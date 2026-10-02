@@ -14,7 +14,7 @@ DEST_ROOT = os.path.join(os.path.dirname(os.path.dirname(_HERE)), "captures", "r
 
 POLL_INTERVAL_S = 15.0
 HTTP_TIMEOUT_S = 8.0
-SSH_TIMEOUT_S = 30.0
+SSH_TIMEOUT_S = 60.0   # du → tail → awk 在百兆板上偶有 10-30s 尖峰,容忍别判死
 SCP_TIMEOUT_S = 3600.0
 
 # 预留 30% 链路给实时预览（README §6）：100M 链路 → scp -l 70000 ≈ 70Mbit/s

@@ -311,6 +311,18 @@ def transfer_one(session, http, ssh_du, scp, dest_root, bwlimit_kbit, log):
 # ---- 主循环 -----------------------------------------------------------------
 
 
+def process_session(sid, dest_root=None, log=print):
+    """拉单个 ready 会话（回放器「同步」按钮的子进程入口）。返回 True=已 transferred。"""
+    try:
+        sess = _http_json("GET", "/api/v1/sessions/%s" % sid)
+    except BaseException as exc:
+        log("FAIL %s: 取会话失败: %s" % (sid, exc))
+        return False
+    return transfer_one(sess, _http_json, _ssh_du_bytes,
+                        lambda r, l: _scp_one(r, l, C.SCP_LIMIT_KBIT),
+                        dest_root or C.DEST_ROOT, C.SCP_LIMIT_KBIT, log)
+
+
 def run(args):
     dest_root = args.dest or C.DEST_ROOT
     os.makedirs(dest_root, exist_ok=True)
@@ -346,12 +358,14 @@ def run(args):
 def cli(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--once", action="store_true", help="只拉一轮后退出（默认常驻轮询）")
+    p.add_argument("--sid", metavar="SID", help="只拉指定会话（回放器内部调用）")
     p.add_argument("--interval", type=float, default=C.POLL_INTERVAL_S, help="轮询间隔秒")
     p.add_argument("--kbit", type=int, default=C.SCP_LIMIT_KBIT, help="scp -l 限速 (Kbit/s)")
     p.add_argument("--dest", default=C.DEST_ROOT, help="本地落盘根目录")
     args = p.parse_args(argv)
+    if args.sid:
+        return 0 if process_session(args.sid, args.dest) else 1
     transferred = run(args)
-    return 0 if transferred or args.once else 1
 
 
 if __name__ == "__main__":

@@ -22,38 +22,164 @@
   #bottom { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 10px;
             background: rgba(0,0,0,.55); display: flex; gap: 10px; align-items: center; }
   #slider { flex: 1; }
-  #status { position: absolute; bottom: 42px; left: 10px; color: #8f8; }
+  #status { position: absolute; bottom: 42px; left: 130px; color: #8f8; }
   #metaBox { position: absolute; right: 8px; top: 52px; max-width: 320px; max-height: 60vh;
              overflow: auto; background: rgba(0,0,0,.6); padding: 8px; border-radius: 4px;
-             font-size: 11px; white-space: pre; color: #9ccc9c; }
+             font-size: 11px; white-space: pre; color: #9ccc9c; display: none; }
+  #metaBox.open { display: block; }
+  #metaToggle { position: absolute; left: 8px; bottom: 42px; padding: 2px 6px;
+                background: rgba(0,0,0,.55); color: #78909c; border: 1px solid #37474f;
+                border-radius: 3px; font-size: 11px; cursor: pointer; display: inline-block; }
+  #metaToggle:hover { color: #cfd8dc; }
+  #flyHud { position: absolute; top: 62px; left: 8px; display: none;
+            padding: 4px 8px; background: rgba(20,40,20,.6); border: 1px solid #3a6;
+            border-radius: 4px; color: #aef; font-size: 11px; pointer-events: none; }
 </style>
 </head>
 <body>
 <div id="view"></div>
 
 <div id="hud">未载入</div>
+<div id="flyHud">✈ 飞行模式 — WASD 移动 · 空格/Shift 升降 · 滚轮调速 · 鼠标视角 · R=复位 T=正视 · F/ESC 退出</div>
 <div id="frameInfo"></div>
 <div id="status">点「选会话目录」载入 captures\remote\&lt;sid&gt;</div>
 
+<div id="trimBox">
+  <b>剪辑 (HR-03)</b>
+  <span id="trimInfo" style="color:#8aaeff">未选区间</span>
+  <div style="display:flex;gap:6px;margin-top:4px">
+    <button id="trimStartBtn">标起点</button>
+    <button id="trimEndBtn">标终点</button>
+    <button id="trimClearBtn">清区间</button>
+    <button id="trimCopyBtn" title="复制剪辑命令到剪贴板">复制 trim 命令</button>
+  </div>
+  <textarea id="trimCmd" readonly placeholder="选区间后点「复制 trim 命令」"></textarea>
+</div>
+<style>
+#trimBox { position: absolute; right: 8px; top: 84px; max-width: 320px;
+           background: rgba(0,0,0,.6); padding: 8px; border-radius: 4px;
+           font-size: 12px; display: none; }
+#trimBox.open { display: block; }
+#trimToggle { position: absolute; left: 58px; bottom: 42px; padding: 2px 6px;
+              background: rgba(0,0,0,.55); color: #78909c; border: 1px solid #37474f;
+              border-radius: 3px; font-size: 11px; cursor: pointer; display: inline-block; }
+#trimToggle:hover { color: #cfd8dc; }
+#trimCmd { width: 100%; height: 54px; margin-top: 6px;
+           background: #131a1e; color: #9ccc9c; border: 1px solid #37474f;
+           border-radius: 3px; font: 11px/1.3 Consolas, monospace;
+           resize: none; padding: 4px; }
+</style>
+
 <div id="toolbar">
-  <button id="pickBtn">选会话目录</button>
+  <button id="sessionsBtn">☰ 会话</button>
+  <button id="pickBtn">手动选目录</button>
   <input id="dirInput" type="file" webkitdirectory style="display:none">
   <button id="playBtn">▶</button>
   <select id="speedSel"></select>
   <label><input id="loopChk" type="checkbox" checked>循环</label>
+  <button id="resetBtn" title="R 键：复位">⌂ 复位</button>
+  <button id="frontBtn" title="T 键：雷达正视图">⬆ 正视</button>
+  <button id="topBtn" title="7 键：顶视正交">⬇ 顶</button>
+  <button id="sideBtn" title="3 键：侧视正交">⇆ 侧</button>
+  <button id="perspBtn" title="0 键：复位透视">◉ 透</button>
+  <label>着色 <select id="lutSel">
+    <option value="lut">亮→白</option>
+    <option value="lut2">亮→黄</option>
+    <option value="gray">灰度</option>
+  </select></label>
+  <button id="auxBtn" title="辅助显示开关">⚙</button>
+  <button id="refBtn" title="参照物">▦</button>
 </div>
 
+<div id="auxMenu">
+  <div><b>辅助显示</b></div>
+  <label><input id="auxGrid" type="checkbox" checked> 地面网格 1m</label>
+  <label><input id="auxGridFine" type="checkbox"> 细格 0.1m</label>
+  <label><input id="auxAxes" type="checkbox" checked> XYZ 三轴</label>
+  <label><input id="auxOrigin" type="checkbox" checked> 雷达原点</label>
+</div>
+<div id="refMenu">
+  <div><b>参照物</b></div>
+  <label><input id="refPersonStand" type="checkbox"> 1.8m 站立人形（可拖）</label>
+  <label><input id="refPersonLying" type="checkbox"> 1.8m 横放人形</label>
+  <label><input id="refDoor21" type="checkbox"> 2.1m 门框</label>
+  <label><input id="refDoor17" type="checkbox"> 1.7m 门框</label>
+</div>
+<style>
+#auxMenu, #refMenu { position: absolute; top: 46px; right: 8px; min-width: 180px;
+                     background: rgba(15,20,23,.95); padding: 10px; border-radius: 4px;
+                     display: none; z-index: 11; font-size: 12px; }
+#auxMenu.open, #refMenu.open { display: block; }
+#auxMenu label, #refMenu label { display: flex; gap: 6px; padding: 3px 0; cursor: pointer; }
+#coordHud { position: absolute; bottom: 42px; left: 8px; padding: 3px 8px;
+            background: rgba(0,0,0,.55); border-radius: 4px; color: #aef;
+            font-size: 12px; pointer-events: none; min-width: 200px; }
+#viewBtn { position: absolute; top: 46px; right: 270px; }
+</style>
+<div id="coordHud">(x,y): —</div>
+
 <div id="metaBox"></div>
+<button id="metaToggle" title="会话 meta">ⓘ meta</button>
+<button id="trimToggle" title="剪辑 (HR-03)">✂ trim</button>
 
 <div id="bottom">
   <span>时间轴</span>
   <input id="slider" type="range" min="0" max="0" value="0">
-  <span style="color:#78909c">空格=播/停 ←→=帧 Shift=×10</span>
+  <span style="color:#78909c">空格=播/停 ←→=帧 Shift=×10 F=飞行 R=复位 T=正视</span>
 </div>
 
+<div id="panel">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <b>会话</b>
+    <span id="panelStatus" style="color:#78909c;font-size:11px"></span>
+    <button id="panelClose">×</button>
+  </div>
+
+  <div id="boardBox">
+    <div id="boardStatus">板端未连接</div>
+    <button id="recBtn">● 开始录制</button>
+    <span id="recSid" style="color:#8aaeff;font-size:11px"></span>
+    <div id="boardMeta" style="color:#78909c;font-size:11px"></div>
+  </div>
+
+  <table id="sessTable">
+    <thead><tr><th>会话</th><th>时长</th><th>帧</th><th>远端</th><th>本地</th></tr></thead>
+    <tbody id="sessBody"></tbody>
+  </table>
+  <div id="sessEmpty" style="color:#78909c;padding:8px;display:none">无会话</div>
+
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button id="refreshBtn">↻ 刷新</button>
+    <button id="syncBtn">⟳ 同步选中</button>
+    <button id="browseBtn">… 手动选</button>
+    <button id="delBtn" style="margin-left:auto;border-color:#7a2a2a;color:#ff9c9c">🗑 删除</button>
+  </div>
+  <div id="syncNote" style="color:#ffcc80;font-size:11px;margin-top:4px"></div>
+</div>
+
+<style>
+#panel { position:absolute; left:0; top:0; bottom:0; width:340px;
+         background:#0f1417; border-right:1px solid #26333a;
+         padding:10px; overflow-y:auto; display:none; z-index:10; }
+#panel.open { display:block; }
+#sessTable { width:100%; border-collapse:collapse; margin-top:8px; font-size:12px; }
+#sessTable th { text-align:left; color:#78909c; font-weight:normal; padding:2px 4px;
+                border-bottom:1px solid #26333a; }
+#sessTable td { padding:4px; border-bottom:1px solid #1a2226; cursor:pointer; }
+#sessTable tr.sel { background:#1d2a33; }
+#sessTable tr:hover td { background:#161f24; }
+#sessTable .dim { color:#546e7a; }
+#sessTable .ok { color:#8f8; }
+#boardBox { margin:8px 0; padding:8px; background:#131a1e; border-radius:4px; }
+#recBtn.recording { background:#5b1a1a; border-color:#a33; color:#ffd6d6; }
+</style>
+
 <script src="vendor/three.min.js"></script>
+<script src="vendor/TrackballControls.js"></script>
 <script src="vendor/OrbitControls.js"></script>
+<script src="vendor/TransformControls.js"></script>
 <script src="human_replay_lib.js"></script>
 <script src="replay.js"></script>
+<script src="panel.js"></script>
 </body>
 </html>
