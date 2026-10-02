@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>IFW192S 团队视图</title>
+<script src="../three.min.js"></script>
+<script src="../OrbitControls.js"></script>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#0b0f14;font:13px/1.4 "Segoe UI",system-ui,sans-serif;color:#dce3ec}
+  #c{position:fixed;inset:0}
+  .card{position:fixed;background:rgba(16,22,30,.82);border:1px solid #2a3442;border-radius:8px;padding:10px 12px;backdrop-filter:blur(2px)}
+  #hud{left:10px;top:10px;min-width:190px}
+  #hud h3{margin:0 0 6px;font-size:12px;color:#8fd0ff;font-weight:600}
+  .row{display:flex;justify-content:space-between;gap:10px;margin:2px 0;white-space:nowrap}
+  .k{color:#8b98a8}.v{color:#e8eef6;font-variant-numeric:tabular-nums}
+  .ok{color:#4ade80}.bad{color:#f87171}.warn{color:#fbbf24}
+  #panel{right:10px;top:10px;text-align:right}
+  .btn{display:block;width:100%;margin:4px 0;padding:6px 10px;background:#1b2430;color:#cfe;border:1px solid #334155;border-radius:6px;cursor:pointer;font-size:12px}
+  .btn:active{background:#263445}
+  #status{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);padding:8px 16px;border-radius:20px;background:rgba(16,22,30,.85);border:1px solid #2a3442;font-size:12px}
+  #status.warn{border-color:#fbbf24;color:#fbbf24}
+  #status.ok{border-color:#166534;color:#4ade80}
+  #status.bad{border-color:#7f1d1d;color:#f87171}
+  #hint{position:fixed;left:10px;bottom:10px;color:#5b6b7d;font-size:11px}
+</style>
+</head>
+<body>
+<div id="c"></div>
+<div class="card" id="hud">
+  <h3>IFW192S 团队视图</h3>
+  <div class="row"><span class="k">连接</span><span class="v" id="mConn">—</span></div>
+  <div class="row"><span class="k">点云帧率</span><span class="v" id="mFps">—</span></div>
+  <div class="row"><span class="k">IMU</span><span class="v" id="mImu">—</span></div>
+  <div class="row"><span class="k">trx 温度</span><span class="v" id="mTrx">—</span></div>
+  <div class="row"><span class="k">main 温度</span><span class="v" id="mMain">—</span></div>
+  <div class="row"><span class="k">设备状态</span><span class="v" id="mFlag">—</span></div>
+</div>
+<div class="card" id="panel">
+  <button class="btn" id="bTop">俯视</button>
+  <button class="btn" id="bReset">重置视角</button>
+  <button class="btn" id="bPause">暂停/继续</button>
+  <div style="margin-top:6px;color:#5b6b7d;font-size:11px">绿=当前人员目标<br>黄=跌倒事件点</div>
+</div>
+<div id="status">连接中… ws://<span id="wsaddr"></span>:8765</div>
+<div id="hint">拖动旋转 · 双指缩放 · 长按平移</div>
+<script>
+(function(){
+"use strict";
+document.getElementById("wsaddr").textContent = location.hostname;
+
+/* ================= 数据源解析（纯代码，与跌倒页同源解码约定） ================= */
+
+/* base64 → Uint8Array */
+function b64ToU8(b64){
+  var bin = atob(b64), n = bin.length, u8 = new Uint8Array(n);
+  for (var i=0;i<n;i++) u8[i] = bin.charCodeAt(i);
+  return u8;
+}
+
+/* 顶层 JSON 消息：{data:"{...}"} 或已解析对象 */
+function unwrapJson(msg){
+  if (!msg) return null;
+  var v = msg.data !== undefined ? msg.data : msg;
+  if (typeof v === "string"){ try { return JSON.parse(v); } catch(e){ return v; } }
+  return (typeof v === "object" && v !== null) ? v : null;
+}
+
+/* PointCloud2 (XYZI float32, XYZ+intensity 前 12 字节为 x/y/z) */
+function parseCloud(msg){
+  if (!msg || !msg.data || typeof msg.data !== "string") return null;
+  var step = msg.point_step | 0;
+  if (step < 12) return null;
+  var u8 = b64ToU8(msg.data);
+  var count = Math.floor(u8.length / step);
+  if (count < 1) return null;
+  var dv = new DataView(u8.buffer);
+  var pos = new Float32Array(count*3);
+  var col = new Uint8Array(count*3);
+  for (var p=0, q=0; p<count; p++, q+=3){
+    var o = p*step;
+    pos[q]   = dv.getFloat32(o,   true);
+    pos[q+1] = dv.getFloat32(o+4, true);
+    pos[q+2] = dv.getFloat32(o+8, true);
+    var inten = (step >= 16) ? dv.getFloat32(o+12, true) : 128;
+    if (!isFinite(inten)) inten = 0;
+    var ci = Math.max(0, Math.min(255, Math.round(inten))) * 3;
+    col[q]=RAMP[ci]; col[q+1]=RAMP[ci+1]; col[q+2]=RAMP[ci+2];
+  }
+  return {pos:pos, col:col};
+}
+var RAMP = (function(){
+  var c = new Uint8Array(256*3);
+  for (var i=0;i<256;i++){
+    var t=i/255, r,g,b;
+    if (t<0.5){ r=0; g=Math.round(t*2*220); b=Math.round(80+t*2*60); }
+    else { r=Math.round((t-0.5)*2*255); g=220; b=Math.round((1-t)*120); }
+    c[i*3]=r; c[i*3+1]=g; c[i*3+2]=b;
+  }
+  return c;
+})();
+
+/* ================= WebSocket 通道 ================= */
+var WS = (function(){
+  var url = "ws://" + location.hostname + ":8765";
+  var ws, retryMs = 1000, timer = null;
+  var handlers = {"/innolidar_points":[], "/inno_imu":[], "/device_status":[], "/human_fall/state":[], "/human_fall/event":[]};
+  var rates = {};
+
+  function setStatus(t, cls){
+    var s = document.getElementById("status");
+    s.textContent = t; s.className = cls || "";
+    var mc = document.getElementById("mConn");
+    mc.textContent = t; mc.className = "v " + (cls==="ok"?"ok":cls==="bad"?"bad":"warn");
+  }
+
+  function connect(){
+    setStatus("连接中…", "warn");
+    try { ws = new WebSocket(url); } catch(e){ setStatus("地址不可用", "bad"); schedule(); return; }
+    ws.binaryType = "arraybuffer";
+    ws.onopen = function(){
+      retryMs = 1000;
+      var subs = [];
+      for (var t in handlers) subs.push({topic:t});
+      ws.send(JSON.stringify({op:"subscribe", subscriptions:subs}));
+      setStatus("已连接", "ok");
+    };
+    ws.onclose = function(){ setStatus("已断开，自动重连…", "warn"); schedule(); };
+    ws.onerror = function(){};
+    ws.onmessage = function(ev){
+      if (typeof ev.data !== "string") return;
+      var m;
+      try { m = JSON.parse(ev.data); } catch(e){ return; }
+      if (m.op !== "publish") return;
+      var list = handlers[m.topic];
+      if (!list) return;
+      var now = performance.now();
+      var r = rates[m.topic] || (rates[m.topic] = {n:0, last:now, hz:0});
+      r.n++;
+      for (var i=0;i<list.length;i++){
+        try { list[i](m.msg); } catch(e){}
+      }
+    };
+  }
+  function schedule(){
+    clearTimeout(timer);
+    timer = setTimeout(connect, retryMs);
+    retryMs = Math.min(retryMs*2, 10000);
+  }
+  setInterval(function(){
+    var now = performance.now();
+    for (var t in rates){
+      var r = rates[t], dt = (now-r.last)/1000;
+      if (dt >= 1){ r.hz = r.n/dt; r.n = 0; r.last = now; }
+    }
+  }, 1000);
+  window.addEventListener("pagehide", function(){ if (ws) ws.close(); });
+  connect();
+  return {
+    on: function(topic, fn){ if (handlers[topic]) handlers[topic].push(fn); },
+    hz: function(topic){ var r = rates[topic]; return r ? r.hz : 0; }
+  };
+})();
+
+/* ================= 场景（相机参数与跌倒页 human_fall/index.html 同源） ================= */
+var width = window.innerWidth, height = window.innerHeight;
+var renderer = null;
+try {
+  renderer = new THREE.WebGLRenderer({antialias:true});
+} catch(e) {
+  document.getElementById("status").textContent = "WebGL 不可用，仅遥测";
+}
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0f14);
+var camera = new THREE.PerspectiveCamera(55, width/height, 0.05, 2000); /* 与跌倒页 55/0.05/2000 一致 */
+camera.up.set(0, 0, 1);
+camera.position.set(6, -6, 5);                                        /* 与跌倒页初始位一致 */
+var controls = null;
+if (renderer){
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 0, 0.9);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.1;
+  controls.maxPolarAngle = Math.PI * 0.49;
+  controls.minDistance = 0.4;
+  controls.maxDistance = 100;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(width, height);
+  document.getElementById("c").appendChild(renderer.domElement);
+}
+scene.add(new THREE.AmbientLight(0xffffff, 0.95));
+var dl = new THREE.DirectionalLight(0xffffff, 0.35); dl.position.set(4,-6,10); scene.add(dl);
+
+/* z-up 下的 XY 地面格网 */
+var grid = new THREE.GridHelper(50, 50, 0x22303f, 0x131a24);
+grid.rotation.x = Math.PI / 2;
+scene.add(grid);
+
+var personMarker = new THREE.Mesh(new THREE.SphereGeometry(0.18, 16, 12), new THREE.MeshBasicMaterial({color:0x22c55e}));
+personMarker.visible = false; scene.add(personMarker);
+var fallMarker = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 12), new THREE.MeshBasicMaterial({color:0xfacc15}));
+fallMarker.visible = false; scene.add(fallMarker);
+
+var pointsGeo = new THREE.BufferGeometry();
+var pointMat = new THREE.PointsMaterial({size:0.035, vertexColors:true, sizeAttenuation:true});
+var pointsObj = null;
+
+/* ================= 数据接入 ================= */
+var paused = false;
+WS.on("/innolidar_points", function(msg){
+  if (paused) return;
+  var c = parseCloud(msg);
+  if (!c) return;
+  pointsGeo.setAttribute("position", new THREE.BufferAttribute(c.pos, 3));
+  pointsGeo.setAttribute("color", new THREE.BufferAttribute(c.col, 3));
+  if (!pointsObj){
+    pointsObj = new THREE.Points(pointsGeo, pointMat);
+    pointsObj.frustumCulled = false;
+    scene.add(pointsObj);
+  }
+});
+WS.on("/inno_imu", function(){ /* Hz 已由 WS.hz 统计，无需逐条处理 */ });
+WS.on("/device_status", function(msg){
+  var s = unwrapJson(msg);
+  if (!s) return;
+  var trx = (s.trx_temperature!==undefined && s.trx_temperature!==null) ? Number(s.trx_temperature).toFixed(1)+"°C" : "—";
+  var main = (s.main_temperature!==undefined && s.main_temperature!==null) ? Number(s.main_temperature).toFixed(1)+"°C" : "—";
+  var f = (s.abnormal_flag!==undefined && s.abnormal_flag!==null) ? s.abnormal_flag : 255;
+  document.getElementById("mTrx").textContent = trx;
+  document.getElementById("mMain").textContent = main;
+  var fe = document.getElementById("mFlag");
+  fe.textContent = (f===0) ? "正常" : "异常("+f+")";
+  fe.className = "v " + (f===0 ? "ok" : "warn");
+});
+
+var latestFall = null;
+WS.on("/human_fall/state", function(msg){
+  var s = unwrapJson(msg);
+  if (!s) return;
+  latestFall = s;
+  if (s.position_m && Array.isArray(s.position_m) && s.position_m.length>=3 && !s.position_predicted){
+    personMarker.position.set(s.position_m[0], s.position_m[1], s.position_m[2]);
+    personMarker.visible = true;
+    personMarker.material.color.set(
+      (s.fall_status==="confirmed"||s.fall_status==="suspected") ? 0xef4444 : 0x22c55e);
+  } else {
+    personMarker.visible = false;
+  }
+});
+WS.on("/human_fall/event", function(msg){
+  var e = unwrapJson(msg);
+  if (!e) return;
+  if (e.evidence && e.evidence.position_m && Array.isArray(e.evidence.position_m)){
+    fallMarker.position.set(e.evidence.position_m[0], e.evidence.position_m[1], e.evidence.position_m[2]);
+    fallMarker.visible = true;
+  }
+  var st = document.getElementById("status");
+  st.textContent = "⚠ 跌倒事件";
+  st.className = "bad";
+});
+
+/* ================= HUD 与控件 ================= */
+setInterval(function(){
+  document.getElementById("mFps").textContent = WS.hz("/innolidar_points").toFixed(1)+" Hz"+(paused?" · 已暂停":"");
+  document.getElementById("mImu").textContent = WS.hz("/inno_imu").toFixed(0)+" Hz";
+  if (latestFall && !paused){
+    var fs = latestFall.fall_status || "—";
+    var st = document.getElementById("status");
+    st.textContent = "状态："+fs;
+    st.className = (fs==="confirmed"||fs==="suspected") ? "warn" : "ok";
+  }
+}, 500);
+
+document.getElementById("bTop").addEventListener("click", function(){
+  camera.up.set(0,1,0);
+  camera.position.set(0.01, 0.01, 24);
+  if (controls) controls.target.set(0,0,0);
+});
+document.getElementById("bReset").addEventListener("click", function(){
+  camera.up.set(0,0,1);
+  camera.position.set(6,-6,5);
+  if (controls) controls.target.set(0,0,0.9);
+});
+document.getElementById("bPause").addEventListener("click", function(){
+  paused = !paused;
+});
+window.addEventListener("resize", function(){
+  width = window.innerWidth; height = window.innerHeight;
+  camera.aspect = width/height; camera.updateProjectionMatrix();
+  if (renderer) renderer.setSize(width, height);
+});
+document.addEventListener("gesturestart", function(e){ e.preventDefault(); });
+document.addEventListener("dblclick", function(e){ e.preventDefault(); });
+
+(function loop(){
+  requestAnimationFrame(loop);
+  if (controls) controls.update();
+  if (renderer) renderer.render(scene, camera);
+})();
+})();
+</script>
+</body>
+</html>
