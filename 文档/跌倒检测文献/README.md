@@ -7,7 +7,7 @@
 | Charles R. Qi 等，2017，PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space | [正文与补充合并版](Qi_2017_PointNet++_正文与补充.pdf) | [arXiv](https://arxiv.org/abs/1706.02413)，14页，补充内容从第11页开始 |
 | PointNet++ 独立补充材料 | [Supplementary Material](Qi_2017_PointNet++_独立补充材料.pdf) | [NeurIPS 官方论文页](https://proceedings.neurips.cc/paper_files/paper/2017/hash/d8bf84be3800d12f74d8b05e9b89836f-Abstract.html)，官方补充ZIP内的PDF，5页 |
 | Sijie Yan 等，2018，Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition | [ST-GCN 正文](Yan_2018_ST-GCN.pdf) | [arXiv](https://arxiv.org/abs/1801.07455)，10页；检查AAAI论文页、arXiv与作者仓库，未发现独立补充附件 |
-| Jiaqi Lai, Mohammad Yavari, Peter Vee Sin Lee, David C. Ackland，2026，Three-Dimensional human motion analysis using LiDAR technology: A systematic review（Journal of Biomechanics 卷202，文章号113292） | 正文与补充材料待补 | DOI：10.1016/j.jbiomech.2026.113292；[官方入口](https://www.sciencedirect.com/science/article/pii/S0021929026001478)。2026-10-02 经 CrossRef 核实元数据、Unpaywall 核实为 hybrid OA（CC BY 4.0），但出版方无直接 PDF 直链、反爬返回 403，自动下载受阻，需人工经浏览器或机构订阅补齐 |
+| Jiaqi Lai, Mohammad Yavari, Peter Vee Sin Lee, David C. Ackland，2026，Three-Dimensional human motion analysis using LiDAR technology: A systematic review（Journal of Biomechanics 卷202，文章号113292） | [正文](Lai_2026_LiDAR人体运动分析综述.pdf) | DOI：10.1016/j.jbiomech.2026.113292；[官方入口](https://www.sciencedirect.com/science/article/pii/S0021929026001478)。hybrid OA（CC BY 4.0）；自动下载受阻，2026-10-02 由用户经浏览器手动取得正文（19页），补充材料未随正文获得、待查 |
 
 文件哈希、相对路径与核验结果见 [文件清单](manifest.json)。源文件使用复制方式纳入，下载目录原文件保留。
 
