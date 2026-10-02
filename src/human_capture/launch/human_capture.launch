@@ -1,0 +1,7 @@
+<launch>
+  <arg name="config" default="$(find human_capture)/config/capture.yaml"/>
+  <node pkg="human_capture" type="capture_server.py" name="capture_server"
+        output="screen" required="true">
+    <param name="config" value="$(arg config)"/>
+  </node>
+</launch>

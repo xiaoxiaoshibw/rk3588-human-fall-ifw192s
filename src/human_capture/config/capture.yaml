@@ -1,0 +1,20 @@
+# human_capture 节点级运行配置
+port: 8766
+bind: 0.0.0.0
+staging_dir: /mnt/captures/captures_remote
+sessions_db: /mnt/captures/captures_remote/sessions.json
+
+# FIFO（HC-02）
+fifo_keep: 10
+fifo_interval_sec: 30
+disk_floor_mb: 5120
+
+# 录制（HC-02；调现成 record_session.py，D10）
+record_script: /root/catkin_ws/src/human_fall_detection/scripts/record_session.py
+record_config:                      # 可选；默认走 record_session 自带 DEFAULT_TOPICS
+max_duration_sec: 300
+sigint_grace_sec: 15
+sigterm_kill_sec: 5
+
+# 话题（仅供参考，实际由 record_session 自己 DEFAULT_TOPICS 决定）
+record_topics: ["/innolidar_points", "/inno_imu", "/device_status"]

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>采集控制台 · human_capture</title>
+<style>
+:root {
+  --bg:#0b0e14; --panel:#11151f; --line:#1e2634; --txt:#c9d4e3; --dim:#6b7a90;
+  --ok:#3ad07a; --warn:#e8b23c; --err:#e05252; --run:#e05252; --idle:#5d6b80;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--txt); font:13px/1.5 "Segoe UI","Microsoft YaHei",sans-serif; min-height:'100vh'; }
+header {
+  display:flex; align-items:center; gap:14px; padding:10px 16px;
+  background:var(--panel); border-bottom:1px solid var(--line); flex-wrap:wrap;
+}
+.title { font-weight:600; white-space:nowrap; }
+.stat { color:var(--dim); white-space:nowrap; }
+.stat b { color:var(--txt); font-variant-numeric:tabular-nums; font-weight:600; }
+.dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--err); margin-right:5px; vertical-align:middle; }
+.dot.on  { background:var(--ok); }
+.dot.warn{ background:var(--warn); }
+main { padding:16px; max-width:1100px; margin:0 auto; }
+section { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:14px 16px; margin-bottom:14px; }
+h2 { font-size:14px; font-weight:600; margin-bottom:10px; color:var(--txt); }
+button {
+  background:#1b2436; color:var(--txt); border:1px solid var(--line); border-radius:4px;
+  padding:6px 14px; font:inherit; cursor:pointer; transition:opacity .15s;
+}
+button:hover:not(:disabled) { background:#25314a; }
+button:disabled { opacity:.45; cursor:not-allowed; }
+button.rec  { background:#3d1a1a; border-color:#5a2020; }
+button.rec:hover:not(:disabled) { background:#522222; }
+button.big  { font-size:15px; padding:10px 28px; }
+table { width:100%; border-collapse:collapse; margin-top:6px; }
+th, td { padding:6px 8px; text-align:left; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; }
+th { color:var(--dim); font-weight:500; font-size:12px; }
+tr:hover td { background:#151a26; }
+.badge { display:inline-block; padding:2px 8px; border-radius:3px; font-size:11px; font-weight:600; }
+.badge.recording    { background:#3d1a1a; color:#ff9090; }
+.badge.extracting   { background:#3d3419; color:#ffd97a; }
+.badge.ready        { background:#193d28; color:#7ae0a8; }
+.badge.transferring { background:#1a2d3d; color:#7ab8ff; }
+.badge.transferred  { background:#212c3d; color:#a6b8cc; }
+.badge.failed       { background:#3d1a1a; color:#ff7070; }
+.badge.purged       { background:#222; color:#888; text-decoration:line-through; }
+.badge.rec { animation:pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+.current-rec {
+  display:flex; align-items:center; gap:14px; padding:12px 14px; background:#1a1214;
+  border:1px solid #5a2020; border-radius:5px; margin-bottom:12px;
+}
+.current-rec .elapsed { font-size:24px; font-weight:600; font-variant-numeric:tabular-nums; color:#ff9090; }
+.current-rec .sid { color:var(--dim); }
+.empty { color:var(--dim); padding:8px 0; }
+.err { color:var(--err); font-size:12px; margin-top:8px; }
+a { color:#7ab8ff; }
+.meta-actions { margin-top:8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="title">采集控制台</span>
+  <span class="stat"><span class="dot" id="rosDot"></span>ROS <b id="rosVal">--</b></span>
+  <span class="stat"><span class="dot" id="srvDot"></span>服务 <b id="srvVal">--</b></span>
+  <span class="stat">盘余 <b id="diskVal">--</b> GB</span>
+  <span class="stat">会话 <b id="totalVal">0</b></span>
+  <span class="stat">录制 <b id="recVal">未</b></span>
+  <span class="stat"><a href="/" target="_blank">↗ 实时预览(8090)</a></span>
+</header>
+
+<main>
+  <section>
+    <h2>录制</h2>
+    <div id="currentRecWrap"></div>
+    <div>
+      <button class="rec big" id="btnStart">● 开始录制</button>
+      <button class="big" id="btnStop" disabled>■ 停止</button>
+      <div class="err" id="recErr"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>会话</h2>
+    <table>
+      <thead><tr>
+        <th>session_id</th><th>状态</th><th>时长</th><th>帧</th><th>大小</th>
+        <th>已下载</th><th>请求下载</th><th>创建时间</th><th>操作</th>
+      </tr></thead>
+      <tbody id="sessBody">
+        <tr><td colspan="9" class="empty">加载中…</td></tr>
+      </tbody>
+    </table>
+    <div class="err" id="sessErr"></div>
+  </section>
+</main>
+
+<script src="capture_lib.js"></script>
+<script src="capture.js"></script>
+</body>
+</html>

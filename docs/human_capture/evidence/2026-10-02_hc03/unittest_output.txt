@@ -1,0 +1,22 @@
+[capture_server] 127.0.0.1 "GET /healthz HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "GET /api/v1/status HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "GET /api/v1/status HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_y HTTP/1.1" 200 -
+[capture_server] 127.0.0.1 "GET /api/v1/sessions/cap_y HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_z HTTP/1.1" 200 -
+[capture_server] 127.0.0.1 "GET /api/v1/sessions/cap_z HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_x HTTP/1.1" 409 -
+.[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_ghost HTTP/1.1" 404 -
+..................................Exception ignored in: <_io.FileIO name='C:\\Users\\30680\\AppData\\Local\\Temp\\tmptohjj1ei\\x.bag' mode='wb' closefd=True>
+Traceback (most recent call last):
+  File "D:\Code\ldiar\src\human_capture\tests\test_hc03_bag2session.py", line 56, in test_rosbag_absent_raises_extract_error
+    open(src, "wb").write(b"#ROSBAG V2.0\n")
+ResourceWarning: unclosed file <_io.BufferedWriter name='C:\\Users\\30680\\AppData\\Local\\Temp\\tmptohjj1ei\\x.bag'>
+..
+----------------------------------------------------------------------
+Ran 42 tests in 12.717s
+
+OK

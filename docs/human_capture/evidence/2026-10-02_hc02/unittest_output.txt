@@ -1,0 +1,17 @@
+[capture_server] 127.0.0.1 "GET /healthz HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "GET /api/v1/status HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "GET /api/v1/status HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_y HTTP/1.1" 200 -
+[capture_server] 127.0.0.1 "GET /api/v1/sessions/cap_y HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_z HTTP/1.1" 200 -
+[capture_server] 127.0.0.1 "GET /api/v1/sessions/cap_z HTTP/1.1" 200 -
+.[capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_x HTTP/1.1" 409 -
+.[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_ghost HTTP/1.1" 404 -
+................................
+----------------------------------------------------------------------
+Ran 38 tests in 13.035s
+
+OK

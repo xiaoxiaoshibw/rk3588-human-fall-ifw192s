@@ -1,0 +1,43 @@
+test_healthz (test_hc01_health.TestHealth.test_healthz) ... [capture_server] 127.0.0.1 "GET /healthz HTTP/1.1" 200 -
+ok
+test_disk_free_matches_shutil (test_hc01_health.TestStatus.test_disk_free_matches_shutil) ... [capture_server] 127.0.0.1 "GET /api/v1/status HTTP/1.1" 200 -
+ok
+test_status_fields (test_hc01_health.TestStatus.test_status_fields) ... [capture_server] 127.0.0.1 "GET /api/v1/status HTTP/1.1" 200 -
+ok
+test_extra_whitelist_blocks_unknown_keys (test_hc01_persistence.TestHttpContract.test_extra_whitelist_blocks_unknown_keys) ... [capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_y HTTP/1.1" 200 -
+[capture_server] 127.0.0.1 "GET /api/v1/sessions/cap_y HTTP/1.1" 200 -
+ok
+test_patch_extra_only_keeps_state (test_hc01_persistence.TestHttpContract.test_patch_extra_only_keeps_state) ... [capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_z HTTP/1.1" 200 -
+[capture_server] 127.0.0.1 "GET /api/v1/sessions/cap_z HTTP/1.1" 200 -
+ok
+test_patch_illegal_transition_409 (test_hc01_persistence.TestHttpContract.test_patch_illegal_transition_409) ... [capture_server] 127.0.0.1 "POST /api/v1/sessions HTTP/1.1" 201 -
+[capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_x HTTP/1.1" 409 -
+ok
+test_patch_missing_session_404 (test_hc01_persistence.TestHttpContract.test_patch_missing_session_404) ... [capture_server] 127.0.0.1 "PATCH /api/v1/sessions/cap_ghost HTTP/1.1" 404 -
+ok
+test_corrupt_refuses_start (test_hc01_persistence.TestPersistence.test_corrupt_refuses_start) ... ok
+test_reopen_keeps_sessions (test_hc01_persistence.TestPersistence.test_reopen_keeps_sessions) ... ok
+test_wrong_shape_refuses_start (test_hc01_persistence.TestPersistence.test_wrong_shape_refuses_start) ... ok
+test_concurrent_transitions_no_torn_json (test_hc01_sessions.TestAtomicWrite.test_concurrent_transitions_no_torn_json) ... ok
+test_bad_state (test_hc01_sessions.TestCrud.test_bad_state) ... ok
+test_delete (test_hc01_sessions.TestCrud.test_delete) ... ok
+test_missing_required (test_hc01_sessions.TestCrud.test_missing_required) ... ok
+test_unknown_get (test_hc01_sessions.TestCrud.test_unknown_get) ... ok
+test_upsert_get_list_order (test_hc01_sessions.TestCrud.test_upsert_get_list_order) ... ok
+test_upsert_replaces_in_place (test_hc01_sessions.TestCrud.test_upsert_replaces_in_place) ... ok
+test_extra_fields_merged (test_hc01_sessions.TestStateMachine.test_extra_fields_merged) ... ok
+test_failed_can_retry_extracting (test_hc01_sessions.TestStateMachine.test_failed_can_retry_extracting) ... ok
+test_happy_path (test_hc01_sessions.TestStateMachine.test_happy_path) ... ok
+test_illegal_jump_rejected (test_hc01_sessions.TestStateMachine.test_illegal_jump_rejected) ... ok
+test_terminal_purged_cannot_move (test_hc01_sessions.TestStateMachine.test_terminal_purged_cannot_move) ... ok
+test_transfer_interrupted_back_to_ready (test_hc01_sessions.TestStateMachine.test_transfer_interrupted_back_to_ready) ... ok
+test_unknown_session (test_hc01_sessions.TestStateMachine.test_unknown_session) ... ok
+test_accepts_normal (test_hc01_sessions.TestValidateId.test_accepts_normal) ... ok
+test_rejects_path_traversal (test_hc01_sessions.TestValidateId.test_rejects_path_traversal) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 4.477s
+
+OK
