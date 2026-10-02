@@ -1,4 +1,5 @@
 #include "publish_manager.h"
+#include <cmath>
 #if ROS_FOUND==1
 #include <ros/ros.h>
 #include <sensor_msgs/point_cloud2_iterator.h>
@@ -38,18 +39,59 @@ public:
     {
 
     }
+    // Device source stamps are consumed in seconds (runtime evidence; the SDK
+    // header comment claiming nanoseconds is not verified, so the unit is not
+    // changed). Non-finite/negative/out-of-range values become the invalid
+    // (0,0) stamp and the fractional-second rounding carries at 1e9 so no
+    // invalid ROS nsec/nanosec (>= 1e9) can be published. The legal second
+    // range follows the actual ROS field: ros::Time.sec is uint32 under ROS1,
+    // while ROS2 builtin_interfaces/Time.sec is int32; the range check runs on
+    // the whole second and again after the nanosecond carry.
+    static void deviceStampToRos(double timestamp, uint32_t& sec, uint32_t& nsec)
+    {
+        sec = 0;
+        nsec = 0;
+#if ROS_FOUND==1
+        const double max_sec = 4294967295.0;
+#else
+        const double max_sec = 2147483647.0;
+#endif
+        if (!std::isfinite(timestamp) || timestamp < 0.0)
+        {
+            return;
+        }
+        double whole = floor(timestamp);
+        if (whole > max_sec)
+        {
+            return;
+        }
+        uint32_t nano = (uint32_t)round((timestamp - whole) * 1e9);
+        if (nano >= 1000000000u)
+        {
+            if (whole + 1.0 > max_sec)
+            {
+                return;
+            }
+            nano -= 1000000000u;
+            whole += 1.0;
+        }
+        sec = (uint32_t)whole;
+        nsec = nano;
+    }
     inline DeviceStatus toRosDeviceStatus(const RosPointCloud& inno_msg,const std::string& frame_id)
     {
         DeviceStatus msg;
         msg.header.frame_id = frame_id;
-        msg.header.stamp.sec = (uint32_t)floor(inno_msg.timestamp);
+        uint32_t stamp_sec = 0;
+        uint32_t stamp_nsec = 0;
+        deviceStampToRos(inno_msg.timestamp, stamp_sec, stamp_nsec);
+        msg.header.stamp.sec = stamp_sec;
         //std::cout<<"inno_msg.timestamp:"<<inno_msg.timestamp<<std::endl;
 #if ROS_FOUND==1
         msg.header.seq = inno_msg.seq;
-        msg.header.stamp.nsec = (uint32_t)round((inno_msg.timestamp - msg.header.stamp.sec) * 1e9);
+        msg.header.stamp.nsec = stamp_nsec;
 #else
-        //ros_msg.header.stamp.nanosec = (uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
-        msg.header.stamp.nanosec =(uint32_t)round((inno_msg.timestamp - msg.header.stamp.sec) * 1e9);
+        msg.header.stamp.nanosec = stamp_nsec;
 #endif
         msg.device_number=inno_msg.device_number;
         msg.trx_temperature=inno_msg.trx_temperature;
@@ -123,7 +165,7 @@ public:
             *iter_timestamp = point.timestamp;
             ++iter_timestamp;
 #elif defined(POINT_TYPE_SOURCE)
-            *iter_timestamp = point.timestamp;ros_msg
+            *iter_timestamp = point.timestamp;
             *iter_distance = point.distance;
             *iter_horizontal = point.horizontal;
             *iter_vertical = point.vertical;
@@ -140,14 +182,16 @@ public:
         //ros_msg.header.stamp=std::chrono::system_clock::now();
         //ros_msg.header.stamp = ros_msg.header.stamp.fromSec(inno_msg.timestamp);
 
-        ros_msg.header.stamp.sec = (uint32_t)floor(inno_msg.timestamp);
+        uint32_t stamp_sec = 0;
+        uint32_t stamp_nsec = 0;
+        deviceStampToRos(inno_msg.timestamp, stamp_sec, stamp_nsec);
+        ros_msg.header.stamp.sec = stamp_sec;
         //std::cout<<"inno_msg.timestamp:"<<inno_msg.timestamp<<std::endl;
 #if ROS_FOUND==1
         ros_msg.header.seq = inno_msg.seq;
-        ros_msg.header.stamp.nsec = (uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
+        ros_msg.header.stamp.nsec = stamp_nsec;
 #else
-        //ros_msg.header.stamp.nanosec = (uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
-        ros_msg.header.stamp.nanosec =(uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
+        ros_msg.header.stamp.nanosec = stamp_nsec;
 #endif
         ros_msg.header.frame_id = frame_id;
         return ros_msg;
@@ -156,11 +200,14 @@ public:
     IMU toRosMsg(const std::shared_ptr<ImuMsg>& msg, const std::string& frame_id)
     {
         IMU imu_msg;
-        imu_msg.header.stamp.sec =(uint32_t)floor(msg->timestamp);
+        uint32_t stamp_sec = 0;
+        uint32_t stamp_nsec = 0;
+        deviceStampToRos(msg->timestamp, stamp_sec, stamp_nsec);
+        imu_msg.header.stamp.sec = stamp_sec;
 #if ROS_FOUND==1
-        imu_msg.header.stamp.nsec =(uint32_t)round(float(msg->timestamp-imu_msg.header.stamp.sec)*1e9);
+        imu_msg.header.stamp.nsec = stamp_nsec;
 #else
-        imu_msg.header.stamp.nanosec =(uint32_t)round((msg->timestamp - imu_msg.header.stamp.sec) * 1e9); //timestamp
+        imu_msg.header.stamp.nanosec = stamp_nsec;
 #endif
         imu_msg.header.frame_id = frame_id;
         // Set IMU data
@@ -171,6 +218,15 @@ public:
         imu_msg.linear_acceleration.x = msg->linear_acceleration_x;
         imu_msg.linear_acceleration.y = msg->linear_acceleration_y;
         imu_msg.linear_acceleration.z = msg->linear_acceleration_z;
+        // The SDK orientation/state semantics are not verified and no valid
+        // quaternion is copied, so declare "orientation not provided" with the
+        // ROS covariance[0] = -1 convention instead of publishing an illegal
+        // all-zero orientation with unknown covariance.
+        for (auto &covariance : imu_msg.orientation_covariance)
+        {
+            covariance = 0.0;
+        }
+        imu_msg.orientation_covariance[0] = -1.0;
         return imu_msg;
     }
 #endif
