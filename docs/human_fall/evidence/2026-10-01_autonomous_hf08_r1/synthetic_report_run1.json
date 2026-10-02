@@ -1,0 +1,107 @@
+{
+  "aggregates": [
+    {
+      "dataset_kind": "synthetic",
+      "effective_observation_fraction": 0.625,
+      "effective_observation_s": 5.0,
+      "false_alarms_per_hour": 360.0,
+      "fn": 0,
+      "fp": 2,
+      "ground_truth_available_session_count": 1,
+      "latency_s": {
+        "count": 2,
+        "p50": 0.0,
+        "p95": 0.09,
+        "values": [
+          -0.1,
+          0.1
+        ]
+      },
+      "negative_duration_s": 10.0,
+      "negative_fp_count": 1,
+      "observation_window_s": 8.0,
+      "pending_session_count": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "session_count": 1,
+      "split_role": "synthetic",
+      "status": "metrics_available",
+      "tp": 2,
+      "track_switches": 1
+    }
+  ],
+  "dataset_version": "hf08-synthetic-hand-table-v1",
+  "event_time_domain": "device_stamp_s_unanchored",
+  "kind": "hf_session_evaluation",
+  "parameters": {
+    "delay_definition": "prediction time minus human-labeled onset, same declared event time domain; not host/browser end-to-end latency",
+    "false_alarm_denominator": "union of human-reviewed negative intervals",
+    "match_binding": "session_id + time_epoch + reviewed target_id",
+    "match_tolerance_s": 1.0,
+    "matching_method": "maximum_cardinality_deterministic_augmenting_paths_v1"
+  },
+  "provenance": {
+    "evaluator_path": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\evaluate_sessions.py",
+    "evaluator_sha256": "a216f43a5b5fea021732d447f802e5a363871d79326dcdeef23e86e037bcf692",
+    "input_path": "D:\\Code\\ldiar\\src\\human_fall_detection\\tests\\hf08_synthetic_events.json",
+    "input_sha256": "a930a7be56a57edcac13197c3a3c67dddf98544d63a24e9524291c859a2e0acd",
+    "split_roles": [
+      "synthetic"
+    ]
+  },
+  "schema_version": 1,
+  "sessions": [
+    {
+      "artifacts": {},
+      "dataset_kind": "synthetic",
+      "effective_observation_fraction": 0.625,
+      "effective_observation_s": 5.0,
+      "false_alarms_per_hour": 360.0,
+      "fn": 0,
+      "fp": 2,
+      "latency_s": {
+        "count": 2,
+        "p50": 0.0,
+        "p95": 0.09,
+        "values": [
+          -0.1,
+          0.1
+        ]
+      },
+      "matches": [
+        {
+          "label_event_id": "truth-1",
+          "latency_s": 0.1,
+          "prediction_event_id": "pred-near-2",
+          "target_id": "person-a",
+          "time_epoch": 0
+        },
+        {
+          "label_event_id": "truth-2",
+          "latency_s": -0.1,
+          "prediction_event_id": "pred-near-1",
+          "target_id": "person-a",
+          "time_epoch": 0
+        }
+      ],
+      "negative_duration_s": 10.0,
+      "negative_fp_count": 1,
+      "observation_window_s": 8.0,
+      "precision": 0.5,
+      "prediction_count": 4,
+      "recall": 1.0,
+      "session_id": "hf08_synthetic_hand_table",
+      "split_group": "hf08_synthetic_hand_table",
+      "split_role": "synthetic",
+      "status": "metrics_available",
+      "tp": 2,
+      "track_switches": 1,
+      "unmatched_labels": [],
+      "unmatched_predictions": [
+        "pred-early",
+        "pred-negative"
+      ]
+    }
+  ],
+  "status": "evaluated"
+}

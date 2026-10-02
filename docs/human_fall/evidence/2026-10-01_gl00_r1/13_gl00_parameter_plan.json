@@ -1,0 +1,118 @@
+{
+  "ticket": "GL-00",
+  "date": "2026-10-01",
+  "status": "plan_only_numbers_pending_field_measurement",
+  "legend": {
+    "old_baseline": "existing value inherited from HF-03 code; not a verified sensor/mount measurement",
+    "design_convention": "algorithm/interface convention chosen now; not a physical acceptance threshold",
+    "pending_measurement": "numeric value must come from on-site measurement before it can be frozen/accepted"
+  },
+  "fitting_selection_thresholds": [
+    {
+      "key": "normal_up_min_z",
+      "existing_value": 0.5,
+      "source": "core/ground.py DEFAULT_SETTINGS (HF-03)",
+      "current_meaning": "loose source +Z prior, tolerates ~60 deg tilt; NOT verified gravity",
+      "proposed": "do not hard-set world Z; use an independently measured up-axis candidate plus a stated angular uncertainty; apply the constraint before support counting (PCL perpendicular-plane mechanism)",
+      "status": "pending_measurement",
+      "needs": "mount pitch/tilt measurement or an independently confirmed level-floor reference; the observed stable ~25 deg offset must be explained (mount pitch vs truly tilted surface)"
+    },
+    {
+      "key": "inlier_threshold_m",
+      "existing_value": 0.05,
+      "source": "core/ground.py / config/geometry.yaml (HF-03)",
+      "proposed": "measure residual vs range on the actual sensor, then set per range band (near/mid/far); report residual percentiles, not a single truncated RMS",
+      "status": "pending_measurement",
+      "needs": "point-plane residual statistics on a known flat surface at several ranges"
+    },
+    {
+      "key": "spatial_sampling",
+      "existing_value": "max_points=100000, max_fit_points=50000, uniform stride",
+      "source": "core/ground.py (HF-03)",
+      "proposed": "spatially balanced sampling (radial/angular or voxel bins) so a dense near wall cannot fill the budget; sampling only selects fit points, original indices preserved for support re-check",
+      "status": "design_convention (bin size pending_measurement)"
+    },
+    {
+      "key": "min_inliers",
+      "existing_value": 100,
+      "source": "core/ground.py (HF-03)",
+      "proposed": "keep as an absolute floor; add an ROI-relative support fraction instead of whole-scene fraction",
+      "status": "design_convention"
+    },
+    {
+      "key": "min_inlier_fraction",
+      "existing_value": 0.2,
+      "source": "core/ground.py (HF-03)",
+      "proposed": "evaluate against the confirmed ground ROI sample, not the whole scene (whole-scene floor support was only ~0.20 here, so a whole-scene 0.5 gate can never pass)",
+      "status": "pending_measurement (depends on ROI definition)"
+    },
+    {
+      "key": "min_holdout_support",
+      "existing_value": 0.5,
+      "source": "core/ground.py / config/geometry.yaml (HF-03)",
+      "proposed": "redefine on ROI/region ground support; keep separate from physical acceptance",
+      "status": "pending_measurement"
+    },
+    {
+      "key": "max_holdout_rms_m",
+      "existing_value": 0.12,
+      "source": "core/ground.py (HF-03); review 3.5 notes support set is truncated at 0.05 m so a 0.12 m RMS gate is not discriminating",
+      "proposed": "report full untruncated residuals on independent known ground regions plus high percentiles; do not treat 0.12 as a precision guarantee",
+      "status": "old_baseline / weak check"
+    },
+    {
+      "key": "ransac_iterations",
+      "existing_value": 150,
+      "source": "core/ground.py (HF-03)",
+      "proposed": "size from N=log(1-p)/log(1-w^3) after ROI restriction; keep a bounded cap and a bounded candidate list (K)",
+      "status": "design_convention (see ransac_budget)"
+    },
+    {
+      "key": "holdout_design",
+      "existing_value": "random split of pooled points",
+      "source": "core/ground.py (HF-03); review 3.4 notes leakage risk",
+      "proposed": "split by capture frame group AND spatial region; no same-surface leakage between fit and validation",
+      "status": "design_convention"
+    }
+  ],
+  "physical_acceptance_thresholds": [
+    {
+      "key": "ground_identity",
+      "proposed": "confirmed by on-site visual/physical identification of the region and its extent, not by automatic ranking",
+      "status": "pending_field"
+    },
+    {
+      "key": "level_floor_condition",
+      "proposed": "confirm the floor is level/planar within the ROI; single-plane premise",
+      "status": "pending_field"
+    },
+    {
+      "key": "normal_d_stability",
+      "proposed": "across independent frame groups: bound the change in normal angle and offset d; support insufficient -> unknown/degraded",
+      "status": "pending_measurement"
+    },
+    {
+      "key": "independent_height_error",
+      "proposed": "error against at least one scale-measured static reference; report measurement uncertainty; accept only after the threshold is frozen before measuring",
+      "status": "pending_measurement"
+    },
+    {
+      "key": "sensor_height",
+      "proposed": "compare fitted d to a rough on-site height statement as a consistency check, never as the source of the value",
+      "status": "pending_field"
+    }
+  ],
+  "ransac_budget": {
+    "formula": "N = log(1-p)/log(1-w^3)",
+    "assumptions": [
+      "independent uniform picks of 3 distinct points",
+      "w = probability a picked point lies on the target plane within the inlier threshold, measured on the restricted ROI sample",
+      "an organized rotating LiDAR gives spatially correlated returns, so the formula is an estimate/upper bound, not a guarantee",
+      "three sample points must be mutually distinct and non-collinear; degenerate samples are skipped"
+    ],
+    "table_p0.99": {"0.10": 4603, "0.15": 1362, "0.20": 573, "0.25": 292, "0.30": 168, "0.40": 70, "0.50": 35},
+    "table_p0.999": {"0.10": 6904, "0.15": 2043, "0.20": 860, "0.25": 439, "0.30": 252, "0.40": 104, "0.50": 52},
+    "observation": "default 150 iterations only reaches p=0.99 when the in-ROI ground fraction w is >= ~0.30; the whole-scene ground fraction observed here is ~0.20, so ROI restriction (raising w) is required before 150 can be justified",
+    "recommendation": "target p=0.999 with w measured on the ROI sample; cap N (e.g. <=2000) and keep a bounded candidate list; never dead-set world Z when the up-axis is unknown"
+  }
+}

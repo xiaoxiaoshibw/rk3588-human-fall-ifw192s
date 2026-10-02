@@ -1,0 +1,147 @@
+﻿# HF-02 R2 prework snapshot (before any source change)
+# date: 2026-09-30 23:33:27 +08:00
+
+## git branch / HEAD
+master
+c96489e40037aca810b23b98d71ba34632d18bd0
+
+## git status --short
+ M src/CMakeLists.txt
+ M src/inno_lidar_ros/src/source/publish_manager.cpp
+?? AGENTS.md
+?? "AISC-3830\347\224\250\346\210\267\346\211\213\345\206\214.pdf"
+?? CLAUDE.md
+?? docs/
+?? rk.txt
+?? src/human_fall_detection/
+?? src/human_follow_calibration/
+
+## tracked diff --stat
+warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF the next time Git touches it
+error: open("src/CMakeLists.txt"): Invalid argument
+fatal: cannot hash src/CMakeLists.txt
+
+## publish_manager.cpp tracked diff (user spelling line + HF-02 round-1 changes)
+warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF the next time Git touches it
+diff --git a/src/inno_lidar_ros/src/source/publish_manager.cpp b/src/inno_lidar_ros/src/source/publish_manager.cpp
+index a4bd461..59ef8d7 100755
+--- a/src/inno_lidar_ros/src/source/publish_manager.cpp
++++ b/src/inno_lidar_ros/src/source/publish_manager.cpp
+@@ -1,4 +1,5 @@
+ #include "publish_manager.h"
++#include <cmath>
+ #if ROS_FOUND==1
+ #include <ros/ros.h>
+ #include <sensor_msgs/point_cloud2_iterator.h>
+@@ -37,19 +38,43 @@ public:
+     Impl()
+     {
+ 
++    }
++    // Device source stamps are consumed in seconds (runtime evidence; the SDK
++    // header comment claiming nanoseconds is not verified, so the unit is not
++    // changed). Non-finite/out-of-range values become the invalid (0,0) stamp
++    // and the fractional-second rounding carries at 1e9 so no invalid ROS
++    // nsec/nanosec (>= 1e9) can be published.
++    static void deviceStampToRos(double timestamp, uint32_t& sec, uint32_t& nsec)
++    {
++        sec = 0;
++        nsec = 0;
++        if (!std::isfinite(timestamp) || timestamp < 0.0 || timestamp > 4294967295.0)
++        {
++            return;
++        }
++        sec = (uint32_t)floor(timestamp);
++        double fraction = timestamp - (double)sec;
++        nsec = (uint32_t)round(fraction * 1e9);
++        if (nsec >= 1000000000u)
++        {
++            nsec -= 1000000000u;
++            ++sec;
++        }
+     }
+     inline DeviceStatus toRosDeviceStatus(const RosPointCloud& inno_msg,const std::string& frame_id)
+     {
+         DeviceStatus msg;
+         msg.header.frame_id = frame_id;
+-        msg.header.stamp.sec = (uint32_t)floor(inno_msg.timestamp);
++        uint32_t stamp_sec = 0;
++        uint32_t stamp_nsec = 0;
++        deviceStampToRos(inno_msg.timestamp, stamp_sec, stamp_nsec);
++        msg.header.stamp.sec = stamp_sec;
+         //std::cout<<"inno_msg.timestamp:"<<inno_msg.timestamp<<std::endl;
+ #if ROS_FOUND==1
+         msg.header.seq = inno_msg.seq;
+-        msg.header.stamp.nsec = (uint32_t)round((inno_msg.timestamp - msg.header.stamp.sec) * 1e9);
++        msg.header.stamp.nsec = stamp_nsec;
+ #else
+-        //ros_msg.header.stamp.nanosec = (uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
+-        msg.header.stamp.nanosec =(uint32_t)round((inno_msg.timestamp - msg.header.stamp.sec) * 1e9);
++        msg.header.stamp.nanosec = stamp_nsec;
+ #endif
+         msg.device_number=inno_msg.device_number;
+         msg.trx_temperature=inno_msg.trx_temperature;
+@@ -123,7 +148,7 @@ public:
+             *iter_timestamp = point.timestamp;
+             ++iter_timestamp;
+ #elif defined(POINT_TYPE_SOURCE)
+-            *iter_timestamp = point.timestamp;ros_msg
++            *iter_timestamp = point.timestamp;
+             *iter_distance = point.distance;
+             *iter_horizontal = point.horizontal;
+             *iter_vertical = point.vertical;
+@@ -140,14 +165,16 @@ public:
+         //ros_msg.header.stamp=std::chrono::system_clock::now();
+         //ros_msg.header.stamp = ros_msg.header.stamp.fromSec(inno_msg.timestamp);
+ 
+-        ros_msg.header.stamp.sec = (uint32_t)floor(inno_msg.timestamp);
++        uint32_t stamp_sec = 0;
++        uint32_t stamp_nsec = 0;
++        deviceStampToRos(inno_msg.timestamp, stamp_sec, stamp_nsec);
++        ros_msg.header.stamp.sec = stamp_sec;
+         //std::cout<<"inno_msg.timestamp:"<<inno_msg.timestamp<<std::endl;
+ #if ROS_FOUND==1
+         ros_msg.header.seq = inno_msg.seq;
+-        ros_msg.header.stamp.nsec = (uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
++        ros_msg.header.stamp.nsec = stamp_nsec;
+ #else
+-        //ros_msg.header.stamp.nanosec = (uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
+-        ros_msg.header.stamp.nanosec =(uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
++        ros_msg.header.stamp.nanosec = stamp_nsec;
+ #endif
+         ros_msg.header.frame_id = frame_id;
+         return ros_msg;
+@@ -156,11 +183,14 @@ public:
+     IMU toRosMsg(const std::shared_ptr<ImuMsg>& msg, const std::string& frame_id)
+     {
+         IMU imu_msg;
+-        imu_msg.header.stamp.sec =(uint32_t)floor(msg->timestamp);
++        uint32_t stamp_sec = 0;
++        uint32_t stamp_nsec = 0;
++        deviceStampToRos(msg->timestamp, stamp_sec, stamp_nsec);
++        imu_msg.header.stamp.sec = stamp_sec;
+ #if ROS_FOUND==1
+-        imu_msg.header.stamp.nsec =(uint32_t)round(float(msg->timestamp-imu_msg.header.stamp.sec)*1e9);
++        imu_msg.header.stamp.nsec = stamp_nsec;
+ #else
+-        imu_msg.header.stamp.nanosec =(uint32_t)round((msg->timestamp - imu_msg.header.stamp.sec) * 1e9); //timestamp
++        imu_msg.header.stamp.nanosec = stamp_nsec;
+ #endif
+         imu_msg.header.frame_id = frame_id;
+         // Set IMU data
+@@ -171,6 +201,15 @@ public:
+         imu_msg.linear_acceleration.x = msg->linear_acceleration_x;
+         imu_msg.linear_acceleration.y = msg->linear_acceleration_y;
+         imu_msg.linear_acceleration.z = msg->linear_acceleration_z;
++        // The SDK orientation/state semantics are not verified and no valid
++        // quaternion is copied, so declare "orientation not provided" with the
++        // ROS covariance[0] = -1 convention instead of publishing an illegal
++        // all-zero orientation with unknown covariance.
++        for (auto &covariance : imu_msg.orientation_covariance)
++        {
++            covariance = 0.0;
++        }
++        imu_msg.orientation_covariance[0] = -1.0;
+         return imu_msg;
+     }
+ #endif

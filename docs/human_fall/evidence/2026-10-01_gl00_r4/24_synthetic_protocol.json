@@ -1,0 +1,91 @@
+{
+  "ticket": "GL-00",
+  "round": "r4",
+  "date": "2026-10-01",
+  "kind": "synthetic_ground_protocol",
+  "status": "PROPOSED_FOR_REVIEW_NOT_IMPLEMENTED",
+  "scope": "software-only executable protocol; NOT a device/physical acceptance threshold",
+  "sources": {
+    "old_path_defaults_unchanged": "src/human_fall_detection/config/geometry.yaml (HF-03); kept as-is so the old behaviour is preserved",
+    "reviewer_proposal": "docs/human_fall/evidence/2026-10-01_gl00_r3/CODEX_REWORK.md item 2",
+    "units": "m, rad"
+  },
+  "activation": "new constrained path must be explicitly enabled; old path defaults and behaviour unchanged",
+  "constrained_path_parameters": {
+    "min_inliers": 100,
+    "min_fit_inlier_fraction": 0.2,
+    "fit_point_cap": 5000,
+    "holdout_point_cap": 10000,
+    "spatial_cell_m": 0.20,
+    "max_points_per_cell": 4,
+    "max_candidates": 3,
+    "max_candidates_note": "keep at most 3 non-duplicate candidates (dedupe by normal angle and offset)",
+    "ransac_iterations": 861,
+    "ransac_iterations_basis": "ceil(log(1-0.999)/log(1-0.20^3)) = ceil(860.0109) = 861 for p=0.999, w=0.20, seed 20261001",
+    "ransac_iteration_hard_cap": 2000,
+    "seed": 20261001,
+    "up_axis": "explicit unit vector supplied by the caller (synthetic reference e.g. [0,0,1]); no hidden world-Z default",
+    "max_angle_rad": 0.2617993877991494,
+    "max_angle_note": "0.2617993877991494 rad = 15 deg, synthetic reference only",
+    "sensor_height_interval_m": "supplied by the fixture, e.g. [1.0, 1.6]; the user 1.1 m is NOT used as truth",
+    "inlier_threshold_m": 0.05
+  },
+  "spatial_sampling": {
+    "rule": "bin candidate/fit points into ground-tangent cells of spatial_cell_m x spatial_cell_m and keep at most max_points_per_cell points per cell",
+    "purpose": "stop a dense near wall from filling the budget; sampling only selects fit points, original source indices are kept for support re-check"
+  },
+  "known_ground_validation_gate": {
+    "independent_regions_min": 3,
+    "points_per_region_min": 20,
+    "untruncated_rms_max_m": 0.03,
+    "abs_residual_p95_max_m": 0.05,
+    "support_fraction_min": 0.8,
+    "support_fraction_basis": "fraction of region points within inlier_threshold_m of the candidate plane",
+    "region_selection_rule": "regions must be pre-confirmed and their point indices must be disjoint from the fit sample indices; validation points must NOT be selected by the candidate plane's own residual",
+    "same_surface_note": "different spatial regions of the same physical floor MAY be independent hold-out regions as long as the pre-confirmed indices/frames do not overlap the fit sample"
+  },
+  "stability_gate": {
+    "normal_change_max_deg": 2.0,
+    "offset_change_max_m": 0.03,
+    "source": "synthetic across-frame-group check only"
+  },
+  "degeneracy_criteria_proposed": {
+    "status": "PROPOSED_NOT_IMPLEMENTED",
+    "min_sample_separation_m": 0.05,
+    "min_sample_triangle_area_m2": 0.0025,
+    "min_planar_eigenvalue_ratio": 0.02,
+    "note": "a 3-point sample is discarded if any pairwise distance < min_sample_separation_m or the triangle area < min_sample_triangle_area_m2; a refined inlier set is degenerate if lambda2/lambda1 < min_planar_eigenvalue_ratio (near-line points) and must fail explicitly"
+  },
+  "ambiguity_criteria_proposed": {
+    "status": "PROPOSED_NOT_IMPLEMENTED",
+    "support_close_ratio": 0.8,
+    "distinct_normal_deg": 10.0,
+    "distinct_offset_m": 0.05,
+    "note": "if the 2nd candidate support >= 0.8 * best support AND it is a different plane (normal angle > 10 deg or |offset difference| > 0.05 m), the result is ambiguous -> orientation_unverified / require ROI+field evidence; never auto-pick the lowest or largest plane"
+  },
+  "failure_branches": {
+    "insufficient_candidates": "fewer than 1 valid candidate after constraints -> status=invalid, reason=ground_not_found (explicit failure, no fabricated plane)",
+    "insufficient_budget_or_points": "not enough points/iterations to reach the target -> status=invalid, explicit reason; never silently lower a threshold",
+    "insufficient_validation_regions": "fewer than 3 usable known-ground regions -> status=invalid/orientation_unverified, no physical claim"
+  },
+  "synthetic_fixtures": [
+    {"id": "A_clean_floor", "tilt_deg": [0, 15, 25], "sensor_height_m": 1.2, "noise_sigma_m": 0.02, "wall_fraction": 0.5, "expect": "valid"},
+    {"id": "B_wall_dominant", "tilt_deg": 15, "sensor_height_m": 1.2, "noise_sigma_m": 0.02, "wall_fraction": 0.7, "expect": "valid via ROI; wall must not win"},
+    {"id": "C_desk_competition", "tilt_deg": 15, "sensor_height_m": 1.2, "noise_sigma_m": 0.02, "desk_offset_m": 0.75, "expect": "floor selected only with ROI/evidence, else ambiguous"},
+    {"id": "D_missing_ground", "tilt_deg": 15, "floor": false, "expect": "ground_not_found"},
+    {"id": "E_tilted_floor", "tilt_deg": 30, "sensor_height_m": 1.2, "noise_sigma_m": 0.02, "expect": "valid if the prior axis admits it"},
+    {"id": "F_degenerate", "collinear": true, "sparse": true, "expect": "explicit degeneracy failure"},
+    {"id": "G_bad_values", "inject": ["nan", "inf", "zero_returns"], "expect": "filtered; zero returns not support"}
+  ],
+  "ransac_budget_ceil_table": {
+    "formula": "N = ceil(log(1-p)/log(1-w^3))",
+    "p0.99": {"0.10": 4603, "0.15": 1363, "0.20": 574, "0.25": 293, "0.30": 169, "0.40": 70, "0.50": 35},
+    "p0.999": {"0.10": 6905, "0.15": 2044, "0.20": 861, "0.25": 439, "0.30": 253, "0.40": 105, "0.50": 52},
+    "assumptions": [
+      "idealized model: independent uniform picks of 3 distinct, non-collinear points",
+      "w = in-ROI probability a point lies on the target plane within the inlier threshold",
+      "an organized rotating LiDAR produces correlated returns, so this count is a PLANNING ESTIMATE that may be too low or too high; it is NOT an upper bound and NOT a correctness guarantee",
+      "always apply ransac_iteration_hard_cap (2000) and a candidate cap"
+    ]
+  }
+}

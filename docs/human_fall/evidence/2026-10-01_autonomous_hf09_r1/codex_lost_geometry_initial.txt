@@ -1,0 +1,24 @@
+test_projection_preserves_cached_snapshot_and_selection (__main__.TransportProjection.test_projection_preserves_cached_snapshot_and_selection) ... ok
+test_reused_candidate_id_does_not_replace_lost_target_geometry (__main__.TransportProjection.test_reused_candidate_id_does_not_replace_lost_target_geometry) ... FAIL
+test_reused_candidate_id_is_not_a_measurement_during_occlusion (__main__.TransportProjection.test_reused_candidate_id_is_not_a_measurement_during_occlusion) ... FAIL
+
+======================================================================
+FAIL: test_reused_candidate_id_does_not_replace_lost_target_geometry (__main__.TransportProjection.test_reused_candidate_id_does_not_replace_lost_target_geometry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_transport_codex.py", line 22, in test_reused_candidate_id_does_not_replace_lost_target_geometry
+    self.assertIsNone(state["position_source_m"])
+AssertionError: [7.000307510572889, 0.00020958146333479552, -0.28971466529713696] is not None
+
+======================================================================
+FAIL: test_reused_candidate_id_is_not_a_measurement_during_occlusion (__main__.TransportProjection.test_reused_candidate_id_is_not_a_measurement_during_occlusion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_transport_codex.py", line 36, in test_reused_candidate_id_is_not_a_measurement_during_occlusion
+    self.assertLess(state["position_source_m"][0], 4)
+AssertionError: 7.000307510572889 not less than 4
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.006s
+
+FAILED (failures=2)

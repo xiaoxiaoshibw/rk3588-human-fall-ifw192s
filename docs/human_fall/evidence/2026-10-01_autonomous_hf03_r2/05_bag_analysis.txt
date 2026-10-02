@@ -1,0 +1,111 @@
+=== real bag read-only re-analysis (hf02_timebase_20260930.bag) ===
+6d6b236b83a2fb4e6e8e60235af774f3790cab9d46b913ddc58c7920a922c68f  /root/catkin_ws/human_fall_sessions/hf02_timebase_20260930.bag
+{"output": "/tmp/hf03_r2_out/geometry_candidate.json", "status": "invalid", "reason": "ground_holdout_failed", "points": 4660009, "sensor_height_m": 1.2786947959534682, "tilt_rad": 0.4422546491247827}
+{
+  "kind": "geometry_calibration",
+  "schema_version": 1,
+  "calibration_id": "hf03_bag_candidate_r2",
+  "created_at_utc": "2026-09-30T17:44:50.862528+00:00",
+  "units": {
+    "length": "m",
+    "angle": "rad"
+  },
+  "frames": {
+    "lidar": "innolidar",
+    "reference": null
+  },
+  "transforms": {},
+  "rotations": {
+    "R_lidar_imu": {
+      "kind": "rotation",
+      "from_frame": "imu",
+      "to_frame": "innolidar",
+      "status": "unknown",
+      "rotation": null,
+      "evidence": null,
+      "note": "no IMU mounting evidence"
+    }
+  },
+  "ground": {
+    "kind": "ground_plane",
+    "status": "invalid",
+    "valid": false,
+    "reason": "ground_holdout_failed",
+    "frame": "innolidar",
+    "point_count": 97561,
+    "normal": [
+      -0.42796983504011105,
+      0.0026883009275203763,
+      0.9037890203658503
+    ],
+    "offset_m": 1.2786947959534682,
+    "sensor_height_m": 1.2786947959534682,
+    "tilt_rad": 0.4422546491247827,
+    "fit_inlier_count": 8206,
+    "inlier_fraction": 0.24031393680264737,
+    "holdout_residual": {
+      "count": 29268,
+      "rms_m": 1.4390269113067284,
+      "max_m": 3.3581958904185867
+    },
+    "holdout_support": {
+      "count": 7091,
+      "rms_m": 0.018854486079069904,
+      "max_m": 0.04994533159547121,
+      "fraction": 0.24227825611589449
+    },
+    "valid_region": {
+      "x_min_m": 0.7082282900810242,
+      "x_max_m": 5.853348731994629,
+      "y_min_m": -1.5625492334365845,
+      "y_max_m": 4.241423606872559,
+      "z_min_m": -1.0623213052749634,
+      "z_max_m": 1.3799961805343628,
+      "range_min_m": 1.63601592717979,
+      "range_max_m": 6.009792823692615,
+      "point_count": 8206
+    },
+    "settings": {
+      "max_points": 100000,
+      "max_fit_points": 50000,
+      "range_min_m": 1.0,
+      "range_max_m": 30.0,
+      "ransac_iterations": 150,
+      "inlier_threshold_m": 0.05,
+      "min_inliers": 100,
+      "min_inlier_fraction": 0.2,
+      "normal_up_min_z": 0.5,
+      "holdout_fraction": 0.3,
+      "min_holdout_points": 20,
+      "max_holdout_rms_m": 0.12,
+      "min_holdout_support": 0.5,
+      "seed": 20261001
+    },
+    "fit_residual": {
+      "count": 8206,
+      "rms_m": 0.01848695490678623,
+      "max_m": 0.08533290775749247
+    }
+  },
+  "sensor_height_m": null,
+  "status": {
+    "extrinsics": "unknown",
+    "imu_alignment": "unknown",
+    "ground": "unknown",
+    "geometry_params": "pending"
+  },
+  "verification": {
+    "ground_physical_verified": false,
+    "extrinsics_verified": false,
+    "imu_alignment_verified": false
+  },
+  "input": {
+    "source": "bag",
+    "path": "hf02_timebase_20260930.bag",
+    "topic": "/innolidar_points",
+    "sha256": "6d6b236b83a2fb4e6e8e60235af774f3790cab9d46b913ddc58c7920a922c68f",
+    "frames": 95,
+    "point_count": 4660009
+  },
+  "note": "read_only_hf02_bag_r2"
+}

@@ -1,0 +1,34 @@
+test_accepted_pending_request_does_not_hang_after_monitor_loss (__main__.ReloadChecks.test_accepted_pending_request_does_not_hang_after_monitor_loss) ... FAIL
+test_empty_reload_preserves_full_canonical_artifact (__main__.ReloadChecks.test_empty_reload_preserves_full_canonical_artifact) ... FAIL
+test_identical_paired_reload_preserves_full_canonical_artifact (__main__.ReloadChecks.test_identical_paired_reload_preserves_full_canonical_artifact) ... FAIL
+
+======================================================================
+FAIL: test_accepted_pending_request_does_not_hang_after_monitor_loss (__main__.ReloadChecks.test_accepted_pending_request_does_not_hang_after_monitor_loss)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r4\codex_r4_reload_checks.py", line 67, in test_accepted_pending_request_does_not_hang_after_monitor_loss
+    self.assertNotEqual(core.baseline.status, 'pending')
+AssertionError: 'pending' == 'pending'
+
+======================================================================
+FAIL: test_empty_reload_preserves_full_canonical_artifact (__main__.ReloadChecks.test_empty_reload_preserves_full_canonical_artifact)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r4\codex_r4_reload_checks.py", line 32, in test_empty_reload_preserves_full_canonical_artifact
+    self.assertEqual(core.calibration, before)
+AssertionError: {'kin[1209 chars]ture'}, 'note': None, 'ground_derived': {'kind[1056 chars]9d'}} != {'kin[1209 chars]ture', 'sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa[1202 chars]9d'}}
+Diff is 5109 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_identical_paired_reload_preserves_full_canonical_artifact (__main__.ReloadChecks.test_identical_paired_reload_preserves_full_canonical_artifact)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r4\codex_r4_reload_checks.py", line 40, in test_identical_paired_reload_preserves_full_canonical_artifact
+    self.assertEqual(core.calibration, before)
+AssertionError: {'kin[1209 chars]ture'}, 'note': None, 'ground_derived': {'kind[1056 chars]9d'}} != {'kin[1209 chars]ture', 'sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa[1202 chars]9d'}}
+Diff is 5109 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.024s
+
+FAILED (failures=3)

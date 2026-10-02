@@ -1,0 +1,18 @@
+test_boolean_schema_version_rejected (__main__.EpochDenominator.test_boolean_schema_version_rejected) ... FAIL
+test_negative_interval_in_another_epoch_does_not_count_event (__main__.EpochDenominator.test_negative_interval_in_another_epoch_does_not_count_event) ... ok
+test_observation_duration_is_separate_across_epochs (__main__.EpochDenominator.test_observation_duration_is_separate_across_epochs) ... ok
+test_overlapping_numeric_seconds_across_epochs_add_duration (__main__.EpochDenominator.test_overlapping_numeric_seconds_across_epochs_add_duration) ... ok
+
+======================================================================
+FAIL: test_boolean_schema_version_rejected (__main__.EpochDenominator.test_boolean_schema_version_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf08_codex.py", line 38, in test_boolean_schema_version_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.056s
+
+FAILED (failures=1)

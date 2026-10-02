@@ -1,0 +1,27 @@
+﻿ROS_DISTRO=noetic
+ROS_MASTER_URI=http://localhost:11311
+=== rosnode list ===
+/foxglove_bridge
+/inno_lidar_node
+/rosout
+=== rostopic list ===
+/device_status
+/inno_imu
+/innolidar_points
+/rosout
+/rosout_agg
+=== topic types ===
+-- /device_status : inno_lidar_msg/DeviceStatus
+-- /inno_imu : sensor_msgs/Imu
+-- /innolidar_points : sensor_msgs/PointCloud2
+-- /rosout : rosgraph_msgs/Log
+-- /rosout_agg : rosgraph_msgs/Log
+=== rosparam related ===
+ssh : head: invalid trailing option -- 
+所在位置 行:16 字符: 15
++ ... ; $script | ssh -o BatchMode=yes -o ConnectTimeout=8 ldiar-wel "docke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (head: invalid trailing option -- :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Try 'head --help' for more information.

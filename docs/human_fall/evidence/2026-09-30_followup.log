@@ -1,0 +1,130 @@
+
+[CONTAINER_MOUNTS]
+/home/wel/slam_localization_wuhan/src -> /root/catkin_ws/src
+
+
+[NETWORK]
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             DOWN           
+eth1             UP             192.168.3.125/24 fe80::bc3c:5fff:febb:4207/64 
+eth2             DOWN           fe80::ae2:6dff:fec4:fd47/64 
+eth3             DOWN           
+wlP4p65s0        DOWN           
+can0             DOWN           
+can1             DOWN           
+eth4             DOWN           
+can2             DOWN           
+can3             DOWN           
+docker0          DOWN           172.17.0.1/16 
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+eth0             DOWN           42:fd:1d:1c:3c:33 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+eth1             UP             be:3c:5f:bb:42:07 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+eth2             DOWN           08:e2:6d:c4:fd:47 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+eth3             DOWN           60:80:47:83:b5:7b <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+wlP4p65s0        DOWN           1c:4d:70:ca:c1:f0 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+can0             DOWN           <NOARP,ECHO> 
+can1             DOWN           <NOARP,ECHO> 
+eth4             DOWN           94:13:2c:47:92:ba <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+can2             DOWN           <NOARP> 
+can3             DOWN           <NOARP> 
+docker0          DOWN           7e:0e:46:ec:34:25 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+
+[HOST_PYTHON_PACKAGES]
+numpy UNAVAILABLE
+cv2 UNAVAILABLE
+rknnlite UNAVAILABLE
+onnxruntime UNAVAILABLE
+
+[CAMERA_NODES_AND_NPU]
+/dev/dri/renderD128
+/dev/dri/renderD129
+
+[DRIVER_CONFIG]
+common:
+  msg_source: 1                                         #0: not use Lidar
+                                                        #1: packet message comes from online Lidar
+                                                        #2: packet message comes from Pcap file
+  send_point_cloud_ros: true                            #true: Send point cloud through ROS or ROS2
+lidar:
+  - driver:
+      lidar_type: IFW192S
+      point_type: 0                             #point cloud type 0(x,y,z,intensity,ring) 1(x,y,z,intensity,ring,time)
+      cloud_port: 8080                          #cloud port of lidar (pc port)
+      check_lidar_ip: 192.168.1.10              #check param of lidar device UDP (lidar ip)
+      h_start_angle: -60                        #herizon Start angle (IFW192S-B H FOV 120°, 居中±60°)
+      h_end_angle: 60                           #herizon End angle of point cloud
+      v_start_angle: -45                        #vertical Start angle (IFW192S-B V FOV 90°, 居中±45°)
+      v_end_angle: 45                           #vertical End angle of point cloud
+      min_distance: 0.02                        #Minimum distance of point cloud
+      max_distance: 30                          #Maximum distance (IFW192S-B 30m@10% reflectivity)
+      pcap_repeat: true                         #True--repeat play pcap file
+      is_device_load_calibration: false           #True--Use calibration from lidar device (本地 ifw192s 标定不适用 FW192SB)
+      calibrate_folder: /root/catkin_ws/src/inno_lidar_ros/config/ifw192s #fallback (msg_source=1 时优先用设备标定)
+      pcap_file: /home/wenjie/project/pcap/ifw192s/71_2.pcap #The path of pcap file (msg_source=1 时不读)
+      extrinsic:
+        use_status: true                        #
+        roll: 0                                 #
+        pitch: 0                                #
+        yaw: 0                                  #
+        x: 0                                    #
+        y: 0                                    #
+        z: 0                                    #
+        
+    ros:
+      ros_frame_id: innolidar                             #Frame id of packet message and point cloud message
+      ros_send_point_cloud_topic: /innolidar_points       #Topic used to send point cloud through ROS
+      ros_send_imu_topic: /inno_imu                       #Topic used to send point cloud through ROS
+      ros_device_status_send_topic: /device_status        #Topic used to send point cloud through ROS
+      
+
+[DRIVER_SOURCE_IMU]
+        ros_msg.header.stamp.nanosec =(uint32_t)round((inno_msg.timestamp - ros_msg.header.stamp.sec) * 1e9);
+#endif
+        ros_msg.header.frame_id = frame_id;
+        return ros_msg;
+    }
+#ifdef ENABLE_IMU_MSG_PARSE
+    IMU toRosMsg(const std::shared_ptr<ImuMsg>& msg, const std::string& frame_id)
+    {
+        IMU imu_msg;
+        imu_msg.header.stamp.sec =(uint32_t)floor(msg->timestamp);
+#if ROS_FOUND==1
+        imu_msg.header.stamp.nsec =(uint32_t)round(float(msg->timestamp-imu_msg.header.stamp.sec)*1e9);
+#else
+        imu_msg.header.stamp.nanosec =(uint32_t)round((msg->timestamp - imu_msg.header.stamp.sec) * 1e9); //timestamp
+#endif
+        imu_msg.header.frame_id = frame_id;
+        // Set IMU data
+        imu_msg.angular_velocity.x = msg->angular_velocity_x;
+        imu_msg.angular_velocity.y = msg->angular_velocity_y;
+        imu_msg.angular_velocity.z = msg->angular_velocity_z;
+
+        imu_msg.linear_acceleration.x = msg->linear_acceleration_x;
+        imu_msg.linear_acceleration.y = msg->linear_acceleration_y;
+        imu_msg.linear_acceleration.z = msg->linear_acceleration_z;
+        return imu_msg;
+    }
+#endif
+
+[ROS_LOG_LOCATIONS]
+
+[DRIVER_FILE_HASHES]
+1285bec671a04d56a457b57a044eb5378a77bdad38f81b4df6832112f95f90de  /root/catkin_ws/src/inno_lidar_ros/src/source/publish_manager.cpp
+df90fc432a789de5010cdd1b741114ad86d4275ee7c9d23659c1df5f569e7baf  /root/catkin_ws/src/inno_lidar_ros/third_party/inno_driver/inno_driver/msg/imu_types.hpp
+
+[UDP_SOCKETS]
+State   Recv-Q   Send-Q     Local Address:Port      Peer Address:Port  Process  
+UNCONN  0        0                0.0.0.0:5353           0.0.0.0:*              
+UNCONN  0        0                0.0.0.0:59640          0.0.0.0:*              
+UNCONN  0        0                0.0.0.0:44494          0.0.0.0:*              
+UNCONN  0        0                0.0.0.0:52786          0.0.0.0:*              
+UNCONN  0        0                0.0.0.0:8080           0.0.0.0:*              
+UNCONN  0        0             127.0.0.53:53             0.0.0.0:*              
+UNCONN  0        0                0.0.0.0:57482          0.0.0.0:*              
+UNCONN  0        0                      *:33911                *:*              
+UNCONN  0        0                      *:5353                 *:*              
+
+[CONTAINER_DEVICE_MAPPING]
+Privileged=false NetworkMode=host Devices=[]
+
+[END]

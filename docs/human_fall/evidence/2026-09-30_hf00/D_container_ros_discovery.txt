@@ -1,0 +1,37 @@
+﻿=== container id/pid/network/binds ===
+Id=43c3213a08eec102693bc127c8d31fd21bdb111a77ab7167535f759a40d3f4a2 Pid= Net=host Ipc=private Binds=[/home/wel/slam_localization_wuhan/src:/root/catkin_ws/src]
+=== lidar-stack.service file ===
+-rw-rw-r-- 1 wel wel 287 9鏈? 18 16:23 /etc/systemd/system/lidar-stack.service
+=== container basics ===
+root
+welcomtech
+noetic
+---SRC---
+CMakeLists.txt
+human_follow_calibration
+human_follow_calibration.json
+inno_lidar_msg
+inno_lidar_ros
+---PKGS---
+/root/catkin_ws/src/human_follow_calibration/:
+CMakeLists.txt
+README.md
+package.xml
+scripts
+tests
+
+/root/catkin_ws/src/inno_lidar_ros/:
+CMakeLists.txt
+config
+launch
+node
+package.xml
+package_ros1.xml
+package_ros2.xml
+rviz
+src
+third_party
+---CONFIG---
+total 8
+-rwxr-xr-x 1 501 staff 2521 Aug  3 23:46 config.yaml
+drwxr-xr-x 2 501 staff 4096 Aug  3 21:27 ifw192s

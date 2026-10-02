@@ -1,0 +1,68 @@
+HF-07 / HF-11 autonomous round evidence index
+round: 2026-10-01_autonomous_hf07_11_r1
+session: ses_f0c1d2e43ffeMDoXiXAHqpVYqQ (model opencode-go/deepseek-v4.1-flash)
+
+Codex-provided inputs (unchanged by this worker):
+  review_hf07_codex.py            (5 composition contracts; original)
+  codex_early_runtime_boundaries.txt   (early 5/5 failures observed by Codex)
+  codex_runtime_boundaries_repeat.txt
+  opencode_exit.txt / opencode_resume_* / opencode_runtime_fix_*  (Codex CLI logs retained)
+
+HF-07 isolated verification:
+  00_board_recon.sh                 board/container recon (read-only)
+  01_build_and_verify.sh            isolated catkin devel+install, source/devel/install probes, unit+reviews, synthetic chain
+  02_device_tests.txt               full device output (all EXIT=0)
+  03_device_unit_summary.txt        device unit summary (Ran 175 tests, OK)
+  07_local_review_hf07.txt          local rerun of review_hf07_codex.py (Ran 5, OK)
+  07_local_unit.txt                 local unit summary (Ran 175 tests, OK)
+  hf07_verify_integration.py        synthetic PointCloud2 protocol chain harness
+  probe_imports.py                  core.__path__ / sensor_health.__file__ / decoder probe
+  hf07_verify.yaml / hf07_ground.json   isolated verify config + valid synthetic ground
+  run_hf07_device.py                uploads isolated tree and runs 01 on ldiar-wel
+  diag.sh / diag2.py / recon2.sh / unit_summary.sh   diagnosis (failures retained)
+
+HF-11 bridge + preview:
+  probe_bridge.py                   serverInfo capabilities (clientPublish present)
+  probe_clientpublish.py            client advertise + client message -> rostopic echo received
+  run_clientpub_probe.sh            host wrapper for the clientPublish probe
+  deploy_preview.sh                 04_preview_deploy.txt (URL + hashes)
+  04_preview_deploy.txt             preview served 200; active index.html unchanged
+  05_final_checks.txt               no leftover process/topics; driver + active page hash unchanged
+
+R3 additions (wire/frame/gating + standalone ground version + single cloud source):
+  08_live_preview_start.txt     isolated verify node + SYNTHETIC demo start (targeted stop of our own procs)
+  09_wire_probe.txt             Node wire probe: HF.packClientMessage select -> accepted ack (PASS)
+  10_preview_final.txt          preview served 200, hashes, candidates/state ~10Hz, URL
+  11_js_lib_checks.txt          node human_fall_lib.test.js -> 12 passed
+  12_state_ground_version.txt   /hf07_verify/state shows calibration_id ground-only-<hash>; served index single source
+  hf11_wire_probe.mjs           exact-page wire packing probe (Node 24 global WebSocket)
+  hf11_live_demo.py             SYNTHETIC standing cloud (not a real human) on /hf07_verify/points
+  start_live_preview.sh / verify_preview_live.sh / state_sample.sh / unit_summary.sh
+  R3 preview hashes: index 5de32a0e33db94aa87a75c09e3c03103a288e2f3aa1eb649cb147f17b7849003
+                     human_fall.js 00130252837b853d48824e2a787051e2b160c19202d569ad1f79e5f5a722afbb
+                     human_fall_lib.js 715f487133edac5e106ead16fb37ebf068ceb70975bf3012adec1e59e04f893d
+  R3 source hashes: core/node_runtime.py 57e7b0a3d0985be23874b5c2e234c12678596486acd0083dd2a4bdf1a9471261
+                    tests/test_hf07_node.py 9fd79ff2b7c4cf9c428a9f49187db031dc3c1d024f50c5cae249b89f6243d54b
+
+Preview URL (verify link): http://192.168.3.125:8090/human_fall_preview/index.html?prefix=/hf07_verify/&points=/hf07_verify/points
+Preview URL (production default): http://192.168.3.125:8090/human_fall_preview/index.html
+Active page sha256 (unchanged): e68dea5121d06c6fbf2fc2e8fa8ff947c05c6a87ba4635c0511ecf5b6491af5f
+Active driver sha256 (unchanged): 0286545f64e76f8435d8da20dcc55e3837eac17d1066415148a2a4c5abb6f3c4
+Preview index sha256: ddffce6288a195f89a70603a4f5793768300e4affc3f6d079b57591e32fda77b
+Preview human_fall.js sha256: a1022da3c254f39f75859cc5765f7842a194ec6debb369acc18198cf97eb726d
+
+Local source hashes:
+  core/node_runtime.py         fc8a4b8e2a51a38d8efdb211e39f13bd7fec236ca51e968eddd9fcf225f0c264
+  core/__init__.py             91c65294b02ca1696f8a5243392733fb033f8a65c0823a92ea2e8b97ce9841c4
+  scripts/human_fall_node.py   ccecd016f1f0cb5d8753de860132a8244babadd633ba6ec6f8f326c9a44cd9da
+  setup.py                     9c85816f19200148ac510f08bec30046f02c3f5fd503123fa869e14a53380888
+  CMakeLists.txt               26f2facdf08f25e69de8dc9a9dbca707fb8e6fb6938b78c2f2003332f2e40bb9
+  config/human_fall.yaml       4129ec429f69978a4e962e765a079816a7b090efc54f74342403ad8d399dfc8b
+  launch/human_fall.launch     377e642c9b3ab4ae208a2dbd373a1b1ad81d65dab4aedaa72547f016bb901f93
+  tests/test_hf07_node.py      f3edeebc955d0d796fa1e5efe2930719e52700cd09454a475b2f539a9fba1f0b
+  core/timebase.py             73d505e194d9b9d0b86a6c4ae952503a5bfc70e2cfda2873f6c2c018ef463100 (frozen, unchanged)
+  core/sensor_quality.py       06d57e2d7f621802dc40e119b4b123aa43085d5f9cc3d5d5990b50a74c50228a (frozen, unchanged)
+  core/lidar_candidates.py     ccb93986b74afe1192ede432fab9268a9be7f3f96cca828a580808cf56d99b09 (frozen, unchanged)
+  webui/human_fall_preview/index.html   ddffce6288a195f89a70603a4f5793768300e4affc3f6d079b57591e32fda77b
+  webui/human_fall_preview/human_fall.js a1022da3c254f39f75859cc5765f7842a194ec6debb369acc18198cf97eb726d
+  webui/index_board_20261001.html       e68dea5121d06c6fbf2fc2e8fa8ff947c05c6a87ba4635c0511ecf5b6491af5f

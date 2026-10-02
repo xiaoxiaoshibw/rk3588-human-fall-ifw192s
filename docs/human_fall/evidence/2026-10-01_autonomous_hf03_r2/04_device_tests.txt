@@ -1,0 +1,33 @@
+=== container python/numpy ===
+Python 3.8.10
+Name: numpy
+Version: 1.17.4
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+=== board unittest (isolated /tmp/hf03_r2_verify) ===
+Ran 92 tests in 0.593s
+
+OK
+wrote /tmp/tmpbff5umv1/interrupted.manifest.json
+bag re-read ok: 5 messages, duration 8.0 s
+  /innolidar_points 5 messages
+{"output": "/tmp/tmpbm4o4dbq/geometry.json", "status": "invalid", "reason": "ground_points_insufficient", "points": 4000, "sensor_height_m": null, "tilt_rad": null}
+{"output": "/tmp/tmpj_jo2l8m/geometry.json", "status": "valid", "reason": null, "points": 6000, "sensor_height_m": 1.3500174455562817, "tilt_rad": 1.9712242579581453e-05}
+=== board codex 6-method ===
+test_disjoint_holdout_plane_cannot_pass_validation (__main__.GeometryContracts) ... ok
+test_dominant_ground_with_other_scene_objects_is_still_valid (__main__.GeometryContracts) ... ok
+test_floor_below_sensor_has_positive_height (__main__.GeometryContracts) ... ok
+test_nonunit_ground_normal_is_rejected_in_artifact (__main__.GeometryContracts) ... ok
+test_plane_above_sensor_is_not_valid_ground (__main__.GeometryContracts) ... ok
+test_svd_is_thin_so_point_cap_does_not_allocate_n_squared (__main__.GeometryContracts) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.025s
+
+OK
+=== board source hashes ===
+b1e7b54bdbdca5b956e0dc1e53ef0440fe26a0297fdce3decd9ecebab17b94e6  src/human_fall_detection/core/ground.py
+be485148cfe20a3aa6a688c8a8b5f6d53a98027a45e833d0afbe2b20fc5edfd7  src/human_fall_detection/config/geometry.yaml
+5600c1392aced1ebe9ac87a526b984b00df407cb15b9239bea615eca4e3947b8  src/human_fall_detection/tests/test_hf03_geometry.py
+5a8f066cff5c9c8491907e560abfe919c8cac4f49f336b63a4f010fd19635825  src/human_fall_detection/core/calibration.py

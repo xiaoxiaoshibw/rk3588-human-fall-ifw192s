@@ -1,0 +1,31 @@
+HF-04..06 round-3 evidence index (2026-10-01, session ses_f0c87fac6ffeKE1MYpxoZMnwXa)
+
+00_prework_git_state.txt / 00_prework_head.txt   start state (user changes preserved)
+01_local_hashes_after.txt                        sha256 of changed files (local == device)
+02_local_tests.txt                               local full regression: 158/158 OK
+                                                 (Python 3.12.10 / NumPy 1.26.4)
+03_independent_review_local.txt                  Codex review_hf04_06_codex.py (16 methods): 16/16 OK
+04_frozen_hashes.txt                             frozen HF-01/02/03 assets unchanged
+05_device_tests.txt                              device isolated /tmp/hf04_06_r3_verify:
+                                                 unittest 158/158 OK + independent 16/16 OK
+                                                 (Python 3.8.10 / NumPy 1.17.4);
+                                                 uploaded hashes match local;
+                                                 driver 0286545f...f3c4 unchanged
+07_final_git_state.txt                           end state (only pre-existing user changes)
+run_device_check.py / run_device_check.sh        runner (UTF-8 bytes stdin, no CRLF)
+
+Round-1/2 evidence retained under ../2026-10-01_autonomous_hf04_06_r1/ and _r2/.
+
+Changed in round 3:
+  core/tracking.py       (fixed clock domain at select; invalid current -> reject)
+  core/features.py       (baseline_applies requires all bindings)
+  core/fall_state.py     (passes component session_id to baseline_applies)
+  tests/test_hf05_tracking.py, tests/test_hf06_fall_state.py (new failing-before cases)
+  docs/human_fall/INTERACTION_CONTRACT.md (binding/clock-domain contract)
+Unchanged in round 3: lidar_candidates.py, association.py, selection.py, baseline.py,
+pipeline.py, fall_replay.py, perception.yaml, test_hf04_candidates.py, CMakeLists.txt,
+and all frozen HF-01/02/03 assets.
+
+Boundaries: synthetic/offline only; real extrinsics/IMU/ground physics, human labels
+and mode acceptance remain NOT_VERIFIED; online confirmed disabled by default. No
+deploy, no driver restart, no network/system/vendor change, no commit.

@@ -1,0 +1,39 @@
+{
+  "constrained_bag": {
+    "cmd": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\calibrate_sensors.py --constrained --up-axis 0 0 1 --sensor-height-interval 0.5 1.6 --fit-frame-group fit --frame innolidar --bag C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\nope.bag --output C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\bag.json",
+    "rc": 2,
+    "stderr": "constrained --bag is not supported: decoded/filtered indices are not original bag source indices or real frame groups; use --points with explicit fit/validation indices (real-source adaptation BLOCKED)"
+  },
+  "fit_region_and_indices": {
+    "cmd": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\calibrate_sensors.py --constrained --up-axis 0 0 1 --sensor-height-interval 0.5 1.6 --fit-frame-group fit --frame innolidar --points C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\cloud.npz --fit-region C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\fit_region.json --fit-indices C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\fit.npy --validation-regions C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\regions.json --output C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\both.json",
+    "rc": 2,
+    "stderr": "usage: calibrate_sensors.py [-h] (--points POINTS | --bag BAG) [--topic TOPIC]\n                            [--max-frames MAX_FRAMES] [--frame FRAME]\n                            [--reference-frame REFERENCE_FRAME] --output\n                            OUTPUT [--config CONFIG]\n                            [--calibration-id CALIBRATION_ID]\n                            [--created-at-utc CREATED_AT_UTC] [--note NOTE]\n                            [--constrained] [--up-axis X Y Z]\n                            [--sensor-height-interval MIN_M MAX_M]\n                            [--fit-indices FIT_INDICES | --fit-region FIT_REGION]\n                            [--validation-regions VALIDATION_REGIONS]\n                            [--fit-frame-group FIT_FRAME_GROUP]\n                            [--diagnostics DIAGNOSTICS]\ncalibrate_sensors.py: error: argument --fit-indices: not allowed with argument --fit-region"
+  },
+  "fit_region_metadata": {
+    "cmd": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\calibrate_sensors.py --constrained --up-axis 0 0 1 --sensor-height-interval 0.5 1.6 --fit-frame-group fit --frame innolidar --points C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\cloud.npz --fit-region C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\fit_region.json --validation-regions C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\regions.json --calibration-id gl01_cli_boundary --output C:\\Users\\30680\\AppData\\Local\\Temp\\tmpj_kpyhba\\good.json",
+    "rc": 0,
+    "stdout": "{\"output\": \"C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\tmpj_kpyhba\\\\good.json\", \"constrained\": true, \"status\": \"valid\", \"reason\": null, \"points\": 3900, \"sensor_height_m\": 1.1998585040668326, \"sampled_fit_count\": 2996, \"iterations\": 861, \"candidates\": 1}",
+    "stderr": "",
+    "input_metadata": {
+      "fit_region": {
+        "path": "fit_region.json",
+        "sha256": "47f906242b6a4bd349ab0893b32256e12879a9cd69a51d4e8b4957c8ad24ac89",
+        "content_meta": {
+          "region_id": "fit",
+          "frame_group": "fit",
+          "index_count": 3000,
+          "first_index": 0,
+          "last_index": 2999
+        }
+      },
+      "validation_regions": {
+        "path": "regions.json",
+        "sha256": "da5ba9c99be55130e9bb4fb72e15344bdd6baa7799adf54f36c96e7f2278a905",
+        "region_count": 3
+      },
+      "source": "points",
+      "point_count": 3900
+    },
+    "constrained_status": "valid"
+  }
+}

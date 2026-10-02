@@ -1,0 +1,106 @@
+﻿=== rostopic info /innolidar_points ===
+Type: sensor_msgs/PointCloud2
+
+Publishers: 
+ * /inno_lidar_node (http://welcomtech:39275/)
+
+Subscribers: None
+
+
+=== hz /innolidar_points (14s) ===
+subscribed to [/innolidar_points]
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+=== header /innolidar_points (first msg) ===
+=== fields /innolidar_points ===
+=== point_step/row_step/height/width/is_dense ===
+=== rostopic info /inno_imu ===
+Type: sensor_msgs/Imu
+
+Publishers: 
+ * /inno_lidar_node (http://welcomtech:39275/)
+
+Subscribers: None
+
+
+=== hz /inno_imu (12s) ===
+subscribed to [/inno_imu]
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+=== echo -n 3 /inno_imu ===
+=== echo -n 2 /device_status ===
+=== rosnode info /inno_lidar_node ===
+--------------------------------------------------------------------------------
+Node [/inno_lidar_node]
+Publications: 
+ * /device_status [inno_lidar_msg/DeviceStatus]
+ * /inno_imu [sensor_msgs/Imu]
+ * /innolidar_points [sensor_msgs/PointCloud2]
+ * /rosout [rosgraph_msgs/Log]
+
+Subscriptions: None
+
+Services: 
+ * /inno_lidar_node/get_loggers
+ * /inno_lidar_node/set_logger_level
+
+
+contacting node http://welcomtech:39275/ ...
+Pid: 102
+Connections:
+ * topic: /rosout
+    * to: /rosout
+    * direction: outbound (43967 - 192.168.3.125:36244) [11]
+    * transport: TCPROS
+
+=== rosparam list (head 60) ===
+/foxglove_bridge/num_sender_threads
+/foxglove_bridge/port
+/foxglove_bridge/send_buffer_limit_bytes
+/inno_lidar_node/config_path
+/rosdistro
+/roslaunch/uris/host_welcomtech__40637
+/rosversion
+/run_id
+=== container processes ===
+    PID USER     COMMAND
+      1 root     sleep infinity
+     32 root     /usr/bin/python3 /opt/ros/noetic/bin/roscore
+     41 root     /usr/bin/python3 /opt/ros/noetic/bin/rosmaster --core -p 11311 -w 3 __log:=/root/.ros/log/006bdc78-bb1d-11f1-864d-be3c5fbb4207/master.log
+     51 root     /opt/ros/noetic/lib/rosout/rosout __name:=rosout __log:=/root/.ros/log/006bdc78-bb1d-11f1-864d-be3c5fbb4207/rosout-1.log
+    102 root     /root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node _config_path:=/root/catkin_ws/src/inno_lidar_ros/config/config.yaml
+    104 root     /opt/ros/noetic/lib/foxglove_bridge/foxglove_bridge _port:=8765 _send_buffer_limit_bytes:=134217728 _num_sender_threads:=4
+   2410 root     python3 -m http.server 8090 --directory /root/catkin_ws/webui
+   3015 root     bash -s
+   3426 root     ps -eo pid,user,args
+   3427 root     head -n 30
+=== container /dev (head 40) ===
+ssh : head: invalid number of lines: '40\r'
+所在位置 行:34 字符: 15
++ ... ; $script | ssh -o BatchMode=yes -o ConnectTimeout=8 ldiar-wel "docke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (head: invalid number of lines: '40\r':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

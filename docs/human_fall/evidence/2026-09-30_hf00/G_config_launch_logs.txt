@@ -1,0 +1,31 @@
+﻿=== lidar-stack.service ===
+[Unit]
+Description=Lidar stack auto-start (eth2 IP + container + ROS driver + foxglove_bridge)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/lidar-stack.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+=== board repo status ===
+总用量 16
+drwxr-xr-x  4 wel wel 4096 9月  29 23:20 .
+drwxr-xr-x 36 wel wel 4096 9月  28 17:33 ..
+drwxr-xr-x  5 wel wel 4096 9月  29 15:19 src
+drwxrwxr-x  2 wel wel 4096 9月  29 23:20 webui
+---
+总用量 24
+drwxr-xr-x 5 wel  wel   4096 9月  29 15:19 .
+drwxr-xr-x 4 wel  wel   4096 9月  29 23:20 ..
+lrwxrwxrwx 1 root root    49 8月   3 23:37 CMakeLists.txt -> /opt/ros/noetic/share/catkin/cmake/toplevel.cmake
+drwx---rwx 4 wel  wel   4096 9月  29 14:25 human_follow_calibration
+-rw-r--r-- 1 wel  wel   1693 9月  29 15:30 human_follow_calibration.json
+drwxr-xr-x 3  501 staff 4096 8月   3 21:27 inno_lidar_msg
+drwxr-xr-x 8  501 staff 4096 8月   5 21:35 inno_lidar_ros
+=== board git ===
+fatal: 不是 git 仓库（或者任何父目录）：.git
+fatal: 不是 git 仓库（或者任何父目录）：.git

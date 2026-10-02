@@ -1,0 +1,24 @@
+== live processes ==
+root       19505       0 16 05:51 ?        00:00:09 /usr/bin/python3 /root/catkin_ws/hf07_verify_ws/devel/lib/human_fall_detection/human_fall_node.py --config /tmp/hf07_verify_r1/docs/human_fall/evidence/2026-10-01_autonomous_hf07_11_r1/hf07_verify.yaml --perception /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/config/perception.yaml
+root       19570       0  4 05:51 ?        00:00:02 python3 /tmp/hf11_live_demo.py
+== preview files hashes ==
+5de32a0e33db94aa87a75c09e3c03103a288e2f3aa1eb649cb147f17b7849003  /root/catkin_ws/webui/human_fall_preview/index.html
+00130252837b853d48824e2a787051e2b160c19202d569ad1f79e5f5a722afbb  /root/catkin_ws/webui/human_fall_preview/human_fall.js
+715f487133edac5e106ead16fb37ebf068ceb70975bf3012adec1e59e04f893d  /root/catkin_ws/webui/human_fall_preview/human_fall_lib.js
+e68dea5121d06c6fbf2fc2e8fa8ff947c05c6a87ba4635c0511ecf5b6491af5f  /root/catkin_ws/webui/index.html
+== preview curl ==
+INDEX=200 40230B
+JS=200 24683B
+LIB=200 8043B
+== served index references lib ==
+1
+== state/candidates publishing (2s) ==
+average rate: 10.008
+	min: 0.092s max: 0.105s std dev: 0.00353s window: 13
+average rate: 10.055
+	min: 0.094s max: 0.106s std dev: 0.00278s window: 14
+== preview URL ==
+http://192.168.3.125:8090/human_fall_preview/index.html?prefix=/hf07_verify/&points=/hf07_verify/points
+== stop command (documented) ==
+docker exec slam-localization pkill -f human_fall_node.py; docker exec slam-localization pkill -f hf11_live_demo
+SCRIPT_DONE

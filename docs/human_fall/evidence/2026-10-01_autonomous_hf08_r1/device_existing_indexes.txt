@@ -1,0 +1,19 @@
+HF-08 read-only device index check; 2026-10-01
+
+Authorized route: SSH alias ldiar-wel -> docker exec slam-localization.
+No bag contents were copied, opened, replayed, or uploaded. Only directory entries and existing JSON manifests were read; SHA256 was computed on those manifest files.
+
+Commands:
+  ssh -o BatchMode=yes -o ConnectTimeout=30 ldiar-wel "docker exec slam-localization ls -la /root/catkin_ws/human_fall_sessions"
+  ssh -o BatchMode=yes -o ConnectTimeout=30 ldiar-wel "docker exec slam-localization find /root/catkin_ws -type f -name '*.manifest.json' -print"
+  ssh -o BatchMode=yes -o ConnectTimeout=30 ldiar-wel "docker exec slam-localization find /root/catkin_ws -type f -name events.jsonl -print"
+  ssh -o BatchMode=yes -o ConnectTimeout=30 ldiar-wel "docker exec slam-localization cat /root/catkin_ws/human_fall_sessions/hf01_sigint_r2.manifest.json /root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.manifest.json /root/catkin_ws/human_fall_sessions/hf01_verify.manifest.json /root/catkin_ws/human_fall_sessions/hf02_timebase_20260930.manifest.json"
+  ssh -o BatchMode=yes -o ConnectTimeout=30 ldiar-wel "docker exec slam-localization sha256sum /root/catkin_ws/human_fall_sessions/hf01_verify.manifest.json /root/catkin_ws/human_fall_sessions/hf01_sigint_r2.manifest.json /root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.manifest.json /root/catkin_ws/human_fall_sessions/hf02_timebase_20260930.manifest.json"
+
+Existing session manifests (label path and label SHA256 are null in each manifest):
+  hf01_verify: bag SHA256 3b9552979478a5882897d8a37d3831bdca09970f21c3a58fa0000ac3876afd29; 75 cloud frames; 7.804 s; manifest SHA256 3d24642483d190058337574aa2f5f790747b00f8806d783feaf6eae9142e8c78.
+  hf01_sigint_r2: bag SHA256 00ae29660c59575276faaca99fd420a636dbee62444377d7f7debd9fc49bd0b1; 286 cloud frames; 29.742 s; manifest SHA256 362ec8fd010a52a47894c501c2f5a560a1896d53180b5cb7cf6181455e1c0a77.
+  hf01_sigint_r2b: bag SHA256 d7f5779c5689f946ed188787d15ac72d01ef2a4ce106aadcfe78192f698fdd9b; 59 cloud frames; 6.129 s; manifest SHA256 e51dc13b43a1870c00f932b430359e7950592bed45cf67e5e633eaeb9c3f0e5a.
+  hf02_timebase_20260930: bag SHA256 6d6b236b83a2fb4e6e8e60235af774f3790cab9d46b913ddc58c7920a922c68f; 95 cloud frames; 9.801 s; manifest SHA256 bc66efc8ac3e096071304c58d681eb0088e8d880730c3db94bfed0540703eff7.
+
+All are HF-01/HF-02 sensor-health/timebase captures; indexed topics contain no /human_fall/state or /human_fall/event output. No events.jsonl exists under /root/catkin_ws. Presence of people, action and identity are unknown; the four recordings are inventory-only and pending human review, not evaluated fall sessions.

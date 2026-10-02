@@ -1,0 +1,53 @@
+{
+  "ticket": "GL-00", "round": "r4", "date": "2026-10-01",
+  "status": "software_plan_SUBMITTED; physical_BLOCKED",
+  "wording_rule": "under correlated LiDAR sampling the budget formula is a planning estimate, NOT an upper bound and NOT a correctness guarantee; it may under- or over-state the true requirement",
+  "software_thresholds": {
+    "source": "24_synthetic_protocol.json (reviewer-proposed pure-synthetic protocol, numbers fixed)",
+    "old_path": "unchanged: config/geometry.yaml defaults stay as-is",
+    "constrained_path_activation": "explicitly enabled",
+    "min_inliers": 100,
+    "min_fit_inlier_fraction": 0.2,
+    "fit_point_cap": 5000,
+    "holdout_point_cap": 10000,
+    "spatial_cell_m": 0.20,
+    "max_points_per_cell": 4,
+    "max_candidates": 3,
+    "ransac_iterations": 861,
+    "ransac_iteration_hard_cap": 2000,
+    "seed": 20261001,
+    "up_axis": "explicit caller-provided unit vector (no hidden world-Z default)",
+    "max_angle_rad": 0.2617993877991494,
+    "sensor_height_interval_m": "fixture-provided e.g. [1.0, 1.6]",
+    "inlier_threshold_m": 0.05,
+    "validation": {"independent_regions_min": 3, "points_per_region_min": 20,
+                   "untruncated_rms_max_m": 0.03, "abs_residual_p95_max_m": 0.05,
+                   "support_fraction_min": 0.8},
+    "stability": {"normal_change_max_deg": 2.0, "offset_change_max_m": 0.03},
+    "degeneracy_criteria_proposed": {"min_sample_separation_m": 0.05,
+                                     "min_sample_triangle_area_m2": 0.0025,
+                                     "min_planar_eigenvalue_ratio": 0.02,
+                                     "status": "proposed_not_implemented"},
+    "ambiguity_criteria_proposed": {"support_close_ratio": 0.8, "distinct_normal_deg": 10.0,
+                                    "distinct_offset_m": 0.05, "status": "proposed_not_implemented"},
+    "failure_branches": ["insufficient_candidates -> ground_not_found",
+                         "insufficient_budget_or_points -> explicit invalid reason",
+                         "insufficient_validation_regions -> invalid/orientation_unverified"]
+  },
+  "ransac_budget_ceil_table": {
+    "formula": "N = ceil(log(1-p)/log(1-w^3))",
+    "p0.99": {"0.10": 4603, "0.15": 1363, "0.20": 574, "0.25": 293, "0.30": 169, "0.40": 70, "0.50": 35},
+    "p0.999": {"0.10": 6905, "0.15": 2044, "0.20": 861, "0.25": 439, "0.30": 253, "0.40": 105, "0.50": 52},
+    "correction": "R3 had p0.999/w0.20 = 860; the exact value is 860.0109 -> ceil 861"
+  },
+  "physical_thresholds_BLOCKED": [
+    {"key": "ground identity", "reason": "operator visual/physical confirmation of ROI not available"},
+    {"key": "single-plane premise over whole ROI", "reason": "levelness/multi-region ground not measured"},
+    {"key": "mount pitch and source-axis<->gravity mapping", "reason": "lidar is now confirmed to look DOWNWARD; exact pitch/axis unknown"},
+    {"key": "inlier distance by range", "reason": "no residual-vs-range measurement"},
+    {"key": "absolute support points / covered area", "reason": "no confirmed ROI extent/density"},
+    {"key": "normal/d long-term stability tolerance", "reason": "only a 5 s window; no multi-session data"},
+    {"key": "independent height error", "reason": "no scale-measured reference height error"},
+    {"key": "sensor height", "reason": "candidate d~1.288-1.316 m; user states ground-to-eyeball vertical ~1.1 m and robot ground-to-top 1.4 m; measurement errors and window->device-origin offset unknown; the ~0.19 m difference is NOT reconciled or treated as truth"}
+  ]
+}

@@ -1,0 +1,407 @@
+DATE=2026-10-01T05:46:28+08:00
+USER=wel HOST=welcomtech ARCH=aarch64
+== container ==
+slam-localization slam-localization:noetic Up 2 days
+DOCKER_PS_EXIT=0
+== active driver hash BEFORE ==
+0286545f64e76f8435d8da20dcc55e3837eac17d1066415148a2a4c5abb6f3c4  /root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node
+DRIVER_BEFORE_EXIT=0
+== upload + unpack ==
+DOCKER_CP_EXIT=0
+/tmp/hf07_verify_r1
+/tmp/hf07_verify_r1/docs
+/tmp/hf07_verify_r1/docs/human_fall
+/tmp/hf07_verify_r1/docs/human_fall/evidence
+/tmp/hf07_verify_r1/src
+/tmp/hf07_verify_r1/src/human_fall_detection
+/tmp/hf07_verify_r1/src/human_fall_detection/config
+/tmp/hf07_verify_r1/src/human_fall_detection/core
+/tmp/hf07_verify_r1/src/human_fall_detection/launch
+/tmp/hf07_verify_r1/src/human_fall_detection/scripts
+/tmp/hf07_verify_r1/src/human_fall_detection/tests
+/tmp/hf07_verify_r1/src/human_follow_calibration
+/tmp/hf07_verify_r1/src/human_follow_calibration/scripts
+/tmp/hf07_verify_r1/src/human_follow_calibration/tests
+DOCKER_UNPACK_EXIT=0
+== isolated catkin build devel + install (no top-level build script) ==
+Creating symlink "/root/catkin_ws/hf07_verify_ws/src/CMakeLists.txt" pointing to "/opt/ros/noetic/share/catkin/cmake/toplevel.cmake"
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /root/catkin_ws/hf07_verify_ws/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /usr/lib/python3/dist-packages/em.py  
+-- Using empy: /usr/lib/python3/dist-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /root/catkin_ws/hf07_verify_ws/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Found Threads: TRUE  
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 3 packages in topological order:
+-- ~~  - inno_lidar_msg
+-- ~~  - human_fall_detection
+-- ~~  - human_follow_calibration
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'inno_lidar_msg'
+-- ==> add_subdirectory(inno_lidar_msg)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- inno_lidar_msg: 1 messages, 0 services
+-- +++ processing catkin package: 'human_fall_detection'
+-- ==> add_subdirectory(human_fall_detection)
+-- Installing devel-space wrapper /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/scripts/sensor_health.py to /root/catkin_ws/hf07_verify_ws/devel/lib/human_fall_detection
+-- Installing devel-space wrapper /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/scripts/record_session.py to /root/catkin_ws/hf07_verify_ws/devel/lib/human_fall_detection
+-- Installing devel-space wrapper /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/scripts/calibrate_sensors.py to /root/catkin_ws/hf07_verify_ws/devel/lib/human_fall_detection
+-- Installing devel-space wrapper /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/scripts/fall_replay.py to /root/catkin_ws/hf07_verify_ws/devel/lib/human_fall_detection
+-- Installing devel-space wrapper /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/scripts/human_fall_node.py to /root/catkin_ws/hf07_verify_ws/devel/lib/human_fall_detection
+-- +++ processing catkin package: 'human_follow_calibration'
+-- ==> add_subdirectory(human_follow_calibration)
+-- Installing devel-space wrapper /root/catkin_ws/hf07_verify_ws/src/human_follow_calibration/scripts/calibrate_human_follow.py to /root/catkin_ws/hf07_verify_ws/devel/lib/human_follow_calibration
+-- Installing devel-space wrapper /root/catkin_ws/hf07_verify_ws/src/human_follow_calibration/scripts/monitor_human_follow.py to /root/catkin_ws/hf07_verify_ws/devel/lib/human_follow_calibration
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/catkin_ws/hf07_verify_ws/build
+Scanning dependencies of target std_msgs_generate_messages_lisp
+Scanning dependencies of target std_msgs_generate_messages_nodejs
+Scanning dependencies of target std_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_nodejs
+Scanning dependencies of target _inno_lidar_msg_generate_messages_check_deps_DeviceStatus
+[  0%] Built target std_msgs_generate_messages_py
+Scanning dependencies of target std_msgs_generate_messages_cpp
+Scanning dependencies of target std_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target _inno_lidar_msg_generate_messages_check_deps_DeviceStatus
+Scanning dependencies of target inno_lidar_msg_generate_messages_cpp
+Scanning dependencies of target inno_lidar_msg_generate_messages_nodejs
+Scanning dependencies of target inno_lidar_msg_generate_messages_py
+Scanning dependencies of target inno_lidar_msg_generate_messages_lisp
+[ 28%] Generating C++ code from inno_lidar_msg/DeviceStatus.msg
+[ 28%] Generating Javascript code from inno_lidar_msg/DeviceStatus.msg
+[ 42%] Generating Lisp code from inno_lidar_msg/DeviceStatus.msg
+[ 57%] Generating Python from MSG inno_lidar_msg/DeviceStatus
+[ 57%] Built target inno_lidar_msg_generate_messages_nodejs
+[ 57%] Built target inno_lidar_msg_generate_messages_lisp
+Scanning dependencies of target inno_lidar_msg_generate_messages_eus
+[ 71%] Generating EusLisp manifest code for inno_lidar_msg
+[ 85%] Generating EusLisp code from inno_lidar_msg/DeviceStatus.msg
+[ 85%] Built target inno_lidar_msg_generate_messages_cpp
+[100%] Generating Python msg __init__.py for inno_lidar_msg
+[100%] Built target inno_lidar_msg_generate_messages_eus
+[100%] Built target inno_lidar_msg_generate_messages_py
+Scanning dependencies of target inno_lidar_msg_generate_messages
+[100%] Built target inno_lidar_msg_generate_messages
+Base path: /root/catkin_ws/hf07_verify_ws
+Source space: /root/catkin_ws/hf07_verify_ws/src
+Build space: /root/catkin_ws/hf07_verify_ws/build
+Devel space: /root/catkin_ws/hf07_verify_ws/devel
+Install space: /root/catkin_ws/hf07_verify_ws/install
+####
+#### Running command: "cmake /root/catkin_ws/hf07_verify_ws/src -DCATKIN_DEVEL_PREFIX=/root/catkin_ws/hf07_verify_ws/devel -DCMAKE_INSTALL_PREFIX=/root/catkin_ws/hf07_verify_ws/install -G Unix Makefiles" in "/root/catkin_ws/hf07_verify_ws/build"
+####
+####
+#### Running command: "make -j4" in "/root/catkin_ws/hf07_verify_ws/build"
+####
+BUILD_EXIT=0
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target _inno_lidar_msg_generate_messages_check_deps_DeviceStatus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_eus
+[ 28%] Built target inno_lidar_msg_generate_messages_py
+[ 42%] Built target inno_lidar_msg_generate_messages_nodejs
+[ 57%] Built target inno_lidar_msg_generate_messages_lisp
+[ 71%] Built target inno_lidar_msg_generate_messages_cpp
+[100%] Built target inno_lidar_msg_generate_messages_eus
+[100%] Built target inno_lidar_msg_generate_messages
+Install the project...
+-- Install configuration: ""
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/_setup_util.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/env.sh
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/setup.bash
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/local_setup.bash
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/setup.sh
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/local_setup.sh
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/setup.zsh
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/local_setup.zsh
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/setup.fish
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/local_setup.fish
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/.rosinstall
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/inno_lidar_msg/msg/DeviceStatus.msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/inno_lidar_msg/cmake/inno_lidar_msg-msg-paths.cmake
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/include/inno_lidar_msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/include/inno_lidar_msg/DeviceStatus.h
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/roseus/ros/inno_lidar_msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/roseus/ros/inno_lidar_msg/msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/roseus/ros/inno_lidar_msg/msg/DeviceStatus.l
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/roseus/ros/inno_lidar_msg/manifest.l
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/common-lisp/ros/inno_lidar_msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/common-lisp/ros/inno_lidar_msg/msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/common-lisp/ros/inno_lidar_msg/msg/_package.lisp
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/common-lisp/ros/inno_lidar_msg/msg/inno_lidar_msg-msg.asd
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/common-lisp/ros/inno_lidar_msg/msg/_package_DeviceStatus.lisp
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/common-lisp/ros/inno_lidar_msg/msg/DeviceStatus.lisp
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/gennodejs/ros/inno_lidar_msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/gennodejs/ros/inno_lidar_msg/msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/gennodejs/ros/inno_lidar_msg/msg/_index.js
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/gennodejs/ros/inno_lidar_msg/msg/DeviceStatus.js
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/gennodejs/ros/inno_lidar_msg/_index.js
+Listing '/root/catkin_ws/hf07_verify_ws/devel/lib/python3/dist-packages/inno_lidar_msg'...
+Compiling '/root/catkin_ws/hf07_verify_ws/devel/lib/python3/dist-packages/inno_lidar_msg/__init__.py'...
+Listing '/root/catkin_ws/hf07_verify_ws/devel/lib/python3/dist-packages/inno_lidar_msg/msg'...
+Compiling '/root/catkin_ws/hf07_verify_ws/devel/lib/python3/dist-packages/inno_lidar_msg/msg/_DeviceStatus.py'...
+Compiling '/root/catkin_ws/hf07_verify_ws/devel/lib/python3/dist-packages/inno_lidar_msg/msg/__init__.py'...
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/msg
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/msg/__pycache__
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/msg/__pycache__/_DeviceStatus.cpython-38.pyc
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/msg/__pycache__/__init__.cpython-38.pyc
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/msg/__init__.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/msg/_DeviceStatus.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/__pycache__
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/__pycache__/__init__.cpython-38.pyc
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/inno_lidar_msg/__init__.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/pkgconfig/inno_lidar_msg.pc
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/inno_lidar_msg/cmake/inno_lidar_msg-msg-extras.cmake
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/inno_lidar_msg/cmake/inno_lidar_msgConfig.cmake
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/inno_lidar_msg/cmake/inno_lidar_msgConfig-version.cmake
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/inno_lidar_msg/package.xml
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/pkgconfig/human_fall_detection.pc
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/cmake/human_fall_detectionConfig.cmake
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/cmake/human_fall_detectionConfig-version.cmake
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/package.xml
++ cd /root/catkin_ws/hf07_verify_ws/src/human_fall_detection
++ mkdir -p /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages
++ /usr/bin/env PYTHONPATH=/root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages:/root/catkin_ws/hf07_verify_ws/build/lib/python3/dist-packages:/opt/ros/noetic/lib/python3/dist-packages CATKIN_BINARY_DIR=/root/catkin_ws/hf07_verify_ws/build /usr/bin/python3 /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/setup.py build --build-base /root/catkin_ws/hf07_verify_ws/build/human_fall_detection install --root=/ --install-layout=deb --prefix=/root/catkin_ws/hf07_verify_ws/install --install-scripts=/root/catkin_ws/hf07_verify_ws/install/bin
+running build
+running build_py
+creating /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib
+creating /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/tracking.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/timebase.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/ground.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/features.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/baseline.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/pipeline.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/selection.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/node_runtime.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/lidar_candidates.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/__init__.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/calibration.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/sensor_quality.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/fall_state.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+copying ./core/association.py -> /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core
+running install
+running install_lib
+creating /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/tracking.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/timebase.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/ground.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/features.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/baseline.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/pipeline.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/selection.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/node_runtime.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/lidar_candidates.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/__init__.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/calibration.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/sensor_quality.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/fall_state.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+copying /root/catkin_ws/hf07_verify_ws/build/human_fall_detection/lib/core/association.py -> /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/tracking.py to tracking.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/timebase.py to timebase.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/ground.py to ground.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/features.py to features.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/baseline.py to baseline.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/pipeline.py to pipeline.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/selection.py to selection.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/node_runtime.py to node_runtime.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/lidar_candidates.py to lidar_candidates.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/__init__.py to __init__.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/calibration.py to calibration.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/sensor_quality.py to sensor_quality.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/fall_state.py to fall_state.cpython-38.pyc
+byte-compiling /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/association.py to association.cpython-38.pyc
+running install_egg_info
+Writing /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/human_fall_detection-0.1.0.egg-info
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/human_fall_detection/sensor_health.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/human_fall_detection/record_session.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/human_fall_detection/calibrate_sensors.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/human_fall_detection/fall_replay.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/human_fall_detection/human_fall_node.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/config
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/config/human_fall.yaml
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/config/perception.yaml
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/config/default.yaml
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/config/geometry.yaml
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/launch
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_fall_detection/launch/human_fall.launch
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/pkgconfig/human_follow_calibration.pc
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_follow_calibration/cmake/human_follow_calibrationConfig.cmake
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_follow_calibration/cmake/human_follow_calibrationConfig-version.cmake
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/share/human_follow_calibration/package.xml
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/human_follow_calibration/calibrate_human_follow.py
+-- Installing: /root/catkin_ws/hf07_verify_ws/install/lib/human_follow_calibration/monitor_human_follow.py
+Base path: /root/catkin_ws/hf07_verify_ws
+Source space: /root/catkin_ws/hf07_verify_ws/src
+Build space: /root/catkin_ws/hf07_verify_ws/build
+Devel space: /root/catkin_ws/hf07_verify_ws/devel
+Install space: /root/catkin_ws/hf07_verify_ws/install
+####
+#### Running command: "make cmake_check_build_system" in "/root/catkin_ws/hf07_verify_ws/build"
+####
+####
+#### Running command: "make install -j4" in "/root/catkin_ws/hf07_verify_ws/build"
+####
+INSTALL_BUILD_EXIT=0
+DOCKER_BUILD_WRAP_EXIT=0
+== SOURCE layout probe (script placed in package root, no manual path) ==
+cwd /tmp/hf07_verify_r1/src/human_fall_detection
+core.__file__ /tmp/hf07_verify_r1/src/human_fall_detection/core/__init__.py
+core.__path__ ['/tmp/hf07_verify_r1/src/human_fall_detection/core']
+sensor_health.__file__ /tmp/hf07_verify_r1/src/human_fall_detection/scripts/sensor_health.py
+decoder_available True calibration_error <class 'calibrate_human_follow.CalibrationError'>
+PROBE_OK True
+SOURCE_PROBE_EXIT=0
+DOCKER_SOURCE_WRAP_EXIT=0
+== DEVEL layout probe from /tmp (no manual path) ==
+cwd /tmp
+core.__file__ /root/catkin_ws/hf07_verify_ws/devel/lib/python3/dist-packages/core/__init__.py
+core.__path__ ['/root/catkin_ws/hf07_verify_ws/devel/lib/python3/dist-packages/core', '/root/catkin_ws/hf07_verify_ws/src/human_fall_detection/./core']
+sensor_health.__file__ /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/scripts/sensor_health.py
+decoder_available True calibration_error <class 'calibrate_human_follow.CalibrationError'>
+PROBE_OK True
+DEVEL_PROBE_EXIT=0
+ROSRUN_HELP_EXIT=0
+DOCKER_DEVEL_WRAP_EXIT=0
+== INSTALL layout probe from /tmp (no manual path) ==
+cwd /tmp
+core.__file__ /root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core/__init__.py
+core.__path__ ['/root/catkin_ws/hf07_verify_ws/install/lib/python3/dist-packages/core']
+sensor_health.__file__ /root/catkin_ws/hf07_verify_ws/install/lib/human_fall_detection/sensor_health.py
+decoder_available True calibration_error <class 'calibrate_human_follow.CalibrationError'>
+PROBE_OK True
+INSTALL_PROBE_EXIT=0
+DOCKER_INSTALL_WRAP_EXIT=0
+== installed artifacts + source hashes ==
+--- devel bin ---
+total 20
+-rwxr-xr-x 1 root root 581 Oct  1 05:46 calibrate_sensors.py
+-rwxr-xr-x 1 root root 575 Oct  1 05:46 fall_replay.py
+-rwxr-xr-x 1 root root 579 Oct  1 05:46 human_fall_node.py
+-rwxr-xr-x 1 root root 578 Oct  1 05:46 record_session.py
+-rwxr-xr-x 1 root root 577 Oct  1 05:46 sensor_health.py
+--- install bin ---
+total 76
+drwxr-xr-x 2 root root  4096 Oct  1 05:46 __pycache__
+-rwxr-xr-x 1 root root  6355 Oct  1 05:46 calibrate_sensors.py
+-rwxr-xr-x 1 root root  3732 Oct  1 05:46 fall_replay.py
+-rwxr-xr-x 1 root root 12669 Oct  1 05:46 human_fall_node.py
+-rwxr-xr-x 1 root root 15746 Oct  1 05:46 record_session.py
+-rwxr-xr-x 1 root root 27026 Oct  1 05:46 sensor_health.py
+91c65294b02ca1696f8a5243392733fb033f8a65c0823a92ea2e8b97ce9841c4  src/human_fall_detection/core/__init__.py
+57e7b0a3d0985be23874b5c2e234c12678596486acd0083dd2a4bdf1a9471261  src/human_fall_detection/core/node_runtime.py
+ccecd016f1f0cb5d8753de860132a8244babadd633ba6ec6f8f326c9a44cd9da  src/human_fall_detection/scripts/human_fall_node.py
+9c85816f19200148ac510f08bec30046f02c3f5fd503123fa869e14a53380888  src/human_fall_detection/setup.py
+26f2facdf08f25e69de8dc9a9dbca707fb8e6fb6938b78c2f2003332f2e40bb9  src/human_fall_detection/CMakeLists.txt
+4129ec429f69978a4e962e765a079816a7b090efc54f74342403ad8d399dfc8b  src/human_fall_detection/config/human_fall.yaml
+377e642c9b3ab4ae208a2dbd373a1b1ad81d65dab4aedaa72547f016bb901f93  src/human_fall_detection/launch/human_fall.launch
+9fd79ff2b7c4cf9c428a9f49187db031dc3c1d024f50c5cae249b89f6243d54b  src/human_fall_detection/tests/test_hf07_node.py
+DOCKER_HASH_WRAP_EXIT=0
+== local unit tests on device (expect 177) ==
+UNIT_EXIT=0
+{"output": "/tmp/tmpv3az41ot/geometry.json", "status": "invalid", "reason": "ground_points_insufficient", "points": 4000, "sensor_height_m": null, "tilt_rad": null}
+{"output": "/tmp/tmp7a_s7twn/geometry.json", "status": "valid", "reason": null, "points": 6000, "sensor_height_m": 1.3500174455562817, "tilt_rad": 1.9712242579581453e-05}
+wrote /tmp/tmp5n1in5ph/a.json
+wrote /tmp/tmp5n1in5ph/b.json
+DOCKER_UNIT_WRAP_EXIT=0
+== independent HF07 composition review (5 methods) on device ==
+test_auxiliary_clock_repeat_does_not_break_geometry_selection (__main__.CompositionContracts) ... ok
+test_disappeared_candidate_in_old_snapshot_is_not_selected (__main__.CompositionContracts) ... ok
+test_invalid_source_stamp_frame_cannot_be_selected (__main__.CompositionContracts) ... ok
+test_ready_current_baseline_reaches_upright_through_runtime (__main__.CompositionContracts) ... ok
+test_stopped_required_cloud_blocks_selection_before_snapshot_ttl (__main__.CompositionContracts) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.044s
+
+OK
+REVIEW_HF07_EXIT=0
+DOCKER_REVIEW_HF07_WRAP_EXIT=0
+== independent HF04-06 boundary review (18 methods) on device ==
+test_capture_baseline_rejects_wrong_epoch (__main__.ContinuityContracts) ... ok
+test_context_reset_is_consumed_once_and_new_observations_recover (__main__.ContinuityContracts) ... ok
+test_delayed_first_missing_frame_already_has_stale_prediction (__main__.ContinuityContracts) ... ok
+test_first_frame_after_long_gap_does_not_auto_bind_another_candidate (__main__.ContinuityContracts) ... ok
+test_future_snapshot_has_negative_age_and_is_rejected (__main__.ContinuityContracts) ... ok
+test_initial_low_posture_with_stored_baseline_is_not_a_descent (__main__.ContinuityContracts) ... ok
+test_invalid_current_receive_does_not_fall_back_to_another_clock (__main__.ContinuityContracts) ... ok
+test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts) ... ok
+test_late_match_cannot_bypass_occlusion_timeout (__main__.ContinuityContracts) ... ok
+test_new_selection_does_not_reuse_previous_targets_ready_baseline (__main__.ContinuityContracts) ... ok
+test_operator_confirmation_does_not_turn_a_flat_low_pose_into_stance (__main__.ContinuityContracts) ... ok
+test_prediction_age_counts_from_last_measurement (__main__.ContinuityContracts) ... ok
+test_prediction_gap_does_not_duplicate_an_existing_event (__main__.ContinuityContracts) ... ok
+test_prediction_is_anchored_at_last_measurement (__main__.ContinuityContracts) ... ok
+test_ready_baseline_without_binding_is_not_valid_for_any_target (__main__.ContinuityContracts) ... ok
+test_replay_does_not_choose_a_target_without_explicit_initial_selection (__main__.ContinuityContracts) ... ok
+test_small_motion_while_initially_low_does_not_use_static_baseline_drop (__main__.ContinuityContracts) ... ok
+test_unknown_request_schema_does_not_execute_selection (__main__.ContinuityContracts) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.009s
+
+OK
+REVIEW_HF04_06_EXIT=0
+DOCKER_REVIEW_HF04_06_WRAP_EXIT=0
+== stop only our own live-preview node/demo (targeted, not the driver) ==
+stopped
+DOCKER_STOP_OURS_WRAP_EXIT=0
+== synthetic protocol-chain integration ==
+[PASS] candidate_snapshot {'count': 1, 'snapshot_id': 'seq:10', 'source': {'seq': 10, 'stamp_secs': 1000, 'stamp_nsecs': 900000000, 'source_stamp_s': 1000.9, 'frame_id': 'innolidar'}}
+[PASS] selection_ack {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'hf07-select-1', 'action': 'select', 'session_id': 'hf07_verify', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': 'c0000', 'selection_version': 1, 'baseline': None, 'idempotent_replay': False}
+[PASS] track_locked locked
+[PASS] baseline_pending_ack {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'hf07-baseline-1', 'action': 'capture_baseline', 'session_id': 'hf07_verify', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': None, 'selection_version': 1, 'baseline': {'status': 'pending', 'reason': None, 'session_id': 'hf07_verify', 'track_id': 't0001', 'calibration_version': 'ground-only-f6e0227005dfec91', 'time_epoch': 0, 'selection_version': 1, 'action_generation': 1, 'sample_count': 0, 'operator_confirmed': True, 'baseline': None}, 'idempotent_replay': False}
+[PASS] baseline_completion {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'hf07-baseline-1', 'action': 'capture_baseline', 'session_id': 'hf07_verify', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': None, 'selection_version': 1, 'baseline': {'status': 'ready', 'reason': None, 'session_id': 'hf07_verify', 'track_id': 't0001', 'calibration_version': 'ground-only-f6e0227005dfec91', 'time_epoch': 0, 'selection_version': 1, 'action_generation': 1, 'sample_count': 30, 'operator_confirmed': True, 'baseline': {'kind': 'target_stance_baseline', 'schema_version': 1, 'baseline_version': 1, 'session_id': 'hf07_verify', 'track_id': 't0001', 'time_epoch': 0, 'selection_version': 1, 'action_generation': 1, 'calibration_version': 'ground-only-f6e0227005dfec91', 'status': 'ready', 'unit': 'm', 'source': 'operator_confirmed', 'height_m': {'median': 0.8499999940395355, 'p10': 0.8499999940395355, 'p90': 0.8499999940395355, 'std': 0.0}, 'position_m': [3.0, 0.0, -0.6500000059604645], 'sample_count': 30, 'duration_s': 3.0, 'position_spread_m': 0.0, 'point_count_median': 80.0, 'thresholds': {'require_seconds': 3.0, 'min_samples': 15, 'min_point_count': 60, 'max_position_spread_m': 0.25, 'height_min_m': 0.8, 'height_max_m': 2.2, 'min_stance_upper_m': 0.8, 'min_stance_span_m': 0.4, 'max_height_std_m': 0.12}, 'units': {'length': 'm', 'time': 's'}}}, 'idempotent_replay': False}
+[PASS] fall_state_synthetic {'final': 'suspected', 'seen': ['low_posture_unclassified', 'suspected', 'unknown', 'upright'], 'confirmed_seen': False}
+[PASS] illegal_stamp_epoch_bump {'before': 0, 'after': 2, 'requires_reselection': True}
+[PASS] no_events_replayed_as_new {'event_count': 0}
+REPORT_OK=True
+INTEGRATION_EXIT=0
+NODE_EXIT=0
+--- node log (tail) ---
+[INFO] [1790804809.402797]: human_fall_node: /hf07_verify/points + /hf07_verify/imu + /hf07_verify/device_status -> /hf07_verify/state (session hf07_verify, ground=valid, events=/tmp/hf07_verify_sessions/events.jsonl)
+DOCKER_INTEGRATION_WRAP_EXIT=0
+== topic check (verify topics only, no cmd_vel) ==
+/hf07_verify/points
+TOPIC_EXIT=0
+== active driver hash AFTER ==
+0286545f64e76f8435d8da20dcc55e3837eac17d1066415148a2a4c5abb6f3c4  /root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node
+DRIVER_AFTER_EXIT=0
+SCRIPT_DONE
+
+--- STDERR ---

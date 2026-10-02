@@ -1,0 +1,20 @@
+== deploy preview ==
+== stop previous demo/node ==
+stopped
+== start verify node (detached) ==
+== start SYNTHETIC demo input (detached) ==
+== processes ==
+root       19505       0 19 05:51 ?        00:00:01 /usr/bin/python3 /root/catkin_ws/hf07_verify_ws/devel/lib/human_fall_detection/human_fall_node.py --config /tmp/hf07_verify_r1/docs/human_fall/evidence/2026-10-01_autonomous_hf07_11_r1/hf07_verify.yaml --perception /root/catkin_ws/hf07_verify_ws/src/human_fall_detection/config/perception.yaml
+root       19570       0 15 05:51 ?        00:00:00 python3 /tmp/hf11_live_demo.py
+== topics ==
+/hf07_verify/candidates
+/hf07_verify/device_status
+/hf07_verify/event
+/hf07_verify/imu
+/hf07_verify/points
+/hf07_verify/selection_ack
+/hf07_verify/selection_request
+/hf07_verify/state
+== node log ==
+== demo log ==
+SCRIPT_DONE

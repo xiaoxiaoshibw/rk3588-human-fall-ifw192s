@@ -1,0 +1,24 @@
+test_disjoint_holdout_plane_cannot_pass_validation (__main__.GeometryContracts.test_disjoint_holdout_plane_cannot_pass_validation) ... ok
+test_dominant_ground_with_other_scene_objects_is_still_valid (__main__.GeometryContracts.test_dominant_ground_with_other_scene_objects_is_still_valid) ... FAIL
+test_floor_below_sensor_has_positive_height (__main__.GeometryContracts.test_floor_below_sensor_has_positive_height) ... ok
+test_nonunit_ground_normal_is_rejected_in_artifact (__main__.GeometryContracts.test_nonunit_ground_normal_is_rejected_in_artifact) ... ok
+test_plane_above_sensor_is_not_valid_ground (__main__.GeometryContracts.test_plane_above_sensor_is_not_valid_ground) ... ok
+test_svd_is_thin_so_point_cap_does_not_allocate_n_squared (__main__.GeometryContracts.test_svd_is_thin_so_point_cap_does_not_allocate_n_squared) ... ok
+
+======================================================================
+FAIL: test_dominant_ground_with_other_scene_objects_is_still_valid (__main__.GeometryContracts.test_dominant_ground_with_other_scene_objects_is_still_valid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf03_codex.py", line 69, in test_dominant_ground_with_other_scene_objects_is_still_valid
+    self.assertEqual(result["status"], "valid", result)
+AssertionError: 'invalid' != 'valid'
+- invalid
+? --
++ valid
+ : {'kind': 'ground_plane', 'status': 'invalid', 'valid': False, 'reason': 'ground_holdout_failed', 'frame': 'innolidar', 'point_count': 540, 'normal': [0.0, 0.0, 1.0], 'offset_m': 1.5, 'sensor_height_m': 1.5, 'tilt_rad': 0.0, 'fit_inlier_count': 289, 'inlier_fraction': 0.7645502645502645, 'holdout_residual': {'count': 162, 'rms_m': 1.3069403547777065, 'max_m': 2.9959869301492863}, 'valid_region': {'x_min_m': -2.0, 'x_max_m': 2.0, 'y_min_m': -2.0, 'y_max_m': 2.0, 'z_min_m': -1.5, 'z_max_m': -1.5, 'range_min_m': 1.5073687885915459, 'range_max_m': 3.2015621187164243, 'point_count': 289}, 'settings': {'max_points': 100000, 'max_fit_points': 50000, 'range_min_m': 0.0, 'range_max_m': 30.0, 'ransac_iterations': 35, 'inlier_threshold_m': 0.05, 'min_inliers': 60, 'min_inlier_fraction': 0.2, 'normal_up_min_z': 0.5, 'holdout_fraction': 0.3, 'min_holdout_points': 20, 'max_holdout_rms_m': 0.12, 'min_holdout_support': 0.8, 'seed': 7}, 'fit_residual': {'count': 289, 'rms_m': 0.0, 'max_m': 0.0}}
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.012s
+
+FAILED (failures=1)
+EXIT=1

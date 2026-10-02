@@ -1,0 +1,74 @@
+test_boolean_version_is_not_a_supported_integer_schema (__main__.ProfileInputs.test_boolean_version_is_not_a_supported_integer_schema) ... FAIL
+test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) ... 
+  test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) (field='seq', value='garbage') ... ERROR
+  test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) (field='stamp_secs', value=100.5) ... FAIL
+  test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) (field='stamp_nsecs', value=1000000000) ... FAIL
+  test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) (field='seq', value=True) ... FAIL
+test_negative_or_boolean_duration_is_not_a_latency (__main__.ProfileInputs.test_negative_or_boolean_duration_is_not_a_latency) ... 
+  test_negative_or_boolean_duration_is_not_a_latency (__main__.ProfileInputs.test_negative_or_boolean_duration_is_not_a_latency) (value=-1) ... FAIL
+  test_negative_or_boolean_duration_is_not_a_latency (__main__.ProfileInputs.test_negative_or_boolean_duration_is_not_a_latency) (value=True) ... FAIL
+
+======================================================================
+ERROR: test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) (field='seq', value='garbage')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_profile_codex.py", line 24, in test_frame_key_rejects_malformed_header_without_raising
+    self.assertIsNone(profile.frame_key(payload))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\src\human_fall_detection\scripts\profile_pipeline.py", line 127, in frame_key
+    return (str(session_id), int(epoch), int(seq), int(secs), int(nsecs))
+                                         ^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'garbage'
+
+======================================================================
+FAIL: test_boolean_version_is_not_a_supported_integer_schema (__main__.ProfileInputs.test_boolean_version_is_not_a_supported_integer_schema)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_profile_codex.py", line 13, in test_boolean_version_is_not_a_supported_integer_schema
+    self.assertIsNone(profile.parse_state(json.dumps({
+AssertionError: {'kind': 'target_state', 'schema_version': True} is not None
+
+======================================================================
+FAIL: test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) (field='stamp_secs', value=100.5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_profile_codex.py", line 24, in test_frame_key_rejects_malformed_header_without_raising
+    self.assertIsNone(profile.frame_key(payload))
+AssertionError: ('s', 0, 1, 100, 1) is not None
+
+======================================================================
+FAIL: test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) (field='stamp_nsecs', value=1000000000)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_profile_codex.py", line 24, in test_frame_key_rejects_malformed_header_without_raising
+    self.assertIsNone(profile.frame_key(payload))
+AssertionError: ('s', 0, 1, 100, 1000000000) is not None
+
+======================================================================
+FAIL: test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) (field='seq', value=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_profile_codex.py", line 24, in test_frame_key_rejects_malformed_header_without_raising
+    self.assertIsNone(profile.frame_key(payload))
+AssertionError: ('s', 0, 1, 100, 1) is not None
+
+======================================================================
+FAIL: test_negative_or_boolean_duration_is_not_a_latency (__main__.ProfileInputs.test_negative_or_boolean_duration_is_not_a_latency) (value=-1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_profile_codex.py", line 29, in test_negative_or_boolean_duration_is_not_a_latency
+    self.assertIsNone(profile._ms(value))
+AssertionError: -1000.0 is not None
+
+======================================================================
+FAIL: test_negative_or_boolean_duration_is_not_a_latency (__main__.ProfileInputs.test_negative_or_boolean_duration_is_not_a_latency) (value=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf09_profile_codex.py", line 29, in test_negative_or_boolean_duration_is_not_a_latency
+    self.assertIsNone(profile._ms(value))
+AssertionError: 1000.0 is not None
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.003s
+
+FAILED (failures=6, errors=1)

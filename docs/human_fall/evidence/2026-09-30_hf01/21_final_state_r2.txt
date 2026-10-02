@@ -1,0 +1,38 @@
+HF-01 round 2 final state, 2026-09-30 (Asia/Shanghai), OpenCode deepseek-v4.1-flash
+repo: D:\Code\ldiar   branch: master   HEAD: c96489e40037aca810b23b98d71ba34632d18bd0
+
+--- git status --short (end of round 2; same tracked set as prework snapshot 12) ---
+ M src/CMakeLists.txt
+ M src/inno_lidar_ros/src/source/publish_manager.cpp
+?? AGENTS.md
+?? "AISC-3830用户手册.pdf"
+?? CLAUDE.md
+?? docs/
+?? rk.txt
+?? src/human_fall_detection/
+?? src/human_follow_calibration/
+No reset / checkout / commit / push in round 2. Driver spelling fix and top-level symlink untouched.
+Round-1 hf01_verify.bag was not written to; it keeps sha256 3b9552979478a5882897d8a37d3831bdca09970f21c3a58fa0000ac3876afd29.
+
+--- local SHA256 of the changed package files (identical to deployed 15_deploy_r2.txt) ---
+33e6143b2604822b856de3d69b8b35eaafe7f4f443d2476ed4e22280252672ca  src/human_fall_detection/CMakeLists.txt
+4290d77154a213259646d67ad8a05efc2d6c56f9a6ab244b384567834184cbaa  src/human_fall_detection/package.xml
+221d9dad659039800c786f244ef2c8275da35adfd042fb8984237d817bf27ce4  src/human_fall_detection/config/default.yaml
+720335f1e9eb090d336a964f0572501c60ed84165593778cd2cc1ab21a58424a  src/human_fall_detection/scripts/record_session.py
+e77f9d7583b81661a26d8119181115307049863e1e94638a54475d1138d38ca1  src/human_fall_detection/scripts/sensor_health.py
+ed55cc1dfbcdfc4ea4b848193d682fbd3be807af97c15e1f2634c647649e046a  src/human_fall_detection/tests/test_hf01_health.py
+b31b27c18e2e3e0f6c088274608c843e4da5613639ba3d9c8d9617737af1a99b  docs/human_fall/CONTRACT.md
+
+--- device (ssh ldiar-wel, container slam-localization:noetic) source SHA256 ---
+33e6143b2604822b856de3d69b8b35eaafe7f4f443d2476ed4e22280252672ca  human_fall_detection/CMakeLists.txt
+4290d77154a213259646d67ad8a05efc2d6c56f9a6ab244b384567834184cbaa  human_fall_detection/package.xml
+221d9dad659039800c786f244ef2c8275da35adfd042fb8984237d817bf27ce4  human_fall_detection/config/default.yaml
+720335f1e9eb090d336a964f0572501c60ed84165593778cd2cc1ab21a58424a  human_fall_detection/scripts/record_session.py
+e77f9d7583b81661a26d8119181115307049863e1e94638a54475d1138d38ca1  human_fall_detection/scripts/sensor_health.py
+ed55cc1dfbcdfc4ea4b848193d682fbd3be807af97c15e1f2634c647649e046a  human_fall_detection/tests/test_hf01_health.py
+
+--- device session artifacts under /root/catkin_ws/human_fall_sessions ---
+3b9552979478a5882897d8a37d3831bdca09970f21c3a58fa0000ac3876afd29  hf01_verify.bag        (round 1, untouched, 96,611,994 B)
+00ae29660c59575276faaca99fd420a636dbee62444377d7f7debd9fc49bd0b1  hf01_sigint_r2.bag     (30 s duration run of the harness attempt whose background SIGINT was ignored, 368,848,097 B)
+d7f5779c5689f946ed188787d15ac72d01ef2a4ce106aadcfe78192f698fdd9b  hf01_sigint_r2b.bag    (correct early SIGINT run, 6.129 s, 75,895,441 B)
+hf01_sigint_r2.manifest.json / hf01_sigint_r2b.manifest.json / .reserve files present as listed in 19_session_sigint_r2b.txt.

@@ -1,0 +1,40 @@
+{
+  "records": [
+    {
+      "case": "valid",
+      "expected_status": "valid",
+      "rc": 0,
+      "stdout": "{\"output\": \"C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\tmpnl706wct\\\\geometry.json\", \"constrained\": true, \"status\": \"valid\", \"reason\": null, \"points\": 3900, \"sensor_height_m\": 1.1998585040668326, \"sampled_fit_count\": 2996, \"iterations\": 861, \"candidates\": 1}",
+      "stderr": "",
+      "artifact_written": true,
+      "constrained_ground_present": true,
+      "constrained_status": "valid",
+      "constrained_reason": null,
+      "validation_region_reports": 3
+    },
+    {
+      "case": "orientation_ambiguous",
+      "expected_status": "orientation_unverified",
+      "rc": 2,
+      "stdout": "{\"output\": \"C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\tmp2m2bffzp\\\\geometry.json\", \"constrained\": true, \"status\": \"orientation_unverified\", \"reason\": \"ground_orientation_ambiguous\", \"points\": 5800, \"sensor_height_m\": 1.1997332257070334, \"sampled_fit_count\": 2634, \"iterations\": 861, \"candidates\": 2}",
+      "stderr": "",
+      "artifact_written": true,
+      "constrained_ground_present": true,
+      "constrained_status": "orientation_unverified",
+      "constrained_reason": "ground_orientation_ambiguous",
+      "validation_region_reports": 0
+    },
+    {
+      "case": "missing_ground",
+      "expected_status": "invalid",
+      "rc": 2,
+      "stdout": "{\"output\": \"C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\tmp_8mb9nxh\\\\geometry.json\", \"constrained\": true, \"status\": \"invalid\", \"reason\": \"ground_not_found\", \"points\": 6300, \"sensor_height_m\": null, \"sampled_fit_count\": 2810, \"iterations\": 861, \"candidates\": 0}",
+      "stderr": "",
+      "artifact_written": true,
+      "constrained_ground_present": true,
+      "constrained_status": "invalid",
+      "constrained_reason": "ground_not_found",
+      "validation_region_reports": 0
+    }
+  ]
+}

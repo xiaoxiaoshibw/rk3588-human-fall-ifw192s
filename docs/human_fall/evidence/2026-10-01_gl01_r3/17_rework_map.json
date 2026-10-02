@@ -1,0 +1,27 @@
+{
+  "ticket": "GL-01",
+  "rework_against": "docs/human_fall/evidence/2026-10-01_gl01_r2/CODEX_REWORK.md",
+  "items": [
+    {"id": 1, "review": "missing/duplicate/overlap metadata must be invalid or ValueError; >=3 regions; strict 1-D int indices, reject mixed bool before NumPy upcast",
+     "fix": "core/ground.py: fit_frame_group required non-empty; per-region frame_group required and distinct; duplicate region_id/group -> REASON_METADATA invalid; _normalise_indices rejects bool/mixed/float element-wise before cast",
+     "evidence": ["21_codex_boundaries.txt", "10_fixtures.json (D,L)", "tests/test_gl01_constrained_ground.py::MetadataAndBoundaryTest"]},
+    {"id": 2, "review": "strict param bounds (seed>=0, max_candidates<=3, hard_cap<=2000, eigenratio<=1); element-wise bool/string rejection; check unit-axis convention; no silent min truncation; protocol floors",
+     "fix": "resolve_constrained_settings enforces floors/caps and mutual relations; _strict_float_sequence rejects mixed bool/str/NaN/Inf; _unit_vector requires unit norm; ransac_iterations>hard_cap is a ValueError (no min clip)",
+     "evidence": ["21_codex_boundaries.txt (test_strict_parameter_limits)", "tests/test_gl01_constrained_ground.py::test_protocol_floors_and_caps_are_not_relaxable"]},
+    {"id": 3, "review": "small max_candidates must not hide floor/desk competition; keep bounded competition evidence; flag pre-refine truncation",
+     "fix": "_COMPETITION_CANDIDATE_CAP=8 kept independently of max_candidates; ambiguity tested over competition list; competition_truncated flag rejects valid when bounded evidence was truncated",
+     "evidence": ["21_codex_boundaries.txt (test_reduced_candidate_cap_cannot_hide_competition)", "10_fixtures.json (C_desk_no_roi)", "tests/test_gl01_constrained_ground.py::test_reduced_candidate_cap_cannot_hide_competition"]},
+    {"id": 4, "review": "validate_constrained_ground accepted a declared-valid artifact with validation_regions=[{passed:False}]; CLI only checked old fields",
+     "fix": "validate_constrained_ground re-validates settings/caps/competition/up_axis/interval and every region (id/group distinct, usable/passed, count, unique indices mutually exclusive with fit and other regions, RMS/p95/support thresholds); legacy validate_ground_plane path retained; CLI calls it before writing",
+     "evidence": ["21_codex_boundaries.txt (test_declared_valid_artifact_needs_three_passing_regions)", "16_cli_boundaries.json (fit_region_metadata rc=0 valid)"]},
+    {"id": 5, "review": "holdout cap max(minpoints, cap//regions) could exceed cap or pass with per-region budget shortfall; declared-insufficient regions must not be skipped and still pass",
+     "fix": "fail with REASON_VALIDATION_INSUFFICIENT when holdout_point_cap//regions < points_per_region_min; every declared region must be usable (unusable -> fail); reports keep original_count and sampled count distinct",
+     "evidence": ["10_fixtures.json (J)", "tests/test_gl01_constrained_ground.py::test_too_few_usable_regions_is_insufficient"]},
+    {"id": 6, "review": "--fit-region/--fit-indices must be mutually exclusive; record ROI/group JSON SHA+content metadata; reject constrained --bag (no original source indices/frame groups)",
+     "fix": "argparse mutually exclusive group; input records sha256 + content metadata; constrained --bag returns 2 with an explicit BLOCKED message; legacy bag path unchanged",
+     "evidence": ["16_cli_boundaries.json"]},
+    {"id": 7, "review": "missing-ground fixture must be truly non-overlapping with an explicit reason; manifest ground.py hash key was the leaked variable (L_group_leak)",
+     "fix": "missing-ground test uses disjoint fit/validation and asserts REASON_NOT_FOUND plus empty raw/candidates; generator hash key fixed to core/ground.py and written only in gl01_r3; R1/R2 outputs preserved",
+     "evidence": ["15_manifest.json", "10_fixtures.json (D)", "tests/test_gl01_constrained_ground.py::test_missing_ground_is_not_fabricated"]}
+  ]
+}

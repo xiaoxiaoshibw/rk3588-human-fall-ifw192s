@@ -1,0 +1,90 @@
+
+[ROS_ENV]
+ROS_DISTRO=noetic
+ROS_MASTER_URI=http://localhost:11311
+Python 3.8.10
+numpy AVAILABLE 1.17.4
+cv2 UNAVAILABLE
+rospy AVAILABLE version not exposed
+mediapipe UNAVAILABLE
+onnxruntime UNAVAILABLE
+rknnlite UNAVAILABLE
+
+[NODES]
+/foxglove_bridge
+/inno_lidar_node
+/rosout
+
+[TOPICS]
+
+Published topics:
+ * /rosout_agg [rosgraph_msgs/Log] 1 publisher
+ * /rosout [rosgraph_msgs/Log] 2 publishers
+ * /innolidar_points [sensor_msgs/PointCloud2] 1 publisher
+ * /device_status [inno_lidar_msg/DeviceStatus] 1 publisher
+ * /inno_imu [sensor_msgs/Imu] 1 publisher
+
+Subscribed topics:
+ * /rosout [rosgraph_msgs/Log] 1 subscriber
+
+
+[LIDAR_NODE]
+--------------------------------------------------------------------------------
+Node [/inno_lidar_node]
+Publications: 
+ * /device_status [inno_lidar_msg/DeviceStatus]
+ * /inno_imu [sensor_msgs/Imu]
+ * /innolidar_points [sensor_msgs/PointCloud2]
+ * /rosout [rosgraph_msgs/Log]
+
+Subscriptions: None
+
+Services: 
+ * /inno_lidar_node/get_loggers
+ * /inno_lidar_node/set_logger_level
+
+
+contacting node http://welcomtech:39275/ ...
+Pid: 102
+Connections:
+ * topic: /rosout
+    * to: /rosout
+    * direction: outbound (43967 - 192.168.3.125:36244) [11]
+    * transport: TCPROS
+
+
+[TIME_MODE]
+ERROR: Parameter [/use_sim_time] is not set
+
+[POINT_HEADER]
+
+[POINT_HZ]
+subscribed to [/innolidar_points]
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+
+[IMU_MESSAGE]
+
+[IMU_HZ]
+subscribed to [/inno_imu]
+no new messages
+no new messages
+no new messages
+no new messages
+no new messages
+
+[DEVICE_STATUS]
+
+[WORKSPACE_PACKAGES]
+/root/catkin_ws/src/human_follow_calibration/package.xml
+/root/catkin_ws/src/inno_lidar_msg/package.xml
+/root/catkin_ws/src/inno_lidar_ros/package.xml
+
+[DRIVER_CONFIG_PATH]
+/root/catkin_ws/src/inno_lidar_ros/config/config.yaml
+
+[DRIVER_CONFIG]
+bash: line 41: syntax error: unexpected end of file

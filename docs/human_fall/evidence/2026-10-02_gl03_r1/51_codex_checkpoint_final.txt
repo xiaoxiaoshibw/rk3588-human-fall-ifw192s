@@ -1,0 +1,122 @@
+test_G02_filtered_indices_reconstruct_actual_ground_geometry (__main__.IndependentGeometry.test_G02_filtered_indices_reconstruct_actual_ground_geometry) ... ok
+test_G03_actual_frame_and_supplied_ground_must_match_bound_context (__main__.IndependentGeometry.test_G03_actual_frame_and_supplied_ground_must_match_bound_context) ... 
+  test_G03_actual_frame_and_supplied_ground_must_match_bound_context (__main__.IndependentGeometry.test_G03_actual_frame_and_supplied_ground_must_match_bound_context) (case='actual source frame differs') ... FAIL
+  test_G03_actual_frame_and_supplied_ground_must_match_bound_context (__main__.IndependentGeometry.test_G03_actual_frame_and_supplied_ground_must_match_bound_context) (case='explicit ground differs') ... FAIL
+test_G03_complete_parent_corruption_cannot_enable_ground_geometry (__main__.IndependentGeometry.test_G03_complete_parent_corruption_cannot_enable_ground_geometry) ... 
+  test_G03_complete_parent_corruption_cannot_enable_ground_geometry (__main__.IndependentGeometry.test_G03_complete_parent_corruption_cannot_enable_ground_geometry) (change='schema_bool') ... FAIL
+  test_G03_complete_parent_corruption_cannot_enable_ground_geometry (__main__.IndependentGeometry.test_G03_complete_parent_corruption_cannot_enable_ground_geometry) (change='missing_id') ... FAIL
+  test_G03_complete_parent_corruption_cannot_enable_ground_geometry (__main__.IndependentGeometry.test_G03_complete_parent_corruption_cannot_enable_ground_geometry) (change='invalid_verification') ... FAIL
+test_G04_prediction_converts_source_and_does_not_keep_stale_reference_box (__main__.IndependentGeometry.test_G04_prediction_converts_source_and_does_not_keep_stale_reference_box) ... FAIL
+test_G05_new_selection_without_cloud_cannot_publish_previous_binding (__main__.IndependentGeometry.test_G05_new_selection_without_cloud_cannot_publish_previous_binding) ... FAIL
+test_G05_release_without_new_cloud_cannot_publish_old_target_geometry (__main__.IndependentGeometry.test_G05_release_without_new_cloud_cannot_publish_old_target_geometry) ... FAIL
+test_G05_stale_and_monitor_failure_clear_current_ground_geometry (__main__.IndependentGeometry.test_G05_stale_and_monitor_failure_clear_current_ground_geometry) ... ok
+test_G07_legacy_snapshot_without_optional_ground_extension_validates (__main__.IndependentGeometry.test_G07_legacy_snapshot_without_optional_ground_extension_validates) ... ERROR
+
+======================================================================
+ERROR: test_G07_legacy_snapshot_without_optional_ground_extension_validates (__main__.IndependentGeometry.test_G07_legacy_snapshot_without_optional_ground_extension_validates)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 54, in test_G07_legacy_snapshot_without_optional_ground_extension_validates
+    validate_snapshot(snap)
+  File "D:\Code\ldiar\src\human_fall_detection\core\lidar_candidates.py", line 637, in validate_snapshot
+    raise ValueError("candidate.bbox_ground_from must be actual_points/unavailable")
+ValueError: candidate.bbox_ground_from must be actual_points/unavailable
+
+======================================================================
+FAIL: test_G03_actual_frame_and_supplied_ground_must_match_bound_context (__main__.IndependentGeometry.test_G03_actual_frame_and_supplied_ground_must_match_bound_context) (case='actual source frame differs')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 71, in test_G03_actual_frame_and_supplied_ground_must_match_bound_context
+    self.unavailable_or_rejected(ground=flat_ground(), calibration=record, frame_id='other_lidar')
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 45, in unavailable_or_rejected
+    self.assertIsNone(snap['coordinate'].get('ground_derived_id'))
+AssertionError: 'gd_653bd8b4ce2c119d' is not None
+
+======================================================================
+FAIL: test_G03_actual_frame_and_supplied_ground_must_match_bound_context (__main__.IndependentGeometry.test_G03_actual_frame_and_supplied_ground_must_match_bound_context) (case='explicit ground differs')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 73, in test_G03_actual_frame_and_supplied_ground_must_match_bound_context
+    self.unavailable_or_rejected(ground=flat_ground(1.4), calibration=record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 45, in unavailable_or_rejected
+    self.assertIsNone(snap['coordinate'].get('ground_derived_id'))
+AssertionError: 'gd_653bd8b4ce2c119d' is not None
+
+======================================================================
+FAIL: test_G03_complete_parent_corruption_cannot_enable_ground_geometry (__main__.IndependentGeometry.test_G03_complete_parent_corruption_cannot_enable_ground_geometry) (change='schema_bool')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 66, in test_G03_complete_parent_corruption_cannot_enable_ground_geometry
+    self.unavailable_or_rejected(ground=flat_ground(), calibration=record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 45, in unavailable_or_rejected
+    self.assertIsNone(snap['coordinate'].get('ground_derived_id'))
+AssertionError: 'gd_653bd8b4ce2c119d' is not None
+
+======================================================================
+FAIL: test_G03_complete_parent_corruption_cannot_enable_ground_geometry (__main__.IndependentGeometry.test_G03_complete_parent_corruption_cannot_enable_ground_geometry) (change='missing_id')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 66, in test_G03_complete_parent_corruption_cannot_enable_ground_geometry
+    self.unavailable_or_rejected(ground=flat_ground(), calibration=record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 45, in unavailable_or_rejected
+    self.assertIsNone(snap['coordinate'].get('ground_derived_id'))
+AssertionError: 'gd_653bd8b4ce2c119d' is not None
+
+======================================================================
+FAIL: test_G03_complete_parent_corruption_cannot_enable_ground_geometry (__main__.IndependentGeometry.test_G03_complete_parent_corruption_cannot_enable_ground_geometry) (change='invalid_verification')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 66, in test_G03_complete_parent_corruption_cannot_enable_ground_geometry
+    self.unavailable_or_rejected(ground=flat_ground(), calibration=record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 45, in unavailable_or_rejected
+    self.assertIsNone(snap['coordinate'].get('ground_derived_id'))
+AssertionError: 'gd_653bd8b4ce2c119d' is not None
+
+======================================================================
+FAIL: test_G04_prediction_converts_source_and_does_not_keep_stale_reference_box (__main__.IndependentGeometry.test_G04_prediction_converts_source_and_does_not_keep_stale_reference_box)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 168, in test_G04_prediction_converts_source_and_does_not_keep_stale_reference_box
+    np.testing.assert_allclose(predicted['bbox_reference_min_m'],
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\site-packages\numpy\testing\_private\utils.py", line 1504, in assert_allclose
+    assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\site-packages\numpy\testing\_private\utils.py", line 797, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Not equal to tolerance rtol=1e-07, atol=0
+
+Mismatched elements: 2 / 3 (66.7%)
+Max absolute difference: 0.03773548
+Max relative difference: 0.0263365
+ x: array([ 1.830181, -1.278335, -0.386076])
+ y: array([ 1.867916, -1.245532, -0.386076])
+
+======================================================================
+FAIL: test_G05_new_selection_without_cloud_cannot_publish_previous_binding (__main__.IndependentGeometry.test_G05_new_selection_without_cloud_cannot_publish_previous_binding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 149, in test_G05_new_selection_without_cloud_cannot_publish_previous_binding
+    self.assertEqual(state['track_id'], core.tracker.track_id)
+AssertionError: 't0001' != 't0002'
+- t0001
+?     ^
++ t0002
+?     ^
+
+
+======================================================================
+FAIL: test_G05_release_without_new_cloud_cannot_publish_old_target_geometry (__main__.IndependentGeometry.test_G05_release_without_new_cloud_cannot_publish_old_target_geometry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r1\codex_geometry_checks.py", line 135, in test_G05_release_without_new_cloud_cannot_publish_old_target_geometry
+    self.assertIsNone(state['track_id'])
+AssertionError: 't0001' is not None
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.127s
+
+FAILED (failures=8, errors=1)
+exit=1

@@ -1,0 +1,24 @@
+HF-08 R2 schema-version type correction validation
+Environment: Windows, Python 3.12.10
+
+Independent Codex review (all 4 required methods):
+  python -B -W error docs/human_fall/evidence/review_hf08_codex.py
+  Ran 4 tests, OK (boolean schema_version plus 3 epoch/denominator boundaries).
+
+Existing regression suites:
+  python -B -W error -m unittest discover -s src/human_fall_detection/tests -v
+  Ran 186 tests, OK.
+  python -B -W error -m unittest discover -s src/human_follow_calibration/tests -v
+  Ran 2 tests, OK.
+
+Change:
+  evaluate_document now requires type(schema_version) is int and value == 1;
+  JSON true is rejected although bool subclasses int in Python.
+  Added test_schema_version_bool_is_not_an_integer_version.
+
+SHA256:
+  src/human_fall_detection/scripts/evaluate_sessions.py = 7a97ce4ff78ff4be59f8e57f80d765842b9b3a4e84dbbb9c0060f65706d2c936
+  src/human_fall_detection/tests/test_hf08_evaluate_sessions.py = 2e80f92677b5a4ad5d00c149d4590cf33591835624c0a6dfc90c5b9f577f234a
+  docs/human_fall/evidence/review_hf08_codex.py = d7cdda1fa645fdf36130cc364842ca6c2f0e18b246f3c5b68438cfb854a285e2
+
+No algorithm, runtime JSONL adapter, hash behavior, data inventory, web page, or pending four-bag manifest was changed in R2.

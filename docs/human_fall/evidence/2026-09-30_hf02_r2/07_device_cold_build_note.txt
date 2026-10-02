@@ -1,0 +1,122 @@
+﻿RUN: ssh ldiar-wel 'bash /tmp/hf02_r2_cold_build_note.sh'
+DATE=2026-09-30T23:48:59+08:00
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /tmp/hf02_r2_cold_ws/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /usr/lib/python3/dist-packages/em.py  
+-- Using empy: /usr/lib/python3/dist-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /tmp/hf02_r2_cold_ws/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Found Threads: TRUE  
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 2 packages in topological order:
+-- ~~  - inno_lidar_msg
+-- ~~  - inno_lidar_ros
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'inno_lidar_msg'
+-- ==> add_subdirectory(inno_lidar_msg)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- inno_lidar_msg: 1 messages, 0 services
+-- +++ processing catkin package: 'inno_lidar_ros'
+-- ==> add_subdirectory(inno_lidar_ros)
+-- Enable IMU MSG PARSE is on
+=============================================================
+-- POINT_TYPE is XYZI_TIME
+=============================================================
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.1") 
+-- Checking for module 'libpcap'
+--   Found libpcap, version 1.9.1
+=============================================================
+-- ROS Found. ROS Support is turned On.
+=============================================================
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/hf02_r2_cold_ws/build
+Scanning dependencies of target std_msgs_generate_messages_eus
+Scanning dependencies of target _inno_lidar_msg_generate_messages_check_deps_DeviceStatus
+Scanning dependencies of target std_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_eus
+Scanning dependencies of target std_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_py
+Scanning dependencies of target std_msgs_generate_messages_lisp
+[  0%] Built target _inno_lidar_msg_generate_messages_check_deps_DeviceStatus
+Scanning dependencies of target inno_lidar_node
+Scanning dependencies of target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_cpp
+Scanning dependencies of target inno_lidar_msg_generate_messages_eus
+[  8%] Building CXX object inno_lidar_ros/CMakeFiles/inno_lidar_node.dir/src/manager/node_manager.cpp.o
+[ 16%] Building CXX object inno_lidar_ros/CMakeFiles/inno_lidar_node.dir/node/inno_lidar_node.cpp.o
+[ 25%] Building CXX object inno_lidar_ros/CMakeFiles/inno_lidar_node.dir/src/source/source_driver.cpp.o
+[ 33%] Generating EusLisp code from inno_lidar_msg/DeviceStatus.msg
+[ 41%] Generating EusLisp manifest code for inno_lidar_msg
+[ 41%] Built target inno_lidar_msg_generate_messages_eus
+[ 50%] Building CXX object inno_lidar_ros/CMakeFiles/inno_lidar_node.dir/src/source/publish_manager.cpp.o
+/tmp/hf02_r2_cold_ws/src/inno_lidar_ros/src/source/publish_manager.cpp:7:10: fatal error: inno_lidar_msg/DeviceStatus.h: No such file or directory
+    7 | #include <inno_lidar_msg/DeviceStatus.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [inno_lidar_ros/CMakeFiles/inno_lidar_node.dir/build.make:102: inno_lidar_ros/CMakeFiles/inno_lidar_node.dir/src/source/publish_manager.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+Scanning dependencies of target inno_lidar_msg_generate_messages_nodejs
+[ 58%] Generating Javascript code from inno_lidar_msg/DeviceStatus.msg
+Scanning dependencies of target inno_lidar_msg_generate_messages_py
+[ 58%] Built target inno_lidar_msg_generate_messages_nodejs
+Scanning dependencies of target inno_lidar_msg_generate_messages_lisp
+[ 66%] Generating Python from MSG inno_lidar_msg/DeviceStatus
+[ 75%] Generating Lisp code from inno_lidar_msg/DeviceStatus.msg
+[ 75%] Built target inno_lidar_msg_generate_messages_lisp
+Scanning dependencies of target inno_lidar_msg_generate_messages_cpp
+[ 83%] Generating C++ code from inno_lidar_msg/DeviceStatus.msg
+[ 91%] Generating Python msg __init__.py for inno_lidar_msg
+[ 91%] Built target inno_lidar_msg_generate_messages_cpp
+[ 91%] Built target inno_lidar_msg_generate_messages_py
+Scanning dependencies of target inno_lidar_msg_generate_messages
+[ 91%] Built target inno_lidar_msg_generate_messages
+make[1]: *** [CMakeFiles/Makefile2:928: inno_lidar_ros/CMakeFiles/inno_lidar_node.dir/all] Error 2
+make: *** [Makefile:141: all] Error 2
+Base path: /tmp/hf02_r2_cold_ws
+Source space: /tmp/hf02_r2_cold_ws/src
+Build space: /tmp/hf02_r2_cold_ws/build
+Devel space: /tmp/hf02_r2_cold_ws/devel
+Install space: /tmp/hf02_r2_cold_ws/install
+Creating symlink "/tmp/hf02_r2_cold_ws/src/CMakeLists.txt" pointing to "/opt/ros/noetic/share/catkin/cmake/toplevel.cmake"
+####
+#### Running command: "cmake /tmp/hf02_r2_cold_ws/src -DCATKIN_DEVEL_PREFIX=/tmp/hf02_r2_cold_ws/devel -DCMAKE_INSTALL_PREFIX=/tmp/hf02_r2_cold_ws/install -G Unix Makefiles" in "/tmp/hf02_r2_cold_ws/build"
+####
+####
+#### Running command: "make -j4" in "/tmp/hf02_r2_cold_ws/build"
+####
+Invoking "make -j4" failed
+COLD_ONE_PASS_BUILD_EXIT=1
+DOCKER_COLD_BUILD_WRAP_EXIT=0
+SCRIPT_DONE
+OUTER_SSH_EXIT=0
+

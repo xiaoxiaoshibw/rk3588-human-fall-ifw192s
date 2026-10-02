@@ -1,0 +1,34 @@
+test_covariance_zero_and_abnormal_flag_are_not_overinterpreted (test_hf01_health.ImuTest.test_covariance_zero_and_abnormal_flag_are_not_overinterpreted) ... ok
+test_covariance_zero_checks_all_nine_entries (test_hf01_health.ImuTest.test_covariance_zero_checks_all_nine_entries) ... ok
+test_nonfinite_measurements_become_null_strict_json (test_hf01_health.ImuTest.test_nonfinite_measurements_become_null_strict_json) ... ok
+test_orientation_not_provided_minus_one_is_unusable (test_hf01_health.ImuTest.test_orientation_not_provided_minus_one_is_unusable) ... ok
+test_quaternion_unusable_cases (test_hf01_health.ImuTest.test_quaternion_unusable_cases) ... ok
+test_bad_hash_summary_and_nonfinite_values_are_rejected (test_hf01_health.ManifestTest.test_bad_hash_summary_and_nonfinite_values_are_rejected) ... ok
+test_manifest_missing_or_invalid_fields_are_rejected (test_hf01_health.ManifestTest.test_manifest_missing_or_invalid_fields_are_rejected) ... ok
+test_manifest_round_trip (test_hf01_health.ManifestTest.test_manifest_round_trip) ... ok
+test_nested_schema_incomplete_or_illegal_objects_are_rejected (test_hf01_health.ManifestTest.test_nested_schema_incomplete_or_illegal_objects_are_rejected) ... ok
+test_omitted_optional_objects_get_complete_defaults (test_hf01_health.ManifestTest.test_omitted_optional_objects_get_complete_defaults) ... ok
+test_timestamp_at_18_with_point_step_26_is_read_unaligned (test_hf01_health.PointCloudTest.test_timestamp_at_18_with_point_step_26_is_read_unaligned) ... ok
+test_truncated_and_invalid_fields_are_rejected (test_hf01_health.PointCloudTest.test_truncated_and_invalid_fields_are_rejected) ... ok
+test_xyz_decoder_reuse_and_padded_big_endian_rows (test_hf01_health.PointCloudTest.test_xyz_decoder_reuse_and_padded_big_endian_rows) ... ok
+test_zero_and_nonfinite_points_are_counted (test_hf01_health.PointCloudTest.test_zero_and_nonfinite_points_are_counted) ... ok
+test_existing_bag_active_or_manifest_blocks_before_recording (test_hf01_health.SessionReservationTest.test_existing_bag_active_or_manifest_blocks_before_recording) ... ok
+test_existing_manifest_is_not_rewritten_when_recorder_would_run (test_hf01_health.SessionReservationTest.test_existing_manifest_is_not_rewritten_when_recorder_would_run) ... ok
+test_interrupted_run_records_sigint_and_keeps_requested_duration (test_hf01_health.SessionReservationTest.test_interrupted_run_records_sigint_and_keeps_requested_duration) ... ok
+test_session_reservation_is_exclusive (test_hf01_health.SessionReservationTest.test_session_reservation_is_exclusive) ... ok
+test_snapshot_never_mixes_new_stamp_with_old_layout (test_hf01_health.SnapshotConcurrencyTest.test_snapshot_never_mixes_new_stamp_with_old_layout) ... ok
+test_cloud_stall_invalid_but_imu_stall_only_degrades (test_hf01_health.StampAndTopicTest.test_cloud_stall_invalid_but_imu_stall_only_degrades) ... ok
+test_invalid_current_stamp_is_null_and_previous_valid_baseline_survives (test_hf01_health.StampAndTopicTest.test_invalid_current_stamp_is_null_and_previous_valid_baseline_survives) ... ok
+test_invalid_stamp_path_is_shared_by_every_topic (test_hf01_health.StampAndTopicTest.test_invalid_stamp_path_is_shared_by_every_topic) ... ok
+test_missing_required_input_is_invalid_not_degraded (test_hf01_health.StampAndTopicTest.test_missing_required_input_is_invalid_not_degraded) ... ok
+test_stamp_repeat_regress_and_forward_jump_bump_epoch (test_hf01_health.StampAndTopicTest.test_stamp_repeat_regress_and_forward_jump_bump_epoch) ... ok
+test_unexpected_frame_degrades_cloud (test_hf01_health.StampAndTopicTest.test_unexpected_frame_degrades_cloud) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.268s
+
+OK
+wrote C:\Users\30680\AppData\Local\Temp\tmp_1dj2g69\interrupted.manifest.json
+bag re-read ok: 5 messages, duration 8.0 s
+  /innolidar_points 5 messages
+EXIT=0

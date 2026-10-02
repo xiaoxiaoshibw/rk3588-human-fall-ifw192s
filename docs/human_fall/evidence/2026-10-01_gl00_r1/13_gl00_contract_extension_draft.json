@@ -1,0 +1,66 @@
+{
+  "ticket": "GL-00",
+  "date": "2026-10-01",
+  "purpose": "minimal additive extension for ground-derived coordinates; draft only, requires Codex review before GL-02 implements",
+  "constraints": [
+    "does not change HF-01 health/manifest v1 (schema_version=1)",
+    "does not change frozen semantics of existing fields; only additive optional fields",
+    "ground-derived transform is stored separately from measured extrinsics and is never written into T_reference_lidar / R_lidar_imu",
+    "presence of a ground block never implies a verified world/vehicle pose"
+  ],
+  "A_ground_artifact_extension": {
+    "kind": "geometry_calibration",
+    "schema_version": 1,
+    "additive_block": {
+      "ground_id": "stable id/hash of ground params + ROI + source data hash",
+      "ground_transform": {
+        "from_frame": "innolidar",
+        "to_frame": "ground_local",
+        "R": "3x3 finite orthonormal det=+1, rows = [u, v, n]",
+        "t": "3 finite metres, t=-R@o, o=-d*n",
+        "origin": "sensor-origin ground foot",
+        "x_reference_axis_source": "confirmed source reference axis used for u (default source +X), recorded explicitly",
+        "convention_note": "horizontal origin/heading are conventions, not measurements; tilted floor normal != gravity",
+        "physical_verified": false
+      },
+      "single_plane_premise": true,
+      "valid_region_ground_local": "ROI bounds and point count, for coverage checks",
+      "source": "bag/numeric file name + sha256 + frame group selection (unchanged by this extension)"
+    },
+    "must_remain_unknown": ["frames.reference", "T_reference_lidar", "R_lidar_imu", "extrinsics_verified"]
+  },
+  "B_candidate_snapshot_extension": {
+    "kind": "candidate_snapshot",
+    "schema_version": 1,
+    "per_candidate_additive_fields": {
+      "center_ground_m": "[x,y,z] or null; center of the same actual candidate points transformed by ground R/t",
+      "bbox_ground_min_m": "[x,y,z] or null",
+      "bbox_ground_max_m": "[x,y,z] or null",
+      "bbox_ground_from": "actual_points | unavailable (never computed from only the source min/max two corners)",
+      "height_m": "existing n.p+d block, unchanged",
+      "ground_relative_available": "existing flag, unchanged"
+    },
+    "unchanged": ["center_source_m", "bbox_source_min_m", "bbox_source_max_m", "evidence_indices"],
+    "coordinate_additions": {
+      "ground_frame": "ground_local or null",
+      "horizontal_basis": "ground_tangent (existing) when a valid ground artifact is loaded"
+    }
+  },
+  "C_frontend_same_version_consumption": [
+    "render ground mode only when snapshot.calibration.calibration_id/version matches the loaded ground artifact",
+    "if physical_verified=false, label the view as unverified/preview; never show as calibrated world coordinates",
+    "missing/unknown/newer fields -> ignore and fall back to source view; never default to valid/green",
+    "two-dimensional selection rectangle is generated from the same ground AABB eight corners; selection still sends original snapshot_id/candidate_id, not pixels"
+  ],
+  "D_legacy_and_compatibility": [
+    "all new fields optional; old clients keep working on source fields",
+    "new fields do not rename or repurpose reference_frame/reference_* (may be null)",
+    "schema_version is bumped only if a frozen field's meaning/enum changes, not for additive optional fields",
+    "v1 records without the new fields load with ground mode disabled and physical flags false"
+  ],
+  "E_recalibration_invalidation": [
+    "a new ground_id/calibration_version invalidates old snapshots, positions, and standing-baseline eligibility",
+    "source seq/stamp_secs/stamp_nsecs/time_epoch sources are preserved and compared unchanged",
+    "monitoring: only regions with trusted ground support are residual-checked; insufficient support -> unknown/degraded; sustained change -> require recalibration (no claim of full yaw/horizontal drift detection)"
+  ]
+}

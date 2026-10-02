@@ -1,0 +1,46 @@
+HF-09 第2轮（R2）板端证据，2026-10-01（UTC 02:2x / 本地 10:2x）
+容器 slam-localization（RK3588 aarch64, ROS Noetic, Python 3.8.10）
+
+=== 同树回归（Windows 与板同源） ===
+Windows: python -B -W error -m unittest discover -> Ran 207 tests OK
+板:      python3 -B -W error -m unittest discover -> Ran 207 tests OK (hf09_r2_board_tests.log)
+（R1 的 202 vs 203 差异=当时板未同步新增的 test_hf09_profile 用例；本轮同步后同树 207=207）
+网页纯检查: human_fall 与 human_fall_preview 各 16 passed（新增 raw 缓存/呈现选择守卫）
+
+=== 不可变代码 bundle ===
+release 目录 bundle/ 存 core/scripts/config + 冻结解码器 human_follow_calibration/scripts，
+并写 bundle/manifest.sha256（见 hf09_bundle_manifest.sha256）。
+显式校验（PYTHONPATH 指向 bundle）：
+  core=         <release>/bundle/core/__init__.py
+  sensor_health= <release>/bundle/scripts/sensor_health.py
+启动/测量均从 bundle 运行；节点 cmdline：
+  python3 <release>/bundle/scripts/human_fall_node.py --config <release>/bundle/config/human_fall_prod.yaml ...
+（devel 工作树只提供 rospy/inno_lidar_msg 等 ROS 依赖，不再提供 core/node）
+
+=== 实际两版本回滚（版本保留，未删目录） ===
+releases 现存：20260930T234815Z(旧,无bundle) 20261001T000138Z(旧,无bundle)
+              20261001T022614Z(B,bundle) 20261001T022902Z(C,bundle)
+start C -> RUNNING (bundle C)
+rollback  -> 停止 C、重指链接、start B：RUNNING (bundle B)
+页面链接：webui/human_fall -> releases/20261001T022614Z/webui/human_fall
+legacy 回滚被拒：`rollback 20261001T000138Z` -> "REFUSING code rollback: ... no immutable code bundle"，exit=6，指针不变
+
+=== PID 精确校验（防误停） ===
+把 NODE_PID 指向 driver pid 102 + 伪造 cmd：`stop` -> "REFUSING to kill pid 102: cmdline does not match node+config"，exit=1；
+driver pid 102 仍存活。正常 stop 只在 cmdline 同时含 node 路径与 config release 路径时执行。
+driver 二进制 sha256 未变：0286545f64e76f8435d8da20dcc55e3837eac17d1066415148a2a4c5abb6f3c4
+
+=== 候选 ROS 投影（真实帧测量） ===
+真实 npz 帧 5025 点、4 候选：完整快照 34424 B -> 投影 5296 B，缩减 84.62%；
+投影后原快照 dumps 完全不变（original_unchanged_after_projection=True）；纯算法/选择缓存不被 pop。
+线上 /human_fall/candidates 已无 evidence_indices。
+
+=== 网页帧对齐与统计分离 ===
+index.html 拆分 recordPointsStats(raw) 与 renderPoints(呈现)；新增 “呈现Hz/未呈现” 统计。
+human_fall.js 缓存最近 8 个原始点云，只呈现“最新已有处理输出的源帧”（前向、不回退，
+无输出>800ms 回退最新 raw 仍显示点云+unknown）；session/epoch/断流切换清缓存；过期隐藏框。
+纯辅助 nextPresentedFrame/pruneRawFrames 有 Node 回归（16 passed）。
+
+=== 未验证/待Codex浏览器复测 ===
+正式页面实际带宽/send buffer 是否缓解=浏览器侧由 Codex 复测；候选投影只减候选话题，原始点云 ~9.4MB/s 仍是主要带宽，
+如仍溢出，备选“仅可视化抽样流（算法全流不变）”未实施，待复测结果决定。

@@ -1,0 +1,37 @@
+HF-09 第3轮（R3）板端证据（真实 ROS 订阅探针），2026-10-01
+容器 slam-localization（RK3588 aarch64, ROS Noetic, Python 3.8.10）
+
+=== 同树回归 / bash -n ===
+bash -n deploy_human_fall.sh -> BASH_N_OK
+Windows 与板同源：都 Ran 211 tests OK（hf09_r3_board_tests.log）
+（板无 node，JS 纯测试在本地 Windows Node 运行：human_fall 与 preview 各 18 passed）
+
+=== 真实 wire header ↔ visualization 映射探针（hf09_display_probe.py）===
+订阅 /human_fall/display_points + /human_fall/state + /innolidar_points 7s：
+  display_frames 60, state_with_viz 60, matched_wire_mapping 60, unmatched 0
+  sample_display: seq=909 secs=82660 nsecs=841500000 width=12000 height=1 point_step=26 fields=[x,y,z,intensity,ring,timestamp]
+  sample_viz: topic=/human_fall/display_points source_topic=/innolidar_points wire_seq=968
+              source={seq, stamp_secs, stamp_nsecs} stride=4 original_points≈49142 display_points=12000
+  source_sample: width=49143 height=1 point_step=26 fields 相同
+  fields_preserved True, point_step_preserved True
+  display_width_equals_display_points True, topic_ok True, source_topic_ok True
+（rospy 会重写 header.seq；节点 publish 后从返回消息读回真实 wire seq 写入映射，探针逐帧核对通过。）
+
+=== manifest 自排除与校验 ===
+manifest_lines=27, self_listed=0, pycache_listed=0
+( cd <release>/bundle && sha256sum -c manifest.sha256 ) -> MANIFEST_OK（hf09_r3_manifest_check.txt）
+
+=== 实际两版本回滚 ===
+releases: 20260930T234815Z(旧) 20261001T000138Z(旧) 20261001T022614Z(B,bundle)
+          20261001T022902Z(bundle) 20261001T031804Z(B2,bundle) 20261001T043437Z(C,bundle,R3)
+rollback -> B2：node running from B2 bundle；再 rollback 20261001T043437Z -> C：node running from C bundle
+页面链接随 current 切换；版本保留、无删目录；legacy（无 bundle）回滚仍拒绝。
+
+=== 驱动 / 活动版本 ===
+driver sha256 未变：0286545f64e76f8435d8da20dcc55e3837eac17d1066415148a2a4c5abb6f3c4
+当前 release：/root/catkin_ws/human_fall_deploy/releases/20261001T043437Z
+page：/root/catkin_ws/webui/human_fall -> .../20261001T043437Z/webui/human_fall
+
+=== 独立显示键守卫 ===
+本地 node docs/human_fall/evidence/review_hf09_display_keys.js -> PASS
+（source_topic 仅 S、display topic 仅 D 且 source header 一致、其他 topic/错配返回 []、负 age 拒绝）

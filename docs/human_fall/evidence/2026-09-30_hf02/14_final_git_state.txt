@@ -1,0 +1,39 @@
+﻿## final state (2026-09-30, after HF-02 work; no commit/push)
+master
+c96489e40037aca810b23b98d71ba34632d18bd0
+
+ M src/CMakeLists.txt
+ M src/inno_lidar_ros/src/source/publish_manager.cpp
+?? AGENTS.md
+?? "AISC-3830\347\224\250\346\210\267\346\211\213\345\206\214.pdf"
+?? CLAUDE.md
+?? docs/
+?? rk.txt
+?? src/human_fall_detection/
+?? src/human_follow_calibration/
+
+git : warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF 
+the next time Git touches it
+所在位置 行:1 字符: 254
++ ... D; echo ""; git status --short; echo ""; git diff --stat 2>&1; echo " ...
++                                              ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+error: open("src/CMakeLists.txt"): Invalid argument
+fatal: cannot hash src/CMakeLists.txt
+
+## hashes of touched/new files (sha256)
+b9c4e706fa80216bb9c0d8eded2f051c5448a0ffd64cb6acd7e90952dc69d394  src\inno_lidar_ros\src\source\publish_manager.cpp
+a118986817fd0b8bc232f28680a30689a9fe7fdfc46f54a541612677d9cf9845  src\human_fall_detection\core\__init__.py
+ebebf373529dab7e1565470167201f5c7381b3e0ac5b0a00fc602b0d08e717ad  src\human_fall_detection\core\timebase.py
+987282f7765fa08c75a677b8dcb2f895f13d2748f3a2f4d3c4f610a842c8ff94  src\human_fall_detection\core\sensor_quality.py
+d62fc44cb9ae8f28b7fe58b714d49ba6dc808ba6c62051ed3637539fd500a3c9  src\human_fall_detection\tests\test_hf02_timebase.py
+e77f9d7583b81661a26d8119181115307049863e1e94638a54475d1138d38ca1  src\human_fall_detection\scripts\sensor_health.py
+720335f1e9eb090d336a964f0572501c60ed84165593778cd2cc1ab21a58424a  src\human_fall_detection\scripts\record_session.py
+221d9dad659039800c786f244ef2c8275da35adfd042fb8984237d817bf27ce4  src\human_fall_detection\config\default.yaml
+
+## pre-existing user changes kept:
+- src/CMakeLists.txt catkin top-level symlink (Windows git cannot hash; untouched)
+- publish_manager.cpp spelling fix line (kept; see 02_driver_diff.txt)
+- untracked AGENTS.md/CLAUDE.md/docs/rk.txt/AISC pdf/human_follow_calibration untouched

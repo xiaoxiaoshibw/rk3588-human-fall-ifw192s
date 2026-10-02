@@ -1,0 +1,133 @@
+test_r1_verified_offset_corrects_match_and_excludes_wrong_raw_match (__main__.ContractBoundaries) ... test_r2_invalid_current_frame_cannot_reuse_previous_observation (__main__.ContractBoundaries) ... FAIL
+test_r2_stopped_streams_cannot_return_observations (__main__.ContractBoundaries) ... FAIL
+test_r3_empirical_sync_does_not_survive_clock_restart (__main__.ContractBoundaries) ... FAIL
+test_r4_empty_verification_value_cannot_enable_motion_classification (__main__.ContractBoundaries) ... FAIL
+test_r4_missing_axes_are_not_finite_six_axis_data (__main__.ContractBoundaries) ... FAIL
+test_r4_non_si_raw_values_need_conversion_or_unknown (__main__.ContractBoundaries) ... FAIL
+
+======================================================================
+FAIL: test_r1_verified_offset_corrects_match_and_excludes_wrong_raw_match (__main__.ContractBoundaries) (imu_stamps=[(1, (100, 500000000))])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 36, in test_r1_verified_offset_corrects_match_and_excludes_wrong_raw_match
+AssertionError: Lists differ: [] != [1]
+
+Second list contains 1 additional elements.
+First extra element 0:
+1
+
+- []
++ [1]
+?  +
+
+
+======================================================================
+FAIL: test_r1_verified_offset_corrects_match_and_excludes_wrong_raw_match (__main__.ContractBoundaries) (imu_stamps=[(1, (100, 0)), (2, (100, 500000000))])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 36, in test_r1_verified_offset_corrects_match_and_excludes_wrong_raw_match
+AssertionError: Lists differ: [1] != [2]
+
+First differing element 0:
+1
+2
+
+- [1]
++ [2]
+
+======================================================================
+FAIL: test_r2_invalid_current_frame_cannot_reuse_previous_observation (__main__.ContractBoundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 53, in test_r2_invalid_current_frame_cannot_reuse_previous_observation
+AssertionError: Lists differ: [{'first': {'seq': 1, 'stamp_secs': 100, '[318 chars]0.0}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'first': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None}, 'second': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None}, 'delta_s': 0.0}
+
++ []
+- [{'delta_s': 0.0,
+-   'first': {'frame_id': None,
+-             'seq': 1,
+-             'source_stamp_s': 100.0,
+-             'stamp_nsecs': 0,
+-             'stamp_reason': None,
+-             'stamp_secs': 100,
+-             'stamp_status': 'first',
+-             'time_received_s': 10.0},
+-   'second': {'frame_id': None,
+-              'seq': 1,
+-              'source_stamp_s': 100.0,
+-              'stamp_nsecs': 0,
+-              'stamp_reason': None,
+-              'stamp_secs': 100,
+-              'stamp_status': 'first',
+-              'time_received_s': 10.0}}]
+
+======================================================================
+FAIL: test_r2_stopped_streams_cannot_return_observations (__main__.ContractBoundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 44, in test_r2_stopped_streams_cannot_return_observations
+AssertionError: Lists differ: [{'first': {'seq': 1, 'stamp_secs': 100, '[318 chars]0.0}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'first': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None}, 'second': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None}, 'delta_s': 0.0}
+
++ []
+- [{'delta_s': 0.0,
+-   'first': {'frame_id': None,
+-             'seq': 1,
+-             'source_stamp_s': 100.0,
+-             'stamp_nsecs': 0,
+-             'stamp_reason': None,
+-             'stamp_secs': 100,
+-             'stamp_status': 'first',
+-             'time_received_s': 10.0},
+-   'second': {'frame_id': None,
+-              'seq': 1,
+-              'source_stamp_s': 100.0,
+-              'stamp_nsecs': 0,
+-              'stamp_reason': None,
+-              'stamp_secs': 100,
+-              'stamp_status': 'first',
+-              'time_received_s': 10.0}}]
+
+======================================================================
+FAIL: test_r3_empirical_sync_does_not_survive_clock_restart (__main__.ContractBoundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 64, in test_r3_empirical_sync_does_not_survive_clock_restart
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_r4_empty_verification_value_cannot_enable_motion_classification (__main__.ContractBoundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 86, in test_r4_empty_verification_value_cannot_enable_motion_classification
+AssertionError: 'static' != 'unknown'
+- static
++ unknown
+ : {'status': 'static', 'reason': None, 'scope': 'device_motion_gravity_reference_not_human_impact', 'gravity_residual_m_s2': 0.0, 'max_angular_rate': 0.0}
+
+======================================================================
+FAIL: test_r4_missing_axes_are_not_finite_six_axis_data (__main__.ContractBoundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 89, in test_r4_missing_axes_are_not_finite_six_axis_data
+AssertionError: unexpectedly identical: True
+
+======================================================================
+FAIL: test_r4_non_si_raw_values_need_conversion_or_unknown (__main__.ContractBoundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 76, in test_r4_non_si_raw_values_need_conversion_or_unknown
+AssertionError: 'moving' not found in ('static', 'unknown') : {'status': 'moving', 'reason': None, 'scope': 'device_motion_gravity_reference_not_human_impact', 'gravity_residual_m_s2': 8.80665, 'max_angular_rate': 0.0}
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.006s
+
+FAILED (failures=8)
+SSH_EXIT=1

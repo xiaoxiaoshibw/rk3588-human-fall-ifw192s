@@ -1,0 +1,46 @@
+== variant ROS1 : HELPER_BUILD_EXIT=0
+ok   carry at 1e9 rounding boundary -> 410/0
+ok   no carry just below boundary -> 409/999999999
+ok   plain fraction -> 12/500000000
+ok   zero -> 0/0
+ok   NaN invalid -> 0/0
+ok   +Inf invalid -> 0/0
+ok   -Inf invalid -> 0/0
+ok   negative invalid -> 0/0
+ok   ROS1 last second fraction kept -> 4294967295/500000000
+ok   ROS1 first out-of-range second rejected -> 0/0
+ok   ROS1 huge value rejected before cast -> 0/0
+BOUNDARY_OK
+== variant ROS1 : HELPER_CHECK_EXIT=0
+== variant ROS2 : HELPER_BUILD_EXIT=0
+ok   carry at 1e9 rounding boundary -> 410/0
+ok   no carry just below boundary -> 409/999999999
+ok   plain fraction -> 12/500000000
+ok   zero -> 0/0
+ok   NaN invalid -> 0/0
+ok   +Inf invalid -> 0/0
+ok   -Inf invalid -> 0/0
+ok   negative invalid -> 0/0
+ok   ROS2 int32-max second fraction kept -> 2147483647/500000000
+ok   ROS2 first out-of-range second rejected -> 0/0
+ok   ROS2 3e9 rejected (would be negative int32) -> 0/0
+ok   ROS2 huge value rejected before cast -> 0/0
+BOUNDARY_OK
+== variant ROS2 : HELPER_CHECK_EXIT=0
+== variant undefined : HELPER_BUILD_EXIT=0
+ok   carry at 1e9 rounding boundary -> 410/0
+ok   no carry just below boundary -> 409/999999999
+ok   plain fraction -> 12/500000000
+ok   zero -> 0/0
+ok   NaN invalid -> 0/0
+ok   +Inf invalid -> 0/0
+ok   -Inf invalid -> 0/0
+ok   negative invalid -> 0/0
+ok   ROS2 int32-max second fraction kept -> 2147483647/500000000
+ok   ROS2 first out-of-range second rejected -> 0/0
+ok   ROS2 3e9 rejected (would be negative int32) -> 0/0
+ok   ROS2 huge value rejected before cast -> 0/0
+BOUNDARY_OK
+== variant undefined : HELPER_CHECK_EXIT=0
+DRIVER_BOUNDARY_EXIT=0
+EXIT=0

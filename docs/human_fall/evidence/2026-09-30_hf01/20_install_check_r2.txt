@@ -1,0 +1,31 @@
+docker cp exit=0
+catkin_make install exit=0
+####
+#### Running command: "make install -j8 -l8" in "/tmp/hf01_install_check/build"
+####
+--- install manifest content ---
+-rw-r--r-- 1 root root 523 Sep 30 15:25 install/share/human_fall_detection/config/default.yaml
+default config ls exit=0
+total 12
+drwxr-xr-x 2 root root 4096 Sep 30 15:26 cmake
+drwxr-xr-x 2 root root 4096 Sep 30 15:26 config
+-rw-r--r-- 1 root root  619 Sep 30 15:25 package.xml
+share ls exit=0
+topics:
+  cloud: /innolidar_points
+  imu: /inno_imu
+config head exit=0
+/tmp/hf01_install_check/install/share/human_fall_detection
+rospack exit=0
+resolved package: /tmp/hf01_install_check/install/share/human_fall_detection
+default config exists: True
+install-space config check exit=0
+--- installed node with default config resolution (15 s) ---
+install-space node published health; session: health_install_check
+observability: invalid
+install node reader exit=0
+install node wait exit=0
+[INFO] [1790753167.337610]: Human-fall health: /innolidar_points + /inno_imu + /device_status -> /human_fall/health (session health_install_check)
+exec exit=0
+--- cleanup temporary workspace ---
+cleanup exit=0

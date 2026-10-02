@@ -1,0 +1,20 @@
+ok   packClientMessage has opcode+channel+uint32 string length+utf8
+ok   packClientMessage channel id is little endian
+ok   frameKey requires integer seq and finite stamps
+ok   sourceKey matches only exact seq+sec+nsec
+ok   headerFromPayload reads seq/secs/nsecs LE
+ok   parseRos1String honours uint32 length and rejects truncation
+ok   validSnapshot rejects unknown schema and non-finite geometry
+ok   validState rejects unknown version and non-finite position
+ok   projectNdc + ndcToPixels handle DPR/viewport offsets
+ok   boxRect / rectsIntersect handle missing corners
+ok   normalizePrefix defaults and forces trailing slash
+ok   cacheKey scopes a frame by its points topic
+ok   same raw frame must still belong to current session and epoch
+ok   nextPresentedFrame picks newest raw with output, forward-only
+ok   pruneRawFrames drops stale frames, preserves order, rejects negative age
+ok   displayKey/visualizationKey/frameKeys wire mapping
+ok   objectKeys isolates selected display/source topic and rejects mismatches
+ok   raw ROS header frame rejects invalid ranges and fractions
+HF lib checks: 18 passed
+exit=0

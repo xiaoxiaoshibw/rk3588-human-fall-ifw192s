@@ -1,0 +1,71 @@
+﻿=== first point raw 26 bytes ===
+=== first point timestamp bytes data[18:26] ===
+ssh : Traceback (most recent call last):
+所在位置 行:18 字符: 34
++ ...  "`r","") | ssh -o BatchMode=yes -o ConnectTimeout=8 ldiar-wel "tr -d ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "/opt/ros/noetic/lib/python3/dist-packages/rostopic/__init__.py", line 944, in callback
+    self.str_fn(data,
+  File "/opt/ros/noetic/lib/python3/dist-packages/rostopic/__init__.py", line 882, in custom_strify_message
+    val = [ord(x) for x in val]
+  File "/opt/ros/noetic/lib/python3/dist-packages/rostopic/__init__.py", line 882, in <listcomp>
+    val = [ord(x) for x in val]
+TypeError: ord() expected string of length 1, but int found
+Traceback (most recent call last):
+  File "/opt/ros/noetic/lib/python3/dist-packages/rostopic/__init__.py", line 944, in callback
+    self.str_fn(data,
+  File "/opt/ros/noetic/lib/python3/dist-packages/rostopic/__init__.py", line 882, in custom_strify_message
+    val = [ord(x) for x in val]
+  File "/opt/ros/noetic/lib/python3/dist-packages/rostopic/__init__.py", line 882, in <listcomp>
+    val = [ord(x) for x in val]
+TypeError: ord() expected string of length 1, but int found
+=== header at same sampling window ===
+seq: 213148
+stamp: 
+  secs: 356
+  nsecs: 212121000
+frame_id: "innolidar"
+---
+=== lidar log tail after live data ===
+type:64
+文件: "/root/catkin_ws/src/inno_lidar_ros/config/ifw192s/ifw192s_elevation_192x256.csv"
+文件: "/root/catkin_ws/src/inno_lidar_ros/config/ifw192s/model_weights_no1.csv"
+文件: "/root/catkin_ws/src/inno_lidar_ros/config/ifw192s/near_filter.csv"
+文件: "/root/catkin_ws/src/inno_lidar_ros/config/ifw192s/ifw192s_azimuth_192x256.csv"
+elevation
+list.size():49152 size:49152
+azimuth
+list.size():49152 size:49152
+LoadCheckFolder success!
+is_use_filter:1 2 2
+[1m[37mInnoLight-LiDAR-Driver is running.....[0m
+=== calibration files (board) ===
+total 536
+-rwxr-xr-x 1 501 staff 270336 Aug  3 15:51 ifw192s_azimuth_192x256.csv
+-rwxr-xr-x 1 501 staff 270268 Aug  3 15:51 ifw192s_elevation_192x256.csv
+-rwxr-xr-x 1 501 staff    165 Aug  3 15:51 model_weights_no1.csv
+-rwxr-xr-x 1 501 staff     26 Aug  3 15:51 near_filter.csv
+=== search camera/calib artifacts in container home ===
+/root/.ros/log/human_follow_calibration_1677_1790663436795.log
+/root/catkin_ws/src/human_follow_calibration
+/root/catkin_ws/src/human_follow_calibration/scripts/calibrate_human_follow.py
+/root/catkin_ws/src/human_follow_calibration/tests/test_calibrate_human_follow.py
+/root/catkin_ws/src/human_follow_calibration.json
+/root/catkin_ws/devel/include/ros_interface/CameraParkingInfo.h
+/root/catkin_ws/devel/include/ros_interface/SensorCalibrator.h
+/root/catkin_ws/devel/include/ros_interface/CameraParkingInfoList.h
+/root/catkin_ws/devel/lib/pkgconfig/human_follow_calibration.pc
+/root/catkin_ws/devel/lib/human_follow_calibration
+/root/catkin_ws/devel/lib/human_follow_calibration/calibrate_human_follow.py
+/root/catkin_ws/devel/share/human_follow_calibration
+/root/catkin_ws/build/atomic_configure/calibrate_human_follow.py.LJf9c
+/root/catkin_ws/build/ros_interface/CMakeFiles/_ros_interface_generate_messages_check_deps_SensorCalibrator.dir
+/root/catkin_ws/build/ros_interface/CMakeFiles/_ros_interface_generate_messages_check_deps_CameraParkingInfoList.dir
+/root/catkin_ws/build/ros_interface/CMakeFiles/_ros_interface_generate_messages_check_deps_CameraParkingInfo.dir
+/root/catkin_ws/build/human_follow_calibration
+=== rosbag/list available? ===
+/opt/ros/noetic/bin/rosbag
+/opt/ros/noetic/bin/rviz

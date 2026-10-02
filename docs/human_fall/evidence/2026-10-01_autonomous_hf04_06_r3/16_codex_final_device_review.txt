@@ -1,0 +1,216 @@
+ENV=3.8.10 NumPy=1.17.4
+HASH_MATCH=True src/human_fall_detection/core/association.py
+HASH_MATCH=True src/human_fall_detection/core/baseline.py
+HASH_MATCH=True src/human_fall_detection/core/calibration.py
+HASH_MATCH=True src/human_fall_detection/core/fall_state.py
+HASH_MATCH=True src/human_fall_detection/core/features.py
+HASH_MATCH=True src/human_fall_detection/core/ground.py
+HASH_MATCH=True src/human_fall_detection/core/lidar_candidates.py
+HASH_MATCH=True src/human_fall_detection/core/pipeline.py
+HASH_MATCH=True src/human_fall_detection/core/selection.py
+HASH_MATCH=True src/human_fall_detection/core/sensor_quality.py
+HASH_MATCH=True src/human_fall_detection/core/timebase.py
+HASH_MATCH=True src/human_fall_detection/core/tracking.py
+HASH_MATCH=True src/human_fall_detection/core/__init__.py
+HASH_MATCH=True docs/human_fall/evidence/review_hf04_06_codex.py
+HASH_MATCH=True src/human_fall_detection/scripts/sensor_health.py
+HASH_MATCH=True src/human_fall_detection/scripts/record_session.py
+HASH_MATCH=True src/human_fall_detection/config/default.yaml
+test_covariance_zero_and_abnormal_flag_are_not_overinterpreted (test_hf01_health.ImuTest) ... ok
+test_covariance_zero_checks_all_nine_entries (test_hf01_health.ImuTest) ... ok
+test_nonfinite_measurements_become_null_strict_json (test_hf01_health.ImuTest) ... ok
+test_orientation_not_provided_minus_one_is_unusable (test_hf01_health.ImuTest) ... ok
+test_quaternion_unusable_cases (test_hf01_health.ImuTest) ... ok
+test_bad_hash_summary_and_nonfinite_values_are_rejected (test_hf01_health.ManifestTest) ... ok
+test_manifest_missing_or_invalid_fields_are_rejected (test_hf01_health.ManifestTest) ... ok
+test_manifest_round_trip (test_hf01_health.ManifestTest) ... ok
+test_nested_schema_incomplete_or_illegal_objects_are_rejected (test_hf01_health.ManifestTest) ... ok
+test_omitted_optional_objects_get_complete_defaults (test_hf01_health.ManifestTest) ... ok
+test_timestamp_at_18_with_point_step_26_is_read_unaligned (test_hf01_health.PointCloudTest) ... ok
+test_truncated_and_invalid_fields_are_rejected (test_hf01_health.PointCloudTest) ... ok
+test_xyz_decoder_reuse_and_padded_big_endian_rows (test_hf01_health.PointCloudTest) ... ok
+test_zero_and_nonfinite_points_are_counted (test_hf01_health.PointCloudTest) ... ok
+test_existing_bag_active_or_manifest_blocks_before_recording (test_hf01_health.SessionReservationTest) ... ok
+test_existing_manifest_is_not_rewritten_when_recorder_would_run (test_hf01_health.SessionReservationTest) ... ok
+test_interrupted_run_records_sigint_and_keeps_requested_duration (test_hf01_health.SessionReservationTest) ... ok
+test_session_reservation_is_exclusive (test_hf01_health.SessionReservationTest) ... ok
+test_snapshot_never_mixes_new_stamp_with_old_layout (test_hf01_health.SnapshotConcurrencyTest) ... ok
+test_cloud_stall_invalid_but_imu_stall_only_degrades (test_hf01_health.StampAndTopicTest) ... ok
+test_invalid_current_stamp_is_null_and_previous_valid_baseline_survives (test_hf01_health.StampAndTopicTest) ... ok
+test_invalid_stamp_path_is_shared_by_every_topic (test_hf01_health.StampAndTopicTest) ... ok
+test_missing_required_input_is_invalid_not_degraded (test_hf01_health.StampAndTopicTest) ... ok
+test_stamp_repeat_regress_and_forward_jump_bump_epoch (test_hf01_health.StampAndTopicTest) ... ok
+test_unexpected_frame_degrades_cloud (test_hf01_health.StampAndTopicTest) ... ok
+test_controlled_event_offset_is_revoked_by_clock_restart (test_hf02_timebase.ClockRestartEvidenceTest) ... ok
+test_reapplying_evidence_rearms_after_restart (test_hf02_timebase.ClockRestartEvidenceTest) ... ok
+test_vendor_protocol_survives_restart_without_new_experiment (test_hf02_timebase.ClockRestartEvidenceTest) ... ok
+test_cache_is_bounded_and_keeps_sequence_traceability (test_hf02_timebase.EpochTest) ... ok
+test_forward_jump_threshold_is_configurable (test_hf02_timebase.EpochTest) ... ok
+test_invalid_stamp_keeps_epoch_and_previous_valid_baseline (test_hf02_timebase.EpochTest) ... ok
+test_repeat_regress_and_jump_rebuild_epoch_and_clear_history (test_hf02_timebase.EpochTest) ... ok
+test_missing_auxiliary_imu_never_blocks_the_required_cloud (test_hf02_timebase.FreshnessTest) ... ok
+test_online_freshness_uses_receive_time (test_hf02_timebase.FreshnessTest) ... ok
+test_replay_freshness_is_driven_by_message_time_only (test_hf02_timebase.FreshnessTest) ... ok
+test_draft_round_sample_without_stamp_fields_still_reads (test_hf02_timebase.HealthCompatibilityTest) ... ok
+test_frozen_block_fields_are_read (test_hf02_timebase.HealthCompatibilityTest) ... ok
+test_invalid_and_missing_blocks_return_none_not_fabrication (test_hf02_timebase.HealthCompatibilityTest) ... ok
+test_axis_mapping_requires_a_valid_right_handed_triad (test_hf02_timebase.ImuSemanticsGuardTest) ... ok
+test_bias_shape_and_finiteness_are_validated (test_hf02_timebase.ImuSemanticsGuardTest) ... ok
+test_empty_and_unknown_verification_values_are_rejected (test_hf02_timebase.ImuSemanticsGuardTest) ... ok
+test_empty_semantics_never_enable_motion_or_fusion (test_hf02_timebase.ImuSemanticsGuardTest) ... ok
+test_non_si_units_are_converted_before_si_thresholds (test_hf02_timebase.ImuSemanticsGuardTest) ... ok
+test_six_axis_requires_three_finite_axes_each (test_hf02_timebase.ImuSemanticsGuardTest) ... ok
+test_supported_axis_triad_variants_are_accepted (test_hf02_timebase.ImuSemanticsGuardTest) ... ok
+test_cross_epoch_observations_are_not_paired (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_current_invalid_frame_never_reuses_previous_observation (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_expired_cache_entries_are_not_matched (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_first_frame_with_invalid_receive_time_is_stale (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_invalid_current_receive_time_never_pretends_fresh_or_paired (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_invalid_receive_alone_keeps_the_source_stamp_epoch_rules (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_pair_requires_now_and_never_serves_stale_observations (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_replay_clock_regression_is_stale_not_clamped_fresh (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_stale_auxiliary_never_waits_and_blocks_pairing (test_hf02_timebase.OnlineFreshnessGateTest) ... ok
+test_close_stamps_and_perfect_fit_do_not_verify_sync (test_hf02_timebase.PairingAndEvidenceTest) ... ok
+test_receive_time_fit_is_not_accepted_as_physical_offset_evidence (test_hf02_timebase.PairingAndEvidenceTest) ... ok
+test_unit_mismatch_is_detected_and_never_paired (test_hf02_timebase.PairingAndEvidenceTest) ... ok
+test_vendor_or_controlled_event_evidence_allows_pairing (test_hf02_timebase.PairingAndEvidenceTest) ... ok
+test_device_motion_stays_unknown_until_units_and_axes_verified (test_hf02_timebase.SensorQualityTest) ... ok
+test_orientation_and_six_axis_are_recorded_separately (test_hf02_timebase.SensorQualityTest) ... ok
+test_static_background_gate_never_passes_without_ground_or_motion (test_hf02_timebase.SensorQualityTest) ... ok
+test_units_require_evidence_and_magnitude_clues_are_rejected (test_hf02_timebase.SensorQualityTest) ... ok
+test_carry_keeps_stamp_usable_in_the_frozen_classifier (test_hf02_timebase.SplitStampTest) ... ok
+test_nanosecond_carry_at_rounding_boundary (test_hf02_timebase.SplitStampTest) ... ok
+test_nonfinite_and_negative_seconds_never_become_a_stamp (test_hf02_timebase.SplitStampTest) ... ok
+test_linear_fit_needs_two_distinct_points (test_hf02_timebase.StrictJsonTest) ... ok
+test_nonfinite_inputs_produce_strict_json_without_nan (test_hf02_timebase.StrictJsonTest) ... ok
+test_evidence_is_bound_to_its_stream_pair (test_hf02_timebase.SyncOffsetPairingTest) ... ok
+test_offset_uncertainty_and_tolerance_ranges_are_enforced (test_hf02_timebase.SyncOffsetPairingTest) ... ok
+test_raw_close_but_physically_wrong_sample_is_excluded (test_hf02_timebase.SyncOffsetPairingTest) ... ok
+test_swapped_argument_order_uses_the_same_mapping (test_hf02_timebase.SyncOffsetPairingTest) ... ok
+test_verified_offset_matches_corresponding_sample_and_keeps_raw (test_hf02_timebase.SyncOffsetPairingTest) ... ok
+test_missing_ground_exits_nonzero_with_invalid_artifact (test_hf03_geometry.CalibrateSensorsToolTest) ... ok
+test_numeric_cloud_produces_valid_artifact_and_strict_json (test_hf03_geometry.CalibrateSensorsToolTest) ... ok
+test_artifact_validation_rejects_bad_shape_or_units (test_hf03_geometry.CalibrationArtifactTest) ... ok
+test_synthetic_extrinsic_is_marked_synthetic_not_verified (test_hf03_geometry.CalibrationArtifactTest) ... ok
+test_unknown_extrinsics_are_never_filled_with_identity (test_hf03_geometry.CalibrationArtifactTest) ... ok
+test_dominant_floor_with_scene_objects_still_valid (test_hf03_geometry.GroundFitTest) ... ok
+test_insufficient_points_and_range_filter (test_hf03_geometry.GroundFitTest) ... ok
+test_large_cloud_stays_bounded_and_capped (test_hf03_geometry.GroundFitTest) ... ok
+test_missing_ground_is_reported_not_fitted (test_hf03_geometry.GroundFitTest) ... ok
+test_no_holdout_evidence_is_unverified_not_passed (test_hf03_geometry.GroundFitTest) ... ok
+test_plane_above_the_sensor_is_not_accepted_as_ground (test_hf03_geometry.GroundFitTest) ... ok
+test_settings_are_validated_and_seeded_fit_is_reproducible (test_hf03_geometry.GroundFitTest) ... ok
+test_tilted_plane_recovers_normal_height_and_holdout_residual (test_hf03_geometry.GroundFitTest) ... ok
+test_vertical_wall_confusion_fails_explicitly (test_hf03_geometry.GroundFitTest) ... ok
+test_non_rigid_and_axis_flip_matrices_are_rejected (test_hf03_geometry.RotationValidationTest) ... ok
+test_proper_rotations_are_accepted (test_hf03_geometry.RotationValidationTest) ... ok
+test_apply_then_inverse_recovers_original_points (test_hf03_geometry.TransformDirectionTest) ... ok
+test_millimetre_metre_mismatch_is_detected (test_hf03_geometry.TransformDirectionTest) ... ok
+test_rotation_only_record_and_unknown (test_hf03_geometry.TransformDirectionTest) ... ok
+test_same_name_frames_and_missing_evidence_are_refused (test_hf03_geometry.TransformDirectionTest) ... ok
+test_background_requires_frames_and_validates_settings (test_hf04_candidates.BackgroundTest) ... ok
+test_frozen_background_never_learns_a_still_person (test_hf04_candidates.BackgroundTest) ... ok
+test_no_background_means_everything_is_foreground (test_hf04_candidates.BackgroundTest) ... ok
+test_tall_standing_person_is_covered_via_projection (test_hf04_candidates.CoverageTest) ... ok
+test_decode_cloud_is_available_without_ros_objects (test_hf04_candidates.DecodeHelperTest) ... ok
+test_compact_blob_has_no_confident_axis (test_hf04_candidates.DegeneracyTest) ... ok
+test_low_point_cluster_is_kept_and_flagged (test_hf04_candidates.DegeneracyTest) ... ok
+test_too_few_points_for_pca_is_explicit (test_hf04_candidates.DegeneracyTest) ... ok
+test_lying_low_posture_survives_without_a_standing_size_gate (test_hf04_candidates.GroundHugTest) ... ok
+test_no_ground_is_uncalibrated_without_height_or_fall_claim (test_hf04_candidates.GroundHugTest) ... ok
+test_tilted_ground_uses_normal_height_and_tangent_basis (test_hf04_candidates.GroundHugTest) ... ok
+test_person_touching_furniture_merges_and_is_reported_as_one_cluster (test_hf04_candidates.MultiTargetAndMergeTest) ... ok
+test_two_separated_targets_stay_two_candidates (test_hf04_candidates.MultiTargetAndMergeTest) ... ok
+test_evidence_indices_reconstruct_the_candidate (test_hf04_candidates.SnapshotContractTest) ... ok
+test_snapshot_is_deterministic_and_strict_json (test_hf04_candidates.SnapshotContractTest) ... ok
+test_validate_rejects_semantic_human_claim (test_hf04_candidates.SnapshotContractTest) ... ok
+test_out_of_gate_candidate_is_unmatched (test_hf05_tracking.AssociationTest) ... ok
+test_two_close_candidates_are_ambiguous_not_resolved (test_hf05_tracking.AssociationTest) ... ok
+test_two_tracks_competing_for_one_candidate_are_both_ambiguous (test_hf05_tracking.AssociationTest) ... ok
+test_initial_lying_fails_without_a_baseline (test_hf05_tracking.BaselineTest) ... ok
+test_low_point_count_fails (test_hf05_tracking.BaselineTest) ... ok
+test_operator_confirmation_cannot_accept_a_flat_low_pose (test_hf05_tracking.BaselineTest) ... ok
+test_predicted_occluded_and_calibration_change_are_refused (test_hf05_tracking.BaselineTest) ... ok
+test_stable_observations_become_a_versioned_baseline (test_hf05_tracking.BaselineTest) ... ok
+test_unstable_position_fails (test_hf05_tracking.BaselineTest) ... ok
+test_capture_baseline_requires_a_lock (test_hf05_tracking.SelectionBackendTest) ... ok
+test_cross_epoch_and_old_version_rejected (test_hf05_tracking.SelectionBackendTest) ... ok
+test_future_snapshot_and_bad_schema_are_rejected (test_hf05_tracking.SelectionBackendTest) ... ok
+test_new_selection_invalidates_previous_ready_baseline (test_hf05_tracking.SelectionBackendTest) ... ok
+test_nonmonotonic_receive_time_is_rejected (test_hf05_tracking.SelectionBackendTest) ... ok
+test_register_snapshot_rejects_nonfinite_receive_time (test_hf05_tracking.SelectionBackendTest) ... ok
+test_same_request_id_different_content_is_conflict (test_hf05_tracking.SelectionBackendTest) ... ok
+test_select_ack_is_authoritative_and_idempotent (test_hf05_tracking.SelectionBackendTest) ... ok
+test_stale_snapshot_rejected (test_hf05_tracking.SelectionBackendTest) ... ok
+test_unknown_candidate_and_poor_quality_rejected (test_hf05_tracking.SelectionBackendTest) ... ok
+test_ambiguous_pair_requires_reselection_and_resets_history (test_hf05_tracking.TrackerTest) ... ok
+test_clock_regression_is_not_treated_as_zero_dt (test_hf05_tracking.TrackerTest) ... ok
+test_epoch_change_resets_to_lost (test_hf05_tracking.TrackerTest) ... ok
+test_invalid_current_receive_does_not_switch_clock_domain (test_hf05_tracking.TrackerTest) ... ok
+test_long_occlusion_becomes_lost_and_resets (test_hf05_tracking.TrackerTest) ... ok
+test_lost_timeout_is_checked_before_association (test_hf05_tracking.TrackerTest) ... ok
+test_pose_size_jump_does_not_swap_the_person (test_hf05_tracking.TrackerTest) ... ok
+test_prediction_is_anchored_at_last_measurement (test_hf05_tracking.TrackerTest) ... ok
+test_prediction_is_flagged_and_adds_no_action_history (test_hf05_tracking.TrackerTest) ... ok
+test_reselecting_a_new_target_increments_history_generation (test_hf05_tracking.TrackerTest) ... ok
+test_state_is_strict_json (test_hf05_tracking.TrackerTest) ... ok
+test_confirmed_requires_mode_gate_and_emits_once (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_crouch_without_descent_is_not_suspected (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_default_mode_tops_out_at_suspected (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_epoch_change_returns_unknown_and_keeps_events (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_initial_low_with_stored_baseline_is_not_a_descent (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_initial_lying_is_low_posture_unclassified (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_prediction_gap_does_not_duplicate_an_existing_event (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_prediction_yields_unknown_without_clearing_events (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_recovery_then_new_fall_is_a_new_event (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_reset_is_consumed_once_and_valid_observations_recover (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_target_switch_clears_action_history (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_unknown_state_does_not_revoke_events (test_hf06_fall_state.FallStateMachineTest) ... ok
+test_context_reset_clears_history (test_hf06_fall_state.FeatureExtractorTest) ... ok
+test_degenerate_axis_stays_unknown (test_hf06_fall_state.FeatureExtractorTest) ... ok
+test_descent_rate_and_near_ground_duration (test_hf06_fall_state.FeatureExtractorTest) ... ok
+test_prediction_does_not_advance_history (test_hf06_fall_state.FeatureExtractorTest) ... ok
+test_ready_baseline_missing_binding_is_not_valid (test_hf06_fall_state.FeatureExtractorTest) ... ok
+test_perception_sections_load_into_each_resolver (test_hf06_fall_state.PerceptionConfigTest) ... ok
+test_fixed_input_replays_identically (test_hf06_fall_state.ReplayPipelineTest) ... ok
+test_replay_script_entry_is_deterministic (test_hf06_fall_state.ReplayPipelineTest) ... wrote /tmp/tmp0w46asjg/interrupted.manifest.json
+bag re-read ok: 5 messages, duration 8.0 s
+  /innolidar_points 5 messages
+{"output": "/tmp/tmpo209lcrt/geometry.json", "status": "invalid", "reason": "ground_points_insufficient", "points": 4000, "sensor_height_m": null, "tilt_rad": null}
+{"output": "/tmp/tmpdmedkc42/geometry.json", "status": "valid", "reason": null, "points": 6000, "sensor_height_m": 1.3500174455562817, "tilt_rad": 1.9712242579581453e-05}
+wrote /tmp/tmps7ze13l2/a.json
+wrote /tmp/tmps7ze13l2/b.json
+ok
+
+----------------------------------------------------------------------
+Ran 158 tests in 1.891s
+
+OK
+REGRESSION_EXIT=0
+test_capture_baseline_rejects_wrong_epoch (__main__.ContinuityContracts) ... ok
+test_context_reset_is_consumed_once_and_new_observations_recover (__main__.ContinuityContracts) ... ok
+test_delayed_first_missing_frame_already_has_stale_prediction (__main__.ContinuityContracts) ... ok
+test_first_frame_after_long_gap_does_not_auto_bind_another_candidate (__main__.ContinuityContracts) ... ok
+test_future_snapshot_has_negative_age_and_is_rejected (__main__.ContinuityContracts) ... ok
+test_initial_low_posture_with_stored_baseline_is_not_a_descent (__main__.ContinuityContracts) ... ok
+test_invalid_current_receive_does_not_fall_back_to_another_clock (__main__.ContinuityContracts) ... ok
+test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts) ... ok
+test_late_match_cannot_bypass_occlusion_timeout (__main__.ContinuityContracts) ... ok
+test_new_selection_does_not_reuse_previous_targets_ready_baseline (__main__.ContinuityContracts) ... ok
+test_operator_confirmation_does_not_turn_a_flat_low_pose_into_stance (__main__.ContinuityContracts) ... ok
+test_prediction_age_counts_from_last_measurement (__main__.ContinuityContracts) ... ok
+test_prediction_gap_does_not_duplicate_an_existing_event (__main__.ContinuityContracts) ... ok
+test_prediction_is_anchored_at_last_measurement (__main__.ContinuityContracts) ... ok
+test_ready_baseline_without_binding_is_not_valid_for_any_target (__main__.ContinuityContracts) ... ok
+test_replay_does_not_choose_a_target_without_explicit_initial_selection (__main__.ContinuityContracts) ... ok
+test_small_motion_while_initially_low_does_not_use_static_baseline_drop (__main__.ContinuityContracts) ... ok
+test_unknown_request_schema_does_not_execute_selection (__main__.ContinuityContracts) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.009s
+
+OK
+BOUNDARIES_EXIT=0
+FINAL_REVIEW_DONE
+
+OUTER_SSH_EXIT=0

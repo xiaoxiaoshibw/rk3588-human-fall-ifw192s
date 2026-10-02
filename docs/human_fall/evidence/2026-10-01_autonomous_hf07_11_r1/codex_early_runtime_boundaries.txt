@@ -1,0 +1,54 @@
+test_auxiliary_clock_repeat_does_not_break_geometry_selection (__main__.CompositionContracts.test_auxiliary_clock_repeat_does_not_break_geometry_selection) ... FAIL
+test_disappeared_candidate_in_old_snapshot_is_not_selected (__main__.CompositionContracts.test_disappeared_candidate_in_old_snapshot_is_not_selected) ... FAIL
+test_invalid_source_stamp_frame_cannot_be_selected (__main__.CompositionContracts.test_invalid_source_stamp_frame_cannot_be_selected) ... FAIL
+test_ready_current_baseline_reaches_upright_through_runtime (__main__.CompositionContracts.test_ready_current_baseline_reaches_upright_through_runtime) ... FAIL
+test_stopped_required_cloud_blocks_selection_before_snapshot_ttl (__main__.CompositionContracts.test_stopped_required_cloud_blocks_selection_before_snapshot_ttl) ... FAIL
+
+======================================================================
+FAIL: test_auxiliary_clock_repeat_does_not_break_geometry_selection (__main__.CompositionContracts.test_auxiliary_clock_repeat_does_not_break_geometry_selection)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf07_codex.py", line 60, in test_auxiliary_clock_repeat_does_not_break_geometry_selection
+    self.assertTrue(ack["accepted"], ack)
+AssertionError: False is not true : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r1', 'action': 'select', 'session_id': 'review', 'time_epoch': 0, 'accepted': False, 'reason': 'epoch_mismatch', 'track_id': None, 'candidate_id': None, 'selection_version': None, 'baseline': None, 'idempotent_replay': False}
+
+======================================================================
+FAIL: test_disappeared_candidate_in_old_snapshot_is_not_selected (__main__.CompositionContracts.test_disappeared_candidate_in_old_snapshot_is_not_selected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf07_codex.py", line 49, in test_disappeared_candidate_in_old_snapshot_is_not_selected
+    self.assertFalse(ack["accepted"], ack)
+AssertionError: True is not false : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r1', 'action': 'select', 'session_id': 'review', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': 'c0000', 'selection_version': 1, 'baseline': None, 'idempotent_replay': False}
+
+======================================================================
+FAIL: test_invalid_source_stamp_frame_cannot_be_selected (__main__.CompositionContracts.test_invalid_source_stamp_frame_cannot_be_selected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf07_codex.py", line 33, in test_invalid_source_stamp_frame_cannot_be_selected
+    self.assertFalse(ack["accepted"], ack)
+AssertionError: True is not false : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r1', 'action': 'select', 'session_id': 'review', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': 'c0000', 'selection_version': 1, 'baseline': None, 'idempotent_replay': False}
+
+======================================================================
+FAIL: test_ready_current_baseline_reaches_upright_through_runtime (__main__.CompositionContracts.test_ready_current_baseline_reaches_upright_through_runtime)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf07_codex.py", line 83, in test_ready_current_baseline_reaches_upright_through_runtime
+    self.assertEqual(result["state"]["fall_status"], "upright", result["state"])
+AssertionError: 'unknown' != 'upright'
+- unknown
++ upright
+ : {'kind': 'target_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'frame_id': 'innolidar', 'source_time_domain': 'device_stamp_s_unanchored', 'normalized_stamp_s': None, 'time_received_s': 10.5, 'snapshot_id': 'seq:6', 'source': {'seq': 6, 'stamp_secs': 100, 'stamp_nsecs': 500000000, 'source_stamp_s': 100.5, 'frame_id': 'innolidar'}, 'method': 'lidar_geometry', 'input_profile': 'lidar_geometry', 'target_kind': 'human_like', 'selection_source': 'operator', 'observability': 'valid', 'reason_codes': ['baseline_not_ready', 'device_no_data', 'imu_no_data', 'clock_cross_stream_unverified', 'host_anchor_unverified'], 'track_id': 't0001', 'track_status': 'locked', 'fall_status': 'unknown', 'position_source_m': [3.0003075105728896, 0.00020958146333479552, -0.28971466529713696], 'position_reference_m': None, 'position_predicted': False, 'prediction_age_s': None, 'prediction_stale': False, 'velocity_m_s': [0.0, 0.0, 0.0], 'bbox_source_min_m': [2.8148377970020286, -0.18299340616305376, -1.0703121935206772], 'bbox_source_max_m': [3.1701907342536755, 0.22625598045041523, 0.6435350615226527], 'bbox_observed': True, 'range_m': {'min': 2.816264692118433, 'median': 3.022464391239989, 'max': 3.2589006301375494}, 'coordinate': {'source_frame': 'innolidar', 'reference_frame': None, 'horizontal_basis': 'ground_tangent', 'ground_relative_available': True, 'ground_frame': 'innolidar', 'transform_status': 'unknown'}, 'ground': {'status': 'valid', 'frame': 'innolidar', 'normal': [0.0, 0.0, 1.0], 'offset_m': 1.5, 'sensor_height_m': 1.5}, 'calibration': {'calibration_id': 'geo', 'ground_status': 'valid', 'schema_version': None}, 'selection_version': 1, 'action_generation': 1, 'history_reset_reason': 'action_history_reset', 'requires_reselection': False, 'baseline': {'status': 'ready', 'reason': None, 'session_id': 'review', 'track_id': 't0001', 'calibration_version': 'geo', 'time_epoch': 0, 'selection_version': 1, 'action_generation': 1, 'sample_count': 3, 'operator_confirmed': False, 'baseline': {'kind': 'target_stance_baseline', 'schema_version': 1, 'baseline_version': 1, 'session_id': 'review', 'track_id': 't0001', 'time_epoch': 0, 'selection_version': 1, 'action_generation': 1, 'calibration_version': 'geo', 'status': 'ready', 'unit': 'm', 'source': 'measured', 'height_m': {'median': 1.210285334702863, 'p10': 1.210285334702863, 'p90': 1.210285334702863, 'std': 0.0}, 'position_m': [3.0003075105728896, 0.00020958146333479552, -0.28971466529713696], 'sample_count': 3, 'duration_s': 0.29999999999999716, 'position_spread_m': 0.0, 'point_count_median': 500.0, 'thresholds': {'require_seconds': 0.2, 'min_samples': 3, 'min_point_count': 60, 'max_position_spread_m': 0.25, 'height_min_m': 0.8, 'height_max_m': 2.2, 'min_stance_upper_m': 0.8, 'min_stance_span_m': 0.4, 'max_height_std_m': 0.12}, 'units': {'length': 'm', 'time': 's'}}}, 'baseline_version': 1, 'mode_verified': False, 'allow_confirmed': False, 'confirmed_enabled': False, 'sensor_quality': {'cloud': {'status': 'fresh', 'age_s': 0.0, 'stamp_status': 'ok', 'stamp_reason': None, 'messages': 6}, 'imu': {'status': 'no_data', 'age_s': None, 'stamp_status': 'none', 'stamp_reason': None, 'messages': 0}, 'device': {'status': 'no_data', 'age_s': None, 'stamp_status': 'none', 'stamp_reason': None, 'messages': 0}, 'ground_valid': True, 'ground_status': 'valid', 'calibration_version': 'geo', 'device_motion': 'unknown'}, 'event_persistence': {'path': None, 'degraded': False, 'reason': None, 'persisted_count': 0, 'recent_count': 0}, 'recent_events': [], 'limitations': ['active_lying_indistinguishable_from_fall', 'slow_slide_may_not_reach_descent_threshold', 'geometric_mode_not_human_labelled'], 'target_features': {'kind': 'target_features', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 't0001', 'source_stamp_s': 100.5, 'observable': True, 'reason': None, 'reset_now': False, 'ground_relative': True, 'height_m': {'min': 0.4296878064793228, 'p10': 0.8814962208223919, 'median': 1.210285334702863, 'p90': 1.5305438861624612, 'max': 2.1435350615226527}, 'height_median_m': 1.210285334702863, 'horizontal_extent_m': 0.20857286538913017, 'axis_verticality': 0.9999750415660775, 'axis_ambiguous': False, 'point_count': 500, 'baseline_height_m': None, 'baseline_bound': False, 'height_drop_m': None, 'descent_rate_m_s': -0.0, 'near_ground_duration_s': 0.0, 'history_samples': 5, 'history_reset_reason': 'action_history_reset'}, 'fall_state': {'kind': 'fall_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 't0001', 'track_status': 'locked', 'source_stamp_s': 100.5, 'fall_status': 'unknown', 'state': 'unknown', 'state_since_source_s': None, 'reason_codes': ['baseline_not_ready'], 'event_id': None, 'new_event': None, 'event_count': 0, 'confirmed_enabled': False, 'mode_verified': False, 'allow_confirmed': False, 'method': 'lidar_geometry', 'baseline_version': None, 'calibration_version': None, 'history_reset_reason': 'action_history_reset', 'limitations': ['active_lying_indistinguishable_from_fall', 'slow_slide_may_not_reach_descent_threshold', 'geometric_mode_not_human_labelled'], 'features': {'kind': 'target_features', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 't0001', 'source_stamp_s': 100.5, 'observable': True, 'reason': None, 'reset_now': False, 'ground_relative': True, 'height_m': {'min': 0.4296878064793228, 'p10': 0.8814962208223919, 'median': 1.210285334702863, 'p90': 1.5305438861624612, 'max': 2.1435350615226527}, 'height_median_m': 1.210285334702863, 'horizontal_extent_m': 0.20857286538913017, 'axis_verticality': 0.9999750415660775, 'axis_ambiguous': False, 'point_count': 500, 'baseline_height_m': None, 'baseline_bound': False, 'height_drop_m': None, 'descent_rate_m_s': -0.0, 'near_ground_duration_s': 0.0, 'history_samples': 5, 'history_reset_reason': 'action_history_reset'}}}
+
+======================================================================
+FAIL: test_stopped_required_cloud_blocks_selection_before_snapshot_ttl (__main__.CompositionContracts.test_stopped_required_cloud_blocks_selection_before_snapshot_ttl)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf07_codex.py", line 40, in test_stopped_required_cloud_blocks_selection_before_snapshot_ttl
+    self.assertFalse(ack["accepted"], ack)
+AssertionError: True is not false : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r1', 'action': 'select', 'session_id': 'review', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': 'c0000', 'selection_version': 1, 'baseline': None, 'idempotent_replay': False}
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.015s
+
+FAILED (failures=5)
+EXIT=1

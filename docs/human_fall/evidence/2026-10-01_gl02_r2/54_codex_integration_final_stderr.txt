@@ -1,0 +1,73 @@
+test_bad_ground_monitor_blocks_real_target_position (__main__.IntegrationChecks.test_bad_ground_monitor_blocks_real_target_position) ... FAIL
+test_bare_block_cannot_leave_live_parent_and_derived_mismatched (__main__.IntegrationChecks.test_bare_block_cannot_leave_live_parent_and_derived_mismatched) ... FAIL
+test_full_artifact_reload_replaces_actual_ground (__main__.IntegrationChecks.test_full_artifact_reload_replaces_actual_ground) ... FAIL
+test_mixed_boolean_rotation_must_be_rejected_before_coercion (__main__.IntegrationChecks.test_mixed_boolean_rotation_must_be_rejected_before_coercion) ... FAIL
+test_nested_version_must_be_integer (__main__.IntegrationChecks.test_nested_version_must_be_integer) ... FAIL
+test_recalibration_requirement_latches_until_new_version (__main__.IntegrationChecks.test_recalibration_requirement_latches_until_new_version) ... FAIL
+test_two_sided_scatter_is_not_coherent_plane_shift (__main__.IntegrationChecks.test_two_sided_scatter_is_not_coherent_plane_shift) ... FAIL
+
+======================================================================
+FAIL: test_bad_ground_monitor_blocks_real_target_position (__main__.IntegrationChecks.test_bad_ground_monitor_blocks_real_target_position)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r2\codex_r2_integration_checks.py", line 91, in test_bad_ground_monitor_blocks_real_target_position
+    self.assertIsNone(result['state']['position_source_m'])
+AssertionError: [1.0, 0.0, -0.4499999999999999] is not None
+
+======================================================================
+FAIL: test_bare_block_cannot_leave_live_parent_and_derived_mismatched (__main__.IntegrationChecks.test_bare_block_cannot_leave_live_parent_and_derived_mismatched)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r2\codex_r2_integration_checks.py", line 65, in test_bare_block_cannot_leave_live_parent_and_derived_mismatched
+    self.assertAlmostEqual(core.ground['offset_m'],core.ground_derived['d'])
+AssertionError: 1.2 != 1.4 within 7 places (0.19999999999999996 difference)
+
+======================================================================
+FAIL: test_full_artifact_reload_replaces_actual_ground (__main__.IntegrationChecks.test_full_artifact_reload_replaces_actual_ground)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r2\codex_r2_integration_checks.py", line 76, in test_full_artifact_reload_replaces_actual_ground
+    self.assertAlmostEqual(core.ground['offset_m'],1.4)
+AssertionError: 1.2 != 1.4 within 7 places (0.19999999999999996 difference)
+
+======================================================================
+FAIL: test_mixed_boolean_rotation_must_be_rejected_before_coercion (__main__.IntegrationChecks.test_mixed_boolean_rotation_must_be_rejected_before_coercion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r2\codex_r2_integration_checks.py", line 29, in test_mixed_boolean_rotation_must_be_rejected_before_coercion
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_nested_version_must_be_integer (__main__.IntegrationChecks.test_nested_version_must_be_integer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r2\codex_r2_integration_checks.py", line 22, in test_nested_version_must_be_integer
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_recalibration_requirement_latches_until_new_version (__main__.IntegrationChecks.test_recalibration_requirement_latches_until_new_version)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r2\codex_r2_integration_checks.py", line 56, in test_recalibration_requirement_latches_until_new_version
+    self.assertEqual(report['status'],'recalibration_required')
+AssertionError: 'ok' != 'recalibration_required'
+- ok
++ recalibration_required
+
+
+======================================================================
+FAIL: test_two_sided_scatter_is_not_coherent_plane_shift (__main__.IntegrationChecks.test_two_sided_scatter_is_not_coherent_plane_shift)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r2\codex_r2_integration_checks.py", line 48, in test_two_sided_scatter_is_not_coherent_plane_shift
+    self.assertNotEqual(report['status'],'recalibration_required')
+AssertionError: 'recalibration_required' == 'recalibration_required'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.012s
+
+FAILED (failures=7)

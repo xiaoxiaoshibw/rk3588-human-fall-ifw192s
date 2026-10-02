@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "dataset_version": "hf08-r1",
+  "created_date": "2026-10-01",
+  "report": "evaluation_report.md",
+  "evaluator": "../../src/human_fall_detection/scripts/evaluate_sessions.py",
+  "synthetic_sample": "../../src/human_fall_detection/tests/hf08_synthetic_events.json",
+  "privacy": "No raw human point clouds included. Anonymous subject labels are local session aliases only; no identity registry.",
+  "sessions": [
+    {
+      "session_id": "hf08_synthetic_hand_table",
+      "dataset_kind": "synthetic",
+      "anonymous_subjects": ["person-a"],
+      "action": "known synthetic fall-event table",
+      "capture_conditions": "hand-calculable event timing fixture",
+      "split_role": "synthetic",
+      "split_group": "hf08_synthetic_hand_table",
+      "label_status": "known_synthetic; fixture construction, not human annotation",
+      "prediction_artifact": "src/human_fall_detection/tests/hf08_synthetic_events.json",
+      "label_artifact": "src/human_fall_detection/tests/hf08_synthetic_events.json",
+      "input_sha256": "a930a7be56a57edcac13197c3a3c67dddf98544d63a24e9524291c859a2e0acd",
+      "evaluator_sha256": "a216f43a5b5fea021732d447f802e5a363871d79326dcdeef23e86e037bcf692",
+      "result_sha256": "c61d121a46ee2460f9f2e8820f7f86b6f93d2c1e43fbb745353fa416cc18299c"
+    }
+  ],
+  "real_sessions": {
+    "status": "PENDING_ANNOTATION",
+    "inventory_evidence": "evidence/2026-10-01_autonomous_hf08_r1/device_existing_indexes.txt",
+    "next_action": "Human-review whether any person is present, anonymous target aliases, action truth, capture conditions and split group. These health/timebase bags have no fall state/event outputs and cannot produce fall metrics before derived predictions and labels exist.",
+    "sessions": [
+      {
+        "session_id": "hf01_verify",
+        "dataset_kind": "device",
+        "bag_index_path": "/root/catkin_ws/human_fall_sessions/hf01_verify.manifest.json",
+        "manifest_sha256": "3d24642483d190058337574aa2f5f790747b00f8806d783feaf6eae9142e8c78",
+        "bag_path": "/root/catkin_ws/human_fall_sessions/hf01_verify.bag",
+        "bag_sha256": "3b9552979478a5882897d8a37d3831bdca09970f21c3a58fa0000ac3876afd29",
+        "event_outputs": "none",
+        "anonymous_subjects": null,
+        "action": "unknown_pending_human_review",
+        "capture_conditions": "HF-01 sensor health capture; 75 cloud frames / 7.804 s; inspect acquisition notes before assigning conditions",
+        "split_role": "unassigned_pending_review",
+        "split_group": null,
+        "label_status": "pending_annotation",
+        "metrics": null
+      },
+      {
+        "session_id": "hf01_sigint_r2",
+        "dataset_kind": "device",
+        "bag_index_path": "/root/catkin_ws/human_fall_sessions/hf01_sigint_r2.manifest.json",
+        "manifest_sha256": "362ec8fd010a52a47894c501c2f5a560a1896d53180b5cb7cf6181455e1c0a77",
+        "bag_path": "/root/catkin_ws/human_fall_sessions/hf01_sigint_r2.bag",
+        "bag_sha256": "00ae29660c59575276faaca99fd420a636dbee62444377d7f7debd9fc49bd0b1",
+        "event_outputs": "none",
+        "anonymous_subjects": null,
+        "action": "unknown_pending_human_review",
+        "capture_conditions": "HF-01 sensor health capture; 286 cloud frames / 29.742 s; inspect acquisition notes before assigning conditions",
+        "split_role": "unassigned_pending_review",
+        "split_group": null,
+        "label_status": "pending_annotation",
+        "metrics": null
+      },
+      {
+        "session_id": "hf01_sigint_r2b",
+        "dataset_kind": "device",
+        "bag_index_path": "/root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.manifest.json",
+        "manifest_sha256": "e51dc13b43a1870c00f932b430359e7950592bed45cf67e5e633eaeb9c3f0e5a",
+        "bag_path": "/root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.bag",
+        "bag_sha256": "d7f5779c5689f946ed188787d15ac72d01ef2a4ce106aadcfe78192f698fdd9b",
+        "event_outputs": "none",
+        "anonymous_subjects": null,
+        "action": "unknown_pending_human_review",
+        "capture_conditions": "HF-01 sensor health capture; 59 cloud frames / 6.129 s; inspect acquisition notes before assigning conditions",
+        "split_role": "unassigned_pending_review",
+        "split_group": null,
+        "label_status": "pending_annotation",
+        "metrics": null
+      },
+      {
+        "session_id": "hf02_timebase_20260930",
+        "dataset_kind": "device",
+        "bag_index_path": "/root/catkin_ws/human_fall_sessions/hf02_timebase_20260930.manifest.json",
+        "manifest_sha256": "bc66efc8ac3e096071304c58d681eb0088e8d880730c3db94bfed0540703eff7",
+        "bag_path": "/root/catkin_ws/src/human_fall_detection/scripts/human_fall_sessions/hf02_timebase_20260930.bag",
+        "bag_sha256": "6d6b236b83a2fb4e6e8e60235af774f3790cab9d46b913ddc58c7920a922c68f",
+        "event_outputs": "none",
+        "anonymous_subjects": null,
+        "action": "unknown_pending_human_review",
+        "capture_conditions": "HF-02 timebase capture; 95 cloud frames / 9.801 s; inspect acquisition notes before assigning conditions",
+        "split_role": "unassigned_pending_review",
+        "split_group": null,
+        "label_status": "pending_annotation",
+        "metrics": null
+      }
+    ],
+    "fall_metrics": null
+  },
+  "split_policy": "Assign all fragments from the same contiguous capture/person-date group to one split_group and one role. Evaluator rejects split_group reuse across roles. Synthetic fixtures remain separate from offline/device sessions."
+}

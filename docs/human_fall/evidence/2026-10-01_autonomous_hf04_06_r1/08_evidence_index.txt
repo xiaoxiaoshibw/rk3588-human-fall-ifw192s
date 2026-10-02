@@ -1,0 +1,27 @@
+HF-04..06 autonomous run evidence index (2026-10-01, session ses_f0c87fac6ffeKE1MYpxoZMnwXa)
+
+00_prework_git_state.txt   start worktree state (user modifications/untracked preserved)
+00_prework_head.txt        HEAD c96489e40037aca810b23b98d71ba34632d18bd0
+01_local_hashes_after.txt  sha256 of every new/changed file (local == device)
+02_local_tests.txt         local full regression: 146/146 OK (Python 3.12.10 / NumPy 1.26.4)
+05_device_tests.txt        device isolated run /tmp/hf04_06_verify: 146/146 OK
+                           (Python 3.8.10 / NumPy 1.17.4); uploaded hashes match local;
+                           active driver binary 0286545f...f3c4 unchanged
+06_frozen_hashes.txt       frozen HF-01/02/03 asset hashes (match HF-03 records)
+07_final_git_state.txt     end worktree state (only pre-existing user changes/untracked)
+run_device_check.py        uploader/runner (subprocess arrays; no credentials)
+run_device_check.sh        remote bash script (isolated /tmp only)
+
+New/changed files (see 01 for full hashes):
+  core/lidar_candidates.py, association.py, tracking.py, selection.py, baseline.py,
+  features.py, fall_state.py, pipeline.py
+  scripts/fall_replay.py
+  config/perception.yaml
+  tests/test_hf04_candidates.py, test_hf05_tracking.py, test_hf06_fall_state.py
+  CMakeLists.txt (install fall_replay.py)
+  docs/human_fall/INTERACTION_CONTRACT.md (v1 draft)
+  docs/human_fall/returns/HF-04.md, HF-05.md, HF-06.md
+
+Boundaries: synthetic/offline only; real extrinsics/IMU/ground physics, real human
+labels, and mode acceptance remain NOT_VERIFIED; online confirmed is disabled by
+default. No deploy, no driver restart, no network/system/vendor change, no commit.

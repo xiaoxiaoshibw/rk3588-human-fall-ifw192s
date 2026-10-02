@@ -1,0 +1,15 @@
+=== container python/numpy ===
+Python 3.8.10
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+Name: numpy
+Version: 1.17.4
+=== container source sha256 of /tmp/hf03_verify ===
+5a8f066cff5c9c8491907e560abfe919c8cac4f49f336b63a4f010fd19635825  src/human_fall_detection/core/calibration.py
+a69bd37cfbb06997eb4172fc66530fc53adebcd8c5473f6fb926dd12becba205  src/human_fall_detection/core/ground.py
+ac31edbd3005afd4ba6d59e704e295ba2edb03ad32a1233c66d6d16acaf47e7a  src/human_fall_detection/scripts/calibrate_sensors.py
+b83d9d6c11f68fe4a50bc83403738805df80a441688020e2bb2592560675325b  src/human_fall_detection/config/geometry.yaml
+9877296b43c9cb7982f91ee87bb9bb62b8033ae45255582f5556ddc471fd715a  src/human_fall_detection/tests/test_hf03_geometry.py
+=== bag sha256 (read-only) ===
+6d6b236b83a2fb4e6e8e60235af774f3790cab9d46b913ddc58c7920a922c68f  /root/catkin_ws/human_fall_sessions/hf02_timebase_20260930.bag

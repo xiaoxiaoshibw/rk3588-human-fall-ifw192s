@@ -1,0 +1,34 @@
+HF-09 board evidence (read-only), 2026-10-01 01:16 UTC / 09:16 CST
+Container: slam-localization (RK3588 aarch64, ROS Noetic, Python 3.8.10, NumPy 1.17.4)
+
+=== current release ===
+/root/catkin_ws/human_fall_deploy/releases/20261001T000138Z
+=== releases kept (no deletion on rollback) ===
+20260930T234815Z
+20261001T000138Z
+=== processes at end of profile ===
+102   inno_lidar_node (driver, unchanged, active)
+21426 human_fall_node.py --config .../releases/20261001T000138Z/human_fall_prod.yaml --perception .../perception.yaml
+(profile pid 22018 completed after 1800 s)
+=== driver binary sha256 (matches HF-02 baseline ...f3c4) ===
+0286545f64e76f8435d8da20dcc55e3837eac17d1066415148a2a4c5abb6f3c4  /root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node
+=== webui ===
+http.server 8090 -> /root/catkin_ws/webui
+human_fall -> /root/catkin_ws/human_fall_deploy/releases/20261001T000138Z/webui/human_fall   (symlink)
+human_fall_preview/ (isolated preview, unchanged)
+index.html (OLD HOMEPAGE, hash unchanged): e68dea5121d06c6fbf2fc2e8fa8ff947c05c6a87ba4635c0511ecf5b6491af5f
+production page human_fall/index.html:        ef1449310f57f3d009d413723152c98d5180324f70d462a8dc0f53b2c207bd85
+three.min.js / OrbitControls.js: reused from ../ (webui root, untouched)
+HTTP 200: http://<board>:8090/human_fall/index.html (37777 bytes) and http://<board>:8090/index.html (35401 bytes)
+=== source hashes on board (== Windows working tree) ===
+1fb84a192a7dacc62440a4c4aba05ae8c45b6befb7d2ea725eeddfd30b99018c  core/node_runtime.py
+373f189378141933c015f30930afb49e09e7d1119c1b050408400214d3227b53  scripts/human_fall_node.py
+5f7f34ca2305a0d92612e5073e7c432d2bb635669e2dab4ecaec6f5d25639f60  scripts/profile_pipeline.py
+2d8f90802bb4e41d88f974eab6af31e6de32e66808873f8d85e06b6cbdc3dadb  config/human_fall_prod.yaml
+=== synthetic cleanup ===
+Both HF-07/HF-11 synthetic processes stopped by exact cmdline/config match (hf07_verify.yaml,
+/tmp/hf11_live_demo.py); driver never touched. See hf09_stop_synthetic.sh.
+=== representative offline replay (unlabeled geometry, NOT person performance) ===
+input /tmp/empty_follow_probe.npz f0..f11, truncated to common min 5012 pts, times=idx*0.105
+replay_wall_s 0.509 (12 frames), frame_count 12, ground_available False
+fall_status counts {'unknown': 12}; track_status counts {'unselected': 12}

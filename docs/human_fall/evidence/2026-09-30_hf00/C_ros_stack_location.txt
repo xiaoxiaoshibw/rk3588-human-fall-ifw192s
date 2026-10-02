@@ -1,0 +1,29 @@
+﻿=== pid1 ===
+6:cpuset:/
+5:memory:/init.scope
+4:devices:/init.scope
+3:freezer:/
+2:cpu,cpuacct:/init.scope
+1:name=systemd:/init.scope
+0::/init.scope
+/sbin/init 
+=== virt ===
+none
+=== inno node cgroup ===
+6:cpuset:/docker/43c3213a08eec102693bc127c8d31fd21bdb111a77ab7167535f759a40d3f4a2
+5:memory:/docker/43c3213a08eec102693bc127c8d31fd21bdb111a77ab7167535f759a40d3f4a2
+4:devices:/docker/43c3213a08eec102693bc127c8d31fd21bdb111a77ab7167535f759a40d3f4a2
+3:freezer:/docker/43c3213a08eec102693bc127c8d31fd21bdb111a77ab7167535f759a40d3f4a2
+2:cpu,cpuacct:/docker/43c3213a08eec102693bc127c8d31fd21bdb111a77ab7167535f759a40d3f4a2
+1:name=systemd:/docker/43c3213a08eec102693bc127c8d31fd21bdb111a77ab7167535f759a40d3f4a2
+0::/docker/43c3213a08eec102693bc127c8d31fd21bdb111a77ab7167535f759a40d3f4a2
+=== lidar-stack unit ===
+=== docker ps -a ===
+ros2-lidar|ros:foxy-ros-base-focal|Exited (137) 10 days ago
+slam-localization|slam-localization:noetic|Up 44 hours
+=== /opt ===
+鎬荤敤閲?16
+drwxr-xr-x  4 root root 4096 6鏈?  2 10:13 .
+drwxr-xr-x 19 root root 4096 9鏈? 29 18:12 ..
+drwx--x--x  4 root root 4096 5鏈? 11 11:03 containerd
+drwxr-xr-x  5 root root 4096 4鏈? 30  2024 panfrost

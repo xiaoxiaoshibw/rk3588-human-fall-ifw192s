@@ -1,0 +1,33 @@
+docker cp exit=0
+catkin_make install exit=0
+####
+#### Running command: "make install -j8 -l8" in "/tmp/hf01_install_check/build"
+####
+--- installed files ---
+-rw-r--r-- 1 root root 523 Sep 30 15:28 install/share/human_fall_detection/config/default.yaml
+install/lib/human_fall_detection/:
+total 44
+-rwxr-xr-x 1 root root 15746 Sep 30 15:28 record_session.py
+-rwxr-xr-x 1 root root 27026 Sep 30 15:28 sensor_health.py
+
+install/lib/human_follow_calibration/:
+total 20
+-rwxr-xr-x 1 root root 16542 Sep 30 15:28 calibrate_human_follow.py
+/tmp/hf01_install_check/install/share/human_fall_detection
+rospack exit=0
+resolved package: /tmp/hf01_install_check/install/share/human_fall_detection
+default config exists: True
+install-space config check exit=0
+--- installed node, default config resolution, wait for a fresh frame (15 s) ---
+strict json parse: ok
+session: health_install_check_b
+observability: valid
+cloud status/decode_error: fresh None
+cloud layout valid/point_step: True 26
+cloud header==first_point_ts: True
+install node reader exit=0
+install node wait exit=0
+[INFO] [1790753311.023936]: Human-fall health: /innolidar_points + /inno_imu + /device_status -> /human_fall/health (session health_install_check_b)
+exec exit=0
+--- cleanup temporary workspace ---
+cleanup exit=0

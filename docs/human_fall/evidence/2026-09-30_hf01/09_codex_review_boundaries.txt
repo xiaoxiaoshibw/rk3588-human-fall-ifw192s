@@ -1,0 +1,92 @@
+test_ctrl_c_reports_actual_sigint_termination (__main__.IndependentReview.test_ctrl_c_reports_actual_sigint_termination) ... FAIL
+test_existing_session_is_rejected_before_starting_recorder (__main__.IndependentReview.test_existing_session_is_rejected_before_starting_recorder) ... FAIL
+test_invalid_current_stamp_does_not_reuse_previous_source_stamp (__main__.IndependentReview.test_invalid_current_stamp_does_not_reuse_previous_source_stamp) ... FAIL
+test_manifest_rejects_incomplete_sync_and_calibration (__main__.IndependentReview.test_manifest_rejects_incomplete_sync_and_calibration) ... 
+  test_manifest_rejects_incomplete_sync_and_calibration (__main__.IndependentReview.test_manifest_rejects_incomplete_sync_and_calibration) (key='sync') ... FAIL
+  test_manifest_rejects_incomplete_sync_and_calibration (__main__.IndependentReview.test_manifest_rejects_incomplete_sync_and_calibration) (key='calibration') ... FAIL
+  test_manifest_rejects_incomplete_sync_and_calibration (__main__.IndependentReview.test_manifest_rejects_incomplete_sync_and_calibration) (key='config') ... FAIL
+test_manifest_rejects_missing_software_version (__main__.IndependentReview.test_manifest_rejects_missing_software_version) ... FAIL
+test_snapshot_cannot_publish_new_stamp_with_previous_valid_layout (__main__.IndependentReview.test_snapshot_cannot_publish_new_stamp_with_previous_valid_layout) ... FAIL
+
+======================================================================
+FAIL: test_ctrl_c_reports_actual_sigint_termination (__main__.IndependentReview.test_ctrl_c_reports_actual_sigint_termination)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf01_codex.py", line 128, in test_ctrl_c_reports_actual_sigint_termination
+    self.assertEqual(manifest["termination"], "sigint", "early Ctrl-C was recorded as duration")
+AssertionError: 'duration' != 'sigint'
+- duration
++ sigint
+ : early Ctrl-C was recorded as duration
+
+======================================================================
+FAIL: test_existing_session_is_rejected_before_starting_recorder (__main__.IndependentReview.test_existing_session_is_rejected_before_starting_recorder)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf01_codex.py", line 111, in test_existing_session_is_rejected_before_starting_recorder
+    self.assertEqual(recorder.call_count, 0, "existing bag/manifest were not protected")
+AssertionError: 1 != 0 : existing bag/manifest were not protected
+
+======================================================================
+FAIL: test_invalid_current_stamp_does_not_reuse_previous_source_stamp (__main__.IndependentReview.test_invalid_current_stamp_does_not_reuse_previous_source_stamp)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf01_codex.py", line 29, in test_invalid_current_stamp_does_not_reuse_previous_source_stamp
+    self.assertIsNone(topic["source_stamp_s"], "current invalid stamp silently became 10.0")
+AssertionError: 10.0 is not None : current invalid stamp silently became 10.0
+
+======================================================================
+FAIL: test_manifest_rejects_incomplete_sync_and_calibration (__main__.IndependentReview.test_manifest_rejects_incomplete_sync_and_calibration) (key='sync')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf01_codex.py", line 88, in test_manifest_rejects_incomplete_sync_and_calibration
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_manifest_rejects_incomplete_sync_and_calibration (__main__.IndependentReview.test_manifest_rejects_incomplete_sync_and_calibration) (key='calibration')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf01_codex.py", line 88, in test_manifest_rejects_incomplete_sync_and_calibration
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_manifest_rejects_incomplete_sync_and_calibration (__main__.IndependentReview.test_manifest_rejects_incomplete_sync_and_calibration) (key='config')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf01_codex.py", line 88, in test_manifest_rejects_incomplete_sync_and_calibration
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_manifest_rejects_missing_software_version (__main__.IndependentReview.test_manifest_rejects_missing_software_version)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf01_codex.py", line 78, in test_manifest_rejects_missing_software_version
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_snapshot_cannot_publish_new_stamp_with_previous_valid_layout (__main__.IndependentReview.test_snapshot_cannot_publish_new_stamp_with_previous_valid_layout)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf01_codex.py", line 72, in test_snapshot_cannot_publish_new_stamp_with_previous_valid_layout
+    self.assertFalse(cloud["source_stamp_s"] == 11.0 and cloud["layout"]["valid"],
+AssertionError: True is not false : new stamp and previous frame's valid layout were published together
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.035s
+
+FAILED (failures=8)
+wrote C:\Users\30680\AppData\Local\Temp\tmps8to5h38\interrupted.manifest.json
+bag re-read ok: 5 messages, duration 8.0 s
+  /innolidar_points 5 messages
+wrote C:\Users\30680\AppData\Local\Temp\tmppp5qufj0\existing.manifest.json
+bag re-read ok: 5 messages, duration 8.0 s
+  /innolidar_points 5 messages
+REVIEW_EXIT=1

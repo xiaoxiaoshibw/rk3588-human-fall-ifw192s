@@ -1,0 +1,161 @@
+docker cp exit=0
+--- health node start (timeout -s INT 30) ---
+health_pid=5341
+--- read one /human_fall/health message (timeout 20) ---
+strict json parse: ok
+session_id: health_r2_sigint
+observability: valid
+cloud stamp_status/secs/nsecs/source: ok 6209 288586000 6209.288586
+imu covariance_zero/not_provided/usable/reason: True False False orientation_all_zero
+imu measurements_finite: True
+device abnormal_flag: 255
+health sample exit=0
+--- record --duration 30, SIGINT to record process after 7 s (no signal to lidar) ---
+record_pid=5383
+record exit=0
+recording command: rosbag record -O /root/catkin_ws/human_fall_sessions/hf01_sigint_r2.bag --duration=30.0 /innolidar_points /inno_imu /device_status /human_fall/health
+[0m[INFO] [1790752935.064000514]: Subscribing to /device_status[0m
+[0m[INFO] [1790752935.068890890]: Subscribing to /human_fall/health[0m
+[0m[INFO] [1790752935.076807890]: Subscribing to /inno_imu[0m
+[0m[INFO] [1790752935.083339183]: Subscribing to /innolidar_points[0m
+[0m[INFO] [1790752935.089960892]: Recording to '/root/catkin_ws/human_fall_sessions/hf01_sigint_r2.bag'.[0m
+wrote /root/catkin_ws/human_fall_sessions/hf01_sigint_r2.manifest.json
+bag re-read ok: 7367 messages, duration 29.742048978805542 s
+  /device_status 286 messages
+  /human_fall/health 53 messages
+  /inno_imu 6742 messages
+  /innolidar_points 286 messages
+--- manifest ---
+{
+  "schema_version": 1,
+  "session_id": "hf01_sigint_r2",
+  "created_at_utc": "2026-09-30T07:22:46.383376+00:00",
+  "host": "welcomtech",
+  "requested_topics": [
+    "/innolidar_points",
+    "/inno_imu",
+    "/device_status",
+    "/human_fall/health"
+  ],
+  "topics": [
+    {
+      "name": "/device_status",
+      "type": "inno_lidar_msg/DeviceStatus",
+      "messages": 286
+    },
+    {
+      "name": "/human_fall/health",
+      "type": "std_msgs/String",
+      "messages": 53
+    },
+    {
+      "name": "/inno_imu",
+      "type": "sensor_msgs/Imu",
+      "messages": 6742
+    },
+    {
+      "name": "/innolidar_points",
+      "type": "sensor_msgs/PointCloud2",
+      "messages": 286
+    }
+  ],
+  "termination": "duration",
+  "duration_requested_s": 30.0,
+  "source_time_domain": "device_stamp_s_unanchored",
+  "sync": {
+    "cross_stream_same_clock_verified": false,
+    "host_anchor_verified": false
+  },
+  "units": {
+    "imu_units_verified": false,
+    "imu_alignment_verified": false
+  },
+  "calibration": {
+    "path": null,
+    "sha256": null,
+    "status": "pending",
+    "tf_available": false
+  },
+  "labels": {
+    "path": null,
+    "sha256": null
+  },
+  "software": {
+    "package": "human_fall_detection",
+    "version": "0.1.0",
+    "python": "3.8.10"
+  },
+  "config": {
+    "path": "/root/catkin_ws/src/human_fall_detection/config/default.yaml",
+    "sha256": "221d9dad659039800c786f244ef2c8275da35adfd042fb8984237d817bf27ce4"
+  },
+  "bag": {
+    "path": "/root/catkin_ws/human_fall_sessions/hf01_sigint_r2.bag",
+    "size_bytes": 368848097,
+    "readable": true,
+    "sha256": "00ae29660c59575276faaca99fd420a636dbee62444377d7f7debd9fc49bd0b1",
+    "summary": {
+      "message_count": 7367,
+      "duration_s": 29.742048978805542,
+      "start_time_s": 1790752935.341022,
+      "end_time_s": 1790752965.083071,
+      "topics": {
+        "/device_status": {
+          "type": "inno_lidar_msg/DeviceStatus",
+          "messages": 286,
+          "frequency": 9.538232030127167
+        },
+        "/human_fall/health": {
+          "type": "std_msgs/String",
+          "messages": 53,
+          "frequency": 1.9918900712141694
+        },
+        "/inno_imu": {
+          "type": "sensor_msgs/Imu",
+          "messages": 6742,
+          "frequency": 197.16560898791897
+        },
+        "/innolidar_points": {
+          "type": "sensor_msgs/PointCloud2",
+          "messages": 286,
+          "frequency": 9.549068042992735
+        }
+      }
+    }
+  }
+}
+--- bag re-read (rosbag info) ---
+path:        /root/catkin_ws/human_fall_sessions/hf01_sigint_r2.bag
+version:     2.0
+duration:    29.7s
+start:       Sep 30 2026 15:22:15.34 (1790752935.34)
+end:         Sep 30 2026 15:22:45.08 (1790752965.08)
+size:        351.8 MB
+messages:    7367
+compression: none [287/287 chunks]
+types:       inno_lidar_msg/DeviceStatus [78797d580cbd39abfe410beef3d76d83]
+             sensor_msgs/Imu             [6a62c6daae103f4ff57a132d6f95cec2]
+             sensor_msgs/PointCloud2     [1158d486dd51d683ce2f1be655c3c181]
+             std_msgs/String             [992ce8a1687cec8c8bd883ec73ca41d1]
+topics:      /device_status        286 msgs    : inno_lidar_msg/DeviceStatus
+             /human_fall/health     53 msgs    : std_msgs/String            
+             /inno_imu            6742 msgs    : sensor_msgs/Imu            
+             /innolidar_points     286 msgs    : sensor_msgs/PointCloud2
+rosbag info exit=0
+--- bag re-read (python API, strict health JSON parse) ---
+/device_status inno_lidar_msg/DeviceStatus 286 messages
+/human_fall/health std_msgs/String 53 messages
+/inno_imu sensor_msgs/Imu 6742 messages
+/innolidar_points sensor_msgs/PointCloud2 286 messages
+health messages parsed with strict json.loads: 53
+python reread exit=0
+health node wait exit=124
+--- session dir ---
+total 454560
+-rw-r--r-- 1 root root 368848097 Sep 30 15:22 hf01_sigint_r2.bag
+-rw------- 1 root root      2465 Sep 30 15:22 hf01_sigint_r2.manifest.json
+-rwxr-xr-x 1 root root         0 Sep 30 15:22 hf01_sigint_r2.reserve
+-rw-r--r-- 1 root root  96611994 Sep 30 14:43 hf01_verify.bag
+-rw------- 1 root root      2451 Sep 30 14:43 hf01_verify.manifest.json
+exec exit=0
+cleanup exit=0

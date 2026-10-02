@@ -1,0 +1,105 @@
+{
+  "release": "/root/catkin_ws/human_fall_deploy/releases/20261001T051310Z",
+  "pid": 26591,
+  "cmdline": "python3 /root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle/scripts/human_fall_node.py --config /root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle/config/human_fall_prod.yaml --perception /root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle/config/perception.yaml ",
+  "pythonpath_prefix": [
+    "/root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle",
+    "/root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle/scripts",
+    "/root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle/human_follow_calibration/scripts"
+  ],
+  "core_file": "/root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle/core/__init__.py",
+  "health_file": "/root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle/scripts/sensor_health.py",
+  "decoder_file": "/root/catkin_ws/human_fall_deploy/releases/20261001T051310Z/bundle/human_follow_calibration/scripts/calibrate_human_follow.py",
+  "manifest_exit": 0,
+  "all_local_hashes_match": true,
+  "hashes": {
+    "bundle/core/node_runtime.py": "5a60e02c12f7ea393b5c1ed2fc0e0afc3ad1871cb43fb4fe9de68ae33b1fde03",
+    "bundle/scripts/human_fall_node.py": "84632b23513eb3c843f05decf9460ee1c6511ce1a2ababd9b3cebbf838bf5c2b",
+    "bundle/scripts/profile_pipeline.py": "6ba94567cada22d87b43b38eb44e4a4985d7f1566cc2aa8add6e705773966623",
+    "bundle/scripts/sensor_health.py": "e77f9d7583b81661a26d8119181115307049863e1e94638a54475d1138d38ca1",
+    "bundle/scripts/record_session.py": "720335f1e9eb090d336a964f0572501c60ed84165593778cd2cc1ab21a58424a",
+    "bundle/config/default.yaml": "221d9dad659039800c786f244ef2c8275da35adfd042fb8984237d817bf27ce4",
+    "bundle/config/human_fall_prod.yaml": "c39ec467384f87a4803c71ab7292ebeae84ea0c93e0a725af8a5d5a4473bdb7b",
+    "bundle/config/perception.yaml": "70c8f04b635ae08de8577be9ee983f59d78560e9edbd96849700bbcf0aed3211",
+    "bundle/human_follow_calibration/scripts/calibrate_human_follow.py": "f60cb48fda8f4ebe58ce38fcacbccc55b312577844e9e23e9fbaac91ac98e773",
+    "webui/human_fall/index.html": "3d749a4521ce3c5e37ad23dfb65d5e3efcb7cd52793d27e2a9385ac2ca8a1014",
+    "webui/human_fall/human_fall.js": "c46cc70e329612175bd9db8dd3fe4bb69159d18cc11c0d64141e983d9e0e631a",
+    "webui/human_fall/human_fall_lib.js": "05b760b4d52445f9ca925bfad64c065df68611341a11e5c531e8f26da607f570"
+  },
+  "driver_sha256": "0286545f64e76f8435d8da20dcc55e3837eac17d1066415148a2a4c5abb6f3c4",
+  "old_homepage_sha256": "e68dea5121d06c6fbf2fc2e8fa8ff947c05c6a87ba4635c0511ecf5b6491af5f",
+  "cloud_density": {
+    "original": false,
+    "display": false
+  },
+  "state": {
+    "schema_version": 1,
+    "kind": "target_state",
+    "session_id": "hfd_20261001_051312",
+    "time_epoch": 0,
+    "track_status": "unselected",
+    "fall_status": "unknown",
+    "observability": "degraded",
+    "confirmed_enabled": false,
+    "sensor_quality": {
+      "cloud": {
+        "status": "fresh",
+        "age_s": 0.053774171974509954,
+        "stamp_status": "ok",
+        "stamp_reason": null,
+        "messages": 752
+      },
+      "imu": {
+        "status": "stale",
+        "age_s": -0.003549292014213279,
+        "stamp_status": "ok",
+        "stamp_reason": null,
+        "messages": 19356
+      },
+      "device": {
+        "status": "fresh",
+        "age_s": 0.057847296993713826,
+        "stamp_status": "ok",
+        "stamp_reason": null,
+        "messages": 824
+      },
+      "ground_valid": false,
+      "ground_status": null,
+      "calibration_version": null,
+      "device_motion": "unknown"
+    },
+    "visualization": {
+      "topic": "/human_fall/display_points",
+      "source_topic": "/innolidar_points",
+      "wire_seq": 752,
+      "source": {
+        "seq": 1029199,
+        "stamp_secs": 84954,
+        "stamp_nsecs": 306355000
+      },
+      "stride": 4,
+      "original_points": 49141,
+      "display_points": 12000
+    },
+    "performance": {
+      "kind": "performance",
+      "schema_version": 1,
+      "enabled": true,
+      "clock_domain": "monotonic",
+      "frame_count": 752,
+      "queue_dropped": 72,
+      "input_valid": true,
+      "suppressed": false,
+      "receive_s": 244946.472609234,
+      "process_start_s": 244946.53768549,
+      "process_finish_s": 244946.619627707,
+      "process_s": 0.08194221698795445,
+      "queue_age_s": 0.06507625599624589,
+      "receive_to_finish_s": 0.14701847298420034,
+      "ground_valid": false,
+      "fall_status": "unknown",
+      "mode": "live_monotonic"
+    }
+  }
+}
+OUTER_SSH_EXIT=0

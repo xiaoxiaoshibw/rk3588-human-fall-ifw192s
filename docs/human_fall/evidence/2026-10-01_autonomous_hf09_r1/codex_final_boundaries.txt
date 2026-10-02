@@ -1,0 +1,87 @@
+
+review_hf03_codex.py
+test_disjoint_holdout_plane_cannot_pass_validation (__main__.GeometryContracts.test_disjoint_holdout_plane_cannot_pass_validation) ... ok
+test_dominant_ground_with_other_scene_objects_is_still_valid (__main__.GeometryContracts.test_dominant_ground_with_other_scene_objects_is_still_valid) ... ok
+test_floor_below_sensor_has_positive_height (__main__.GeometryContracts.test_floor_below_sensor_has_positive_height) ... ok
+test_nonunit_ground_normal_is_rejected_in_artifact (__main__.GeometryContracts.test_nonunit_ground_normal_is_rejected_in_artifact) ... ok
+test_plane_above_sensor_is_not_valid_ground (__main__.GeometryContracts.test_plane_above_sensor_is_not_valid_ground) ... ok
+test_svd_is_thin_so_point_cap_does_not_allocate_n_squared (__main__.GeometryContracts.test_svd_is_thin_so_point_cap_does_not_allocate_n_squared) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+OK
+review_hf04_06_codex.py
+test_capture_baseline_rejects_wrong_epoch (__main__.ContinuityContracts.test_capture_baseline_rejects_wrong_epoch) ... ok
+test_context_reset_is_consumed_once_and_new_observations_recover (__main__.ContinuityContracts.test_context_reset_is_consumed_once_and_new_observations_recover) ... ok
+test_delayed_first_missing_frame_already_has_stale_prediction (__main__.ContinuityContracts.test_delayed_first_missing_frame_already_has_stale_prediction) ... ok
+test_first_frame_after_long_gap_does_not_auto_bind_another_candidate (__main__.ContinuityContracts.test_first_frame_after_long_gap_does_not_auto_bind_another_candidate) ... ok
+test_future_snapshot_has_negative_age_and_is_rejected (__main__.ContinuityContracts.test_future_snapshot_has_negative_age_and_is_rejected) ... ok
+test_initial_low_posture_with_stored_baseline_is_not_a_descent (__main__.ContinuityContracts.test_initial_low_posture_with_stored_baseline_is_not_a_descent) ... ok
+test_invalid_current_receive_does_not_fall_back_to_another_clock (__main__.ContinuityContracts.test_invalid_current_receive_does_not_fall_back_to_another_clock) ... ok
+test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts.test_invalid_snapshot_receive_time_cannot_enable_selection) ... ok
+test_late_match_cannot_bypass_occlusion_timeout (__main__.ContinuityContracts.test_late_match_cannot_bypass_occlusion_timeout) ... ok
+test_new_selection_does_not_reuse_previous_targets_ready_baseline (__main__.ContinuityContracts.test_new_selection_does_not_reuse_previous_targets_ready_baseline) ... ok
+test_operator_confirmation_does_not_turn_a_flat_low_pose_into_stance (__main__.ContinuityContracts.test_operator_confirmation_does_not_turn_a_flat_low_pose_into_stance) ... ok
+test_prediction_age_counts_from_last_measurement (__main__.ContinuityContracts.test_prediction_age_counts_from_last_measurement) ... ok
+test_prediction_gap_does_not_duplicate_an_existing_event (__main__.ContinuityContracts.test_prediction_gap_does_not_duplicate_an_existing_event) ... ok
+test_prediction_is_anchored_at_last_measurement (__main__.ContinuityContracts.test_prediction_is_anchored_at_last_measurement) ... ok
+test_ready_baseline_without_binding_is_not_valid_for_any_target (__main__.ContinuityContracts.test_ready_baseline_without_binding_is_not_valid_for_any_target) ... ok
+test_replay_does_not_choose_a_target_without_explicit_initial_selection (__main__.ContinuityContracts.test_replay_does_not_choose_a_target_without_explicit_initial_selection) ... ok
+test_small_motion_while_initially_low_does_not_use_static_baseline_drop (__main__.ContinuityContracts.test_small_motion_while_initially_low_does_not_use_static_baseline_drop) ... ok
+test_unknown_request_schema_does_not_execute_selection (__main__.ContinuityContracts.test_unknown_request_schema_does_not_execute_selection) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.005s
+
+OK
+review_hf07_codex.py
+test_auxiliary_clock_repeat_does_not_break_geometry_selection (__main__.CompositionContracts.test_auxiliary_clock_repeat_does_not_break_geometry_selection) ... ok
+test_disappeared_candidate_in_old_snapshot_is_not_selected (__main__.CompositionContracts.test_disappeared_candidate_in_old_snapshot_is_not_selected) ... ok
+test_invalid_source_stamp_frame_cannot_be_selected (__main__.CompositionContracts.test_invalid_source_stamp_frame_cannot_be_selected) ... ok
+test_ready_current_baseline_reaches_upright_through_runtime (__main__.CompositionContracts.test_ready_current_baseline_reaches_upright_through_runtime) ... ok
+test_stopped_required_cloud_blocks_selection_before_snapshot_ttl (__main__.CompositionContracts.test_stopped_required_cloud_blocks_selection_before_snapshot_ttl) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.020s
+
+OK
+review_hf08_codex.py
+test_boolean_schema_version_rejected (__main__.EpochDenominator.test_boolean_schema_version_rejected) ... ok
+test_negative_interval_in_another_epoch_does_not_count_event (__main__.EpochDenominator.test_negative_interval_in_another_epoch_does_not_count_event) ... ok
+test_observation_duration_is_separate_across_epochs (__main__.EpochDenominator.test_observation_duration_is_separate_across_epochs) ... ok
+test_overlapping_numeric_seconds_across_epochs_add_duration (__main__.EpochDenominator.test_overlapping_numeric_seconds_across_epochs_add_duration) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.016s
+
+OK
+review_hf09_codex.py
+test_before_first_frame_fall_state_is_unknown (__main__.WatchdogContracts.test_before_first_frame_fall_state_is_unknown) ... ok
+test_request_clock_sampled_after_lock_wait (__main__.WatchdogContracts.test_request_clock_sampled_after_lock_wait) ... ok
+test_ros_builder_never_claims_message_clock (__main__.WatchdogContracts.test_ros_builder_never_claims_message_clock) ... ok
+test_stalled_stream_does_not_report_last_measured_position (__main__.WatchdogContracts.test_stalled_stream_does_not_report_last_measured_position) ... ok
+test_stalled_stream_no_longer_reports_upright (__main__.WatchdogContracts.test_stalled_stream_no_longer_reports_upright) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.136s
+
+OK
+review_hf09_profile_codex.py
+test_boolean_version_is_not_a_supported_integer_schema (__main__.ProfileInputs.test_boolean_version_is_not_a_supported_integer_schema) ... ok
+test_frame_key_rejects_malformed_header_without_raising (__main__.ProfileInputs.test_frame_key_rejects_malformed_header_without_raising) ... ok
+test_negative_or_boolean_duration_is_not_a_latency (__main__.ProfileInputs.test_negative_or_boolean_duration_is_not_a_latency) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
+review_hf09_transport_codex.py
+test_projection_preserves_cached_snapshot_and_selection (__main__.TransportProjection.test_projection_preserves_cached_snapshot_and_selection) ... ok
+test_reused_candidate_id_does_not_replace_lost_target_geometry (__main__.TransportProjection.test_reused_candidate_id_does_not_replace_lost_target_geometry) ... ok
+test_reused_candidate_id_is_not_a_measurement_during_occlusion (__main__.TransportProjection.test_reused_candidate_id_is_not_a_measurement_during_occlusion) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.006s
+
+OK

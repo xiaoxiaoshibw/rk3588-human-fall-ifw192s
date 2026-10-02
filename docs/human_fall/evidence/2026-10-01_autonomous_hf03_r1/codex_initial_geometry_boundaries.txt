@@ -1,0 +1,50 @@
+test_disjoint_holdout_plane_cannot_pass_validation (__main__.GeometryContracts.test_disjoint_holdout_plane_cannot_pass_validation) ... FAIL
+test_floor_below_sensor_has_positive_height (__main__.GeometryContracts.test_floor_below_sensor_has_positive_height) ... ok
+test_nonunit_ground_normal_is_rejected_in_artifact (__main__.GeometryContracts.test_nonunit_ground_normal_is_rejected_in_artifact) ... FAIL
+test_plane_above_sensor_is_not_valid_ground (__main__.GeometryContracts.test_plane_above_sensor_is_not_valid_ground) ... ok
+test_svd_is_thin_so_point_cap_does_not_allocate_n_squared (__main__.GeometryContracts.test_svd_is_thin_so_point_cap_does_not_allocate_n_squared) ... FAIL
+
+======================================================================
+FAIL: test_disjoint_holdout_plane_cannot_pass_validation (__main__.GeometryContracts.test_disjoint_holdout_plane_cannot_pass_validation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf03_codex.py", line 52, in test_disjoint_holdout_plane_cannot_pass_validation
+    self.assertNotEqual(result["status"], "valid", result)
+AssertionError: 'valid' == 'valid' : {'kind': 'ground_plane', 'status': 'valid', 'valid': True, 'reason': None, 'frame': None, 'point_count': 400, 'normal': [0.0, 0.0, 1.0], 'offset_m': 1.5, 'sensor_height_m': 1.5, 'tilt_rad': 0.0, 'fit_inlier_count': 280, 'inlier_fraction': 1.0, 'holdout_residual': {'count': 120, 'rms_m': 2.5, 'max_m': 2.5}, 'valid_region': {'x_min_m': -2.0, 'x_max_m': 2.0, 'y_min_m': -2.0, 'y_max_m': 2.0, 'z_min_m': -1.5, 'z_max_m': -1.5, 'range_min_m': 1.5073687885915459, 'range_max_m': 3.2015621187164243, 'point_count': 280}, 'settings': {'max_points': 100000, 'max_fit_points': 50000, 'range_min_m': 0.0, 'range_max_m': 30.0, 'ransac_iterations': 35, 'inlier_threshold_m': 0.05, 'min_inliers': 60, 'min_inlier_fraction': 0.2, 'normal_up_min_z': 0.5, 'holdout_fraction': 0.3, 'seed': 7}, 'fit_residual_rms_m': 0.0, 'fit_residual_max_m': 0.0, 'fit_residual': {'count': 280, 'rms_m': 0.0, 'max_m': 0.0}}
+
+======================================================================
+FAIL: test_nonunit_ground_normal_is_rejected_in_artifact (__main__.GeometryContracts.test_nonunit_ground_normal_is_rejected_in_artifact)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf03_codex.py", line 55, in test_nonunit_ground_normal_is_rejected_in_artifact
+    with self.assertRaises(GeometryCalibrationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: GeometryCalibrationError not raised
+
+======================================================================
+FAIL: test_svd_is_thin_so_point_cap_does_not_allocate_n_squared (__main__.GeometryContracts.test_svd_is_thin_so_point_cap_does_not_allocate_n_squared)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf03_codex.py", line 44, in test_svd_is_thin_so_point_cap_does_not_allocate_n_squared
+    fit_ground_plane(plane(), SETTINGS)
+  File "D:\Code\ldiar\src\human_fall_detection\core\ground.py", line 175, in fit_ground_plane
+    _, _, vt = np.linalg.svd(inliers - centroid)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\unittest\mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\unittest\mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\unittest\mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf03_codex.py", line 39, in bounded_svd
+    self.assertIs(kwargs.get("full_matrices"), False,
+AssertionError: None is not False : default SVD creates NxN U; use full_matrices=False
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.033s
+
+FAILED (failures=3)
+EXIT=1

@@ -1,0 +1,96 @@
+{
+  "derived_status": {
+    "geometric_usable": true,
+    "ground_derived_id": "gd_3b87dcaa8a1e7207",
+    "ground_identity_confirmed": false,
+    "physical_height_verified": false,
+    "present": true
+  },
+  "lifecycle": {
+    "baseline_reason": "ground_derived_changed",
+    "baseline_status": "idle",
+    "first_id": "gd_8a5401e8631ae145",
+    "record": {
+      "changed": true,
+      "ground_derived_id": "gd_36ee9fbdff16c473",
+      "invalidated": [
+        "baseline",
+        "snapshots",
+        "positions"
+      ],
+      "kind": "ground_derived_lifecycle",
+      "previous_id": "gd_8a5401e8631ae145"
+    },
+    "second_id": "gd_36ee9fbdff16c473",
+    "snapshot_cleared": true,
+    "source_before": {
+      "frame_id": "innolidar",
+      "seq": 1,
+      "source_stamp_s": 100.0,
+      "stamp_nsecs": 0,
+      "stamp_secs": 100
+    }
+  },
+  "monitor": {
+    "degraded_transient": {
+      "min_support_fraction": 0.8,
+      "min_support_points": 20,
+      "p95_m": 0.30000000000000004,
+      "point_count": 400,
+      "reason": "ground_residual_change_not_sustained",
+      "residual_tolerance_m": 0.05,
+      "rms_m": 0.09498513925395032,
+      "roi_count": 400,
+      "shift_m": 0.003997066703463559,
+      "status": "degraded",
+      "support_count": 360,
+      "support_fraction": 0.9,
+      "sustained": false
+    },
+    "insufficient_support": {
+      "min_support_fraction": 0.8,
+      "min_support_points": 20,
+      "p95_m": null,
+      "point_count": 5,
+      "reason": "insufficient_trusted_region_points",
+      "residual_tolerance_m": 0.05,
+      "rms_m": null,
+      "roi_count": 5,
+      "shift_m": null,
+      "status": "unknown",
+      "support_count": 0,
+      "support_fraction": null,
+      "sustained": false
+    },
+    "ok": {
+      "min_support_fraction": 0.8,
+      "min_support_points": 20,
+      "p95_m": 0.009038476269470224,
+      "point_count": 400,
+      "reason": null,
+      "residual_tolerance_m": 0.05,
+      "rms_m": 0.0049208354444447286,
+      "roi_count": 400,
+      "shift_m": 0.0033982444980746873,
+      "status": "ok",
+      "support_count": 400,
+      "support_fraction": 1.0,
+      "sustained": false
+    },
+    "sustained": {
+      "min_support_fraction": 0.8,
+      "min_support_points": 20,
+      "p95_m": 0.30000000000000004,
+      "point_count": 400,
+      "reason": "ground_residual_shift",
+      "residual_tolerance_m": 0.05,
+      "rms_m": 0.09498513925395032,
+      "roi_count": 400,
+      "shift_m": 0.003997066703463559,
+      "status": "recalibration_required",
+      "support_count": 360,
+      "support_fraction": 0.9,
+      "sustained": true
+    }
+  }
+}

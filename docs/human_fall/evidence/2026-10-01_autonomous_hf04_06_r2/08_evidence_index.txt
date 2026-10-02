@@ -1,0 +1,28 @@
+HF-04..06 round-2 evidence index (2026-10-01, session ses_f0c87fac6ffeKE1MYpxoZMnwXa)
+
+00_prework_git_state.txt / 00_prework_head.txt   start state (user changes preserved)
+01_local_hashes_after.txt                        sha256 of changed files (local == device)
+02_local_tests.txt                               local full regression: 156/156 OK
+                                                 (Python 3.12.10 / NumPy 1.26.4)
+03_independent_review_local.txt                  Codex review_hf04_06_codex.py: 14/14 OK
+04_frozen_hashes.txt                             frozen HF-01/02/03 asset hashes unchanged
+05_device_tests.txt                              device isolated /tmp/hf04_06_r2_verify:
+                                                 unittest 156/156 OK + independent 14/14 OK
+                                                 (Python 3.8.10 / NumPy 1.17.4);
+                                                 uploaded hashes match local;
+                                                 driver 0286545f...f3c4 unchanged
+07_final_git_state.txt                           end state (only pre-existing user changes)
+run_device_check.py / run_device_check.sh        runner (UTF-8 bytes stdin, no CRLF)
+
+Round-1 failed device attempts are preserved at
+../2026-10-01_autonomous_hf04_06_r1/05_device_tests_failed_attempt.txt
+
+Changed in round 2: core/tracking.py, selection.py, baseline.py, features.py,
+fall_state.py, pipeline.py, scripts/fall_replay.py, tests/test_hf05_tracking.py,
+tests/test_hf06_fall_state.py, docs/human_fall/INTERACTION_CONTRACT.md.
+Unchanged in round 2: core/lidar_candidates.py, association.py, config/perception.yaml,
+tests/test_hf04_candidates.py, CMakeLists.txt, and all frozen HF-01/02/03 assets.
+
+Boundaries: synthetic/offline only; real extrinsics/IMU/ground physics, human labels
+and mode acceptance remain NOT_VERIFIED; online confirmed disabled by default. No
+deploy, no driver restart, no network/system/vendor change, no commit.

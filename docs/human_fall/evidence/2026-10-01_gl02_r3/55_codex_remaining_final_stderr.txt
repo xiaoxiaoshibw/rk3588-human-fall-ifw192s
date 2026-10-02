@@ -1,0 +1,53 @@
+test_calibration_version_change_invalidates_old_target (__main__.ContextChecks.test_calibration_version_change_invalidates_old_target) ... FAIL
+test_minor_one_sided_obstacle_is_not_whole_ground_shift (__main__.ContextChecks.test_minor_one_sided_obstacle_is_not_whole_ground_shift) ... FAIL
+test_monitor_unavailable_cannot_accept_baseline_capture (__main__.ContextChecks.test_monitor_unavailable_cannot_accept_baseline_capture) ... FAIL
+test_paired_context_is_detached_from_caller_mutation (__main__.ContextChecks.test_paired_context_is_detached_from_caller_mutation) ... FAIL
+test_paired_context_publishes_its_actual_derived_version (__main__.ContextChecks.test_paired_context_publishes_its_actual_derived_version) ... FAIL
+
+======================================================================
+FAIL: test_calibration_version_change_invalidates_old_target (__main__.ContextChecks.test_calibration_version_change_invalidates_old_target)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r3\codex_r3_context_checks.py", line 63, in test_calibration_version_change_invalidates_old_target
+    self.assertIsNone(core.tracker.position_m)
+AssertionError: [1.0, 0.0, 0.2] is not None
+
+======================================================================
+FAIL: test_minor_one_sided_obstacle_is_not_whole_ground_shift (__main__.ContextChecks.test_minor_one_sided_obstacle_is_not_whole_ground_shift)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r3\codex_r3_context_checks.py", line 26, in test_minor_one_sided_obstacle_is_not_whole_ground_shift
+    self.assertNotEqual(report['status'],'recalibration_required')
+AssertionError: 'recalibration_required' == 'recalibration_required'
+
+======================================================================
+FAIL: test_monitor_unavailable_cannot_accept_baseline_capture (__main__.ContextChecks.test_monitor_unavailable_cannot_accept_baseline_capture)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r3\codex_r3_context_checks.py", line 80, in test_monitor_unavailable_cannot_accept_baseline_capture
+    self.assertFalse(ack['accepted'])
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_paired_context_is_detached_from_caller_mutation (__main__.ContextChecks.test_paired_context_is_detached_from_caller_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r3\codex_r3_context_checks.py", line 52, in test_paired_context_is_detached_from_caller_mutation
+    self.assertAlmostEqual(core.ground['offset_m'],1.4)
+AssertionError: 99.0 != 1.4 within 7 places (97.6 difference)
+
+======================================================================
+FAIL: test_paired_context_publishes_its_actual_derived_version (__main__.ContextChecks.test_paired_context_publishes_its_actual_derived_version)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r3\codex_r3_context_checks.py", line 43, in test_paired_context_publishes_its_actual_derived_version
+    self.assertEqual(out['snapshot']['calibration']['ground_derived_id'],
+AssertionError: 'gd_653bd8b4ce2c119d' != 'gd_f19f31ed2caa8a66'
+- gd_653bd8b4ce2c119d
++ gd_f19f31ed2caa8a66
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.015s
+
+FAILED (failures=5)

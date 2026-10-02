@@ -1,0 +1,62 @@
+{
+  "valid_record_loads_ok": true,
+  "corruptions": [
+    {
+      "case": "fit_group_equals_validation_group",
+      "rejected": true,
+      "error": "validation region ids/groups must be distinct"
+    },
+    {
+      "case": "region_rms_negative",
+      "rejected": true,
+      "error": "validation region rms_m must be non-negative"
+    },
+    {
+      "case": "region_p95_negative",
+      "rejected": true,
+      "error": "validation region p95_m must be non-negative"
+    },
+    {
+      "case": "region_support_over_one",
+      "rejected": true,
+      "error": "validation region support_fraction must be in [0, 1]"
+    },
+    {
+      "case": "region_rms_bool",
+      "rejected": true,
+      "error": "validation region rms_m must be a finite number"
+    },
+    {
+      "case": "height_outside_interval",
+      "rejected": true,
+      "error": "constrained ground height is outside the interval"
+    },
+    {
+      "case": "normal_disagrees_with_up_axis",
+      "rejected": true,
+      "error": "constrained ground normal disagrees with up_axis"
+    },
+    {
+      "case": "fit_index_bool",
+      "rejected": true,
+      "error": "fit_support_indices must be integer indices"
+    },
+    {
+      "case": "fit_index_out_of_range",
+      "rejected": true,
+      "error": "fit_support_indices contains an out-of-range index"
+    },
+    {
+      "case": "iterations_zero",
+      "rejected": true,
+      "error": "constrained ground iterations are outside the budget"
+    }
+  ],
+  "legal_failure_record": {
+    "status": "orientation_unverified",
+    "reason": "ground_orientation_ambiguous",
+    "loads_ok": true,
+    "error": null
+  },
+  "all_corruptions_rejected": true
+}

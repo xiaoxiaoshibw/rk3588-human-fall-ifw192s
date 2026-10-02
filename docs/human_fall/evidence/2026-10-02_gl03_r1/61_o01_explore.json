@@ -1,0 +1,66 @@
+{
+ "analysis": "GL-03 O01/G06 exploratory connection baseline",
+ "baseline_connection_pool": {
+  "cell_m": 0.25,
+  "components": 1,
+  "occupied_cells": 1188
+ },
+ "labelled_suspected_plane_ablation": {
+  "band_count": 76668,
+  "band_definition": "|z - median_z| <= max(0.050, 3*MAD)",
+  "band_fraction_of_pool": 0.7870569032244819,
+  "band_mad_m": 0.49129999999999996,
+  "band_median_z_m": -0.0131,
+  "components_delta": 0,
+  "enabled": true,
+  "normal_assumption": "none (z-band only)",
+  "note": "this is a pool-level hypothesis only; with no trusted real ground identity and no single-frame evidence the ablation cannot confirm the current-frame large-candidate root cause",
+  "remaining_cells": 1026,
+  "remaining_components": 1,
+  "trusted_real_plane_available": false
+ },
+ "pool": {
+  "aabb_max_m": [
+   10.8929,
+   8.2939,
+   6.6572
+  ],
+  "aabb_min_m": [
+   0.1833,
+   -2.903,
+   -1.0773
+  ],
+  "frame_provenance": "cross-frame pool (metadata.frames=47)",
+  "has_frame_id": false,
+  "has_original_index": false,
+  "limitation": "cannot be treated as a single frame and cannot reconstruct original point indices",
+  "member": "14_current_sample.csv",
+  "path": "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_sample.csv.tgz",
+  "range_m": {
+   "max": 13.69926363349505,
+   "min": 0.33906957988000047,
+   "p50": 2.2947780415543457
+  },
+  "row_count": 97411,
+  "sampling": "header x,y,z only, no frame or index",
+  "sha256": "528d8ed29430d7a9037dc46d69123b310b280aedeb0f4fff1a6e231d347f9a0e"
+ },
+ "roi_points": {
+  "frame_count": 2,
+  "frame_seq_max": 1142511,
+  "frame_seq_min": 1142510,
+  "limitation": "ROI-limited and point-capped; frame_seq is known but this is not the full frame and has no full-cloud background/range context",
+  "point_index_max": 30585,
+  "point_index_min": 16335,
+  "row_count": 6000,
+  "rows_per_frame_max": 3306,
+  "rows_per_frame_min": 2694,
+  "sampling": "per-frame ROI subset, capped export (roi_export_capped)",
+  "sha256": "4c9ccaacb4f941cb995532620fb5af6886b98b6ac18855d8a6870c56db30660f"
+ },
+ "separation_decision": {
+  "default_off": true,
+  "enabled": false,
+  "reason": "no trusted real ground condition and no full-frame evidence; minimal separation stays default-off and the real single-frame root cause / robot identity stays BLOCKED"
+ }
+}

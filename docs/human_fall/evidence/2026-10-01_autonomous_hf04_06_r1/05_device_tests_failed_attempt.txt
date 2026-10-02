@@ -1,0 +1,40 @@
+# HF-04..06 round-1 device check FAILED ATTEMPTS (preserved for review)
+
+These attempts did not modify the board; they failed on the Windows ->
+SSH -> bash transfer. Kept (not deleted) so the CR/quoting failures are
+auditable. The successful round-1 run is `05_device_tests.txt`.
+
+## Attempt 1 .. 2: remote bash script received CRLF; unpack failed
+
+ssh exit: 0
+DATE=2026-10-01T02:14:31+08:00
+USER=wel HOST=welcomtech ARCH=aarch64
+== docker ps ==
+slam-localization
+DOCKER_PS_EXIT=0
+== container python/numpy ==
+Python 3.8.10
+numpy 1.17.4
+DOCKER_ENV_WRAP_EXIT=0
+== unpack uploaded isolated tree ==
+DOCKER_CP_EXIT=0
+DOCKER_UNPACK_WRAP_EXIT=2
+== unit tests on device ==
+ImportError: Start directory is not importable: 'src/human_fall_detection/tests'
+DEVICE_UNITTEST_EXIT=1
+...
+bash: $'\r': command not found
+tar: /tmp/hf04_06_verify.tar: Cannot open: No such file or directory
+sha256sum: src/human_fall_detection/core/lidar_candidates.py: No such file or directory
+
+Root cause: `subprocess.run(..., input=remote, text=True)` on Windows translated
+`\n` to `\r\n` on the piped stdin, so the remote `bash -s` saw CR characters.
+Caller also hit a GBK decode error when reading the SSH output.
+
+Fix: pass `input=remote.encode("utf-8")` (no text mode) and decode stdout/stderr
+as UTF-8 with errors="replace". Also strip `\r` locally. See the round-2 runner
+`../2026-10-01_autonomous_hf04_06_r2/run_device_check.py`.
+
+The first failed attempt also exposed a driver-side `UnicodeDecodeError` when
+capturing stdout under the default GBK codec; the same fix resolves it. No board
+state, driver, network or bag was touched by these attempts.

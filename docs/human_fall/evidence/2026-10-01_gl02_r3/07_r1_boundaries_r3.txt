@@ -1,0 +1,21 @@
+test_bool_nested_version_is_rejected (__main__.GL02Boundaries.test_bool_nested_version_is_rejected) ... ok
+test_coherent_ground_shift_requires_recalibration (__main__.GL02Boundaries.test_coherent_ground_shift_requires_recalibration) ... ok
+test_parent_plane_and_derived_plane_must_match (__main__.GL02Boundaries.test_parent_plane_and_derived_plane_must_match) ... ok
+test_reload_rejects_damaged_same_id (__main__.GL02Boundaries.test_reload_rejects_damaged_same_id) ... ok
+test_switch_clears_tracked_position (__main__.GL02Boundaries.test_switch_clears_tracked_position) ... ERROR
+test_unconfirmed_auto_bounds_cannot_be_trusted_ground (__main__.GL02Boundaries.test_unconfirmed_auto_bounds_cannot_be_trusted_ground) ... ok
+
+======================================================================
+ERROR: test_switch_clears_tracked_position (__main__.GL02Boundaries.test_switch_clears_tracked_position)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r1\codex_gl02_boundaries.py", line 52, in test_switch_clears_tracked_position
+    core.apply_ground_context(ground_derived=self.block(1.4))
+  File "D:\Code\ldiar\src\human_fall_detection\core\node_runtime.py", line 459, in apply_ground_context
+    raise ValueError(
+ValueError: a bare ground_derived update is incomplete: supply the matching parent ground (build a full artifact when the parent is not at hand)
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+FAILED (errors=1)

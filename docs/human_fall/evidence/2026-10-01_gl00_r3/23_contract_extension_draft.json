@@ -1,0 +1,53 @@
+{
+  "ticket": "GL-00", "round": "r3", "date": "2026-10-01",
+  "purpose": "minimal additive, versioned extension for ground-derived coordinates and candidate ground boxes",
+  "requires_review_before": "GL-02 implementation",
+  "hard_rules": [
+    "do NOT change any frozen field meaning: keep coordinate.source_frame, coordinate.reference_frame, coordinate.horizontal_basis, coordinate.ground_frame, coordinate.ground_relative_available, coordinate.transform_status semantics exactly as in INTERACTION_CONTRACT v1",
+    "do NOT write the ground transform into measured-extrinsics fields (T_reference_lidar, rotations, extrinsics_verified stay as HF-03 left them; frames.reference stays null)",
+    "all additions are optional; absence means the old behaviour; presence never implies a verified physical pose",
+    "HF-01 health/manifest v1 are untouched; bump schema_version only if a frozen field meaning/enum changes, not for additive optional fields"
+  ],
+  "A_ground_artifact_additive_block": {
+    "kind": "geometry_calibration",
+    "new_key": "ground_derived",
+    "fields": {
+      "ground_derived_id": "stable hash id of (n,d,R,t,ROI,source data hash)",
+      "from_frame": "innolidar",
+      "to_frame": "ground_local",
+      "R": "3x3 finite orthonormal det=+1, rows [u;v;n]",
+      "t": "3 finite m; t=-R@o, o=-d*n",
+      "origin": "sensor-origin ground foot",
+      "x_reference_axis_source": "confirmed source reference axis used for u",
+      "convention": "o=-d*n; u=proj(a); v=n x u; R=[u;v;n]; horizontal heading/origin are conventions",
+      "single_plane_premise": true,
+      "valid_region_ground_local": "ROI bounds + point count for coverage checks",
+      "physical_verified": false
+    }
+  },
+  "B_candidate_snapshot_additive_fields": {
+    "kind": "candidate_snapshot",
+    "per_candidate": {
+      "bbox_ground_min_m": "[x,y,z] or null; min over the candidate's ACTUAL transformed points",
+      "bbox_ground_max_m": "[x,y,z] or null",
+      "center_ground_m": "[x,y,z] or null; center of the same actual transformed points",
+      "bbox_ground_from": "actual_points | unavailable (never from only the source min/max two corners)"
+    },
+    "coordinate_additions": {
+      "ground_derived_id": "which ground_derived artifact produced the ground box; null if none",
+      "note": "the existing coordinate.ground_frame string is LEFT AS IS; do not repurpose it as the transform id"
+    },
+    "unchanged": ["center_source_m", "bbox_source_min_m", "bbox_source_max_m", "evidence_indices", "height_m", "ground_relative_available"]
+  },
+  "C_frontend_same_version_consumption": [
+    "enable ground mode only when snapshot's ground_derived_id matches the loaded ground artifact",
+    "physical_verified=false => label the view unverified/preview; never show as calibrated world coordinates",
+    "unknown/missing/newer fields => ignore and fall back to source view; never default to valid/green",
+    "2D selection rectangle from the same ground AABB eight corners; selection still sends source snapshot_id/candidate_id, not pixels"
+  ],
+  "D_recalibration_invalidation": [
+    "a new ground_derived_id/calibration_version invalidates old snapshots, positions and standing-baseline eligibility",
+    "source seq/stamp_secs/stamp_nsecs/time_epoch are preserved and compared unchanged",
+    "monitoring checks only regions with trusted ground support; insufficient support => unknown/degraded; sustained change => require recalibration (no claim of full yaw/horizontal drift detection)"
+  ]
+}

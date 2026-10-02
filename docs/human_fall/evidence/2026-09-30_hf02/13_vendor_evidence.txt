@@ -1,0 +1,52 @@
+# HF-02 厂商与源码证据（时间戳单位 / IMU 语义）
+
+采集日期：2026-09-30（Asia/Shanghai）。执行：OpenCode DeepSeek v4.1 Flash。
+
+## 1. SDK 头文件注释 vs 发布代码（互相矛盾，均不足以单独定单位）
+
+- 文件：`src/inno_lidar_ros/third_party/inno_driver/inno_driver/msg/imu_types.hpp`
+  sha256 `df90fc432a789de5010cdd1b741114ad86d4275ee7c9d23659c1df5f569e7baf`
+  注释：`double timestamp;  // Time in nanoseconds`（第 5 行）。
+- 发布实现：`src/inno_lidar_ros/src/source/publish_manager.cpp`（git HEAD `c96489e` 版本）
+  的 `toRosMsg(ImuMsg)` 把 `msg->timestamp` 按“秒”拆分为 header `sec`/`nsec`。
+- 结论：头文件注释与厂商发布代码在单位上矛盾；仅凭注释改时间单位为纳秒被禁止，且与运行时表现不符（见第 3 节）。
+
+## 2. 厂商仓库与二进制检索
+
+- 厂商 GitHub 仓库 `innolidar/inno_lidar_ros`（README 声明支持 IFW192S/FW192S/FW192A、含 IMU 解析）。
+  `main` 分支 `inno_lidar_ros/src/source/publish_manager.cpp` 共 281 行，与本仓库版本一致：
+  同样按“秒”拆分 timestamp、同样不复制 orientation、无 covariance 声明，也没有 IMU 单位/轴向/偏置说明。
+  该文件同样存在 `*iter_timestamp = point.timestamp;ros_msg` 拼写错误（本仓库工作树中的用户修复相对它是修正）。
+  检查时间 2026-09-30；该仓库 README 未见 IMU 协议/单位章节。
+- 预编译 SDK `libinno_driver.so`（aarch64）本地与板上 sha256 一致：
+  `863aab8818d766d66b76cb8f5f58342e5f9829e55fef443ce7ea2779ff6de944`。
+  可见符号包含 `OnlineManager::SplitIMUFrame`、`Decoder::IsImuSame(IMUBlock)`、`RegisterImuCallBack`，
+  说明 SDK 内部确有 IMU 帧拆分/回调链；二进制字符串检索未发现 `deg/dps/rad/s/g/unit` 等任何单位串，
+  也未发现 IMU 芯片型号串（完整过滤输出见 `11_sdk_binary_string_scan.txt`）。
+- 开放 SDK `Seyond-Inc/inno-lidar-sdk` 支持 Falcon/Robin/HB-D1 等型号，不含 IFW192S；其数据包点时间使用
+  µs 级字段（`ts_start_us`/`ts_10us`），与本设备闭源 SDK 的 ImuMsg 字段不同源，不能外推 IMU 单位。
+- 板上与本机未找到 IFW192S 的 IMU 协议或单位文档。`D:\Code` 下唯一厂商手册为 `AISC-3830用户手册.pdf`
+  （RK3588 板卡手册，含 RTC/NTP 章节），与雷达 IMU 单位无关。
+
+## 3. 运行时行为（发布边界自洽为“秒”，但不构成原始字段单位证明）
+
+- 多次采样中 header 秒值量级：HF-00 窗口约 409 s → HF-01 约 6381 s → 本单 16:21–16:43 为 9817–11039 s，
+  与“秒”数量级一致；若纳秒字段被按秒解释，秒值应达 1e11–1e14。该证据只证明“发布链路把该值当秒用且输出自洽”；
+  闭源 .so 是否在回调前做过 ns→s 转换无法证实，故原始字段单位仍为 **UNVERIFIED**。
+  （跨会话数值不可比：设备原点未锚定，会话间可能复位，不据此计算连续性或漂移。）
+- cloud `header.stamp` == 首点 `timestamp`：HF-00/HF-01 已测；本单 6 帧再测全部相等（`05_stamp_rate_probe.txt`）。
+- 设备域与主机 monotonic 速率：120 s 两轮采样，分段源/接收速率比 1.00003–1.00056（含首 5 s 连接预热段）；
+  见 `05`/`06`。短窗抖动大于稳定漂移，不构成同钟、UTC 锚定或漂移校正证据。
+- IMU 六轴数值有限、有变化；`orientation` 恒为 (0,0,0,0)，`orientation_covariance[0]` 恒为 0.0
+  （实时采样与离线 bag 一致，见 `10_bag_offline_read.txt`）。当前在线节点仍是旧二进制，未部署本单源码修复。
+- SDK `state` 字段未映射到 ROS 话题，闭源 `.so` 内语义无法验证 → 保持 `unknown`，不据此复制四元数。
+
+## 4. 结论（本单）
+
+- 时间：发布链路“秒”语义自洽，生成侧 sec/nsec 进位与非法值处理已修复并构建验证（见 `03`）；
+  秒/纳秒原始单位未获厂商证据 → `normalized_stamp_s` 继续 `null`，
+  `cross_stream_same_clock_verified` / `host_anchor_verified` 继续 `false`。
+- IMU：单位/轴向/偏置未验证（无厂商协议、无受控已知姿态/旋转实验条件）→ 该路融合禁用；
+  本单整体 **BLOCKED**（设备验证部分）。
+- 解除阻塞所需条件：厂商协议文本，或现场受控实验（稳定安装、已知转角/重力方向/旋转量）核验单位、轴向与偏置；
+  该实验需用户授权与现场执行条件，本轮不具备，未编造任何动作或结果。

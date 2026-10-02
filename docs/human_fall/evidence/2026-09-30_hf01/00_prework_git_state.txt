@@ -1,0 +1,40 @@
+HF-01 pre-work worktree baseline (Windows local, captured before any HF-01 write)
+Command: git -C D:\Code\ldiar status --short --branch ; git -C D:\Code\ldiar log --oneline -5 ; git -C D:\Code\ldiar rev-parse HEAD
+Date: 2026-09-30 (Asia/Shanghai), before HF-01 file creation
+
+## branch - status --short --branch
+## master...origin/master
+ M src/CMakeLists.txt
+ M src/inno_lidar_ros/src/source/publish_manager.cpp
+?? AGENTS.md
+?? "AISC-3830用户手册.pdf"
+?? CLAUDE.md
+?? docs/
+?? rk.txt
+?? src/human_follow_calibration/
+
+## log --oneline -5
+c96489e 更新3588动态链接库
+bce800b 优化本地文件循环播放滤波异常问题
+c08d71d 优化半径滤波算法运行效率
+747418d 更新两个平台下的动态链接库
+1b7ef60 更新aarch64平台下的动态链接库
+
+## rev-parse HEAD
+c96489e40037aca810b23b98d71ba34632d18bd0
+
+## git diff --stat
+warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF the next time Git touches it
+error: open("src/CMakeLists.txt"): Invalid argument
+fatal: cannot hash src/CMakeLists.txt
+
+Note: src/CMakeLists.txt is a symlink ("l" mode) and Windows git cannot hash it;
+this is the pre-existing environment limitation recorded in HF-00 (Q log). No reset,
+checkout, commit or push was performed in HF-01.
+
+## publish_manager.cpp diff (pre-existing user spelling fix, preserved)
+@@ -123,7 +123,7 @@ public:
+-            *iter_timestamp = point.timestamp;ros_msg
++            *iter_timestamp = point.timestamp;
+
+This diff is unchanged by HF-01 (no HF-01 edit touches driver sources).

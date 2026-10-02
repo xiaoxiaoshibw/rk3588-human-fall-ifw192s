@@ -1,0 +1,55 @@
+{
+  "ticket": "GL-00", "round": "r3", "date": "2026-10-01",
+  "status": "software_plan_reviewable; physical_values_pending/BLOCKED",
+  "corrected_fact": "user corrected the installation: the lidar looks DOWNWARD, not level; the earlier 'forward-up tilt' statement is retracted. Exact pitch and source-axis-to-gravity mapping are unknown.",
+  "legend": {
+    "old_baseline": "existing HF-03 value, not a verified sensor/mount measurement",
+    "design_convention": "chosen software convention, not a physical acceptance threshold",
+    "synthetic_fixture": "parameter selected for the synthetic prototype that GL-01 may freeze now",
+    "pending_measurement": "needs on-site measurement before freezing"
+  },
+  "software_thresholds_for_synthetic_prototype": [
+    {"key": "ransac_iterations", "existing": 150, "source": "core/ground.py",
+     "proposed": "synthetic fixture set to ceil of N for p=0.999 at the fixture's in-ROI ground fraction w; keep a hard cap",
+     "status": "synthetic_fixture"},
+    {"key": "inlier_threshold_m", "existing": 0.05, "source": "config/geometry.yaml",
+     "proposed": "synthetic fixture 0.02 m noise -> 0.05 m baseline stays for synthetic only",
+     "status": "synthetic_fixture"},
+    {"key": "normal_up_min_z", "existing": 0.5, "source": "core/ground.py",
+     "proposed": "synthetic fixture may use a known axis; production must not dead-set world Z",
+     "status": "synthetic_fixture"},
+    {"key": "min_inliers / min_inlier_fraction", "existing": "100 / 0.2", "source": "core/ground.py",
+     "proposed": "evaluate on the restricted ROI sample, not the whole scene", "status": "design_convention"},
+    {"key": "holdout_design", "existing": "random pooled split", "source": "core/ground.py",
+     "proposed": "split by frame group and spatial region; no same-surface leakage", "status": "design_convention"},
+    {"key": "spatial_sampling", "existing": "max_points 100000, uniform stride", "source": "core/ground.py",
+     "proposed": "radial/angular balanced sampling so a dense near surface cannot fill the budget", "status": "design_convention"},
+    {"key": "max_holdout_rms_m", "existing": 0.12, "source": "core/ground.py; review 3.5 notes the support set is truncated at 0.05 m so 0.12 m is not discriminating",
+     "proposed": "report untruncated residuals and high percentiles; do not call 0.12 m a precision guarantee", "status": "old_baseline/weak"}
+  ],
+  "physical_acceptance_thresholds_blocked": [
+    {"key": "up_axis / mount pitch", "observed": "dominant plane normal is ~25-26 deg off source +Z, horizontal component ~ -X, stable across captures; consistent with a downward-looking mount but NOT proof",
+     "needed": "measured mount pitch and axis convention", "status": "BLOCKED"},
+    {"key": "inlier distance per range", "needed": "residual vs range on a known flat surface", "status": "BLOCKED"},
+    {"key": "absolute support count / covered area", "needed": "confirmed ground ROI extent and point density", "status": "BLOCKED"},
+    {"key": "ground identity", "observed": "single dominant plane support ~19-20% of valid returns over all three captures; identity not operator-confirmed",
+     "needed": "operator confirmation of the walkable ground region vs a large tilted surface", "status": "BLOCKED"},
+    {"key": "single-plane premise", "observed": "several other tilted planes exist (walls/ceiling/furniture); floor levelness across the whole ROI not verified",
+     "needed": "level check / multi-region ground confirmation", "status": "BLOCKED"},
+    {"key": "normal/d stability threshold", "observed": "current capture frame-group max normal angle 2.37 deg, offset spread 0.072 m (same 5 s window; no long-term drift data)",
+     "needed": "longer/multi-session data and a frozen tolerance", "status": "BLOCKED"},
+    {"key": "independent height error", "needed": "one scale-measured static reference with stated uncertainty", "status": "BLOCKED"},
+    {"key": "sensor height", "observed": "candidate perpendicular distance d ~ 1.288-1.316 m; user states ground-to-radar-eyeball vertical ~1.1 m and robot total height 1.4 m; measurement point vs device origin offset and errors unknown",
+     "needed": "measurement basis definition and origin offset audit; the ~0.19 m difference is NOT reconciled or treated as verified", "status": "BLOCKED"}
+  ],
+  "ransac_budget_ceil": {
+    "formula": "N = ceil(log(1-p)/log(1-w^3))",
+    "p0.99": {"0.10": 4603, "0.15": 1363, "0.20": 574, "0.25": 293, "0.30": 169, "0.40": 70, "0.50": 35},
+    "p0.999": {"0.10": 6905, "0.15": 2044, "0.20": 860, "0.25": 439, "0.30": 253, "0.40": 105, "0.50": 52},
+    "assumptions": ["independent uniform 3-point picks, distinct and non-collinear",
+                    "w = in-ROI probability a point is on the plane within threshold",
+                    "organized rotating LiDAR returns are correlated; treat N as an estimate/upper bound, not a guarantee",
+                    "cap N and keep a bounded candidate list; do not dead-set world Z when the axis is unknown"],
+    "observation": "150 iterations only reaches p=0.99 when w >= ~0.30; whole-scene ground support here is ~0.20, so ROI restriction is required first"
+  }
+}

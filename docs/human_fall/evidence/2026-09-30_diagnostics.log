@@ -1,0 +1,63 @@
+
+[DRIVER_STARTUP_LOG_TAIL]
+
+[DRM_DRIVERS]
+/sys/class/drm/renderD128
+/sys/bus/platform/drivers/rockchip-drm
+DRIVER=rockchip-drm
+OF_NAME=display-subsystem
+OF_FULLNAME=/display-subsystem
+OF_COMPATIBLE_0=rockchip,display-subsystem
+OF_COMPATIBLE_N=1
+MODALIAS=of:Ndisplay-subsystemT(null)Crockchip,display-subsystem
+/sys/class/drm/renderD129
+/sys/bus/platform/drivers/RKNPU
+DRIVER=RKNPU
+OF_NAME=npu
+OF_FULLNAME=/npu@fdab0000
+OF_COMPATIBLE_0=rockchip,rk3588-rknpu
+OF_COMPATIBLE_N=1
+MODALIAS=of:NnpuT(null)Crockchip,rk3588-rknpu
+
+[ETH2_LINK]
+/sys/class/net/eth2/operstate: down
+/sys/class/net/eth2/carrier: 0
+
+[CONTAINER_VIDEO_DEVICES]
+
+[ROS_PACKAGE_LIST_CAMERA_RELATED]
+foxglove_bridge /opt/ros/noetic/share/foxglove_bridge
+image_transport /opt/ros/noetic/share/image_transport
+inno_lidar_msg /root/catkin_ws/src/inno_lidar_msg
+inno_lidar_ros /root/catkin_ws/src/inno_lidar_ros
+stereo_msgs /opt/ros/noetic/share/stereo_msgs
+
+[REMOTE_BUILD_FLAGS]
+11:set(POINT_TYPE XYZI_TIME)
+16:set(COMPILE_METHOD CATKIN)
+18:if(COMPILE_METHOD STREQUAL "COLCON")
+29:option(ENABLE_IMU_MSG_PARSE "Enable IMU MSG PARSE" ON)
+30:if(${ENABLE_IMU_MSG_PARSE})
+31:  add_definitions(-DENABLE_IMU_MSG_PARSE)
+33:endif(${ENABLE_IMU_MSG_PARSE})
+63:if(${POINT_TYPE} STREQUAL "XYZI")
+64:  add_definitions(-DPOINT_TYPE_XYZI)
+65:elseif(${POINT_TYPE} STREQUAL "XYZI_TIME")
+66:  add_definitions(-DPOINT_TYPE_TIME)
+68:  add_definitions(-DPOINT_TYPE_SOURCE)
+75:message("-- POINT_TYPE is ${POINT_TYPE}")
+101:  if(${COMPILE_METHOD} STREQUAL "CATKIN")
+118:  endif(${COMPILE_METHOD} STREQUAL "CATKIN")
+132:if(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
+147:else(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
+153:endif(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
+197:  if(${COMPILE_METHOD} STREQUAL "CATKIN")
+209:if(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
+231:endif(rclcpp_FOUND AND ${COMPILE_METHOD} STREQUAL "COLCON")
+5:    double timestamp;  // Time in nanoseconds
+18:          timestamp(0),
+35:          timestamp(ts),
+53:            timestamp = other.timestamp;
+70:      timestamp = 0.0;
+
+[END]

@@ -1,0 +1,67 @@
+{
+  "ticket": "GL-00", "round": "r4", "date": "2026-10-01",
+  "kind": "ground_derived_contract_extension",
+  "status": "PROPOSED_FOR_REVIEW",
+  "hard_rules": [
+    "additive/optional only; frozen field meaning unchanged: coordinate.source_frame, coordinate.reference_frame, coordinate.horizontal_basis, coordinate.ground_frame, coordinate.ground_relative_available, coordinate.transform_status",
+    "the ground-derived transform is stored only under a new ground_derived block; it must NEVER be written into measured extrinsics (T_reference_lidar, rotations, frames.reference, extrinsics_verified)",
+    "presence of ground_derived never implies a verified physical pose; all physical flags stay false until measured",
+    "HF-01 health/manifest v1 unchanged; bump schema_version only if a frozen field meaning/enum changes"
+  ],
+  "A_ground_derived_block": {
+    "parent_kind": "geometry_calibration",
+    "key": "ground_derived",
+    "nested_schema_version": 1,
+    "units": "m",
+    "from_frame": "innolidar",
+    "to_frame": "ground_local",
+    "loader_rule": "reject a ground_derived block whose nested schema_version is missing or is not the supported value; do not guess/merge",
+    "fields": {
+      "ground_derived_id": "stable hash id over (n,d,R,t,ROI,source hash)",
+      "R": "3x3 finite orthonormal det=+1, rows [u;v;n]",
+      "t": "3 finite m; t=-R@o, o=-d*n",
+      "origin": "sensor-origin ground foot",
+      "x_reference_axis_source": "confirmed source reference axis used for u",
+      "convention": "o=-d*n; u=proj(a); v=n x u; R=[u;v;n]; heading/origin are conventions",
+      "applicability": {
+        "single_plane_assumed": true,
+        "single_plane_note": "software precondition (fixed mount, flat indoor, one dominant plane); true means the assumption was declared, NOT that the field was confirmed",
+        "single_plane_confirmed": false,
+        "confirmed_note": "field confirmation flag; false until measured/confirmed; never hard-coded true"
+      },
+      "valid_region_ground_local": "ROI bounds + point count",
+      "physical_verified": false
+    }
+  },
+  "B_candidate_snapshot_additive_fields": {
+    "kind": "candidate_snapshot",
+    "per_candidate": {
+      "bbox_ground_min_m": "[x,y,z] or null; per-axis min over the candidate's ACTUAL transformed points",
+      "bbox_ground_max_m": "[x,y,z] or null; per-axis max over the same points",
+      "center_ground_m": "[x,y,z] or null; DEFINED as per-axis median of the candidate's ACTUAL transformed points (not a rotated source median)",
+      "bbox_ground_from": "actual_points | unavailable (never from only the source min/max two corners)"
+    },
+    "coordinate_additions": {
+      "ground_derived_id": "id of the ground_derived artifact that produced the box; null if none",
+      "note": "the existing coordinate.ground_frame string is LEFT AS IS; it is not repurposed as the transform id"
+    },
+    "unchanged": ["center_source_m", "bbox_source_min_m", "bbox_source_max_m", "evidence_indices", "height_m", "ground_relative_available"]
+  },
+  "C_state_consumption_consistent_with_candidate": {
+    "kind": "target_state",
+    "rule": "state exposes the SAME derived geometry and version binding as the candidate snapshot: center_ground_m, bbox_ground_min_m/max_m (per-axis median/AABB of actual transformed points), coordinate.ground_derived_id, calibration_id/version",
+    "binding": "state and candidate must reference the same ground_derived_id and source frame id; a mismatch means the box is stale and must not be shown as current",
+    "frozen_fields": "position_source_m / bbox_source_* keep their meaning; add parallel ground fields only"
+  },
+  "D_frontend_and_legacy": [
+    "enable ground mode only when ground_derived_id matches the loaded artifact AND physical_verified is read (false => label unverified/preview)",
+    "unknown/missing/newer nested version => ground mode disabled, fall back to source view; never default to valid/green",
+    "all additions optional: v1 clients ignore them and keep source behaviour",
+    "2D selection rectangle derived from the same ground AABB eight corners; selection still sends source snapshot_id/candidate_id, not pixels"
+  ],
+  "E_recalibration_invalidation": [
+    "a new ground_derived_id/calibration_version invalidates old snapshots, positions and standing-baseline eligibility",
+    "source seq/stamp_secs/stamp_nsecs/time_epoch are preserved and compared unchanged",
+    "monitoring only regions with trusted ground support; insufficient support => unknown/degraded; sustained change => require recalibration (no claim of full yaw/horizontal-drift detection)"
+  ]
+}

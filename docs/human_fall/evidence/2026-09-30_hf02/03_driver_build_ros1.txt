@@ -1,0 +1,42 @@
+﻿ssh : + docker exec slam-localization bash -lc 'source /opt/ros/noetic/setup.bash && touch /tmp/hf02_ws/src/inno_lidar_
+ros/src/source/publish_manager.cpp && cd /tmp/hf02_ws && catkin_make 2>&1; echo FULL_BUILD_EXIT=${PIPESTATUS[0]}'
+所在位置 行:1 字符: 105
++ ... lace "`r","") | ssh -o BatchMode=yes ldiar-wel "bash -s" 2>&1 | Out-F ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (+ docker exec s...PIPESTATUS[0]}':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_eus
+Scanning dependencies of target inno_lidar_node
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_cpp
+[  8%] Building CXX object inno_lidar_ros/CMakeFiles/inno_lidar_node.dir/src/source/publish_manager.cpp.o
+[  8%] Built target std_msgs_generate_messages_nodejs
+[  8%] Built target _inno_lidar_msg_generate_messages_check_deps_DeviceStatus
+[ 16%] Built target inno_lidar_msg_generate_messages_lisp
+[ 33%] Built target inno_lidar_msg_generate_messages_eus
+[ 41%] Built target inno_lidar_msg_generate_messages_nodejs
+[ 58%] Built target inno_lidar_msg_generate_messages_py
+[ 66%] Built target inno_lidar_msg_generate_messages_cpp
+[ 66%] Built target inno_lidar_msg_generate_messages
+[ 75%] Linking CXX executable /tmp/hf02_ws/devel/lib/inno_lidar_ros/inno_lidar_node
+[100%] Built target inno_lidar_node
+Base path: /tmp/hf02_ws
+Source space: /tmp/hf02_ws/src
+Build space: /tmp/hf02_ws/build
+Devel space: /tmp/hf02_ws/devel
+Install space: /tmp/hf02_ws/install
+####
+#### Running command: "make cmake_check_build_system" in "/tmp/hf02_ws/build"
+####
+####
+#### Running command: "make -j8 -l8" in "/tmp/hf02_ws/build"
+####
+FULL_BUILD_EXIT=0
++ docker exec slam-localization bash -lc 'sha256sum /tmp/hf02_ws/src/inno_lidar_ros/src/source/publish_manager.cpp /tmp
+/hf02_ws/src/inno_lidar_ros/src/source/publish_manager.h'
+b9c4e706fa80216bb9c0d8eded2f051c5448a0ffd64cb6acd7e90952dc69d394  /tmp/hf02_ws/src/inno_lidar_ros/src/source/publish_manager.cpp
+a0498465df433da74873bc770d38bb0aa5a992e1aa4ab96efd35a9b922ddb655  /tmp/hf02_ws/src/inno_lidar_ros/src/source/publish_manager.h
++ $'\r'
+bash: 琛?4: $'\r'锛氭湭鎵惧埌鍛戒护

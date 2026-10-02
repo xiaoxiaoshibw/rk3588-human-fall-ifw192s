@@ -1,0 +1,95 @@
+﻿=== runtime config.yaml ===
+common:
+  msg_source: 1                                         #0: not use Lidar
+                                                        #1: packet message comes from online Lidar
+                                                        #2: packet message comes from Pcap file
+  send_point_cloud_ros: true                            #true: Send point cloud through ROS or ROS2
+lidar:
+  - driver:
+      lidar_type: IFW192S
+      point_type: 0                             #point cloud type 0(x,y,z,intensity,ring) 1(x,y,z,intensity,ring,time)
+      cloud_port: 8080                          #cloud port of lidar (pc port)
+      check_lidar_ip: 192.168.1.10              #check param of lidar device UDP (lidar ip)
+      h_start_angle: -60                        #herizon Start angle (IFW192S-B H FOV 120°, 居中±60°)
+      h_end_angle: 60                           #herizon End angle of point cloud
+      v_start_angle: -45                        #vertical Start angle (IFW192S-B V FOV 90°, 居中±45°)
+      v_end_angle: 45                           #vertical End angle of point cloud
+      min_distance: 0.02                        #Minimum distance of point cloud
+      max_distance: 30                          #Maximum distance (IFW192S-B 30m@10% reflectivity)
+      pcap_repeat: true                         #True--repeat play pcap file
+      is_device_load_calibration: false           #True--Use calibration from lidar device (本地 ifw192s 标定不适用 FW192SB)
+      calibrate_folder: /root/catkin_ws/src/inno_lidar_ros/config/ifw192s #fallback (msg_source=1 时优先用设备标定)
+      pcap_file: /home/wenjie/project/pcap/ifw192s/71_2.pcap #The path of pcap file (msg_source=1 时不读)
+      extrinsic:
+        use_status: true                        #
+        roll: 0                                 #
+        pitch: 0                                #
+        yaw: 0                                  #
+        x: 0                                    #
+        y: 0                                    #
+        z: 0                                    #
+        
+    ros:
+      ros_frame_id: innolidar                             #Frame id of packet message and point cloud message
+      ros_send_point_cloud_topic: /innolidar_points       #Topic used to send point cloud through ROS
+      ros_send_imu_topic: /inno_imu                       #Topic used to send point cloud through ROS
+      ros_device_status_send_topic: /device_status        #Topic used to send point cloud through ROS
+      
+=== launch dir ===
+ros1_start.launch
+ros2_start.launch.py
+=== ros1_start.launch (head 80) ===
+<launch>
+  <node pkg="inno_lidar_ros" name="inno_lidar_node" type="inno_lidar_node" output="screen">
+    <param name="config_path" value=""/>
+  </node>
+  <!-- rviz -->
+  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find inno_lidar_ros)/rviz/rviz.rviz" />
+</launch>
+=== latest node log ===
+rostopic_3388_1790744423527.log
+rostopic_3359_1790744412710.log
+rostopic_3330_1790744399836.log
+rostopic_3281_1790744393260.log
+rostopic_3252_1790744387436.log
+using: 
+tail: cannot open '' for reading: No such file or directory
+=== webui dir ===
+total 660
+drwxrwxr-x 2 1000 1000   4096 Sep 29 23:20 .
+drwxr-xr-x 1 root root   4096 Sep 29 23:22 ..
+-rw-r--r-- 1 1000 1000  26375 Sep 29 23:20 OrbitControls.js
+-rw-r--r-- 1 1000 1000  25476 Sep 29 23:20 index.html
+-rw-r--r-- 1 1000 1000 603445 Sep 29 23:20 three.min.js
+=== /dev head ===
+fd
+full
+mqueue
+null
+ptmx
+pts
+random
+shm
+stderr
+stdin
+stdout
+tty
+urandom
+zero
+=== accelerators/sdk ===
+ls: cannot access '/usr/lib/librknn*': No such file or directory
+ls: cannot access '/usr/lib/aarch64-linux-gnu/librknn*': No such file or directory
+ls: cannot access '/usr/bin/rknn*': No such file or directory
+3.8.10 (default, Mar 18 2025, 20:04:55) 
+[GCC 9.4.0]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'cv2'
+ssh : bash: line 21: 1
+所在位置 行:23 字符: 15
++ ... ; $script | ssh -o BatchMode=yes -o ConnectTimeout=8 ldiar-wel "docke ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (bash: line 21: 1:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+: ambiguous redirect

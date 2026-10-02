@@ -1,0 +1,28 @@
+{
+  "ticket": "GL-01",
+  "rework_against": "docs/human_fall/evidence/2026-10-01_gl01_r3/CODEX_ARTIFACT_REWORK.md",
+  "reviewer_script": "docs/human_fall/evidence/2026-10-01_gl01_r3/codex_artifact_checks.py",
+  "scope": "validate_constrained_ground loader hardening only; legacy validate_ground_plane behavior preserved",
+  "items": [
+    {"review": "declared-valid artifact with fit_frame_group missing or equal to any validation group",
+     "fix": "valid record requires a non-empty fit_frame_group and every region group distinct from it", "evidence": ["40_codex_artifact_checks.txt", "10_loader_cases.json"]},
+    {"review": "region rms_m/p95_m negative/bool/non-numeric; support_fraction outside [0,1]",
+     "fix": "_region_number rejects bool/non-numeric/NaN/Inf; non-negativity and [0,1] enforced for every present region", "evidence": ["40_codex_artifact_checks.txt", "10_loader_cases.json"]},
+    {"review": "stored normal must match declared up_axis within the settings angle",
+     "fix": "valid branch rejects when angle(normal, up_axis) > settings.max_angle_rad", "evidence": ["40_codex_artifact_checks.txt", "10_loader_cases.json"]},
+    {"review": "d must lie inside the stored sensor height interval",
+     "fix": "valid branch rejects offset_m outside [low, high]", "evidence": ["40_codex_artifact_checks.txt", "10_loader_cases.json"]},
+    {"review": "fit_support_indices must be strict in-range unique ints (bool/out-of-range/duplicate rejected)",
+     "fix": "_validated_indices uses _normalise_indices (bool/float/range) plus uniqueness", "evidence": ["40_codex_artifact_checks.txt", "10_loader_cases.json"]},
+    {"review": "input_point_count missing/invalid; region indices >= count or over cumulative holdout cap",
+     "fix": "input_point_count required non-negative int; region indices strictly in range and disjoint; cumulative sampled count <= holdout_point_cap", "evidence": ["40_codex_artifact_checks.txt"]},
+    {"review": "iterations zero/under protocol budget/over cap",
+     "fix": "iterations >= settings.ransac_iterations and <= hard cap; iterations_cap <= hard cap", "evidence": ["40_codex_artifact_checks.txt", "10_loader_cases.json"]},
+    {"review": "up_axis must already be unit; loader must not silently re-normalise",
+     "fix": "_unit_vector raises on a non-unit stored up_axis; stored value is never mutated", "evidence": ["tests/test_gl01_constrained_ground.py::ArtifactLoaderValidationTest"]},
+    {"review": "must not only check one statistic bound or trust passed:true",
+     "fix": "every valid region is re-derived: unique/range indices, count match, disjointness, RMS/p95/support thresholds", "evidence": ["40_codex_artifact_checks.txt"]},
+    {"review": "legal invalid/orientation_unverified diagnostics must stay saveable (not erased by competition_truncated)",
+     "fix": "physical/independence gates apply only to status=valid; competition_truncated gate is valid-only; non-valid records only get type/range checks", "evidence": ["16_cli_records.json", "10_loader_cases.json"]}
+  ]
+}

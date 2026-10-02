@@ -1,0 +1,61 @@
+﻿## branch / HEAD (recorded 2026-09-30 Asia/Shanghai, pre-work)
+master
+c96489e40037aca810b23b98d71ba34632d18bd0
+
+## git status --short
+ M src/CMakeLists.txt
+ M src/inno_lidar_ros/src/source/publish_manager.cpp
+?? AGENTS.md
+?? "AISC-3830\347\224\250\346\210\267\346\211\213\345\206\214.pdf"
+?? CLAUDE.md
+?? docs/
+?? rk.txt
+?? src/human_fall_detection/
+?? src/human_follow_calibration/
+
+## git diff --stat (expected failure on src/CMakeLists.txt symlink, Windows)
+git : warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF 
+the next time Git touches it
+所在位置 行:1 字符: 483
++ ... n src/CMakeLists.txt symlink, Windows)"; git diff --stat 2>&1; echo " ...
++                                              ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+error: open("src/CMakeLists.txt"): Invalid argument
+fatal: cannot hash src/CMakeLists.txt
+
+## git diff -- src/inno_lidar_ros/src/source/publish_manager.cpp
+git : warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF 
+the next time Git touches it
+所在位置 行:1 字符: 587
++ ... nager.cpp"; git diff -- src/inno_lidar_ros/src/source/publish_manager ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+diff --git a/src/inno_lidar_ros/src/source/publish_manager.cpp b/src/inno_lidar_ros/src/source/publish_manager.cpp
+index a4bd461..d94374e 100755
+--- a/src/inno_lidar_ros/src/source/publish_manager.cpp
++++ b/src/inno_lidar_ros/src/source/publish_manager.cpp
+@@ -123,7 +123,7 @@ public:
+             *iter_timestamp = point.timestamp;
+             ++iter_timestamp;
+ #elif defined(POINT_TYPE_SOURCE)
+-            *iter_timestamp = point.timestamp;ros_msg
++            *iter_timestamp = point.timestamp;
+             *iter_distance = point.distance;
+             *iter_horizontal = point.horizontal;
+             *iter_vertical = point.vertical;
+
+## git diff -- src/CMakeLists.txt
+git : error: open("src/CMakeLists.txt"): Invalid argument
+所在位置 行:1 字符: 706
++ ... f -- src/CMakeLists.txt"; git diff -- src/CMakeLists.txt 2>&1; echo " ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error: open("sr...nvalid argument:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+fatal: cannot hash src/CMakeLists.txt
+
+## note: src/CMakeLists.txt is the catkin top-level symlink; Windows git cannot hash it

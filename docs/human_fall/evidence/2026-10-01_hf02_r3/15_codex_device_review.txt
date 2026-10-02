@@ -1,0 +1,20 @@
+running slam-localization:noetic
+Python=3.8.10 NumPy=1.17.4
+HASH_MATCH=True docs/human_fall/evidence/review_hf02_r2_codex.py
+HASH_MATCH=True src/human_follow_calibration/scripts/calibrate_human_follow.py
+HASH_MATCH=True src/human_fall_detection/core/timebase.py
+HASH_MATCH=True src/human_fall_detection/scripts/sensor_health.py
+HASH_MATCH=True src/human_fall_detection/CMakeLists.txt
+HASH_MATCH=True docs/human_fall/evidence/review_hf02_codex.py
+HASH_MATCH=True docs/human_fall/evidence/hf02_r2_driver_boundary_check.py
+HASH_MATCH=True src/human_fall_detection/tests/test_hf02_timebase.py
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+  File "/usr/lib/python3.8/pathlib.py", line 1229, in read_bytes
+    with self.open(mode='rb') as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/hf02_r3_verify/docs/human_fall/CONTRACT.md'
+OUTER_SSH_EXIT=1

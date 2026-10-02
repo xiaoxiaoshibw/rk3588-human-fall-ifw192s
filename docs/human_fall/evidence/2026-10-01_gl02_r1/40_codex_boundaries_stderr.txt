@@ -1,0 +1,65 @@
+test_bool_nested_version_is_rejected (__main__.GL02Boundaries.test_bool_nested_version_is_rejected) ... FAIL
+test_coherent_ground_shift_requires_recalibration (__main__.GL02Boundaries.test_coherent_ground_shift_requires_recalibration) ... FAIL
+test_parent_plane_and_derived_plane_must_match (__main__.GL02Boundaries.test_parent_plane_and_derived_plane_must_match) ... FAIL
+test_reload_rejects_damaged_same_id (__main__.GL02Boundaries.test_reload_rejects_damaged_same_id) ... FAIL
+test_switch_clears_tracked_position (__main__.GL02Boundaries.test_switch_clears_tracked_position) ... FAIL
+test_unconfirmed_auto_bounds_cannot_be_trusted_ground (__main__.GL02Boundaries.test_unconfirmed_auto_bounds_cannot_be_trusted_ground) ... FAIL
+
+======================================================================
+FAIL: test_bool_nested_version_is_rejected (__main__.GL02Boundaries.test_bool_nested_version_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r1\codex_gl02_boundaries.py", line 70, in test_bool_nested_version_is_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_coherent_ground_shift_requires_recalibration (__main__.GL02Boundaries.test_coherent_ground_shift_requires_recalibration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r1\codex_gl02_boundaries.py", line 42, in test_coherent_ground_shift_requires_recalibration
+    self.assertEqual(report['status'],'recalibration_required')
+AssertionError: 'degraded' != 'recalibration_required'
+- degraded
++ recalibration_required
+
+
+======================================================================
+FAIL: test_parent_plane_and_derived_plane_must_match (__main__.GL02Boundaries.test_parent_plane_and_derived_plane_must_match)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r1\codex_gl02_boundaries.py", line 63, in test_parent_plane_and_derived_plane_must_match
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_reload_rejects_damaged_same_id (__main__.GL02Boundaries.test_reload_rejects_damaged_same_id)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r1\codex_gl02_boundaries.py", line 59, in test_reload_rejects_damaged_same_id
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_switch_clears_tracked_position (__main__.GL02Boundaries.test_switch_clears_tracked_position)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r1\codex_gl02_boundaries.py", line 53, in test_switch_clears_tracked_position
+    self.assertIsNone(core.tracker.position_m)
+AssertionError: [1.0, 0.0, 0.5] is not None
+
+======================================================================
+FAIL: test_unconfirmed_auto_bounds_cannot_be_trusted_ground (__main__.GL02Boundaries.test_unconfirmed_auto_bounds_cannot_be_trusted_ground)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r1\codex_gl02_boundaries.py", line 46, in test_unconfirmed_auto_bounds_cannot_be_trusted_ground
+    self.assertNotEqual(report['status'],'ok')
+AssertionError: 'ok' == 'ok'
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.006s
+
+FAILED (failures=6)

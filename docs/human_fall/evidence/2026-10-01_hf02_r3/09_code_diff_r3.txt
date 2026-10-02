@@ -1,0 +1,250 @@
+﻿3d9478136ac2e98f4039664a17ef5e31c4692bec9cea34804dc4e73f9789123e  /tmp/hf02_r2_verify/src/human_fall_detection/core/timebase.py
+54052ef0cffdae7bc582f83dabcc590c9a050bce79e33301f7ae01f71452b3be  /tmp/hf02_r2_verify/src/human_fall_detection/core/sensor_quality.py
+eb5b456f48d9a9c59643c2189381d774398a624f450f86cfe94518f9c76e6aa0  /tmp/hf02_r2_verify/src/human_fall_detection/tests/test_hf02_timebase.py
+HASH_R2_TREE_EXIT=0
+--- /tmp/hf02_r2_verify/src/human_fall_detection/core/timebase.py	2026-09-30 23:35:14.000000000 +0800
++++ /tmp/hf02_r3_verify/src/human_fall_detection/core/timebase.py	2026-10-01 00:31:40.000000000 +0800
+@@ -144,7 +144,11 @@
+         self.entries = deque(maxlen=self.cache_size)
+         self.messages = 0
+         self.first_receive_s = None
++        # last_receive_s stays the last *legal* receive baseline; receive_status
++        # describes the current frame's receive quality separately, so an
++        # invalid receive time cannot masquerade as a fresh observation.
+         self.last_receive_s = None
++        self.receive_status = "none"
+         self.last_stamp = None
+         self.stamp_status = "none"
+         self.stamp_reason = None
+@@ -161,6 +165,7 @@
+             self.first_receive_s = receive
+         if receive is not None:
+             self.last_receive_s = receive
++        self.receive_status = "ok" if receive is not None else "invalid"
+         if frame_id is not None:
+             self.frame_id = frame_id
+         try:
+@@ -223,10 +228,17 @@
+         return usable
+ 
+     def freshness(self, now):
++        """Freshness of the *current* frame, never inherited from an older one.
++
++        The last legal receive time remains the age baseline, but if the most
++        recent frame itself arrived with a missing/non-finite receive time the
++        stream is ``stale`` with no age instead of appearing fresh on the
++        strength of the previous frame.
++        """
+         reference = finite_or_none(now)
+         if self.messages == 0:
+             return "no_data", None
+-        if self.last_receive_s is None or reference is None:
++        if self.receive_status != "ok" or self.last_receive_s is None or reference is None:
+             return "stale", None
+         age = reference - self.last_receive_s
+         if age < 0.0 or age > self.timeout_s:
+@@ -239,6 +251,7 @@
+                 "stamp_reason": self.stamp_reason, "stamp_secs": self.stamp_secs,
+                 "stamp_nsecs": self.stamp_nsecs,
+                 "source_stamp_s": finite_or_none(self.source_stamp_s),
++                "receive_status": self.receive_status,
+                 "history_size": len(self.entries)}
+ 
+ 
+@@ -492,6 +505,10 @@
+                     "reason": PAIRING_TIME_INVALID_CODE, "ratios": ratios,
+                     "mapping": mapping}
+         for stream in (first, second):
++            if stream.receive_status == "invalid":
++                return {"status": "input_receive_invalid", "pairs": [],
++                        "reason": stream.label + "_receive_time_invalid",
++                        "ratios": ratios, "mapping": mapping}
+             status, _ = stream.freshness(now)
+             if status != "fresh":
+                 return {"status": "input_not_fresh", "pairs": [],
+@@ -546,6 +563,8 @@
+                 codes.append(label + "_no_data")
+             elif status == "stale":
+                 codes.append(label + "_stale")
++            if stream.receive_status == "invalid":
++                codes.append(label + "_receive_time_invalid")
+             if stream.stamp_reason:
+                 codes.append(stream.stamp_reason)
+         suspected, _ = self.unit_mismatch()
+DIFF_TIMEBASE_EXIT=1
+--- /tmp/hf02_r2_verify/src/human_fall_detection/core/sensor_quality.py	2026-09-30 23:36:58.000000000 +0800
++++ /tmp/hf02_r3_verify/src/human_fall_detection/core/sensor_quality.py	2026-10-01 00:31:55.000000000 +0800
+@@ -32,6 +32,52 @@
+     return values
+ 
+ 
++# Reference-frame directions used by the supported axis_mapping triad, in a
++# right-handed forward/left/up frame (ROS REP-103 style). Only the direction
++# names are defined here; the device's actual mounting stays unknown.
++REFERENCE_DIRECTIONS = {
++    "forward": (1.0, 0.0, 0.0),
++    "backward": (-1.0, 0.0, 0.0),
++    "left": (0.0, 1.0, 0.0),
++    "right": (0.0, -1.0, 0.0),
++    "up": (0.0, 0.0, 1.0),
++    "down": (0.0, 0.0, -1.0),
++}
++
++
++def _validated_axis_mapping(value):
++    """Validate the supported three-axis mapping description.
++
++    Accepted form: ``x_<direction>_y_<direction>_z_<direction>``. It is read
++    ``from`` each IMU sensor axis ``x``/``y``/``z`` (listed once, in order)
++    ``to`` the direction it points to in the reference frame. The directions
++    must be known names, pairwise distinct and form a proper (right-handed)
++    rotation, so text such as ``unknown``, missing/duplicate axes, duplicate
++    directions and mirrored triads are rejected before any state change. This
++    validates the description only; it never guesses the real device axes.
++    """
++    if not isinstance(value, str):
++        raise ValueError("axis_mapping must be a supported triad string")
++    tokens = value.split("_")
++    if len(tokens) != 6 or tokens[0::2] != ["x", "y", "z"]:
++        raise ValueError("axis_mapping must be "
++                         "'x_<direction>_y_<direction>_z_<direction>' with each "
++                         "sensor axis exactly once")
++    directions = tokens[1::2]
++    for name in directions:
++        if name not in REFERENCE_DIRECTIONS:
++            raise ValueError("unsupported axis direction: " + repr(name))
++    if len(set(directions)) != 3:
++        raise ValueError("axis direction conflict: two sensor axes point the same way")
++    first, second, third = (REFERENCE_DIRECTIONS[name] for name in directions)
++    cross = (first[1] * second[2] - first[2] * second[1],
++             first[2] * second[0] - first[0] * second[2],
++             first[0] * second[1] - first[1] * second[0])
++    if cross != third:
++        raise ValueError("axis_mapping is not a right-handed rotation of x/y/z")
++    return value
++
++
+ class ImuSemantics:
+     """Per-field verification state for the auxiliary device IMU."""
+ 
+@@ -44,9 +90,9 @@
+         """Mark one semantic field verified by named evidence.
+ 
+         The value itself is validated: empty values, unsupported unit names,
+-        malformed axis descriptions and wrong-sized/non-finite bias vectors are
+-        rejected before any state mutation, so an empty ``verify`` call can
+-        never enable motion classification.
++        invalid axis-mapping descriptions and wrong-sized/non-finite bias
++        vectors are rejected before any state mutation, so neither an empty nor
++        an arbitrary ``verify`` call can enable motion classification.
+         """
+         if field not in SEMANTIC_FIELDS:
+             raise ValueError("unknown IMU semantic field: " + str(field))
+@@ -61,8 +107,7 @@
+             if not isinstance(value, str) or value not in ANGULAR_VELOCITY_UNITS_TO_SI:
+                 raise ValueError("unsupported angular velocity units: " + repr(value))
+         elif field == "axis_mapping":
+-            if not isinstance(value, str) or not value.strip():
+-                raise ValueError("axis_mapping must be a non-empty description string")
++            value = _validated_axis_mapping(value)
+         elif field == "bias":
+             value = _validated_bias(value)
+         self.status[field] = "verified"
+DIFF_SENSOR_QUALITY_EXIT=1
+--- /tmp/hf02_r2_verify/src/human_fall_detection/tests/test_hf02_timebase.py	2026-09-30 23:38:06.000000000 +0800
++++ /tmp/hf02_r3_verify/src/human_fall_detection/tests/test_hf02_timebase.py	2026-10-01 00:32:25.000000000 +0800
+@@ -405,6 +405,52 @@
+         self.assertEqual(result["status"], "paired")
+         self.assertEqual([p["first"]["seq"] for p in result["pairs"]], [2])
+ 
++    def test_invalid_current_receive_time_never_pretends_fresh_or_paired(self):
++        for label in ("cloud", "imu"):
++            for invalid_receive in (None, float("nan"), float("inf")):
++                with self.subTest(label=label, receive=invalid_receive):
++                    session = make_session()
++                    session.note("cloud", 1, (100, 0), 10.0)
++                    session.note("imu", 1, (100, 0), 10.0)
++                    session.apply_sync_evidence("vendor_protocol", offset_s=0.0)
++                    session.note(label, 2, (100, 100000000), invalid_receive)
++                    self.assertEqual(session.time_epoch, 0)
++                    self.assertEqual(session.streams[label].last_stamp,
++                                     (100, 100000000))
++                    self.assertEqual(session.streams[label].freshness(10.1)[0], "stale")
++                    snapshot = session.snapshot(10.1)
++                    self.assertEqual(snapshot["streams"][label]["status"], "stale")
++                    self.assertEqual(snapshot["streams"][label]["receive_status"],
++                                     "invalid")
++                    self.assertIn(label + "_receive_time_invalid",
++                                  snapshot["reason_codes"])
++                    dumps_strict(snapshot)
++                    result = session.pair("cloud", "imu", 0.01, now=10.1)
++                    self.assertEqual(result["status"], "input_receive_invalid")
++                    self.assertEqual(result["reason"], label + "_receive_time_invalid")
++                    self.assertEqual(result["pairs"], [])
++                    session.note(label, 3, (100, 200000000), 10.1)
++                    self.assertEqual(session.streams[label].receive_status, "ok")
++                    recovered = session.pair("cloud", "imu", 0.01, now=10.1)
++                    self.assertEqual(recovered["status"], "paired")
++
++    def test_first_frame_with_invalid_receive_time_is_stale(self):
++        session = make_session()
++        session.note("cloud", 1, (100, 0), float("nan"))
++        self.assertEqual(session.streams["cloud"].freshness(10.0)[0], "stale")
++        self.assertEqual(session.snapshot(10.0)["streams"]["cloud"]["receive_status"],
++                         "invalid")
++
++    def test_invalid_receive_alone_keeps_the_source_stamp_epoch_rules(self):
++        session = make_session()
++        session.note("cloud", 1, (100, 0), 10.0)
++        session.note("cloud", 2, (200, 0), None)
++        self.assertEqual(session.time_epoch, 1)
++        self.assertEqual(session.epoch_reason, "cloud_stamp_forward_jump")
++        session.note("cloud", 3, (200, 100000000), 10.1)
++        self.assertEqual(session.time_epoch, 1)
++        self.assertEqual(session.streams["cloud"].freshness(10.1)[0], "fresh")
++
+ 
+ class HealthCompatibilityTest(unittest.TestCase):
+     def test_frozen_block_fields_are_read(self):
+@@ -578,6 +624,39 @@
+         self.assertEqual(result["status"], "unknown")
+         self.assertFalse(static_background_usable(True, True, result["status"])["usable"])
+ 
++    def test_axis_mapping_requires_a_valid_right_handed_triad(self):
++        semantics = ImuSemantics()
++        semantics.verify("acceleration_units", "m_s2", "vendor_protocol")
++        semantics.verify("angular_velocity_units", "rad_s", "vendor_protocol")
++        for description in ("unknown", "x_forward_x_left_z_up", "x_forward_y_left",
++                            "x_forward_y_left_z_up_extra", "x_forward_y_forward_z_up",
++                            "x_forward_y_right_z_up", "X_forward_Y_left_Z_up",
++                            "x_forward_y_left_w_up", "x_forward_y_left_z_sideways", ""):
++            with self.subTest(description=description), self.assertRaises(ValueError):
++                semantics.verify("axis_mapping", description, "controlled_attitude")
++        self.assertFalse(semantics.alignment_verified)
++        self.assertNotIn("axis_mapping", semantics.values)
++        self.assertEqual(len(semantics.evidence), 2)
++        self.assertEqual(device_motion_status(
++            (0.0, 0.0, 9.80665), (0.0, 0.0, 0.0), semantics)["status"], "unknown")
++        semantics.verify("axis_mapping", "x_forward_y_left_z_up", "controlled_attitude")
++        self.assertTrue(semantics.alignment_verified)
++        self.assertEqual(device_motion_status(
++            (0.0, 0.0, 9.80665), (0.0, 0.0, 0.0), semantics)["status"], "static")
++
++    def test_supported_axis_triad_variants_are_accepted(self):
++        for description in ("x_forward_y_left_z_up", "x_forward_y_up_z_right",
++                            "x_backward_y_right_z_up"):
++            with self.subTest(description=description):
++                semantics = ImuSemantics()
++                semantics.verify("acceleration_units", "m_s2", "vendor_protocol")
++                semantics.verify("angular_velocity_units", "rad_s", "vendor_protocol")
++                semantics.verify("axis_mapping", description, "controlled_attitude")
++                self.assertTrue(semantics.alignment_verified)
++                self.assertEqual(device_motion_status(
++                    (0.0, 0.0, 9.80665), (0.0, 0.0, 0.0), semantics)["status"],
++                    "static")
++
+ 
+ if __name__ == "__main__":
+     unittest.main()
+DIFF_TESTS_EXIT=1
+DIFF_SCRIPT_DONE

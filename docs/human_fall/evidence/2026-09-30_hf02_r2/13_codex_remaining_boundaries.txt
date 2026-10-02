@@ -1,0 +1,71 @@
+test_r2_invalid_current_receive_time_cannot_reuse_cached_pair (__main__.RoundTwoBoundaries.test_r2_invalid_current_receive_time_cannot_reuse_cached_pair) ... 
+  test_r2_invalid_current_receive_time_cannot_reuse_cached_pair (__main__.RoundTwoBoundaries.test_r2_invalid_current_receive_time_cannot_reuse_cached_pair) (receive=None) ... FAIL
+  test_r2_invalid_current_receive_time_cannot_reuse_cached_pair (__main__.RoundTwoBoundaries.test_r2_invalid_current_receive_time_cannot_reuse_cached_pair) (receive=nan) ... FAIL
+  test_r2_invalid_current_receive_time_cannot_reuse_cached_pair (__main__.RoundTwoBoundaries.test_r2_invalid_current_receive_time_cannot_reuse_cached_pair) (receive=inf) ... FAIL
+test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment (__main__.RoundTwoBoundaries.test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment) ... 
+  test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment (__main__.RoundTwoBoundaries.test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment) (description='unknown') ... FAIL
+  test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment (__main__.RoundTwoBoundaries.test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment) (description='x_forward_x_left_z_up') ... FAIL
+
+======================================================================
+FAIL: test_r2_invalid_current_receive_time_cannot_reuse_cached_pair (__main__.RoundTwoBoundaries.test_r2_invalid_current_receive_time_cannot_reuse_cached_pair) (receive=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf02_r2_codex.py", line 24, in test_r2_invalid_current_receive_time_cannot_reuse_cached_pair
+    self.assertEqual(result["pairs"], [], result)
+AssertionError: Lists differ: [{'first': {'seq': 1, 'stamp_secs': 100, '[388 chars]0.0}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'first': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'second': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'delta_s': 0.0, 'residual_s': 0.0, 'offset_s': 0.0}
+
+Diff is 691 characters long. Set self.maxDiff to None to see it. : {'status': 'paired', 'pairs': [{'first': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'second': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'delta_s': 0.0, 'residual_s': 0.0, 'offset_s': 0.0}], 'reason': None, 'ratios': [], 'mapping': {'first_label': 'cloud', 'second_label': 'imu', 'offset_s': 0.0, 'uncertainty_s': None, 'evidence': 'vendor_protocol', 'time_epoch': 0, 'direction': 'second = first + offset_s'}}
+
+======================================================================
+FAIL: test_r2_invalid_current_receive_time_cannot_reuse_cached_pair (__main__.RoundTwoBoundaries.test_r2_invalid_current_receive_time_cannot_reuse_cached_pair) (receive=nan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf02_r2_codex.py", line 24, in test_r2_invalid_current_receive_time_cannot_reuse_cached_pair
+    self.assertEqual(result["pairs"], [], result)
+AssertionError: Lists differ: [{'first': {'seq': 1, 'stamp_secs': 100, '[388 chars]0.0}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'first': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'second': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'delta_s': 0.0, 'residual_s': 0.0, 'offset_s': 0.0}
+
+Diff is 691 characters long. Set self.maxDiff to None to see it. : {'status': 'paired', 'pairs': [{'first': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'second': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'delta_s': 0.0, 'residual_s': 0.0, 'offset_s': 0.0}], 'reason': None, 'ratios': [], 'mapping': {'first_label': 'cloud', 'second_label': 'imu', 'offset_s': 0.0, 'uncertainty_s': None, 'evidence': 'vendor_protocol', 'time_epoch': 0, 'direction': 'second = first + offset_s'}}
+
+======================================================================
+FAIL: test_r2_invalid_current_receive_time_cannot_reuse_cached_pair (__main__.RoundTwoBoundaries.test_r2_invalid_current_receive_time_cannot_reuse_cached_pair) (receive=inf)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf02_r2_codex.py", line 24, in test_r2_invalid_current_receive_time_cannot_reuse_cached_pair
+    self.assertEqual(result["pairs"], [], result)
+AssertionError: Lists differ: [{'first': {'seq': 1, 'stamp_secs': 100, '[388 chars]0.0}] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+{'first': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'second': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'delta_s': 0.0, 'residual_s': 0.0, 'offset_s': 0.0}
+
+Diff is 691 characters long. Set self.maxDiff to None to see it. : {'status': 'paired', 'pairs': [{'first': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'second': {'seq': 1, 'stamp_secs': 100, 'stamp_nsecs': 0, 'source_stamp_s': 100.0, 'time_received_s': 10.0, 'stamp_status': 'first', 'stamp_reason': None, 'frame_id': None, 'time_epoch': 0}, 'delta_s': 0.0, 'residual_s': 0.0, 'offset_s': 0.0}], 'reason': None, 'ratios': [], 'mapping': {'first_label': 'cloud', 'second_label': 'imu', 'offset_s': 0.0, 'uncertainty_s': None, 'evidence': 'vendor_protocol', 'time_epoch': 0, 'direction': 'second = first + offset_s'}}
+
+======================================================================
+FAIL: test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment (__main__.RoundTwoBoundaries.test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment) (description='unknown')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf02_r2_codex.py", line 37, in test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment
+    self.assertFalse(semantics.alignment_verified, semantics.report())
+AssertionError: True is not false : {'role': 'device_motion_gravity_reference_not_human_impact', 'acceleration_units': 'verified', 'angular_velocity_units': 'verified', 'axis_mapping': 'verified', 'bias': 'unknown', 'values': {'acceleration_units': 'm_s2', 'angular_velocity_units': 'rad_s', 'axis_mapping': 'unknown'}, 'units_verified': True, 'alignment_verified': True, 'evidence': [{'field': 'acceleration_units', 'value': 'm_s2', 'evidence': 'vendor_protocol', 'note': None}, {'field': 'angular_velocity_units', 'value': 'rad_s', 'evidence': 'vendor_protocol', 'note': None}, {'field': 'axis_mapping', 'value': 'unknown', 'evidence': 'controlled_attitude', 'note': None}]}
+
+======================================================================
+FAIL: test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment (__main__.RoundTwoBoundaries.test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment) (description='x_forward_x_left_z_up')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf02_r2_codex.py", line 37, in test_r4_unknown_or_duplicate_axis_description_cannot_verify_alignment
+    self.assertFalse(semantics.alignment_verified, semantics.report())
+AssertionError: True is not false : {'role': 'device_motion_gravity_reference_not_human_impact', 'acceleration_units': 'verified', 'angular_velocity_units': 'verified', 'axis_mapping': 'verified', 'bias': 'unknown', 'values': {'acceleration_units': 'm_s2', 'angular_velocity_units': 'rad_s', 'axis_mapping': 'x_forward_x_left_z_up'}, 'units_verified': True, 'alignment_verified': True, 'evidence': [{'field': 'acceleration_units', 'value': 'm_s2', 'evidence': 'vendor_protocol', 'note': None}, {'field': 'angular_velocity_units', 'value': 'rad_s', 'evidence': 'vendor_protocol', 'note': None}, {'field': 'axis_mapping', 'value': 'x_forward_x_left_z_up', 'evidence': 'controlled_attitude', 'note': None}]}
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+FAILED (failures=5)
+EXIT=1

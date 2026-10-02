@@ -1,0 +1,43 @@
+﻿=== ros/inno process args ===
+   2918 root     Mon Sep 28 17:14:25 2026 /usr/bin/python3 /opt/ros/noetic/bin/roscore
+   2929 root     Mon Sep 28 17:14:26 2026 /usr/bin/python3 /opt/ros/noetic/bin/rosmaster --core -p 11311 -w 3 __log:=/root/.ros/log/006bdc78-bb1d-11f1-864d-be3c5fbb4207/master.log
+   2940 root     Mon Sep 28 17:14:27 2026 /opt/ros/noetic/lib/rosout/rosout __name:=rosout __log:=/root/.ros/log/006bdc78-bb1d-11f1-864d-be3c5fbb4207/rosout-1.log
+   3022 root     Mon Sep 28 17:14:31 2026 /root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node _config_path:=/root/catkin_ws/src/inno_lidar_ros/config/config.yaml
+=== systemd ===
+none
+lidar-stack.service
+=== serial by-id ===
+鎬荤敤閲?0
+lrwxrwxrwx 1 root root 13 9鏈? 28 17:12 usb-wch.cn_USB_Quad_Serial_0123456789-if00 -> ../../ttyACM0
+lrwxrwxrwx 1 root root 13 9鏈? 28 17:12 usb-wch.cn_USB_Quad_Serial_0123456789-if02 -> ../../ttyACM1
+lrwxrwxrwx 1 root root 13 9鏈? 28 17:12 usb-wch.cn_USB_Quad_Serial_0123456789-if04 -> ../../ttyACM2
+lrwxrwxrwx 1 root root 13 9鏈? 28 17:12 usb-wch.cn_USB_Quad_Serial_0123456789-if06 -> ../../ttyACM3
+ls: 鏃犳硶璁块棶 '/dev/ttyUSB*': 娌℃湁閭ｄ釜鏂囦欢鎴栫洰褰?crw-rw---- 1 root dialout 166, 0 9鏈? 28 17:12 /dev/ttyACM0
+crw-rw---- 1 root dialout 166, 1 9鏈? 28 17:12 /dev/ttyACM1
+crw-rw---- 1 root dialout 166, 2 9鏈? 28 17:12 /dev/ttyACM2
+crw-rw---- 1 root dialout 166, 3 9鏈? 28 17:12 /dev/ttyACM3
+=== net links ===
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+eth0             DOWN           42:fd:1d:1c:3c:33 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+eth1             UP             be:3c:5f:bb:42:07 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+eth2             DOWN           08:e2:6d:c4:fd:47 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+eth3             DOWN           60:80:47:83:b5:7b <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+wlP4p65s0        DOWN           1c:4d:70:ca:c1:f0 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+can0             DOWN           <NOARP,ECHO> 
+can1             DOWN           <NOARP,ECHO> 
+eth4             DOWN           94:13:2c:47:92:ba <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+can2             DOWN           <NOARP> 
+can3             DOWN           <NOARP> 
+docker0          DOWN           7e:0e:46:ec:34:25 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+=== route ===
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+192.168.3.0/24 dev eth1 proto kernel scope link src 192.168.3.125 
+=== eth2 link ===
+	Speed: 10Mb/s
+	Duplex: Half
+	Link detected: no
+=== modules ===
+none
+=== kernel video/camera hints ===
+=== host ros install ===
+ls: 鏃犳硶璁块棶 '/opt/ros': 娌℃湁閭ｄ釜鏂囦欢鎴栫洰褰?/usr/bin/python3

@@ -1,0 +1,93 @@
+test_declared_valid_artifact_needs_three_passing_regions (__main__.IndependentBoundaries.test_declared_valid_artifact_needs_three_passing_regions) ... FAIL
+test_duplicate_region_identity_cannot_validate (__main__.IndependentBoundaries.test_duplicate_region_identity_cannot_validate) ... FAIL
+test_missing_group_provenance_cannot_validate (__main__.IndependentBoundaries.test_missing_group_provenance_cannot_validate) ... FAIL
+test_mixed_bool_prior_is_rejected (__main__.IndependentBoundaries.test_mixed_bool_prior_is_rejected) ... FAIL
+test_reduced_candidate_cap_cannot_hide_competition (__main__.IndependentBoundaries.test_reduced_candidate_cap_cannot_hide_competition) ... FAIL
+test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) ... 
+  test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) (override={'seed': -1}) ... FAIL
+  test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) (override={'max_candidates': 4}) ... FAIL
+  test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) (override={'min_planar_eigenvalue_ratio': 1.1}) ... FAIL
+  test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) (override={'ransac_iteration_hard_cap': 2001}) ... FAIL
+
+======================================================================
+FAIL: test_declared_valid_artifact_needs_three_passing_regions (__main__.IndependentBoundaries.test_declared_valid_artifact_needs_three_passing_regions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 64, in test_declared_valid_artifact_needs_three_passing_regions
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_duplicate_region_identity_cannot_validate (__main__.IndependentBoundaries.test_duplicate_region_identity_cannot_validate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 40, in test_duplicate_region_identity_cannot_validate
+    self.assertNotEqual(result['status'], 'valid')
+AssertionError: 'valid' == 'valid'
+
+======================================================================
+FAIL: test_missing_group_provenance_cannot_validate (__main__.IndependentBoundaries.test_missing_group_provenance_cannot_validate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 27, in test_missing_group_provenance_cannot_validate
+    self.assertNotEqual(result['status'], 'valid')
+AssertionError: 'valid' == 'valid'
+
+======================================================================
+FAIL: test_mixed_bool_prior_is_rejected (__main__.IndependentBoundaries.test_mixed_bool_prior_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 31, in test_mixed_bool_prior_is_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_reduced_candidate_cap_cannot_hide_competition (__main__.IndependentBoundaries.test_reduced_candidate_cap_cannot_hide_competition)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 56, in test_reduced_candidate_cap_cannot_hide_competition
+    self.assertNotEqual(result['status'], 'valid')
+AssertionError: 'valid' == 'valid'
+
+======================================================================
+FAIL: test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) (override={'seed': -1})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 71, in test_strict_parameter_limits
+    with self.subTest(override=override), self.assertRaises(ValueError):
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) (override={'max_candidates': 4})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 71, in test_strict_parameter_limits
+    with self.subTest(override=override), self.assertRaises(ValueError):
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) (override={'min_planar_eigenvalue_ratio': 1.1})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 71, in test_strict_parameter_limits
+    with self.subTest(override=override), self.assertRaises(ValueError):
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_strict_parameter_limits (__main__.IndependentBoundaries.test_strict_parameter_limits) (override={'ransac_iteration_hard_cap': 2001})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r2\codex_boundaries.py", line 71, in test_strict_parameter_limits
+    with self.subTest(override=override), self.assertRaises(ValueError):
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.325s
+
+FAILED (failures=9)

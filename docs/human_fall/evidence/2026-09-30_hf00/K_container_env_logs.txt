@@ -1,0 +1,89 @@
+﻿=== /tmp/lidar.log (tail 80) ===
+[1m[32m------------------------------------------------------[0m
+[1m[32mReceive Packets From : Online LiDAR[0m
+[1m[32mPoint Cloud for UDP Port: 8080[0m
+[1m[32m------------------------------------------------------[0m
+[1m[32m------------------------------------------------------[0m
+[1m[32m             InnoLight Lidar Driver Parameters [0m
+[32mis_device_load: 0[0m
+[32mInputType: ONLINE_LIDAR[0m
+[32mLidarType: IFW192S[0m
+[1m[32m------------------------------------------------------[0m
+[1m[32m------------------------------------------------------[0m
+[1m[32m             InnoLight Input Parameters [0m
+[32mlocal_ip: 0.0.0.0[0m
+[32mlocal_port: 8080[0m
+[32mpcap_file: /home/wenjie/project/pcap/ifw192s/71_2.pcap[0m
+[1m[32m------------------------------------------------------[0m
+[1m[32m------------------------------------------------------[0m
+[1m[32m             InnoLight Transform Parameters [0m
+[32mvalid: 1[0m
+[32mx: 0[0m
+[32my: 0[0m
+[32mz: 0[0m
+[32mroll: 0[0m
+[32mpitch: 0[0m
+[32myaw: 0[0m
+[1m[32m------------------------------------------------------[0m
+[1m[32m------------------------------------------------------[0m
+[1m[32m             InnoLight Calibration Parameters [0m
+[32mlocal_port: 13080[0m
+[32mremote_port: 7000[0m
+[32mremote_ip: 192.168.1.10[0m
+[32mcalibration_folders: /root/catkin_ws/src/inno_lidar_ros/config/ifw192s[0m
+[1m[32m------------------------------------------------------[0m
+----------------ENABLE_IMU_MSG_PARSE
+type:64
+文件: "/root/catkin_ws/src/inno_lidar_ros/config/ifw192s/ifw192s_elevation_192x256.csv"
+文件: "/root/catkin_ws/src/inno_lidar_ros/config/ifw192s/model_weights_no1.csv"
+文件: "/root/catkin_ws/src/inno_lidar_ros/config/ifw192s/near_filter.csv"
+文件: "/root/catkin_ws/src/inno_lidar_ros/config/ifw192s/ifw192s_azimuth_192x256.csv"
+elevation
+list.size():49152 size:49152
+azimuth
+list.size():49152 size:49152
+LoadCheckFolder success!
+is_use_filter:1 2 2
+[1m[37mInnoLight-LiDAR-Driver is running.....[0m
+=== /tmp/bridge.log (tail 10) ===
+[31m[ERROR] [1790587608.028034995]: [WS] handle_read_handshake error: websocketpp.transport:7 (End of File)[0m
+[31m[ERROR] [1790667303.758882478]: [WS] handle_read_handshake error: websocketpp.transport:7 (End of File)[0m
+[31m[ERROR] [1790697729.301383869]: [WS] handle_read_frame error: websocketpp.transport:7 (End of File)[0m
+=== node binary ===
+total 3756
+-rwxr-xr-x 1 root root 3844176 Sep 20 11:44 inno_lidar_node
+=== board CMakeLists key lines ===
+11:set(POINT_TYPE XYZI_TIME)
+29:option(ENABLE_IMU_MSG_PARSE "Enable IMU MSG PARSE" ON)
+30:if(${ENABLE_IMU_MSG_PARSE})
+31:  add_definitions(-DENABLE_IMU_MSG_PARSE)
+33:endif(${ENABLE_IMU_MSG_PARSE})
+63:if(${POINT_TYPE} STREQUAL "XYZI")
+64:  add_definitions(-DPOINT_TYPE_XYZI)
+65:elseif(${POINT_TYPE} STREQUAL "XYZI_TIME")
+66:  add_definitions(-DPOINT_TYPE_TIME)
+68:  add_definitions(-DPOINT_TYPE_SOURCE)
+75:message("-- POINT_TYPE is ${POINT_TYPE}")
+=== python/numpy/pip ===
+numpy 1.17.4
+numpy               1.17.4    
+=== find camera/sdk dirs ===
+=== /root listing ===
+total 84
+drwx------  1 root root  4096 Aug  5 21:51 .
+drwxr-xr-x  1 root root  4096 Sep 29 23:22 ..
+drwxr-xr-x  5 root root  4096 Aug  5 21:45 .ai_completion
+-rw-------  1 root root 17462 Sep 29 15:42 .bash_history
+-rw-r--r--  1 root root  3180 Aug  1 15:47 .bashrc
+drwx------  3 root root  4096 Aug  5 21:45 .cache
+-rw-r--r--  1 root root    22 Aug  5 21:45 .gitconfig
+drwx------  3 root root  4096 Aug  5 21:45 .pki
+-rw-r--r--  1 root root   161 Dec  5  2019 .profile
+drwxrwxrwx  3 root root  4096 Sep 30 12:54 .ros
+drwxr-xr-x  2 root root  4096 Aug  1 15:42 .ssh
+drwxr-xr-x  6 root root  4096 Aug  5 21:53 .trae-cn
+drwxr-xr-x 12 root root  4096 Aug  5 22:43 .trae-cn-server
+-rw-r--r--  1 root root   170 Aug  5 22:42 .wget-hsts
+drwxr-xr-x  1 root root  4096 Sep 29 23:22 catkin_ws
+=== ldconfig camera-like ===
+=== ros log inno files ===

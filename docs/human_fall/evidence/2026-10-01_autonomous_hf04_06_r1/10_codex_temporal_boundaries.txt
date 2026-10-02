@@ -1,0 +1,133 @@
+test_capture_baseline_rejects_wrong_epoch (__main__.ContinuityContracts.test_capture_baseline_rejects_wrong_epoch) ... FAIL
+test_context_reset_is_consumed_once_and_new_observations_recover (__main__.ContinuityContracts.test_context_reset_is_consumed_once_and_new_observations_recover) ... FAIL
+test_first_frame_after_long_gap_does_not_auto_bind_another_candidate (__main__.ContinuityContracts.test_first_frame_after_long_gap_does_not_auto_bind_another_candidate) ... FAIL
+test_future_snapshot_has_negative_age_and_is_rejected (__main__.ContinuityContracts.test_future_snapshot_has_negative_age_and_is_rejected) ... FAIL
+test_initial_low_posture_with_stored_baseline_is_not_a_descent (__main__.ContinuityContracts.test_initial_low_posture_with_stored_baseline_is_not_a_descent) ... FAIL
+test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts.test_invalid_snapshot_receive_time_cannot_enable_selection) ... 
+  test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts.test_invalid_snapshot_receive_time_cannot_enable_selection) (received=nan) ... FAIL
+  test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts.test_invalid_snapshot_receive_time_cannot_enable_selection) (received=inf) ... FAIL
+test_late_match_cannot_bypass_occlusion_timeout (__main__.ContinuityContracts.test_late_match_cannot_bypass_occlusion_timeout) ... FAIL
+test_new_selection_does_not_reuse_previous_targets_ready_baseline (__main__.ContinuityContracts.test_new_selection_does_not_reuse_previous_targets_ready_baseline) ... FAIL
+test_prediction_gap_does_not_duplicate_an_existing_event (__main__.ContinuityContracts.test_prediction_gap_does_not_duplicate_an_existing_event) ... FAIL
+test_prediction_is_anchored_at_last_measurement (__main__.ContinuityContracts.test_prediction_is_anchored_at_last_measurement) ... FAIL
+test_small_motion_while_initially_low_does_not_use_static_baseline_drop (__main__.ContinuityContracts.test_small_motion_while_initially_low_does_not_use_static_baseline_drop) ... FAIL
+test_unknown_request_schema_does_not_execute_selection (__main__.ContinuityContracts.test_unknown_request_schema_does_not_execute_selection) ... FAIL
+
+======================================================================
+FAIL: test_capture_baseline_rejects_wrong_epoch (__main__.ContinuityContracts.test_capture_baseline_rejects_wrong_epoch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 132, in test_capture_baseline_rejects_wrong_epoch
+    self.assertFalse(ack["accepted"], ack)
+AssertionError: True is not false : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r2', 'action': 'capture_baseline', 'session_id': 'review', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': None, 'selection_version': 1, 'baseline': {'status': 'pending', 'reason': None, 'session_id': 'review', 'track_id': 't0001', 'calibration_version': 'geo', 'sample_count': 0, 'operator_confirmed': False, 'baseline': None}, 'idempotent_replay': False}
+
+======================================================================
+FAIL: test_context_reset_is_consumed_once_and_new_observations_recover (__main__.ContinuityContracts.test_context_reset_is_consumed_once_and_new_observations_recover)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 172, in test_context_reset_is_consumed_once_and_new_observations_recover
+    self.assertEqual(result["fall_status"], "upright", result)
+AssertionError: 'unknown' != 'upright'
+- unknown
++ upright
+ : {'kind': 'fall_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'second', 'track_status': 'locked', 'source_stamp_s': 101.4, 'fall_status': 'unknown', 'state': 'unknown', 'state_since_source_s': 101, 'reason_codes': ['action_history_reset'], 'event_id': None, 'new_event': None, 'event_count': 0, 'confirmed_enabled': False, 'mode_verified': False, 'allow_confirmed': False, 'method': 'lidar_geometry', 'baseline_version': 2, 'calibration_version': 'geo', 'history_reset_reason': 'action_history_reset', 'limitations': ['active_lying_indistinguishable_from_fall', 'slow_slide_may_not_reach_descent_threshold', 'geometric_mode_not_human_labelled'], 'features': {'kind': 'target_features', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'second', 'source_stamp_s': 101.4, 'observable': True, 'reason': None, 'ground_relative': True, 'height_m': {'median': 1.5}, 'height_median_m': 1.5, 'horizontal_extent_m': 0.5, 'axis_verticality': 1.0, 'axis_ambiguous': False, 'point_count': 200, 'baseline_height_m': 1.5, 'height_drop_m': 0.0, 'descent_rate_m_s': -0.0, 'near_ground_duration_s': 0.0, 'history_samples': 3, 'history_reset_reason': 'action_history_reset'}}
+
+======================================================================
+FAIL: test_first_frame_after_long_gap_does_not_auto_bind_another_candidate (__main__.ContinuityContracts.test_first_frame_after_long_gap_does_not_auto_bind_another_candidate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 64, in test_first_frame_after_long_gap_does_not_auto_bind_another_candidate
+    self.assertNotEqual(result["track_status"], "locked", result)
+AssertionError: 'locked' == 'locked' : {'kind': 'target_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'track_status': 'locked', 'candidate_id': 'other', 'position_m': [5.0, 0.0, 1.0], 'position_predicted': False, 'prediction_age_s': None, 'prediction_stale': False, 'velocity_m_s': [0.5, 0.0, 0.0], 'selection_version': 0, 'calibration_version': None, 'requires_reselection': False, 'action_generation': 1, 'history_reset_reason': 'operator_select', 'last_update_source_s': 110.0, 'last_update_receive_s': 20.0}
+
+======================================================================
+FAIL: test_future_snapshot_has_negative_age_and_is_rejected (__main__.ContinuityContracts.test_future_snapshot_has_negative_age_and_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 90, in test_future_snapshot_has_negative_age_and_is_rejected
+    self.assertFalse(ack["accepted"], ack)
+AssertionError: True is not false : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r1', 'action': 'select', 'session_id': 'review', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': 'c1', 'selection_version': 1, 'baseline': None, 'idempotent_replay': False}
+
+======================================================================
+FAIL: test_initial_low_posture_with_stored_baseline_is_not_a_descent (__main__.ContinuityContracts.test_initial_low_posture_with_stored_baseline_is_not_a_descent)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 143, in test_initial_low_posture_with_stored_baseline_is_not_a_descent
+    self.assertEqual(result["fall_status"], "low_posture_unclassified", result)
+AssertionError: 'confirmed' != 'low_posture_unclassified'
+- confirmed
++ low_posture_unclassified
+ : {'kind': 'fall_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'track_status': 'locked', 'source_stamp_s': 101.0, 'fall_status': 'confirmed', 'state': 'confirmed', 'state_since_source_s': 100.8, 'reason_codes': ['measured_descent', 'sustained_low_posture', 'valid_stance_baseline', 'mode_verified'], 'event_id': 'fall:review:target:1', 'new_event': None, 'event_count': 1, 'confirmed_enabled': True, 'mode_verified': True, 'allow_confirmed': True, 'method': 'lidar_geometry', 'baseline_version': 1, 'calibration_version': 'geo', 'history_reset_reason': None, 'limitations': ['active_lying_indistinguishable_from_fall', 'slow_slide_may_not_reach_descent_threshold', 'geometric_mode_not_human_labelled'], 'features': {'kind': 'target_features', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'source_stamp_s': 101.0, 'observable': True, 'reason': None, 'ground_relative': True, 'height_m': {'median': 0.2}, 'height_median_m': 0.2, 'horizontal_extent_m': 0.5, 'axis_verticality': 1.0, 'axis_ambiguous': False, 'point_count': 200, 'baseline_height_m': 1.5, 'height_drop_m': 1.3, 'descent_rate_m_s': -0.0, 'near_ground_duration_s': 1.0, 'history_samples': 4, 'history_reset_reason': None}}
+
+======================================================================
+FAIL: test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts.test_invalid_snapshot_receive_time_cannot_enable_selection) (received=nan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 101, in test_invalid_snapshot_receive_time_cannot_enable_selection
+    self.assertFalse(ack["accepted"], ack)
+AssertionError: True is not false : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r1', 'action': 'select', 'session_id': 'review', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': 'c1', 'selection_version': 1, 'baseline': None, 'idempotent_replay': False}
+
+======================================================================
+FAIL: test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts.test_invalid_snapshot_receive_time_cannot_enable_selection) (received=inf)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 101, in test_invalid_snapshot_receive_time_cannot_enable_selection
+    self.assertFalse(ack["accepted"], ack)
+AssertionError: True is not false : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r1', 'action': 'select', 'session_id': 'review', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': 'c1', 'selection_version': 1, 'baseline': None, 'idempotent_replay': False}
+
+======================================================================
+FAIL: test_late_match_cannot_bypass_occlusion_timeout (__main__.ContinuityContracts.test_late_match_cannot_bypass_occlusion_timeout)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 74, in test_late_match_cannot_bypass_occlusion_timeout
+    self.assertNotEqual(result["track_status"], "locked", result)
+AssertionError: 'locked' == 'locked' : {'kind': 'target_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'track_status': 'locked', 'candidate_id': 'other', 'position_m': [0.1, 0.0, 1.0], 'position_predicted': False, 'prediction_age_s': None, 'prediction_stale': False, 'velocity_m_s': [0.01, 0.0, 0.0], 'selection_version': 0, 'calibration_version': None, 'requires_reselection': False, 'action_generation': 1, 'history_reset_reason': 'operator_select', 'last_update_source_s': 110.0, 'last_update_receive_s': 20.0}
+
+======================================================================
+FAIL: test_new_selection_does_not_reuse_previous_targets_ready_baseline (__main__.ContinuityContracts.test_new_selection_does_not_reuse_previous_targets_ready_baseline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 121, in test_new_selection_does_not_reuse_previous_targets_ready_baseline
+    self.assertNotEqual(value.baseline.snapshot()["status"], "ready")
+AssertionError: 'ready' == 'ready'
+
+======================================================================
+FAIL: test_prediction_gap_does_not_duplicate_an_existing_event (__main__.ContinuityContracts.test_prediction_gap_does_not_duplicate_an_existing_event)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 161, in test_prediction_gap_does_not_duplicate_an_existing_event
+    self.assertEqual(result["event_count"], 1, result)
+AssertionError: 2 != 1 : {'kind': 'fall_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'track_status': 'locked', 'source_stamp_s': 101.2, 'fall_status': 'confirmed', 'state': 'confirmed', 'state_since_source_s': 101.2, 'reason_codes': ['measured_descent', 'sustained_low_posture', 'valid_stance_baseline', 'mode_verified'], 'event_id': 'fall:review:target:2', 'new_event': {'kind': 'fall_event', 'schema_version': 1, 'event_id': 'fall:review:target:2', 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'fall_status': 'confirmed', 'method': 'lidar_geometry', 'start_source_s': 100.2, 'end_source_s': 101.2, 'low_duration_s': 0.7999999999999972, 'height_drop_m': 1.3, 'reason_codes': ['measured_descent', 'sustained_low_posture', 'valid_stance_baseline', 'mode_verified'], 'baseline_version': 1, 'calibration_version': 'geo', 'config_version': 1, 'evidence': {'features': {'kind': 'target_features', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'source_stamp_s': 101.2, 'observable': True, 'reason': None, 'ground_relative': True, 'height_m': {'median': 0.2}, 'height_median_m': 0.2, 'horizontal_extent_m': 0.5, 'axis_verticality': 1.0, 'axis_ambiguous': False, 'point_count': 200, 'baseline_height_m': 1.5, 'height_drop_m': 1.3, 'descent_rate_m_s': 0.5290697674418626, 'near_ground_duration_s': 0.7999999999999972, 'history_samples': 6, 'history_reset_reason': None}}}, 'event_count': 2, 'confirmed_enabled': True, 'mode_verified': True, 'allow_confirmed': True, 'method': 'lidar_geometry', 'baseline_version': 1, 'calibration_version': 'geo', 'history_reset_reason': None, 'limitations': ['active_lying_indistinguishable_from_fall', 'slow_slide_may_not_reach_descent_threshold', 'geometric_mode_not_human_labelled'], 'features': {'kind': 'target_features', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'source_stamp_s': 101.2, 'observable': True, 'reason': None, 'ground_relative': True, 'height_m': {'median': 0.2}, 'height_median_m': 0.2, 'horizontal_extent_m': 0.5, 'axis_verticality': 1.0, 'axis_ambiguous': False, 'point_count': 200, 'baseline_height_m': 1.5, 'height_drop_m': 1.3, 'descent_rate_m_s': 0.5290697674418626, 'near_ground_duration_s': 0.7999999999999972, 'history_samples': 6, 'history_reset_reason': None}}
+
+======================================================================
+FAIL: test_prediction_is_anchored_at_last_measurement (__main__.ContinuityContracts.test_prediction_is_anchored_at_last_measurement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 84, in test_prediction_is_anchored_at_last_measurement
+    self.assertAlmostEqual(result["position_m"][0], 3.0, places=6, msg=str(result))
+AssertionError: 4.0 != 3.0 within 6 places (1.0 difference) : {'kind': 'target_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'track_status': 'occluded', 'candidate_id': 'c1', 'position_m': [4.0, 0.0, 1.0], 'position_predicted': True, 'prediction_age_s': 1.0, 'prediction_stale': False, 'velocity_m_s': [1.0, 0.0, 0.0], 'selection_version': 0, 'calibration_version': None, 'requires_reselection': False, 'action_generation': 1, 'history_reset_reason': 'operator_select', 'last_update_source_s': 101.0, 'last_update_receive_s': 11.0}
+
+======================================================================
+FAIL: test_small_motion_while_initially_low_does_not_use_static_baseline_drop (__main__.ContinuityContracts.test_small_motion_while_initially_low_does_not_use_static_baseline_drop)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 185, in test_small_motion_while_initially_low_does_not_use_static_baseline_drop
+    self.assertEqual(result["fall_status"], "low_posture_unclassified", result)
+AssertionError: 'confirmed' != 'low_posture_unclassified'
+- confirmed
++ low_posture_unclassified
+ : {'kind': 'fall_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'track_status': 'locked', 'source_stamp_s': 101, 'fall_status': 'confirmed', 'state': 'confirmed', 'state_since_source_s': 100.8, 'reason_codes': ['measured_descent', 'sustained_low_posture', 'valid_stance_baseline', 'mode_verified'], 'event_id': 'fall:review:target:1', 'new_event': None, 'event_count': 1, 'confirmed_enabled': True, 'mode_verified': True, 'allow_confirmed': True, 'method': 'lidar_geometry', 'baseline_version': 1, 'calibration_version': 'geo', 'history_reset_reason': None, 'limitations': ['active_lying_indistinguishable_from_fall', 'slow_slide_may_not_reach_descent_threshold', 'geometric_mode_not_human_labelled'], 'features': {'kind': 'target_features', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'source_stamp_s': 101, 'observable': True, 'reason': None, 'ground_relative': True, 'height_m': {'median': 0.15}, 'height_median_m': 0.15, 'horizontal_extent_m': 0.5, 'axis_verticality': 1.0, 'axis_ambiguous': False, 'point_count': 200, 'baseline_height_m': 1.5, 'height_drop_m': 1.35, 'descent_rate_m_s': 0.1470588235294125, 'near_ground_duration_s': 1.0, 'history_samples': 4, 'history_reset_reason': None}}
+
+======================================================================
+FAIL: test_unknown_request_schema_does_not_execute_selection (__main__.ContinuityContracts.test_unknown_request_schema_does_not_execute_selection)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 107, in test_unknown_request_schema_does_not_execute_selection
+    self.assertFalse(ack["accepted"], ack)
+AssertionError: True is not false : {'kind': 'selection_ack', 'schema_version': 1, 'request_id': 'r1', 'action': 'select', 'session_id': 'review', 'time_epoch': 0, 'accepted': True, 'reason': None, 'track_id': 't0001', 'candidate_id': 'c1', 'selection_version': 1, 'baseline': None, 'idempotent_replay': False}
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.005s
+
+FAILED (failures=13)
+EXIT=1

@@ -1,0 +1,21 @@
+== one /hf07_verify/state sample (standalone ground -> non-empty calibration id) ==
+data: "{\"kind\": \"target_state\", \"schema_version\": 1, \"session_id\": \"hf07_verify\"\
+  , \"clock_domain\": \"monotonic\", \"normalized_stamp_s\": null, \"time_received_s\"\
+  : \"lidar_geometry\", \"target_kind\": \"human_like\", \"selection_source\": \"\
+  , \"imu_no_data\"], \"track_id\": \"t0001\", \"track_status\": \"locked\", \"fall_status\"\
+  : \"unknown\", \"position_source_m\": [3.0, -0.1153261661529541, -0.6500000059604645],\
+  \ 1.0], \"offset_m\": 1.5, \"sensor_height_m\": 1.5}, \"calibration\": {\"calibration_id\"\
+  : \"ground-only-f6e0227005dfec91\", \"ground_status\": \"valid\", \"schema_version\"\
+  : 1}, \"selection_version\": 1, \"action_generation\": 1, \"history_reset_reason\"\
+  track_id\": null, \"calibration_version\": null, \"time_epoch\": null, \"selection_version\"\
+  ground_status\": \"valid\", \"calibration_version\": \"ground-only-f6e0227005dfec91\"\
+  ], \"target_features\": {\"kind\": \"target_features\", \"schema_version\": 1, \"\
+  : 64, \"history_reset_reason\": \"action_history_reset\"}, \"fall_state\": {\"kind\"\
+  : 0, \"track_id\": \"t0001\", \"track_status\": \"locked\", \"source_stamp_s\":\
+  \ 1133.700945139, \"fall_status\": \"unknown\", \"state\": \"unknown\", \"state_since_source_s\"\
+  , \"geometric_mode_not_human_labelled\"], \"features\": {\"kind\": \"target_features\"\
+== served preview index markers (single cloud source selection) ==
+const HF_POINTS_TOPIC = HF_QUERY.get("points") || "/innolidar_points";
+const TOPICS = [HF_POINTS_TOPIC, "/inno_imu", "/device_status"];
+  if (topic === HF_POINTS_TOPIC) {
+SCRIPT_DONE

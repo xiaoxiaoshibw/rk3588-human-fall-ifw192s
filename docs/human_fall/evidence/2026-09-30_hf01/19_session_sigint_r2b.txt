@@ -1,0 +1,172 @@
+docker cp exit=0
+--- health node start (timeout -s INT 30) ---
+health_pid=5550
+--- read one /human_fall/health message (timeout 20) ---
+strict json parse: ok
+session_id: health_r2_sigint_b
+observability: valid
+cloud stamp_status/secs/nsecs/source: ok 6381 889296000 6381.889296
+imu covariance_zero/not_provided/usable/reason: True False False orientation_all_zero
+imu measurements_finite: True
+device abnormal_flag: 255
+health sample exit=0
+--- record --duration 30, SIGINT to the record process after 7 s ---
+record exit= 130
+record driver exit=0
+recording command: rosbag record -O /root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.bag --duration=30.0 /innolidar_points /inno_imu /device_status /human_fall/health
+[0m[INFO] [1790753107.676268983]: Subscribing to /device_status[0m
+[0m[INFO] [1790753107.686007150]: Subscribing to /human_fall/health[0m
+[0m[INFO] [1790753107.691461609]: Subscribing to /inno_imu[0m
+[0m[INFO] [1790753107.696615068]: Subscribing to /innolidar_points[0m
+[0m[INFO] [1790753107.703209652]: Recording to '/root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.bag'.[0m
+wrote /root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.manifest.json
+bag re-read ok: 1515 messages, duration 6.129006862640381 s
+  /device_status 59 messages
+  /human_fall/health 12 messages
+  /inno_imu 1385 messages
+  /innolidar_points 59 messages
+--- manifest ---
+{
+  "schema_version": 1,
+  "session_id": "hf01_sigint_r2b",
+  "created_at_utc": "2026-09-30T07:25:15.146559+00:00",
+  "host": "welcomtech",
+  "requested_topics": [
+    "/innolidar_points",
+    "/inno_imu",
+    "/device_status",
+    "/human_fall/health"
+  ],
+  "topics": [
+    {
+      "name": "/device_status",
+      "type": "inno_lidar_msg/DeviceStatus",
+      "messages": 59
+    },
+    {
+      "name": "/human_fall/health",
+      "type": "std_msgs/String",
+      "messages": 12
+    },
+    {
+      "name": "/inno_imu",
+      "type": "sensor_msgs/Imu",
+      "messages": 1385
+    },
+    {
+      "name": "/innolidar_points",
+      "type": "sensor_msgs/PointCloud2",
+      "messages": 59
+    }
+  ],
+  "termination": "sigint",
+  "duration_requested_s": 30.0,
+  "source_time_domain": "device_stamp_s_unanchored",
+  "sync": {
+    "cross_stream_same_clock_verified": false,
+    "host_anchor_verified": false
+  },
+  "units": {
+    "imu_units_verified": false,
+    "imu_alignment_verified": false
+  },
+  "calibration": {
+    "path": null,
+    "sha256": null,
+    "status": "pending",
+    "tf_available": false
+  },
+  "labels": {
+    "path": null,
+    "sha256": null
+  },
+  "software": {
+    "package": "human_fall_detection",
+    "version": "0.1.0",
+    "python": "3.8.10"
+  },
+  "config": {
+    "path": "/root/catkin_ws/src/human_fall_detection/config/default.yaml",
+    "sha256": "221d9dad659039800c786f244ef2c8275da35adfd042fb8984237d817bf27ce4"
+  },
+  "bag": {
+    "path": "/root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.bag",
+    "size_bytes": 75895441,
+    "readable": true,
+    "sha256": "d7f5779c5689f946ed188787d15ac72d01ef2a4ce106aadcfe78192f698fdd9b",
+    "summary": {
+      "message_count": 1515,
+      "duration_s": 6.129006862640381,
+      "start_time_s": 1790753107.962072,
+      "end_time_s": 1790753114.0910788,
+      "topics": {
+        "/device_status": {
+          "type": "inno_lidar_msg/DeviceStatus",
+          "messages": 59,
+          "frequency": 9.54762254341247
+        },
+        "/human_fall/health": {
+          "type": "std_msgs/String",
+          "messages": 12,
+          "frequency": 1.992516964144895
+        },
+        "/inno_imu": {
+          "type": "sensor_msgs/Imu",
+          "messages": 1385,
+          "frequency": 198.35913927642468
+        },
+        "/innolidar_points": {
+          "type": "sensor_msgs/PointCloud2",
+          "messages": 59,
+          "frequency": 9.481385031845335
+        }
+      }
+    }
+  }
+}
+--- bag re-read (rosbag info) ---
+path:        /root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.bag
+version:     2.0
+duration:    6.1s
+start:       Sep 30 2026 15:25:07.96 (1790753107.96)
+end:         Sep 30 2026 15:25:14.09 (1790753114.09)
+size:        72.4 MB
+messages:    1515
+compression: none [60/60 chunks]
+types:       inno_lidar_msg/DeviceStatus [78797d580cbd39abfe410beef3d76d83]
+             sensor_msgs/Imu             [6a62c6daae103f4ff57a132d6f95cec2]
+             sensor_msgs/PointCloud2     [1158d486dd51d683ce2f1be655c3c181]
+             std_msgs/String             [992ce8a1687cec8c8bd883ec73ca41d1]
+topics:      /device_status         59 msgs    : inno_lidar_msg/DeviceStatus
+             /human_fall/health     12 msgs    : std_msgs/String            
+             /inno_imu            1385 msgs    : sensor_msgs/Imu            
+             /innolidar_points      59 msgs    : sensor_msgs/PointCloud2
+rosbag info exit=0
+--- bag re-read (python API, strict health JSON parse) ---
+/device_status inno_lidar_msg/DeviceStatus 59 messages
+/human_fall/health std_msgs/String 12 messages
+/inno_imu sensor_msgs/Imu 1385 messages
+/innolidar_points sensor_msgs/PointCloud2 59 messages
+health messages parsed with strict json.loads: 12
+python reread exit=0
+--- R1: re-run the same session id must refuse and preserve files ---
+d7f5779c5689f946ed188787d15ac72d01ef2a4ce106aadcfe78192f698fdd9b  /root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.bag
+e51dc13b43a1870c00f932b430359e7950592bed45cf67e5e633eaeb9c3f0e5a  /root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.manifest.json
+refusing to touch an existing session: session output already exists: /root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.bag
+conflict run exit=1
+/root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.bag: OK
+/root/catkin_ws/human_fall_sessions/hf01_sigint_r2b.manifest.json: OK
+conflict hash check exit=0
+health node wait exit=0
+--- session dir ---
+total 528684
+-rw-r--r-- 1 root root 368848097 Sep 30 15:22 hf01_sigint_r2.bag
+-rw------- 1 root root      2465 Sep 30 15:22 hf01_sigint_r2.manifest.json
+-rwxr-xr-x 1 root root         0 Sep 30 15:22 hf01_sigint_r2.reserve
+-rw-r--r-- 1 root root  75895441 Sep 30 15:25 hf01_sigint_r2b.bag
+-rw------- 1 root root      2458 Sep 30 15:25 hf01_sigint_r2b.manifest.json
+-rwxr-xr-x 1 root root         0 Sep 30 15:25 hf01_sigint_r2b.reserve
+-rw-r--r-- 1 root root  96611994 Sep 30 14:43 hf01_verify.bag
+-rw------- 1 root root      2451 Sep 30 14:43 hf01_verify.manifest.json
+exec exit=0
+cleanup exit=0

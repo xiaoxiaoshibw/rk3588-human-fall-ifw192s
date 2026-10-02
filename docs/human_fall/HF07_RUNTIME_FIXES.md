@@ -1,0 +1,17 @@
+# HF07实际组合链独立复核：先闭合5项再继续UI
+
+继续session ses_f0c1d2e43ffeMDoXiXAHqpVYqQ，Codex仅定向停本次CLI worker10748提供早期复核，不是停止整体开发。包装路径修复和已建ws保留，不重盘点；不改冻结模块/原158及前阶段18边界。
+
+evidence/review_hf07_codex.py当前5方法5失败，原样脚本/日志codex_early_runtime_boundaries.txt。以下都是实际FallNodeCore组合调用，不是仅模块假对象测试。
+
+1. required cloud当前stamp=(0,0)仍产候选缓存并允许select。处理前验证当前源/接收/布局/帧/新鲜度；不能把非法receive替换成now而登记“有效”快照。诊断候选可保留但不可参与有效选择/观测/下降；输入失效清连续动作证据并unknown，不只最后标observability invalid。
+2. required cloud10秒收到后，11秒已超过cloud_stale0.6但尚在snapshot_ttl2，handle_request仍接受选择。入口检查当前必需输入质量与真实当前monotonic，不只缓存TTL；停止/非法帧时拒绝新的select/capture，release仍可解除当前目标。计算/排队耗时按实际处理时刻看age，human_fall_node.worker目前now=receive_s会把迟到帧永远当fresh，应使用实际当前时钟并丢过期处理结果。
+3. 最新快照已无目标时，旧快照尚未过TTL也能锁消失人。对旧源候选做当前最新有效候选唯一连续匹配，无当前候选/歧义即拒绝；不能只用旧缓存位置。允许有界延迟时唯一同目标继续，不粗暴要求永远最新ID导致所有网络请求失败。回执/状态的resolved source snapshot/candidate绑定明确。
+4. auxiliary IMU连续重复stamp使global Timebase epoch改变，selection epoch却不更新，下一有效cloud的新请求永久epoch_mismatch。纯几何模式不能因未验证辅助钟复位清必需cloud时序；分离required-cloud epoch和aux诊断时序（复用已有Timebase/TimeStream，不复制冻结逻辑），云epoch改变时正确同步所有依赖。IMU单位/时钟未验证仍degraded/unknown辅助，不阻断独立点云选人。
+5. 功能正例：正确当前目标/地面/基线已采ready，但runtime观察不给FeatureExtractor/FallStateMachine传selection_version等六项绑定，严格baseline_applies导致永远baseline_not_ready/unknown。给全部观测与采样传真实session/track/epoch/selection/generation/calibration；成功采集后的下一有效standing帧应upright（模式confirmed仍false），不要把消费守卫放松。
+
+补ROS数据流/必要输入失效/排队迟到/请求/正向基线的真正组合测试，两端跑原158+新增171及独立18/本5方法，记录同哈希/内外退出码。EventLog加载/写失败不应塞不可JSON的近期记录导致后续状态永远发布失败；当前事件历史去重不得把已写事件重发成新事件。重启/队列/时序质量仍按原HF07任务要求。
+
+节点还需显式live/replay时间域：现在统一monotonic、不支持replay暂停/重开区分。按调用者模式取单一时钟，replay不把长墙钟暂停变成物理运动/低姿态持续，恢复前后source时间/epoch正确，页面标回放/暂停；不能禁用质量检查。不需要新库，纯replay CLI可复用前模块。
+
+完成后继续原HF11当前真实页面/bridge clientPublish实查与预览子目录；原活动index/驱动不替换。普通问题自己处理，SSH用Python utf8 bytes不要多层heredoc/CRLF；保留失败。结束写HF07/11 SUBMITTED供Codex直接复审，勿要求用户转交；confirmed门控、物理NOT_VERIFIED边界不变。

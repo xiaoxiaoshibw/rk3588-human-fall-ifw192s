@@ -1,0 +1,127 @@
+test_loaded_budget_cannot_be_zero (__main__.ArtifactChecks.test_loaded_budget_cannot_be_zero) ... FAIL
+test_loaded_fit_group_cannot_equal_validation_group (__main__.ArtifactChecks.test_loaded_fit_group_cannot_equal_validation_group) ... FAIL
+test_loaded_fit_source_indices_must_be_valid (__main__.ArtifactChecks.test_loaded_fit_source_indices_must_be_valid) ... 
+  test_loaded_fit_source_indices_must_be_valid (__main__.ArtifactChecks.test_loaded_fit_source_indices_must_be_valid) (index=True) ... FAIL
+  test_loaded_fit_source_indices_must_be_valid (__main__.ArtifactChecks.test_loaded_fit_source_indices_must_be_valid) (index=3900) ... FAIL
+test_loaded_height_must_match_declared_prior (__main__.ArtifactChecks.test_loaded_height_must_match_declared_prior) ... FAIL
+test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) ... 
+  test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) (key='rms_m', value=-0.01) ... FAIL
+  test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) (key='p95_m', value=-0.01) ... FAIL
+  test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) (key='support_fraction', value=1.2) ... FAIL
+  test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) (key='rms_m', value=False) ... FAIL
+test_loaded_normal_must_match_declared_up_axis (__main__.ArtifactChecks.test_loaded_normal_must_match_declared_up_axis) ... FAIL
+
+======================================================================
+FAIL: test_loaded_budget_cannot_be_zero (__main__.ArtifactChecks.test_loaded_budget_cannot_be_zero)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 48, in test_loaded_budget_cannot_be_zero
+    self.check_rejected(lambda g:g.update(iterations=0))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_fit_group_cannot_equal_validation_group (__main__.ArtifactChecks.test_loaded_fit_group_cannot_equal_validation_group)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 29, in test_loaded_fit_group_cannot_equal_validation_group
+    self.check_rejected(lambda g:g.update(fit_frame_group=g['validation_regions'][0]['frame_group']))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_fit_source_indices_must_be_valid (__main__.ArtifactChecks.test_loaded_fit_source_indices_must_be_valid) (index=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 45, in test_loaded_fit_source_indices_must_be_valid
+    self.check_rejected(lambda g:g['fit_support_indices'].__setitem__(0,index))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_fit_source_indices_must_be_valid (__main__.ArtifactChecks.test_loaded_fit_source_indices_must_be_valid) (index=3900)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 45, in test_loaded_fit_source_indices_must_be_valid
+    self.check_rejected(lambda g:g['fit_support_indices'].__setitem__(0,index))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_height_must_match_declared_prior (__main__.ArtifactChecks.test_loaded_height_must_match_declared_prior)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 37, in test_loaded_height_must_match_declared_prior
+    self.check_rejected(lambda g:g.update(sensor_height_interval_m=[.5,.9]))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) (key='rms_m', value=-0.01)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 34, in test_loaded_negative_residuals_and_impossible_support_rejected
+    self.check_rejected(lambda g:g['validation_regions'][0].update({key:value}))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) (key='p95_m', value=-0.01)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 34, in test_loaded_negative_residuals_and_impossible_support_rejected
+    self.check_rejected(lambda g:g['validation_regions'][0].update({key:value}))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) (key='support_fraction', value=1.2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 34, in test_loaded_negative_residuals_and_impossible_support_rejected
+    self.check_rejected(lambda g:g['validation_regions'][0].update({key:value}))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_negative_residuals_and_impossible_support_rejected (__main__.ArtifactChecks.test_loaded_negative_residuals_and_impossible_support_rejected) (key='rms_m', value=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 34, in test_loaded_negative_residuals_and_impossible_support_rejected
+    self.check_rejected(lambda g:g['validation_regions'][0].update({key:value}))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_loaded_normal_must_match_declared_up_axis (__main__.ArtifactChecks.test_loaded_normal_must_match_declared_up_axis)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 40, in test_loaded_normal_must_match_declared_up_axis
+    self.check_rejected(lambda g:g.update(up_axis=[1.,0.,0.]))
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl01_r3\codex_artifact_checks.py", line 25, in check_rejected
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.073s
+
+FAILED (failures=10)

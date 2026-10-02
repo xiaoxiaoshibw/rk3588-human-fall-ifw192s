@@ -1,0 +1,45 @@
+﻿== collected: 2026-09-30 13:46:22 +08:00 ==
+== branch ==
+master
+== HEAD ==
+c96489e40037aca810b23b98d71ba34632d18bd0
+== status --short ==
+ M src/CMakeLists.txt
+ M src/inno_lidar_ros/src/source/publish_manager.cpp
+?? AGENTS.md
+?? "AISC-3830\347\224\250\346\210\267\346\211\213\345\206\214.pdf"
+?? CLAUDE.md
+?? docs/
+?? rk.txt
+?? src/human_follow_calibration/
+== publish_manager user diff ==
+warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF the next time Git touches it
+diff --git a/src/inno_lidar_ros/src/source/publish_manager.cpp b/src/inno_lidar_ros/src/source/publish_manager.cpp
+index a4bd461..d94374e 100755
+--- a/src/inno_lidar_ros/src/source/publish_manager.cpp
++++ b/src/inno_lidar_ros/src/source/publish_manager.cpp
+@@ -123,7 +123,7 @@ public:
+             *iter_timestamp = point.timestamp;
+             ++iter_timestamp;
+ #elif defined(POINT_TYPE_SOURCE)
+-            *iter_timestamp = point.timestamp;ros_msg
++            *iter_timestamp = point.timestamp;
+             *iter_distance = point.distance;
+             *iter_horizontal = point.horizontal;
+             *iter_vertical = point.vertical;
+== publish_manager diff patch hash ==
+8e216e007f171f906b439ad515dcec91aad72391
+== src/CMakeLists.txt ls-files ==
+120000 20168168606294577155b02b7fd1000947532faf 0	src/CMakeLists.txt
+== src/CMakeLists.txt HEAD content ==
+/opt/ros/noetic/share/catkin/cmake/toplevel.cmake
+== src/CMakeLists.txt diff attempt (expected failure on Windows) ==
+git : error: open("src/CMakeLists.txt"): Invalid argument
+所在位置 行:1 字符: 955
++ ... on Windows) =="; $out += (git diff -- src/CMakeLists.txt 2>&1 | Out-S ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error: open("sr...nvalid argument:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+fatal: cannot hash src/CMakeLists.txt
+

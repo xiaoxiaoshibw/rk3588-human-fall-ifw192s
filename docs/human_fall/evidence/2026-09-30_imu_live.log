@@ -1,0 +1,98 @@
+
+[CURRENT_CONFIG_AND_PUBLISHERS]
+2:  msg_source: 1                                         #0: not use Lidar
+8:      lidar_type: IFW192S
+10:      cloud_port: 8080                          #cloud port of lidar (pc port)
+11:      check_lidar_ip: 192.168.1.10              #check param of lidar device UDP (lidar ip)
+20:      calibrate_folder: /root/catkin_ws/src/inno_lidar_ros/config/ifw192s #fallback (msg_source=1 时优先用设备标定)
+21:      pcap_file: /home/wenjie/project/pcap/ifw192s/71_2.pcap #The path of pcap file (msg_source=1 时不读)
+Type: sensor_msgs/Imu
+
+Publishers: 
+ * /inno_lidar_node (http://welcomtech:39275/)
+
+Subscribers: None
+
+
+
+[SDK_RELEVANT_SYMBOLS]
+0000000000078308 W innolight::lidar::OnlineManager<PointCloud<PointSource> >::Impl::GetImuMsg()
+00000000000770f8 W innolight::lidar::OnlineManager<PointCloud<Point> >::Impl::GetImuMsg()
+0000000000077a00 W innolight::lidar::OnlineManager<PointCloud<PointTime> >::Impl::GetImuMsg()
+000000000005e4d0 W innolight::lidar::DecoderIFW192S<PointCloud<PointSource> >::DecodeMsopPacket(unsigned char const*, unsigned long, unsigned short)
+000000000005dba0 W innolight::lidar::DecoderIFW192S<PointCloud<PointSource> >::Impl::DecodeMsopPacket(unsigned char const*, unsigned long, unsigned short)
+000000000005d280 W innolight::lidar::DecoderIFW192S<PointCloud<Point> >::DecodeMsopPacket(unsigned char const*, unsigned long, unsigned short)
+000000000005c990 W innolight::lidar::DecoderIFW192S<PointCloud<Point> >::Impl::DecodeMsopPacket(unsigned char const*, unsigned long, unsigned short)
+000000000005db98 W innolight::lidar::DecoderIFW192S<PointCloud<PointTime> >::DecodeMsopPacket(unsigned char const*, unsigned long, unsigned short)
+000000000005d288 W innolight::lidar::DecoderIFW192S<PointCloud<PointTime> >::Impl::DecodeMsopPacket(unsigned char const*, unsigned long, unsigned short)
+0000000000051528 W innolight::lidar::Decoder<PointCloud<PointSource> >::IsImuSame(innolight::lidar::IMUBlock const&, innolight::lidar::IMUBlock const&)
+000000000004fdb8 W innolight::lidar::Decoder<PointCloud<Point> >::IsImuSame(innolight::lidar::IMUBlock const&, innolight::lidar::IMUBlock const&)
+0000000000050970 W innolight::lidar::Decoder<PointCloud<PointTime> >::IsImuSame(innolight::lidar::IMUBlock const&, innolight::lidar::IMUBlock const&)
+
+[LOADED_SDK]
+7f82c93000-7f82d27000 r-xp 00000000 b3:03 1308603                        /root/catkin_ws/src/inno_lidar_ros/third_party/inno_driver/lib/aarch64/libinno_driver.so
+7f82d27000-7f82d36000 ---p 00094000 b3:03 1308603                        /root/catkin_ws/src/inno_lidar_ros/third_party/inno_driver/lib/aarch64/libinno_driver.so
+7f82d36000-7f82d3a000 r--p 00093000 b3:03 1308603                        /root/catkin_ws/src/inno_lidar_ros/third_party/inno_driver/lib/aarch64/libinno_driver.so
+
+[MEASUREMENT_START]
+{
+  "window_s": 4.02,
+  "imu_messages": 902,
+  "point_messages": 39,
+  "imu_arrival_hz": 226.766,
+  "imu_stamp_delta_min_s": 0.004311024999992696,
+  "imu_stamp_delta_max_s": 0.004529999999931533,
+  "imu_stamps_strictly_increasing": true,
+  "all_measurements_finite": true,
+  "acceleration_norm_min": 9.667777291087226,
+  "acceleration_norm_max": 9.80584715994858,
+  "nonzero_quaternions": 0,
+  "orientation_covariance0_values": [
+    0.0
+  ],
+  "point_arrival_hz": 9.646,
+  "first_imu": {
+    "stamp": 777.366355002,
+    "frame": "innolidar",
+    "acc": [
+      -4.2281599044799805,
+      0.1388636827468872,
+      8.719681739807129
+    ],
+    "gyro": [
+      -0.002727075247094035,
+      0.03490656241774559,
+      0.022362016141414642
+    ],
+    "q": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "orientation_covariance0": 0.0
+  },
+  "last_imu": {
+    "stamp": 781.340434998,
+    "frame": "innolidar",
+    "acc": [
+      -4.19464111328125,
+      0.16759410500526428,
+      8.78671932220459
+    ],
+    "gyro": [
+      -0.002727075247094035,
+      0.031634073704481125,
+      0.01363537646830082
+    ],
+    "q": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "orientation_covariance0": 0.0
+  }
+}
+
+[END]

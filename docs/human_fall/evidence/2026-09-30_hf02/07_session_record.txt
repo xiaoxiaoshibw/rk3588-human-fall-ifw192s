@@ -1,0 +1,32 @@
+﻿ssh : + docker exec slam-localization bash -lc 'source /opt/ros/noetic/setup.bash && cd /root/catkin_ws/src/human_fall_
+detection/scripts && python3 -B record_session.py --session-id hf02_timebase_20260930 --duration 10; echo RECORD_EXIT=$
+?'
+所在位置 行:1 字符: 101
++ ... lace "`r","") | ssh -o BatchMode=yes ldiar-wel "bash -s" 2>&1 | Out-F ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (+ docker exec s...RECORD_EXIT=$?':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+recording command: rosbag record -O /root/catkin_ws/src/human_fall_detection/scripts/human_fall_sessions/hf02_timebase_20260930.bag --duration=10.0 /innolidar_points /inno_imu /device_status /human_fall/health
+[0m[INFO] [1790757752.841920088]: Subscribing to /device_status[0m
+[0m[INFO] [1790757752.851000755]: Subscribing to /human_fall/health[0m
+[0m[INFO] [1790757752.855283881]: Subscribing to /inno_imu[0m
+[0m[INFO] [1790757752.859886381]: Subscribing to /innolidar_points[0m
+[0m[INFO] [1790757752.867476299]: Recording to '/root/catkin_ws/src/human_fall_detection/scripts/human_fall_sessions/hf02_timebase_20260930.bag'.[0m
+wrote /root/catkin_ws/src/human_fall_detection/scripts/human_fall_sessions/hf02_timebase_20260930.manifest.json
+bag re-read ok: 2407 messages, duration 9.800751447677612 s
+  /device_status 95 messages
+  /inno_imu 2217 messages
+  /innolidar_points 95 messages
+RECORD_EXIT=0
++ docker exec slam-localization bash -lc 'cd /root/catkin_ws/human_fall_sessions && sha256sum hf02_timebase_20260930.ba
+g && ls -l hf02_timebase_20260930* && head -c 1200 hf02_timebase_20260930.manifest.json; echo'
+sha256sum: hf02_timebase_20260930.bag: No such file or directory
+
++ docker exec slam-localization bash -lc 'source /opt/ros/noetic/setup.bash && cd /root/catkin_ws/human_fall_sessions &
+& rosbag info hf02_timebase_20260930.bag 2>&1 | head -40'
+ERROR reading hf02_timebase_20260930.bag: [Errno 2] No such file or directory: 'hf02_timebase_20260930.bag'
++ docker exec slam-localization bash -lc 'sha256sum /root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node'
+0286545f64e76f8435d8da20dcc55e3837eac17d1066415148a2a4c5abb6f3c4  /root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node
++ $'\r'
+bash: 琛?6: $'\r'锛氭湭鎵惧埌鍛戒护

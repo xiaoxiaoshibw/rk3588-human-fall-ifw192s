@@ -1,0 +1,27 @@
+HF-08 local validation summary
+Date: 2026-10-01
+Environment: Windows; Python 3.12.10
+
+Commands:
+  python -B -W error -m unittest discover -s src/human_fall_detection/tests -v
+    Ran 185 tests, OK.
+  python -B -W error -m unittest discover -s src/human_follow_calibration/tests -v
+    Ran 2 tests, OK.
+  python -B -W error -m unittest src.human_fall_detection.tests.test_hf08_evaluate_sessions -v
+    Ran 8 tests, OK.
+  python -B src/human_fall_detection/scripts/evaluate_sessions.py --input src/human_fall_detection/tests/hf08_synthetic_events.json --output docs/human_fall/evidence/2026-10-01_autonomous_hf08_r1/synthetic_report_run1.json
+  python -B src/human_fall_detection/scripts/evaluate_sessions.py --input src/human_fall_detection/tests/hf08_synthetic_events.json --output docs/human_fall/evidence/2026-10-01_autonomous_hf08_r1/synthetic_report_run2.json
+    Both returned 0, status=evaluated.
+
+SHA256:
+  synthetic_report_run1.json = c61d121a46ee2460f9f2e8820f7f86b6f93d2c1e43fbb745353fa416cc18299c
+  synthetic_report_run2.json = c61d121a46ee2460f9f2e8820f7f86b6f93d2c1e43fbb745353fa416cc18299c
+  hf08_synthetic_events.json = a930a7be56a57edcac13197c3a3c67dddf98544d63a24e9524291c859a2e0acd
+  evaluate_sessions.py = a216f43a5b5fea021732d447f802e5a363871d79326dcdeef23e86e037bcf692
+  test_hf08_evaluate_sessions.py = 7edfca0113609218fed3561083a8a5a07e3d5f25141ea042b1325a310d7b61c2
+
+Read-only authorized-board inventory:
+  4 existing HF-01/02 manifest indexes; all label path/hash null, and no /human_fall/state, /human_fall/event or events.jsonl output.
+  Manifest and bag hashes are preserved in device_existing_indexes.txt and dataset_manifest.json. Bag contents were not opened/copied/replayed.
+
+Class: tests are local/offline or synthetic. A read-only device index check was performed; no ROS node, bag replay, device event evaluation or browser test was run. No real-human labels or valid negative-hour denominator were available; real performance remains pending/null.

@@ -1,0 +1,26 @@
+== deploy preview (does not touch active index.html) ==
+DEPLOY_CP_EXIT=0
+== listing ==
+total 72
+drwxr-xr-x 2 root root  4096 Oct  1 04:58 .
+drwxrwxr-x 3 1000 1000  4096 Oct  1 04:56 ..
+-rw-rw-r-- 1 1000 1000 20790 Oct  1 04:57 human_fall.js
+-rw-rw-r-- 1 1000 1000 40071 Oct  1 04:55 index.html
+== hashes (preview + active untouched) ==
+ddffce6288a195f89a70603a4f5793768300e4affc3f6d079b57591e32fda77b  /root/catkin_ws/webui/human_fall_preview/index.html
+a1022da3c254f39f75859cc5765f7842a194ec6debb369acc18198cf97eb726d  /root/catkin_ws/webui/human_fall_preview/human_fall.js
+e68dea5121d06c6fbf2fc2e8fa8ff947c05c6a87ba4635c0511ecf5b6491af5f  /root/catkin_ws/webui/index.html
+ab34e95dac676133caca7024b158a9062de00338f5bd3cbf8d94536e3748335b  /root/catkin_ws/webui/index.html.bak4-20260930
+== curl preview URL ==
+PREVIEW_INDEX_HTTP=200 bytes=40071
+PREVIEW_JS_HTTP=200 bytes=20790
+PARENT_THREE_HTTP=200 bytes=603445
+PARENT_ORBIT_HTTP=200 bytes=26375
+== served preview sanity ==
+1
+1
+1
+6
+== active page still original title ==
+<title>IFW192S 闆疯揪瀹炴椂鍙鍖?/title>
+SCRIPT_DONE

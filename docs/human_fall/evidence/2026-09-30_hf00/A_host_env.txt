@@ -1,0 +1,78 @@
+﻿=== date/host ===
+2026骞?09鏈?30鏃?鏄熸湡涓?12:52:35 CST
+welcomtech
+Linux welcomtech 5.10.160 #117 SMP Sun Apr 28 14:03:29 CST 2024 aarch64 aarch64 aarch64 GNU/Linux
+=== os-release ===
+NAME="Ubuntu"
+VERSION="20.04.6 LTS (Focal Fossa)"
+ID=ubuntu
+=== cpu/mem/disk ===
+8
+              鎬昏         宸茬敤        绌洪棽      鍏变韩    缂撳啿/缂撳瓨    鍙敤
+鍐呭瓨锛?      7.7Gi       921Mi       4.8Gi        18Mi       2.0Gi       6.7Gi
+/dev/root        57G   33G   22G   61% /
+=== device-tree model ===
+Rockchip RK3588 EVB7 LP4 V10 Board
+
+=== docker ===
+slam-localization|slam-localization:noetic|Up 44 hours
+NetworkMode=host PidMode= Privileged=false
+=== video/media/npu nodes ===
+ls: 鏃犳硶璁块棶 '/dev/video*': 娌℃湁閭ｄ釜鏂囦欢鎴栫洰褰?ls: 鏃犳硶璁块棶 '/dev/media*': 娌℃湁閭ｄ釜鏂囦欢鎴栫洰褰?ls: 鏃犳硶璁块棶 '/dev/rknpu*': 娌℃湁閭ｄ釜鏂囦欢鎴栫洰褰?crw------- 1 root root 241, 0 9鏈? 28 17:12 /dev/mpp_service
+
+/dev/dri:
+鎬荤敤閲?0
+drwxr-xr-x  2 root root        120 9鏈? 28 17:12 by-path
+crw-rw----+ 1 root video  226,   0 9鏈? 28 17:12 card0
+crw-rw----+ 1 root video  226,   1 9鏈? 28 17:12 card1
+crw-rw----+ 1 root render 226, 128 9鏈? 28 17:12 renderD128
+crw-rw----+ 1 root render 226, 129 9鏈? 28 17:12 renderD129
+=== iio ===
+iio:device0
+iio_sysfs_trigger
+=== usb ===
+Bus 012 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 011 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 014 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 013 Device 004: ID 0d8c:0012 C-Media Electronics, Inc. 
+Bus 013 Device 003: ID 8087:0a2a Intel Corp. 
+Bus 013 Device 002: ID 0424:2514 Microchip Technology, Inc. (formerly SMSC) USB 2.0 Hub
+Bus 013 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 009 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 010 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 006 Device 005: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+Bus 006 Device 004: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+Bus 006 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+Bus 006 Device 002: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+Bus 006 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 008 Device 002: ID 05e3:0626 Genesys Logic, Inc. USB3.1 Hub
+Bus 008 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 007 Device 004: ID 0471:ec00 Philips (or NXP) USB_CAN-II
+Bus 007 Device 003: ID 046d:c534 Logitech, Inc. Unifying Receiver
+Bus 007 Device 005: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
+Bus 007 Device 002: ID 24ae:1878 RAPOO Rapoo 2.4G Wireless Device
+Bus 007 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 002 Device 002: ID 1a86:55d5 QinHeng Electronics USB Quad_Serial
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+=== ip ===
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             DOWN           
+eth1             UP             192.168.3.125/24 fe80::bc3c:5fff:febb:4207/64 
+eth2             DOWN           fe80::ae2:6dff:fec4:fd47/64 
+eth3             DOWN           
+wlP4p65s0        DOWN           
+can0             DOWN           
+can1             DOWN           
+eth4             DOWN           
+can2             DOWN           
+can3             DOWN           
+docker0          DOWN           172.17.0.1/16 
+=== ros-ish processes on host ===
+   2918 root     roscore
+   2929 root     rosmaster
+   2940 root     rosout
+   3022 root     inno_lidar_node

@@ -1,0 +1,74 @@
+﻿ssh : + docker cp /tmp/hf02_verify.tar slam-localization:/tmp/hf02_verify.tar
+所在位置 行:1 字符: 103
++ ... lace "`r","") | ssh -o BatchMode=yes ldiar-wel "bash -s" 2>&1 | Out-F ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (+ docker cp /tm...hf02_verify.tar:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
++ docker exec slam-localization bash -lc 'rm -rf /tmp/hf02_verify && mkdir -p /tmp/hf02_verify && tar -xf /tmp/hf02_ver
+ify.tar -C /tmp/hf02_verify && python3 -B -W error -m unittest discover -s /tmp/hf02_verify/human_fall_detection/tests 
+-v 2>&1; echo DEVICE_TESTS_EXIT=$?'
+test_covariance_zero_and_abnormal_flag_are_not_overinterpreted (test_hf01_health.ImuTest) ... ok
+test_covariance_zero_checks_all_nine_entries (test_hf01_health.ImuTest) ... ok
+test_nonfinite_measurements_become_null_strict_json (test_hf01_health.ImuTest) ... ok
+test_orientation_not_provided_minus_one_is_unusable (test_hf01_health.ImuTest) ... ok
+test_quaternion_unusable_cases (test_hf01_health.ImuTest) ... ok
+test_bad_hash_summary_and_nonfinite_values_are_rejected (test_hf01_health.ManifestTest) ... ok
+test_manifest_missing_or_invalid_fields_are_rejected (test_hf01_health.ManifestTest) ... ok
+test_manifest_round_trip (test_hf01_health.ManifestTest) ... ok
+test_nested_schema_incomplete_or_illegal_objects_are_rejected (test_hf01_health.ManifestTest) ... ok
+test_omitted_optional_objects_get_complete_defaults (test_hf01_health.ManifestTest) ... ok
+test_timestamp_at_18_with_point_step_26_is_read_unaligned (test_hf01_health.PointCloudTest) ... ok
+test_truncated_and_invalid_fields_are_rejected (test_hf01_health.PointCloudTest) ... ok
+test_xyz_decoder_reuse_and_padded_big_endian_rows (test_hf01_health.PointCloudTest) ... ok
+test_zero_and_nonfinite_points_are_counted (test_hf01_health.PointCloudTest) ... ok
+test_existing_bag_active_or_manifest_blocks_before_recording (test_hf01_health.SessionReservationTest) ... ok
+test_existing_manifest_is_not_rewritten_when_recorder_would_run (test_hf01_health.SessionReservationTest) ... ok
+test_interrupted_run_records_sigint_and_keeps_requested_duration (test_hf01_health.SessionReservationTest) ... ok
+test_session_reservation_is_exclusive (test_hf01_health.SessionReservationTest) ... ok
+test_snapshot_never_mixes_new_stamp_with_old_layout (test_hf01_health.SnapshotConcurrencyTest) ... ok
+test_cloud_stall_invalid_but_imu_stall_only_degrades (test_hf01_health.StampAndTopicTest) ... ok
+test_invalid_current_stamp_is_null_and_previous_valid_baseline_survives (test_hf01_health.StampAndTopicTest) ... ok
+test_invalid_stamp_path_is_shared_by_every_topic (test_hf01_health.StampAndTopicTest) ... ok
+test_missing_required_input_is_invalid_not_degraded (test_hf01_health.StampAndTopicTest) ... ok
+test_stamp_repeat_regress_and_forward_jump_bump_epoch (test_hf01_health.StampAndTopicTest) ... ok
+test_unexpected_frame_degrades_cloud (test_hf01_health.StampAndTopicTest) ... ok
+test_cache_is_bounded_and_keeps_sequence_traceability (test_hf02_timebase.EpochTest) ... ok
+test_forward_jump_threshold_is_configurable (test_hf02_timebase.EpochTest) ... ok
+test_invalid_stamp_keeps_epoch_and_previous_valid_baseline (test_hf02_timebase.EpochTest) ... ok
+test_repeat_regress_and_jump_rebuild_epoch_and_clear_history (test_hf02_timebase.EpochTest) ... ok
+test_missing_auxiliary_imu_never_blocks_the_required_cloud (test_hf02_timebase.FreshnessTest) ... ok
+test_online_freshness_uses_receive_time (test_hf02_timebase.FreshnessTest) ... ok
+test_replay_freshness_is_driven_by_message_time_only (test_hf02_timebase.FreshnessTest) ... ok
+test_draft_round_sample_without_stamp_fields_still_reads (test_hf02_timebase.HealthCompatibilityTest) ... ok
+test_frozen_block_fields_are_read (test_hf02_timebase.HealthCompatibilityTest) ... ok
+test_invalid_and_missing_blocks_return_none_not_fabrication (test_hf02_timebase.HealthCompatibilityTest) ... ok
+test_close_stamps_and_perfect_fit_do_not_verify_sync (test_hf02_timebase.PairingAndEvidenceTest) ... ok
+test_receive_time_fit_is_not_accepted_as_physical_offset_evidence (test_hf02_timebase.PairingAndEvidenceTest) ... ok
+test_unit_mismatch_is_detected_and_never_paired (test_hf02_timebase.PairingAndEvidenceTest) ... ok
+test_vendor_or_controlled_event_evidence_allows_pairing (test_hf02_timebase.PairingAndEvidenceTest) ... ok
+test_device_motion_stays_unknown_until_units_and_axes_verified (test_hf02_timebase.SensorQualityTest) ... ok
+test_orientation_and_six_axis_are_recorded_separately (test_hf02_timebase.SensorQualityTest) ... ok
+test_static_background_gate_never_passes_without_ground_or_motion (test_hf02_timebase.SensorQualityTest) ... ok
+test_units_require_evidence_and_magnitude_clues_are_rejected (test_hf02_timebase.SensorQualityTest) ... ok
+test_carry_keeps_stamp_usable_in_the_frozen_classifier (test_hf02_timebase.SplitStampTest) ... ok
+test_nanosecond_carry_at_rounding_boundary (test_hf02_timebase.SplitStampTest) ... ok
+test_nonfinite_and_negative_seconds_never_become_a_stamp (test_hf02_timebase.SplitStampTest) ... ok
+test_linear_fit_needs_two_distinct_points (test_hf02_timebase.StrictJsonTest) ... ok
+test_nonfinite_inputs_produce_strict_json_without_nan (test_hf02_timebase.StrictJsonTest) ... ok
+
+----------------------------------------------------------------------
+Ran 48 tests in 0.143s
+
+OK
+wrote /tmp/tmpvfqsdveq/interrupted.manifest.json
+bag re-read ok: 5 messages, duration 8.0 s
+  /innolidar_points 5 messages
+DEVICE_TESTS_EXIT=0
++ docker exec slam-localization bash -lc 'sha256sum /tmp/hf02_verify/human_fall_detection/core/timebase.py /tmp/hf02_ve
+rify/human_fall_detection/core/sensor_quality.py /tmp/hf02_verify/human_fall_detection/tests/test_hf02_timebase.py'
+ebebf373529dab7e1565470167201f5c7381b3e0ac5b0a00fc602b0d08e717ad  /tmp/hf02_verify/human_fall_detection/core/timebase.py
+987282f7765fa08c75a677b8dcb2f895f13d2748f3a2f4d3c4f610a842c8ff94  /tmp/hf02_verify/human_fall_detection/core/sensor_quality.py
+d62fc44cb9ae8f28b7fe58b714d49ba6dc808ba6c62051ed3637539fd500a3c9  /tmp/hf02_verify/human_fall_detection/tests/test_hf02_timebase.py
++ $'\r'
+bash: 琛?5: $'\r'锛氭湭鎵惧埌鍛戒护

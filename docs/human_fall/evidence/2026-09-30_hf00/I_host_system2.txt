@@ -1,0 +1,183 @@
+﻿=== lidar-stack.sh ===
+#!/bin/bash
+# lidar-stack.sh - 3588 开机自启：动态定位雷达网口 + 容器 + ROS 驱动 + foxglove_bridge
+# 雷达物理网口按 MAC 识别，避免将联网的 eth1 误当雷达口；接口名可以变化
+set -e
+
+# [1/4] 寻找指定 MAC 且有载波的雷达网口
+LIDAR_IF=""
+LIDAR_MAC="08:e2:6d:c4:fd:47"  # radar physical port; name may change on reboot
+for attempt in 1 2 3 4 5 6; do
+  for iface in $(ls /sys/class/net/ | grep -E "^eth"); do
+    [ "$(cat /sys/class/net/$iface/address 2>/dev/null)" = "$LIDAR_MAC" ] || continue
+    if [ "$(cat /sys/class/net/$iface/operstate 2>/dev/null)" = "up" ]; then
+      LIDAR_IF="$iface"
+      break
+    fi
+  done
+  [ -n "$LIDAR_IF" ] && break
+  sleep 5
+done
+
+if [ -z "$LIDAR_IF" ]; then
+  echo "[1/4] WARNING: 未检测到指定 MAC 的雷达网口或未接线，跳过雷达 IP 配置"
+else
+  echo "[1/4] 雷达网口: $LIDAR_IF"
+  ip link set "$LIDAR_IF" up 2>/dev/null || true
+  # 幂等配置：已存在则忽略，不存在则添加
+  if ! ip addr show "$LIDAR_IF" | grep -q "192.168.1.35"; then
+    ip addr add 192.168.1.35/24 dev "$LIDAR_IF" 2>/dev/null || true
+  fi
+  if ! ip route show | grep -q "192.168.1.10 dev $LIDAR_IF"; then
+    ip route replace 192.168.1.10/32 dev "$LIDAR_IF" src 192.168.1.35
+  fi
+fi
+
+if ! docker ps --format '{{.Names}}' | grep -qx slam-localization; then
+    docker start slam-localization
+fi
+sleep 5
+echo "[2/4] 容器已启动"
+
+docker exec slam-localization bash -c '
+  if ! pgrep -f "^/usr/bin/python3 /opt/ros/noetic/bin/rosmaster" > /dev/null; then
+    source /opt/ros/noetic/setup.bash
+    roscore > /tmp/roscore.log 2>&1 &
+    sleep 5
+  fi'
+echo "[3/4] roscore 就绪"
+
+docker exec slam-localization bash -c '
+  source /opt/ros/noetic/setup.bash
+  source /root/catkin_ws/devel/setup.bash
+  # 清掉残留/僵尸驱动进程（锚定二进制路径，避免误杀本脚本 shell）
+  for p in $(pgrep -f "^/root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node"); do kill -9 "$p" 2>/dev/null || true; done
+  if ! pgrep -f "^/root/catkin_ws/devel/lib/inno_lidar_ros/inno_lidar_node" > /dev/null; then
+    rosrun inno_lidar_ros inno_lidar_node _config_path:=/root/catkin_ws/src/inno_lidar_ros/config/config.yaml > /tmp/lidar.log 2>&1 &
+  fi
+  if ! pgrep -f "^/opt/ros/noetic/lib/foxglove_bridge/foxglove_bridge" > /dev/null; then
+    rosrun foxglove_bridge foxglove_bridge _port:=8765 _send_buffer_limit_bytes:=134217728 _num_sender_threads:=4 > /tmp/bridge.log 2>&1 &
+  fi'
+echo "[4/4] 驱动 + bridge 已启动"
+=== eth2 addr ===
+4: eth2: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc pfifo_fast state DOWN group default qlen 1000
+    link/ether 08:e2:6d:c4:fd:47 brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::ae2:6dff:fec4:fd47/64 scope link 
+       valid_lft forever preferred_lft forever
+=== netplan ===
+00-welcomtech-config.yaml
+00-welcomtech-config.yaml.bak
+00-welcomtech-config.yaml.bak2
+00-welcomtech-config.yaml.bak-20260929-lidar
+00-welcomtech-config.yaml.bak-eth1
+/etc/netplan/00-welcomtech-config.yaml.bak:network:
+/etc/netplan/00-welcomtech-config.yaml.bak:  version: 2
+/etc/netplan/00-welcomtech-config.yaml.bak:  renderer: networkd
+/etc/netplan/00-welcomtech-config.yaml.bak:  ethernets:
+/etc/netplan/00-welcomtech-config.yaml.bak:    eth0:
+/etc/netplan/00-welcomtech-config.yaml.bak:      dhcp4: no
+/etc/netplan/00-welcomtech-config.yaml.bak:      addresses: [192.168.1.101/24]
+/etc/netplan/00-welcomtech-config.yaml.bak:      gateway4: 192.168.1.1
+/etc/netplan/00-welcomtech-config.yaml.bak:      nameservers:
+/etc/netplan/00-welcomtech-config.yaml.bak:            addresses: [8.8.8.8]
+/etc/netplan/00-welcomtech-config.yaml.bak:    eth1:
+/etc/netplan/00-welcomtech-config.yaml.bak:      dhcp4: true
+/etc/netplan/00-welcomtech-config.yaml.bak:    eth2:
+/etc/netplan/00-welcomtech-config.yaml.bak:      dhcp4: true
+/etc/netplan/00-welcomtech-config.yaml.bak:    eth3:
+/etc/netplan/00-welcomtech-config.yaml.bak:      dhcp4: true
+/etc/netplan/00-welcomtech-config.yaml.bak:    eth4:
+/etc/netplan/00-welcomtech-config.yaml.bak:      dhcp4: true
+/etc/netplan/00-welcomtech-config.yaml.bak2:network:
+/etc/netplan/00-welcomtech-config.yaml.bak2:  version: 2
+/etc/netplan/00-welcomtech-config.yaml.bak2:  renderer: networkd
+/etc/netplan/00-welcomtech-config.yaml.bak2:  ethernets:
+/etc/netplan/00-welcomtech-config.yaml.bak2:    eth0:
+/etc/netplan/00-welcomtech-config.yaml.bak2:      dhcp4: no
+/etc/netplan/00-welcomtech-config.yaml.bak2:      addresses: [192.168.1.101/24]
+/etc/netplan/00-welcomtech-config.yaml.bak2:      nameservers:
+/etc/netplan/00-welcomtech-config.yaml.bak2:            addresses: [8.8.8.8]
+/etc/netplan/00-welcomtech-config.yaml.bak2:    eth1:
+/etc/netplan/00-welcomtech-config.yaml.bak2:      dhcp4: true
+/etc/netplan/00-welcomtech-config.yaml.bak2:    eth2:
+/etc/netplan/00-welcomtech-config.yaml.bak2:      dhcp4: true
+/etc/netplan/00-welcomtech-config.yaml.bak2:    eth3:
+/etc/netplan/00-welcomtech-config.yaml.bak2:      dhcp4: true
+/etc/netplan/00-welcomtech-config.yaml.bak2:    eth4:
+/etc/netplan/00-welcomtech-config.yaml.bak2:      dhcp4: true
+/etc/netplan/00-welcomtech-config.yaml.bak-eth1:network:
+/etc/netplan/00-welcomtech-config.yaml.bak-eth1:  version: 2
+/etc/netplan/00-welcomtech-config.yaml.bak-eth1:  renderer: networkd
+/etc/netplan/00-welcomtech-config.yaml.bak-eth1:  ethernets:
+/etc/netplan/00-welcomtech-config.yaml.bak-eth1:    eth0:
+=== boot overlays ===
+=== devfreq ===
+dmc
+fb000000.gpu
+fdab0000.npu
+=== device-tree top ===
+cam_ircut
+display-subsystem
+i2c@fd880000
+i2c@fea90000
+i2c@feaa0000
+i2c@feab0000
+i2c@feac0000
+i2c@fead0000
+i2c@fec80000
+i2c@fec90000
+i2c@feca0000
+mipi0-csi2@fdd10000
+mipi1-csi2@fdd20000
+mipi2-csi2@fdd30000
+mipi3-csi2@fdd40000
+mipi4-csi2@fdd50000
+mipi5-csi2@fdd60000
+npu@fdab0000
+npu-opp-table
+rkcif-mipi-lvds
+=== dpkg camera/video pkgs ===
+ii  avahi-autoipd                              0.7-4ubuntu7.3                       arm64        Avahi IPv4LL network address configuration daemon
+ii  gir1.2-clutter-gst-3.0:arm64               3.0.27-1                             arm64        Gobject introspection data for Clutter GStreamer elements
+ii  gir1.2-gst-plugins-bad-1.0:arm64           1.16.3-0ubuntu1.1                    arm64        GObject introspection data for the GStreamer libraries from the "bad" set
+ii  gir1.2-gst-plugins-base-1.0:arm64          1.16.3-0ubuntu1.4                    arm64        GObject introspection data for the GStreamer Plugins Base library
+ii  gir1.2-gstreamer-1.0:arm64                 1.16.3-0ubuntu1.2                    arm64        GObject introspection data for the GStreamer library
+ii  gnome-video-effects                        0.5.0-1ubuntu1                       all          Collection of GStreamer effects
+ii  gstreamer1.0-alsa:arm64                    1.16.3-0ubuntu1.4                    arm64        GStreamer plugin for ALSA
+ii  gstreamer1.0-clutter-3.0:arm64             3.0.27-1                             arm64        Clutter PLugin for GStreamer 1.0
+ii  gstreamer1.0-gl:arm64                      1.16.3-0ubuntu1.4                    arm64        GStreamer plugins for GL
+ii  gstreamer1.0-gtk3:arm64                    1.16.3-0ubuntu1.3                    arm64        GStreamer plugin for GTK+3
+ii  gstreamer1.0-libav:arm64                   1.16.2-2                             arm64        ffmpeg plugin for GStreamer
+ii  gstreamer1.0-nice:arm64                    0.1.16-1                             arm64        ICE library (GStreamer plugin)
+ii  gstreamer1.0-packagekit                    1.1.13-2ubuntu1.1                    arm64        GStreamer plugin to install codecs using PackageKit
+ii  gstreamer1.0-plugins-bad:arm64             1.16.3-0ubuntu1.1                    arm64        GStreamer plugins from the "bad" set
+ii  gstreamer1.0-plugins-base:arm64            1.16.3-0ubuntu1.4                    arm64        GStreamer plugins from the "base" set
+ii  gstreamer1.0-plugins-base-apps             1.16.3-0ubuntu1.4                    arm64        GStreamer helper programs from the "base" set
+ii  gstreamer1.0-plugins-good:arm64            1.16.3-0ubuntu1.3                    arm64        GStreamer plugins from the "good" set
+ii  gstreamer1.0-plugins-ugly:arm64            1.16.2-2build1                       arm64        GStreamer plugins from the "ugly" set
+ii  gstreamer1.0-pulseaudio:arm64              1.16.3-0ubuntu1.3                    arm64        GStreamer plugin for PulseAudio
+ii  gstreamer1.0-qt5:arm64                     1.16.3-0ubuntu1.3                    arm64        GStreamer plugin for Qt5
+=== libs ===
+libcamd.so.2
+libcamd.so.2.4.6
+libcamel-1.2.so.62
+libcamel-1.2.so.62.0.0
+libgstbasecamerabinsrc-1.0.so
+libgstbasecamerabinsrc-1.0.so.0
+libgstbasecamerabinsrc-1.0.so.0.1603.0
+libwebcam.so.0
+libwebcam.so.0.2.4
+=== journalctl test ===
+[0;1;39mHint: You are currently not seeing messages from other users and the system.[0m
+[0;1;39m      Users in groups 'adm', 'systemd-journal' can see all messages.[0m
+[0;1;39m      Pass -q to turn off this notice.[0m
+-- Logs begin at Tue 2026-06-02 12:25:39 CST, end at Wed 2026-09-30 13:01:46 CST. --
+-- No entries --
+=== journal camera grep ===
+ssh : tail: 无效的行数: “20\r”
+所在位置 行:25 字符: 34
++ ...  "`r","") | ssh -o BatchMode=yes -o ConnectTimeout=8 ldiar-wel "bash  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (tail: 无效的行数: “20\r”:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

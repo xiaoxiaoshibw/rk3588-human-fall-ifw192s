@@ -1,0 +1,233 @@
+test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) ... 
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value='', entry='validator') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value='', entry='startup') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value='', entry='reload') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=None, entry='validator') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=None, entry='startup') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=None, entry='reload') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=1, entry='validator') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=1, entry='startup') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=1, entry='reload') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=True, entry='validator') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=True, entry='startup') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=True, entry='reload') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=1.0, entry='validator') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=1.0, entry='startup') ... FAIL
+  test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=1.0, entry='reload') ... FAIL
+test_A09_A10_ready_retires_on_monitor_failure_and_cannot_revive (__main__.LifecycleChecks.test_A09_A10_ready_retires_on_monitor_failure_and_cannot_revive) ... FAIL
+test_A10_conflicting_request_keeps_conflict_under_bad_monitor (__main__.LifecycleChecks.test_A10_conflicting_request_keeps_conflict_under_bad_monitor) ... FAIL
+test_A10_failed_capture_replays_original_ack_under_bad_monitor (__main__.LifecycleChecks.test_A10_failed_capture_replays_original_ack_under_bad_monitor) ... FAIL
+test_A10_failed_capture_replays_original_ack_under_stale_cloud (__main__.LifecycleChecks.test_A10_failed_capture_replays_original_ack_under_stale_cloud) ... FAIL
+test_A10_failure_discards_collected_samples (__main__.LifecycleChecks.test_A10_failure_discards_collected_samples) ... FAIL
+test_A10_postcompute_stale_suppression_keeps_terminal_ack (__main__.LifecycleChecks.test_A10_postcompute_stale_suppression_keeps_terminal_ack) ... FAIL
+test_A10_watchdog_ack_reaches_existing_ros_ack_transport (__main__.LifecycleChecks.test_A10_watchdog_ack_reaches_existing_ros_ack_transport) ... FAIL
+test_empty_reload_preserves_metadata_monitor_and_pending_task (claude_r5_checks.R5BoundaryChecks.test_empty_reload_preserves_metadata_monitor_and_pending_task) ... ok
+test_first_bad_frame_cancels_and_recovery_cannot_stitch (claude_r5_checks.R5BoundaryChecks.test_first_bad_frame_cancels_and_recovery_cannot_stitch) ... ok
+test_ready_baseline_retires_on_version_switch_not_on_same_reload (claude_r5_checks.R5BoundaryChecks.test_ready_baseline_retires_on_version_switch_not_on_same_reload)
+Collector-level retire: a changed context retires an old ready ... ok
+test_watchdog_settles_pending_without_new_cloud_frame (claude_r5_checks.R5BoundaryChecks.test_watchdog_settles_pending_without_new_cloud_frame) ... ok
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value='', entry='validator')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value='', entry='startup')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value='', entry='reload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=None, entry='validator')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=None, entry='startup')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=None, entry='reload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=1, entry='validator')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=1, entry='startup')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='calibration_id', value=1, entry='reload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=True, entry='validator')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=True, entry='startup')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=True, entry='reload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=1.0, entry='validator')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=1.0, entry='startup')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A02_full_artifact_strict_id_and_schema_all_entries (__main__.LifecycleChecks.test_A02_full_artifact_strict_id_and_schema_all_entries) (field='schema_version', value=1.0, entry='reload')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 167, in test_A02_full_artifact_strict_id_and_schema_all_entries
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_A09_A10_ready_retires_on_monitor_failure_and_cannot_revive (__main__.LifecycleChecks.test_A09_A10_ready_retires_on_monitor_failure_and_cannot_revive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 94, in test_A09_A10_ready_retires_on_monitor_failure_and_cannot_revive
+    self.assertEqual(core.baseline.status, 'ready', core.baseline.snapshot())
+AssertionError: 'failed' != 'ready'
+- failed
++ ready
+ : {'status': 'failed', 'reason': 'insufficient_stance_span', 'session_id': 's1', 'track_id': 't0001', 'calibration_version': 'v1', 'time_epoch': 0, 'selection_version': 1, 'action_generation': 1, 'sample_count': 0, 'operator_confirmed': False, 'baseline': None}
+
+======================================================================
+FAIL: test_A10_conflicting_request_keeps_conflict_under_bad_monitor (__main__.LifecycleChecks.test_A10_conflicting_request_keeps_conflict_under_bad_monitor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 87, in test_A10_conflicting_request_keeps_conflict_under_bad_monitor
+    self.assertEqual(result['reason'], 'request_id_conflict')
+AssertionError: 'ground_monitor_unavailable' != 'request_id_conflict'
+- ground_monitor_unavailable
++ request_id_conflict
+
+
+======================================================================
+FAIL: test_A10_failed_capture_replays_original_ack_under_bad_monitor (__main__.LifecycleChecks.test_A10_failed_capture_replays_original_ack_under_bad_monitor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 69, in test_A10_failed_capture_replays_original_ack_under_bad_monitor
+    self.assertEqual(replay, expected)
+AssertionError: {'kin[153 chars]ed': False, 'reason': 'ground_monitor_unavaila[113 chars]alse} != {'kin[153 chars]ed': True, 'reason': None, 'track_id': 't0001'[321 chars]True}
+Diff is 1054 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_A10_failed_capture_replays_original_ack_under_stale_cloud (__main__.LifecycleChecks.test_A10_failed_capture_replays_original_ack_under_stale_cloud)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 78, in test_A10_failed_capture_replays_original_ack_under_stale_cloud
+    self.assertEqual(replay, expected)
+AssertionError: {'kin[153 chars]ed': False, 'reason': 'cloud_stale', 'track_id[98 chars]alse} != {'kin[153 chars]ed': True, 'reason': None, 'track_id': 't0001'[321 chars]True}
+Diff is 1039 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_A10_failure_discards_collected_samples (__main__.LifecycleChecks.test_A10_failure_discards_collected_samples)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 107, in test_A10_failure_discards_collected_samples
+    self.assertGreater(len(core.baseline.samples), 0)
+AssertionError: 0 not greater than 0
+
+======================================================================
+FAIL: test_A10_postcompute_stale_suppression_keeps_terminal_ack (__main__.LifecycleChecks.test_A10_postcompute_stale_suppression_keeps_terminal_ack)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 153, in test_A10_postcompute_stale_suppression_keeps_terminal_ack
+    self.assertEqual(len(acks), 1, 'postcompute suppression lost an already-issued terminal ack')
+AssertionError: 0 != 1 : postcompute suppression lost an already-issued terminal ack
+
+======================================================================
+FAIL: test_A10_watchdog_ack_reaches_existing_ros_ack_transport (__main__.LifecycleChecks.test_A10_watchdog_ack_reaches_existing_ros_ack_transport)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r5_codex\codex_r5_lifecycle_checks.py", line 122, in test_A10_watchdog_ack_reaches_existing_ros_ack_transport
+    self.assertEqual(len(acks), 1, 'terminal ack was published only inside state')
+AssertionError: 0 != 1 : terminal ack was published only inside state
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.134s
+
+FAILED (failures=22)
+exit=1

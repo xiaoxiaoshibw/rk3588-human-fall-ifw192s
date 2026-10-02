@@ -1,0 +1,33 @@
+﻿ssh : + docker cp /tmp/r4_check_lf.py slam-localization:/tmp/gl00_r4_check.py
+所在位置 行:1 字符: 371
++ ... 1_gl00_r4"; ssh -o BatchMode=yes -o ConnectTimeout=8 wel@192.168.3.12 ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (+ docker cp /tm...l00_r4_check.py:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
++ docker cp /tmp/r4_protocol_lf.json slam-localization:/tmp/gl00_r4_protocol.json
++ docker exec slam-localization bash -lc 'python3 -V; python3 /tmp/gl00_r4_check.py /tmp/gl00_r4_protocol.json; echo PR
+OTOCOL_INNER=$?'
+Python 3.8.10
+PASS ceil budget table matches formula
+PASS ransac_iterations == ceil(p=.999,w=.20)
+PASS hard cap >= iterations
+PASS untruncated rms <= p95
+PASS fit cap <= holdout cap
+PASS at least 3 validation regions
+PASS >=20 points per region
+PASS support fraction in (0,1]
+PASS candidate cap between 1 and 3
+PASS clean plane passes gate
+PASS shifted plane fails gate
+PASS degeneracy criteria present
+PASS ambiguity criteria present
+ALL_CHECKS_PASSED
+PROTOCOL_INNER=0
++ docker exec slam-localization bash -lc 'source /opt/ros/noetic/setup.bash; cd /root/catkin_ws/human_fall_sessions/gl0
+0_current_20261001T083023380343Z; python3 /tmp/gl00_r2_layout_check.py gl00_current_20261001T083023380343Z.bag /tmp/gl0
+0_out/r4_layout_check.json >/dev/null 2>&1; echo LAYOUT_INNER=$?; python3 /tmp/gl00_r3_support_viz.py gl00_current_2026
+1001T083023380343Z.bag /tmp/gl00_out/r4_support.svg /tmp/gl00_out/r4_support.csv /tmp/gl00_out/r4_support.json >/dev/nu
+ll 2>&1; echo VIZ_INNER=$?'
+LAYOUT_INNER=0
+VIZ_INNER=0

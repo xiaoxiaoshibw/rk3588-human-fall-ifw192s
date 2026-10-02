@@ -1,0 +1,13 @@
+ENV=3.8.10 NumPy=1.17.4
+HASH_MATCH=True src/human_fall_detection/config/geometry.yaml
+HASH_MATCH=True src/human_fall_detection/scripts/calibrate_sensors.py
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "/usr/lib/python3.8/pathlib.py", line 1229, in read_bytes
+    with self.open(mode='rb') as f:
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/hf03_r2_verify/src/inno_lidar_ros/src/source/publish_manager.cpp'
+OUTER_SSH_EXIT=1

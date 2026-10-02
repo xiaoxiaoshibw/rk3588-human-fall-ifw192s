@@ -1,0 +1,16 @@
+test_changed_context_returns_original_capture_terminal_before_clear (__main__.PendingVersionChecks.test_changed_context_returns_original_capture_terminal_before_clear) ... FAIL
+test_same_context_pending_stays_pending_and_invalid_switch_is_atomic (__main__.PendingVersionChecks.test_same_context_pending_stays_pending_and_invalid_switch_is_atomic) ... ok
+
+======================================================================
+FAIL: test_changed_context_returns_original_capture_terminal_before_clear (__main__.PendingVersionChecks.test_changed_context_returns_original_capture_terminal_before_clear)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-01_gl02_r6\codex_pending_version_checks.py", line 28, in test_changed_context_returns_original_capture_terminal_before_clear
+    self.assertIsNotNone(terminal, 'context reset silently erased an accepted request')
+AssertionError: unexpectedly None : context reset silently erased an accepted request
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.009s
+
+FAILED (failures=1)
+exit=1

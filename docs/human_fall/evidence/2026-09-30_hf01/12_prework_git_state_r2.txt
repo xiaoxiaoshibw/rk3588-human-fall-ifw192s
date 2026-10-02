@@ -1,0 +1,23 @@
+HF-01 round 2 prework snapshot, 2026-09-30 (Asia/Shanghai), OpenCode deepseek-v4.1-flash
+repo: D:\Code\ldiar
+branch: master
+HEAD: c96489e40037aca810b23b98d71ba34632d18bd0
+--- git status --short (before any round-2 edit) ---
+ M src/CMakeLists.txt
+ M src/inno_lidar_ros/src/source/publish_manager.cpp
+?? AGENTS.md
+?? "AISC-3830用户手册.pdf"
+?? CLAUDE.md
+?? docs/
+?? rk.txt
+?? src/human_fall_detection/
+?? src/human_follow_calibration/
+--- git diff --stat (tracked; symlink src/CMakeLists.txt unreadable on Windows) ---
+warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF the next time Git touches it
+error: open("src/CMakeLists.txt"): Invalid argument
+fatal: cannot hash src/CMakeLists.txt
+--- note ---
+existing untracked: AGENTS.md, CLAUDE.md, docs/, rk.txt, src/human_fall_detection/, src/human_follow_calibration/
+user modifications preserved: src/CMakeLists.txt symlink, publish_manager.cpp one-line spelling fix
+round-1 artifacts preserved: docs/human_fall/evidence/2026-09-30_hf01/00-11 (not edited), hf01_verify.bag on device only
+local baseline before round-2 edits: python 3.12.10 / numpy 1.26.4, 13 tests OK (03_local_tests.txt from round 1 still valid)

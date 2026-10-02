@@ -1,0 +1,75 @@
+﻿ssh : + docker exec slam-localization bash -lc 'mv /root/catkin_ws/src/human_fall_detection/scripts/human_fall_sessions
+/hf02_timebase_20260930.bag /root/catkin_ws/src/human_fall_detection/scripts/human_fall_sessions/hf02_timebase_20260930
+.manifest.json /root/catkin_ws/src/human_fall_detection/scripts/human_fall_sessions/hf02_timebase_20260930.reserve /roo
+t/catkin_ws/human_fall_sessions/ && rmdir /root/catkin_ws/src/human_fall_detection/scripts/human_fall_sessions'
+所在位置 行:1 字符: 102
++ ... lace "`r","") | ssh -o BatchMode=yes ldiar-wel "bash -s" 2>&1 | Out-F ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (+ docker exec s..._fall_sessions':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
++ ls -la /home/wel/slam_localization_wuhan/src/human_fall_detection/scripts/
+鎬荤敤閲?56
+drwxrwxr-x 3 wel  wel   4096 9鏈? 30 16:43 .
+drwxrwxr-x 5 wel  wel   4096 9鏈? 30 14:33 ..
+drwxr-xr-x 2 root root  4096 9鏈? 30 15:22 __pycache__
+-rw-rw-r-- 1 wel  wel  15746 9鏈? 30 15:16 record_session.py
+-rw-rw-r-- 1 wel  wel  27026 9鏈? 30 15:13 sensor_health.py
++ docker exec slam-localization bash -lc 'cd /root/catkin_ws/human_fall_sessions && sha256sum hf02_timebase_20260930.ba
+g && ls -l hf02_timebase_20260930* && python3 -c "import json;d=json.load(open(\"hf02_timebase_20260930.manifest.json\"
+));print(json.dumps({k:d[k] for k in (\"schema_version\",\"session_id\",\"termination\",\"duration_requested_s\",\"sour
+ce_time_domain\",\"sync\",\"units\",\"topics\")},indent=1))"'
+6d6b236b83a2fb4e6e8e60235af774f3790cab9d46b913ddc58c7920a922c68f  hf02_timebase_20260930.bag
+-rw-r--r-- 1 root root 122079151 Sep 30 16:42 hf02_timebase_20260930.bag
+-rw------- 1 root root      2138 Sep 30 16:42 hf02_timebase_20260930.manifest.json
+-rwxr-xr-x 1 root root         0 Sep 30 16:42 hf02_timebase_20260930.reserve
+{
+ "schema_version": 1,
+ "session_id": "hf02_timebase_20260930",
+ "termination": "duration",
+ "duration_requested_s": 10.0,
+ "source_time_domain": "device_stamp_s_unanchored",
+ "sync": {
+  "cross_stream_same_clock_verified": false,
+  "host_anchor_verified": false
+ },
+ "units": {
+  "imu_units_verified": false,
+  "imu_alignment_verified": false
+ },
+ "topics": [
+  {
+   "name": "/device_status",
+   "type": "inno_lidar_msg/DeviceStatus",
+   "messages": 95
+  },
+  {
+   "name": "/inno_imu",
+   "type": "sensor_msgs/Imu",
+   "messages": 2217
+  },
+  {
+   "name": "/innolidar_points",
+   "type": "sensor_msgs/PointCloud2",
+   "messages": 95
+  }
+ ]
+}
++ docker exec slam-localization bash -lc 'source /opt/ros/noetic/setup.bash && cd /root/catkin_ws/human_fall_sessions &
+& rosbag info hf02_timebase_20260930.bag 2>&1 | head -40'
+path:        hf02_timebase_20260930.bag
+version:     2.0
+duration:    9.8s
+start:       Sep 30 2026 16:42:33.06 (1790757753.06)
+end:         Sep 30 2026 16:42:42.86 (1790757762.86)
+size:        116.4 MB
+messages:    2407
+compression: none [96/96 chunks]
+types:       inno_lidar_msg/DeviceStatus [78797d580cbd39abfe410beef3d76d83]
+             sensor_msgs/Imu             [6a62c6daae103f4ff57a132d6f95cec2]
+             sensor_msgs/PointCloud2     [1158d486dd51d683ce2f1be655c3c181]
+topics:      /device_status        95 msgs    : inno_lidar_msg/DeviceStatus
+             /inno_imu           2217 msgs    : sensor_msgs/Imu            
+             /innolidar_points     95 msgs    : sensor_msgs/PointCloud2
++ $'\r'
+bash: 琛?6: $'\r'锛氭湭鎵惧埌鍛戒护

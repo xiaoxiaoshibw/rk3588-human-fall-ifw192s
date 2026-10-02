@@ -1,0 +1,48 @@
+test_capture_baseline_rejects_wrong_epoch (__main__.ContinuityContracts.test_capture_baseline_rejects_wrong_epoch) ... ok
+test_context_reset_is_consumed_once_and_new_observations_recover (__main__.ContinuityContracts.test_context_reset_is_consumed_once_and_new_observations_recover) ... ok
+test_first_frame_after_long_gap_does_not_auto_bind_another_candidate (__main__.ContinuityContracts.test_first_frame_after_long_gap_does_not_auto_bind_another_candidate) ... ok
+test_future_snapshot_has_negative_age_and_is_rejected (__main__.ContinuityContracts.test_future_snapshot_has_negative_age_and_is_rejected) ... ok
+test_initial_low_posture_with_stored_baseline_is_not_a_descent (__main__.ContinuityContracts.test_initial_low_posture_with_stored_baseline_is_not_a_descent) ... ok
+test_invalid_current_receive_does_not_fall_back_to_another_clock (__main__.ContinuityContracts.test_invalid_current_receive_does_not_fall_back_to_another_clock) ... 
+  test_invalid_current_receive_does_not_fall_back_to_another_clock (__main__.ContinuityContracts.test_invalid_current_receive_does_not_fall_back_to_another_clock) (received=nan) ... FAIL
+  test_invalid_current_receive_does_not_fall_back_to_another_clock (__main__.ContinuityContracts.test_invalid_current_receive_does_not_fall_back_to_another_clock) (received=inf) ... FAIL
+test_invalid_snapshot_receive_time_cannot_enable_selection (__main__.ContinuityContracts.test_invalid_snapshot_receive_time_cannot_enable_selection) ... ok
+test_late_match_cannot_bypass_occlusion_timeout (__main__.ContinuityContracts.test_late_match_cannot_bypass_occlusion_timeout) ... ok
+test_new_selection_does_not_reuse_previous_targets_ready_baseline (__main__.ContinuityContracts.test_new_selection_does_not_reuse_previous_targets_ready_baseline) ... ok
+test_operator_confirmation_does_not_turn_a_flat_low_pose_into_stance (__main__.ContinuityContracts.test_operator_confirmation_does_not_turn_a_flat_low_pose_into_stance) ... ok
+test_prediction_gap_does_not_duplicate_an_existing_event (__main__.ContinuityContracts.test_prediction_gap_does_not_duplicate_an_existing_event) ... ok
+test_prediction_is_anchored_at_last_measurement (__main__.ContinuityContracts.test_prediction_is_anchored_at_last_measurement) ... ok
+test_ready_baseline_without_binding_is_not_valid_for_any_target (__main__.ContinuityContracts.test_ready_baseline_without_binding_is_not_valid_for_any_target) ... FAIL
+test_replay_does_not_choose_a_target_without_explicit_initial_selection (__main__.ContinuityContracts.test_replay_does_not_choose_a_target_without_explicit_initial_selection) ... ok
+test_small_motion_while_initially_low_does_not_use_static_baseline_drop (__main__.ContinuityContracts.test_small_motion_while_initially_low_does_not_use_static_baseline_drop) ... ok
+test_unknown_request_schema_does_not_execute_selection (__main__.ContinuityContracts.test_unknown_request_schema_does_not_execute_selection) ... ok
+
+======================================================================
+FAIL: test_invalid_current_receive_does_not_fall_back_to_another_clock (__main__.ContinuityContracts.test_invalid_current_receive_does_not_fall_back_to_another_clock) (received=nan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 229, in test_invalid_current_receive_does_not_fall_back_to_another_clock
+    self.assertTrue(result["position_predicted"] or
+AssertionError: False is not true : {'kind': 'target_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'track_status': 'locked', 'candidate_id': 'c1', 'position_m': [0.2, 0.0, 1.0], 'position_predicted': False, 'prediction_age_s': None, 'prediction_stale': False, 'velocity_m_s': [2.0000000000001137, 0.0, 0.0], 'selection_version': 0, 'calibration_version': None, 'requires_reselection': False, 'action_generation': 1, 'history_reset_reason': 'operator_select', 'last_measured_source_s': 100.1, 'last_measured_receive_s': None}
+
+======================================================================
+FAIL: test_invalid_current_receive_does_not_fall_back_to_another_clock (__main__.ContinuityContracts.test_invalid_current_receive_does_not_fall_back_to_another_clock) (received=inf)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 229, in test_invalid_current_receive_does_not_fall_back_to_another_clock
+    self.assertTrue(result["position_predicted"] or
+AssertionError: False is not true : {'kind': 'target_state', 'schema_version': 1, 'session_id': 'review', 'time_epoch': 0, 'track_id': 'target', 'track_status': 'locked', 'candidate_id': 'c1', 'position_m': [0.2, 0.0, 1.0], 'position_predicted': False, 'prediction_age_s': None, 'prediction_stale': False, 'velocity_m_s': [2.0000000000001137, 0.0, 0.0], 'selection_version': 0, 'calibration_version': None, 'requires_reselection': False, 'action_generation': 1, 'history_reset_reason': 'operator_select', 'last_measured_source_s': 100.1, 'last_measured_receive_s': None}
+
+======================================================================
+FAIL: test_ready_baseline_without_binding_is_not_valid_for_any_target (__main__.ContinuityContracts.test_ready_baseline_without_binding_is_not_valid_for_any_target)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\review_hf04_06_codex.py", line 219, in test_ready_baseline_without_binding_is_not_valid_for_any_target
+    self.assertFalse(baseline_applies(unknown_baseline, context))
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.005s
+
+FAILED (failures=3)
+EXIT=1

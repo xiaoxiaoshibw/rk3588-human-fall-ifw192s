@@ -1,0 +1,30 @@
+# HF-07 isolated verification config (synthetic topics under /hf07_verify).
+session_id: hf07_verify
+topics:
+  cloud: /hf07_verify/points
+  imu: /hf07_verify/imu
+  device_status: /hf07_verify/device_status
+  candidates: /hf07_verify/candidates
+  state: /hf07_verify/state
+  event: /hf07_verify/event
+  selection_request: /hf07_verify/selection_request
+  selection_ack: /hf07_verify/selection_ack
+timeouts_s:
+  cloud_stale: 0.6
+  imu_stale: 0.3
+  device_stale: 0.6
+stamps:
+  max_forward_jump_s: 300.0
+checks:
+  expected_cloud_frame: innolidar
+publish_period_s: 0.2
+geometry:
+  calibration_path: null
+  ground_path: /tmp/hf07_verify_r1/docs/human_fall/evidence/2026-10-01_autonomous_hf07_11_r1/hf07_ground.json
+  background_path: null
+mode:
+  require_ground: false
+output:
+  session_dir: /tmp/hf07_verify_sessions
+  event_file: events.jsonl
+  recent_events: 32

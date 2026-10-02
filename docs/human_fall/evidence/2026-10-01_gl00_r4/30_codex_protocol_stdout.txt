@@ -1,0 +1,14 @@
+PASS ceil budget table matches formula
+PASS ransac_iterations == ceil(p=.999,w=.20)
+PASS hard cap >= iterations
+PASS untruncated rms <= p95
+PASS fit cap <= holdout cap
+PASS at least 3 validation regions
+PASS >=20 points per region
+PASS support fraction in (0,1]
+PASS candidate cap between 1 and 3
+PASS clean plane passes gate
+PASS shifted plane fails gate
+PASS degeneracy criteria present
+PASS ambiguity criteria present
+ALL_CHECKS_PASSED

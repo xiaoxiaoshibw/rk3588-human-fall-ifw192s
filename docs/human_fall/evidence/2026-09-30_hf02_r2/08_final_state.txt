@@ -1,0 +1,57 @@
+﻿# HF-02 R2 final state (after software rework, before round-2 return append)
+# date: 2026-09-30 23:49:24 +08:00
+
+## branch/HEAD (unchanged, no commit/push)
+master
+c96489e40037aca810b23b98d71ba34632d18bd0
+c96489e 鏇存柊3588鍔ㄦ€侀摼鎺ュ簱
+
+## git status --short
+ M src/CMakeLists.txt
+ M src/inno_lidar_ros/src/source/publish_manager.cpp
+?? AGENTS.md
+?? "AISC-3830\347\224\250\346\210\267\346\211\213\345\206\214.pdf"
+?? CLAUDE.md
+?? docs/
+?? rk.txt
+?? src/human_fall_detection/
+?? src/human_follow_calibration/
+?? "\346\226\207\346\241\243/"
+
+## tracked diff --stat
+warning: in the working copy of 'src/inno_lidar_ros/src/source/publish_manager.cpp', LF will be replaced by CRLF the next time Git touches it
+error: open("src/CMakeLists.txt"): Invalid argument
+fatal: cannot hash src/CMakeLists.txt
+
+## untouched frozen/round-1 evidence (hash check)
+a639538f8a4fcae7093b7696b05ebd6142481435f109add50a4de972d979aaa1  D:\Code\ldiar\docs\human_fall\evidence\review_hf02_codex.py
+091336fdc141e4251887d6c0aed23fb56f663dadaf1ab5a17960307e91213ac8  D:\Code\ldiar\docs\human_fall\evidence\review_hf02_driver_codex.py
+e77f9d7583b81661a26d8119181115307049863e1e94638a54475d1138d38ca1  D:\Code\ldiar\src\human_fall_detection\scripts\sensor_health.py
+720335f1e9eb090d336a964f0572501c60ed84165593778cd2cc1ab21a58424a  D:\Code\ldiar\src\human_fall_detection\scripts\record_session.py
+221d9dad659039800c786f244ef2c8275da35adfd042fb8984237d817bf27ce4  D:\Code\ldiar\src\human_fall_detection\config\default.yaml
+
+## round-2 evidence directory
+00_prework_git_state.txt  6397
+00_prework_hashes.txt  1796
+01_codex_review_local.txt  1661
+02_codex_driver_local.txt  169
+03_driver_boundary_local.txt  1806
+04_local_tests.txt  11018
+05_local_hashes_after.txt  1650
+06_device_checks.txt  15716
+07_device_cold_build_note.txt  6633
+run_device_checks.sh  3951
+run_device_cold_build_note.sh  986
+
+
+## concurrent user artifact (not touched)
+D:\Code\ldiar\文档\ (文档.md + 文档.assets\image-20260930234145126.png) appeared at 2026-09-30 23:41 local, outside this session's commands; not created/modified/deleted by this round. Prework status did not list it.
+
+## post-snapshot concurrent update (observed, not caused by this session)
+At 2026-09-30 23:51-23:53 local, outside this session's commands, the untracked
+root file AISC-3830用户手册.pdf (present at prework 00_prework_git_state.txt) is
+no longer at the repo root; it now sits in 文档\AISC-3830用户手册.pdf with its
+original LastWriteTime 2026-09-28 16:43:35. New user files appeared under
+文档\ (文档.md, 文档.assets, a 论文-related folder). This session only read,
+hashed and listed paths; it did not create, move, rename or delete any user file.
+git status no longer lists the PDF at the root because the user moved it.
