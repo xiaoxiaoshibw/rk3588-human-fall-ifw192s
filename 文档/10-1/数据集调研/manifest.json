@@ -1,0 +1,133 @@
+{
+  "created": "2026-10-02",
+  "scope": "真 LiDAR 点云 + 人体级标注（姿态/SMPL/分割/步态身份）的公开数据集；不含 RGB-D/毫米波（已收录在上级 notes）",
+  "datasets": [
+    {
+      "name": "LiveHPS / FreeMotion",
+      "year": 2024,
+      "paper_arxiv": "2402.17171",
+      "paper_local_pdf": "2402.17171_LiveHPS数据集.pdf",
+      "sensors": "Ouster OS1-128 LiDAR + RGB + 17-IMU 捕捉服",
+      "setting": "室内全景棚 + 室外",
+      "subjects": 20,
+      "frames": 578775,
+      "labels": "完整 SMPL (pose+shape+global_translation), 人形点云实例分割",
+      "access": "未正式开放（论文声明将开放）",
+      "relevance_to_ours": "唯一的室内 360° 多机位 LiDAR + 真 SMPL；距离-点数先验可参考"
+    },
+    {
+      "name": "LiDARHuman26M / LiDARCap",
+      "year": 2022,
+      "paper_arxiv": "2203.14698",
+      "paper_local_pdf": null,
+      "sensors": "RMB LiDAR + IMU",
+      "setting": "室外远距 (20-45 m) 动作捕捉",
+      "labels": "IMU 真值导出的 SMPL",
+      "access": "见 lidarhumanmotion.net（不稳，建议查 OpenXLab）",
+      "relevance_to_ours": "远距人体点数衰减模型参考"
+    },
+    {
+      "name": "MM-Fi",
+      "year": 2023,
+      "paper_arxiv": "2305.10345",
+      "paper_local_pdf": "2305.10345_MMFi数据集论文.pdf",
+      "sensors": "LiDAR + mmWave + WiFi CSI + RGB-D",
+      "setting": "室内固定机位",
+      "subjects": 40,
+      "activities": "27类日常 + 13类康复，无跌倒",
+      "access": "https://ntu-aiot-lab.github.io/mm-fi",
+      "relevance_to_ours": "机位/视场与本项目最接近；但仍无跌倒类"
+    },
+    {
+      "name": "SUSTech1K / LidarGait",
+      "year": 2023,
+      "paper_arxiv": "2211.10598",
+      "paper_local_pdf": "2211.10598_LidarGait基准.pdf",
+      "sensors": "LiDAR + RGB",
+      "setting": "室外",
+      "subjects": 1050,
+      "sequences": 25239,
+      "labels": "身份 ID + 步态序列",
+      "access": "https://lidargait.github.io → 签署协议邮件申请至 shencf2019@mail.sustech.edu.cn；代码 https://github.com/ShiqiYu/OpenGait",
+      "relevance_to_ours": "身份识别（不重识别），与本项目目的不同，仅条目备查"
+    },
+    {
+      "name": "SLOPER4D",
+      "year": 2023,
+      "paper_arxiv": "2303.09095",
+      "paper_local_pdf": "2303.09095_SLOPER4D数据集论文.pdf",
+      "sensors": "头盔式 Ouster OS1-128 + RGB + 17-IMU",
+      "setting": "室外城市",
+      "sequences": "12 subjects / 15 sequences / 100K LiDAR frames",
+      "labels": "SMPL + 场景 mesh + 2D/3D 关键点",
+      "access": "http://www.lidarhumanmotion.net/sloper4d/",
+      "relevance_to_ours": "户外 ego 视角，与固定机位差异大"
+    },
+    {
+      "name": "HSC4D",
+      "year": 2022,
+      "paper_arxiv": "2203.09215",
+      "paper_local_pdf": null,
+      "sensors": "体内 IMU + LiDAR",
+      "setting": "室内外交互场景捕捉",
+      "labels": "SMPL",
+      "relevance_to_ours": "以人自身 ego 移动为主，非固定外人观测"
+    },
+    {
+      "name": "CIMI4D",
+      "year": 2023,
+      "paper_arxiv": "2303.17948",
+      "paper_local_pdf": null,
+      "sensors": "IMU + LiDAR",
+      "setting": "攀爬/梯子等",
+      "relevance_to_ours": "动作集合全是攀爬，无跌倒"
+    },
+    {
+      "name": "Human-M3",
+      "year": 2023,
+      "paper_arxiv": "2308.00628",
+      "paper_local_pdf": null,
+      "sensors": "Livox MID-100 x 4 多机位 + RGB",
+      "setting": "室外街景",
+      "relevance_to_ours": "固定多机位 LiDAR 是亮点；但场景为街景"
+    },
+    {
+      "name": "Waymo Open Dataset (人体子集)",
+      "year": 2019,
+      "paper_arxiv": "1912.04838",
+      "paper_local_pdf": null,
+      "sensors": "5 自研 LiDAR + 5 RGB",
+      "setting": "室外自动驾驶",
+      "labels": "14 个 3D 人关键点 + 框",
+      "access": "https://waymo.com/open/",
+      "relevance_to_ours": "最大规模真 LiDAR 行人标注；非本项目机位"
+    }
+  ],
+  "related_method_papers": [
+    {
+      "id": "2003.05093",
+      "title": "Learning-Based Human Segmentation and Velocity Estimation Using Automatic Labeled LiDAR Sequence",
+      "year": 2020,
+      "local_pdf": "2003.05093_自动标注LiDAR人体分割.pdf",
+      "use": "用 RGB 帮 LiDAR 自动标人，本项目自采 PCAP 自动标注的关键方法论"
+    }
+  ],
+  "synthetic_source": [
+    {
+      "name": "AMASS",
+      "use": "SMPL 动作库，可经 raycasting 合成 LiDAR（SLOPER4D/LiveHPS 用过此招）"
+    },
+    {
+      "name": "CMU MoCap",
+      "use": "同 AMASS，合成 LiDAR 源"
+    }
+  ],
+  "survey": {
+    "id": "2509.12197",
+    "title": "3D Human Pose and Shape Estimation from LiDAR Point Clouds: A Review",
+    "year": 2025,
+    "local_pdf": "2509.12197_LiDAR人体姿态估计综述.pdf",
+    "authors": "Valeo AI",
+    "note": "数据集专章权威列表，须先读"
+  }
+}
