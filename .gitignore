@@ -1,0 +1,12 @@
+# 仓库卫生底线（2026-10-02 T6 审查）。只挡真正不该入库的，保持小。
+__pycache__/
+*.pyc
+
+# 第三方仓库完整克隆（参考用，不入库；上游 URL+commit 已在 文档/10-1/README.md 登记）
+文档/10-1/github/
+
+# 原始传感器采集(bag/pcap)，CLAUDE.md 明令不入库；/captures/ 亦在 .git/info/exclude
+/captures/
+*.bag
+*.pcap
+*.db3
