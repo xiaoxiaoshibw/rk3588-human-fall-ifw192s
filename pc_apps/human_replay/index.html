@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>human_replay — HR-02 回放器</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0e10;
+               color: #cfd8dc; font: 13px/1.4 Consolas, "Microsoft YaHei", monospace; }
+  #view { position: absolute; inset: 0; }
+  #hud { position: absolute; top: 8px; left: 8px; padding: 4px 8px;
+         background: rgba(0,0,0,.55); border-radius: 4px; }
+  #frameInfo { position: absolute; top: 34px; left: 8px; padding: 2px 8px;
+               background: rgba(0,0,0,.4); border-radius: 4px; color: #8aaeff; }
+  #toolbar { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px;
+             background: rgba(0,0,0,.55); padding: 6px; border-radius: 4px;
+             align-items: center; }
+  button, select { background: #1d262b; color: #cfd8dc; border: 1px solid #37474f;
+                   border-radius: 3px; padding: 3px 10px; cursor: pointer; }
+  button:hover { background: #26333a; }
+  label { display: flex; gap: 3px; align-items: center; }
+  #bottom { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 10px;
+            background: rgba(0,0,0,.55); display: flex; gap: 10px; align-items: center; }
+  #slider { flex: 1; }
+  #status { position: absolute; bottom: 42px; left: 10px; color: #8f8; }
+  #metaBox { position: absolute; right: 8px; top: 52px; max-width: 320px; max-height: 60vh;
+             overflow: auto; background: rgba(0,0,0,.6); padding: 8px; border-radius: 4px;
+             font-size: 11px; white-space: pre; color: #9ccc9c; }
+</style>
+</head>
+<body>
+<div id="view"></div>
+
+<div id="hud">未载入</div>
+<div id="frameInfo"></div>
+<div id="status">点「选会话目录」载入 captures\remote\&lt;sid&gt;</div>
+
+<div id="toolbar">
+  <button id="pickBtn">选会话目录</button>
+  <input id="dirInput" type="file" webkitdirectory style="display:none">
+  <button id="playBtn">▶</button>
+  <select id="speedSel"></select>
+  <label><input id="loopChk" type="checkbox" checked>循环</label>
+</div>
+
+<div id="metaBox"></div>
+
+<div id="bottom">
+  <span>时间轴</span>
+  <input id="slider" type="range" min="0" max="0" value="0">
+  <span style="color:#78909c">空格=播/停 ←→=帧 Shift=×10</span>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="human_replay_lib.js"></script>
+<script src="replay.js"></script>
+</body>
+</html>
