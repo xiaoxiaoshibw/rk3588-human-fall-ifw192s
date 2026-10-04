@@ -81,6 +81,7 @@
       <label>点大小 <input type="range" id="ptSize" min="0.5" max="5" step="0.1" value="1.8" style="vertical-align:middle;width:90px"></label>
       <label>缩放 <input type="range" id="camZoom" min="0.5" max="3" step="0.1" style="vertical-align:middle;width:70px"></label>
       <label>旋转 <input type="range" id="camRot" min="0.5" max="3" step="0.1" style="vertical-align:middle;width:70px"></label>
+      <label title="右键拖动平移的速度">平移 <input type="range" id="camPan" min="0.5" max="3" step="0.1" style="vertical-align:middle;width:70px"></label>
       <label title="内部渲染分辨率比例，窗口大/高分屏卡顿时调低">分辨率 <input type="range" id="renderScale" min="0.4" max="1" step="0.05" value="1" style="vertical-align:middle;width:70px"></label>
       <button id="btnFit" title="R 键">复位视角</button>
       <button id="btnFront" title="T 键：雷达正视图（俯视 +X）">正视图</button>
@@ -488,12 +489,15 @@ function applyCamSpeed() {
   if (!controls) return;
   controls.zoomSpeed = parseFloat($("camZoom").value);
   controls.rotateSpeed = parseFloat($("camRot").value);
+  controls.panSpeed = parseFloat($("camPan").value);
 }
 $("camZoom").value = storeGet("hf_cam_zoom") || "1.0";
 $("camRot").value = storeGet("hf_cam_rot") || "1.0";
+$("camPan").value = storeGet("hf_cam_pan") || "1.0";
 applyCamSpeed();
 $("camZoom").oninput = () => { applyCamSpeed(); storeSet("hf_cam_zoom", $("camZoom").value); };
 $("camRot").oninput = () => { applyCamSpeed(); storeSet("hf_cam_rot", $("camRot").value); };
+$("camPan").oninput = () => { applyCamSpeed(); storeSet("hf_cam_pan", $("camPan").value); };
 /* 渲染分辨率：降内部分辨率省 GPU（窗口大/4K 屏时明显），CSS 仍全屏拉伸。 */
 $("renderScale").value = String(window.__renderScale);
 $("renderScale").oninput = () => {
