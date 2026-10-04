@@ -79,7 +79,11 @@
     <div id="hfBanner">几何模式 · 未标定/未验收不产生 confirmed</div>
     <div class="tools">
       <label>点大小 <input type="range" id="ptSize" min="0.5" max="5" step="0.1" value="1.8" style="vertical-align:middle;width:90px"></label>
-      <button id="btnFit">复位视角</button>
+      <label>缩放 <input type="range" id="camZoom" min="0.5" max="3" step="0.1" style="vertical-align:middle;width:70px"></label>
+      <label>旋转 <input type="range" id="camRot" min="0.5" max="3" step="0.1" style="vertical-align:middle;width:70px"></label>
+      <label title="内部渲染分辨率比例，窗口大/高分屏卡顿时调低">分辨率 <input type="range" id="renderScale" min="0.4" max="1" step="0.05" value="1" style="vertical-align:middle;width:70px"></label>
+      <button id="btnFit" title="R 键">复位视角</button>
+      <button id="btnFront" title="T 键：雷达正视图（俯视 +X）">正视图</button>
     </div>
   </div>
   <aside>
@@ -333,7 +337,10 @@ let intens = new Float32Array(MAX_POINTS);
 
 try {
   renderer = new THREE.WebGLRenderer({ canvas: $("gl"), antialias: false });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  /* 渲染分辨率 = 设备DPR × 用户缩放。窗口越大 GPU 负载越大（逐点填充率受限），
+   * 允许降到 0.5 把内部渲染分辨率砍半，CSS 仍撑满窗口（浏览器拉伸）。 */
+  window.__renderScale = parseFloat(storeGet("hf_render_scale") || "1.0") || 1.0;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2) * window.__renderScale);
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0b0e14);
   camera = new THREE.PerspectiveCamera(55, 1, 0.05, 2000);
@@ -465,7 +472,35 @@ function fitView() {
   dirty3d = true;
 }
 $("btnFit").onclick = fitView;
+/* human_fall.js 的 hfFrontView/hfResetView 是权威实现；按钮兜底：库未加载就 inline。*/
+$("btnFront").onclick = () => {
+  if (typeof window.hfFrontView === "function") { window.hfFrontView(); return; }
+  if (no3d) return;
+  camera.up.set(0, 0, 1);
+  camera.position.set(-6, 0, 1.6);
+  controls.target.set(5, 0, 1.0);
+  controls.update();
+  dirty3d = true;
+};
 $("ptSize").oninput = e => { if (material) { material.size = parseFloat(e.target.value); dirty3d = true; } };
+/* 相机速度：可自调并持久化（缩放/旋转影响的是手感，不参与任何回传）。 */
+function applyCamSpeed() {
+  if (!controls) return;
+  controls.zoomSpeed = parseFloat($("camZoom").value);
+  controls.rotateSpeed = parseFloat($("camRot").value);
+}
+$("camZoom").value = storeGet("hf_cam_zoom") || "1.0";
+$("camRot").value = storeGet("hf_cam_rot") || "1.0";
+applyCamSpeed();
+$("camZoom").oninput = () => { applyCamSpeed(); storeSet("hf_cam_zoom", $("camZoom").value); };
+$("camRot").oninput = () => { applyCamSpeed(); storeSet("hf_cam_rot", $("camRot").value); };
+/* 渲染分辨率：降内部分辨率省 GPU（窗口大/4K 屏时明显），CSS 仍全屏拉伸。 */
+$("renderScale").value = String(window.__renderScale);
+$("renderScale").oninput = () => {
+  window.__renderScale = parseFloat($("renderScale").value) || 1.0;
+  storeSet("hf_render_scale", $("renderScale").value);
+  if (renderer) { renderer.setPixelRatio(Math.min(devicePixelRatio, 2) * window.__renderScale); resize3d(); }
+};
 
 /* ---------- IMU 曲线（环形缓冲 + rAF 节流重绘） ---------- */
 const IMU_N = 512;
@@ -830,7 +865,11 @@ $("url").value = storeGet("lidar_ws_url") ||
 function loop() {
   requestAnimationFrame(loop);
   if (imuDirty) { imuDirty = false; drawImu("gyro", gyroBuf); drawImu("accel", accelBuf); }
-  if (dirty3d && !no3d) { dirty3d = false; controls.update(); renderer.render(scene, camera); }
+  if (dirty3d && !no3d) {
+    dirty3d = false;
+    controls.update();
+    renderer.render(scene, camera);
+  }
 }
 resize3d(); fitCanvases();
 if (location.protocol === "file:") log("提示：本地文件方式打开，直接点连接即可");

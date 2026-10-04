@@ -438,7 +438,9 @@
     }
   }
 
-  /* ---- 3D boxes ---- */
+  /* ---- 3D boxes（对象池：复用 LineSegments，消失的候选超龄后移除并 dispose，防 scene 无限增长） ---- */
+  var HF_BOX_MAX = 20;          /* 活框上限（远多于实际候选数，仅为保险） */
+  var HF_BOX_STALE_MS = 2000;   /* 候选消失后保留这么久再删（容忍短暂漏帧） */
   var hfBoxes = { cand: {}, target: null }, hfBoxGroup = null;
   if (!no3d && scene) { hfBoxGroup = new THREE.Group(); scene.add(hfBoxGroup); }
   function hfBoxGeometry() {
@@ -458,7 +460,32 @@
     var line = new THREE.LineSegments(hfBoxGeometry(), mat);
     line.frustumCulled = false;
     if (hfBoxGroup) hfBoxGroup.add(line);
-    return { line: line, mat: mat };
+    return { line: line, mat: mat, lastSeen: hfNow() };
+  }
+  function hfDropBox(id) {
+    var b = hfBoxes.cand[id];
+    if (!b) return;
+    if (hfBoxGroup) hfBoxGroup.remove(b.line);
+    b.line.geometry.dispose();
+    b.mat.dispose();
+    delete hfBoxes.cand[id];
+  }
+  /* 每帧清理：超龄的隐藏框真正移出 scene；同时兜底总量上限（删最老的）。 */
+  function hfPruneBoxes(now) {
+    var ids = Object.keys(hfBoxes.cand), i, b;
+    for (i = 0; i < ids.length; i++) {
+      b = hfBoxes.cand[ids[i]];
+      if (!b.line.visible && (now - b.lastSeen) > HF_BOX_STALE_MS) hfDropBox(ids[i]);
+    }
+    ids = Object.keys(hfBoxes.cand);
+    while (ids.length > HF_BOX_MAX) {
+      var oldest = ids[0];
+      for (i = 1; i < ids.length; i++) {
+        if (hfBoxes.cand[ids[i]].lastSeen < hfBoxes.cand[oldest].lastSeen) oldest = ids[i];
+      }
+      hfDropBox(oldest);
+      ids = Object.keys(hfBoxes.cand);
+    }
   }
   function hfPlace(box, min, max, color) {
     box.mat.color.setHex(color);
@@ -526,6 +553,7 @@
       for (var i = 0; i < snap.candidates.length; i++) {
         var c = snap.candidates[i];
         if (!hfBoxes.cand[c.candidate_id]) hfBoxes.cand[c.candidate_id] = hfMakeBox();
+        hfBoxes.cand[c.candidate_id].lastSeen = hfNow();
         hfPlace(hfBoxes.cand[c.candidate_id], c.bbox_source_min_m, c.bbox_source_max_m, 0xffd24a);
         var rm = (c.range_m && HF.isNum(c.range_m.median)) ? c.range_m.median.toFixed(2) : "?";
         boxes.push({ box: hfBoxes.cand[c.candidate_id], min: c.bbox_source_min_m,
@@ -535,6 +563,7 @@
     var liveIds = {};
     if (snap) for (var j = 0; j < snap.candidates.length; j++) liveIds[snap.candidates[j].candidate_id] = true;
     for (var id in hfBoxes.cand) if (!liveIds[id]) hfBoxes.cand[id].line.visible = false;
+    hfPruneBoxes(hfNow());
 
     var target = null;
     var s = hf.lastState, stFresh = s && hfFresh(hf.lastStateRxMs);
