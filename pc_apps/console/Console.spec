@@ -7,8 +7,9 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[('console.html', '.'), ('console_icon.png', '.'),
-           (r'D:\Code\ldiar\pc_apps\human_replay', 'human_replay')],
-    hiddenimports=['json', 'urllib.request', 'webbrowser'],
+           ('../human_replay', 'human_replay')],
+    # Workbench Python sources remain in datas: their real bytes are version-hashed at run time.
+    hiddenimports=['json', 'urllib.request', 'webbrowser', 'numpy', 'numpy.linalg', 'uuid', 'zipfile'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

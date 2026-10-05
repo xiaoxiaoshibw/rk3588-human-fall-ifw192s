@@ -20,7 +20,24 @@ import webview
 
 # PyInstaller onefile 解压目录优先（console.html / human_replay 被打进 exe）
 HERE = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
-PAGE = os.path.join(HERE, "console.html")
+
+
+def _shell_url(port):
+    """壳页 URL：相对路径由 pywebview 内置本地 http 服务供给 WebView2。
+
+    不能用 file:// + 查询串：WebView2 会把 '?' 百分号编码进文件名去找，
+    直接 ERR_FILE_NOT_FOUND（2026-10-05 实测）。
+    """
+    return "console.html?replay_port=%d" % port
+
+
+def _replay_dir():
+    """human_replay 目录：冻结时在 _MEIPASS 下；源码运行时与 console/ 平级（pc_apps/）。"""
+    for d in (os.path.join(HERE, "human_replay"),
+              os.path.join(os.path.dirname(HERE), "human_replay")):
+        if os.path.isfile(os.path.join(d, "human_replay_lib.py")):
+            return d
+    return os.path.join(HERE, "human_replay")
 
 
 def _start_replay_server():
@@ -28,15 +45,34 @@ def _start_replay_server():
 
     不用其 main()：main 会 webbrowser.open 弹浏览器，而服务由控制台 iframe 消费。
     """
-    sys.path.insert(0, os.path.join(HERE, "human_replay"))
-    m = runpy.run_path(os.path.join(HERE, "human_replay", "human_replay_lib.py"))
-    # 冻结时数据根不在 _MEIPASS（解压目录），改指 exe 工作目录下的 captures/remote
+    replay_dir = _replay_dir()
+    sys.path.insert(0, replay_dir)
+    m = runpy.run_path(os.path.join(replay_dir, "human_replay_lib.py"))
+    # 仓内 exe 与源码共用捕获目录；移动版的数据放 exe 旁，不依赖快捷方式 cwd。
     if getattr(sys, "frozen", False):
-        m["C"].DEST_ROOT = os.path.join(os.getcwd(), "captures", "remote")
+        m["C"].DEST_ROOT = _frozen_capture_root()
     os.makedirs(m["C"].DEST_ROOT, exist_ok=True)
-    srv = m["ThreadingHTTPServer"](("127.0.0.1", m["PORT"]), m["Handler"])
+    try:
+        srv = m["ThreadingHTTPServer"](("127.0.0.1", m["PORT"]), m["Handler"])
+    except OSError:
+        # An existing console/replay instance may own 8901; keep each instance's code/data together.
+        srv = m["ThreadingHTTPServer"](("127.0.0.1", 0), m["Handler"])
     threading.Thread(target=srv.serve_forever, daemon=True).start()
-    print("human_replay 服务 http://127.0.0.1:%d/（随控制台退出）" % m["PORT"])
+    print("human_replay 服务 http://127.0.0.1:%d/（随控制台退出）" % srv.server_address[1])
+    return srv.server_address[1]
+
+
+def _frozen_capture_root():
+    exe_dir = os.path.dirname(os.path.abspath(sys.executable))
+    root = exe_dir
+    while True:
+        if (os.path.isfile(os.path.join(root, "pc_apps", "human_replay", "human_replay_lib.py"))
+                and os.path.isdir(os.path.join(root, "captures", "remote"))):
+            return os.path.join(root, "captures", "remote")
+        parent = os.path.dirname(root)
+        if parent == root:
+            return os.path.join(exe_dir, "captures", "remote")
+        root = parent
 
 
 def _suppress_edge_save_bubble():
@@ -64,11 +100,11 @@ if __name__ == "__main__":
         import multiprocessing
         multiprocessing.freeze_support()
 
-    _start_replay_server()
+    replay_port = _start_replay_server()
     _suppress_edge_save_bubble()
     webview.create_window(
         "总控制台",
-        PAGE,
+        _shell_url(replay_port),
         width=1440, height=900,
         min_size=(900, 600),
     )
