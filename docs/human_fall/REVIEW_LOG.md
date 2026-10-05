@@ -707,3 +707,11 @@ R1将数值平面PASS当作地面完成的判断错误已纠正。用户要求�
 ## 2026-10-05 GL-V01 R2 Luka 收口附记 / 转发镜像同步
 
 R2 算法与验收表保持 Codex 提交原文不改。本附记只补本轮外部发现：`dist/Console.exe` 与 `dist/hr02_offline/Console.exe` 以及桌面 `LiDAR_Console.zip` 在 R2 打包后仍指向 R1 SHA 559383E7…，且当时有两个 hr02_offline 旧实例运行中并锁住旧 exe。已在停止外部驻留进程后同步全部为 R2 SHA C8F34A5E…，zip 重打包只替换内嵌 exe、其余沿用原内容；历史 `dist/gl_v01/`、`dist/gl_w01/` 按 GL-W01 附记保持。来源不明的桌面 `LiDAR_Console_20261005.zip` 不动。所有原文/原 SHA 在 [18_console_sync.json](evidence/2026-10-05_gl_v01_r2/18_console_sync.json)、[21_closeout_luka.md](evidence/2026-10-05_gl_v01_r2/21_closeout_luka.md)。场景位置独立对照摘要 [20_target_plane_summary.json](evidence/2026-10-05_gl_v01_r2/20_target_plane_summary.json)。
+
+## 2026-10-05 HF-12 感知链前置滤波降噪 / 指定OpenCode独立复审 / 软件PASS
+
+用户本轮明确“你负责独立复审”。复审会话未参与 HF-12 实现；审者模型/提供方与写者同为 `opencode-go/deepseek-v4.1-flash`（独立会话、全部结论来自本会话复跑；独立性限制如实记录，是否可接受由用户/Codex 裁定）。唯一 [HF12_ACCEPTANCE.md](HF12_ACCEPTANCE.md) v1：**H01–H06/R01/S01 独立复审 PASS，D01 NOT_RUN，无软件返工项，不自行 ACCEPTED。**
+
+复核要点：HEAD/无暂存未变，改前基线 SHA 经验证等于 HEAD blob（lidar_candidates `447E4003…`、perception `70C8F04B…`），8 个最终产物 SHA256 本会话重算与 FINAL 快照逐一相等；新测试 16/16、全量 504/504 复跑 OK（改前 488 对照）；独立 30/30 边界（HEAD 剥离新增键后默认关闭输出逐 JSON 相等、稠密/回退路径对暴力体素计数逐点相等、高度带/背景顺序反例、校验负例与旧 settings 回灌）；探针计数 59668/176/58963/174 与作者证据逐项一致（计时受负载影响不作性能结论）；v1 缺陷复现 [6,6,3]/[T,T,T] 复跑保留；两被审文件 diff 仅意图内 hunk。
+
+观察（非阻断）：体素计数为精确半径邻域的超集（0.19 m@r=0.1 可计入，半径内绝无漏计）；极小半径运行时有界守卫（2^20 回退上限）；`radius=True/None` 沿用既有 `_POSITIVE` 转换风格。合成/桌面范围，板端与真实数据保持 NOT_RUN。完整报告与全部日志：[evidence/2026-10-05_hf12_r1/opencode_review_01/00_review.md](evidence/2026-10-05_hf12_r1/opencode_review_01/00_review.md)。作者保持停写；验收表结果列与 WORKFLOW 顶部指针由用户/Codex 决定是否同步。

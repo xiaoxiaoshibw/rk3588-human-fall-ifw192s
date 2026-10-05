@@ -1,0 +1,74 @@
+﻿## HF-12 independent review scope @ 2026-10-05T21:49:10.3418538+08:00
+## python
+3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+numpy 1.26.4
+## git rev-parse HEAD
+0d5ab424f073444b2acb7230fdee805572183894
+## git log -1
+0d5ab424f073444b2acb7230fdee805572183894 鏀舵暃鎬у叆搴擄細HF/GL 鍏ㄦ祦绋嬫枃妗?human_fall_detection ROS鍖?閲囬泦閾捐矾+鍥炴斁/閰嶅钩/楠岃瘉/鎺у埗鍙癠I+v1/R2鑷姩鍦伴潰+ignore瑙勫垯
+## git diff --cached --stat (expect empty)
+## git status --short
+ M docs/human_fall/WORKFLOW.md
+ M docs/human_fall/evidence/2026-10-05_agl_b_r1/11_regression_after_b.txt
+ M docs/human_fall/evidence/2026-10-05_gl_floor_diag_r1/06_analyze_floor_sheet.py
+ M docs/human_fall/tickets/INDEX.md
+ M pc_apps/human_replay/LEVELING_README.md
+ M pc_apps/human_replay/human_detect.html
+ M pc_apps/human_replay/human_detect.js
+ M pc_apps/human_replay/human_replay_lib.py
+ M pc_apps/human_replay/leveling.py
+ M pc_apps/human_replay/validation.py
+ M src/CMakeLists.txt
+ M src/human_fall_detection/config/perception.yaml
+ M src/human_fall_detection/core/lidar_candidates.py
+?? .mirasim/
+?? ML/
+?? docs/human_fall/GLS01_ACCEPTANCE.md
+?? docs/human_fall/GLS02_ACCEPTANCE.md
+?? docs/human_fall/HF12_ACCEPTANCE.md
+?? docs/human_fall/evidence/2026-10-05_agl_b_r1/30_scope_check.txt
+?? docs/human_fall/evidence/2026-10-05_agl_c_r1/
+?? docs/human_fall/evidence/2026-10-05_agl_d_r1/
+?? docs/human_fall/evidence/2026-10-05_agl_e_r1/
+?? docs/human_fall/evidence/2026-10-05_gl_floor_diag_r1/07_sheet_v2.log
+?? docs/human_fall/evidence/2026-10-05_gl_floor_diag_r1/08_sheet_v2.json
+?? docs/human_fall/evidence/2026-10-05_gl_floor_diag_r1/09_sheet_v2_summary.md
+?? docs/human_fall/evidence/2026-10-05_gl_s01_r1/
+?? docs/human_fall/evidence/2026-10-05_gl_s02_r1/
+?? docs/human_fall/evidence/2026-10-05_hf12_r1/
+?? docs/human_fall/returns/GL-B.md
+?? docs/human_fall/returns/GL-C.md
+?? docs/human_fall/returns/GL-D.md
+?? docs/human_fall/returns/GL-E.md
+?? docs/human_fall/returns/GL-S01.md
+?? docs/human_fall/returns/GL-S02.md
+?? docs/human_fall/returns/HF-12.md
+?? docs/human_fall/tickets/GL-S01_floor_sheet_v2.md
+?? docs/human_fall/tickets/GL-S02_fine_roi_selection.md
+?? docs/human_fall/tickets/HF-12_point_denoise.md
+?? pc_apps/human_replay/floor_roi.py
+?? pc_apps/human_replay/floor_roi_test.py
+?? pc_apps/human_replay/floor_sheet.py
+?? pc_apps/human_replay/floor_sheet_test.py
+?? pc_apps/human_replay/human_pipe_lib.js
+?? pc_apps/human_replay/human_pipe_lib.test.js
+?? src/human_fall_detection/core/adaptive_ground/consensus.py
+?? src/human_fall_detection/core/adaptive_ground/controller.py
+?? src/human_fall_detection/core/adaptive_ground/temporal.py
+?? src/human_fall_detection/core/adaptive_ground/transform.py
+?? src/human_fall_detection/tests/test_agl_c_consensus.py
+?? src/human_fall_detection/tests/test_agl_d_controller.py
+?? src/human_fall_detection/tests/test_agl_e_offline.py
+?? src/human_fall_detection/tests/test_hf12_denoise.py
+?? "\346\226\207\346\241\243\346\224\266\351\233\206\357\274\210\344\272\272\345\267\245\357\274\211/"
+## current SHA256
+F0647DC25F30B899979CD77414745FA29BBB8912709DB9E00ED70784EA6BAEB0  src\human_fall_detection\core\lidar_candidates.py
+BE5EC6D752515554EF680696578C0BD4F48FA5547C77B97114FCD707F97DFE01  src\human_fall_detection\config\perception.yaml
+115E6C032B533E11B251C3867E2E3F1928D5F23A20D017775E540CBA8A00CAF1  src\human_fall_detection\tests\test_hf12_denoise.py
+962981B926F84C57EE8C94101E274D4B7C54CA10B52D49C15AD5A8DAA4B9F73E  docs\human_fall\HF12_ACCEPTANCE.md
+392D6F32A7773529D2AC7664FA6CB9FF9CA722DAC2865A535423DC632FA9D9C6  docs\human_fall\tickets\HF-12_point_denoise.md
+E0AFF220EC32D64813F62A862C5E7446D498B2A00438482DBC87B3200CF6AC60  docs\human_fall\returns\HF-12.md
+18637A2433AB82BF8AD72F9FB88932D473004A1A073F60010C2ED04B18A371AA  docs\human_fall\WORKFLOW.md
+806E34D2AE0C029BEFFF5C4C0C72826E0EA7C1EF57EB8E71660D6246ABC48962  docs\human_fall\tickets\INDEX.md
+## HEAD baseline perception.yaml SHA256 (expect writer 70C8F04B...)
+70C8F04B635AE08DE8577BE9EE983F59D78560E9EDBD96849700BBCF0AED3211  (git show HEAD:src/human_fall_detection/config/perception.yaml)

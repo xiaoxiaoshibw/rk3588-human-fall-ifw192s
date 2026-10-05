@@ -1,0 +1,104 @@
+﻿python : ..................................................................refusing to overwrite existing file C:\Users
+\30680\AppData\Local\Temp\tmp6975ijdi\geometry.json: write a new version name instead
+所在位置 行:2 字符: 1
++ python -B -W error -m unittest discover -s src/human_fall_detection/t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (..................on name instead:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+--ground-derived needs a valid constrained ground and an explicit --reference-axis X Y Z
+.......................................................................................................................
+.......................gli02 candidate refused: constrained fit refused: up_axis is required
+gli02 candidate refused: at least three validation_regions are required
+.gli02 candidate refused: output already exists: C:\Users\30680\AppData\Local\Temp\gli02-grcp331s\t3.json
+..gli02 input refused: input is not an adapted capture-input NPZ; the legacy route is not available here: C:\Users\3068
+0\AppData\Local\Temp\gli02-5c6025p1\legacy.npz
+gli02 input refused: adapted NPZ must contain exactly points and input_manifest, got ['extra', 'input_manifest', 'point
+s']
+.output already exists: C:\Users\30680\AppData\Local\Temp\gli02-684j3yf1\template.json
+.....gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: while parsing a flow node
+expected the node content, but found '<stream end>'
+  in "C:\Users\30680\AppData\Local\Temp\gli02-cqgxlx16\syntax.yaml", line 1, column 22
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: unknown constrained ground setting: unknown
+gli02 candidate refused: constrained config refused: spatial_cell_m must be a finite number
+gli02 candidate refused: constrained config refused: spatial_cell_m must be finite
+gli02 candidate refused: constrained config refused: spatial_cell_m must be finite
+gli02 candidate refused: constrained config refused: spatial_cell_m must be a positive number
+gli02 candidate refused: constrained config refused: max_points_per_cell must be an integer
+gli02 candidate refused: constrained config refused: min_inliers must be >= 100
+gli02 candidate refused: constrained config refused: int too large to convert to float
+gli02 candidate refused: constrained config refused: [Errno 2] No such file or directory: 'C:\\Users\\30680\\AppData\\L
+ocal\\Temp\\gli02-cqgxlx16\\absent.yaml'
+gli02 candidate refused: constrained config refused: [Errno 2] No such file or directory: ''
+gli02 candidate refused: constrained config refused: [Errno 13] Permission denied: 'C:\\Users\\30680\\AppData\\Local\\T
+emp\\gli02-cqgxlx16'
+gli02 candidate refused: constrained config refused: 'utf-8' codec can't decode byte 0xff in position 0: invalid start 
+byte
+..gli02 candidate refused: constrained config requires PyYAML: import of yaml halted; None in sys.modules
+gli02 candidate refused: constrained config refused: PyYAML is required
+..gli02 candidate refused: output already exists: C:\Users\30680\AppData\Local\Temp\gli02-7j9gqnof\variant.json
+.gli02 candidate refused: constrained fit refused: up_axis is required
+gli02 candidate refused: CLI frame 'other' disagrees with the adapted manifest frame 'innolidar'
+.GL-I04 diagnostic refused: constrained config refused: seed must be an integer
+.GL-I04 diagnostic refused: output must be outside capture and production package
+GL-I04 diagnostic refused: CLI frame 'wrong' disagrees with the adapted manifest frame 'innolidar'
+GL-I04 diagnostic refused: failed calculation
+GL-I04 diagnostic refused: adapted NPZ must contain exactly points and input_manifest, got ['points']
+GL-I04 diagnostic refused: source points.bin changed since adaptation
+.GL-I04 diagnostic refused: exclusive output directory already exists
+.GL-I04 diagnostic refused: unsupported draft schema/kind
+GL-I04 diagnostic refused: unsupported draft schema/kind
+GL-I04 diagnostic refused: unsupported draft schema/kind
+GL-I04 diagnostic refused: explicit reviewed draft required
+GL-I04 diagnostic refused: up_axis must be a unit vector (norm 2.000000)
+GL-I04 diagnostic refused: sensor_height_interval_m low must be below high
+GL-I04 diagnostic refused: draft source mismatch: frame
+GL-I04 diagnostic refused: draft source mismatch: units
+GL-I04 diagnostic refused: draft source mismatch: meta_sha256
+GL-I04 diagnostic refused: draft source mismatch: bin_sha256
+GL-I04 diagnostic refused: draft source mismatch: manifest_points_sha256
+GL-I04 diagnostic refused: draft source mismatch: time_domain
+GL-I04 diagnostic refused: validation region v1 shares a source frame with the fit set
+GL-I04 diagnostic refused: region x_min_m must be a finite number
+GL-I04 diagnostic refused: all four diagnostic regions must be fixed spatial boxes
+GL-I04 diagnostic refused: unique nonempty box ids required
+.......................................................................................................................
+.......................................................................................................................
+........................................
+----------------------------------------------------------------------
+Ran 504 tests in 69.772s
+
+OK
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\tmp6975ijdi\\geometry.json", "constrained": true, "status": "valid", "reason": null, "points": 3900, "sensor_height_m": 1.2000999432716293, "sampled_fit_count": 2908, "iterations": 861, "candidates": 2, "ground_derived_id": "gd_2af34943fa0a643f"}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-a2jezfdx\\candidate.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-grcp331s\\t3.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-il2820ap\\synthetic.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-il2820ap\\capture_export.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "capture_export", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"draft_out": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-684j3yf1\\template.json", "status": "pending_human_review"}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-do2f7lcv\\t7.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-32q5xkc9\\default.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-32q5xkc9\\frozen.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"draft_out": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-jsqfgxcb\\blank.json", "status": "pending_human_review"}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-0rtwjj5n\\without_yaml_default.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-ax18cb92\\first.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-ax18cb92\\reloaded.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-7j9gqnof\\variant.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output_dir": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-xdq7tokb\\one", "kind": "gli04_geometry_diagnostic", "physical_verified": false, "box_frame_records": 28, "sidecar_count": 2920}
+{"output_dir": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-xdq7tokb\\two", "kind": "gli04_geometry_diagnostic", "physical_verified": false, "box_frame_records": 28, "sidecar_count": 2920}
+wrote C:\Users\30680\AppData\Local\Temp\tmptec09c47\interrupted.manifest.json
+bag re-read ok: 5 messages, duration 8.0 s
+  /innolidar_points 5 messages
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\tmp_ix3t2gc\\geometry.json", "status": "invalid", "reason": "ground_points_insufficient", "points": 4000, "sensor_height_m": null, "tilt_rad": null}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\tmpq8cu2u1f\\geometry.json", "status": "valid", "reason": null, "points": 6000, "sensor_height_m": 1.3500174455562817, "tilt_rad": 1.9712242579581453e-05}
+wrote C:\Users\30680\AppData\Local\Temp\tmp7mp1725f\a.json
+wrote C:\Users\30680\AppData\Local\Temp\tmp7mp1725f\b.json
+wrote C:\Users\30680\AppData\Local\Temp\tmpmc3n89ox\a.json (no_data)
+wrote C:\Users\30680\AppData\Local\Temp\tmpmc3n89ox\b.json (no_data)
+exit=0
+

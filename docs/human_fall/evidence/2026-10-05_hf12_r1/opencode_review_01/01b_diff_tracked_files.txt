@@ -1,0 +1,196 @@
+﻿diff --git a/src/human_fall_detection/config/perception.yaml b/src/human_fall_detection/config/perception.yaml
+index 046bd7f..f45cef7 100644
+--- a/src/human_fall_detection/config/perception.yaml
++++ b/src/human_fall_detection/config/perception.yaml
+@@ -7,6 +7,14 @@ candidates:
+   range_max_m: 8.0
+   height_min_m: -0.3
+   height_max_m: 2.5
++  # Isolated-point denoise before the ground-dependent height gate, the frozen
++  # background and clustering: keep a point when its radius-sized voxel plus the
++  # 26 neighbours hold >= denoise_min_neighbors points (self included, so 1
++  # keeps everything). Engineering default for field tuning; core
++  # DEFAULT_SETTINGS keeps it disabled so bare/test calls are unchanged.
++  denoise_enabled: true
++  denoise_radius_m: 0.1
++  denoise_min_neighbors: 2
+   voxel_size_m: 0.08
+   cluster_cell_m: 0.25
+   max_points: 60000
+diff --git a/src/human_fall_detection/core/lidar_candidates.py b/src/human_fall_detection/core/lidar_candidates.py
+index 3d2c120..2c0c816 100644
+--- a/src/human_fall_detection/core/lidar_candidates.py
++++ b/src/human_fall_detection/core/lidar_candidates.py
+@@ -50,11 +50,15 @@ DEFAULT_SETTINGS = {
+     "pca_axis_ratio": 2.5,
+     "background_cell_m": 0.1,
+     "background_z_cell_m": 0.1,
++    "denoise_enabled": False,
++    "denoise_radius_m": 0.1,
++    "denoise_min_neighbors": 2,
+ }
+ 
+ _POSITIVE = ("range_max_m", "voxel_size_m", "cluster_cell_m", "max_points",
+              "min_cluster_points", "preferred_cluster_points", "pca_min_points",
+-             "pca_axis_ratio", "background_cell_m", "background_z_cell_m")
++             "pca_axis_ratio", "background_cell_m", "background_z_cell_m",
++             "denoise_radius_m")
+ 
+ 
+ def resolve_settings(settings=None):
+@@ -72,6 +76,14 @@ def resolve_settings(settings=None):
+     resolved["min_cluster_points"] = int(resolved["min_cluster_points"])
+     resolved["preferred_cluster_points"] = int(resolved["preferred_cluster_points"])
+     resolved["pca_min_points"] = int(resolved["pca_min_points"])
++    if not isinstance(resolved["denoise_enabled"], bool):
++        raise ValueError("denoise_enabled must be true or false")
++    if isinstance(resolved["denoise_min_neighbors"], bool) \
++            or not isinstance(resolved["denoise_min_neighbors"], (int, np.integer)):
++        raise ValueError("denoise_min_neighbors must be an integer")
++    resolved["denoise_min_neighbors"] = int(resolved["denoise_min_neighbors"])
++    if resolved["denoise_min_neighbors"] < 1:
++        raise ValueError("denoise_min_neighbors must be at least 1")
+     for key in ("range_min_m", "height_min_m", "height_max_m"):
+         resolved[key] = float(resolved[key])
+         if not np.isfinite(resolved[key]):
+@@ -213,6 +225,91 @@ def scene_change_fraction(points, background):
+     return float(np.count_nonzero(foreground_mask(array, background)) / len(array))
+ 
+ 
++def denoise_mask(points, radius_m, min_neighbors):
++    """Keep mask for the isolated-point denoise stage (True = keep).
++
++    A point is kept when its ``radius_m``-sized voxel plus the 26 neighbouring
++    voxels hold at least ``min_neighbors`` points including the point itself
++    (``min_neighbors=1`` keeps everything). This is a coarse deterministic
++    radius filter -- candidates are counted per voxel, not by exact pairwise
++    distance -- applied after the finite/range gates so coordinates are
++    bounded. The dense box-sum path is the normal one; the packed-key fallback
++    keeps compute/memory bounded for very small configured radii.
++    """
++    array = np.asarray(points, dtype=np.float64)
++    if array.ndim != 2 or array.shape[1] != 3:
++        raise ValueError("points must be an (N,3) array")
++    radius = float(radius_m)
++    if not np.isfinite(radius) or radius <= 0.0:
++        raise ValueError("radius_m must be a positive finite number")
++    if isinstance(min_neighbors, bool) \
++            or not isinstance(min_neighbors, (int, np.integer)):
++        raise ValueError("min_neighbors must be an integer")
++    min_neighbors = int(min_neighbors)
++    if min_neighbors < 1:
++        raise ValueError("min_neighbors must be at least 1")
++    if not len(array):
++        return np.zeros(0, dtype=bool)
++    cells = np.floor(array / radius).astype(np.int64)
++    low = cells.min(axis=0)
++    span = cells.max(axis=0) - low + 1
++    if int(span[0]) * int(span[1]) * int(span[2]) <= _DENSE_CELL_LIMIT:
++        total = _dense_neighbour_counts(cells, low, span)
++    else:
++        total = _packed_neighbour_counts(cells, low, span)
++    return total >= min_neighbors
++
++
++_DENSE_CELL_LIMIT = 8000000  # int32 dense grid cap (~32 MiB transient)
++
++
++def _dense_neighbour_counts(cells, low, span):
++    """27-cell counts via a separable [1,1,1] box sum on a dense int32 grid."""
++    shape = (int(span[0]), int(span[1]), int(span[2]))
++    ids = ((cells[:, 0] - low[0]) * shape[1] + (cells[:, 1] - low[1])) \
++        * shape[2] + (cells[:, 2] - low[2])
++    counts = np.bincount(ids, minlength=shape[0] * shape[1] * shape[2])
++    grid = counts.reshape(shape).astype(np.int32)
++    for axis in (0, 1, 2):
++        n = shape[axis]
++        moved = grid.copy()
++        head = [slice(None)] * 3
++        tail = [slice(None)] * 3
++        head[axis] = slice(0, n - 1)
++        tail[axis] = slice(1, n)
++        moved[tuple(tail)] += grid[tuple(head)]
++        moved[tuple(head)] += grid[tuple(tail)]
++        grid = moved
++    return grid.reshape(-1)[ids]
++
++
++def _packed_neighbour_counts(cells, low, span):
++    """Fallback above the dense cap: packed int64 keys + 27 searchsorted.
++
++    A digit base larger than every axis span keeps the 27 shifted keys
++    distinct, and makes an out-of-range neighbour key borrow into a digit value
++    no real cell can occupy, so it can never match a real point.
++    """
++    base = int(span.max()) + 1
++    if base > (1 << 20):
++        raise ValueError("radius_m too small for the point extent")
++    key = ((cells[:, 0] - low[0]) * base + (cells[:, 1] - low[1])) * base \
++        + (cells[:, 2] - low[2])
++    unique, counts = np.unique(key, return_counts=True)
++    stride_x = base * base
++    stride_y = base
++    total = np.zeros(len(key), dtype=np.int64)
++    for dx in (-1, 0, 1):
++        for dy in (-1, 0, 1):
++            for dz in (-1, 0, 1):
++                shifted = key + (dx * stride_x + dy * stride_y + dz)
++                index = np.searchsorted(unique, shifted)
++                index = np.minimum(index, len(unique) - 1)
++                hit = unique[index] == shifted
++                total += np.where(hit, counts[index], 0)
++    return total
++
++
+ def ground_coverage(points, ground):
+     """Fraction of points whose ground projection lies inside the ground region.
+ 
+@@ -583,6 +680,27 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
+ 
+     ranges = np.linalg.norm(array, axis=1) if len(array) else np.zeros(0)
+     keep = (ranges >= resolved["range_min_m"]) & (ranges <= resolved["range_max_m"])
++    array = array[keep]
++    original_indices = original_indices[keep]
++
++    # Pre-level denoise: it runs before the ground-dependent height gate and
++    # before the frozen background so neighbour support never depends on ground
++    # validity and never loses points the background is about to remove. Counts
++    # below are the points entering/leaving this stage (self included).
++    denoise = {"enabled": bool(resolved["denoise_enabled"]),
++               "radius_m": None, "min_neighbors": None,
++               "input_point_count": int(len(array)),
++               "kept_point_count": int(len(array)), "dropped_point_count": 0}
++    if resolved["denoise_enabled"] and len(array):
++        mask = denoise_mask(array, resolved["denoise_radius_m"],
++                            resolved["denoise_min_neighbors"])
++        denoise["radius_m"] = resolved["denoise_radius_m"]
++        denoise["min_neighbors"] = resolved["denoise_min_neighbors"]
++        denoise["kept_point_count"] = int(np.count_nonzero(mask))
++        denoise["dropped_point_count"] = int(len(array) - denoise["kept_point_count"])
++        array = array[mask]
++        original_indices = original_indices[mask]
++
+     # Source-frame guard: a plane fitted in another lidar frame must not filter
+     # this frame's points or label them ground-relative, before any height/ground
+     # field is computed. Without an eligible plane the output is the explicit
+@@ -591,9 +709,9 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
+         else None
+     if basis is not None and len(array):
+         heights = array @ basis[0] + float(ground["offset_m"])
+-        keep &= (heights >= resolved["height_min_m"]) & (heights <= resolved["height_max_m"])
+-    array = array[keep]
+-    original_indices = original_indices[keep]
++        keep = (heights >= resolved["height_min_m"]) & (heights <= resolved["height_max_m"])
++        array = array[keep]
++        original_indices = original_indices[keep]
+ 
+     if background is not None and len(array):
+         fg = foreground_mask(array, background)
+@@ -662,6 +780,7 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
+     quality = {
+         "ground_valid": basis is not None,
+         "background_applied": background is not None,
++        "denoise": denoise,
+         "candidate_count": len(candidates),
+         "input_point_count": int(len(array)),
+         "coverage": ground_coverage(array, ground) if len(array) else

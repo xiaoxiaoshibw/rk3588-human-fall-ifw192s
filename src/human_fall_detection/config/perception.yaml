@@ -7,6 +7,14 @@ candidates:
   range_max_m: 8.0
   height_min_m: -0.3
   height_max_m: 2.5
+  # Isolated-point denoise before the ground-dependent height gate, the frozen
+  # background and clustering: keep a point when its radius-sized voxel plus the
+  # 26 neighbours hold >= denoise_min_neighbors points (self included, so 1
+  # keeps everything). Engineering default for field tuning; core
+  # DEFAULT_SETTINGS keeps it disabled so bare/test calls are unchanged.
+  denoise_enabled: true
+  denoise_radius_m: 0.1
+  denoise_min_neighbors: 2
   voxel_size_m: 0.08
   cluster_cell_m: 0.25
   max_points: 60000

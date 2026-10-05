@@ -1,0 +1,40 @@
+﻿python : test_core_defaults_keep_denoise_disabled (test_hf12_denoise.DefaultsTest.test_core_defaults_keep_denoise_disab
+led) ... ok
+所在位置 行:2 字符: 1
++ python -B -W error -m unittest discover -s src/human_fall_detection/t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_core_defau...isabled) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_default_matches_explicit_off (test_hf12_denoise.DefaultsTest.test_default_matches_explicit_off) ... ok
+test_perception_config_enables_denoise (test_hf12_denoise.DefaultsTest.test_perception_config_enables_denoise) ... ok
+test_empty_single_and_min_neighbors_one (test_hf12_denoise.MaskSemanticsTest.test_empty_single_and_min_neighbors_one) .
+.. ok
+test_mask_validates_parameters (test_hf12_denoise.MaskSemanticsTest.test_mask_validates_parameters) ... ok
+test_neighbouring_cells_support_each_other (test_hf12_denoise.MaskSemanticsTest.test_neighbouring_cells_support_each_ot
+her) ... ok
+test_small_radius_fallback_keeps_counting (test_hf12_denoise.MaskSemanticsTest.test_small_radius_fallback_keeps_countin
+g) ... ok
+test_bad_values_rejected (test_hf12_denoise.SettingsValidationTest.test_bad_values_rejected) ... ok
+test_old_settings_snapshot_without_denoise_keys_round_trips (test_hf12_denoise.SettingsValidationTest.test_old_settings
+_snapshot_without_denoise_keys_round_trips) ... ok
+test_valid_overrides_resolve (test_hf12_denoise.SettingsValidationTest.test_valid_overrides_resolve) ... ok
+test_evidence_indices_map_to_original_points (test_hf12_denoise.SnapshotDenoiseTest.test_evidence_indices_map_to_origin
+al_points) ... ok
+test_isolated_points_dropped_dense_cluster_kept (test_hf12_denoise.SnapshotDenoiseTest.test_isolated_points_dropped_den
+se_cluster_kept) ... ok
+test_min_neighbors_one_keeps_isolated_points (test_hf12_denoise.SnapshotDenoiseTest.test_min_neighbors_one_keeps_isolat
+ed_points) ... ok
+test_order_denoise_precedes_background (test_hf12_denoise.SnapshotDenoiseTest.test_order_denoise_precedes_background) .
+.. ok
+test_order_denoise_precedes_height_gate (test_hf12_denoise.SnapshotDenoiseTest.test_order_denoise_precedes_height_gate)
+ ... ok
+test_snapshot_stays_deterministic_and_strict (test_hf12_denoise.SnapshotDenoiseTest.test_snapshot_stays_deterministic_a
+nd_strict) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.149s
+
+OK
+exit=0
+

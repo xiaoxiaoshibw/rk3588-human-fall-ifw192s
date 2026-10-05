@@ -1,0 +1,37 @@
+﻿python: 3.12.10 numpy: 1.26.4
+PASS H01 HEAD blob == writer pre-change SHA 447E4003...
+PASS H01 default-off current == HEAD after stripping the added keys
+PASS H01 default-off stage is a no-op record
+PASS H02 dense path == brute-force voxel count (r=0.05)
+PASS H02 dense path == brute-force voxel count (r=0.1)
+PASS H02 dense path == brute-force voxel count (r=0.3)
+PASS H02 dense path == brute-force voxel count (r=0.7)
+PASS H02 packed fallback == brute force (span 30 m, r=0.01)
+PASS H02 cross-voxel pair supports, far single dropped
+PASS H02 min_neighbors=1 keeps a single point
+PASS H02 min_neighbors=2 drops a single point
+PASS H02 empty input returns an empty mask
+PASS H02 deterministic over repeated runs
+NOTE documented coarse semantics: two points 0.19 m apart (> 0.1 m radius), adjacent voxels -> [True, True]
+PASS H03 reject denoise_enabled=1
+PASS H03 reject denoise_enabled=True
+PASS H03 reject denoise_radius_m=0.0
+PASS H03 reject denoise_radius_m=nan
+PASS H03 reject denoise_min_neighbors=0
+PASS H03 reject denoise_min_neighbors=True
+PASS H03 reject denoise_min_neighbors=2.5
+PASS H03 reject not_a_setting=1
+PASS H03 np.int64 min_neighbors accepted
+PASS H03 pre-change settings round-trip to defaults
+NOTE radius=None -> TypeError (same float() conversion style as the other positive keys)
+NOTE radius=1e-6 over an extreme extent -> runtime guard: radius_m too small for the point extent (positive finite radii pass resolve_settings; documented bounded fallback)
+PASS H04 denoise precedes the height gate (below-band point supports)
+PASS H04 denoise precedes background removal
+PASS H05 validate_snapshot + deterministic + strict JSON
+PASS H05 evidence indices map to original input points
+PASS H06 quality counts equal the recomputed mask
+PASS H06 perception.yaml resolves to enabled/0.1/2
+PASS H06 disabled stage dropped=0
+checks: 30 failed: 0
+exit=0
+
