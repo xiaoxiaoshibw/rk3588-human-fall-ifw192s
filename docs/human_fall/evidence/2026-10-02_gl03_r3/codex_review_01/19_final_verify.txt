@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\final_verify.py", line 31, in <module>
+    external_new_sha={p:sha(p) for p in submitted['external_concurrent_preserved_not_attributed']['new']},
+                        ^^^^^^
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\final_verify.py", line 9, in sha
+    return hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\lidata_to_replay.py'
+EXIT=1

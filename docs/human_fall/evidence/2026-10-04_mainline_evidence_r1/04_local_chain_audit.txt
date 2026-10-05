@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-04_mainline_evidence_r1\04_local_chain_audit.py", line 75, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-04_mainline_evidence_r1\04_local_chain_audit.py", line 43, in main
+    compare_frames(meta['frames'],observed['frames'],manifest['frames'])
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-04_mainline_evidence_r1\04_local_chain_audit.py", line 25, in compare_frames
+    raise ValueError('frame %d.%s mismatch'%(ordinal,key))
+ValueError: frame 0.bag_time_sec mismatch

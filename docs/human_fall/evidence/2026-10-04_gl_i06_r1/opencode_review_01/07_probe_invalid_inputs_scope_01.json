@@ -1,0 +1,28 @@
+{
+  "invalid_inputs": {
+    "fail_count": 0,
+    "failures": []
+  },
+  "ignored_inputs": {
+    "captures/remote/cap_20261002_163621/meta.json": "ok",
+    "captures/remote/cap_20261002_163621/points.bin": "ok",
+    "docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_candidate.adapted.npz": "ok"
+  },
+  "r0_real": {
+    "observed_real_frames": 89,
+    "real_use": "development WHAT_IF only; not final physical holdout",
+    "physical_verified": false,
+    "refinement_gate_triggered": true,
+    "robust_gate_triggered": false
+  },
+  "model_domain": {
+    "comparison_domain": "fixed raw sequence/sample; W changes with K; full FIT only support",
+    "metric_domain": "full per-event W in variant.W; witnesses field is bounded exact storage subset"
+  },
+  "model": {
+    "K1_full_best": 434,
+    "K2_full_best": 436,
+    "K3_full_best": 438,
+    "K1_W_ne_K2_W": true
+  }
+}

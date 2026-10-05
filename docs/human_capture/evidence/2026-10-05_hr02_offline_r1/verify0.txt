@@ -1,0 +1,38 @@
+Warning: truncated output (original token count: 738)
+Total output lines: 47
+
+
+Traceback (most recent call last):
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 1344, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1338, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1384, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1333, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1093, in _send_output
+    self.send(msg)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1037, in send
+    self.connect()
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1003, in connect
+    self.sock = self._create_connection(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\socket.py", line 865, in create_conn…138 tokens truncated… data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 532, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 1373, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 1347, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [WinError 10061] ����Ŀ�����������ܾ����޷����ӡ�>
+ProcessId CommandLine
+--------- -----------
+    24088 "C:\Users\30680\scoop\apps\python312\current\python.exe" -m PyInstaller --noconfirm --distpath dist/hr02_off…
+    29868 C:\Users\30680\scoop\apps\python312\current\python.exe -m PyInstaller --noconfirm --clean Console.spec

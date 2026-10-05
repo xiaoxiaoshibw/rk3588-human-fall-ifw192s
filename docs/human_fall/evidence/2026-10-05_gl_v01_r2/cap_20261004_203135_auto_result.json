@@ -1,0 +1,179 @@
+{
+  "sid": "cap_20261004_203135",
+  "job_id": "500314ff11484be58f44b3cf11ad033f",
+  "regions": [
+    [
+      1.25,
+      1.5,
+      -0.75,
+      -0.5
+    ],
+    [
+      2.25,
+      2.5,
+      -0.75,
+      -0.5
+    ],
+    [
+      1.0,
+      1.25,
+      -0.25,
+      0.0
+    ],
+    [
+      2.25,
+      2.5,
+      -0.25,
+      0.0
+    ]
+  ],
+  "candidate": {
+    "kind": "lowest_connected_floor_v1",
+    "profile": {
+      "id": "lowest_connected_floor_v1",
+      "voxel_m": 0.1,
+      "cell_m": 0.25,
+      "normal_alignment_min": 0.94,
+      "offset_range_m": [
+        0.8,
+        1.8
+      ],
+      "discovery_band_m": 0.08,
+      "cell_height_span_max_m": 0.18,
+      "cell_floor_gap_max_m": 0.08,
+      "cell_local_rms_max_m": 0.025,
+      "min_points_per_fit_frame": 30,
+      "min_component_cells": 8,
+      "min_component_axis_m": 0.5,
+      "max_discovery_planes": 6
+    },
+    "normal_source": [
+      -0.47850354558941083,
+      -0.025912785541084928,
+      0.8777031869623491
+    ],
+    "offset_source_m": 1.4024270638672056,
+    "pitch_deg": 28.598200160443415,
+    "roll_deg": -1.4848594522608398,
+    "support_ratio": 0.2756843350149134,
+    "discovery_voxels": 17600,
+    "plane_voxels": 1469,
+    "fit_frame_count": 110,
+    "component_cells": 28,
+    "component_area_m2": 1.75,
+    "component_span_m": [
+      2.25,
+      1.25
+    ],
+    "selected_cells": [
+      {
+        "bounds": [
+          1.25,
+          1.5,
+          -0.75,
+          -0.5
+        ],
+        "count": 15760,
+        "min_frame_count": 136,
+        "z_min": -1.3814982728250218,
+        "z_max": -1.2876014236993045,
+        "height_span_m": 0.09389684912571727,
+        "local_rms_m": 0.01407697859311518,
+        "local_normal_z": 0.9980163230685511
+      },
+      {
+        "bounds": [
+          2.25,
+          2.5,
+          -0.75,
+          -0.5
+        ],
+        "count": 4525,
+        "min_frame_count": 39,
+        "z_min": -1.3266404638561262,
+        "z_max": -1.2740771212317648,
+        "height_span_m": 0.052563342624361464,
+        "local_rms_m": 0.007157060862300397,
+        "local_normal_z": 0.9928276846346612
+      },
+      {
+        "bounds": [
+          1.0,
+          1.25,
+          -0.25,
+          0.0
+        ],
+        "count": 20744,
+        "min_frame_count": 178,
+        "z_min": -1.3990031828821778,
+        "z_max": -1.253872638679004,
+        "height_span_m": 0.14513054420317384,
+        "local_rms_m": 0.01477314245624391,
+        "local_normal_z": 0.9969155201354076
+      },
+      {
+        "bounds": [
+          2.25,
+          2.5,
+          -0.25,
+          0.0
+        ],
+        "count": 5111,
+        "min_frame_count": 42,
+        "z_min": -1.3417262179104323,
+        "z_max": -1.2521315674332334,
+        "height_span_m": 0.08959465047719894,
+        "local_rms_m": 0.007390833748460302,
+        "local_normal_z": 0.9997950369842243
+      }
+    ],
+    "full_height_preserved": true,
+    "uses_manual_reference": false,
+    "basis": "lowest horizontal connected sheet; full-height obstacle rejection; four interior patches; FIT frames only"
+  },
+  "recommended": "tls",
+  "artifacts": [
+    "tls",
+    "svd",
+    "ransac"
+  ],
+  "estimators": {
+    "tls": {
+      "valid": true,
+      "reject_reasons": [],
+      "full": {
+        "count": 46140,
+        "rms_m": 0.01436693721395985,
+        "p95_m": 0.028944392306423393,
+        "support_ratio": 0.999393151278717,
+        "median_signed_m": -0.00033383275929665945,
+        "status": "PASS"
+      }
+    },
+    "svd": {
+      "valid": true,
+      "reject_reasons": [],
+      "full": {
+        "count": 46140,
+        "rms_m": 0.01436693721395985,
+        "p95_m": 0.028944392306423383,
+        "support_ratio": 0.999393151278717,
+        "median_signed_m": -0.0003338327592964374,
+        "status": "PASS"
+      }
+    },
+    "ransac": {
+      "valid": true,
+      "reject_reasons": [],
+      "full": {
+        "count": 46140,
+        "rms_m": 0.014789750594524042,
+        "p95_m": 0.0298169174757208,
+        "support_ratio": 0.9995231902904205,
+        "median_signed_m": 0.00015812542192339407,
+        "status": "PASS"
+      }
+    }
+  },
+  "seconds": 23.062000000001717
+}

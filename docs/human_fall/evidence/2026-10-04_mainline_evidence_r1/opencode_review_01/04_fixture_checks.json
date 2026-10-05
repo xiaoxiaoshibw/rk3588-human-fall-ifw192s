@@ -1,0 +1,90 @@
+{
+  "kind": "gle01_r1_independent_fixtures",
+  "schema": 1,
+  "checks": [
+    {
+      "name": "hand_serialized_len_52",
+      "value": 52,
+      "expect": 52,
+      "ok": true
+    },
+    {
+      "name": "offset_datatype_roundtrip",
+      "ok": true
+    },
+    {
+      "name": "little_endian_bytes",
+      "ok": true
+    },
+    {
+      "name": "big_endian_differs",
+      "ok": true,
+      "value": 6.896490392174587e-41
+    },
+    {
+      "name": "wrong_offset_detected",
+      "ok": true
+    },
+    {
+      "name": "canonical_28_stride",
+      "ok": true
+    },
+    {
+      "name": "canonical_pads_zero",
+      "ok": true
+    },
+    {
+      "name": "canonical_xyz_preserved",
+      "ok": true
+    },
+    {
+      "name": "canonical_timestamp_is_f32",
+      "ok": true
+    },
+    {
+      "name": "same_count_diff_content_hash",
+      "ok": true
+    },
+    {
+      "name": "round6_policy_accepts",
+      "ok": true
+    },
+    {
+      "name": "header_alias_content_rejected",
+      "ok": true,
+      "detail": {
+        "foreign_seq": true,
+        "wrong_nsec": true,
+        "wrong_offset": true,
+        "wrong_count": true,
+        "lost_point": true,
+        "bag_time_beyond_6dp_diff": true,
+        "ordinal_alias": true
+      }
+    },
+    {
+      "name": "timestamp_loss_counterexample",
+      "value": 183460.007811,
+      "numeric_error": 0.00781099998857826,
+      "half_ulp": 0.0078125,
+      "error_gt_0p001": true,
+      "error_le_half_ulp": true,
+      "claimed_below_0p1us": false
+    },
+    {
+      "name": "timestamp_loss_counterexample",
+      "value": 183462.492189,
+      "numeric_error": 0.00781099998857826,
+      "half_ulp": 0.0078125,
+      "error_gt_0p001": true,
+      "error_le_half_ulp": true,
+      "claimed_below_0p1us": false
+    },
+    {
+      "name": "header_ints_stay_exact",
+      "ok": true
+    }
+  ],
+  "all_pass": true,
+  "timestamp_units_verified": false
+}

@@ -1,0 +1,135 @@
+COMMAND: ['C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe', '-B', '-W', 'error', 'docs/human_fall/evidence/2026-10-02_gl03_r6/codex_review_01/input_matrix_checks.py']
+test_G03_bad_canonical_record_cannot_enable_standalone_fallback (__main__.InputMatrix.test_G03_bad_canonical_record_cannot_enable_standalone_fallback) ... FAIL
+test_G03_damaged_summary_container_is_rejected_or_unavailable (__main__.InputMatrix.test_G03_damaged_summary_container_is_rejected_or_unavailable) ... 
+  test_G03_damaged_summary_container_is_rejected_or_unavailable (__main__.InputMatrix.test_G03_damaged_summary_container_is_rejected_or_unavailable) (key='frames') ... ERROR
+  test_G03_damaged_summary_container_is_rejected_or_unavailable (__main__.InputMatrix.test_G03_damaged_summary_container_is_rejected_or_unavailable) (key='transforms') ... ERROR
+test_G03_explicit_summary_versions_refused (__main__.InputMatrix.test_G03_explicit_summary_versions_refused) ... ok
+test_G03_full_blocks_cannot_downgrade (__main__.InputMatrix.test_G03_full_blocks_cannot_downgrade) ... ok
+test_G03_full_parent_optional_reference_label_cannot_be_a_container (__main__.InputMatrix.test_G03_full_parent_optional_reference_label_cannot_be_a_container) ... 
+  test_G03_full_parent_optional_reference_label_cannot_be_a_container (__main__.InputMatrix.test_G03_full_parent_optional_reference_label_cannot_be_a_container) (value=[]) ... FAIL
+  test_G03_full_parent_optional_reference_label_cannot_be_a_container (__main__.InputMatrix.test_G03_full_parent_optional_reference_label_cannot_be_a_container) (value={}) ... FAIL
+test_G03_full_parent_source_label_must_be_a_frame_name (__main__.InputMatrix.test_G03_full_parent_source_label_must_be_a_frame_name) ... 
+  test_G03_full_parent_source_label_must_be_a_frame_name (__main__.InputMatrix.test_G03_full_parent_source_label_must_be_a_frame_name) (value=42) ... FAIL
+  test_G03_full_parent_source_label_must_be_a_frame_name (__main__.InputMatrix.test_G03_full_parent_source_label_must_be_a_frame_name) (value=True) ... FAIL
+  test_G03_full_parent_source_label_must_be_a_frame_name (__main__.InputMatrix.test_G03_full_parent_source_label_must_be_a_frame_name) (value=['innolidar']) ... FAIL
+test_G07_minimal_summaries_and_plain_extensions_remain_supported (__main__.InputMatrix.test_G07_minimal_summaries_and_plain_extensions_remain_supported) ... ok
+
+======================================================================
+ERROR: test_G03_damaged_summary_container_is_rejected_or_unavailable (__main__.InputMatrix.test_G03_damaged_summary_container_is_rejected_or_unavailable) (key='frames')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 54, in test_G03_damaged_summary_container_is_rejected_or_unavailable
+    self.unavailable(record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 15, in unavailable
+    snap=self.snap(record)
+         ^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 12, in snap
+    return ref.ReferenceBinding().snapshot(None,record)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r2\codex_reference_checks.py", line 30, in snapshot
+    return build_snapshot(geo.points(), session_id='s', time_epoch=0,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\src\human_fall_detection\core\lidar_candidates.py", line 583, in build_snapshot
+    reference, _reference_reason = _resolve_reference_transform(
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\src\human_fall_detection\core\lidar_candidates.py", line 409, in _resolve_reference_transform
+    return resolve_reference_transform(calibration, transform, frame_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\src\human_fall_detection\core\calibration.py", line 398, in resolve_reference_transform
+    declared_lidar = (parent.get("frames") or {}).get("lidar")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+
+======================================================================
+ERROR: test_G03_damaged_summary_container_is_rejected_or_unavailable (__main__.InputMatrix.test_G03_damaged_summary_container_is_rejected_or_unavailable) (key='transforms')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 54, in test_G03_damaged_summary_container_is_rejected_or_unavailable
+    self.unavailable(record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 15, in unavailable
+    snap=self.snap(record)
+         ^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 12, in snap
+    return ref.ReferenceBinding().snapshot(None,record)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r2\codex_reference_checks.py", line 30, in snapshot
+    return build_snapshot(geo.points(), session_id='s', time_epoch=0,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\src\human_fall_detection\core\lidar_candidates.py", line 583, in build_snapshot
+    reference, _reference_reason = _resolve_reference_transform(
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\src\human_fall_detection\core\lidar_candidates.py", line 409, in _resolve_reference_transform
+    return resolve_reference_transform(calibration, transform, frame_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\src\human_fall_detection\core\calibration.py", line 376, in resolve_reference_transform
+    canonical = calibration_reference_transform(parent)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\src\human_fall_detection\core\calibration.py", line 305, in calibration_reference_transform
+    record = (calibration.get("transforms") or {}).get("T_reference_lidar")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+
+======================================================================
+FAIL: test_G03_bad_canonical_record_cannot_enable_standalone_fallback (__main__.InputMatrix.test_G03_bad_canonical_record_cannot_enable_standalone_fallback)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 61, in test_G03_bad_canonical_record_cannot_enable_standalone_fallback
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_G03_full_parent_optional_reference_label_cannot_be_a_container (__main__.InputMatrix.test_G03_full_parent_optional_reference_label_cannot_be_a_container) (value=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 49, in test_G03_full_parent_optional_reference_label_cannot_be_a_container
+    self.unavailable(record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 18, in unavailable
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_G03_full_parent_optional_reference_label_cannot_be_a_container (__main__.InputMatrix.test_G03_full_parent_optional_reference_label_cannot_be_a_container) (value={})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 49, in test_G03_full_parent_optional_reference_label_cannot_be_a_container
+    self.unavailable(record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 18, in unavailable
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_G03_full_parent_source_label_must_be_a_frame_name (__main__.InputMatrix.test_G03_full_parent_source_label_must_be_a_frame_name) (value=42)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 44, in test_G03_full_parent_source_label_must_be_a_frame_name
+    self.unavailable(record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 18, in unavailable
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_G03_full_parent_source_label_must_be_a_frame_name (__main__.InputMatrix.test_G03_full_parent_source_label_must_be_a_frame_name) (value=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 44, in test_G03_full_parent_source_label_must_be_a_frame_name
+    self.unavailable(record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 18, in unavailable
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_G03_full_parent_source_label_must_be_a_frame_name (__main__.InputMatrix.test_G03_full_parent_source_label_must_be_a_frame_name) (value=['innolidar'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 44, in test_G03_full_parent_source_label_must_be_a_frame_name
+    self.unavailable(record)
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r6\codex_review_01\input_matrix_checks.py", line 18, in unavailable
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.021s
+
+FAILED (failures=6, errors=2)
+
+EXIT=1

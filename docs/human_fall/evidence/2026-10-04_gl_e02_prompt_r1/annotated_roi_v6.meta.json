@@ -1,0 +1,193 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_roi_visual_annotation_pathA",
+  "version": "v6",
+  "source_image": "mirasim-att-4be22c9f.jpg",
+  "source_path": "C:/Users/30680/AppData/Local/Temp/mirasim-att-4be22c9f.jpg",
+  "source_size": [
+    1086,
+    610
+  ],
+  "user_scene_confirmation": "user_confirmed",
+  "physical_verified": false,
+  "previous_versions_obsolete": [
+    "v1",
+    "v2",
+    "v3",
+    "v4",
+    "v5"
+  ],
+  "reason_for_obsolescence": "Prior versions used scene_reference_01.png which is not a lidar-view image. v6 uses a user-supplied image taken AT the lidar position, with user-drawn magenta trapezoid marking the lidar ground footprint. This is the correct geometric basis for ROI selection.",
+  "rrapezoid_corners_pixels": {
+    "TL": [
+      320,
+      240
+    ],
+    "TR": [
+      810,
+      240
+    ],
+    "BR": [
+      990,
+      580
+    ],
+    "BL": [
+      80,
+      580
+    ]
+  },
+  "trapezoid_meaning": "lidar FOV intersection with ground (user-drawn)",
+  "roi_axis": "lidar +x (depth direction in image)",
+  "roi_bands": [
+    {
+      "roi_id": "VAL_far",
+      "label": "#4 VAL-FAR",
+      "physical_distance_from_lidar": "~2.5-3.0 m from lidar",
+      "y_norm_range": [
+        0.0,
+        0.25
+      ],
+      "color": [
+        155,
+        89,
+        182
+      ],
+      "quad_pixels": [
+        [
+          320,
+          240
+        ],
+        [
+          810,
+          240
+        ],
+        [
+          855,
+          325
+        ],
+        [
+          260,
+          325
+        ]
+      ]
+    },
+    {
+      "roi_id": "VAL_mid_far",
+      "label": "#3 VAL-MID-FAR",
+      "physical_distance_from_lidar": "~1.8-2.2 m",
+      "y_norm_range": [
+        0.25,
+        0.5
+      ],
+      "color": [
+        230,
+        126,
+        34
+      ],
+      "quad_pixels": [
+        [
+          260,
+          325
+        ],
+        [
+          855,
+          325
+        ],
+        [
+          900,
+          410
+        ],
+        [
+          200,
+          410
+        ]
+      ]
+    },
+    {
+      "roi_id": "VAL_mid_near",
+      "label": "#2 VAL-MID-NEAR",
+      "physical_distance_from_lidar": "~1.2-1.5 m",
+      "y_norm_range": [
+        0.5,
+        0.75
+      ],
+      "color": [
+        241,
+        196,
+        15
+      ],
+      "quad_pixels": [
+        [
+          200,
+          410
+        ],
+        [
+          900,
+          410
+        ],
+        [
+          945,
+          495
+        ],
+        [
+          140,
+          495
+        ]
+      ]
+    },
+    {
+      "roi_id": "FIT_near",
+      "label": "#1 FIT-NEAR",
+      "physical_distance_from_lidar": "~0.5-0.8 m (FIT)",
+      "y_norm_range": [
+        0.75,
+        1.0
+      ],
+      "color": [
+        46,
+        204,
+        113
+      ],
+      "quad_pixels": [
+        [
+          140,
+          495
+        ],
+        [
+          945,
+          495
+        ],
+        [
+          990,
+          580
+        ],
+        [
+          80,
+          580
+        ]
+      ]
+    }
+  ],
+  "constraints_satisfied": {
+    "all_rois_within_trapezoid": true,
+    "rois_do_not_overlap": true,
+    "roi_axis_along_lidar_x": true,
+    "four_independent_distances": true
+  },
+  "field_actions_required": [
+    "Confirm the 4 color bands are all clean wood floor at field",
+    "Place stickers Zone-FIT-01 (#1), Zone-VAL-01 (#2), Zone-VAL-02 (#3), Zone-VAL-03 (#4)",
+    "Laser rangefinder: lidar origin -> each sticker center x3",
+    "Photograph each sticker location with this annotated image as backdrop"
+  ],
+  "version_history": [
+    {
+      "v": "v1-v5",
+      "issue": "Entire geometry wrong - based on non-lidar-view image"
+    },
+    {
+      "v": "v6",
+      "fix": "Use real lidar-view image, ROI along lidar x-axis, strictly inside user-drawn ground footprint trapezoid"
+    }
+  ]
+}

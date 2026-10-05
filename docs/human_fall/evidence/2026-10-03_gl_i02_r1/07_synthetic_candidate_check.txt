@@ -1,0 +1,19 @@
+$ --capture-dir D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\cap --frame innolidar --units m --output D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\candidate.json --emit-draft --draft-out D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\draft_template.json --source-kind synthetic_fixture
+  rc=0 stdout={"draft_out": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-03_gl_i02_r1\\07_synthetic\\draft_template.json", "status": "pending_human_review"} stderr=
+emit-draft exit 0                                        PASS rc=0
+draft status pending_human_review                        PASS pending_human_review
+draft default_refusal no_auto_ground_selection           PASS no_auto_ground_selection
+draft is null until human fills                          PASS 
+$ --prepared-npz D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\candidate.adapted.npz --draft D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\draft_filled.json --output D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\candidate.json --source-kind synthetic_fixture
+  rc=0 stdout={"output": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-03_gl_i02_r1\\07_synthetic\\candidate.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:cc4502364f6087cbab4240d0", "validation_regions": 3} stderr=
+candidate exit 0                                         PASS rc=0
+candidate artifact exists                                PASS 
+status.ground == candidate                               PASS candidate
+ground.status == valid                                   PASS valid
+verification.ground_physical_verified is false           PASS 
+no GROUND_DERIVED_KEY                                    PASS 
+input.source == synthetic_fixture                        PASS 
+input.synthetic is true                                  PASS 
+manifest provenance physical_verified false              PASS 
+manifest point_index_domain capture_export_row           PASS 
+synthetic checks: 14/14

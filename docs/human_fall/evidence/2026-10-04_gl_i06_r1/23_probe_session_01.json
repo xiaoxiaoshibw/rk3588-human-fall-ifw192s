@@ -1,0 +1,153 @@
+{
+  "info": {
+    "id": "ses_efa9b0eddffeCDGAhIWtGA8fpk",
+    "slug": "tidy-panda",
+    "projectID": "17f164c0b45183f5a0340f3d26c9d2fb79ecc3a8",
+    "directory": "D:\\Code\\ldiar",
+    "path": "",
+    "title": "PROBE_OK reply constraint",
+    "agent": "build",
+    "model": {
+      "id": "deepseek-v4.1-flash",
+      "providerID": "opencode-go",
+      "variant": "default"
+    },
+    "version": "1.18.34",
+    "summary": {
+      "additions": 0,
+      "deletions": 0,
+      "files": 0
+    },
+    "cost": 0.001256226,
+    "tokens": {
+      "input": 8323,
+      "output": 4,
+      "reasoning": 0,
+      "cache": {
+        "read": 1792,
+        "write": 0
+      }
+    },
+    "permission": [
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_enter",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_exit",
+        "pattern": "*",
+        "action": "deny"
+      }
+    ],
+    "time": {
+      "created": 1791091863843,
+      "updated": 1791091874247
+    }
+  },
+  "messages": [
+    {
+      "info": {
+        "role": "user",
+        "time": {
+          "created": 1791091864178
+        },
+        "agent": "build",
+        "model": {
+          "providerID": "opencode-go",
+          "modelID": "deepseek-v4.1-flash"
+        },
+        "summary": {
+          "diffs": []
+        },
+        "id": "msg_10564f2720015gtUdhjzJT6y7W",
+        "sessionID": "ses_efa9b0eddffeCDGAhIWtGA8fpk"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "\"No tool use, no file reads/writes, no commands. Reply only PROBE_OK\"",
+          "id": "prt_10564f2800015MD0WODASk6GSr",
+          "sessionID": "ses_efa9b0eddffeCDGAhIWtGA8fpk",
+          "messageID": "msg_10564f2720015gtUdhjzJT6y7W"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_10564f2720015gtUdhjzJT6y7W",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "D:\\Code\\ldiar",
+          "root": "D:\\Code\\ldiar"
+        },
+        "cost": 0.001256226,
+        "tokens": {
+          "total": 10119,
+          "input": 8323,
+          "output": 4,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 1792
+          }
+        },
+        "modelID": "deepseek-v4.1-flash",
+        "providerID": "opencode-go",
+        "time": {
+          "created": 1791091865135,
+          "completed": 1791091874235
+        },
+        "finish": "stop",
+        "id": "msg_10564f62f001M5vnZ6bVI5Y201",
+        "sessionID": "ses_efa9b0eddffeCDGAhIWtGA8fpk"
+      },
+      "parts": [
+        {
+          "snapshot": "8fb616dbd61e96dc6262fc4f3e646744c029c0b1",
+          "type": "step-start",
+          "id": "prt_10565110d001beIa3oXb06jnGK",
+          "sessionID": "ses_efa9b0eddffeCDGAhIWtGA8fpk",
+          "messageID": "msg_10564f62f001M5vnZ6bVI5Y201"
+        },
+        {
+          "type": "text",
+          "text": "PROBE_OK",
+          "time": {
+            "start": 1791091872019,
+            "end": 1791091872025
+          },
+          "id": "prt_105651113001d3Zsne4qpgr4Uz",
+          "sessionID": "ses_efa9b0eddffeCDGAhIWtGA8fpk",
+          "messageID": "msg_10564f62f001M5vnZ6bVI5Y201"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "8fb616dbd61e96dc6262fc4f3e646744c029c0b1",
+          "type": "step-finish",
+          "tokens": {
+            "total": 10119,
+            "input": 8323,
+            "output": 4,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 1792
+            }
+          },
+          "cost": 0.001256226,
+          "id": "prt_10565153c001cToZ6FFJei07o6",
+          "sessionID": "ses_efa9b0eddffeCDGAhIWtGA8fpk",
+          "messageID": "msg_10564f62f001M5vnZ6bVI5Y201"
+        }
+      ]
+    }
+  ]
+}

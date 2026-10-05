@@ -1,0 +1,31 @@
+# 本地离线配平工作台（GL-W01）
+
+启动仓库根目录 `open_console.bat` 后点「离线配平」，或运行 `python pc_apps/human_replay/human_replay_lib.py` 后打开 http://127.0.0.1:8901/leveling.html 。本地 Python 需 NumPy；新打包版携带 NumPy。已运行的旧服务需关闭其窗口并重新启动才加载新路由。
+
+总控制台默认使用8901；已有实例占用时，新实例自动选择空闲本地端口并将三项本地入口指向它，不中断旧服务。请从总控卡片进入，无需手动修改地址。
+
+1. 从本地列表选择 `captures/remote/<sid>` 下的原始录制（human_capture_session v1，28B，至少4帧）。全程不需要连接板端。
+2. 名义 pitch/roll 用于选区显示和方向锚点，高度作为用户测量参考独立保存。四个默认区域只适用于原场景；新录制需要核对。可编辑XY边界或在俯视画布拖框替换选中区域，滚轮缩放。
+3. 确认四个地面区域、填依据、点击配平。拟合前冻结完整 finite/nonzero 源行，不按Z或残差筛点；三区域以上不是自动地面身份识别。第⌊(N−1)/3⌋、⌊2(N−1)/3⌋、N−1帧独立留出，不训练。
+4. 页面展示TLS covariance／centered SVD／原始RANSAC（861次，seed20261001，5cm，无inlier精修）。共同全域、四区、三个留出帧各检查 RMS≤3cm／P95≤5cm／支持率≥80%／每区≥20点；λ2/λ3≥.01、二维展开≥10cm。TLS/SVD是同一LS家族。全部通过且两两差≤2°／3cm时推荐TLS；否则公开冲突或失败，不二票压RANSAC。
+5. 通过几何门的方法各生成一套新数据，页面可选择预览和下载ZIP。全失败仍能下载诊断报告。显示抽稀至每帧最多12000点，计算完整域；共同域超过200万点会显式拒绝，不自动降采样。
+
+auto 模式（P03）：「自动配平」按钮让算法在源点云里自己找 4 个不重叠地面 ROI——服务端调 `leveling_lib.detect_ground_domain`（RANSAC 861/seed20261001/0.08 主面，n_z≥.85、d∈[.8,1.8]m；地内点投 display 系做 1m 网格贪心取 top-4 连通域）。**人工四区确认流程不变**，auto 只是把"画 ROI"这一步换成算法，后续冻结域/留帧/TLS/SVD/RANSAC/一致性门/导出全部沿用本文件节 4–5 的同一管线。detect 失败显式拒绝（`ground_auto_candidate_invalid` / `ground_auto_regions_invalid`），不静默回落到预设区域。回放页 `replay.js` 在 `__load_session_sid` 成功后调用 GET `/api/leveling/leveled_latest?sid=...` 应用最近 job 的 TLS `transform.json`；找不到或文件校验失败则原样渲染、不阻塞回放。
+
+输出位置：`captures/leveled/<job_id>/`。每种通过方法的目录含 `points.bin`、`meta.json`、`transform.json`、`quality.json`、`dataset.zip`；根目录有 `report.json`、`domain.npz`、`manifest.json`。ZIP包含meta/bin/transform/quality/report/domain。frames、总点数、行顺序及非XYZ字节不变。finite且非零的全部XYZ应用列向量source→display：R=Rx(roll)Ry(pitch)，t=[0,0,d]，不是d/nz；零/非有限源XYZ保留并计数。meta中的原始框转存source_annotations，human_annotations清空，避免源坐标框混入旋转后的数据。
+
+`physical_height_m`是确认时填写的参考，不被拟合d覆盖；参考datum/精度未知保持未核验。derivative sensor.frame_id是ground_offline_display，保存完整源SHA和版本，只能当离线显示数据。physical_verified/extrinsics_verified/runtime_eligible始终false。当前使用已曝光会话的独立留帧诊断，不能称未曝光物理真值。不是规划中的AGL时间控制器，也不接生产ground消息/ROS。
+
+原录制、旧证据均不写入。单任务后台执行，源文件变化或算法变化会拒绝发布结果。原离线配平页的任务轮询/下载URL不跨进程恢复，旧结果可直接打开ZIP或目录；下面的算法验证页支持绑定检查后恢复存盘结果和下载。离线配平页面不调用板端接口。
+
+检查：`python -B -W error -m unittest discover -s pc_apps/human_replay -p leveling_test.py -v`。
+
+## 算法验证工作台（GL-V01）
+
+总控制台第五项「算法验证」，或同一本地服务 `/validation.html`。只列 `cap_20261004_203349`（102帧）、`cap_20261004_203135`（113帧）、`cap_20261004_202456`（91帧）、`cap_20261002_223757`（165帧），不查询板端。点击会话恢复保存的报告、当时的区域/参数、同帧前后点云及通过方法的ZIP。源内容或报告/变换变动时拒绝旧结果；下载逐文件校验SHA。
+
+202456复用既有 `27f870c6c7be43f4b9dc50121a5fc03f`；203135新结果 `7cb130bf4228417db41526299a438a31` 三法通过并推荐TLS；203349新结果 `4c6dfc6cb92342429b21296de6a4080e` TLS/SVD通过并有完整数据，RANSAC区域/留帧门及跨方法一致性失败，标「部分通过」，只显示有效方法的离线预览，不作自动推荐。历史auto/旧区域/稀疏区域失败保留。
+
+新两会话的区域只在FIT帧上重新选取完整XY格，区域内全高度源行保留。已曝光的留出帧仅作离线诊断，不称未曝光泛化或物理真值。原算法和门未变，原捕获及202456产物未覆盖。
+
+Windows桌面「总控制台」快捷方式更新到 `pc_apps/console/dist/gl_v01/Console.exe`，重开生效。检查：`python -B -W error -m unittest discover -s pc_apps/human_replay -p validation_test.py -v`。验收与证据：`docs/human_fall/GLV01_ACCEPTANCE.md`。

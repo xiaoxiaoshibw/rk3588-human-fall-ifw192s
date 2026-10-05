@@ -1,0 +1,62 @@
+{
+  "source_manifest_and_addendum_match": true,
+  "production_drift": false,
+  "head": "cbd0be1c86a1051a9a5800dfb7263f842896e1e6",
+  "model": [
+    [
+      "opencode-go",
+      "deepseek-v4.1-flash"
+    ]
+  ],
+  "session": "ses_efdc5ab31ffeBwyoFXmoG3GmHX",
+  "exit": 0,
+  "finish": "stop",
+  "review_elapsed_s": 997.7350000000151,
+  "db": "default",
+  "native_ponytail": true,
+  "after_submission_external_changes": [
+    "docs/human_capture/returns/HR-07.md",
+    "pc_apps/human_limb/limb_v2.py",
+    "pc_apps/human_limb/run_limb_v2.py"
+  ],
+  "after_submission_external_additions": [
+    "docs/human_fall/returns/GL-I04.md"
+  ],
+  "external_change_classification": "pc_apps/human_limb and HR-07 return changed concurrently outside GL-I04; reviewer/root issued no writes to them. Preserve, no rollback. stdout24 timing covered by25 addendum, not source drift.",
+  "source_SHA": {
+    "src/human_fall_detection/core/ground_diagnostics.py": "80ef45ae59d0fbb4e01bd7fb334043d6bcde0f58e86aec057e42561e4c974e66",
+    "src/human_fall_detection/scripts/diagnose_gli04_geometry.py": "85a83b8835d00e186840071c2eec0e7a7860970243823779dab06d13ba517b9e",
+    "src/human_fall_detection/tests/test_gli04_geometry.py": "7a3df86ae6386cdd476429b3ac54b0b3fcead8e0e6fbce1ddd2baf4af8ffcb7c"
+  },
+  "software": {
+    "L01": "PASS",
+    "L02": "PASS",
+    "L03": "PASS",
+    "L04": "PASS",
+    "L05": "PASS",
+    "L06": "PASS",
+    "R01": "PASS",
+    "R02": "PASS",
+    "R03": "PASS",
+    "R04": "PASS",
+    "R05": "PASS",
+    "R06": "PASS",
+    "S01": "PASS"
+  },
+  "Q": {
+    "Q01": "PASS",
+    "Q02": "PASS",
+    "Q03": "PASS",
+    "Q04": "PASS",
+    "Q05": "PASS",
+    "Q06": "PASS",
+    "Q07": "PASS",
+    "Q08": "PASS",
+    "Q09": "PASS",
+    "Q10": "PASS"
+  },
+  "B01": "BLOCKED",
+  "B02": "BLOCKED",
+  "D01": "NOT_RUN",
+  "D02": "NOT_RUN"
+}

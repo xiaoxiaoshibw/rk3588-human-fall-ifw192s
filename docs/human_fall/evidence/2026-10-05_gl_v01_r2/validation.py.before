@@ -1,0 +1,195 @@
+"""Three-session local validation UI; reuse leveling jobs and immutable disk outputs."""
+import copy
+import hashlib
+import json
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+import leveling as W
+
+SESSIONS = ("cap_20261004_203349", "cap_20261004_203135", "cap_20261004_202456")
+
+
+def member(sid):
+    if sid not in SESSIONS:
+        raise ValueError("算法验证仅接受指定的三个会话")
+    return sid
+
+
+def read_json(path, expected=None):
+    if path.resolve() != path or not path.is_file():
+        raise ValueError("结果文件缺失或为链接")
+    data = path.read_bytes()
+    if expected is not None and hashlib.sha256(data).hexdigest() != expected:
+        raise ValueError("结果文件SHA已变化")
+    value = json.loads(data)
+    if not isinstance(value, dict):
+        raise ValueError("结果JSON必须为object")
+    return value
+
+
+def saved_job(root, outroot, job_id, sid=None, binding=None):
+    if not isinstance(job_id, str) or not W._JOB.fullmatch(job_id):
+        raise ValueError("结果ID非法")
+    directory = Path(outroot).resolve() / job_id
+    if directory.resolve() != directory:
+        raise ValueError("结果目录不得为链接")
+    manifest = read_json(directory / "manifest.json")
+    report = read_json(directory / "report.json", manifest["report_sha256"])
+    actual_sid = member(report["sid"])
+    if sid is not None and member(sid) != actual_sid:
+        raise ValueError("结果与所选会话不一致")
+    if (report.get("kind") != "offline_leveling_report" or report.get("schema") != 1
+            or report["job_id"] != job_id or manifest["job_id"] != job_id
+            or report["source"] != manifest["source"]):
+        raise ValueError("结果版本或源绑定非法")
+    if binding is None:
+        _, _, binding = W.source(root, actual_sid)
+    if report["source"] != binding:
+        raise ValueError("源数据已变化，旧结果不可用")
+    if any(report.get(flag) is not False for flag in ("physical_verified", "extrinsics_verified", "runtime_eligible")):
+        raise ValueError("只接受离线显示结果")
+    if W.sha(directory / "domain.npz") != manifest["domain_sha256"]:
+        raise ValueError("冻结域SHA已变化")
+    artifacts = manifest["artifacts"]
+    estimators = report["estimators"]
+    if set(estimators) != {"tls", "svd", "ransac"} or set(artifacts) != {n for n, a in estimators.items() if a["valid"]}:
+        raise ValueError("三法报告与导出目录不一致")
+    for name, hashes in artifacts.items():
+        if set(hashes) != W.FILES:
+            raise ValueError("导出文件清单不完整")
+        folder = directory / name
+        for filename in W.FILES:
+            path = folder / filename
+            if path.resolve() != path or not path.is_file():
+                raise ValueError("配平数据缺失或为链接")
+        transform = read_json(folder / "transform.json", hashes["transform.json"])
+        meta = read_json(folder / "meta.json", hashes["meta.json"])
+        if (transform.get("source") != binding or transform.get("estimator") != name
+                or transform.get("R") != estimators[name]["R"] or transform.get("t") != estimators[name]["t"]
+                or meta.get("leveling", {}).get("original_session_id") != actual_sid
+                or meta.get("leveling", {}).get("transform_id") != transform.get("transform_id")
+                or (folder / "points.bin").stat().st_size != meta["total_points"] * 28):
+            raise ValueError("变换与报告/会话不一致")
+    if report.get("recommended") not in (None, "tls") or report.get("recommended") and not all(a["valid"] for a in estimators.values()):
+        raise ValueError("推荐结果不符合三法门")
+    return {"job_id": job_id, "sid": actual_sid, "state": "ready", "message": "已恢复存盘评估",
+            "report": report, "artifacts": artifacts, "persisted": True}
+
+
+def latest(root, outroot, sid, binding=None):
+    member(sid)
+    if binding is None:
+        _, _, binding = W.source(root, sid)
+    candidates = []
+    base = Path(outroot).resolve()
+    for directory in base.iterdir() if base.is_dir() else ():
+        if not directory.is_dir() or not W._JOB.fullmatch(directory.name):
+            continue
+        report_file = directory / "report.json"
+        try:
+            if read_json(report_file).get("sid") == sid:
+                candidates.append(directory)
+        except (ValueError, OSError):
+            try:
+                if read_json(directory / "manifest.json").get("source") == binding:
+                    candidates.append(directory)
+            except (ValueError, OSError):
+                continue
+    if not candidates:
+        return None
+    # A damaged newest result is explicit; never silently replace it with an older success.
+    selected = max(candidates, key=lambda p: (max(f.stat().st_mtime_ns for f in (p / "report.json", p / "manifest.json") if f.is_file()), p.name))
+    return saved_job(root, outroot, selected.name, sid, binding)
+
+
+def sessions(root, outroot):
+    rows = []
+    for sid in SESSIONS:
+        row = {"sid": sid, "available": False, "status": "源数据不可用", "job_id": None}
+        try:
+            _, meta, binding = W.source(root, sid)
+            row.update(available=True, duration_sec=meta.get("duration_sec"), frames=len(meta["frames"]),
+                       total_points=meta["total_points"], status="待配平")
+            job = latest(root, outroot, sid, binding)
+            if job:
+                report = job["report"]
+                passed = [n.upper() for n, a in report["estimators"].items() if a["valid"]]
+                status = "配平完成" if report["recommended"] else "部分通过 · " + "/".join(passed) if passed else "评估未通过"
+                row.update(job_id=job["job_id"], status=status,
+                           recommended=report["recommended"],
+                           methods={n: a["valid"] for n, a in report["estimators"].items()})
+        except (ValueError, KeyError, TypeError, OSError) as exc:
+            row.update(status="结果不可用" if row["available"] else "源数据不可用", error=str(exc))
+        rows.append(row)
+    return rows
+
+
+def handle(handler, method, root):
+    parsed = urlparse(handler.path)
+    query = parse_qs(parsed.query)
+    outroot = Path(root).resolve().parent / "leveled"
+    sid = query.get("sid", [None])[0]
+    try:
+        if method == "POST":
+            if parsed.path != "/api/validation/run":
+                return handler.send_error(404)
+            origin = handler.headers.get("Origin")
+            if origin and origin != "http://" + handler.headers.get("Host", ""):
+                raise ValueError("仅接受本地工作台同源请求")
+            size = int(handler.headers.get("Content-Length", "0"))
+            if not 0 < size <= 65536:
+                raise ValueError("请求大小非法")
+            body = json.loads(handler.rfile.read(size))
+            if not isinstance(body, dict):
+                raise ValueError("配平请求必须为object")
+            member(body.get("sid"))
+            return handler._json(W.start(root, outroot, body), 202)
+        if parsed.path == "/api/validation/sessions":
+            return handler._json({"sessions": sessions(root, outroot)})
+        if parsed.path == "/api/validation/source":
+            _, meta, binding = W.source(root, member(sid))
+            return handler._json({"sid": sid, "meta": meta, "source": binding, "profile": W.PROFILE})
+        if parsed.path == "/api/validation/latest":
+            job = latest(root, outroot, member(sid))
+            return handler._json(job if job else {"error": "该会话尚未配平"}, 200 if job else 404)
+        if parsed.path == "/api/validation/job":
+            job_id = query.get("id", [""])[0]
+            with W._job_lock:
+                job = copy.deepcopy(W._jobs.get(job_id))
+            if job:
+                member(job["sid"])
+                if sid is not None and member(sid) != job["sid"]:
+                    raise ValueError("结果与所选会话不一致")
+                if job["state"] != "ready":
+                    return handler._json(job)
+            return handler._json(saved_job(root, outroot, job_id, sid))
+        if parsed.path == "/api/validation/artifact":
+            job_id, name, algorithm = [query.get(k, [""])[0] for k in ("id", "name", "method")]
+            job = saved_job(root, outroot, job_id, sid)
+            if algorithm == "report" and name == "report.json":
+                path = outroot / job_id / name
+                manifest = read_json(outroot / job_id / "manifest.json")
+                expected = manifest["report_sha256"]
+            elif algorithm in job["artifacts"] and name in W.FILES:
+                path = outroot / job_id / algorithm / name
+                expected = job["artifacts"][algorithm][name]
+            else:
+                raise ValueError("算法未通过或文件非法")
+            if W.sha(path) != expected:
+                raise ValueError("输出文件SHA已变化，拒绝下载")
+            handler.send_response(200)
+            handler.send_header("Content-Type", "application/octet-stream")
+            handler.send_header("Content-Length", str(path.stat().st_size))
+            handler.send_header("Content-Disposition", 'attachment; filename="' + algorithm + "_" + name + '"')
+            handler.send_header("Cache-Control", "no-store")
+            handler.end_headers()
+            with path.open("rb") as stream:
+                for block in iter(lambda: stream.read(1 << 20), b""):
+                    handler.wfile.write(block)
+            return
+        return handler.send_error(404)
+    except RuntimeError as exc:
+        return handler._json({"error": str(exc)}, 409)
+    except (ValueError, TypeError, KeyError, OSError) as exc:
+        return handler._json({"error": str(exc)}, 400)

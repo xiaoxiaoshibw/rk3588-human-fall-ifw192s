@@ -1,0 +1,285 @@
+--- a/src/human_fall_detection/core/calibration.py
++++ b/src/human_fall_detection/core/calibration.py
+@@ -299,10 +299,19 @@
+ 
+ 
+ def calibration_reference_transform(calibration):
+-    """The artifact-owned lidar->reference transform, or None when unknown."""
++    """The artifact-owned lidar->reference transform, or None when unknown.
++
++    A non-object ``transforms`` container or child record yields ``None`` here
++    rather than a raw ``AttributeError``; structural qualification refuses such
++    damage before a reference binding is consumed, so this is only a safeguard.
++    A legal ``unknown``/absent record keeps the original no-canonical meaning.
++    """
+     if not isinstance(calibration, dict):
+         return None
+-    record = (calibration.get("transforms") or {}).get("T_reference_lidar")
++    transforms = calibration.get("transforms")
++    if not isinstance(transforms, dict):
++        return None
++    record = transforms.get("T_reference_lidar")
+     if isinstance(record, dict) and record.get("status") != "unknown":
+         return record
+     return None
+@@ -324,6 +333,45 @@
+     return any(key in calibration for key in FULL_ARTIFACT_KEYS)
+ 
+ 
++def _legacy_summary_reason(summary):
++    """Reason a legacy minimal summary is unusable, else ``None``.
++
++    A true summary (no full-product block, no ``kind``) keeps the original
++    compatibility semantics: the optional containers and frame labels may be
++    absent/``None`` (an empty object also means "undeclared"), and an absent or
++    legal-``unknown`` canonical child keeps the standalone fallback. But every
++    *declared* field must have its declared type -- a container is an object, a
++    frame name is a non-empty string and the canonical child is an object -- and
++    the explicitly present ``schema_version`` must be the supported one. A
++    damaged container/child is refused here instead of surfacing a raw
++    ``AttributeError`` in a later consumer, and is never mistaken for "no
++    canonical record" (which would wrongly re-enable the standalone fallback).
++    """
++    if "schema_version" in summary:
++        version = summary.get("schema_version")
++        if isinstance(version, bool) or not isinstance(version, int) \
++                or version != SCHEMA_VERSION:
++            return "reference_calibration_invalid"
++    frames = summary.get("frames")
++    if frames is not None and not isinstance(frames, dict):
++        return "reference_calibration_invalid"
++    if isinstance(frames, dict):
++        for label in ("lidar", "reference"):
++            if label in frames:
++                value = frames.get(label)
++                if value is not None \
++                        and (not isinstance(value, str) or not value):
++                    return "reference_calibration_invalid"
++    transforms = summary.get("transforms")
++    if transforms is not None and not isinstance(transforms, dict):
++        return "reference_calibration_invalid"
++    if isinstance(transforms, dict) and "T_reference_lidar" in transforms:
++        record = transforms.get("T_reference_lidar")
++        if record is not None and not isinstance(record, dict):
++            return "reference_calibration_invalid"
++    return None
++
++
+ def resolve_reference_transform(calibration=None, transform=None, frame_id=None):
+     """Effective lidar->reference transform for a producing frame, or ``None``.
+ 
+@@ -336,8 +384,9 @@
+     validator, so deleting/nulling the ``kind`` of a complete product or an
+     unsupported schema/identity can never be downgraded to the legacy path; an
+     explicit non-artifact ``kind`` is refused. Only a true minimal summary (no
+-    full-product block, no ``kind``, supported-or-absent ``schema_version``)
+-    keeps the legacy path. The effective record itself must be fully qualified
++    full-product block, no ``kind``, supported-or-absent ``schema_version``,
++    declared containers/labels/child of the declared types) keeps the legacy
++    path. The effective record itself must be fully qualified
+     (frames/direction/units/status/evidence/R/t), not merely numerically
+     loadable, and a record whose ``from_frame`` differs from the actual
+     producing ``frame_id`` or from the parent's declared ``frames.lidar``, or
+@@ -365,14 +414,13 @@
+             # Explicit non-artifact kind: a damaged/foreign record, never a
+             # legacy minimal summary (which has no ``kind``).
+             return None, "reference_calibration_invalid"
+-        elif "schema_version" in parent:
+-            # True minimal summary: an explicitly present version must be the
+-            # one this module supports; a missing version keeps the old
+-            # compatibility path (a 99/True/float version is not v1).
+-            version = parent.get("schema_version")
+-            if isinstance(version, bool) or not isinstance(version, int) \
+-                    or version != SCHEMA_VERSION:
+-                return None, "reference_calibration_invalid"
++        else:
++            # True minimal summary: the explicitly present version and every
++            # declared container/label/canonical child must have their declared
++            # types before any consumer reads them (GL-03 G03).
++            reason = _legacy_summary_reason(parent)
++            if reason is not None:
++                return None, reason
+     canonical = calibration_reference_transform(parent)
+     if canonical is not None:
+         try:
+@@ -394,18 +442,19 @@
+         if isinstance(declared, str) and declared and declared != frame_id:
+             return None, "reference_from_frame_mismatch"
+     declared_lidar = None
+-    if parent is not None:
+-        declared_lidar = (parent.get("frames") or {}).get("lidar")
++    reference_frame = None
++    if parent is not None and isinstance(parent.get("frames"), dict):
++        declared_lidar = parent["frames"].get("lidar")
++        reference_frame = parent["frames"].get("reference")
+     if isinstance(declared_lidar, str) and declared_lidar:
+         # Cross-record binding: the producing ``from`` frame cannot contradict
+         # the parent artifact's declared lidar frame (GL-03 G03), even when the
+-        # caller supplies no frame_id (node startup/reload binding).
++        # caller supplies no frame_id (node startup/reload binding). A declared
++        # non-string label was already refused by the structural guard, so it
++        # can never silently skip this comparison.
+         declared = effective.get("from_frame")
+         if isinstance(declared, str) and declared and declared != declared_lidar:
+             return None, "reference_from_frame_mismatch"
+-    reference_frame = None
+-    if parent is not None:
+-        reference_frame = (parent.get("frames") or {}).get("reference")
+     to_frame = effective.get("to_frame")
+     if reference_frame and isinstance(to_frame, str) and to_frame \
+             and to_frame != reference_frame:
+@@ -927,9 +976,24 @@
+     if artifact.get("units") != UNITS:
+         raise GeometryCalibrationError("units must be " + repr(UNITS))
+     frames = artifact.get("frames")
+-    if not isinstance(frames, dict) or not frames.get("lidar"):
+-        raise GeometryCalibrationError("frames.lidar is required")
++    if not isinstance(frames, dict):
++        raise GeometryCalibrationError("frames must be an object")
++    lidar_frame = frames.get("lidar")
++    if not isinstance(lidar_frame, str) or not lidar_frame:
++        raise GeometryCalibrationError("frames.lidar must be a non-empty string")
++    reference_frame = frames.get("reference")
++    if reference_frame is not None \
++            and (not isinstance(reference_frame, str) or not reference_frame):
++        raise GeometryCalibrationError(
++            "frames.reference must be null or a non-empty string")
++    for field in ("transforms", "rotations"):
++        container = artifact.get(field)
++        if container is not None and not isinstance(container, dict):
++            raise GeometryCalibrationError(field + " must be an object")
+     for name, record in (artifact.get("transforms") or {}).items():
++        if not isinstance(record, dict):
++            raise GeometryCalibrationError(
++                "transform record must be an object: " + str(name))
+         if record.get("status") != "unknown":
+             recovered = make_transform(record.get("rotation"),
+                                        record.get("translation_m"),
+@@ -943,6 +1007,9 @@
+         else:
+             _check_distinct_frames(record.get("from_frame"), record.get("to_frame"))
+     for name, record in (artifact.get("rotations") or {}).items():
++        if not isinstance(record, dict):
++            raise GeometryCalibrationError(
++                "rotation record must be an object: " + str(name))
+         if record.get("status") != "unknown":
+             recovered = make_rotation(record.get("rotation"), record.get("from_frame"),
+                                       record.get("to_frame"),
+--- a/src/human_fall_detection/core/lidar_candidates.py
++++ b/src/human_fall_detection/core/lidar_candidates.py
+@@ -602,10 +602,16 @@
+     for number, candidate in enumerate(candidates):
+         candidate["candidate_id"] = "c{:04d}".format(number)
+ 
++    # A damaged/non-object parent ``frames`` block was already refused as an
++    # unusable reference binding; the coordinate metadata must stay readable
++    # (null) instead of raising here (GL-03 G03).
++    declared_frames = calibration.get("frames") \
++        if isinstance(calibration, dict) else None
++    reference_label = declared_frames.get("reference") \
++        if isinstance(declared_frames, dict) else None
+     coordinate = {
+         "source_frame": frame_id,
+-        "reference_frame": (calibration or {}).get("frames", {}).get("reference")
+-        if calibration and calibration.get("frames", {}).get("reference") else None,
++        "reference_frame": reference_label or None,
+         "horizontal_basis": "ground_tangent" if basis is not None else "raw_xy_uncalibrated",
+         "ground_relative_available": basis is not None,
+         "ground_frame": ground.get("frame") if isinstance(ground, dict) else None,
+--- a/src/human_fall_detection/tests/test_gl03_candidates_geometry.py
++++ b/src/human_fall_detection/tests/test_gl03_candidates_geometry.py
+@@ -468,6 +468,94 @@
+                 self.assertEqual(snap["coordinate"]["transform_status"],
+                                  "unknown")
+ 
++    def test_full_parent_labels_must_be_frame_names(self):
++        # R7 (G03): a full artifact's frames.lidar is a required non-empty
++        # name and frames.reference is null or a non-empty name; truthiness,
++        # containers and non-strings are not names and cannot skip the binding.
++        for value in (42, True, ["innolidar"], ""):
++            with self.subTest(label="lidar", value=value):
++                artifact = reference_calibration(reference_transform())
++                artifact["frames"]["lidar"] = value
++                snap = snapshot(blob(), calibration=artifact)
++                self.assertTrue(all(c["center_reference_m"] is None
++                                    for c in snap["candidates"]), value)
++                self.assertEqual(snap["coordinate"]["transform_status"],
++                                 "unknown")
++        for value in ([], {}, 42, True, ""):
++            with self.subTest(label="reference", value=value):
++                artifact = reference_calibration(reference_transform())
++                artifact["frames"]["reference"] = value
++                snap = snapshot(blob(), calibration=artifact)
++                self.assertTrue(all(c["center_reference_m"] is None
++                                    for c in snap["candidates"]), value)
++
++    def test_full_parent_bad_containers_and_child_are_refused(self):
++        # R7 (G03): a non-object transforms/rotations container or a non-object
++        # canonical child of a full artifact is damage, never "absent".
++        for container in ("transforms", "rotations"):
++            with self.subTest(container=container):
++                artifact = reference_calibration(reference_transform())
++                artifact[container] = "damaged"
++                snap = snapshot(blob(), calibration=artifact)
++                self.assertTrue(all(c["center_reference_m"] is None
++                                    for c in snap["candidates"]))
++        artifact = reference_calibration(reference_transform())
++        artifact["transforms"]["T_reference_lidar"] = "damaged"
++        snap = snapshot(blob(), calibration=artifact)
++        self.assertTrue(all(c["center_reference_m"] is None
++                            for c in snap["candidates"]))
++
++    def test_damaged_summary_containers_are_refused_without_raw_error(self):
++        # R7 (G03): a true summary with a non-object frames/transforms container
++        # is refused as unavailable instead of raising AttributeError.
++        base = {"calibration_id": "legacy",
++                "frames": {"lidar": FROM_FRAME, "reference": TO_FRAME},
++                "transforms": {"T_reference_lidar": reference_transform()}}
++        for key in ("frames", "transforms"):
++            for value in ("damaged", 42, []):
++                with self.subTest(key=key, value=value):
++                    summary = dict(base)
++                    summary[key] = value
++                    snap = snapshot(blob(), calibration=summary)
++                    self.assertTrue(all(c["center_reference_m"] is None
++                                        for c in snap["candidates"]))
++
++    def test_bad_canonical_child_cannot_enable_standalone_fallback(self):
++        # R7 (G03): a declared but damaged canonical child is refused; it is
++        # not "no record", so the legal standalone must not be adopted.
++        summary = {"calibration_id": "legacy",
++                   "frames": {"lidar": FROM_FRAME, "reference": TO_FRAME},
++                   "transforms": {"T_reference_lidar": "damaged"}}
++        snap = snapshot(blob(), calibration=summary,
++                        transform=reference_transform())
++        self.assertTrue(all(c["center_reference_m"] is None
++                            for c in snap["candidates"]))
++        self.assertEqual(snap["coordinate"]["transform_status"], "unknown")
++
++    def test_undeclared_summary_fields_keep_legacy_compatibility(self):
++        # R7 (G07): absent/None containers and labels stay undeclared, an
++        # absent/None/legal-unknown canonical child keeps the standalone
++        # fallback, and a valid summary keeps projecting.
++        transform = reference_transform()
++        cases = (
++            {"calibration_id": "legacy"},
++            {"calibration_id": "legacy", "frames": None, "transforms": None},
++            {"calibration_id": "legacy", "frames": {},
++             "transforms": {"T_reference_lidar": transform}},
++            {"calibration_id": "legacy",
++             "frames": {"lidar": None, "reference": None},
++             "transforms": {"T_reference_lidar": transform}},
++            {"calibration_id": "legacy",
++             "frames": {"lidar": FROM_FRAME, "reference": TO_FRAME},
++             "transforms": {"T_reference_lidar":
++                            make_unknown_transform(FROM_FRAME, TO_FRAME)}},
++        )
++        for index, record in enumerate(cases):
++            with self.subTest(case=index):
++                snap = snapshot(blob(), calibration=record,
++                                transform=reference_transform())
++                self.assertIsNotNone(snap["candidates"][0]["center_reference_m"])
++
+ 
+ class GroundGeometryTest(unittest.TestCase):
+     """G02: ground geometry from ACTUAL points under the validated R/t."""

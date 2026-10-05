@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>human_limb — 四肢实时回放 web 服务</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#0b0e10; color:#cfd8dc; font:13px/1.4 Consolas,"Microsoft YaHei",monospace; }
+  #view { position:absolute; inset:0; }
+  #hud  { position:absolute; top:8px; left:8px; padding:6px 10px; background:rgba(0,0,0,.55); border-radius:4px; min-width:260px; }
+  #hud b.bend { color:#ffa726; }
+  #hud b.bend.deep { color:#ef5350; }
+  #frameInfo { position:absolute; top:60px; left:8px; padding:2px 8px; background:rgba(0,0,0,.4); color:#8aaeff; border-radius:4px; font-size:11px; }
+  #toolbar { position:absolute; top:8px; right:8px; display:flex; gap:6px; background:rgba(0,0,0,.55); padding:6px; border-radius:4px; align-items:center; }
+  button, select { background:#1d262b; color:#cfd8dc; border:1px solid #37474f; border-radius:3px; padding:3px 10px; cursor:pointer; }
+  button:hover { background:#26333a; }
+  button:disabled { opacity:.4; cursor:default; }
+  #bottom { position:absolute; left:0; right:0; bottom:0; padding:6px 10px; background:rgba(0,0,0,.55); display:flex; gap:10px; align-items:center; }
+  #slider { flex:1; }
+  #status { position:absolute; bottom:42px; left:120px; color:#8f8; }
+  #panel { position:absolute; top:64px; right:8px; width:340px; max-height:76vh; overflow:auto; background:rgba(0,0,0,.72); border:1px solid #37474f; border-radius:4px; padding:8px; font-size:12px; }
+  #panel h4 { margin:0 0 6px; font-size:12px; color:#9ccc9c; font-weight:normal; }
+  .sidrow { padding:4px 6px; border-bottom:1px solid #1d262b; cursor:pointer; display:flex; justify-content:space-between; gap:8px; align-items:center; }
+  .sidrow:hover { background:#131a1e; }
+  .sidrow.active { background:#1c2f26; }
+  .sidrow .info { color:#78909c; font-size:11px; }
+  .tag { font-size:10px; padding:0 4px; border-radius:2px; border:1px solid #37474f; color:#8aaeff; }
+  .tag.limb { color:#9ccc9c; border-color:#4a6; }
+</style>
+</head>
+<body>
+<div id="view"></div>
+<div id="hud">载入会话 …</div>
+<div id="frameInfo"></div>
+<div id="status"></div>
+
+<div id="toolbar">
+  <button id="refreshBtn">⟳ 刷新</button>
+  <button id="lockBtn" title="点选场景中的人形位置">🎯 标人</button>
+  <button id="rerunBtn" title="清除 limb_labels, 用当前 lock 重跑">↻ 重跑</button>
+  <button id="playBtn">▶</button>
+  <select id="speedSel"><option>0.5</option><option selected>1</option><option>2</option><option>4</option></select>
+  <button id="resetBtn" title="复位相机">⌂</button>
+</div>
+<div id="lockHint" style="position:absolute;top:60px;left:50%;transform:translateX(-50%);padding:6px 14px;background:rgba(255,167,38,.85);border-radius:4px;color:#000;display:none;font-weight:bold;">
+  🎯 点击场景中的人形所在位置 (X 前向 / Y 左向) — 然后点「↻ 重跑」
+</div>
+<div id="bottom">
+  <span id="tCur">0.00</span>
+  <input id="slider" type="range" min="0" max="0" value="0" step="1">
+  <span id="tEnd">0.00</span>
+</div>
+
+<div id="panel">
+  <h4>会话列表（本地 captures\remote）</h4>
+  <div id="sidList">…</div>
+</div>
+
+<script src="/vendor/three.min.js"></script>
+<script src="/vendor/OrbitControls.js"></script>
+<script>
+"use strict";
+const els = {};
+["hud","frameInfo","status","refreshBtn","lockBtn","rerunBtn","playBtn","speedSel","resetBtn","slider","tCur","tEnd","sidList","lockHint"].forEach(id => els[id] = document.getElementById(id));
+
+const S = {
+  scene:null, camera:null, renderer:null, controls:null,
+  ptsGeo:null, ptsObj:null, frames:null, total:0,
+  skeleton:null,
+  idx:0, playing:false, fps:10, acc:0, last_ts:0,
+  meta:null, limb:null, sid:null,
+};
+const COLS = { cloud:0x9ecfff, torso:0xffb74d, arm_l:0xef5350, arm_r:0xba68c8,
+                leg_l:0x66bb6a, leg_r:0x26c6da, head:0xffee58 };
+
+function limb_colour(name) {
+  if (name === "head" || name === "neck") return COLS.head;
+  if (/_l$/.test(name)) return /shoulder|elbow|wrist/.test(name) ? COLS.arm_l : COLS.leg_l;
+  if (/_r$/.test(name)) return /shoulder|elbow|wrist/.test(name) ? COLS.arm_r : COLS.leg_r;
+  return COLS.torso;
+}
+
+function ensureScene() {
+  if (S.renderer) return;
+  S.renderer = new THREE.WebGLRenderer({ antialias: true });
+  S.renderer.setPixelRatio(devicePixelRatio);
+  S.renderer.setSize(innerWidth, innerHeight);
+  document.getElementById("view").appendChild(S.renderer.domElement);
+  S.scene = new THREE.Scene();
+  S.scene.background = new THREE.Color(0x0b0e10);
+  S.camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.05, 80);
+  S.camera.position.set(-2.5, -3, 3);
+  S.camera.up.set(0, 0, 1);
+  S.camera.lookAt(3, 0, 1);
+  S.controls = new THREE.OrbitControls(S.camera, S.renderer.domElement);
+  S.controls.target.set(3, 0, 1);
+  S.scene.add(new THREE.AxesHelper(0.6));
+  const grid = new THREE.GridHelper(20, 20, 0x37474f, 0x263238);
+  grid.rotation.x = Math.PI / 2;
+  grid.position.z = -0.01;
+  S.scene.add(grid);
+  addEventListener("resize", () => {
+    S.camera.aspect = innerWidth / innerHeight;
+    S.camera.updateProjectionMatrix();
+    S.renderer.setSize(innerWidth, innerHeight);
+  });
+  requestAnimationFrame(loop);
+}
+function loop(ts) {
+  requestAnimationFrame(loop);
+  const dt = Math.min(0.05, (ts - S.last_ts) / 1000 || 0);
+  S.last_ts = ts;
+  if (S.playing && S.frames) {
+    S.acc += dt * parseFloat(els.speedSel.value) * S.fps;
+    while (S.acc >= 1) { S.acc -= 1; showFrame((S.idx + 1) % S.frames.length); }
+  }
+  S.controls && S.controls.update();
+  S.renderer && S.renderer.render(S.scene, S.camera);
+}
+
+/* ---- 面板 ---------------------------------------------------------------- */
+async function api(p, opt) {
+  const r = await fetch(p, opt);
+  if (!r.ok) throw new Error(p + " → " + r.status + " " + (await r.text()).slice(0, 200));
+  return r.json();
+}
+async function refreshSessions() {
+  try {
+    const d = await api("/api/sessions");
+    els.sidList.innerHTML = "";
+    for (const s of d.sessions) {
+      const row = document.createElement("div");
+      row.className = "sidrow" + (s.sid === S.sid ? " active" : "");
+      const limb = s.has_limb ? `<span class="tag limb">limb ${s.limb_detected}/${s.limb_total}</span>` : "";
+      const jobTag = s.job && s.job.stage ? `<span class="tag">${s.job.stage}${s.job.error ? " ✗" : ""}</span>` : "";
+      row.innerHTML = `<div><b>${s.sid}</b><div class="info">${(s.duration||0).toFixed(1)}s · ${s.frames||'?'} 帧 · ${(s.has_meta&&s.has_points)?'✓':'缺文件'}</div></div><div>${limb} ${jobTag}</div>`;
+      row.onclick = () => selectSession(s.sid);
+      els.sidList.appendChild(row);
+    }
+    if (!d.sessions.length) els.sidList.textContent = "本地无会话（先让 fetch.py 拉一个回来）";
+  } catch (e) { els.sidList.textContent = "刷新失败: " + e.message; }
+}
+
+async function selectSession(sid) {
+  S.sid = sid;
+  renderActiveRow();
+  els.status.textContent = sid + " · 检查 limb 状态 …";
+  const st = await api("/api/prepare_status?sid=" + encodeURIComponent(sid));
+  const lockInfo = st.lock && st.lock.x != null ? ` 🔒(${st.lock.x},${st.lock.y})` : " 未标";
+  if (st.has_limb) {
+    els.status.textContent = sid + " · 已就绪" + lockInfo + " 载入 …";
+    await load(sid);
+    return;
+  }
+  if (st.stage === "fetch" || st.stage === "limb" || st.stage === "queued") {
+    poll(sid); return;
+  }
+  if (!st.has_meta || !st.has_points) {
+    els.status.textContent = sid + " · 缺 meta/points，先 fetch…";
+  } else {
+    els.status.textContent = sid + " · 触发 limb…";
+  }
+  await api("/api/prepare", { method: "POST", headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ sid }) });
+  poll(sid);
+}
+async function poll(sid) {
+  const t0 = Date.now();
+  const iv = setInterval(async () => {
+    try {
+      const st = await api("/api/prepare_status?sid=" + encodeURIComponent(sid));
+      els.status.textContent = sid + " · " + (st.stage || "?") + " …";
+      if (st.stage === "done" || st.has_limb) {
+        clearInterval(iv);
+        els.status.textContent = sid + " · limb 完成，载入";
+        await load(sid);
+        refreshSessions();
+      } else if (st.stage === "error") {
+        clearInterval(iv);
+        els.status.textContent = sid + " · 失败: " + (st.error || "?");
+      } else if (Date.now() - t0 > 5 * 60 * 1000) {
+        clearInterval(iv);
+        els.status.textContent = sid + " · 超时";
+      }
+    } catch (e) {
+      clearInterval(iv);
+      els.status.textContent = "轮询失败: " + e.message;
+    }
+  }, 800);
+}
+function renderActiveRow() {
+  document.querySelectorAll(".sidrow").forEach(r =>
+    r.classList.toggle("active", r.textContent.includes(S.sid || "")));
+}
+
+/* ---- 数据加载 ------------------------------------------------------------ */
+async function load(sid) {
+  const [meta, limb, bin] = await Promise.all([
+    fetch("/api/file?sid=" + sid + "&name=meta.json").then(r => r.json()),
+    fetch("/api/file?sid=" + sid + "&name=limb_labels.json").then(r => r.json()),
+    fetch("/api/file?sid=" + sid + "&name=points.bin").then(r => r.arrayBuffer()),
+  ]);
+  prepare(meta, limb, new Uint8Array(bin));
+  document.querySelectorAll(".sidrow").forEach(r =>
+    r.classList.toggle("active", r.textContent.includes(sid)));
+}
+function prepare(meta, limb, buf) {
+  S.meta = meta; S.limb = limb; S.frames = meta.frames;
+  S.total = meta.total_points || meta.frames.reduce((s,f)=>s+f.count_points, 0);
+  els.slider.max = S.frames.length - 1;
+  els.tEnd.textContent = (S.frames.length / S.fps).toFixed(1);
+  if (S.ptsObj) S.scene.remove(S.ptsObj);
+  const n = S.total;
+  const pos = new Float32Array(n * 3);
+  const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  for (let i = 0; i < n; i++) {
+    const b = i * 28;
+    pos[i*3]   = dv.getFloat32(b + 0, true);
+    pos[i*3+1] = dv.getFloat32(b + 4, true);
+    pos[i*3+2] = dv.getFloat32(b + 8, true);
+  }
+  S.ptsGeo = new THREE.BufferGeometry();
+  S.ptsGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  const mat = new THREE.PointsMaterial({ size: 0.04, color: COLS.cloud, sizeAttenuation: true });
+  S.ptsObj = new THREE.Points(S.ptsGeo, mat);
+  S.ptsObj.frustumCulled = false;
+  S.scene.add(S.ptsObj);
+  if (S.skeleton) S.scene.remove(S.skeleton);
+  S.skeleton = new THREE.Group();
+  S.scene.add(S.skeleton);
+  els.status.textContent = meta.session_id + " · " + S.frames.length + " 帧";
+  showFrame(0);
+}
+function rebuildSkeleton(rec) {
+  while (S.skeleton.children.length) {
+    const c = S.skeleton.children[0];
+    S.skeleton.remove(c);
+    if (c.geometry) c.geometry.dispose();
+    if (c.material) c.material.dispose();
+  }
+  if (!rec || !rec.detected || !rec.keypoints) return;
+  const pts = rec.keypoints;
+  for (const [a, b] of rec.bones) {
+    if (!pts[a] || !pts[b]) continue;
+    const g = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(...pts[a]),
+      new THREE.Vector3(...pts[b]),
+    ]);
+    S.skeleton.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: limb_colour(b) })));
+  }
+  for (const k of Object.keys(pts)) {
+    const v = pts[k]; if (!v) continue;
+    const r = (k === "head" ? 0.10 : 0.05);
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(r, 10, 8),
+      new THREE.MeshBasicMaterial({ color: limb_colour(k) })
+    );
+    mesh.position.set(v[0], v[1], v[2]);
+    S.skeleton.add(mesh);
+  }
+}
+function showFrame(i) {
+  if (!S.frames) return;
+  S.idx = i;
+  const f = S.frames[i];
+  S.ptsGeo.setDrawRange(f.offset_points, f.count_points);
+  const rec = S.limb.frames[i];
+  rebuildSkeleton(rec);
+  const t = f.bag_time_sec - S.frames[0].bag_time_sec;
+  els.tCur.textContent = t.toFixed(2);
+  els.slider.value = i;
+  const deg = rec && rec.detected ? rec.torso_tilt_deg : null;
+  const degTxt = deg == null ? "—" : deg.toFixed(1) + "°";
+  let cls = "bend", label = "直立";
+  if (deg == null) label = "未检出";
+  else if (deg >= 60) { cls = "bend deep"; label = "深弯（倒下？）"; }
+  else if (deg >= 35) { cls = "bend deep"; label = "弯腰"; }
+  else if (deg >= 20) { cls = "bend"; label = "前倾"; }
+  const kp = rec && rec.keypoints ? Object.values(rec.keypoints).filter(v=>v).length : 0;
+  els.hud.innerHTML = "<b>" + (S.sid || "") + "</b> · 帧 " + i + "/" + (S.frames.length-1)
+    + "<br>躯干倾角 <b class='"+cls+"'>" + degTxt + "</b> " + label
+    + (rec && rec.detected ? " · " + kp + "/15 关键点" : "");
+  els.frameInfo.textContent = "seq=" + f.seq + " n=" + f.count_points;
+}
+
+/* ---- 事件绑定 ------------------------------------------------------------ */
+els.refreshBtn.onclick = () => refreshSessions();
+// 锁定模式： 用户点击 canvas 上的点云 → 提交为 lock
+let lockMode = false;
+els.lockBtn.onclick = () => {
+  if (!S.sid) { els.status.textContent = "先选一会话"; return; }
+  lockMode = !lockMode;
+  els.lockHint.style.display = lockMode ? "block" : "none";
+  els.lockBtn.textContent = lockMode ? "🎯 标人中…" : "🎯 标人";
+};
+els.rerunBtn.onclick = async () => {
+  if (!S.sid) { els.status.textContent = "先选一会话"; return; }
+  els.status.textContent = "强制重跑 limb…";
+  await api("/api/prepare", { method: "POST", headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ sid: S.sid, force: true }) });
+  poll(S.sid);
+};
+document.getElementById("view").addEventListener("click", async (e) => {
+  if (!lockMode || !S.sid || !S.ptsObj) return;
+  // raycast 到 z=0 地面， 替代 3D 点
+  const r = S.renderer.domElement.getBoundingClientRect();
+  const ndc = new THREE.Vector2(
+    ((e.clientX - r.left) / r.width) * 2 - 1,
+    -((e.clientY - r.top) / r.height) * 2 + 1);
+  const rc = new THREE.Raycaster();
+  rc.setFromCamera(ndc, S.camera);
+  // 求射线与 z=0 平面交点
+  const origin = rc.ray.origin, dir = rc.ray.direction;
+  if (Math.abs(dir.z) < 1e-6) { els.status.textContent = "视线几乎平行地面， 换个角度"; return; }
+  const t = -origin.z / dir.z;
+  if (t < 0) { els.status.textContent = "视线朝后， 换个角度"; return; }
+  const hit = origin.clone().add(dir.clone().multiplyScalar(t));
+  const x = Math.round(hit.x * 100) / 100, y = Math.round(hit.y * 100) / 100;
+  // 提交 server
+  try {
+    const r = await api("/api/lock", { method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sid: S.sid, x, y }) });
+    els.status.textContent = "lock ✓ (" + x + ", " + y + ") — 点「↻ 重跑」";
+  } catch (err) {
+    els.status.textContent = "lock 失败: " + err.message;
+  }
+  lockMode = false;
+  els.lockHint.style.display = "none";
+  els.lockBtn.textContent = "🎯 标人";
+});
+els.playBtn.onclick = () => { S.playing = !S.playing; els.playBtn.textContent = S.playing ? "⏸" : "▶"; };
+els.resetBtn.onclick = () => { S.camera.position.set(-2.5, -3, 3); S.controls.target.set(3, 0, 1); };
+els.slider.oninput = () => { showFrame(parseInt(els.slider.value)); S.playing = false; els.playBtn.textContent = "▶"; };
+addEventListener("keydown", e => {
+  if (e.code === "Space") { S.playing = !S.playing; els.playBtn.textContent = S.playing ? "⏸" : "▶"; e.preventDefault(); }
+  else if (e.code === "ArrowRight") showFrame(Math.min(S.frames.length - 1, S.idx + 1));
+  else if (e.code === "ArrowLeft") showFrame(Math.max(0, S.idx - 1));
+});
+ensureScene();
+refreshSessions();
+</script>
+</body>
+</html>

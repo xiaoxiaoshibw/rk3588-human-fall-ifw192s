@@ -79,6 +79,9 @@
     <div id="hfBanner">HF-11 预览 · 几何/合成模式 · 未验收模式不产生 confirmed</div>
     <div class="tools">
       <label>点大小 <input type="range" id="ptSize" min="0.5" max="5" step="0.1" value="1.8" style="vertical-align:middle;width:90px"></label>
+      <label>缩放 <input type="range" id="camZoom" min="0.5" max="3" step="0.1" style="vertical-align:middle;width:70px"></label>
+      <label>旋转 <input type="range" id="camRot" min="0.5" max="3" step="0.1" style="vertical-align:middle;width:70px"></label>
+      <label title="内部渲染分辨率比例，窗口大/高分屏卡顿时调低">分辨率 <input type="range" id="renderScale" min="0.4" max="1" step="0.05" value="1" style="vertical-align:middle;width:70px"></label>
       <button id="btnFit">复位视角</button>
     </div>
   </div>
@@ -92,6 +95,36 @@
       <tr><td>异常标志</td><td id="dvAbn">--</td></tr>
       <tr><td>更新时刻</td><td id="dvTime">--</td></tr>
     </table></section>
+    <section><h3>坐标配平 (GL-04)</h3>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+        <button id="hfModeSource">原始雷达</button>
+        <button id="hfModeGround">配平 ground_local</button>
+        <button id="hfOverhead">俯瞰</button>
+      </div>
+      <div id="hfLevelTag" style="font-size:11px;margin-bottom:4px;color:var(--warn);">
+        配平不可用：尚未收到显式版本化地面变换
+      </div>
+      <table class="kv">
+        <tr><td>坐标模式</td><td id="gMode">--</td></tr>
+        <tr><td>frame / 单位</td><td id="gFrame">--</td></tr>
+        <tr><td>源帧 / 显示帧</td><td id="gFrames">--</td></tr>
+        <tr><td>标定 / schema</td><td id="gCal">--</td></tr>
+        <tr><td>基底 / 变换</td><td id="gGeom">--</td></tr>
+        <tr><td>地面状态</td><td id="gGround">--</td></tr>
+        <tr><td>配平入口</td><td id="gRender">--</td></tr>
+        <tr><td>支持区</td><td id="gSupport">--</td></tr>
+        <tr><td>物理验证</td><td id="gPhys">--</td></tr>
+        <tr><td>FPS / 队列 / 连接</td><td id="gPerf">--</td></tr>
+      </table>
+      <div style="color:var(--dim);font-size:11px;margin-top:4px;">
+        参考网格为无限装饰网格，≠ 已核验地面；配平仅应用板端显式版本化 R/t，不做浏览器拟合；支持区只消费显式字段。
+      </div>
+      <div style="color:var(--dim);font-size:11px;margin-top:2px;">
+        图例：装饰网格 = 灰蓝（始终显示，非地面）·
+        <span style="color:#4ad0c0;">支持面 polygon = 青色</span>（不透明 0.85）·
+        <span style="color:#4a90d0;">支持线 polyline = 蓝色</span>（不透明 0.85）
+      </div>
+    </section>
     <section><h3>人体跌倒 (HF-11，算法在 RK3588)</h3>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
         <button id="hfSelectMode">选人模式：关</button>
@@ -103,15 +136,15 @@
         <tr><td>目标 / 状态</td><td id="hfTrack">--</td></tr>
         <tr><td>跌倒状态</td><td id="hfFall">--</td></tr>
         <tr><td>可观测性</td><td id="hfObs">--</td></tr>
-        <tr><td>位置 source (m)</td><td id="hfPos">--</td></tr>
-        <tr><td>距离 source (m)</td><td id="hfRange">--</td></tr>
+        <tr><td id="hfPosLabel">位置 source (m)</td><td id="hfPos">--</td></tr>
+        <tr><td id="hfRangeLabel">距离 source (m)</td><td id="hfRange">--</td></tr>
         <tr><td>坐标 / 标定</td><td id="hfCoord">--</td></tr>
         <tr><td>目标基线</td><td id="hfBaseline">--</td></tr>
         <tr><td>预测</td><td id="hfPred">--</td></tr>
         <tr><td>事件保存</td><td id="hfPersist">--</td></tr>
       </table>
       <div style="color:var(--dim);font-size:11px;margin-top:4px;">
-        拖框选择（选人模式下拖出矩形）或点下方候选；坐标均为雷达 source 系（innolidar），未标定为世界坐标。
+        拖框选择（选人模式下拖出矩形）或点下方候选；读数随所选模式：原始=雷达 source 系（innolidar，未标定为世界坐标），配平=ground_local。候选行同法标注所属系。
       </div>
       <div id="hfCands"></div>
     </section>
@@ -333,7 +366,11 @@ let intens = new Float32Array(MAX_POINTS);
 
 try {
   renderer = new THREE.WebGLRenderer({ canvas: $("gl"), antialias: false });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  /* 渲染分辨率 = 设备DPR × 用户缩放。窗口越大 GPU 负载越大（逐点填充率受限），
+   * 允许降到 0.5 把内部渲染分辨率砍半，CSS 仍撑满窗口（浏览器拉伸）。
+   * 注意：preview 的 human_fall.js 每帧会用 __renderScale 重算 DPR，别在这里定死。 */
+  window.__renderScale = parseFloat(storeGet("hf_render_scale") || "1.0") || 1.0;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2) * window.__renderScale);
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0b0e14);
   camera = new THREE.PerspectiveCamera(55, 1, 0.05, 2000);
@@ -466,6 +503,25 @@ function fitView() {
 }
 $("btnFit").onclick = fitView;
 $("ptSize").oninput = e => { if (material) { material.size = parseFloat(e.target.value); dirty3d = true; } };
+/* 相机速度：可自调并持久化（缩放/旋转影响的是手感，不参与任何回传）。 */
+function applyCamSpeed() {
+  if (!controls) return;
+  controls.zoomSpeed = parseFloat($("camZoom").value);
+  controls.rotateSpeed = parseFloat($("camRot").value);
+}
+$("camZoom").value = storeGet("hf_cam_zoom") || "1.0";
+$("camRot").value = storeGet("hf_cam_rot") || "1.0";
+applyCamSpeed();
+$("camZoom").oninput = () => { applyCamSpeed(); storeSet("hf_cam_zoom", $("camZoom").value); };
+$("camRot").oninput = () => { applyCamSpeed(); storeSet("hf_cam_rot", $("camRot").value); };
+/* 渲染分辨率：降内部分辨率省 GPU（窗口大/高分屏时明显），CSS 仍全屏拉伸。
+   preview 的 human_fall.js 每帧会按 __renderScale 重算 DPR 并调 resize3d，这里只更新值。 */
+$("renderScale").value = String(window.__renderScale);
+$("renderScale").oninput = () => {
+  window.__renderScale = parseFloat($("renderScale").value) || 1.0;
+  storeSet("hf_render_scale", $("renderScale").value);
+  if (renderer) { renderer.setPixelRatio(Math.min(devicePixelRatio, 2) * window.__renderScale); resize3d(); }
+};
 
 /* ---------- IMU 曲线（环形缓冲 + rAF 节流重绘） ---------- */
 const IMU_N = 512;

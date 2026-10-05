@@ -1,0 +1,119 @@
+[
+  {
+    "id": "V08",
+    "matrix": "C15",
+    "name": "normal fixture is a complete bound published-shape snapshot/state",
+    "result": "PASS",
+    "observed": {
+      "snapvalid": true,
+      "statevalid": true,
+      "ground": "ready",
+      "support": "ready",
+      "obs": {
+        "ok": true,
+        "reason": "ok"
+      },
+      "plane": {
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "offset_m": 1.5,
+        "t2": 1.5
+      },
+      "physical": {
+        "ground_physical_verified": false,
+        "extrinsics_verified": false,
+        "imu_alignment_verified": false
+      }
+    }
+  },
+  {
+    "id": "V08",
+    "matrix": "C15",
+    "name": "tilted fixture is a complete bound published-shape snapshot/state",
+    "result": "PASS",
+    "observed": {
+      "snapvalid": true,
+      "statevalid": true,
+      "ground": "ready",
+      "support": "ready",
+      "obs": {
+        "ok": true,
+        "reason": "ok"
+      },
+      "plane": {
+        "normal": [
+          0,
+          0.20791169081775931,
+          0.9781476007338057
+        ],
+        "offset_m": 1.5,
+        "t2": 1.5
+      },
+      "physical": {
+        "ground_physical_verified": false,
+        "extrinsics_verified": false,
+        "imu_alignment_verified": false
+      }
+    }
+  },
+  {
+    "id": "V09/V10",
+    "matrix": "C15",
+    "name": "no_extrinsics fixture keeps actual source, no ground, physical false",
+    "result": "PASS",
+    "observed": {
+      "snapvalid": true,
+      "statevalid": true,
+      "ground": "unavailable",
+      "obs": {
+        "ok": false,
+        "reason": "ground_invalid"
+      },
+      "sel": {
+        "ok": true,
+        "reason": "ok"
+      },
+      "position_source_from": "actual_points",
+      "physical": {
+        "ground_physical_verified": false,
+        "extrinsics_verified": false,
+        "imu_alignment_verified": false
+      }
+    }
+  },
+  {
+    "id": "V03",
+    "matrix": "C14",
+    "name": "r6 normal fixture with source mm refused; legacy missing units tolerated",
+    "result": "PASS",
+    "observed": {
+      "bad": "invalid",
+      "legacy": "ready"
+    }
+  },
+  {
+    "id": "V02/V03",
+    "matrix": "C13/C14",
+    "name": "r6 normal fixture with support_units mm refused",
+    "result": "PASS",
+    "observed": {
+      "status": "invalid",
+      "reason": "support_units"
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "r6 identity token covers units.length/ground kind+schema/center_ground",
+    "result": "PASS",
+    "observed": {
+      "units": true,
+      "kind": true,
+      "schema": true,
+      "center": true
+    }
+  }
+]

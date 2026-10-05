@@ -1,0 +1,60 @@
+{
+  "kind": "ground_region_review_plan",
+  "schema": 1,
+  "plan_id": "region-review:034d8fd43d87d355f0e899c293b4c64a1f31c805698e9465196e7cc9560fdaa6",
+  "binding": {
+    "source_id": "cc615d42add21656ee401913987bae85fd1abada423a90927fb3575e5d711356",
+    "bin_sha256": "b81797f9825792655e5930edeb39c15275eb64e01999984884da61d252c599ff",
+    "xyz_sha256": "a4ad287ea14edd1ba584dd24dce866d7c4eacdc7ce2594edb2ddb1eef1b51c27",
+    "frame": "innolidar",
+    "units": "m",
+    "model_id": "nominal:357fc1379b4c078da0e1845ca0f8369e53b073fe2dbfb8fa6668850671de9203",
+    "window_bag_time_sec": [
+      1790930182.177557,
+      1790930191.258644
+    ]
+  },
+  "cell_m": 0.25,
+  "regions": [
+    {
+      "region_id": "FIT_near",
+      "role": "fit",
+      "frame_group": "frame:3d854c4e9c848ce08fb1e058",
+      "x_min_m": 0.5,
+      "x_max_m": 1.0,
+      "y_min_m": -0.8,
+      "y_max_m": -0.2,
+      "description": "FIT_near nominal spatial footprint; all heights; ground identity pending scene/3D landmark review"
+    },
+    {
+      "region_id": "VAL_middle",
+      "role": "validation",
+      "frame_group": "frame:9193dc1e25cb0607623864f9",
+      "x_min_m": 1.05,
+      "x_max_m": 1.5,
+      "y_min_m": -0.8,
+      "y_max_m": -0.2,
+      "description": "VAL_middle nominal spatial footprint; all heights; ground identity pending scene/3D landmark review"
+    },
+    {
+      "region_id": "VAL_far",
+      "role": "validation",
+      "frame_group": "frame:67413b1f9fff306b6f2f91d1",
+      "x_min_m": 1.6,
+      "x_max_m": 2.1,
+      "y_min_m": -0.8,
+      "y_max_m": -0.2,
+      "description": "VAL_far nominal spatial footprint; all heights; ground identity pending scene/3D landmark review"
+    },
+    {
+      "region_id": "VAL_side",
+      "role": "validation",
+      "frame_group": "frame:971a20d523a5df063a108be0",
+      "x_min_m": 1.1,
+      "x_max_m": 1.6,
+      "y_min_m": -1.5,
+      "y_max_m": -1.0,
+      "description": "VAL_side nominal spatial footprint; all heights; ground identity pending scene/3D landmark review"
+    }
+  ]
+}

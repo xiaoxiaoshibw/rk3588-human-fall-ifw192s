@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_roi_pointcloud_annotation",
+  "version": "v8",
+  "corrections_from_v7": [
+    "Use user-provided mount geometry h=1.1m, pitch=26deg (not histogram mode)",
+    "Rotate lidar frame to world frame via R_y(-pitch) and translate -1.1m in z",
+    "Floor plate = world |Zw| < 0.10 m (not 'z near histogram mode')"
+  ],
+  "mount_geometry_user_provided": {
+    "height_m": 1.1,
+    "pitch_deg": 26.0,
+    "source": "user verbal statement, not yet formal FIELD_CHECKLIST §2/§3 measurement",
+    "physical_verified": false
+  },
+  "power_strip": {
+    "X_range_world_m": [
+      2.5,
+      2.55
+    ],
+    "user_measured_distance_m": 2.5
+  },
+  "source": {
+    "bag_session_id": "cap_20261002_233210",
+    "points_sha256": "d946b80b51258e4e0452fc3a40f9ebd7b47c9b3edac25df7aeb1c6ea9f322664",
+    "frames_merged": 99,
+    "total_points": 4863787,
+    "floor_points": 394019,
+    "floor_z_tol_m": 0.1
+  },
+  "roi_definitions": [
+    {
+      "roi_id": "#1 FIT_near",
+      "X_range_world_m": [
+        0.6,
+        1.2
+      ],
+      "Y_range_world_m": [
+        -0.4,
+        0.4
+      ],
+      "note": "FIT, closest to lidar",
+      "points_inside": 44951,
+      "color_rgb": [
+        46,
+        204,
+        113
+      ]
+    },
+    {
+      "roi_id": "#2 VAL_mid_near",
+      "X_range_world_m": [
+        1.3,
+        1.8
+      ],
+      "Y_range_world_m": [
+        -0.5,
+        0.5
+      ],
+      "note": "VAL mid-near",
+      "points_inside": 1807,
+      "color_rgb": [
+        241,
+        196,
+        15
+      ]
+    },
+    {
+      "roi_id": "#3 VAL_mid_far",
+      "X_range_world_m": [
+        1.9,
+        2.4
+      ],
+      "Y_range_world_m": [
+        -0.5,
+        0.5
+      ],
+      "note": "VAL mid-far, before power strip",
+      "points_inside": 10866,
+      "color_rgb": [
+        230,
+        126,
+        34
+      ]
+    },
+    {
+      "roi_id": "#4 VAL_far",
+      "X_range_world_m": [
+        2.7,
+        3.4
+      ],
+      "Y_range_world_m": [
+        -0.5,
+        0.5
+      ],
+      "note": "VAL far, past power strip",
+      "points_inside": 995,
+      "color_rgb": [
+        155,
+        89,
+        182
+      ]
+    }
+  ],
+  "rendering": {
+    "color_scheme": "Z_world residual via RdYlGn",
+    "projection": "top-down (Y lateral, X forward)"
+  },
+  "next_physical_steps": [
+    "User measures mount height/angle formally per FIELD_CHECKLIST §2/§3",
+    "Replace h=1.1 deg=26 with measured values when available",
+    "Place stickers Zone-FIT-01 .. Zone-VAL-03 at field",
+    "Laser-rangefinder distance from origin to each sticker x3"
+  ],
+  "version_history": [
+    {
+      "v": "v7",
+      "issue": "Used histogram mode for floor z, treated lidar x as world x — both wrong"
+    },
+    {
+      "v": "v8",
+      "fix": "Proper leveling: R_y(-26) rotation + 1.1m translate, floor plate = |Zw| < 0.10"
+    }
+  ]
+}

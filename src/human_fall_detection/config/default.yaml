@@ -1,0 +1,25 @@
+topics:
+  cloud: /innolidar_points
+  imu: /inno_imu
+  device_status: /device_status
+  health: /human_fall/health
+timeouts_s:
+  cloud_stale: 0.6
+  imu_stale: 0.3
+  device_stale: 0.6
+publish_period_s: 0.5
+stamps:
+  max_forward_jump_s: 30.0
+checks:
+  expected_cloud_frame: innolidar
+imu_semantics:
+  units_verified: false
+  alignment_verified: false
+recording:
+  topics:
+    - /innolidar_points
+    - /inno_imu
+    - /device_status
+    - /human_fall/health
+  duration_s: 10.0
+  output_dir: /root/catkin_ws/human_fall_sessions

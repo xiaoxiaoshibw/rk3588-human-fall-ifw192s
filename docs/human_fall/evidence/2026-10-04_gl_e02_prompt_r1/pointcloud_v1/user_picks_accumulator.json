@@ -1,0 +1,69 @@
+{
+  "schema_version": "2.0",
+  "kind": "gle02_user_roi_picks_accumulator",
+  "session_id": "cap_20261002_233210",
+  "status": "4_of_4_PICKED_ALL_GATES_PASS",
+
+  "transform": {
+    "user_initial": {"pitch_deg": 26.0, "roll_deg": 0.0, "tz_m": 1.340,
+                      "source": "user visual alignment annotator.html v11, 2026-10-04"},
+    "optimized": {"pitch_deg": 26.2338, "roll_deg": -1.3221, "tz_m": 1.3222,
+                   "source": "joint solve on 229,691 frozen floor points (optimize_transform.py)",
+                   "roll_note": "FITTING PARAMETER, not a physical claim. From a planar floor alone, "
+                                "'lidar roll' and 'floor Y-slope' are mathematically indistinguishable. "
+                                "The fit absorbed the Y-tilt; whether it is really lidar roll is a §3 "
+                                "question and irrelevant to the software gates."},
+    "convention": "R = Rx(roll) @ Ry(pitch); Z += tz"
+  },
+
+  "picks": [
+    {"pick_id": "pick_01", "role_hint": "candidate FIT or VAL",
+     "box_world_m": {"X": [1.022, 1.773], "Y": [-0.952, -0.432]},
+     "n_ground": 89374, "rms_m": 0.0151, "absres_p95_m": 0.0299, "support": 0.999},
+    {"pick_id": "pick_02", "role_hint": "candidate VAL (far)",
+     "box_world_m": {"X": [2.623, 3.333], "Y": [-0.585, 0.213]},
+     "n_ground": 27298, "rms_m": 0.0203, "absres_p95_m": 0.0307, "support": 0.970,
+     "note": "initial run failed RMS gate due to robot-body points (Z 0.3-1.0m) inside X/Y box; "
+             "fixed by standard ground Z-gate |Z|<0.15m (production-pipeline equivalent)"},
+    {"pick_id": "pick_03", "role_hint": "candidate FIT (best flatness)",
+     "box_world_m": {"X": [1.918, 2.415], "Y": [-0.964, 0.087]},
+     "n_ground": 51967, "rms_m": 0.0096, "absres_p95_m": 0.0183, "support": 1.000},
+    {"pick_id": "pick_04", "role_hint": "candidate VAL (near/lateral)",
+     "box_world_m": {"X": [1.296, 1.776], "Y": [-0.400, 0.220]},
+     "n_ground": 61030, "rms_m": 0.0134, "absres_p95_m": 0.0257, "support": 0.999,
+     "note": "Y_min edited -0.473 -> -0.400 per user decision A (remove overlap with pick_01)"}
+  ],
+
+  "gate_results": {
+    "authority": "GROUND_LEVELING_NEXT_STAGE_PLAN.md §5 (既有软件工程门)",
+    "all_four_boxes": "PASS all 7 gates",
+    "thresholds": {"min_points": 20, "max_rms_m": 0.03, "max_absres_p95_m": 0.05,
+                    "min_support": 0.8, "max_normal_deg": 2.0, "max_offset_range_m": 0.03},
+    "gate_input_convention": "ROI box AND |Z|<0.15m ground gate; residuals untruncated"
+  },
+
+  "cross_box_observation": {
+    "method": "single FIT plane extrapolated to VAL boxes (frozen points)",
+    "result": "FIT=pick_03 best: VAL |P95| = 5.2cm/5.8cm/3.7cm",
+    "interpretation": "2-6cm systematic cross-box deviation = REAL floor spatial unevenness "
+                       "(wood floor), absorbed by per-box fit; not a transform artifact. "
+                       "PLAN §5 gates are per-box; cross-box extrapolation is NOT a gate.",
+    "significance": "will inform P2 physical-stage expectations"
+  },
+
+  "open_items": [
+    "Assign FIT vs VAL_01..03 roles among 4 picks (user decision pending; recommendation: pick_03=FIT)",
+    "Per-box frame windows (single-frame assignment), seq values recorded in software_gate_check.meta.json",
+    "FIELD_CHECKLIST §2 laser: verify tz≈1.322 (vs our model estimate); §3 verify pitch/roll",
+    "Physical verification still BLOCKED until §2/§3 instrument measurements done"
+  ],
+
+  "evidence_files": [
+    "user_pick_fit_v1.png/json           - pick_01 first measurement",
+    "user_picks_verify_all.png/json      - 4-box health check",
+    "optimized_transform.json            - joint (pitch, roll, tz) solve",
+    "optimize_transform.png              - before/after visualization",
+    "p2_frozen_validation.png/json       - true cross-box P2 attempt (0/4 pass; informational)",
+    "software_gate_check.png/json        - PLAN §5 gates: 4/4 boxes ALL PASS"
+  ]
+}

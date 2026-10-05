@@ -1,0 +1,37 @@
+test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board) ... [17:40:37] "GET /api/leveling/sessions HTTP/1.1" 200 -
+[17:40:37] "GET /api/leveling/source?sid=cap_20990101_000001 HTTP/1.1" 200 -
+[17:40:37] "POST /api/leveling/run HTTP/1.1" 400 -
+[17:40:37] "POST /api/leveling/run HTTP/1.1" 409 -
+[17:40:37] "POST /api/leveling/run HTTP/1.1" 202 -
+[17:40:37] "GET /api/leveling/job?id=7035a4d0ae554a8f988e4df035acd127 HTTP/1.1" 200 -
+[17:40:37] "GET /api/leveling/job?id=7035a4d0ae554a8f988e4df035acd127 HTTP/1.1" 200 -
+[17:40:38] "GET /api/leveling/job?id=7035a4d0ae554a8f988e4df035acd127 HTTP/1.1" 200 -
+[17:40:38] "GET /api/leveling/job?id=7035a4d0ae554a8f988e4df035acd127 HTTP/1.1" 200 -
+[17:40:38] "GET /api/leveling/job?id=7035a4d0ae554a8f988e4df035acd127 HTTP/1.1" 200 -
+[17:40:38] "GET /api/leveling/artifact?id=7035a4d0ae554a8f988e4df035acd127&method=tls&name=dataset.zip HTTP/1.1" 200 -
+[17:40:38] "POST /api/leveling/run HTTP/1.1" 202 -
+[17:40:38] "GET /api/leveling/job?id=19e28b268a9d4beaa83bdb20b87c79a3 HTTP/1.1" 200 -
+[17:40:38] "GET /api/leveling/job?id=19e28b268a9d4beaa83bdb20b87c79a3 HTTP/1.1" 200 -
+[17:40:38] "POST /api/leveling/run HTTP/1.1" 202 -
+[17:40:38] "GET /api/leveling/job?id=67cad93b7510449ca6825f1731765c9c HTTP/1.1" 200 -
+[17:40:38] "GET /api/leveling/job?id=67cad93b7510449ca6825f1731765c9c HTTP/1.1" 200 -
+FAIL
+test_line_domain_and_ls_majority_cannot_override_conflict (leveling_test.WorkbenchTest.test_line_domain_and_ls_majority_cannot_override_conflict) ... ok
+test_request_boundary_source_drift_and_owned_config (leveling_test.WorkbenchTest.test_request_boundary_source_drift_and_owned_config) ... ok
+test_transform_export_and_frozen_disjoint_rows (leveling_test.WorkbenchTest.test_transform_export_and_frozen_disjoint_rows) ... ok
+
+======================================================================
+FAIL: test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\pc_apps\human_replay\leveling_test.py", line 190, in test_actual_http_job_failures_concurrency_download_and_no_board
+    self.assertEqual(auto_job["state"],"ready",auto_job)
+AssertionError: 'failed' != 'ready'
+- failed
++ ready
+ : {'job_id': '67cad93b7510449ca6825f1731765c9c', 'sid': 'cap_20990101_000001', 'state': 'failed', 'message': "floor_regions_invalid: no connected unobstructed floor component; [{'offset_m': 1.2995979751730478, 'clean_floor_cells': 0}]", 'created': 1791193238.3810544, 'error': "floor_regions_invalid: no connected unobstructed floor component; [{'offset_m': 1.2995979751730478, 'clean_floor_cells': 0}]"}
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.937s
+
+FAILED (failures=1)

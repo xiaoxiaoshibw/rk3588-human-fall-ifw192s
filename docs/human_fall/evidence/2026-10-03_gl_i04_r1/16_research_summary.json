@@ -1,0 +1,137 @@
+{
+  "clean": {
+    "prototype_statuses": {
+      "seen_sequence_closed_single": 6
+    },
+    "oracle_statuses": {
+      "seen_sequence_closed_single": 6
+    },
+    "baseline_status_reasons": {
+      "valid/None": 6
+    },
+    "prototype_median_seconds": 0.08514364999427926,
+    "baseline_median_seconds": 0.03740050000487827,
+    "max_retained": 1,
+    "max_refined": 860
+  },
+  "noise": {
+    "prototype_statuses": {
+      "seen_sequence_closed_single": 6
+    },
+    "oracle_statuses": {
+      "seen_sequence_closed_single": 6
+    },
+    "baseline_status_reasons": {
+      "valid/None": 6
+    },
+    "prototype_median_seconds": 0.09069499999168329,
+    "baseline_median_seconds": 0.03821245000290219,
+    "max_retained": 1,
+    "max_refined": 818
+  },
+  "high_noise": {
+    "prototype_statuses": {
+      "unresolved": 6
+    },
+    "oracle_statuses": {
+      "unresolved": 6
+    },
+    "baseline_status_reasons": {
+      "valid/None": 6
+    },
+    "prototype_median_seconds": 0.1262910500081489,
+    "baseline_median_seconds": 0.04114234998996835,
+    "max_retained": 128,
+    "max_refined": 691
+  },
+  "dual": {
+    "prototype_statuses": {
+      "unresolved": 6
+    },
+    "oracle_statuses": {
+      "unresolved": 6
+    },
+    "baseline_status_reasons": {
+      "orientation_unverified/ground_orientation_ambiguous": 6
+    },
+    "prototype_median_seconds": 0.12401004999992438,
+    "baseline_median_seconds": 0.047993000014685094,
+    "max_retained": 128,
+    "max_refined": 537
+  },
+  "close": {
+    "prototype_statuses": {
+      "unresolved": 6
+    },
+    "oracle_statuses": {
+      "unresolved": 6
+    },
+    "baseline_status_reasons": {
+      "invalid/ground_validation_failed": 6
+    },
+    "prototype_median_seconds": 0.15084679999563377,
+    "baseline_median_seconds": 0.04770180000923574,
+    "max_retained": 128,
+    "max_refined": 672
+  },
+  "real_WHAT_IF": [
+    {
+      "label": "approved",
+      "prototype_status": "unresolved",
+      "reasons": [
+        "no_refined_witness"
+      ],
+      "counts": {
+        "draws_seen": 861,
+        "qualified": 0,
+        "refined": 0,
+        "rejected": 0,
+        "retained": 0,
+        "merged_exact": 0,
+        "merged_certified": 0,
+        "unprocessed": 0,
+        "trace_unrecorded": 0,
+        "unstored": 0,
+        "peak_retained": 0
+      },
+      "baseline_status": "invalid",
+      "baseline_reason": "ground_degenerate",
+      "oracle": {
+        "status": "unresolved",
+        "refined_count": 0,
+        "distinct_pair_count": 0,
+        "scope": "same seen hypotheses only"
+      }
+    },
+    {
+      "label": "negative_X",
+      "prototype_status": "unresolved",
+      "reasons": [
+        "close_competition",
+        "distinct_refined_witnesses",
+        "similarity_envelope_not_closed"
+      ],
+      "counts": {
+        "draws_seen": 861,
+        "qualified": 693,
+        "refined": 693,
+        "rejected": 0,
+        "retained": 31,
+        "merged_exact": 0,
+        "merged_certified": 662,
+        "unprocessed": 0,
+        "trace_unrecorded": 0,
+        "unstored": 0,
+        "peak_retained": 31
+      },
+      "baseline_status": "orientation_unverified",
+      "baseline_reason": "ground_competition_unresolved",
+      "oracle": {
+        "status": "unresolved",
+        "refined_count": 693,
+        "distinct_pair_count": 3519,
+        "scope": "same seen hypotheses only"
+      }
+    }
+  ]
+}

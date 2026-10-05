@@ -1,0 +1,17 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-W",
+    "error",
+    "src/human_fall_detection/scripts/fit_joint_leveling.py",
+    "--input",
+    "docs\\human_fall\\evidence\\2026-10-04_gl_c01_r1\\adapted_99_01.npz",
+    "--selection",
+    "docs\\human_fall\\evidence\\2026-10-04_gl_c01_r1\\04_frozen_selection_01.json",
+    "--output",
+    "docs\\human_fall\\evidence\\2026-10-04_gl_c01_r1\\joint_01"
+  ],
+  "exit": 2,
+  "tail": "joint leveling refused: cannot read evidence docs\\human_fall\\evidence\\2026-10-04_gl_c01_r1\\04_frozen_selection_01.json: [Errno 2] No such file or directory: 'docs\\\\human_fall\\\\evidence\\\\2026-10-04_gl_c01_r1\\\\04_frozen_selection_01.json'\r\n"
+}

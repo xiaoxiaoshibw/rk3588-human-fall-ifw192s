@@ -1,0 +1,60 @@
+﻿python : test_known_gt_angles_flip_and_display_rotation_AGL_A_02 (test_agl_a_estimators.AglAEstimatorInterfaceTest.test
+_known_gt_angles_flip_and_display_rotation_AGL_A_02) ... ok
+所在位置 行:3 字符: 1
++ python -B -W error -m unittest discover -s src/human_fall_detection/t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_known_gt_a...GL_A_02) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_numeric_cross_check_and_ransac_denominators_AGL_A_04 (test_agl_a_estimators.AglAEstimatorInterfaceTest.test_numeri
+c_cross_check_and_ransac_denominators_AGL_A_04) ... ok
+test_ownership_reload_and_config_epoch_AGL_A_05 (test_agl_a_estimators.AglAEstimatorInterfaceTest.test_ownership_reload
+_and_config_epoch_AGL_A_05) ... ok
+test_scaled_normal_offset_assemble_regression_AGL_A_02 (test_agl_a_estimators.AglAEstimatorInterfaceTest.test_scaled_no
+rmal_offset_assemble_regression_AGL_A_02)
+缩放输入过公有装配：地面网格 z=-1.32（2z+2.64=0）；修复前 offset=2.64/RMS=1.32。 ... FAIL
+test_scaled_normal_offset_normalization_regression_AGL_A_02 (test_agl_a_estimators.AglAEstimatorInterfaceTest.test_scal
+ed_normal_offset_normalization_regression_AGL_A_02)
+独审反例：|n|≠1 时 d 必须同除 ‖n‖（修复前 d 停在 -2.64，平面放大 ‖n‖ 倍）。 ... FAIL
+test_shared_domain_binding_and_json_safe_outputs_AGL_A_01 (test_agl_a_estimators.AglAEstimatorInterfaceTest.test_shared
+_domain_binding_and_json_safe_outputs_AGL_A_01) ... ok
+test_strict_refusals_and_invalid_no_identity_AGL_A_03 (test_agl_a_estimators.AglAEstimatorInterfaceTest.test_strict_ref
+usals_and_invalid_no_identity_AGL_A_03) ... ok
+
+======================================================================
+FAIL: test_scaled_normal_offset_assemble_regression_AGL_A_02 (test_agl_a_estimators.AglAEstimatorInterfaceTest.test_sca
+led_normal_offset_assemble_regression_AGL_A_02)
+缩放输入过公有装配：地面网格 z=-1.32（2z+2.64=0）；修复前 offset=2.64/RMS=1.32。
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\src\human_fall_detection\tests\test_agl_a_estimators.py", line 145, in test_scaled_normal_offset_
+assemble_regression_AGL_A_02
+    self.assertAlmostEqual(estimate["offset_source_m"], 1.32, places=12)
+AssertionError: 2.64 != 1.32 within 12 places (1.32 difference)
+
+======================================================================
+FAIL: test_scaled_normal_offset_normalization_regression_AGL_A_02 (test_agl_a_estimators.AglAEstimatorInterfaceTest.tes
+t_scaled_normal_offset_normalization_regression_AGL_A_02)
+独审反例：|n|≠1 时 d 必须同除 ‖n‖（修复前 d 停在 -2.64，平面放大 ‖n‖ 倍）。
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\src\human_fall_detection\tests\test_agl_a_estimators.py", line 131, in test_scaled_normal_offset_
+normalization_regression_AGL_A_02
+    self.assertEqual(canonical_plane([0.0, 0.0, 2.0], -2.64, up),
+AssertionError: Tuples differ: ([0.0, 0.0, 1.0], -2.64) != ([0.0, 0.0, 1.0], -1.32)
+
+First differing element 1:
+-2.64
+-1.32
+
+- ([0.0, 0.0, 1.0], -2.64)
+?                     ---
+
++ ([0.0, 0.0, 1.0], -1.32)
+?                    +++
+
+
+----------------------------------------------------------------------
+Ran 7 tests in 1.271s
+
+FAILED (failures=2)

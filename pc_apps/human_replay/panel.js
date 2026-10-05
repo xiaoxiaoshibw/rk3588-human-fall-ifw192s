@@ -16,6 +16,7 @@
 
     // 当前选中 sid
     var selected_sid = null;
+    var refresh_version = 0;
 
     function setNote(msg, is_err) {
         els.syncNote.textContent = msg || "";
@@ -23,15 +24,26 @@
     }
 
     function api(path, method, body) {
+        // GET 超时只影响读状态；录制/同步等写请求仍等待实际结果。
+        var controller = (!method || method === "GET") ? new AbortController() : null;
+        var timer = controller ? setTimeout(function () { controller.abort(); }, 6000) : null;
         return fetch(path, {
             method: method || "GET",
             headers: body ? { "Content-Type": "application/json" } : undefined,
             body: body ? JSON.stringify(body) : undefined,
+            signal: controller ? controller.signal : undefined,
         }).then(function (r) {
             if (!r.ok) return r.json().catch(function () { return {}; }).then(function (j) {
                 throw new Error(j.error || ("HTTP " + r.status));
             });
             return r.json();
+        }).then(function (r) {
+            clearTimeout(timer);
+            return r;
+        }, function (e) {
+            clearTimeout(timer);
+            if (e.name === "AbortError") throw new Error("请求超时");
+            throw e;
         });
     }
 
@@ -39,7 +51,8 @@
     function refresh_board() {
         api("/api/board/status").then(function (st) {
             if (st.error) {
-                els.boardStatus.textContent = "板端: " + st.error;
+                els.boardStatus.textContent = "板端离线，可回放本地会话";
+                els.boardStatus.title = st.error;
                 els.boardStatus.style.color = "#f88";
                 els.recBtn.disabled = true;
                 return;
@@ -60,7 +73,8 @@
             }
             els.boardMeta.textContent = "";
         }).catch(function (e) {
-            els.boardStatus.textContent = "板端: " + e.message;
+            els.boardStatus.textContent = "板端离线，可回放本地会话";
+            els.boardStatus.title = e.message;
             els.boardStatus.style.color = "#f88";
             els.recBtn.disabled = true;
         });
@@ -118,14 +132,26 @@
     }
 
     function refresh_sessions() {
-        els.panelStatus && (els.panelStatus.textContent = "加载中…");
-        api("/api/sessions").then(function (r) {
+        var version = ++refresh_version;
+        els.panelStatus && (els.panelStatus.textContent = "加载本地…");
+        api("/api/sessions?scope=local").then(function (r) {
+            if (version !== refresh_version) return;
             render_sessions(r.sessions || []);
-            if (els.panelStatus) {
-                els.panelStatus.textContent = r.board_error ? ("板端: " + r.board_error) : "";
-            }
+            if (els.panelStatus) els.panelStatus.textContent = "本地可用，检查板端…";
+            return api("/api/sessions").then(function (remote) {
+                if (version !== refresh_version) return;
+                if (!remote.board_error) render_sessions(remote.sessions || []);
+                if (els.panelStatus) els.panelStatus.textContent = remote.board_error
+                    ? "离线 · 本地会话" : "";
+            }).catch(function () {
+                if (version === refresh_version && els.panelStatus)
+                    els.panelStatus.textContent = "离线 · 本地会话";
+            });
         }).catch(function (e) {
-            if (els.panelStatus) els.panelStatus.textContent = e.message;
+            if (version !== refresh_version) return;
+            if (els.panelStatus) {
+                els.panelStatus.textContent = "本地列表失败: " + e.message;
+            }
         });
     }
 

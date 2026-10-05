@@ -1,0 +1,46 @@
+{
+ "acceptance": {
+  "path": "docs/human_fall/GL03_ACCEPTANCE.md",
+  "sha256": "16ecd6f1b53e5daf4c1276f2a3e86c5f76241b09415eb499b29dd9888d128126"
+ },
+ "changed": [
+  {
+   "path": "src/human_fall_detection/core/calibration.py",
+   "sha256": "38d2e25e6667ce4134ff02a08e6b22275f5e0a7677c177d5675225e376489f01"
+  },
+  {
+   "path": "src/human_fall_detection/core/lidar_candidates.py",
+   "sha256": "318abc786f49bb5d87e0a1e2030c017a2e489d302a038a814e56203fdd5bf1c5"
+  },
+  {
+   "path": "src/human_fall_detection/core/node_runtime.py",
+   "sha256": "4297663bc3cb08235672588b855f2ab135d39d10efa4b64ace7e88778e5fd8d4"
+  },
+  {
+   "path": "src/human_fall_detection/tests/test_gl03_candidates_geometry.py",
+   "sha256": "7d327dbabd97547fc12ca3d57038303cf4bbc33c178d3e27b605a5925e652750"
+  }
+ ],
+ "data": {
+  "planes": "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_planes.json",
+  "planes_sha256": "f238294ee42f9161ec4ee7a804a5448de617fbfe6e689125e022408e04bc43e8",
+  "pool": "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_sample.csv.tgz",
+  "pool_rows": 97411,
+  "pool_sha256": "528d8ed29430d7a9037dc46d69123b310b280aedeb0f4fff1a6e231d347f9a0e",
+  "roi": "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_roi_points.csv",
+  "roi_sha256": "4c9ccaacb4f941cb995532620fb5af6886b98b6ac18855d8a6870c56db30660f"
+ },
+ "external_concurrent_preserved_not_attributed": {
+  "modified": [
+   "src/human_fall_detection/scripts/fall_replay.py"
+  ],
+  "new": [
+   "src/human_fall_detection/scripts/lidata_to_replay.py",
+   "src/human_fall_detection/tests/test_lidata_to_replay.py"
+  ],
+  "note": "observed after 2026-10-02 15:55 local; not written or reviewed by this round; kept as-is"
+ },
+ "not_modified_frozen": "no config/default.yaml, geometry.yaml, geometry_constrained.yaml, human_fall.yaml, human_fall_prod.yaml, perception.yaml, driver, webui, raw data, historical evidence",
+ "round": "GL-03 R3 / 2026-10-02",
+ "start_head": "49eb7581faabdda031642e04d3ef4ffe75d48331"
+}

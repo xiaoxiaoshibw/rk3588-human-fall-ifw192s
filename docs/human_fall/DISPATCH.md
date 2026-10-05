@@ -1,8 +1,92 @@
+# 当前活动覆盖 / 2026-10-03 GL-I01离线输入（诊断门）
+
+当前本地新增入口：[GL-V01三会话算法验证](tickets/GL-V01_algorithm_validation.md) / [唯一验收v1](GLV01_ACCEPTANCE.md) / [回传](returns/GL-V01.md)。作者SUBMITTED/STOPPED，外部独审NOT_RUN；仅静态离线，历史数值FAIL与物理/设备边界保持。
+
+
+2026-10-05当前活动覆盖：**GL-W01 R1 / SUBMITTED / 指定独审服务BLOCKED**，[本单](tickets/GL-W01_offline_workbench.md)/[唯一v1](GLW01_ACCEPTANCE.md)。本次用户明确授权本地静态离线配平工作台；Codex唯一writer完成并自验，Go Flash/defaultDB一次无工具probe55.477秒超时exit1，无独审session/推理结果，不自动重试/切模型/改DB。生产/设备/采集/部署/AGL在线路线未启动。以下为历史活动记录。
+
+本轮仅计划：自适应地面配平最终路线已编制 **PLAN_READY**，[正式计划](ADAPTIVE_GROUND_LEVELING_FINAL_PLAN.md)/[模块与状态契约](ADAPTIVE_GROUND_LEVELING_CONTRACT.md)/[GL-A～GL-I工单索引](tickets/INDEX.md)。九单均未实施/NOT_RUN；H实时shadow与I人工接管须后续具体授权及证据门；当前静态方案、1.14m物理记录、P02既有结果保持，不启动CLI/设备/源码变更。
+
+2026-10-04 当前离线P02 v2：四ROI联合配平与同一HTML三算法展示已完成作者自验；392196源点、逐区门PASS，留一区3/4 FAIL保留，物理/外推BLOCKED/P1 NO，无设备/采集/部署。入口：[唯一v2](P02_ACCEPTANCE.md)/[本轮结果](evidence/2026-10-04_p02_four_roi_r1/08_REPORT.md)。以下GL-C01等为历史阶段记录。
+
+2026-10-04 GL-C01 **当前联合反解小点自验完成 / SUBMITTED / STOPPED**：[唯一v1](GLC01_ACCEPTANCE.md)/[收口](evidence/2026-10-04_gl_c01_r1/20_CLOSEOUT_01.md)。99帧新cohort单FIT/frame0与三个独立validation/frame33/66/98，源行冻结无Z/残差裁剪；数据估计pitch26.314310°/roll-0.612061°/tz1.323137m，validation共同FIT平面P95两区0.050762/0.057539m FAIL保留。458fall回归、5新tests作者自验通过；未指定独审，不标软件独审PASS。用户要求做完这一小点先停，本轮不派probe/独审/后续任务，不设备/采集/部署/生产。
+
+2026-10-04 GL-B01 R1 **区域复核/诊断软件独审PASS / SUBMITTED / STOPPED**：[唯一v1](GLB01_ACCEPTANCE.md)/[收口](evidence/2026-10-04_gl_b01_r1/33_CLOSEOUT_01.md)/[独审](evidence/2026-10-04_gl_b01_r1/30_OPENCODE_VERDICT_01.md)。R01–R06/S01/Q01–Q06 PASS，无需返工；用户木地板/工作台语义和75cm参考已记录，P01剩余行集/精度/SDK BLOCKED，D01 NOT_RUN。89帧当前数据2959候选场景行保持全高度、未制造精确ground标签。联合反解下一单按新用户具体授权处理，B代码持续停写。
+
+2026-10-04 GL-N01 R1 **当前参数名义离线配平软件独审PASS / SUBMITTED / STOPPED**：[主线计划v3](GROUND_LEVELING_NEXT_STAGE_PLAN_V3.md)/[唯一v1](GLN01_ACCEPTANCE.md)/[收口](evidence/2026-10-04_gl_n01_r1/22_CLOSEOUT_01.md)/[前后图](evidence/2026-10-04_gl_n01_r1/07_before_after_frame05_01.png)。26°/1.1m已变换全部89帧，3699085有效点源行保留；N01–N06/S01/Q01–Q06 PASS，P01独立物理BLOCKED、D01 NOT_RUN，真实浏览器NOT_RUN/BLOCKED。参数可配置、新ID与结果版本；无writer、不自动真实拟合/生产接入/设备/采集/部署。
+
+2026-10-04 GL-E02 R1 **软件独审PASS / SUBMITTED / STOPPED**：[唯一v1](GLE02_ACCEPTANCE.md)/[收口](evidence/2026-10-04_gl_e02_r1/41_CLOSEOUT_01.md)/[Go Flash独审](evidence/2026-10-04_gl_e02_r1/36_OPENCODE_VERDICT_02.md)。E01–E06/S01/Q01–Q07 PASS，P01独立物理复核BLOCKED，D01 NOT_RUN。用户最新1.1m/约26°下俯作为名义安装参数已记录；照片确认与刚拍陈述保留。无writer/无需返工，不自动拟合/采集/生产接入/部署。
+
+2026-10-04 下一阶段计划已准备（DRAFT_READY，未启动）：[阶段计划v2](GROUND_LEVELING_NEXT_STAGE_PLAN.md)/[算法设计](GROUND_LEVELING_ALGORITHM_DESIGN.md)/[首代码研究单GL-I06](GLI06_ACCEPTANCE.md)/[执行提示](AI_PROMPT_GLI06_CODEX_R1.md)。算法shadow与GL-E02现场证据并行准备，源码写入串行；当前GL-E01来源链PASS及物理/DPR未闭合状态保持。
+
+2026-10-04 主线GL-E01 R1 **来源链独审PASS / STOPPED**：[唯一v1](GLE01_ACCEPTANCE.md)/[收口](evidence/2026-10-04_mainline_evidence_r1/17_CLOSEOUT.md)/[指定独审](evidence/2026-10-04_mainline_evidence_r1/opencode_review_01/00_review.md)。原bag实际SHA、89frames/4372400points、26B→28B全部bytes/XYZ/meta/NPZ匹配，A01–A05/S01/Q01–Q06与B01来源链PASS；B02物理BLOCKED，D01 NOT_RUN，D02 DPR环境BLOCKED。旧NPZ/旧GL-I05记录不回填，GL-I05软件PASS保持；不新采集/部署/driver/network变化。当前主线转录制外参/ROI身份与实际DPR，详情见收口。
+
+2026-10-04 当前主线GL-E01 **SUBMITTED待独审**：[唯一v1](GLE01_ACCEPTANCE.md)/[取证范围](evidence/2026-10-04_mainline_evidence_r1/00_SCOPE_AND_DIAG.md)。既有原bag已只读找到，实际SHA与声明一致，原26B独立重建canonical28B与本地bin/NPZ全量匹配；仅来源链自验，不是物理标定。Codex已停写，fresh probe后Go Flash/defaultDB复核。GL-I05软件PASS保持；外参/ROI身份仍BLOCKED，GL04真实DPR当前API不可控；不新采集/部署/网络/driver变化。
+
+2026-10-04 GL-I05 R2 **软件独审PASS / STOPPED**：[唯一v1](GLI05_ACCEPTANCE.md)/[收口](evidence/2026-10-04_gl_i05_r2/31_CLOSEOUT.md)/[最终指定二审](evidence/2026-10-04_gl_i05_r2/opencode_second_review_02/00_review.md)。C01–C06/E01–E02/S01/Q01–Q10 PASS；B01/B02 BLOCKED、D01/D02 NOT_RUN，整单未ACCEPTED。无writer、无新软件FAIL，仅离线研究/源点证据工具；生产/输入/旧证据冻结，GL04/GL05设备边界保持。原算法二审检查器覆盖偏差已保留全版本并新编号不可变复验，未掩盖历史。
+
+2026-10-04 GL-I05 R2 **SUBMITTED待指定独立二审**：[唯一v1](GLI05_ACCEPTANCE.md)/[提交](evidence/2026-10-04_gl_i05_r2/research_01/11_submission_manifest.json)/[R1复盘](evidence/2026-10-04_gl_i05_r1/09_CLOSEOUT.md)。Codex研究writer已停写；38case自验同序列匹配、17研究自检通过；fresh probe后Go Flash/defaultDB只读二审。B01/B02 BLOCKED，D01/D02 NOT_RUN，未ACCEPTED。
+
+2026-10-04 GL-I05 R2 **同项返工实施中**：R1指定Go Flash/defaultDB独审REWORK，[R1收口](evidence/2026-10-04_gl_i05_r1/09_CLOSEOUT.md)/[二审](evidence/2026-10-04_gl_i05_r1/opencode_second_review_01/00_review.md)/[唯一验收v1](GLI05_ACCEPTANCE.md)。Codex唯一研究writer，旧提交停写；只新evidence/2026-10-04_gl_i05_r2/research_01，生产/数据/旧证据冻结。完成自验停写后fresh probe再指定二审；B01/B02 BLOCKED、D01/D02 NOT_RUN，未ACCEPTED。
+
+2026-10-04 GL-I05 R1 **已SUBMITTED待独立二审**：[唯一验收v1](GLI05_ACCEPTANCE.md)/[回传](returns/GL-I05.md)/[提交manifest](evidence/2026-10-03_gl_i05_r1/research_01/11_submission_manifest.json)/[逐帧复核页](evidence/2026-10-03_gl_i05_r1/research_01/source_review.html)。Claude顶替Codex为唯一研究writer已停写（2026-10-04用户恢复Codex编排）；32 case全oracle_match/closure_safe、生产423/423测试OK、零src修改；B01/B02 BLOCKED、D01/D02 NOT_RUN，整单未ACCEPTED。Codex接回后先一次≤1min Go Flash/defaultDB probe，再按[二审模板](AI_PROMPT_GLI05_OPENCODE_SECOND_REVIEW_R1.md)只读独立二审收口。
+
+2026-10-03当前入口：[GL-I04 v1](GLI04_ACCEPTANCE.md)/[收口](evidence/2026-10-03_gl_i04_r1/32_CLOSEOUT.md)/[指定OpenCode二审](evidence/2026-10-03_gl_i04_r1/opencode_second_review_01/00_review.md)。Codex三新文件停写后独立二审：L01–L06/R01–R06/S01/Q01–Q10 PASS，无源码返工；B01/B02 BLOCKED、D01/D02 NOT_RUN，整单未ACCEPTED。离线诊断可用，搜索原型保留研究、不接运行时；无活动writer，冻结算法/批准输入保持，GL04DPR/正式及GL05设备边界不变。下方准备/GL-I03入口均为历史。
+
+下一工作区间已准备，**未启动/未派工**：[GL-I04 R1任务](GLI04_TASK.md)/[验收草表v1](GLI04_ACCEPTANCE.md)/[Codex开发提示](AI_PROMPT_GLI04_CODEX_R1.md)/[OpenCode二审提示](AI_PROMPT_GLI04_OPENCODE_SECOND_REVIEW_R1.md)。本轮仅交付计划与提示词，现行GL-I03结果保持；后续明确按提示开始后再切活动入口、fresh基线和结果状态。
+
+**2026-10-03 当前唯一主线GL-I03 R1：Codex三文件开发完成、OpenCode二审软件PASS，无需返工；真实目标未闭合。** [验收v1](GLI03_ACCEPTANCE.md)/[收口](evidence/2026-10-03_gl_i03_r1/32_CLOSEOUT.md)/[正式二审](evidence/2026-10-03_gl_i03_r1/opencode_second_review_01/00_review.md)/[研究后的计划](evidence/2026-10-03_gl_i03_r1/research_01/27_PLAN_REVISION.md)。K04 SYNTH PASS/REAL BLOCKED、B01BLOCKED、D01/D02NOT_RUN，未ACCEPTED；source先验/搜索完整性/holdout一致性逐层研究，先核已有记录/空间身份而非再调cell。无writer、无新FAIL，不重复派软件返工。角色仍Codex主开发、指定Go Flash/defaultDB二审；GL04DPR/正式不并入、GL05设备/部署/采集/网络/HR边界保持，下方旧状态全部历史。
+
+**2026-10-03 20:13当前覆盖**：用户授权本次继续，GL-I03 R1新probe55.047秒启动超时/exit1，生产writer未启动；[最新BLOCKED核查](evidence/2026-10-03_gl_i03_r1/15_RESUME_BLOCKED.md)/[唯一验收](GLI03_ACCEPTANCE.md)/[紧凑实施提示](AI_PROMPT_GLI03_OPENCODE_R1_RESUME.md)。只读日志定位本次配置加载阶段无模型请求标记；历史08另有Go上游授权拒绝补证。停止、不再试/切modelDBauth，待指定通道恢复后先probe再派三文件/独审；先验/真实candidate与GL04/GL05冻结边界保持。下方为历次过程。
+
+**接回收口最新覆盖：GL-I03 R1服务BLOCKED，生产实施未提交/无writer。** [唯一v1验收](GLI03_ACCEPTANCE.md)/[当前独审](evidence/2026-10-03_gl_i03_r1/codex_review_01/CODEX_REVIEW.md)/[BLOCKED](evidence/2026-10-03_gl_i03_r1/CODEX_BLOCKED.md)/[恢复紧凑提示](AI_PROMPT_GLI03_OPENCODE_R1_RESUME.md)。新probe55.078秒超时/exit1立即停止，不重试或切modelDBauth。恢复后先≤1min指定Go Flash/defaultDB probe，成功再三文件实施并独审；K04真实candidate角度/height先验一致性另BLOCKED，不自行调整。GL04 DPR当前工具环境无法真实验证，仍NOT_RUN/正式不并入；GL05设备/部署/采集/网络/HR冻结。下方活动标题/19:25内容为历史过程。
+
+**2026-10-03 19:25最新覆盖**：Codex正式接回，唯一活动[GL-I03 R1](AI_PROMPT_GLI03_OPENCODE_R1.md)/[验收v1](GLI03_ACCEPTANCE.md)/[派前审查](evidence/2026-10-03_gl_i03_r1/00_PLAN_REVIEW.md)。先只诊断停写，核SHA/设计门后另派实施；单Go Flash/defaultDB writer，≤1min probe。真实两参数preflight采样1193仍ground_degenerate，K04 REAL candidate BLOCKED；默认/冻结数学/config不改。GL-I01/I02历史获审保持，GL04DPR NOT_RUN/正式不并入、GL05设备/部署/采集/网络/HR冻结。下方GL-I01活动指针为历史。
+
+GL-P01软件P01–P06/M01–M12 PASS，[R2独审](evidence/2026-10-03_gl_p01_r2/CODEX_REVIEW.md)；设备/完整support/正式实际端到端未因此通过。用户“继续”推进[GL-I01 v1](GLI01_ACCEPTANCE.md)/[阶段一诊断](AI_PROMPT_GLI01_OPENCODE_R1_DIAG.md)。唯一Go Flash/default DB writer，先probe、只落00_diag并stop；Codex核源码未改+矩阵后另发实施。本地已有capture export→带hash/map NPZ→数值入口真实frame成员门，不自动选地面/拟合真实cal。B01原bag索引/原frame及units证据BLOCKED，D01物理NOT_RUN。GL04DPR NOT_RUN/正式不合并、不GL05设备/网络/部署/采集；冻结数据、用户Q/E/help/HR/重组和历史。下方GL-P01入口为历史。
+
+# 历史活动覆盖 / 2026-10-03 GL-P01生产消息软件准备
+
+用户引用上一聊天计划并明确开始开发。唯一活动production writer工单[GL-P01 R1](AI_PROMPT_GLP01_OPENCODE_R1.md)，唯一[验收v1](GLP01_ACCEPTANCE.md)/[计划](evidence/2026-10-03_gl_p01_r1/PLAN_REVIEW.md)，Codex编排/独审，OpenCode Go Flash/default DB单写入者，派前<=1分钟probe。最小producer validated R/t白名单投影和集中interop检查；支持区null+reason，无可信轮廓不造polygon。GL04留等待DPR状态，无代码FAIL不派R8；本轮Computer Use因无法确认Edge当前URL停止，未继续UI输入。正式不并入、不GL05设备/板端网络/采集/配置启用/部署。用户改动与旧证据保留。
+
+# 历史活动覆盖 / 2026-10-03 GL-04 R7待真实DPR浏览器收口
+
+R7 OpenCode Go Flash/default DB同session真压缩后exit0/SUBMITTED，Codex独立复审当前代码条目无FAIL。V01–03/V05–09 PASS，V04/C12/M03实际DPR-only NOT_RUN，V10结构BLOCKED/D01设备NOT_RUN；因此GL04尚未软件收口/ACCEPTED。唯一[验收v1](GL04_ACCEPTANCE.md)/[R7正式复审](evidence/2026-10-03_gl04_r7/CODEX_REVIEW.md)，R7工单仅历史追溯，无活动writer/无新FAIL，不派R8。真实两mode clip/退化M11已PASS，原54/源码SHA/浏览器来源修复已核。下一步只补真实DPR-only验证；正式仍冻结，不合并/不GL05/部署/采集/板端网络；外部Q/E/帮助/HR/重组和旧证据保留。下方R6/R7开发入口全部历史。
+
+# 历史活动覆盖 / 2026-10-03 GL-04 R7准备
+
+唯一活动GL04，Codex独审/编排，唯一OpenCode Go Flash/default DB writer。R6已SUBMITTED/停写，独审仅V07/V09 source provenance REWORK，原阻断全部闭合；[R6复审](evidence/2026-10-03_gl04_r6/CODEX_REVIEW.md)、[v1](GL04_ACCEPTANCE.md)、[R7完整矩阵](evidence/2026-10-03_gl04_r7/PLAN_REVIEW.md)、[唯一R7工单](AI_PROMPT_GL04_OPENCODE_R7.md)。新派工先≤1分钟probe，原session长上下文先真压缩；没有第二writer。V04隔离DPR/完整clip仍NOT_RUN，V10 BLOCKED/D01 NOT_RUN；正式冻结，不GL05/部署/采集/板端网络，不改原54/旧证据/用户Q-E帮助。下方R6执行/服务阻塞均历史。
+
+# 历史活动覆盖 / 2026-10-03 GL-04 R6恢复开发
+
+用户本轮明确恢复OpenCode开发。Codex唯一编排/独审，OpenCode Go Flash/default DB唯一生产writer；当前新probe8.828秒PROBE_OK/exit0，详[R6服务恢复](evidence/2026-10-03_gl04_r6/SERVICE_RECOVERED.md)。唯一[工单](AI_PROMPT_GL04_OPENCODE_R6.md)/[设计矩阵](evidence/2026-10-03_gl04_r6/PLAN_REVIEW.md)，先00_diag后实施，日志03_opencode*.jsonl/meta。v1结果仍R5 REWORK，待提交后独审；正式/core/driver/其它webui/旧证据/原44冻结，不GL05/部署/采集/板端网络。以下R6服务BLOCKED是历史，已由本次同条件成功probe覆盖。
+
+# 历史活动覆盖 / 2026-10-03 GL-04 R5独审REWORK，R6首次probe BLOCKED
+
+唯一活动工单GL-04；本轮用户恢复指令确认Codex接回唯一编排/独立复审/状态收口，OpenCode `opencode-go/deepseek-v4.1-flash`/default DB仍唯一生产写入者。当前无活动写入者。R5 SHA吻合交接/回传，R4原5+2FAIL已闭合，但新增source physical fall/失效track、坐标token/单位与fixture缺绑定仍FAIL。[v1验收表](GL04_ACCEPTANCE.md)、[R5正式独立复审](evidence/2026-10-03_gl04_r5/CODEX_REVIEW.md)、[R6设计矩阵](evidence/2026-10-03_gl04_r6/PLAN_REVIEW.md)、[唯一后续提示词](AI_PROMPT_GL04_OPENCODE_R6.md)是当前入口。R6无工具probe55.313秒超时，详[BLOCKED](evidence/2026-10-03_gl04_r6/CODEX_BLOCKED.md)与[派工指令](evidence/2026-10-03_gl04_r6/CODEX_R6_DISPATCH_MSG.md)，尚未派入实现、不换模型/DB；恢复先≤1分钟probe。
+
+V04实际DPR变化/完整camera退化NOT_RUN；V10生产R/t/support结构缺口BLOCKED，D01设备/物理NOT_RUN。真实六图/rotate/zoom/resize/俯瞰/静默断连重连及缺陷证据在R5/browser_01。当前软件未获审，不并入正式页，不部署/采集/联网板端/启动GL05；正式Q/E/帮助、HR与重组保留。**R6服务BLOCKED维持55.313秒/exit1；服务恢复后由Codex仍走同provider/model/default DB、先≤1分钟无工具probe，Claude Code 不顶替。** 下方旧状态仅历史。
+
+# 历史活动覆盖 / 2026-10-03 GL-04 R5（R4复审入口）
+
+唯一活动工单GL-04，Codex编排/独立复审，生产代码只由指定OpenCode Go Flash写入。R4独立复审REWORK（V05/V06/V07/V09既有资格/消费者组合未闭合），[v1验收表](GL04_ACCEPTANCE.md)、[R4复审](evidence/2026-10-02_gl04_r4/CODEX_REVIEW.md)、[R5设计审查](evidence/2026-10-03_gl04_r5/PLAN_REVIEW.md)、[本轮派工](AI_PROMPT_GL04_OPENCODE_R5.md)是当前入口。V10生产R/t/support缺口BLOCKED，D01设备NOT_RUN；正式页未通过preview验证，不同步/发布。历史R1–R4记录保留在下文及其证据目录，不作当前结果。HEAD外部HR-03..05推进至cbd0be1，仅human_capture/replay，不归因GL04。
+
+# 历史活动覆盖 / 2026-10-02 GL-04 R1
+
+用户本轮明确启动GL-04；它是唯一当前活动工单。Codex唯一编排/独立复审，OpenCode指定Go Flash唯一生产写入者；default DB probe已exit0/PROBE_OK。当前阶段验收表先行/派工准备。[GL04验收v1](GL04_ACCEPTANCE.md)、[R1提示词](AI_PROMPT_GL04_OPENCODE_R1.md)、[操作矩阵](evidence/2026-10-02_gl04_r1/02_operation_matrix.md)。实际HEAD8633eac，外部HR-02推进保留；GL02/03获审软件结果与G06关闭/身份BLOCKED/设备NOT_RUN不变。只改preview授权范围，不部署/采集/联网板端/启动GL05。下方“GL04未授权”均为历史，被本轮用户指令覆盖。
 # HF/GL 当前派工入口
+
+当前按[WORKFLOW.md](WORKFLOW.md) v2及用户本轮交接授权，唯一生效编排/独立复审/状态收口者为 Codex。范围内自动派 OpenCode CLI `opencode-go/deepseek-v4.1-flash` 已恢复，生产代码单写入者仍 OpenCode。GL02软件PASS不变；GL03 R7 G01/G02/G03/G04/G05/G07/G08 软件PASS，G06真实分离BLOCKED，O01统计PASS/真实身份BLOCKED，D01设备NOT_RUN/现场BLOCKED。当前无活动实现写入者、无新FAIL、无需R8；整单未标ACCEPTED，GL04须另获用户授权。[R7独立复审](evidence/2026-10-02_gl03_r7/codex_review_01/CODEX_REVIEW.md)、[验收v1](GL03_ACCEPTANCE.md)。
+
+2026-10-02本轮交接：Claude Code 17:54按CLAUDE_STANDBY顶替后现交回Codex；此后唯一生效编排者是Codex，登记见CLI_RECOVERY。
+
+以下旧R4/R3及手动派工状态均为历史，由顶部R7结果/自动派工授权覆盖。
+
+当前GL03 R4已独立复审，软件REWORK（G03/G04/G05）；已完成连续失败[设计审查](evidence/2026-10-02_gl03_r4/codex_review_01/PLAN_REVIEW.md)，详[R4复审](evidence/2026-10-02_gl03_r4/codex_review_01/CODEX_REVIEW.md)。下一步唯一[手动R5工单](AI_PROMPT_GL03_OPENCODE_R5.md)，Codex不自动启动/重试。验收v1判据不变，GL04未放行；下方旧轮次状态只作历史。
 
 按[WORKFLOW.md](WORKFLOW.md) v2执行：用户最新授权Codex直接派OpenCode CLI `opencode-go/deepseek-v4.1-flash`、跟进与独立复审，无需手动搬运；一张工单一份版本化验收表，逐入口/状态集中诊断，提交按[RETURN_TEMPLATE.md](RETURN_TEMPLATE.md)逐条回传。
 
-当前（2026-10-02）GL-02软件PASS（A01–A12），设备NOT_RUN/物理BLOCKED；[最终独立复审](evidence/2026-10-02_gl02_r7/CODEX_REVIEW.md)＋[GL02验收v1](GL02_ACCEPTANCE.md)。当前无活动实现写入者。GL-03软件前置已满足，本轮未启动；部署/采集不在本轮授权内。[CLI恢复流程](CLI_RECOVERY.md)记录上下文故障恢复及成本控制。
+当前（2026-10-02）GL-02软件PASS（A01–A12），设备NOT_RUN/物理BLOCKED；[最终独立复审](evidence/2026-10-02_gl02_r7/CODEX_REVIEW.md)＋[GL02验收v1](GL02_ACCEPTANCE.md)。当前无活动实现写入者。GL03 R3已独立复审、软件REWORK（G03/G04/G05）；O01纠正PASS，真实身份BLOCKED/设备NOT_RUN；[R3复审](evidence/2026-10-02_gl03_r3/codex_review_01/CODEX_REVIEW.md)、[手动R4工单](AI_PROMPT_GL03_OPENCODE_R4.md)；部署/采集不在本轮授权内。[CLI恢复流程](CLI_RECOVERY.md)记录上下文故障恢复及成本控制。
 
 ## 历史共同要求与回传记录
 
@@ -16,11 +100,11 @@
 
 最新目标见 [WEBUI_SCOPE.md](WEBUI_SCOPE.md)：算法在 RK3588，现有 WebUI 人工选人＋自动跟踪框、位置/站姿基线标定和跌倒状态显示。新增 HF-11 改造已有网页，HF-05/07 提供选择/回执与结果接口；不在浏览器判跌倒，不因点云人体可见就宣布算法已完成。
 
-## 强制使用马尾辫 skill
+## 强制使用马尾辫 skill（任何 AI 涉及代码必读，无例外）
 
-开工前读取 `C:\Users\30680\.codex\skills\ponytail\SKILL.md`，在回传中写明使用路径。若 OpenCode 支持技能调用，调用同名 ponytail；无法调用时直接读取 SKILL.md 并遵守。其他机器需先由用户提供该文件的真实副本；找不到须报告，不得声称用了 skill。
+开工前**任何产生/修改生产或测试代码的 AI**（OpenCode、Claude Code、Codex 特殊应急路径、未来接手的任意 AI）必须先读取 `C:\Users\30680\.codex\skills\ponytail\SKILL.md`（或本机 `C:\Users\30680\.config\opencode\skills\ponytail\SKILL.md`，同一份），在回传中写明使用路径与 ponytail 强度等级（lite/full/ultra）。若 OpenCode 支持技能调用，调用同名 ponytail；无法调用时直接读取 SKILL.md 并遵守。其他机器需先由用户提供该文件的真实副本；找不到须报告，**不得声称用了 skill**。
 
-按“现成实现 → 标准库 → 已安装依赖 → 最小新代码”的顺序选择。复用点云解析；纯计算用 NumPy 与 unittest。不要引入微服务、训练平台、通用插件体系或多个备用模型。仅在性能实测需要时做 NPU 移植。硬件阈值仍须可配置。为新增非平凡逻辑留下至少一个能失败的有效检查，不写照抄实现的测试。
+按”现成实现 → 标准库 → 已安装依赖 → 最小新代码”的顺序选择。复用点云解析；纯计算用 NumPy 与 unittest。不要引入微服务、训练平台、通用插件体系或多个备用模型。仅在性能实测需要时做 NPU 移植。硬件阈值仍须可配置。为新增非平凡逻辑留下至少一个能失败的有效检查，不写照抄实现的测试。
 
 ## 修改与运行边界
 
@@ -69,3 +153,4 @@ CONTRACT.md 的冻结范围优先于本节摘要。HF-01 health/manifest 已正�
 ## GL-02 Claude R4 Codex独立复审 / 2026-10-01
 
 R3原五方法5/5、R2七方法7/7、静态6/6、fall 271/271、follow 2/2、两个webui各18/18均由Codex独立实跑通过。新增reload/已有pending三方法3失败exit1：空或相同配套reload沿用旧版本却丢input.sha256/evidence/note等完整产物字段；已accepted基线请求在随后monitor持续不可用超过10秒时仍pending且无终态回执。软件REWORK，GL-03不放行；设备兼容NOT_RUN、真实物理BLOCKED。详[evidence/2026-10-01_gl02_r4/CODEX_REVIEW.md](evidence/2026-10-01_gl02_r4/CODEX_REVIEW.md)与57_*。手动下一步[AI_PROMPT_GL02_CLAUDE_R5.md](AI_PROMPT_GL02_CLAUDE_R5.md)；只修这两项，不自动派工。生产源码/原测试/driver差异/Windows软链接表示保留，未部署/采集/commit/push/reset。
+

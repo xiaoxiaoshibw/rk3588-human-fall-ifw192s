@@ -1,0 +1,36 @@
+# HF-07 node runtime config. Independent of config/default.yaml (frozen HF-01
+# health/manifest) and config/geometry.yaml; algorithm thresholds live in
+# config/perception.yaml (one section per core module resolver).
+session_id: null                 # null -> hfd_<utc timestamp> at startup
+topics:
+  cloud: /innolidar_points
+  imu: /inno_imu
+  device_status: /device_status
+  candidates: /human_fall/candidates
+  state: /human_fall/state
+  event: /human_fall/event
+  selection_request: /human_fall/selection_request
+  selection_ack: /human_fall/selection_ack
+timeouts_s:
+  cloud_stale: 0.6
+  imu_stale: 0.3
+  device_stale: 0.6
+stamps:
+  max_forward_jump_s: 30.0
+checks:
+  expected_cloud_frame: innolidar
+publish_period_s: 0.5
+geometry:
+  # null -> wait (candidates stay in uncalibrated radar coordinates and the
+  # fall state stays unknown). Set one of the paths to activate ground-relative
+  # height/fall logic. A configured but invalid artifact fails startup.
+  calibration_path: null
+  ground_path: null
+  background_path: null
+mode:
+  # true -> refuse to start without a valid ground instead of waiting.
+  require_ground: false
+output:
+  session_dir: /root/catkin_ws/human_fall_sessions
+  event_file: events.jsonl
+  recent_events: 64

@@ -1,0 +1,122 @@
+"""GL-V01: fixed cohort, restart recovery, source/output drift and real HTTP."""
+import copy
+import hashlib
+import json
+from pathlib import Path
+import tempfile
+import threading
+import unittest
+from unittest.mock import patch
+import urllib.error
+import urllib.request
+
+import human_replay_lib as H
+import leveling as W
+from leveling_test import fixture as base_fixture
+import validation as V
+
+
+def fixture(root, sid):
+    directory, meta, request = base_fixture(root)
+    directory = directory.rename(root / sid)
+    meta["session_id"] = sid
+    (directory / "meta.json").write_text(json.dumps(meta), encoding="utf-8")
+    request["sid"] = sid
+    request["source"] = W.source(root, sid)[2]
+    return directory, meta, request
+
+
+class ValidationTest(unittest.TestCase):
+    def test_cohort_restart_http_and_rejected_nonmembers(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "remote"; root.mkdir()
+            outroot = root.parent / "leveled"
+            sid = V.SESSIONS[2]
+            directory, meta, request = fixture(root, sid)
+            fixture(root, "cap_outside")
+            job_id = V.REFERENCE_JOB
+            report, artifacts = W.run_job(root, outroot, request, job_id, lambda m: None)
+            self.assertEqual(report["recommended"], "tls")
+            rows = V.sessions(root, outroot)
+            self.assertEqual([s["sid"] for s in rows], list(V.SESSIONS))
+            self.assertEqual(rows[2]["status"], "原配平参考（保留）")
+            self.assertFalse(rows[0]["available"])
+            with patch.object(H.C, "DEST_ROOT", str(root)), patch.object(H, "_board_get", side_effect=AssertionError("board forbidden")):
+                server = H.ThreadingHTTPServer(("127.0.0.1", 0), H.Handler)
+                threading.Thread(target=server.serve_forever, daemon=True).start()
+                base = "http://127.0.0.1:%d" % server.server_address[1]
+                def get(path):
+                    with urllib.request.urlopen(base + path, timeout=5) as response:
+                        return response.read()
+                try:
+                    # No live _jobs entry: persisted reports and downloads survive restart.
+                    self.assertNotIn(job_id, W._jobs)
+                    job = json.loads(get("/api/validation/latest?sid=" + sid))
+                    self.assertEqual(job["job_id"], job_id)
+                    self.assertTrue(job["persisted"])
+                    self.assertEqual(json.loads(get("/api/validation/job?id=" + job_id + "&sid=" + sid))["sid"], sid)
+                    artifact_url = "/api/validation/artifact?id=" + job_id + "&method=tls&name=points.bin&sid=" + sid
+                    self.assertEqual(hashlib.sha256(get(artifact_url)).hexdigest(), artifacts["tls"]["points.bin"])
+                    for path in ("/api/validation/source?sid=cap_outside", "/api/validation/latest?sid=cap_outside",
+                                 "/api/validation/job?id=" + job_id + "&sid=" + V.SESSIONS[0],
+                                 "/api/validation/artifact?id=" + job_id + "&method=tls&name=../points.bin"):
+                        with self.assertRaises(urllib.error.HTTPError) as exc:
+                            get(path)
+                        self.assertEqual(exc.exception.code, 400)
+                    with patch.object(W, "start") as start:
+                        bad = copy.deepcopy(request); bad["sid"] = "cap_outside"
+                        for body in (bad, []):
+                            req = urllib.request.Request(base + "/api/validation/run", json.dumps(body).encode(), {"Content-Type": "application/json"})
+                            with self.assertRaises(urllib.error.HTTPError) as exc:
+                                urllib.request.urlopen(req, timeout=5)
+                            self.assertEqual(exc.exception.code, 400)
+                        start.assert_not_called()
+                    bin_path = outroot / job_id / "tls" / "points.bin"
+                    data = bytearray(bin_path.read_bytes()); data[-1] ^= 1; bin_path.write_bytes(data)
+                    with self.assertRaises(urllib.error.HTTPError) as exc:
+                        get(artifact_url)
+                    self.assertEqual(exc.exception.code, 400)
+                finally:
+                    server.shutdown(); server.server_close()
+
+    def test_saved_binding_damage_and_latest_never_hides_newest_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "remote"; root.mkdir()
+            outroot = root.parent / "leveled"; sid = V.SESSIONS[2]
+            directory, meta, request = fixture(root, sid)
+            W.run_job(root, outroot, request, "c" * 32, lambda m: None)
+            job_id = "a" * 32
+            W.run_job(root, outroot, request, job_id, lambda m: None)
+            job_dir = outroot / job_id
+            self.assertEqual(V.latest(root, outroot, sid)["job_id"], job_id)
+            transform = job_dir / "tls" / "transform.json"; original = transform.read_bytes()
+            transform.write_bytes(original + b" ")
+            with self.assertRaisesRegex(ValueError, "SHA"):
+                V.latest(root, outroot, sid)
+            transform.write_bytes(original)
+            meta_file = directory / "meta.json"; original = meta_file.read_bytes()
+            meta_file.write_bytes(original + b" ")
+            with self.assertRaisesRegex(ValueError, "源数据已变化"):
+                V.latest(root, outroot, sid)
+            self.assertEqual(V.sessions(root, outroot)[2]["status"], "结果不可用")
+            meta_file.write_bytes(original)
+            report_file = job_dir / "report.json"; original = report_file.read_bytes()
+            report_file.write_bytes(b"{")
+            with self.assertRaises(ValueError):
+                V.latest(root, outroot, sid)
+            report_file.write_bytes(original)
+            manifest_file = job_dir / "manifest.json"; manifest = manifest_file.read_bytes()
+            report = json.loads(original); report["schema"] = 999
+            report_file.write_text(json.dumps(report), encoding="utf-8")
+            changed = json.loads(manifest); changed["report_sha256"] = W.sha(report_file)
+            manifest_file.write_text(json.dumps(changed), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "版本"):
+                V.latest(root, outroot, sid)
+            report_file.write_bytes(original); manifest_file.write_bytes(manifest)
+            manifest_file.unlink()
+            with self.assertRaises(ValueError):
+                V.latest(root, outroot, sid)
+
+
+if __name__ == "__main__":
+    unittest.main()

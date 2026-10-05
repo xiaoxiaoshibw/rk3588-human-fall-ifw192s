@@ -1,0 +1,281 @@
+[
+  {
+    "id": "V06",
+    "matrix": "C10",
+    "name": "source raw XYZ survives ground unknown but physical fall/color are unknown",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "3.00, 0.00, -0.50",
+      "position_label": "位置 source (m)",
+      "track": "t1 / locked",
+      "prediction": "实测",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    }
+  },
+  {
+    "id": "V06",
+    "matrix": "C10",
+    "name": "source raw XYZ survives ground none but physical fall/color are unknown",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "3.00, 0.00, -0.50",
+      "position_label": "位置 source (m)",
+      "track": "t1 / locked",
+      "prediction": "实测",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    }
+  },
+  {
+    "id": "V06/V09",
+    "matrix": "C01/C10",
+    "name": "legacy source-only locked retains raw XYZ while physical fall/color are unknown",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "3.00, 0.00, -0.50",
+      "position_label": "位置 source (m)",
+      "track": "t1 / locked",
+      "prediction": "实测",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    }
+  },
+  {
+    "id": "V07",
+    "matrix": "C08",
+    "name": "predicted pose without current target observation keeps diagnostic but physical fall is unknown",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "position_label": "位置 source (m)",
+      "track": "t1 / occluded",
+      "prediction": "预测 age=0.50s",
+      "target_visible": true,
+      "target_color": "6b7a90"
+    }
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "lost rejects retained prior source observation while respecting validState",
+    "result": "PASS",
+    "observed": {
+      "valid_state": true,
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "position_label": "位置 source (m)",
+      "track": "t1 / 未对齐当前帧",
+      "prediction": "-- / 无对齐观测",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "ambiguous rejects retained prior source observation while respecting validState",
+    "result": "PASS",
+    "observed": {
+      "valid_state": true,
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "position_label": "位置 source (m)",
+      "track": "t1 / 未对齐当前帧",
+      "prediction": "-- / 无对齐观测",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "unselected rejects retained prior source observation while respecting validState",
+    "result": "PASS",
+    "observed": {
+      "valid_state": true,
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "position_label": "位置 source (m)",
+      "track": "未选目标 / 未对齐当前帧",
+      "prediction": "-- / 无对齐观测",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V06",
+    "matrix": "C06/C10",
+    "name": "schema2 existing source invalidation stays unknown/null",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "position_label": "位置 source (m)",
+      "track": "t1 / 未对齐当前帧",
+      "prediction": "-- / 无对齐观测",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V06",
+    "matrix": "C06/C10",
+    "name": "verifier_unavailable existing source invalidation stays unknown/null",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "position_label": "位置 source (m)",
+      "track": "t1 / 未对齐当前帧",
+      "prediction": "-- / 无对齐观测",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "source old rendered choice rejects in-place snapshot units.length",
+    "result": "PASS",
+    "observed": {
+      "mode": "source",
+      "changed_field": "snapshot units.length",
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "ground old rendered choice rejects in-place snapshot units.length",
+    "result": "PASS",
+    "observed": {
+      "mode": "ground",
+      "changed_field": "snapshot units.length",
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "source old rendered choice rejects in-place candidate center_ground_m",
+    "result": "PASS",
+    "observed": {
+      "mode": "source",
+      "changed_field": "candidate center_ground_m",
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "ground old rendered choice rejects in-place candidate center_ground_m",
+    "result": "PASS",
+    "observed": {
+      "mode": "ground",
+      "changed_field": "candidate center_ground_m",
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "source old rendered choice rejects in-place ground block kind",
+    "result": "PASS",
+    "observed": {
+      "mode": "source",
+      "changed_field": "ground block kind",
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "ground old rendered choice rejects in-place ground block kind",
+    "result": "PASS",
+    "observed": {
+      "mode": "ground",
+      "changed_field": "ground block kind",
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "source old rendered choice rejects in-place ground block schema_version",
+    "result": "PASS",
+    "observed": {
+      "mode": "source",
+      "changed_field": "ground block schema_version",
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C05/C11",
+    "name": "ground old rendered choice rejects in-place ground block schema_version",
+    "result": "PASS",
+    "observed": {
+      "mode": "ground",
+      "changed_field": "ground block schema_version",
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V03",
+    "matrix": "C14",
+    "name": "explicit source mm cannot be presented as measured source metres",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "position_label": "位置 source (m)",
+      "track": "t1 / 未对齐当前帧",
+      "prediction": "-- / 无对齐观测",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V03/V06",
+    "matrix": "C14",
+    "name": "explicit source mm cannot qualify metre ground transform",
+    "result": "PASS",
+    "observed": {
+      "status": "invalid",
+      "reason": "source_units"
+    }
+  },
+  {
+    "id": "V02/V03",
+    "matrix": "C13",
+    "name": "explicit support_units mm cannot qualify metre support layer",
+    "result": "PASS",
+    "observed": {
+      "status": "invalid",
+      "reason": "support_units"
+    }
+  }
+]

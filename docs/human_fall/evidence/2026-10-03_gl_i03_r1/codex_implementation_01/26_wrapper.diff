@@ -1,0 +1,54 @@
+--- GLI02_R1_before
++++ GLI03_Codex_R1_after
+@@ -44,6 +44,7 @@
+                          resolve_constrained_settings,
+                          validate_constrained_ground)
+ from calibrate_sensors import save_exclusive_json
++from sensor_health import load_config
+ 
+ DRAFT_KIND = "gli02_capture_selection_draft"
+ DRAFT_STATUS = "pending_human_review"
+@@ -66,6 +67,9 @@
+                         help="declared length unit for prepare (only 'm')")
+     parser.add_argument("--draft", default=None,
+                         help="human-filled capture selection draft JSON")
++    parser.add_argument("--constrained-config", default=None,
++                        help="explicit constrained ground YAML; omit to keep "
++                             "the frozen defaults")
+     parser.add_argument("--emit-draft", action="store_true",
+                         help="write a blank pending draft to --draft-out and stop")
+     parser.add_argument("--draft-out", default=None,
+@@ -169,6 +173,24 @@
+     raise CaptureInputError(label + " needs indices or complete x/y/z bounds")
+ 
+ 
++def _load_constrained_settings(path):
++    """Load an explicit variant without changing defaults or draft emission."""
++    if path is None:
++        return resolve_constrained_settings(None)
++    try:
++        import yaml
++    except ImportError as exc:
++        raise CaptureInputError("constrained config requires PyYAML: " + str(exc))
++    try:
++        config = load_config(path)
++        if not isinstance(config, dict) or not isinstance(
++                config.get("ground_constrained"), dict):
++            raise ValueError("config needs a ground_constrained mapping")
++        return resolve_constrained_settings(config["ground_constrained"])
++    except (OSError, ValueError, OverflowError, RuntimeError, yaml.YAMLError) as exc:
++        raise CaptureInputError("constrained config refused: " + str(exc))
++
++
+ def _run_candidate(args, manifest, points):
+     draft = _load_draft(args.draft)
+     up_axis = draft.get("up_axis")
+@@ -187,7 +209,7 @@
+     fit_rows, resolved_regions = gate_selection(
+         points, manifest, fit_region, None, fit_region["frame_group"],
+         resolved_regions_in)
+-    resolved = resolve_constrained_settings(None)
++    resolved = _load_constrained_settings(args.constrained_config)
+     try:
+         result = fit_ground_plane_constrained(
+             points, settings=resolved, frame=frame, up_axis=up_axis,

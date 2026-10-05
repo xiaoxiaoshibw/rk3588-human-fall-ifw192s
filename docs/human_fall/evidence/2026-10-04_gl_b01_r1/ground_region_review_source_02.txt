@@ -1,0 +1,166 @@
+"""Spatial scene-row review and observation diagnostics; no calibration production."""
+import copy
+
+import numpy as np
+
+from .calibration import apply_transform
+from .capture_input import (gate_selection, select_group_region, source_identity)
+from .ground_diagnostics import pca_plane, residual_stats
+from .ground_evidence import (check_selection, digest, keys, number, require,
+                              text)
+from .nominal_leveling import validate_nominal_model
+
+
+def review_binding(manifest, model):
+    s = manifest["source"]
+    return {"source_id": source_identity(s["meta_sha256"], s["bin_sha256"]),
+            "bin_sha256": s["bin_sha256"], "xyz_sha256": manifest["points"]["sha256"],
+            "frame": manifest["declared"]["frame"], "units": "m",
+            "model_id": model["model_id"],
+            "window_bag_time_sec": [manifest["frames"][0]["bag_time_sec"], manifest["frames"][-1]["bag_time_sec"]]}
+
+
+def plan_id(plan):
+    return "region-review:" + digest({k:v for k,v in plan.items() if k != "plan_id"})
+
+
+def validate_review_plan(plan, manifest, model):
+    plan = copy.deepcopy(plan)
+    model = validate_nominal_model(model)
+    keys(plan, ("kind", "schema", "plan_id", "binding", "cell_m", "regions"), "review plan")
+    require(plan["kind"] == "ground_region_review_plan" and type(plan["schema"]) is int
+            and plan["schema"] == 1, "plan kind/schema")
+    require(plan["plan_id"] == plan_id(plan), "plan ID/content mismatch")
+    require(model["from_frame"] == manifest["declared"]["frame"]
+            and manifest["declared"]["units"] == "m", "nominal model source frame/units")
+    require(digest(plan["binding"]) == digest(review_binding(manifest, model)), "source/window/model binding mismatch")
+    require(1e-6 <= number(plan["cell_m"], "cell_m") <= 1000,
+            "cell_m must be in [1e-6,1000] for bounded numerical grid observations")
+    require(isinstance(plan["regions"], list) and len(plan["regions"]) >= 4, "FIT and >=3 validation regions required")
+    ids, groups, fits = set(), set(), 0
+    for region in plan["regions"]:
+        keys(region, ("region_id", "role", "frame_group", "x_min_m", "x_max_m",
+                      "y_min_m", "y_max_m", "description"), "spatial footprint")
+        text(region["region_id"], "region_id")
+        text(region["description"], "region description")
+        require(region["region_id"] not in ids, "region alias/duplicate")
+        require(region["frame_group"] in manifest["frame_groups"] and region["frame_group"] not in groups,
+                "unknown or nonindependent frame_group")
+        require(region["role"] in ("fit", "validation"), "region role")
+        fits += int(region["role"] == "fit")
+        ids.add(region["region_id"]); groups.add(region["frame_group"])
+        for axis in ("x", "y"):
+            low = number(region[axis+"_min_m"], "footprint low")
+            high = number(region[axis+"_max_m"], "footprint high")
+            require(low < high, "footprint bounds must increase")
+    require(fits == 1, "exactly one FIT required")
+    return plan
+
+
+def height_observations(mapped, cell_m):
+    if not len(mapped):
+        return {"domain": "all_selected_scene_points", "count": 0,
+                "z_stats": None, "histogram": None, "cells": [], "reason": "empty_spatial_region"}
+    z = mapped[:, 2]
+    counts, edges = np.histogram(z, bins=60)
+    cells = {}
+    for point in mapped:
+        key = tuple(int(np.floor(v / cell_m)) for v in point[:2])
+        cells.setdefault(key, []).append(float(point[2]))
+    return {"domain": "all_selected_scene_points_not_ground_error", "count": len(mapped),
+            "z_stats": residual_stats(mapped, [0,0,1], 0),
+            "histogram": {"counts": counts.tolist(), "edges_m": edges.tolist(),
+                          "usage": "scene_distribution_only_no_ground_selection"},
+            "cells": [{"cell_xy": list(k), "count": len(v),
+                       "z_q10_q50_q90_m": np.quantile(v,[.1,.5,.9]).tolist()} for k,v in sorted(cells.items())],
+            "reason": None}
+
+
+def observe_review_regions(points, manifest, model, plan):
+    plan = validate_review_plan(plan, manifest, model)
+    require(isinstance(points, np.ndarray) and points.ndim == 2 and points.shape[1] == 3
+            and points.dtype.kind in "fiu" and len(points) == manifest["points"]["shape"][0], "source array shape/type")
+    model = validate_nominal_model(model)
+    observations, records, selectors = [], [], []
+    regions = sorted(plan["regions"], key=lambda r: r["role"] != "fit")
+    for region in regions:
+        group = manifest["frame_groups"][region["frame_group"]]
+        start,end = group["rows"]
+        member = np.arange(start,end,dtype=np.int64)
+        usable = np.isfinite(points[member]).all(axis=1) & np.any(points[member] != 0,axis=1)
+        member = member[usable]
+        mapped = apply_transform(points[member], model)
+        mask = ((mapped[:,0] >= region["x_min_m"]) & (mapped[:,0] <= region["x_max_m"])
+                & (mapped[:,1] >= region["y_min_m"]) & (mapped[:,1] <= region["y_max_m"]))
+        wanted = member[mask]
+        selector = {"region_id": region["region_id"], "frame_group": region["frame_group"], "indices": wanted.tolist()}
+        rows = select_group_region(points, manifest, selector)
+        cloud = apply_transform(points[rows],model)
+        selectors.append(selector)
+        observations.append({"region_id":region["region_id"], "role":region["role"],
+            "frame_group":region["frame_group"], "ordinal":group["ordinal"], "seq":group["seq"],
+            "source_rows":rows.tolist(), "selection_method":"nominal_XY_footprint_all_heights",
+            "ground_identity":"unknown", "confirmation":"pending",
+            "observation":height_observations(cloud,plan["cell_m"])})
+        for row,source,nominal in zip(rows.tolist(),points[rows],cloud):
+            records.append({"region_id":region["region_id"], "pooled_row":row,
+                "source_row":row-start, "ordinal":group["ordinal"], "seq":group["seq"],
+                "frame_group":region["frame_group"], "source_xyz_m":source.astype(float).tolist(),
+                "nominal_xyz_m":nominal.tolist(), "identity":"unreviewed_scene_member"})
+    gate = "NOT_RUN_empty_regions"
+    if all(s["indices"] for s in selectors):
+        gate_selection(points,manifest,selectors[0],None,selectors[0]["frame_group"],selectors[1:])
+        gate = "PASS_source_membership_only_not_ground_identity"
+    return {"kind":"ground_region_observations", "schema":1, "plan_id":plan["plan_id"],
+            "binding":plan["binding"], "regions":observations, "membership_gate":gate,
+            "physical_verified":False, "candidate_eligible":False}, records
+
+
+def legacy_box_diagnostics(points, manifest, model, selectors):
+    result = []
+    rotation = np.asarray(model["rotation"]); translation = np.asarray(model["translation_m"])
+    for region_id,selector in selectors:
+        rows = select_group_region(points,manifest,selector)
+        mask = np.isfinite(points[rows]).all(axis=1) & np.any(points[rows] != 0,axis=1)
+        rows = rows[mask]; source = points[rows].astype(float); mapped = apply_transform(source,model)
+        plane,reason = None,None
+        try:
+            pca = pca_plane(source,model["up_source"])
+            n = rotation @ pca["normal"]
+            offset = pca["offset_m"] - float(n @ translation)
+            plane = {"normal_nominal":n.tolist(), "offset_nominal_m":offset,
+                     "tilt_to_nominal_z_deg":float(np.degrees(np.arccos(np.clip(n[2],-1,1)))),
+                     "source_offset_observed_m":pca["offset_m"],
+                     "eigenvalue_ratio":pca["eigenvalue_ratio"],
+                     "origin":"PCA_all_legacy_ROI_scene_rows_not_installation_measurement",
+                     "own_domain_residual":residual_stats(mapped,n,offset)}
+        except ValueError as exc:
+            reason = str(exc)
+        result.append({"region_id":region_id, "frame_group":selector["frame_group"],
+            "count":len(rows), "nominal_height_observation":height_observations(mapped,.25),
+            "pca_scene_plane":plane, "pca_reason":reason, "physical_ground_error":False})
+    return result
+
+
+def validate_confirmed_rows(selection, observations, points, manifest, files):
+    """Human source rows must be a subset of the offered scene rows, not a fit band."""
+    expected = {r["region_id"]:r for r in observations["regions"]}
+    keys(selection,("selection_id","version","binding","fit","validation"),"confirmed selection")
+    require(isinstance(selection["validation"],list),"validation list")
+    regions = [selection["fit"]] + selection["validation"]
+    require(len(regions) == len(expected), "all planned roles must be retained")
+    require({r.get("region_id") for r in regions if isinstance(r,dict)} == set(expected), "confirmed region IDs mismatch")
+    for i,region in enumerate(regions):
+        original = expected[region["region_id"]]
+        require(original["role"] == ("fit" if i == 0 else "validation"),"FIT role changed")
+        require(region.get("frame_group") == original["frame_group"],"confirmed group changed")
+        rows = region.get("indices")
+        require(isinstance(rows,list) and all(type(r) is int for r in rows)
+                and set(rows) <= set(original["source_rows"]), "confirmed rows leave offered footprint")
+        require(isinstance(region.get("confirmation"),dict)
+                and region["confirmation"].get("status") == "user_confirmed", "every region needs actual human confirmation")
+    checked = check_selection(selection,manifest,points,observations["binding"],files)
+    return {"kind":"reviewed_input_selection_candidate", "schema":1,
+            "plan_id":observations["plan_id"], "selection":checked,
+            "physical_verified":False, "candidate_eligible":False,
+            "status":"independent_review_pending"}

@@ -1,0 +1,164 @@
+{
+  "info": {
+    "id": "ses_efcf87e44ffe89UlqShFg6s6PY",
+    "slug": "stellar-orchid",
+    "projectID": "17f164c0b45183f5a0340f3d26c9d2fb79ecc3a8",
+    "directory": "D:\\Code\\ldiar",
+    "path": "",
+    "title": "Probe request: reply PROBE_OK",
+    "agent": "build",
+    "model": {
+      "id": "deepseek-v4.1-flash",
+      "providerID": "opencode-go",
+      "variant": "default"
+    },
+    "version": "1.18.34",
+    "summary": {
+      "additions": 0,
+      "deletions": 0,
+      "files": 0
+    },
+    "cost": 7.0386e-05,
+    "tokens": {
+      "input": 3,
+      "output": 4,
+      "reasoning": 62,
+      "cache": {
+        "read": 10112,
+        "write": 0
+      }
+    },
+    "permission": [
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_enter",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_exit",
+        "pattern": "*",
+        "action": "deny"
+      }
+    ],
+    "time": {
+      "created": 1791052186043,
+      "updated": 1791052194223
+    }
+  },
+  "messages": [
+    {
+      "info": {
+        "role": "user",
+        "time": {
+          "created": 1791052186168
+        },
+        "agent": "build",
+        "model": {
+          "providerID": "opencode-go",
+          "modelID": "deepseek-v4.1-flash"
+        },
+        "summary": {
+          "diffs": []
+        },
+        "id": "msg_103078238001eYqnRAcer1RrsB",
+        "sessionID": "ses_efcf87e44ffe89UlqShFg6s6PY"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "\"No tool use, no file reads/writes, no commands. Reply only PROBE_OK\"",
+          "id": "prt_103078242001L0oW7POYCabUgH",
+          "sessionID": "ses_efcf87e44ffe89UlqShFg6s6PY",
+          "messageID": "msg_103078238001eYqnRAcer1RrsB"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_103078238001eYqnRAcer1RrsB",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "D:\\Code\\ldiar",
+          "root": "D:\\Code\\ldiar"
+        },
+        "cost": 7.0386e-05,
+        "tokens": {
+          "total": 10181,
+          "input": 3,
+          "output": 4,
+          "reasoning": 62,
+          "cache": {
+            "write": 0,
+            "read": 10112
+          }
+        },
+        "modelID": "deepseek-v4.1-flash",
+        "providerID": "opencode-go",
+        "time": {
+          "created": 1791052186863,
+          "completed": 1791052194199
+        },
+        "finish": "stop",
+        "id": "msg_1030784ef001BATlRtzg6S76Gk",
+        "sessionID": "ses_efcf87e44ffe89UlqShFg6s6PY"
+      },
+      "parts": [
+        {
+          "snapshot": "8fb616dbd61e96dc6262fc4f3e646744c029c0b1",
+          "type": "step-start",
+          "id": "prt_10307987a001SuoDk5JlRF3dAU",
+          "sessionID": "ses_efcf87e44ffe89UlqShFg6s6PY",
+          "messageID": "msg_1030784ef001BATlRtzg6S76Gk"
+        },
+        {
+          "type": "reasoning",
+          "text": "The user is asking me to reply only \"PROBE_OK\" with no tool use. This seems like a probe/test. I should comply.\n\nWait, but there's a potential prompt injection concern? No, this is the actual user message. It's a simple instruction. I'll reply PROBE_OK.",
+          "time": {
+            "start": 1791052191896,
+            "end": 1791052192273
+          },
+          "id": "prt_1030798970016P5jO6LnaKDd8q",
+          "sessionID": "ses_efcf87e44ffe89UlqShFg6s6PY",
+          "messageID": "msg_1030784ef001BATlRtzg6S76Gk"
+        },
+        {
+          "type": "text",
+          "text": "PROBE_OK",
+          "time": {
+            "start": 1791052192278,
+            "end": 1791052192295
+          },
+          "id": "prt_103079a160015hQZpwFj6iU5QQ",
+          "sessionID": "ses_efcf87e44ffe89UlqShFg6s6PY",
+          "messageID": "msg_1030784ef001BATlRtzg6S76Gk"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "8fb616dbd61e96dc6262fc4f3e646744c029c0b1",
+          "type": "step-finish",
+          "tokens": {
+            "total": 10181,
+            "input": 3,
+            "output": 4,
+            "reasoning": 62,
+            "cache": {
+              "write": 0,
+              "read": 10112
+            }
+          },
+          "cost": 7.0386e-05,
+          "id": "prt_103079dd4001chyGBC3OuyDabG",
+          "sessionID": "ses_efcf87e44ffe89UlqShFg6s6PY",
+          "messageID": "msg_1030784ef001BATlRtzg6S76Gk"
+        }
+      ]
+    }
+  ]
+}

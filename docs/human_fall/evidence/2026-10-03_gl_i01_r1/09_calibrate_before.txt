@@ -1,0 +1,376 @@
+#!/usr/bin/env python3
+"""Offline geometry calibration: ground plane from a bag or numeric cloud (HF-03).
+
+This tool is read-only with respect to the live system: it never starts or
+restarts the LiDAR, never publishes, and never touches the original bag. It
+reads either
+
+- a local numeric point array (``.npy`` or ``.npz`` with a ``points`` array), or
+- an existing PointCloud2 bag topic (``rosbag``; only available on the board),
+
+fits a bounded robust ground plane in the sensor frame and writes an
+independent geometry-calibration artifact (schema version 1). The installation
+transform and the IMU mounting rotation are left explicitly ``unknown``: with no
+on-site measurement this tool never fabricates an extrinsic or an identity
+matrix, keeps IMU fusion disabled and marks physical verification as not done.
+"""
+
+import argparse
+import hashlib
+import json
+import os
+import sys
+import tempfile
+import time
+from datetime import datetime, timezone
+
+import numpy as np
+
+PACKAGE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                           os.pardir))
+if PACKAGE_DIR not in sys.path:
+    sys.path.insert(0, PACKAGE_DIR)
+
+from core.calibration import (GeometryCalibrationError, build_geometry_calibration,
+                              build_ground_derived, validate_geometry_calibration)
+from core.ground import (DEFAULT_SETTINGS, fit_ground_plane,
+                         fit_ground_plane_constrained, ground_is_valid,
+                         region_indices, resolve_constrained_settings,
+                         validate_constrained_ground)
+from sensor_health import _load_xyz_from_cloud, load_config, save_json
+
+
+def save_exclusive_json(path, data):
+    """Exclusive-create atomic JSON write; refuses any existing target.
+
+    ``save_json`` atomically replaces a temp file (never a partial write), but
+    an existing output path is still silently replaced. Versioned geometry
+    artifacts are *immutable* once deployed, so a new version must fail loudly
+    on any existing output rather than overwrite it — even when the file
+    appeared after an earlier up-front existence check (a TOCTOU race between
+    the pre-check and the actual write). This is the conforming counterpart to
+    the up-front checks; both stay in place. No directions are loosened.
+    """
+    directory = os.path.abspath(os.path.dirname(path) or ".")
+    os.makedirs(directory, exist_ok=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=directory,
+                                         prefix=".human-fall-", suffix=".json",
+                                         delete=False) as output:
+            temporary = output.name
+            json.dump(data, output, indent=2, ensure_ascii=False, allow_nan=False)
+            output.write("\n")
+        link = getattr(os, "link", None)
+        if link is not None:
+            try:
+                # Atomic exclusive create: the first writer wins; any later
+                # writer sees EEXIST and the target content is untouched.
+                link(temporary, path)
+            except FileExistsError:
+                raise GeometryCalibrationError(
+                    "output already exists: " + str(path)) from None
+        else:  # pragma: no cover - platforms without hard links
+            with open(temporary, "rb") as source:
+                data = source.read()
+            try:
+                fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL)
+            except FileExistsError:
+                raise GeometryCalibrationError(
+                    "output already exists: " + str(path)) from None
+            with os.fdopen(fd, "wb") as target:
+                target.write(data)
+    finally:
+        if temporary and os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def load_points(path):
+    """Load a numeric (N,3) array from .npy or .npz (key ``points`` or first)."""
+    loaded = np.load(path, allow_pickle=False)
+    if isinstance(loaded, np.lib.npyio.NpzFile):
+        key = "points" if "points" in loaded.files else loaded.files[0]
+        points = loaded[key]
+    else:
+        points = loaded
+    array = np.asarray(points, dtype=np.float64)
+    if array.ndim == 2 and array.shape[1] > 3:
+        array = array[:, :3]
+    if array.ndim != 2 or array.shape[1] != 3:
+        raise GeometryCalibrationError(
+            "points file must hold an (N,3) array, got shape " + str(array.shape))
+    return array
+
+
+def load_json(path):
+    with open(path, encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def load_indices(path):
+    """Load an explicit 1-D source-index array (.npy)."""
+    return np.asarray(np.load(path, allow_pickle=False))
+
+
+def load_points_from_bag(path, topic, max_frames):
+    try:
+        import rosbag
+    except ImportError as exc:
+        raise RuntimeError("rosbag is required for --bag input: " + str(exc))
+    xyz_from_cloud, calibration_error = _load_xyz_from_cloud()
+    if xyz_from_cloud is None:
+        raise RuntimeError("cannot locate human_follow_calibration.xyz_from_cloud")
+    chunks = []
+    frames = 0
+    frame_id = None
+    with rosbag.Bag(path, "r") as bag:
+        for _, message, _ in bag.read_messages(topics=[topic]):
+            if frame_id is None:
+                frame_id = getattr(message.header, "frame_id", None)
+            try:
+                chunks.append(xyz_from_cloud(message, 0.0))
+            except calibration_error:
+                continue
+            frames += 1
+            if max_frames and frames >= max_frames:
+                break
+    if not chunks:
+        raise RuntimeError("no decodable PointCloud2 messages on " + topic)
+    return np.vstack(chunks), frames, frame_id
+
+
+def ground_settings(config):
+    section = (config or {}).get("ground") or {}
+    settings = dict(DEFAULT_SETTINGS)
+    settings.update(section)
+    return settings
+
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--points", help="local .npy/.npz numeric cloud")
+    source.add_argument("--bag", help="existing rosbag file (read-only)")
+    parser.add_argument("--topic", default="/innolidar_points")
+    parser.add_argument("--max-frames", type=int, default=0,
+                        help="cap decodable bag frames (0 = all)")
+    parser.add_argument("--frame", default="innolidar")
+    parser.add_argument("--reference-frame", default=None,
+                        help="optional reference frame name; transform stays unknown")
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--config", default=None, help="optional geometry YAML")
+    parser.add_argument("--calibration-id", default=None)
+    parser.add_argument("--created-at-utc", default=None)
+    parser.add_argument("--note", default=None)
+    constrained = parser.add_argument_group(
+        "constrained (GL-01)",
+        "opt-in constrained fit; old defaults/behaviour are unchanged")
+    constrained.add_argument("--constrained", action="store_true",
+                             help="enable the GL-01 constrained path")
+    constrained.add_argument("--up-axis", type=float, nargs=3,
+                             metavar=("X", "Y", "Z"),
+                             help="explicit up/ground-normal prior (unit vector)")
+    constrained.add_argument("--sensor-height-interval", type=float, nargs=2,
+                             metavar=("MIN_M", "MAX_M"),
+                             help="fixture-supplied plausible sensor height")
+    fit_source = constrained.add_mutually_exclusive_group()
+    fit_source.add_argument("--fit-indices", default=None,
+                            help="explicit fit source indices (.npy)")
+    fit_source.add_argument("--fit-region", default=None,
+                            help="explicit fit ROI/bounds JSON (indices or x/y/z)")
+    constrained.add_argument("--validation-regions", default=None,
+                             help="explicit validation region list JSON")
+    constrained.add_argument("--fit-frame-group", default=None,
+                             help="frame-group id of the fit sample")
+    constrained.add_argument("--diagnostics", default=None,
+                             help="optional path to write the full constrained result")
+    constrained.add_argument("--ground-derived", action="store_true",
+                             help="also export the GL-02 ground_local transform block")
+    constrained.add_argument("--reference-axis", type=float, nargs=3,
+                             metavar=("X", "Y", "Z"),
+                             help="confirmed source reference axis for ground X "
+                                  "(required with --ground-derived)")
+    return parser.parse_args(argv)
+
+
+def load_input(args, input_info):
+    """Load the point cloud from --points or --bag and describe it."""
+    if args.points:
+        points = load_points(args.points)
+        frame = args.frame
+        input_info.update({"source": "points", "path": os.path.basename(args.points),
+                           "sha256": sha256_file(args.points), "frames": None})
+    else:
+        points, frames, frame_id = load_points_from_bag(args.bag, args.topic,
+                                                        args.max_frames)
+        frame = frame_id or args.frame
+        input_info.update({"source": "bag", "path": os.path.basename(args.bag),
+                           "topic": args.topic, "sha256": sha256_file(args.bag),
+                           "frames": frames})
+    input_info["point_count"] = int(len(points))
+    return points, frame
+
+
+def run_constrained(args, config):
+    """GL-01 constrained path; writes an explicitly unverified artifact."""
+    if args.bag:
+        print("constrained --bag is not supported: decoded/filtered indices are "
+              "not original bag source indices or real frame groups; use "
+              "--points with explicit fit/validation indices "
+              "(real-source adaptation BLOCKED)", file=sys.stderr)
+        return 2
+
+    settings = (config or {}).get("ground_constrained")
+    try:
+        resolved = resolve_constrained_settings(settings)
+    except ValueError as exc:
+        print("invalid constrained settings: " + str(exc), file=sys.stderr)
+        return 2
+
+    input_info = {"constrained": True}
+    points, frame = load_input(args, input_info)
+
+    # Never write any file before we know it can be completed: both the artifact
+    # output and the diagnostics (a record of the same run) are versioned
+    # products. Refuse to overwrite either up-front — a diagnostics-only write
+    # would still clobber an existing record.
+    for side_effect in (args.output, args.diagnostics):
+        if side_effect and os.path.exists(side_effect):
+            print("refusing to overwrite existing file " + side_effect +
+                  ": write a new version name instead", file=sys.stderr)
+            return 2
+
+    fit_indices = None
+    if args.fit_region:
+        region = load_json(args.fit_region)
+        fit_indices = region_indices(points, region)
+        input_info["fit_region"] = {"path": os.path.basename(args.fit_region),
+                                    "sha256": sha256_file(args.fit_region),
+                                    "region": region}
+    elif args.fit_indices:
+        fit_indices = load_indices(args.fit_indices)
+        input_info["fit_indices"] = {"path": os.path.basename(args.fit_indices),
+                                     "sha256": sha256_file(args.fit_indices)}
+    regions = None
+    if args.validation_regions:
+        regions = load_json(args.validation_regions)
+        input_info["validation_regions"] = {
+            "path": os.path.basename(args.validation_regions),
+            "sha256": sha256_file(args.validation_regions),
+            "regions": regions}
+
+    error, result = None, None
+    try:
+        result = fit_ground_plane_constrained(
+            points, settings=resolved, frame=frame, up_axis=args.up_axis,
+            sensor_height_interval_m=args.sensor_height_interval,
+            fit_indices=fit_indices, fit_frame_group=args.fit_frame_group,
+            validation_regions=regions)
+        if result is not None:
+            validate_constrained_ground(result, expected_frame=frame)
+    except ValueError as exc:
+        result, error = None, str(exc)
+
+    if args.diagnostics and result is not None:
+        try:
+            save_exclusive_json(args.diagnostics, result)
+        except GeometryCalibrationError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+
+    created = args.created_at_utc or datetime.now(timezone.utc).isoformat()
+    calibration_id = args.calibration_id or ("geometry_" + time.strftime("%Y%m%d_%H%M%S"))
+    valid = result is not None and ground_is_valid(result)
+    ground_derived = None
+    if args.ground_derived:
+        if not valid or args.reference_axis is None:
+            print("--ground-derived needs a valid constrained ground and an "
+                  "explicit --reference-axis X Y Z", file=sys.stderr)
+            return 2
+        try:
+            ground_derived = build_ground_derived(
+                result, args.reference_axis, created_at_utc=created,
+                source={"path": input_info.get("path"),
+                        "sha256": input_info.get("sha256"),
+                        "frame": frame, "kind": "constrained_ground"})
+        except GeometryCalibrationError as exc:
+            print("cannot build ground-derived transform: " + str(exc),
+                  file=sys.stderr)
+            return 2
+    artifact = build_geometry_calibration(
+        calibration_id, created, frame, reference_frame=args.reference_frame,
+        ground=result, ground_derived=ground_derived, input_info=input_info,
+        statuses={"ground": "valid" if valid else "unknown",
+                  "geometry_params": "candidate" if valid else "pending"},
+        note=args.note)
+    if result is not None:
+        artifact["constrained_ground"] = result
+        validate_geometry_calibration(artifact)
+    try:
+        save_exclusive_json(args.output, artifact)
+    except GeometryCalibrationError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+
+    summary = {"output": args.output, "constrained": True,
+               "status": None if result is None else result["status"],
+               "reason": error if result is None else result["reason"],
+               "points": int(len(points)),
+               "sensor_height_m": None if result is None else result["sensor_height_m"],
+               "sampled_fit_count": None if result is None else result["sampled_fit_count"],
+               "iterations": None if result is None else result["iterations"],
+               "candidates": None if result is None else len(result["candidates"]),
+               "ground_derived_id": None if ground_derived is None
+               else ground_derived["ground_derived_id"]}
+    print(json.dumps(summary, allow_nan=False))
+    return 0 if valid else 2
+
+
+def main(argv=None):
+    args = parse_args(argv)
+    config = load_config(args.config) if args.config else {}
+    if args.constrained:
+        return run_constrained(args, config)
+    # Option dependency is explicit: a ground-derived transform can only come
+    # from the GL-01 constrained fit. Silently dropping the flag on the legacy
+    # path would hide a caller error behind a successful-looking run.
+    if args.ground_derived:
+        print("--ground-derived requires --constrained (the legacy fit does "
+              "not produce a trusted ground record)", file=sys.stderr)
+        return 2
+
+    settings = ground_settings(config)
+    input_info = {}
+    points, frame = load_input(args, input_info)
+
+    result = fit_ground_plane(points, settings=settings, frame=frame)
+    created = args.created_at_utc or datetime.now(timezone.utc).isoformat()
+    calibration_id = args.calibration_id or ("geometry_" + time.strftime("%Y%m%d_%H%M%S"))
+    valid = ground_is_valid(result)
+    artifact = build_geometry_calibration(
+        calibration_id, created, frame, reference_frame=args.reference_frame,
+        ground=result,
+        input_info=input_info,
+        statuses={"ground": "valid" if valid else "unknown",
+                  "geometry_params": "candidate" if valid else "pending"},
+        note=args.note)
+    save_json(args.output, artifact)
+
+    summary = {"output": args.output, "status": result["status"],
+               "reason": result["reason"], "points": int(len(points)),
+               "sensor_height_m": result["sensor_height_m"],
+               "tilt_rad": result["tilt_rad"]}
+    print(json.dumps(summary, allow_nan=False))
+    return 0 if valid else 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

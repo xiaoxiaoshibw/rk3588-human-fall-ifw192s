@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "adoption": "retain_frozen_baseline_no_adoption",
+  "final_seeds": [
+    1707,
+    1719,
+    1741
+  ],
+  "development_seeds": [
+    7,
+    19,
+    41
+  ],
+  "final_kinds": [
+    "clean",
+    "low_noise",
+    "high_noise",
+    "wall",
+    "table",
+    "dual",
+    "density",
+    "missing",
+    "collinear",
+    "narrow_band"
+  ],
+  "implementation_sha256": {
+    "r0_01.py": "c28238b8674779259eca5943d115bf465367767e80e6920b66a1850b282ebce8",
+    "refinement_05.py": "0fd22ccb06918e418aa9d72f165d0ef68d89c78b7d82d3a07ede7f11545a8933",
+    "holdout_03.py": "2e13720fe373629394b5eb1af70b1650fcccafacc8cfa32255452cfc183f3e2c"
+  },
+  "reason": "K2/K3 introduce extra nonconvergence/unresolved; improved individual seed error is not enough for adoption gate",
+  "robust_weights": "NOT_RUN condition not triggered",
+  "physical_verified": false,
+  "final_holdout_first_exposure_after_this_file": true
+}

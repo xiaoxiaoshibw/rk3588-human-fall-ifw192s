@@ -1,0 +1,48 @@
+{
+  "kind": "gle01_r1_independent_local_chain_verify",
+  "schema": 1,
+  "local_bin_sha256": "b81797f9825792655e5930edeb39c15275eb64e01999984884da61d252c599ff",
+  "local_bin_size": 122427200,
+  "local_meta_sha256": "675c23ded9dcee82e6e985f17665469a487d34520408582708601eb188b1d692",
+  "local_npz_sha256": "f12f48bd3977d935952f5fae685bd73f4721dca09e663fdd6219d3abae215558",
+  "remote_canonical_bin_sha256": "b81797f9825792655e5930edeb39c15275eb64e01999984884da61d252c599ff",
+  "remote_canonical_xyz_sha256": "a4ad287ea14edd1ba584dd24dce866d7c4eacdc7ce2594edb2ddb1eef1b51c27",
+  "remote_raw_serialized_data_sha256": "80da6465210da313d83be1ce6cc1b8f27c8f8eb0e2605a575cdbbd985b6d2dd7",
+  "remote_frame_count": 89,
+  "remote_bag_sha256": "bbbc0c00122c68c9c71cd6a799e4ee977f839cc4904d733f9660998df0ebd378",
+  "checks": {
+    "remote_canonical_equals_local_bin": true,
+    "remote_xyz_equals_local_bin_xyz": true,
+    "declared_bag_sha_matches_remote": true,
+    "points_total_4372400": true,
+    "canonical_pad_bytes_all_zero": true
+  },
+  "all_frame_bytes_match": true,
+  "all_frame_xyz_match": true,
+  "frames_meta_match": true,
+  "npz": {
+    "keys": [
+      "input_manifest",
+      "points"
+    ],
+    "points_dtype": "float32",
+    "points_shape": [
+      4372400,
+      3
+    ],
+    "points_equal_bin_xyz": true,
+    "source_bin_sha256": "b81797f9825792655e5930edeb39c15275eb64e01999984884da61d252c599ff",
+    "source_meta_sha256": "675c23ded9dcee82e6e985f17665469a487d34520408582708601eb188b1d692",
+    "bin_sha_matches": true,
+    "meta_sha_matches": true,
+    "declared_bag_sha": "bbbc0c00122c68c9c71cd6a799e4ee977f839cc4904d733f9660998df0ebd378",
+    "source_bag_hash_verified": false,
+    "physical_verified": false,
+    "npz_frames_match_remote": true
+  },
+  "timestamp_raw_range": [
+    183460.002503,
+    183469.228165
+  ],
+  "conclusion": "independent local+remote aggregate, per-frame and NPZ source identity agree; time units and physics remain unverified"
+}

@@ -1,0 +1,48 @@
+[
+  {
+    "check": "author_research",
+    "command": [
+      "C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe",
+      "-B",
+      "-W",
+      "error",
+      "docs/human_fall/evidence/2026-10-03_gl_i05_r1/research_01/test_gli05_research.py"
+    ],
+    "exit": 0,
+    "elapsed_s": 1.9777498999901582
+  },
+  {
+    "check": "fall_regression",
+    "command": [
+      "C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe",
+      "-B",
+      "-W",
+      "error",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "src/human_fall_detection/tests",
+      "-v"
+    ],
+    "exit": 0,
+    "elapsed_s": 16.813481099990895
+  },
+  {
+    "check": "follow_regression",
+    "command": [
+      "C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe",
+      "-B",
+      "-W",
+      "error",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "src/human_follow_calibration/tests",
+      "-v"
+    ],
+    "exit": 0,
+    "elapsed_s": 0.6498823000001721
+  }
+]

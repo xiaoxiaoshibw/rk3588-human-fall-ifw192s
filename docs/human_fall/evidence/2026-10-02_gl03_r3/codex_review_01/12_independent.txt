@@ -1,0 +1,90 @@
+COMMAND: ['C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe', '-B', '-W', 'error', 'D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-02_gl03_r3\\codex_review_01\\review_checks.py']
+test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) ... 
+  test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) (key='from_frame') ... FAIL
+  test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) (key='to_frame') ... FAIL
+  test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) (key='status') ... FAIL
+  test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) (key='units') ... FAIL
+test_G03_no_ground_reference_node_masks_foreign_frame (__main__.ReviewChecks.test_G03_no_ground_reference_node_masks_foreign_frame) ... ok
+test_G03_node_rejects_conflicting_explicit_reference_at_start (__main__.ReviewChecks.test_G03_node_rejects_conflicting_explicit_reference_at_start) ... FAIL
+test_G03_reference_source_mismatch_does_not_project (__main__.ReviewChecks.test_G03_reference_source_mismatch_does_not_project) ... ok
+test_G03_reference_target_cannot_conflict_with_known_label (__main__.ReviewChecks.test_G03_reference_target_cannot_conflict_with_known_label) ... ok
+test_G05_full_reload_uses_current_artifact_reference_transform (__main__.ReviewChecks.test_G05_full_reload_uses_current_artifact_reference_transform) ... ok
+test_G05_same_id_changed_reference_cannot_keep_old_eligibility (__main__.ReviewChecks.test_G05_same_id_changed_reference_cannot_keep_old_eligibility) ... FAIL
+test_G05_standalone_caller_mutation_cannot_change_live_binding (__main__.ReviewChecks.test_G05_standalone_caller_mutation_cannot_change_live_binding) ... FAIL
+
+======================================================================
+FAIL: test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) (key='from_frame')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\review_checks.py", line 63, in test_G03_malformed_standalone_never_projects
+    self.assertTrue(all(c['center_reference_m'] is None
+AssertionError: False is not true : from_frame
+
+======================================================================
+FAIL: test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) (key='to_frame')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\review_checks.py", line 63, in test_G03_malformed_standalone_never_projects
+    self.assertTrue(all(c['center_reference_m'] is None
+AssertionError: False is not true : to_frame
+
+======================================================================
+FAIL: test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) (key='status')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\review_checks.py", line 63, in test_G03_malformed_standalone_never_projects
+    self.assertTrue(all(c['center_reference_m'] is None
+AssertionError: False is not true : status
+
+======================================================================
+FAIL: test_G03_malformed_standalone_never_projects (__main__.ReviewChecks.test_G03_malformed_standalone_never_projects) (key='units')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\review_checks.py", line 63, in test_G03_malformed_standalone_never_projects
+    self.assertTrue(all(c['center_reference_m'] is None
+AssertionError: False is not true : units
+
+======================================================================
+FAIL: test_G03_node_rejects_conflicting_explicit_reference_at_start (__main__.ReviewChecks.test_G03_node_rejects_conflicting_explicit_reference_at_start)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\review_checks.py", line 49, in test_G03_node_rejects_conflicting_explicit_reference_at_start
+    self.assertTrue(all(c['center_reference_m'] is None
+AssertionError: False is not true : node silently discarded conflicting standalone transform
+
+======================================================================
+FAIL: test_G05_same_id_changed_reference_cannot_keep_old_eligibility (__main__.ReviewChecks.test_G05_same_id_changed_reference_cannot_keep_old_eligibility)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\review_checks.py", line 37, in test_G05_same_id_changed_reference_cannot_keep_old_eligibility
+    self.assertTrue(result['changed'], 'same ID changed T silently kept eligibility')
+AssertionError: False is not true : same ID changed T silently kept eligibility
+
+======================================================================
+FAIL: test_G05_standalone_caller_mutation_cannot_change_live_binding (__main__.ReviewChecks.test_G05_standalone_caller_mutation_cannot_change_live_binding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r3\codex_review_01\review_checks.py", line 72, in test_G05_standalone_caller_mutation_cannot_change_live_binding
+    np.testing.assert_allclose(before['candidates'][0]['center_reference_m'],
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\site-packages\numpy\testing\_private\utils.py", line 1504, in assert_allclose
+    assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\site-packages\numpy\testing\_private\utils.py", line 797, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Not equal to tolerance rtol=1e-07, atol=0
+
+Mismatched elements: 1 / 3 (33.3%)
+Max absolute difference: 8.
+Max relative difference: 0.72687476
+ x: array([ 3.006022, -1.90591 ,  0.204184])
+ y: array([11.006022, -1.90591 ,  0.204184])
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.173s
+
+FAILED (failures=7)
+
+EXIT=1

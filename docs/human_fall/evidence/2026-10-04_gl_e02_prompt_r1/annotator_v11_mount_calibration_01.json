@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_mount_geometry_human_calibration",
+  "version": "01",
+  "status": "USER_CONFIRMED_NOT_INSTRUMENT_MEASURED",
+
+  "session_id": "cap_20261002_233210",
+  "points_sha256": "d946b80b51258e4e0452fc3a40f9ebd7b47c9b3edac25df7aeb1c6ea9f322664",
+  "frames_merged": 99,
+  "recorded_at_local": "2026-10-04T17:47:56+08:00",
+  "recorded_by": "user-in-the-loop slider session (annotator.html v11)",
+  "tool": "pc_apps/human_replay/annotator.html (v11) served via human_replay_lib.py :8901",
+
+  "rotation": {
+    "direction_confirmed": "A",
+    "matrix_rowmajor": [
+      [0.8987940463, 0.0, 0.4383711468, 0.0],
+      [0.0,          1.0, 0.0,          0.0],
+      [-0.4383711468,0.0, 0.8987940463, 0.0],
+      [0.0,          0.0, 0.0,          1.0]
+    ],
+    "interpretation": "R_y(+26deg) applied to raw lidar-frame points levels the floor visually (user verdict: 'A是对的')",
+    "pitch_deg_user_estimate": 26.0,
+    "pitch_uncertainty_note": "26 is user verbal estimate ('26度左右'), not instrument measured; floor looked NOT tilted after A, so estimate is visually consistent"
+  },
+
+  "height_offset": {
+    "tz_best_fit_m": 1.340,
+    "slider_step_m": 0.005,
+    "criterion": "floor band of point cloud visually sits on the z=0 ground grid",
+    "user_verdict": "最合适",
+    "implied_mount_height_m": 1.340,
+    "derivation_note": "under R_y(+26) + Z += tz convention, a flat floor maps to Z_w = tz - h; aligning floor to Z_w=0 yields tz = h. Exact for any rotation angle IF the floor is flat.",
+    "supersedes_verbal_estimate_m": 1.1,
+    "delta_m": 0.240
+  },
+
+  "evidence_class": {
+    "physical_verified": false,
+    "method": "human visual alignment on rendered point cloud vs synthetic grid (human-in-the-loop)",
+    "not_a_substitute_for": [
+      "FIELD_CHECKLIST §2 laser rangefinder 3-trial origin_to_floor_m",
+      "FIELD_CHECKLIST §3 independent tilt/up measurement"
+    ],
+    "value_of_this_record": "independent algorithmic-side estimate to cross-check against §2 laser measurement; if both agree within 0.02m the physical chain is strongly corroborated",
+    "uncertainty_m": 0.02,
+    "uncertainty_basis": "slider step 0.005m + human eye alignment error at 5m camera distance, estimated"
+  },
+
+  "history": [
+    {"date": "2026-10-04", "event": "v7 assumed h=1.1 pitch=26 from verbal only; identity transform experiment (v10) incorrectly concluded SDK already leveled — DISPROVEN by user screenshot (cloud tilted under identity)"},
+    {"date": "2026-10-04", "event": "v11 A/B trial: user confirmed A=R_y(+26deg) correct direction; slider tuning gave tz=+1.340m"}
+  ],
+
+  "next_steps": [
+    "Set annotator.html default tz=1.340 (done in v11.1)",
+    "At field: laser-measure origin_to_floor_m x3 (CHECKLIST §2); compare against 1.340",
+    "If mismatch > 0.02m: prefer laser value for measurement_record.json and re-tune annotator",
+    "Regenerate 2D ROI figure (matplotlib) with confirmed transform when needed for sticker placement"
+  ]
+}

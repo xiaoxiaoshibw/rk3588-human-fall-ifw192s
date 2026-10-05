@@ -1,0 +1,48 @@
+{
+  "kind": "chain_negative_checks",
+  "checks": [
+    {
+      "name": "foreign_seq",
+      "rejected": true
+    },
+    {
+      "name": "wrong_nsec",
+      "rejected": true
+    },
+    {
+      "name": "wrong_offset",
+      "rejected": true
+    },
+    {
+      "name": "wrong_count",
+      "rejected": true
+    },
+    {
+      "name": "lost_point",
+      "rejected": true
+    },
+    {
+      "name": "wrong_bag_time",
+      "rejected": true
+    },
+    {
+      "name": "ordinal_alias",
+      "rejected": true
+    },
+    {
+      "name": "frame_count",
+      "rejected": true
+    },
+    {
+      "name": "same_count_different_content_hash",
+      "different": true
+    },
+    {
+      "name": "float32_timestamp_loss_counterexample",
+      "numeric_error": 0.00781099998857826,
+      "units_verified": false,
+      "no_microsecond_precision_claim": true
+    }
+  ],
+  "all_pass": true
+}

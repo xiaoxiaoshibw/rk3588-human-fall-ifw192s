@@ -1,0 +1,175 @@
+--- pc_apps/human_replay/panel.js.before
++++ pc_apps/human_replay/panel.js
+@@ -16,6 +16,7 @@
+ 
+     // 当前选中 sid
+     var selected_sid = null;
++    var refresh_version = 0;
+ 
+     function setNote(msg, is_err) {
+         els.syncNote.textContent = msg || "";
+@@ -23,15 +24,26 @@
+     }
+ 
+     function api(path, method, body) {
++        // GET 超时只影响读状态；录制/同步等写请求仍等待实际结果。
++        var controller = (!method || method === "GET") ? new AbortController() : null;
++        var timer = controller ? setTimeout(function () { controller.abort(); }, 6000) : null;
+         return fetch(path, {
+             method: method || "GET",
+             headers: body ? { "Content-Type": "application/json" } : undefined,
+             body: body ? JSON.stringify(body) : undefined,
++            signal: controller ? controller.signal : undefined,
+         }).then(function (r) {
+             if (!r.ok) return r.json().catch(function () { return {}; }).then(function (j) {
+                 throw new Error(j.error || ("HTTP " + r.status));
+             });
+             return r.json();
++        }).then(function (r) {
++            clearTimeout(timer);
++            return r;
++        }, function (e) {
++            clearTimeout(timer);
++            if (e.name === "AbortError") throw new Error("请求超时");
++            throw e;
+         });
+     }
+ 
+@@ -39,7 +51,8 @@
+     function refresh_board() {
+         api("/api/board/status").then(function (st) {
+             if (st.error) {
+-                els.boardStatus.textContent = "板端: " + st.error;
++                els.boardStatus.textContent = "板端离线，可回放本地会话";
++                els.boardStatus.title = st.error;
+                 els.boardStatus.style.color = "#f88";
+                 els.recBtn.disabled = true;
+                 return;
+@@ -60,7 +73,8 @@
+             }
+             els.boardMeta.textContent = "";
+         }).catch(function (e) {
+-            els.boardStatus.textContent = "板端: " + e.message;
++            els.boardStatus.textContent = "板端离线，可回放本地会话";
++            els.boardStatus.title = e.message;
+             els.boardStatus.style.color = "#f88";
+             els.recBtn.disabled = true;
+         });
+@@ -118,14 +132,26 @@
+     }
+ 
+     function refresh_sessions() {
+-        els.panelStatus && (els.panelStatus.textContent = "加载中…");
+-        api("/api/sessions").then(function (r) {
++        var version = ++refresh_version;
++        els.panelStatus && (els.panelStatus.textContent = "加载本地…");
++        api("/api/sessions?scope=local").then(function (r) {
++            if (version !== refresh_version) return;
+             render_sessions(r.sessions || []);
++            if (els.panelStatus) els.panelStatus.textContent = "本地可用，检查板端…";
++            return api("/api/sessions").then(function (remote) {
++                if (version !== refresh_version) return;
++                if (!remote.board_error) render_sessions(remote.sessions || []);
++                if (els.panelStatus) els.panelStatus.textContent = remote.board_error
++                    ? "离线 · 本地会话" : "";
++            }).catch(function () {
++                if (version === refresh_version && els.panelStatus)
++                    els.panelStatus.textContent = "离线 · 本地会话";
++            });
++        }).catch(function (e) {
++            if (version !== refresh_version) return;
+             if (els.panelStatus) {
+-                els.panelStatus.textContent = r.board_error ? ("板端: " + r.board_error) : "";
+-            }
+-        }).catch(function (e) {
+-            if (els.panelStatus) els.panelStatus.textContent = e.message;
++                els.panelStatus.textContent = "本地列表失败: " + e.message;
++            }
+         });
+     }
+ 
+--- pc_apps/human_replay/human_replay_lib.py.before
++++ pc_apps/human_replay/human_replay_lib.py
+@@ -179,13 +179,16 @@
+ 
+     # ---------- 会话面板 ----------
+     def _api_sessions(self):
++        from urllib.parse import urlparse, parse_qs
++        local_only = parse_qs(urlparse(self.path).query).get("scope") == ["local"]
++        local = _local_sessions(C.DEST_ROOT)
+         board_error = None
+         board_sessions = []
+-        try:
+-            board_sessions = _board_get("/api/v1/sessions").get("sessions", [])
+-        except BaseException as exc:
+-            board_error = "连接板失败: %s" % exc
+-        local = _local_sessions(C.DEST_ROOT)
++        if not local_only:
++            try:
++                board_sessions = _board_get("/api/v1/sessions").get("sessions", [])
++            except BaseException as exc:
++                board_error = "连接板失败: %s" % exc
+         out = []
+         for s in board_sessions:
+             sid = s.get("session_id", "")
+--- pc_apps/console/console_gui.py.before
++++ pc_apps/console/console_gui.py
+@@ -48,9 +48,9 @@
+     replay_dir = _replay_dir()
+     sys.path.insert(0, replay_dir)
+     m = runpy.run_path(os.path.join(replay_dir, "human_replay_lib.py"))
+-    # 冻结时数据根不在 _MEIPASS（解压目录），改指 exe 工作目录下的 captures/remote
++    # 仓内 exe 与源码共用捕获目录；移动版的数据放 exe 旁，不依赖快捷方式 cwd。
+     if getattr(sys, "frozen", False):
+-        m["C"].DEST_ROOT = os.path.join(os.getcwd(), "captures", "remote")
++        m["C"].DEST_ROOT = _frozen_capture_root()
+     os.makedirs(m["C"].DEST_ROOT, exist_ok=True)
+     try:
+         srv = m["ThreadingHTTPServer"](("127.0.0.1", m["PORT"]), m["Handler"])
+@@ -60,6 +60,19 @@
+     threading.Thread(target=srv.serve_forever, daemon=True).start()
+     print("human_replay 服务 http://127.0.0.1:%d/（随控制台退出）" % srv.server_address[1])
+     return srv.server_address[1]
++
++
++def _frozen_capture_root():
++    exe_dir = os.path.dirname(os.path.abspath(sys.executable))
++    root = exe_dir
++    while True:
++        if (os.path.isfile(os.path.join(root, "pc_apps", "human_replay", "human_replay_lib.py"))
++                and os.path.isdir(os.path.join(root, "captures", "remote"))):
++            return os.path.join(root, "captures", "remote")
++        parent = os.path.dirname(root)
++        if parent == root:
++            return os.path.join(exe_dir, "captures", "remote")
++        root = parent
+ 
+ 
+ def _suppress_edge_save_bubble():
+--- pc_apps/console/console_test.py.before
++++ pc_apps/console/console_test.py
+@@ -28,6 +28,24 @@
+         d = G._replay_dir()
+         self.assertTrue(os.path.isfile(os.path.join(d, 'human_replay_lib.py')), d)
+ 
++    def test_frozen_capture_root_ignores_shortcut_cwd(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            root = Path(tmp) / 'repo'
++            source = root / 'pc_apps' / 'human_replay' / 'human_replay_lib.py'
++            source.parent.mkdir(parents=True)
++            source.touch()
++            captures = root / 'captures' / 'remote'
++            captures.mkdir(parents=True)
++            exe = root / 'pc_apps' / 'console' / 'dist' / 'Console.exe'
++            exe.parent.mkdir(parents=True)
++            # Empty captures next to dist was the old incorrect shortcut root.
++            (exe.parent / 'captures' / 'remote').mkdir(parents=True)
++            with patch.object(G.sys, 'executable', str(exe)):
++                self.assertEqual(Path(G._frozen_capture_root()), captures)
++            portable = Path(tmp) / 'portable' / 'Console.exe'
++            with patch.object(G.sys, 'executable', str(portable)):
++                self.assertEqual(Path(G._frozen_capture_root()), portable.parent / 'captures' / 'remote')
++
+     def test_occupied_default_port_uses_new_instance_server(self):
+         servers = []
+         def make(address, handler):

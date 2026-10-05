@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/MtepT5K0aXcSfwT93OS2xIkmGk4</id>
+  <title>arXiv Query: search_query=&amp;id_list=2207.11919,2108.05560&amp;start=0&amp;max_results=2</title>
+  <updated>2026-10-03T19:40:50Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=2&amp;id_list=2207.11919,2108.05560" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>2</opensearch:itemsPerPage>
+  <opensearch:totalResults>2</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2207.11919v2</id>
+    <title>Patchwork++: Fast and Robust Ground Segmentation Solving Partial Under-Segmentation Using 3D Point Cloud</title>
+    <updated>2022-09-27T04:26:13Z</updated>
+    <link href="https://arxiv.org/abs/2207.11919v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2207.11919v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In the field of 3D perception using 3D LiDAR sensors, ground segmentation is an essential task for various purposes, such as traversable area detection and object recognition. Under these circumstances, several ground segmentation methods have been proposed. However, some limitations are still encountered. First, some ground segmentation methods require fine-tuning of parameters depending on the surroundings, which is excessively laborious and time-consuming. Moreover, even if the parameters are well adjusted, a partial under-segmentation problem can still emerge, which implies ground segmentation failures in some regions. Finally, ground segmentation methods typically fail to estimate an appropriate ground plane when the ground is above another structure, such as a retaining wall. To address these problems, we propose a robust ground segmentation method called Patchwork++, an extension of Patchwork. Patchwork++ exploits adaptive ground likelihood estimation (A-GLE) to calculate appropriate parameters adaptively based on the previous ground segmentation results. Moreover, temporal ground revert (TGR) alleviates a partial under-segmentation problem by using the temporary ground property. Also, region-wise vertical plane fitting (R-VPF) is introduced to segment the ground plane properly even if the ground is elevated with different layers. Finally, we present reflected noise removal (RNR) to eliminate virtual noise points efficiently based on the 3D LiDAR reflection model. We demonstrate the qualitative and quantitative evaluations using a SemanticKITTI dataset. Our code is available at https://github.com/url-kaist/patchwork-plusplus</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-07-25T06:09:02Z</published>
+    <arxiv:comment>This paper has been accepted for publication in the proceedings of IROS 2022</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Seungjae Lee</name>
+    </author>
+    <author>
+      <name>Hyungtae Lim</name>
+    </author>
+    <author>
+      <name>Hyun Myung</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2108.05560v2</id>
+    <title>Patchwork: Concentric Zone-based Region-wise Ground Segmentation with Ground Likelihood Estimation Using a 3D LiDAR Sensor</title>
+    <updated>2022-03-10T11:13:23Z</updated>
+    <link href="https://arxiv.org/abs/2108.05560v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2108.05560v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Ground segmentation is crucial for terrestrial mobile platforms to perform navigation or neighboring object recognition. Unfortunately, the ground is not flat, as it features steep slopes; bumpy roads; or objects, such as curbs, flower beds, and so forth. To tackle the problem, this paper presents a novel ground segmentation method called \textit{Patchwork}, which is robust for addressing the under-segmentation problem and operates at more than 40 Hz. In this paper, a point cloud is encoded into a Concentric Zone Model-based representation to assign an appropriate density of cloud points among bins in a way that is not computationally complex. This is followed by Region-wise Ground Plane Fitting, which is performed to estimate the partial ground for each bin. Finally, Ground Likelihood Estimation is introduced to dramatically reduce false positives. As experimentally verified on SemanticKITTI and rough terrain datasets, our proposed method yields promising performance compared with the state-of-the-art methods, showing faster speed compared with existing plane fitting--based methods. Code is available: https://github.com/LimHyungTae/patchwork</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2021-08-12T06:52:10Z</published>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Hyungtae Lim</name>
+    </author>
+    <author>
+      <name>Minho Oh</name>
+    </author>
+    <author>
+      <name>Hyun Myung</name>
+    </author>
+  </entry>
+</feed>

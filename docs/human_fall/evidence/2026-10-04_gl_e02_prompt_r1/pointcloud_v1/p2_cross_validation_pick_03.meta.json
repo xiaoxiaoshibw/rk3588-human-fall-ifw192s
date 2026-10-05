@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_p2_cross_validation",
+  "fit_id": "pick_03",
+  "transform": {
+    "rotation": "A: R_y(+26deg)",
+    "tz_m": 1.34
+  },
+  "fit_plane": {
+    "a": 0.01753060705959797,
+    "b_X": 0.005356552544981241,
+    "c_Y": 0.012056470848619938,
+    "rms_m": 0.009643559344112873
+  },
+  "results": [
+    {
+      "roi": "pick_01",
+      "role": "VAL",
+      "n": 88518,
+      "res_mean_m": -0.015203544870018959,
+      "res_std_m": 0.019421687349677086,
+      "absres_p95_m": 0.05216314885765313,
+      "absres_max_m": 0.09986139833927155,
+      "p2_gate_pass": false
+    },
+    {
+      "roi": "pick_02",
+      "role": "VAL",
+      "n": 27009,
+      "res_mean_m": -0.02046304941177368,
+      "res_std_m": 0.02004215307533741,
+      "absres_p95_m": 0.05809036940336225,
+      "absres_max_m": 0.07936815917491913,
+      "p2_gate_pass": false
+    },
+    {
+      "roi": "pick_03",
+      "role": "FIT",
+      "n": 52473,
+      "res_mean_m": 3.072638532497507e-10,
+      "res_std_m": 0.009643559344112873,
+      "absres_p95_m": 0.018458006158471107,
+      "absres_max_m": 0.056507136672735214,
+      "p2_gate_pass": true
+    },
+    {
+      "roi": "pick_04",
+      "role": "VAL",
+      "n": 61691,
+      "res_mean_m": -0.0036079103592783213,
+      "res_std_m": 0.019322412088513374,
+      "absres_p95_m": 0.03711456246674061,
+      "absres_max_m": 0.07667864859104156,
+      "p2_gate_pass": true
+    }
+  ],
+  "p2_gate_m": 0.05,
+  "overall_pass": false,
+  "notes": [
+    "This is the real P2 protocol: single plane from FIT, extrapolated to VALs.",
+    "Per-box self-fit numbers (from verify_user_picks_all.py) are health checks only."
+  ]
+}

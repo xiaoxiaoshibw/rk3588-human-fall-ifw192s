@@ -1,0 +1,34 @@
+# GL-01 constrained ground path parameters (software synthetic prototype).
+# Independent of config/geometry.yaml (HF-03, frozen) and default.yaml (HF-01,
+# frozen). Enabled only with the calibrate_sensors.py --constrained flag; the
+# legacy ground path and its defaults are unchanged.
+#
+# This is a software protocol, NOT a device/physical acceptance threshold. Real
+# ROI identity, independent site regions and sensor height remain BLOCKED until
+# measured on-site. Units: m, rad (angles deg for the diagnostic fields).
+ground_constrained:
+  min_inliers: 100
+  min_fit_inlier_fraction: 0.2
+  fit_point_cap: 5000
+  holdout_point_cap: 10000
+  spatial_cell_m: 0.20
+  max_points_per_cell: 4
+  max_candidates: 3
+  ransac_iterations: 861
+  ransac_iteration_hard_cap: 2000
+  seed: 20261001
+  inlier_threshold_m: 0.05
+  max_angle_rad: 0.2617993877991494
+  min_sample_separation_m: 0.05
+  min_sample_triangle_area_m2: 0.0025
+  min_planar_eigenvalue_ratio: 0.02
+  support_close_ratio: 0.8
+  distinct_normal_deg: 10.0
+  distinct_offset_m: 0.05
+  independent_regions_min: 3
+  points_per_region_min: 20
+  untruncated_rms_max_m: 0.03
+  abs_residual_p95_max_m: 0.05
+  support_fraction_min: 0.8
+  normal_change_max_deg: 2.0
+  offset_change_max_m: 0.03

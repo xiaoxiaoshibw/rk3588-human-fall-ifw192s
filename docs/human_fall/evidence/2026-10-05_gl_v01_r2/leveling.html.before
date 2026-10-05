@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>离线配平工作台</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#10151c;color:#dce5f0;font:14px/1.5 "Microsoft YaHei",sans-serif}header{padding:16px 24px;border-bottom:1px solid #2d3c4d;display:flex;gap:18px;align-items:center}h1{font-size:20px;margin:0}a{color:#83caff}main{padding:18px;display:grid;grid-template-columns:340px 1fr;gap:18px}.card{background:#18222e;border:1px solid #2b3b4c;border-radius:9px;padding:16px;margin-bottom:14px}h2{font-size:16px;margin:0 0 12px}.muted{font-size:12px;color:#9aabbf}button,input,select,textarea{font:inherit;color:inherit;background:#101b27;border:1px solid #3d5368;border-radius:4px;padding:6px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}.primary{background:#2277a9;border-color:#4197c9;width:100%;font-weight:bold;padding:10px}label{display:block;margin:8px 0}input[type=number]{width:80px}input[type=checkbox]{width:auto}select,textarea{width:100%}textarea{height:60px;resize:vertical}table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;border-bottom:1px solid #304254;padding:7px 4px}#regions input{width:61px;font-size:12px;padding:3px}#regions td{padding:5px 1px}.pass{color:#81dbb2}.fail{color:#ff9c9c}#note{white-space:pre-wrap;overflow-wrap:anywhere;min-height:44px}#roi{display:block;width:100%;height:320px;touch-action:none;border:1px solid #3c5268;cursor:crosshair}#views{display:grid;grid-template-columns:1fr 1fr;gap:12px}.view{height:300px;background:#0c1219}.view canvas{display:block;width:100%;height:100%}.tools{display:flex;gap:10px;align-items:center;margin:10px 0}.tools input[type=range]{flex:1}.tools select{width:140px}#result[hidden]{display:none}#downloads{display:flex;gap:12px;flex-wrap:wrap}#downloads a{padding:7px 10px;border:1px solid #3b6176;border-radius:4px}details{margin-top:12px}summary{cursor:pointer}#report{white-space:pre-wrap;max-height:340px;overflow:auto;font-size:12px}.scroll{overflow-x:auto}@media(max-width:1050px){main{grid-template-columns:1fr}#regions input{width:70px}}@media(max-width:680px){#views{grid-template-columns:1fr}header{flex-wrap:wrap}}
+</style></head><body>
+<header><h1>⚖ 离线配平工作台</h1><a href="/">← 会话回放</a><span class="muted">本地录制 · 四区同域评估 · 新数据导出</span></header>
+<main><aside>
+<section class="card"><h2>1 · 选择录制会话</h2><label>本地会话<select id="session"><option value="">请选择…</option></select></label><button id="refresh">刷新本地列表</button><p id="sourceInfo" class="muted">载入 meta.json 与 points.bin 后可配平。</p></section>
+<section class="card"><h2>2 · 确认地面区域</h2><p class="muted">名义角度用于俯视选区与法向符号锚点。高度仅保存为测量参考；最终平移由拟合 d 决定。</p>
+<label>名义 pitch (°) <input id="pitch" type="number" value="26" min="-75" max="75" step=".1"></label>
+<label>名义 roll (°) <input id="roll" type="number" value="0" min="-45" max="45" step=".1"></label>
+<label>测量参考高度 (m) <input id="height" type="number" value="1.14" min=".01" max="10" step=".01"></label>
+<p class="muted">四区预设来自现有场景，仅供起点。每次换会话请在右侧核对，可拖框替换选中区，或编辑米制边界。全高度参与，无 Z／残差裁剪。</p>
+<table id="regions"><thead><tr><th>区域</th><th>X min</th><th>X max</th><th>Y min</th><th>Y max</th></tr></thead><tbody></tbody></table>
+<label><input id="confirmed" type="checkbox"> 我已确认四区包含要评估的地面</label>
+<label>确认依据<textarea id="basis" placeholder="例如：本次录制中的木地板四个空置区域，已核对无遮挡"></textarea></label>
+<button id="run" class="primary" disabled>配平 · 评估三种算法并生成数据</button>
+<button id="runAuto" class="primary" disabled style="margin-left:8px">自动配平 · 算法找地面区域</button>
+<p id="note" role="status" aria-live="polite" class="muted">等待载入会话。</p></section>
+<section class="card muted"><b>本次离线评估协议</b><p>拟合前固定共同域；三个独立帧留出验证。每区 ≥20 点；RMS ≤3 cm，P95 ≤5 cm，5 cm 内支持率 ≥80%。检查二维展开，拒绝线状域。</p><p>三方法全部有效且两两差 ≤2°／3 cm 时推荐 TLS。TLS 与 SVD 同属最小二乘家族，分歧时不以二票压 RANSAC。</p><p>输出仅为离线显示数据。数值通过不代表物理标定、全场范围或生产可用。</p></section>
+</aside><div>
+<section class="card"><h2>俯视选区 · 名义显示坐标 (m)</h2><div class="tools"><label>替换区域 <select id="activeRegion"><option value="0">#1</option><option value="1">#2</option><option value="2">#3</option><option value="3">#4</option></select></label><button id="mapReset">复位选区视野</button><span class="muted">拖动框选 · 滚轮缩放</span></div><canvas id="roi" width="1100" height="440" aria-label="俯视点云，拖框设置地面区域"></canvas></section>
+<section class="card"><h2>同帧前后对照</h2><div class="tools"><button id="play" disabled>▶ 播放</button><input id="frame" type="range" min="0" max="0" value="0" aria-label="帧序号"><span id="frameInfo">未载入</span><select id="method" aria-label="右侧配平方法"><option value="nominal">名义显示预览</option></select><button id="cameraReset">复位视角</button></div>
+<div id="views"><div><b>原始 source · innolidar</b><div id="rawView" class="view"></div></div><div><b id="levelLabel">名义预览 · 未评估</b><div id="levelView" class="view"></div></div></div><p class="muted">拖动旋转，滚轮缩放；两侧视角同步。网格是显示参考。显示每帧最多 12000 点，算法使用完整冻结域，导出保留全部源行。</p></section>
+<section id="result" class="card" hidden><h2>三种算法 · 可行度与数据</h2><p id="consensus"></p><div class="scroll"><table id="algorithms"><thead><tr><th>方法</th><th>离线门</th><th>Pitch / Roll (°)</th><th>tz (m)</th><th>RMS / P95 (cm)</th><th>支持率</th><th>拒绝原因</th></tr></thead><tbody></tbody></table></div><p id="pairs" class="muted"></p><div id="downloads"></div><details><summary>逐区、三个留出帧、源 SHA 与完整报告</summary><pre id="report"></pre></details></section>
+</div></main><script src="vendor/three.min.js"></script><script src="vendor/OrbitControls.js"></script><script src="leveling.js"></script></body></html>

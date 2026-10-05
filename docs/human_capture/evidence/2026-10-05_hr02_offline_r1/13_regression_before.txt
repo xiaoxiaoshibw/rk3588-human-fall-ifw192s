@@ -1,0 +1,9 @@
+Pure node/vm negative check: redirect only panel.js read to panel.js.before (no source rewrite).
+Command: node -e "const fs=require('fs'),read=fs.readFileSync; fs.readFileSync=function(p,...a){return read.call(this,String(p).endsWith('/panel.js')?'docs/human_capture/evidence/2026-10-05_hr02_offline_r1/panel.js.before':p,...a)};require('./pc_apps/human_replay/panel.test.js')"
+Exit code: 1 (expected)
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
++ '/api/sessions'
+- '/api/sessions?scope=local'
+at panel.test.js:37:12
+Current-source check: tests0.txt, exit 0.

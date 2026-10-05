@@ -1,0 +1,309 @@
+--- a/src/human_fall_detection/core/calibration.py
++++ b/src/human_fall_detection/core/calibration.py
+@@ -317,17 +317,26 @@
+     known artifact record a legal standalone transform keeps the legacy
+     support. A full artifact is validated end-to-end first, so a damaged,
+     newer-version or id-less parent can never supply reference coordinates; an
+-    old minimal calibration summary (no ``kind``) keeps the legacy path. The
+-    effective record itself must be fully qualified (frames/direction/units/
+-    status/evidence/R/t), not merely numerically loadable, and a record whose
+-    ``from_frame`` differs from the actual producing ``frame_id``, or whose
+-    ``to_frame`` disagrees with the declared ``frames.reference``, can never
+-    supply reference coordinates. Returns ``(record_or_None, reason_or_None)``
++    old minimal calibration summary (no ``kind``) keeps the legacy path, while
++    a record that carries an explicit non-artifact ``kind`` is refused instead
++    of being mistaken for that legacy summary. The effective record itself must
++    be fully qualified (frames/direction/units/status/evidence/R/t), not merely
++    numerically loadable, and a record whose ``from_frame`` differs from the
++    actual producing ``frame_id`` or from the parent's declared ``frames.lidar``,
++    or whose ``to_frame`` disagrees with the declared ``frames.reference``, can
++    never supply reference coordinates. Returns
++    ``(record_or_None, reason_or_None)``
+     with a deep-copied record; an unusable reference is reported as ``None``
+     (and the caller publishes null reference fields) rather than raising, so
+     the ordinary no-reference/source-only path is unchanged.
+     """
+     parent = calibration if isinstance(calibration, dict) else None
++    if parent is not None and parent.get("kind") is not None \
++            and parent.get("kind") != KIND:
++        # An explicit non-artifact kind is a damaged/foreign record, never a
++        # legacy minimal summary (which has no ``kind``): it must not bypass
++        # the supported-parent validation below (GL-03 G03).
++        return None, "reference_calibration_invalid"
+     if parent is not None and parent.get("kind") == KIND:
+         try:
+             parent = validate_geometry_calibration(copy.deepcopy(parent))
+@@ -350,8 +359,18 @@
+     else:
+         return None, None
+     if isinstance(frame_id, str) and frame_id:
+-        recorded = effective.get("from_frame")
+-        if isinstance(recorded, str) and recorded and recorded != frame_id:
++        declared = effective.get("from_frame")
++        if isinstance(declared, str) and declared and declared != frame_id:
++            return None, "reference_from_frame_mismatch"
++    declared_lidar = None
++    if parent is not None:
++        declared_lidar = (parent.get("frames") or {}).get("lidar")
++    if isinstance(declared_lidar, str) and declared_lidar:
++        # Cross-record binding: the producing ``from`` frame cannot contradict
++        # the parent artifact's declared lidar frame (GL-03 G03), even when the
++        # caller supplies no frame_id (node startup/reload binding).
++        declared = effective.get("from_frame")
++        if isinstance(declared, str) and declared and declared != declared_lidar:
+             return None, "reference_from_frame_mismatch"
+     reference_frame = None
+     if parent is not None:
+--- a/src/human_fall_detection/core/node_runtime.py
++++ b/src/human_fall_detection/core/node_runtime.py
+@@ -32,6 +32,7 @@
+   persisted) event is not re-published as new.
+ """
+ 
++import copy
+ import hashlib
+ import json
+ import math
+@@ -370,8 +371,12 @@
+                 or calibration
+             self.ground, self.ground_derived = ground_context_from_calibration(
+                 self.calibration)
+-        self.transform = transform
+-        if transform is not None \
++        # The standalone caller transform is frozen (deep-copied) at the
++        # node's ownership boundary: a later in-place caller edit is not a
++        # reload authorization, so every reload may only re-read this fixed
++        # copy, never the caller's live dict (GL-03 G05).
++        self.transform = copy.deepcopy(transform) if transform is not None else None
++        if self.transform is not None \
+                 and calibration_reference_transform(self.calibration) is not None:
+             # A startup that supplies an explicit transform next to an artifact
+             # that already owns T_reference_lidar must not silently discard the
+@@ -380,7 +385,7 @@
+             # adopt the new artifact's own T without being blocked by the old
+             # standalone parameter.
+             _binding, _reason = resolve_reference_transform(self.calibration,
+-                                                            transform)
++                                                            self.transform)
+             if _reason == "reference_transform_conflict":
+                 raise ValueError(
+                     "explicit reference transform conflicts with the "
+@@ -388,7 +393,7 @@
+                     "T_reference_lidar")
+         # Effective lidar->reference binding actually used by snapshots and
+         # predictions. An artifact-owned transform is authoritative; without
+-        # one the legal standalone caller transform keeps the legacy support.
++        # one the fixed standalone copy keeps the legacy support.
+         self._reference_transform, self._reference_reason = \
+             self._resolve_reference_binding()
+         self.background = background
+@@ -457,18 +462,23 @@
+         calibration_id = (self.calibration or {}).get("calibration_id")
+         return (calibration_id, self._ground_derived_id)
+ 
++    def _prospective_reference_binding(self, calibration):
++        """Resolve the effective reference binding for a candidate artifact.
++
++        A full artifact that owns a known ``T_reference_lidar`` is authoritative:
++        a reload adopts the new artifact's transform and never publishes a new
++        calibration id with the old matrix. Without a known artifact record the
++        *fixed startup copy* of the standalone transform keeps the legacy
++        support; the caller's live dict is never re-read (GL-03 G05). The
++        returned record is validated/deep-copied by the shared resolver.
++        """
++        standalone = None if calibration_reference_transform(calibration) \
++            else self.transform
++        return resolve_reference_transform(calibration, standalone)
++
+     def _resolve_reference_binding(self):
+-        """Bind the artifact-owned reference transform, else the standalone one.
+-
+-        A full artifact that owns a known ``T_reference_lidar`` is authoritative:
+-        on a context reload the new artifact's transform replaces any earlier
+-        caller-supplied record (the core is unbound from the caller and never
+-        publishes a new calibration id with the old matrix). Without a known
+-        artifact record the legal standalone transform keeps its legacy support.
+-        """
+-        standalone = None if calibration_reference_transform(self.calibration) \
+-            else self.transform
+-        return resolve_reference_transform(self.calibration, standalone)
++        """Bind the effective reference transform for the live artifact."""
++        return self._prospective_reference_binding(self.calibration)
+ 
+     def _resolve_new_context(self, ground, calibration, ground_derived):
+         """Validate the requested change first; return the canonical binding.
+@@ -565,7 +575,18 @@
+             same_reference = (previous_reference is None
+                               and new_reference is None) \
+                 or _same_transform_record(previous_reference, new_reference)
+-            if new_version == previous_version and not same_reference:
++            # Prospective effective binding, resolved before any assignment:
++            # the new artifact's known T wins; otherwise the fixed startup
++            # standalone copy is used, never the caller's live dict. A same-id
++            # reload whose declared parent record *or* actual effective binding
++            # would change is a contradiction, not a reload (GL-03 G04/G05).
++            new_binding, new_binding_reason = \
++                self._prospective_reference_binding(new_calibration)
++            same_binding = (self._reference_transform is None
++                            and new_binding is None) \
++                or _same_transform_record(self._reference_transform, new_binding)
++            if new_version == previous_version \
++                    and not (same_reference and same_binding):
+                 # The same calibration id with a different actual reference
+                 # transform is a contradiction, not a reload: the old snapshot/
+                 # track eligibility was built with the old matrix and must not
+@@ -583,14 +604,13 @@
+                       "changed": bool(changed)}
+             # Atomic switch: only after validation succeeded; the consumed
+             # ground/derived come from the same canonical artifact so the
+-            # published id can never disagree with the consumed records.
++            # published id can never disagree with the consumed records, and
++            # snapshots/predictions bind exactly the prospective record that
++            # was just validated and compared (no re-read of any live source).
+             self.calibration = new_calibration
+             self.ground, self.ground_derived = resolved_ground, resolved_block
+-            # Re-resolve the reference binding from the adopted artifact before
+-            # any new frame: a new version must never publish its id with the
+-            # previous version's T.
+-            self._reference_transform, self._reference_reason = \
+-                self._resolve_reference_binding()
++            self._reference_transform = new_binding
++            self._reference_reason = new_binding_reason
+             if changed:
+                 invalidated = ["baseline", "snapshots", "positions", "requests",
+                                "action_history"]
+--- a/src/human_fall_detection/tests/test_gl03_candidates_geometry.py
++++ b/src/human_fall_detection/tests/test_gl03_candidates_geometry.py
+@@ -21,7 +21,7 @@
+ 
+ from core.calibration import (apply_ground_derived, apply_transform,
+                               build_geometry_calibration, build_ground_derived,
+-                              make_transform)
++                              make_transform, make_unknown_transform)
+ from core.ground import MONITOR_OK
+ from core.lidar_candidates import build_snapshot, validate_snapshot
+ from core.node_runtime import FallNodeCore
+@@ -307,6 +307,123 @@
+                              now=1.3)["snapshot"]["candidates"][0]
+         np.testing.assert_allclose(before["center_reference_m"],
+                                    after["center_reference_m"], atol=1e-12)
++
++    def test_wrong_kind_full_artifact_is_not_legacy_summary(self):
++        # R5 (G03): a record that explicitly declares a non-artifact kind is a
++        # damaged/foreign record, not an old no-kind minimal summary: its
++        # internal R/t must not bypass the supported-parent validation.
++        artifact = reference_calibration(reference_transform())
++        artifact["kind"] = "unsupported_geometry_calibration"
++        snap = snapshot(blob(), calibration=artifact)
++        self.assertTrue(all(c["center_reference_m"] is None
++                            for c in snap["candidates"]))
++        self.assertEqual(snap["coordinate"]["transform_status"], "unknown")
++
++    def test_parent_lidar_frame_must_match_reference_record(self):
++        # R5 (G03): parent frames.lidar and the producing T.from are one
++        # cross-record binding; legal internal R/t is not enough.
++        artifact = reference_calibration(reference_transform())
++        artifact["frames"]["lidar"] = "other_lidar"
++        snap = snapshot(blob(), calibration=artifact)
++        self.assertTrue(all(c["center_reference_m"] is None
++                            for c in snap["candidates"]))
++        self.assertEqual(snap["coordinate"]["transform_status"], "unknown")
++
++    def test_standalone_same_id_reload_cannot_reread_mutated_caller(self):
++        # R5 (G04/G05): the standalone input is frozen at the node boundary. A
++        # caller edit after startup is not a reload authorization: a same-id
++        # reload keeps the fixed binding (or refuses before side effects), and
++        # the occluded prediction uses the same fixed inverse.
++        transform = reference_transform()
++        record = reference_calibration(
++            make_unknown_transform(FROM_FRAME, TO_FRAME),
++            calibration_id="standalone-ref")
++        core = FallNodeCore("s1", {}, expected_frame=FROM_FRAME,
++                            calibration=record, transform=transform)
++        first = core.process(blob(), 1.0, seq=1, stamp_secs=100,
++                             stamp_nsecs=0, frame_id=FROM_FRAME, now=1.0)
++        request = {"schema_version": 1, "request_id": "r5-standalone-select",
++                   "action": "select", "session_id": "s1",
++                   "time_epoch": first["state"]["time_epoch"],
++                   "snapshot_id": first["snapshot"]["snapshot_id"],
++                   "candidate_id": first["snapshot"]["candidates"][0]["candidate_id"],
++                   "selection_version": 0}
++        self.assertTrue(core.handle_request(request, 1.01)["accepted"])
++        core.process(blob(), 1.1, seq=2, stamp_secs=100,
++                     stamp_nsecs=100000000, frame_id=FROM_FRAME, now=1.1)
++        source_before = np.asarray(core._last_candidate["center_source_m"])
++        bound_before = copy.deepcopy(core._reference_transform)
++        transform["translation_m"][0] = 9.0
++        try:
++            result = core.apply_ground_context(calibration=copy.deepcopy(record))
++        except ValueError:
++            self.assertEqual(core._reference_transform, bound_before)
++        else:
++            self.assertFalse(result["changed"])
++            self.assertEqual(core._reference_transform, bound_before)
++        state = core.process(np.empty((0, 3)), 1.2, seq=3, stamp_secs=100,
++                             stamp_nsecs=200000000, frame_id=FROM_FRAME,
++                             now=1.2)["state"]
++        self.assertIsNotNone(state.get("position_source_m"))
++        np.testing.assert_allclose(state["position_source_m"], source_before,
++                                   atol=1e-8)
++
++    def test_new_id_known_to_unknown_fallback_uses_frozen_standalone(self):
++        # R5 (G05): when the new artifact no longer owns a known T, the
++        # fallback is the fixed startup standalone copy, never the caller's
++        # later in-place edit.
++        artifact_tf = reference_transform()
++        caller_tf = copy.deepcopy(artifact_tf)
++        core = FallNodeCore("s1", {}, expected_frame=FROM_FRAME,
++                            calibration=reference_calibration(artifact_tf),
++                            transform=caller_tf)
++        new_record = reference_calibration(
++            make_unknown_transform(FROM_FRAME, TO_FRAME),
++            calibration_id="ref-cal-c")
++        caller_tf["translation_m"][0] = 9.0
++        lifecycle = core.apply_ground_context(calibration=new_record)
++        self.assertTrue(lifecycle["changed"])
++        snap = core.process(blob(), 1.2, seq=2, stamp_secs=100,
++                            stamp_nsecs=200000000, frame_id=FROM_FRAME,
++                            now=1.2)["snapshot"]
++        self.assertEqual(snap["calibration"]["calibration_id"], "ref-cal-c")
++        for candidate in snap["candidates"]:
++            expected = apply_transform(
++                np.asarray(candidate["center_source_m"], dtype=float)[None, :],
++                artifact_tf)[0]
++            np.testing.assert_allclose(candidate["center_reference_m"],
++                                       expected, atol=1e-9)
++
++    def test_same_id_rejection_leaves_pending_status_and_request_untouched(self):
++        # R5 (G04/G05): a rejected same-id reload has no side effect on a
++        # pending baseline, the cached measurement status or the request gate;
++        # an ordinary release still works on the unchanged fixed binding.
++        core = FallNodeCore("s1", {}, expected_frame=FROM_FRAME,
++                            calibration=reference_calibration(
++                                reference_transform()))
++        first = core.process(blob(), 1.0, seq=1, stamp_secs=100,
++                             stamp_nsecs=0, frame_id=FROM_FRAME, now=1.0)
++        request = {"schema_version": 1, "request_id": "r5-pending-select",
++                   "action": "select", "session_id": "s1",
++                   "time_epoch": first["state"]["time_epoch"],
++                   "snapshot_id": first["snapshot"]["snapshot_id"],
++                   "candidate_id": first["snapshot"]["candidates"][0]["candidate_id"],
++                   "selection_version": 0}
++        self.assertTrue(core.handle_request(request, 1.01)["accepted"])
++        core.baseline.start(core.tracker.track_id,
++                            core.calibration["calibration_id"])
++        self.assertEqual(core.baseline.status, "pending")
++        tracker_before = core.tracker.snapshot()
++        state_before = core.status_state(1.11)
++        with self.assertRaises(ValueError):
++            core.apply_ground_context(calibration=reference_calibration(
++                reference_transform(translation=(9.0, -2.0, 0.7))))
++        self.assertEqual(core.baseline.status, "pending")
++        self.assertEqual(core.tracker.snapshot(), tracker_before)
++        self.assertEqual(core.status_state(1.11), state_before)
++        release = dict(request, request_id="r5-release", action="release",
++                       selection_version=1)
++        self.assertTrue(core.handle_request(release, 1.12)["accepted"])
+ 
+ 
+ class GroundGeometryTest(unittest.TestCase):

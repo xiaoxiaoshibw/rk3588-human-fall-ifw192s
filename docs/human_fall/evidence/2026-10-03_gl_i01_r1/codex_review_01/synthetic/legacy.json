@@ -1,0 +1,107 @@
+{
+  "kind": "geometry_calibration",
+  "schema_version": 1,
+  "calibration_id": "geometry_20261003_163316",
+  "created_at_utc": "2026-10-03T08:33:16.407276+00:00",
+  "units": {
+    "length": "m",
+    "angle": "rad"
+  },
+  "frames": {
+    "lidar": "innolidar",
+    "reference": null
+  },
+  "transforms": {},
+  "rotations": {
+    "R_lidar_imu": {
+      "kind": "rotation",
+      "from_frame": "imu",
+      "to_frame": "innolidar",
+      "status": "unknown",
+      "rotation": null,
+      "evidence": null,
+      "note": "no IMU mounting evidence"
+    }
+  },
+  "ground": {
+    "kind": "ground_plane",
+    "status": "valid",
+    "valid": true,
+    "reason": null,
+    "frame": "innolidar",
+    "point_count": 3000,
+    "normal": [
+      1.4162050684924908e-05,
+      -3.896387513075857e-06,
+      0.9999999998921274
+    ],
+    "offset_m": 1.1999835702268622,
+    "sensor_height_m": 1.1999835702268622,
+    "tilt_rad": 1.4688267409302808e-05,
+    "fit_inlier_count": 2100,
+    "inlier_fraction": 1.0,
+    "holdout_residual": {
+      "count": 900,
+      "rms_m": 0.0020157500213484575,
+      "max_m": 0.006004221060446513
+    },
+    "holdout_support": {
+      "count": 900,
+      "rms_m": 0.0020157500213484575,
+      "max_m": 0.006004221060446513,
+      "fraction": 1.0
+    },
+    "valid_region": {
+      "x_min_m": -3.9986047067443824,
+      "x_max_m": 3.9984242262815854,
+      "y_min_m": -2.995770014185566,
+      "y_max_m": 2.9998279930390677,
+      "z_min_m": -1.2066364142760793,
+      "z_max_m": -1.191926276642311,
+      "range_min_m": 1.201910125063681,
+      "range_max_m": 5.073247513371518,
+      "point_count": 2100
+    },
+    "settings": {
+      "max_points": 100000,
+      "max_fit_points": 50000,
+      "range_min_m": 1.0,
+      "range_max_m": 30.0,
+      "ransac_iterations": 150,
+      "inlier_threshold_m": 0.05,
+      "min_inliers": 100,
+      "min_inlier_fraction": 0.2,
+      "normal_up_min_z": 0.5,
+      "holdout_fraction": 0.3,
+      "min_holdout_points": 20,
+      "max_holdout_rms_m": 0.12,
+      "min_holdout_support": 0.5,
+      "seed": 20261001
+    },
+    "fit_residual": {
+      "count": 2100,
+      "rms_m": 0.0020176082644498,
+      "max_m": 0.008059112043389716
+    }
+  },
+  "sensor_height_m": 1.1999835702268622,
+  "status": {
+    "extrinsics": "unknown",
+    "imu_alignment": "unknown",
+    "ground": "valid",
+    "geometry_params": "candidate"
+  },
+  "verification": {
+    "ground_physical_verified": false,
+    "extrinsics_verified": false,
+    "imu_alignment_verified": false
+  },
+  "input": {
+    "source": "points",
+    "path": "legacy_cloud.npz",
+    "sha256": "0a6003c77cf7deb6b9f4620724b48e281150742dd3ec00d9b77dd5361b63dec5",
+    "frames": null,
+    "point_count": 3000
+  },
+  "note": null
+}

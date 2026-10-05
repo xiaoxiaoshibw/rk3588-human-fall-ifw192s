@@ -1,0 +1,36 @@
+FAIL explicit source provenance unavailable cannot read as current measured XYZ :: explicit non-actual source position must be unavailable
++ actual - expected
+
++ '3.00, 0.00, -0.50'
+- '--'
+
+FAIL explicit source provenance predicted cannot read as current measured XYZ :: explicit non-actual source position must be unavailable
++ actual - expected
+
++ '3.00, 0.00, -0.50'
+- '--'
+
+PASS bbox flag alone does not erase actual_points raw center
+PASS legacy omitted provenance retains current source XYZ
+FAIL lost is not a valid occluded prediction :: inactive/non-occluded target cannot reappear through prediction diagnostic
+
+true !== false
+
+FAIL ambiguous is not a valid occluded prediction :: inactive/non-occluded target cannot reappear through prediction diagnostic
+
+true !== false
+
+FAIL unselected is not a valid occluded prediction :: inactive/non-occluded target cannot reappear through prediction diagnostic
+
+true !== false
+
+FAIL locked is not a valid occluded prediction :: inactive/non-occluded target cannot reappear through prediction diagnostic
+
+true !== false
+
+FAIL explicit stale occluded prediction cannot redraw retained bbox :: stale prediction cannot remain a current diagnostic box
+
+true !== false
+
+PASS fresh occluded empty-candidate prediction retains grey diagnostic
+{"pass":3,"fail":7}

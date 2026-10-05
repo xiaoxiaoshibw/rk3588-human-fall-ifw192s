@@ -1,0 +1,80 @@
+FAIL V06 C10 source raw XYZ survives ground unknown but physical fall/color are unknown :: physical fall must be unknown
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+FAIL V06 C10 source raw XYZ survives ground none but physical fall/color are unknown :: physical fall must be unknown
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+FAIL V06/V09 C01/C10 legacy source-only locked retains raw XYZ while physical fall/color are unknown :: physical fall must be unknown
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+FAIL V07 C08 predicted pose without current target observation keeps diagnostic but physical fall is unknown :: physical fall must be unknown
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+FAIL V07/V09 C08 lost rejects retained prior source observation while respecting validState :: lost/ambiguous/unselected cannot claim retained source pose as current
++ actual - expected
+
++ '3.00, 0.00, -0.50'
+- '--'
+
+FAIL V07/V09 C08 ambiguous rejects retained prior source observation while respecting validState :: lost/ambiguous/unselected cannot claim retained source pose as current
++ actual - expected
+
++ '3.00, 0.00, -0.50'
+- '--'
+
+FAIL V07/V09 C08 unselected rejects retained prior source observation while respecting validState :: lost/ambiguous/unselected cannot claim retained source pose as current
++ actual - expected
+
++ '3.00, 0.00, -0.50'
+- '--'
+
+PASS V06 C06/C10 schema2 existing source invalidation stays unknown/null
+PASS V06 C06/C10 verifier_unavailable existing source invalidation stays unknown/null
+FAIL V05 C05/C11 source old rendered choice rejects in-place snapshot units.length :: old choice must reject changed render/coordinate metadata
+
+1 !== 0
+
+FAIL V05 C05/C11 ground old rendered choice rejects in-place snapshot units.length :: old choice must reject changed render/coordinate metadata
+
+1 !== 0
+
+FAIL V05 C05/C11 source old rendered choice rejects in-place candidate center_ground_m :: old choice must reject changed render/coordinate metadata
+
+1 !== 0
+
+FAIL V05 C05/C11 ground old rendered choice rejects in-place candidate center_ground_m :: old choice must reject changed render/coordinate metadata
+
+1 !== 0
+
+FAIL V05 C05/C11 source old rendered choice rejects in-place ground block kind :: old choice must reject changed render/coordinate metadata
+
+1 !== 0
+
+FAIL V05 C05/C11 ground old rendered choice rejects in-place ground block kind :: old choice must reject changed render/coordinate metadata
+
+1 !== 0
+
+FAIL V05 C05/C11 source old rendered choice rejects in-place ground block schema_version :: old choice must reject changed render/coordinate metadata
+
+1 !== 0
+
+FAIL V05 C05/C11 ground old rendered choice rejects in-place ground block schema_version :: old choice must reject changed render/coordinate metadata
+
+1 !== 0
+
+FAIL V03 C14 explicit source mm cannot be presented as measured source metres :: source mm must be unavailable or labelled with its actual/unknown unit
+FAIL V03/V06 C14 explicit source mm cannot qualify metre ground transform :: contradictory source units must not feed a metre transform
+FAIL V02/V03 C13 explicit support_units mm cannot qualify metre support layer :: explicit non-metre support is unknown/unavailable, never metre geometry
+{"pass":2,"fail":18}

@@ -1,0 +1,47 @@
+--- before
+
++++ after
+
+@@ -3,14 +3,17 @@
+
+ <h1>点云离线配平：沿用 annotator 方式</h1>
+ <p>实测高度：<b>1.14 m</b>，原记录保留。右侧默认先 R_y(+26°)，再沿 Z 平移 +1.340 m。</p>
+ <label>数据片段<select id="frame"></select></label><label>左侧坐标<select id="before"><option value="source">原始雷达坐标</option><option value="before">原名义显示</option></select></label>
+-<label>右侧模型<select id="mode"><option value="reference">annotator 方式</option><option value="local">#3 局部平面修正</option></select></label>
++<label>右侧模型<select id="mode"><option value="reference">annotator 方式</option><option value="local">算法配平（#3 地面点集）</option></select></label>
+ <label>下俯角 <input id="pitch" type="number" min="-90" max="90" step="0.1" value="26" style="width:70px">°</label>
+ <label>显示 Z 平移 <input id="tz" type="number" min="-3" max="3" step="0.005" value="1.340" style="width:80px">m</label>
++<button id="algorithmButton" type="button" style="padding:8px 16px;margin:8px;border:1px solid #357059;border-radius:5px;background:#e4f2e8;font:inherit">算法配平</button>
++<label>算法估计器 <select id="estimator"><option value="tls">TLS（默认）</option><option value="svd">SVD</option><option value="ransac">RANSAC</option></select></label>
++<div id="algorithmInfo" style="margin:12px 0;padding:12px;background:#eef3f7;border-radius:6px"></div>
+ <p id="info"></p><canvas id="plot" width="1400" height="820"></canvas>
+ <p class="note">橙色是同一批 #3 VAL 源点，灰色是周边场景。红线为显示地面 Z=0。角度/平移控件只改变本页预览，不改实测高度。#3 局部修正仅用于对照，整场适用范围与测距精度尚未确认。预览抽样不影响完整数值结果。</p>
+ <script>
+ const DATA=<unchanged existing payload + algorithm_models>;
+-const frame=document.querySelector('#frame'),before=document.querySelector('#before'),mode=document.querySelector('#mode'),pitch=document.querySelector('#pitch'),tz=document.querySelector('#tz'),ctx=document.querySelector('#plot').getContext('2d');
++const frame=document.querySelector('#frame'),before=document.querySelector('#before'),mode=document.querySelector('#mode'),pitch=document.querySelector('#pitch'),tz=document.querySelector('#tz'),estimator=document.querySelector('#estimator'),algorithmButton=document.querySelector('#algorithmButton'),ctx=document.querySelector('#plot').getContext('2d');
+ DATA.frames.forEach((f,i)=>{const o=document.createElement('option');o.value=i;o.textContent=f.name;frame.append(o)});
+ function panel(points,flags,axis,left,top,title){
+  const xmin=axis? -1.3:0,xmax=axis?1.3:4.2,zmin=before.value==='source'?-2:-.55,zmax=.65;
+@@ -20,11 +23,15 @@
+
+  ctx.save();ctx.beginPath();ctx.rect(x0,y0,W,H);ctx.clip();ctx.strokeStyle='#b52525';ctx.beginPath();ctx.moveTo(x0,py(0));ctx.lineTo(x0+W,py(0));ctx.stroke();
+  for(let pass=0;pass<2;pass++){ctx.fillStyle=pass?'#dc7c19':'#9ba6b0';points.forEach((p,i)=>{if(flags[i]===pass)ctx.fillRect(px(p[axis])-1,py(p[2])-1,pass?3:2,pass?3:2)})}ctx.restore();ctx.fillStyle='#203044';ctx.fillText((axis?'Y':'X')+' (m)',x0+W-45,y0+H+38);ctx.fillText('Z (m)',left+10,y0-9);
+ }
++function algorithmPoints(source, name){const m=DATA.algorithm_models[name];return source.map(q=>m.rotation.map((row,i)=>row[0]*q[0]+row[1]*q[1]+row[2]*q[2]+m.translation_m[i]))}
+ function draw(){const f=DATA.frames[Number(frame.value)],p=Number(pitch.value),h=Number(tz.value);ctx.clearRect(0,0,1400,820);
+- if(!Number.isFinite(p)||!Number.isFinite(h)||p < -90||p > 90||h < -3||h > 3){document.querySelector('#info').textContent='请输入合法角度和平移量';return}
+- const a=p*Math.PI/180,c=Math.cos(a),s=Math.sin(a),right=mode.value==='local'?f.after:f.source.map(q=>[c*q[0]+s*q[2],q[1],-s*q[0]+c*q[2]+h]);
+- for(let axis=0;axis<2;axis++){panel(f[before.value],f.roi3,axis,0,axis*400,before.value==='source'?'原始雷达':'原名义显示');panel(right,f.roi3,axis,700,axis*400,mode.value==='local'?'#3 局部修正':'annotator 方式配平')}
+- const m=DATA.model,r=DATA.metrics.roi3_ground_z_stats;document.querySelector('#info').textContent=mode.value==='local'?`${f.name} · 局部模型 pitch ${m.pitch_deg.toFixed(4)}° / roll ${m.roll_deg.toFixed(4)}° / Z平移 ${m.translation_m[2].toFixed(4)}m；A/C #3 全点 RMS ${(100*r.rms_m).toFixed(2)}cm / P95 ${(100*r.p95_abs_m).toFixed(2)}cm。`:`${f.name} · R_y(${p.toFixed(2)}°)，再 Z += ${h.toFixed(3)}m；实测记录仍为 1.14m。`;
++ if(mode.value!=='local'&&(pitch.value.trim()===''||tz.value.trim()===''||!Number.isFinite(p)||!Number.isFinite(h)||p < -90||p > 90||h < -3||h > 3)){document.querySelector('#info').textContent='请输入合法角度和平移量';return}
++ const a=p*Math.PI/180,c=Math.cos(a),s=Math.sin(a),right=mode.value==='local'?algorithmPoints(f.source,estimator.value):f.source.map(q=>[c*q[0]+s*q[2],q[1],-s*q[0]+c*q[2]+h]);
++ for(let axis=0;axis<2;axis++){panel(f[before.value],f.roi3,axis,0,axis*400,before.value==='source'?'原始雷达':'原名义显示');panel(right,f.roi3,axis,700,axis*400,mode.value==='local'?'算法配平 '+estimator.value.toUpperCase():'annotator 方式配平')}
++ const m=DATA.algorithm_models[estimator.value];document.querySelector('#info').textContent=mode.value==='local'?`${f.name} · ${estimator.value.toUpperCase()} 算法配平：pitch ${m.pitch_deg.toFixed(4)}° / roll ${m.roll_deg.toFixed(4)}° / Z平移 ${m.translation_m[2].toFixed(4)}m；A/C #3 全点 RMS ${(100*m.rms_m).toFixed(2)}cm / P95 ${(100*m.p95_m).toFixed(2)}cm。`:`${f.name} · R_y(${p.toFixed(2)}°)，再 Z += ${h.toFixed(3)}m；实测记录仍为 1.14m。`;
+  pitch.disabled=tz.disabled=mode.value==='local';
+-}frame.onchange=before.onchange=mode.onchange=draw;pitch.oninput=tz.oninput=draw;draw();
++ estimator.disabled=mode.value!=='local';
++ algorithmButton.textContent=mode.value==='local'?'✓ 算法配平已启用':'算法配平';
++ document.querySelector('#algorithmInfo').textContent=`${estimator.value.toUpperCase()}：使用 A/C 的同一批 ${DATA.metrics.confirmed_roi3_A_C_count.toLocaleString()} 个 #3 地面点估计平面，再计算旋转与 Z 平移。pitch ${m.pitch_deg.toFixed(4)}° / roll ${m.roll_deg.toFixed(4)}° / Z平移 ${m.translation_m[2].toFixed(6)}m；RMS ${(100*m.rms_m).toFixed(2)}cm，P95 ${(100*m.p95_m).toFixed(2)}cm。仅 #3 局部验证；实测高度记录仍为 1.14m。`;
++}algorithmButton.onclick=()=>{mode.value='local';draw()};frame.onchange=before.onchange=mode.onchange=estimator.onchange=draw;pitch.oninput=tz.oninput=draw;draw();
+ </script></html>

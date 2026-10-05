@@ -1,0 +1,50 @@
+{
+  "sid": "cap_20261004_203349",
+  "job_id": "4c6dfc6cb92342429b21296de6a4080e",
+  "recommended": null,
+  "artifacts": [
+    "tls",
+    "svd"
+  ],
+  "methods": {
+    "tls": {
+      "valid": true,
+      "reject_reasons": [],
+      "full": {
+        "count": 38665,
+        "rms_m": 0.013924104624463005,
+        "p95_m": 0.029002880641189586,
+        "support_ratio": 0.9991723781197466,
+        "median_signed_m": -2.9011122566480196e-05,
+        "status": "PASS"
+      }
+    },
+    "svd": {
+      "valid": true,
+      "reject_reasons": [],
+      "full": {
+        "count": 38665,
+        "rms_m": 0.013924104624463007,
+        "p95_m": 0.02900288064118932,
+        "support_ratio": 0.9991723781197466,
+        "median_signed_m": -2.9011122566036107e-05,
+        "status": "PASS"
+      }
+    },
+    "ransac": {
+      "valid": false,
+      "reject_reasons": [
+        "GL_REGION_QUALITY",
+        "GL_HOLDOUT_QUALITY"
+      ],
+      "full": {
+        "count": 38665,
+        "rms_m": 0.01746526071094763,
+        "p95_m": 0.03471601249376288,
+        "support_ratio": 0.9995085995085995,
+        "median_signed_m": 0.0018075375242705416,
+        "status": "PASS"
+      }
+    }
+  }
+}

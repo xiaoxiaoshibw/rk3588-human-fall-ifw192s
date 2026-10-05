@@ -1,0 +1,38 @@
+$ --prepared-npz D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\candidate.adapted.npz --draft C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\draft_no_axis.json --output C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\n02.json
+  rc=2 stderr=gli02 candidate refused: constrained fit refused: up_axis is required
+N02 missing up_axis exit 2                               PASS rc=2
+N02 no artifact                                          PASS 
+$ --prepared-npz D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\candidate.adapted.npz --draft D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\draft_filled.json --output C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\n03.json
+  rc=0 stderr=
+$ --prepared-npz D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\candidate.adapted.npz --draft D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\draft_filled.json --output C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\n03.json
+  rc=2 stderr=gli02 candidate refused: output already exists: C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\n03.json
+N03 first candidate exit 0                               PASS rc=0
+N03 existing target exit 2                               PASS rc=2
+N03 old artifact preserved                               PASS 
+$ --prepared-npz C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\legacy.npz --draft D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\draft_filled.json --output C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\n06.json
+  rc=2 stderr=gli02 input refused: input is not an adapted capture-input NPZ; the legacy route is not available here: C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\legacy.npz
+N06 legacy input exit 2                                  PASS rc=2
+N06 legacy no artifact                                   PASS 
+$ --prepared-npz C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\damaged.npz --draft D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\draft_filled.json --output C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\n06b.json
+  rc=2 stderr=gli02 input refused: adapted NPZ must contain exactly points and input_manifest, got ['extra', 'input_manifest', 'points']
+N06 damaged adapted exit 2                               PASS rc=2
+N06 damaged no artifact                                  PASS 
+$ --prepared-npz D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\candidate.adapted.npz --emit-draft --draft-out C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\template.json --output C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\unused.json
+  rc=0 stderr=
+N07 emit-draft exit 0                                    PASS rc=0
+N07 status pending_human_review                          PASS 
+N07 default_refusal set                                  PASS 
+N07 required decision fields present                     PASS 
+$ --prepared-npz D:\Code\ldiar\docs\human_fall\evidence\2026-10-03_gl_i02_r1\07_synthetic\candidate.adapted.npz --emit-draft --draft-out C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\template.json --output C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\unused.json
+  rc=2 stderr=output already exists: C:\Users\30680\AppData\Local\Temp\gli02-neg-1icl_l9i\template.json
+N07 draft exclusive (second emit exit 2)                 PASS rc=2
+SHA capture_input.py                                     PASS 56355e9594433d91
+SHA prepare_capture_input.py                             PASS 648a8da63a6656b0
+SHA calibrate_sensors.py                                 PASS 3f30cf945d70b06f
+SHA test_gli01_capture_input.py                          PASS 50f615d7a5ffdc49
+SHA ground.py                                            PASS 2d25ccfd9b41b4e1
+SHA calibration.py                                       PASS d29519a1cdb5e495
+SHA meta.json                                            PASS 675c23ded9dcee82
+SHA points.bin                                           PASS b81797f982579265
+captures/remote has no new file                          PASS 
+negative+sha checks: 23/23

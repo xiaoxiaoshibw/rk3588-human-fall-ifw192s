@@ -1,0 +1,25 @@
+GL-B R1 开工基线（2026-10-05, Asia/Shanghai）
+=============================================
+branch: master
+HEAD:   8676bb479d4ae35cf22075cfe70225cf2220572a（自 A 开工以来未变）
+worktree: dirty；git status --porcelain = 270 行（含 A 全部未跟踪新增）
+环境: Python 3.12.10 / NumPy 1.26.4（开发机）；板端目标 3.8/1.17，纯 stdlib+NumPy
+
+B 前置（A 独审登记的两项非阻断观察，本单闭合）:
+  ① region_codes 无 SHA/未入 domain_id  → selection.py 增加 region_codes_sha256 并入绑定
+  ② validate_plane_estimate 未比对 sign_anchor 与 domain up_axis → contracts.py 补齐
+将要修改的文件（均为 A 新增未跟踪文件；不触任何已跟踪资产）:
+  506487ddf8d2af2a025d46fe09266e31b6a88648  src/human_fall_detection/core/adaptive_ground/contracts.py
+  9dd6e45b6188ae558738791fdfcf57a7c8d2b873  src/human_fall_detection/core/adaptive_ground/selection.py
+（只读参照，不改）tls.py 47c0dc47…、ransac.py c1536dc1…
+B 新增: core/adaptive_ground/quality.py、tests/test_agl_b_quality.py、
+        evidence/2026-10-05_agl_b_r1/、returns/GL-B.md
+
+P02 fixture（B-04/C-05/E-05 共用，只读）:
+  docs/human_fall/evidence/2026-10-04_p02_four_roi_r1/02_FROZEN_POINTS.npz
+  source (392196,3) float64；region_code ∈ {1..4}；source_rows 为逐帧行号（非全局单调，
+  domain 构建用局部索引）；已知留一区: #1 P95 FAIL、#2 PASS、#3 P95 FAIL、#4 RMS/P95/support FAIL。
+
+回归基线: 上一轮（A R2 后）全量 465/OK/exit 0；A 专项 7/OK。
+ponytail SKILL.md 路径: C:\Users\30680\.config\opencode\skills\ponytail（本单沿用：复用冻结原语，
+不新增依赖，最小模块）。

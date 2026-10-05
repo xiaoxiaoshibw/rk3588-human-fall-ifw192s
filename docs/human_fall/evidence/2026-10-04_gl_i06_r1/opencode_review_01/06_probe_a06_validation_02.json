@@ -1,0 +1,126 @@
+{
+  "a06_validation": {
+    "scanned": 147,
+    "skipped_empty_W": 39,
+    "fail_count": 9,
+    "failures": [
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        2064
+      ],
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        119
+      ],
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        542
+      ],
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        2064
+      ],
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        119
+      ],
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        542
+      ],
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        2064
+      ],
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        119
+      ],
+      [
+        "row_count_or_bounds",
+        "real_historical_WHAT_IF_negative_X",
+        542
+      ]
+    ]
+  },
+  "region_geometry": {
+    "fail_count": 0,
+    "failures": []
+  },
+  "final_holdout": {
+    "fail_count": 0,
+    "failures": [],
+    "kinds": [
+      "clean",
+      "collinear",
+      "density",
+      "dual",
+      "high_noise",
+      "low_noise",
+      "missing",
+      "narrow_band",
+      "table",
+      "wall"
+    ],
+    "seeds": [
+      1707,
+      1719,
+      1741
+    ],
+    "closed_cases": [
+      "final_clean_1707",
+      "final_clean_1707",
+      "final_clean_1707",
+      "final_clean_1719",
+      "final_clean_1719",
+      "final_clean_1719",
+      "final_clean_1741",
+      "final_clean_1741",
+      "final_clean_1741",
+      "final_low_noise_1707",
+      "final_low_noise_1707",
+      "final_low_noise_1719",
+      "final_low_noise_1719",
+      "final_low_noise_1741",
+      "final_low_noise_1741",
+      "final_wall_1707",
+      "final_wall_1719",
+      "final_wall_1741",
+      "final_density_1707",
+      "final_density_1707",
+      "final_density_1707",
+      "final_density_1719",
+      "final_density_1719",
+      "final_density_1719",
+      "final_density_1741",
+      "final_density_1741",
+      "final_density_1741",
+      "final_missing_1707",
+      "final_missing_1707",
+      "final_missing_1707",
+      "final_missing_1719",
+      "final_missing_1719",
+      "final_missing_1719",
+      "final_missing_1741",
+      "final_missing_1741",
+      "final_missing_1741"
+    ],
+    "unresolved_no_worst": 18
+  },
+  "freeze_order": {
+    "freeze_mtime": "2026-10-03T20:47:36.588682+00:00",
+    "first_final_mtime": "2026-10-03T20:47:37.454011+00:00",
+    "summary_mtime": "2026-10-03T20:49:11.965564+00:00",
+    "fail_count": 0,
+    "failures": []
+  },
+  "note": "degenerate collinear/narrow_band produce empty W and no plane; their independent-region scoring is undefined, not a false closure"
+}

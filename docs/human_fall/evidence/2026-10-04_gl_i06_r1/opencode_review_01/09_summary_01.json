@@ -1,0 +1,99 @@
+{
+  "verdicts": {
+    "A01": {
+      "verdict": "PASS",
+      "manifest_files_ok": "646/646",
+      "frozen_sha_ok": "2917/2922",
+      "scope_changed_sha": [],
+      "acceptance_sha_match": true,
+      "r0_cases_ledger": 62,
+      "r0_ledger_fail": 0,
+      "fresh_recompute_fail": 0,
+      "K1_equals_R0_and_sample_raw_settings_sha": true
+    },
+    "A02": {
+      "verdict": "PASS",
+      "count_identity_fail": 0,
+      "ledger_checked": 186
+    },
+    "A03": {
+      "verdict": "PASS",
+      "contract_fail": 0,
+      "budget_fail": 0,
+      "full_vs_self_oracle_fail_all_K": 0,
+      "final_holdout_oracle_fail": 0,
+      "final_closed_ledgers": 36,
+      "W_changes_with_K": "25/62"
+    },
+    "A04": {
+      "verdict": "PASS",
+      "injection_fail": 0,
+      "real_nonconverged_high_noise_K2": 682
+    },
+    "A05": {
+      "verdict": "PASS",
+      "J_recompute_fail": 0,
+      "invalid_input_fail": 0,
+      "robust_weights": "NOT_RUN condition not triggered; confirmed no mixed-tail evidence; bias is truncation on symmetric noise (K2/K3 route), wall/table/dual are competitors"
+    },
+    "A06": {
+      "verdict": "PASS_with_limitation",
+      "validation_fail_synthetic_non_degenerate": 0,
+      "empty_W_degenerate_cases": 39,
+      "region_geometry_fail": 0,
+      "final_holdout_fail": 0,
+      "freeze_before_first_final": true,
+      "limitation": "collinear/narrow_band (and real_approved W=0) have no plane, so independent-region scoring is undefined; competition-closure does not certify region quality (wall K1 closed at 0.412deg / 0.043m region RMS, disclosed in development_metrics)."
+    },
+    "A07": {
+      "verdict": "PASS",
+      "fail_count": 0,
+      "repeats": [
+        3,
+        3,
+        3
+      ],
+      "runtime_scope": "desktop process includes imports; no RK3588 claim"
+    },
+    "S01": {
+      "verdict": "PASS_software",
+      "overwrite/ast_fail": 0,
+      "probe": "controller 21/23: ses_efa9b0eddffeCDGAhIWtGA8fpk PROBE_OK exit0 opencode-go/deepseek-v4.1-flash default DB",
+      "review_session": "controller 22_second_review_01.jsonl (this review); final meta controller-supplied"
+    },
+    "B01": {
+      "verdict": "BLOCKED",
+      "physical_verified": false,
+      "ground_valid": false,
+      "real_approved_zero_eligible": true
+    },
+    "D01": {
+      "verdict": "NOT_RUN",
+      "device_scope": "no deploy/capture/device; desktop only"
+    },
+    "Q01": {
+      "verdict": "PASS"
+    },
+    "Q02": {
+      "verdict": "PASS"
+    },
+    "Q03": {
+      "verdict": "PASS"
+    },
+    "Q04": {
+      "verdict": "PASS_robust_NOT_RUN"
+    },
+    "Q05": {
+      "verdict": "PASS_real_final_NOT_RUN"
+    },
+    "Q06": {
+      "verdict": "PASS_probe_and_review_present"
+    }
+  },
+  "physical_verified": false,
+  "ground_valid": false,
+  "author_submission_head": "cbd0be1c86a1051a9a5800dfb7263f842896e1e6",
+  "branch": "master",
+  "opencode_review_status": "SECOND_REVIEW_SUBMITTED",
+  "ponytail_skill_path": "C:\\Users\\30680\\.config\\opencode\\skills\\ponytail\\SKILL.md"
+}

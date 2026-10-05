@@ -27,11 +27,11 @@ This is a Linux ROS workspace — builds must run on Linux/aarch64 board, not Wi
 
 ```bash
 # ROS1 (Noetic, catkin_make)
-./build_ros1.sh
+./tools/build_ros1.sh
 source devel/setup.bash
 
 # ROS2 (colcon)
-./build_ros2.sh
+./tools/build_ros2.sh
 ```
 
 The `COMPILE_METHOD` variable in `src/inno_lidar_msg/CMakeLists.txt` and `src/inno_lidar_ros/CMakeLists.txt` toggles between `CATKIN` and `COLCON`; the scripts `sed` it. Package.xml variants (`package_ros1.xml` / `package_ros2.xml`) are copied over `package.xml` by the same scripts. If a build fails, check that these files match the intended ROS version.

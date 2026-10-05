@@ -1,0 +1,17 @@
+test_cohort_restart_http_and_rejected_nonmembers (validation_test.ValidationTest.test_cohort_restart_http_and_rejected_nonmembers) ... [16:18:11] "GET /api/validation/latest?sid=cap_20261004_202456 HTTP/1.1" 200 -
+[16:18:11] "GET /api/validation/job?id=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&sid=cap_20261004_202456 HTTP/1.1" 200 -
+[16:18:11] "GET /api/validation/artifact?id=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&method=tls&name=points.bin&sid=cap_20261004_202456 HTTP/1.1" 200 -
+[16:18:11] "GET /api/validation/source?sid=cap_outside HTTP/1.1" 400 -
+[16:18:11] "GET /api/validation/latest?sid=cap_outside HTTP/1.1" 400 -
+[16:18:11] "GET /api/validation/job?id=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&sid=cap_20261004_203349 HTTP/1.1" 400 -
+[16:18:11] "GET /api/validation/artifact?id=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&method=tls&name=../points.bin HTTP/1.1" 400 -
+[16:18:11] "POST /api/validation/run HTTP/1.1" 400 -
+[16:18:11] "POST /api/validation/run HTTP/1.1" 400 -
+[16:18:11] "GET /api/validation/artifact?id=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&method=tls&name=points.bin&sid=cap_20261004_202456 HTTP/1.1" 400 -
+ok
+test_saved_binding_damage_and_latest_never_hides_newest_failure (validation_test.ValidationTest.test_saved_binding_damage_and_latest_never_hides_newest_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.417s
+
+OK

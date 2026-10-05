@@ -1,0 +1,632 @@
+{
+  "normal": {
+    "validSnapshot": true,
+    "validState": true,
+    "groundRender": "ready",
+    "groundRenderReason": "ok",
+    "support": "ready",
+    "cloudBytes": 1843,
+    "cloudHeader": {
+      "seq": 7,
+      "secs": 1000,
+      "nsecs": 0
+    },
+    "cloudFrameKeys": [
+      "S|7@1000.0",
+      "D|/human_fall/display_points|7@1000.0"
+    ],
+    "snapshotFrameKeys": [
+      "S|7@1000.0"
+    ],
+    "candidateGroundBoxFrom": "actual_points",
+    "snapshot": {
+      "schema_version": 1,
+      "kind": "candidate_snapshot",
+      "session_id": "syn",
+      "snapshot_id": "seq:7",
+      "time_epoch": 0,
+      "source": {
+        "seq": 7,
+        "stamp_secs": 1000,
+        "stamp_nsecs": 0,
+        "source_stamp_s": 1000,
+        "frame_id": "innolidar"
+      },
+      "units": {
+        "length": "m",
+        "angle": "rad"
+      },
+      "coordinate": {
+        "source_frame": "innolidar",
+        "reference_frame": null,
+        "horizontal_basis": "ground_tangent",
+        "ground_relative_available": true,
+        "ground_frame": "ground_local",
+        "transform_status": "unknown",
+        "ground_derived_id": "syn-gd-1"
+      },
+      "calibration": {
+        "calibration_id": "syn-cal-1",
+        "schema_version": 1,
+        "ground_status": "valid",
+        "ground_derived_id": "syn-gd-1"
+      },
+      "ground": {
+        "status": "valid",
+        "frame": "innolidar",
+        "normal": null,
+        "offset_m": null,
+        "sensor_height_m": null
+      },
+      "settings": {},
+      "quality": {
+        "ground_valid": true,
+        "candidate_count": 1,
+        "input_point_count": 108
+      },
+      "candidates": [
+        {
+          "candidate_id": "c0000",
+          "semantic": "unknown",
+          "point_count": 27,
+          "center_source_m": [
+            3,
+            0.10000000000000003,
+            -0.7
+          ],
+          "center_ground_m": [
+            3,
+            0.10000000000000003,
+            0.8
+          ],
+          "bbox_source_min_m": [
+            2.85,
+            0.1,
+            -1.5
+          ],
+          "bbox_source_max_m": [
+            3.15,
+            0.1,
+            0.09999999999999987
+          ],
+          "bbox_ground_min_m": [
+            2.85,
+            0.1,
+            0
+          ],
+          "bbox_ground_max_m": [
+            3.15,
+            0.1,
+            1.5999999999999999
+          ],
+          "bbox_ground_from": "actual_points",
+          "range_m": {
+            "min": 3.082207001484488,
+            "median": 3.082207001484488,
+            "max": 3.082207001484488
+          },
+          "axis": {
+            "ambiguous": false
+          },
+          "quality": {
+            "sufficient_points": true
+          }
+        }
+      ],
+      "verification": {
+        "ground_physical_verified": false,
+        "extrinsics_verified": false,
+        "imu_alignment_verified": false
+      },
+      "ground_render": {
+        "schema_version": 1,
+        "kind": "ground_render",
+        "from_frame": "innolidar",
+        "to_frame": "ground_local",
+        "units": "m",
+        "calibration_id": "syn-cal-1",
+        "geometry_schema_version": 1,
+        "ground_derived_id": "syn-gd-1",
+        "R": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ],
+        "t": [
+          0,
+          0,
+          1.5
+        ],
+        "support": {
+          "schema_version": 1,
+          "kind": "support_region",
+          "frame": "ground_local",
+          "ground_derived_id": "syn-gd-1",
+          "polygon": [
+            [
+              -2,
+              -2
+            ],
+            [
+              2,
+              -2
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              -2,
+              2
+            ]
+          ]
+        }
+      },
+      "note": "synthetic/offline GL-04 fixture"
+    },
+    "state": {
+      "schema_version": 1,
+      "kind": "target_state",
+      "session_id": "syn",
+      "time_epoch": 0,
+      "track_id": "t0001",
+      "track_status": "locked",
+      "fall_status": "upright",
+      "observability": "valid",
+      "position_source_m": [
+        3,
+        0.10000000000000003,
+        -0.7
+      ],
+      "position_predicted": false,
+      "bbox_source_min_m": [
+        2.85,
+        0.1,
+        -1.5
+      ],
+      "bbox_source_max_m": [
+        3.15,
+        0.1,
+        0.09999999999999987
+      ],
+      "bbox_ground_min_m": [
+        2.85,
+        0.1,
+        0
+      ],
+      "bbox_ground_max_m": [
+        3.15,
+        0.1,
+        1.5999999999999999
+      ],
+      "bbox_ground_from": "actual_points",
+      "range_m": {
+        "median": 3.082207001484488
+      },
+      "selection_version": 1,
+      "source": {
+        "seq": 7,
+        "stamp_secs": 1000,
+        "stamp_nsecs": 0,
+        "frame_id": "innolidar"
+      },
+      "calibration": {
+        "calibration_id": "syn-cal-1",
+        "ground_status": "valid"
+      },
+      "baseline": {
+        "status": "ready"
+      },
+      "event_persistence": {
+        "degraded": false,
+        "persisted_count": 0
+      },
+      "visualization": null
+    }
+  },
+  "tilted": {
+    "validSnapshot": true,
+    "validState": true,
+    "groundRender": "ready",
+    "groundRenderReason": "ok",
+    "support": "ready",
+    "cloudBytes": 1843,
+    "cloudHeader": {
+      "seq": 7,
+      "secs": 1000,
+      "nsecs": 0
+    },
+    "cloudFrameKeys": [
+      "S|7@1000.0",
+      "D|/human_fall/display_points|7@1000.0"
+    ],
+    "snapshotFrameKeys": [
+      "S|7@1000.0"
+    ],
+    "candidateGroundBoxFrom": "actual_points",
+    "snapshot": {
+      "schema_version": 1,
+      "kind": "candidate_snapshot",
+      "session_id": "syn",
+      "snapshot_id": "seq:7",
+      "time_epoch": 0,
+      "source": {
+        "seq": 7,
+        "stamp_secs": 1000,
+        "stamp_nsecs": 0,
+        "source_stamp_s": 1000,
+        "frame_id": "innolidar"
+      },
+      "units": {
+        "length": "m",
+        "angle": "rad"
+      },
+      "coordinate": {
+        "source_frame": "innolidar",
+        "reference_frame": null,
+        "horizontal_basis": "ground_tangent",
+        "ground_relative_available": true,
+        "ground_frame": "ground_local",
+        "transform_status": "unknown",
+        "ground_derived_id": "syn-gd-1"
+      },
+      "calibration": {
+        "calibration_id": "syn-cal-1",
+        "schema_version": 1,
+        "ground_status": "valid",
+        "ground_derived_id": "syn-gd-1"
+      },
+      "ground": {
+        "status": "valid",
+        "frame": "innolidar",
+        "normal": null,
+        "offset_m": null,
+        "sensor_height_m": null
+      },
+      "settings": {},
+      "quality": {
+        "ground_valid": true,
+        "candidate_count": 1,
+        "input_point_count": 108
+      },
+      "candidates": [
+        {
+          "candidate_id": "c0000",
+          "semantic": "unknown",
+          "point_count": 27,
+          "center_source_m": [
+            3,
+            -0.0477234234990509,
+            -0.7054944895954398
+          ],
+          "center_ground_m": [
+            3,
+            0.10000000000000003,
+            0.8
+          ],
+          "bbox_source_min_m": [
+            2.85,
+            -0.2140527761532584,
+            -1.4880125701824845
+          ],
+          "bbox_source_max_m": [
+            3.15,
+            0.11860592915515648,
+            0.07702359099160451
+          ],
+          "bbox_ground_min_m": [
+            2.85,
+            0.1,
+            0
+          ],
+          "bbox_ground_max_m": [
+            3.15,
+            0.1,
+            1.5999999999999999
+          ],
+          "bbox_ground_from": "actual_points",
+          "range_m": {
+            "min": 3.082207001484488,
+            "median": 3.082207001484488,
+            "max": 3.082207001484488
+          },
+          "axis": {
+            "ambiguous": false
+          },
+          "quality": {
+            "sufficient_points": true
+          }
+        }
+      ],
+      "verification": {
+        "ground_physical_verified": false,
+        "extrinsics_verified": false,
+        "imu_alignment_verified": false
+      },
+      "ground_render": {
+        "schema_version": 1,
+        "kind": "ground_render",
+        "from_frame": "innolidar",
+        "to_frame": "ground_local",
+        "units": "m",
+        "calibration_id": "syn-cal-1",
+        "geometry_schema_version": 1,
+        "ground_derived_id": "syn-gd-1",
+        "R": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0.9781476007338057,
+            -0.20791169081775931
+          ],
+          [
+            0,
+            0.20791169081775931,
+            0.9781476007338057
+          ]
+        ],
+        "t": [
+          0,
+          0,
+          1.5
+        ],
+        "support": {
+          "schema_version": 1,
+          "kind": "support_region",
+          "frame": "ground_local",
+          "ground_derived_id": "syn-gd-1",
+          "polygon": [
+            [
+              -2,
+              -2
+            ],
+            [
+              2,
+              -2
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              -2,
+              2
+            ]
+          ]
+        }
+      },
+      "note": "synthetic/offline GL-04 fixture"
+    },
+    "state": {
+      "schema_version": 1,
+      "kind": "target_state",
+      "session_id": "syn",
+      "time_epoch": 0,
+      "track_id": "t0001",
+      "track_status": "locked",
+      "fall_status": "upright",
+      "observability": "valid",
+      "position_source_m": [
+        3,
+        -0.0477234234990509,
+        -0.7054944895954398
+      ],
+      "position_predicted": false,
+      "bbox_source_min_m": [
+        2.85,
+        -0.2140527761532584,
+        -1.4880125701824845
+      ],
+      "bbox_source_max_m": [
+        3.15,
+        0.11860592915515648,
+        0.07702359099160451
+      ],
+      "bbox_ground_min_m": [
+        2.85,
+        0.1,
+        0
+      ],
+      "bbox_ground_max_m": [
+        3.15,
+        0.1,
+        1.5999999999999999
+      ],
+      "bbox_ground_from": "actual_points",
+      "range_m": {
+        "median": 3.082207001484488
+      },
+      "selection_version": 1,
+      "source": {
+        "seq": 7,
+        "stamp_secs": 1000,
+        "stamp_nsecs": 0,
+        "frame_id": "innolidar"
+      },
+      "calibration": {
+        "calibration_id": "syn-cal-1",
+        "ground_status": "valid"
+      },
+      "baseline": {
+        "status": "ready"
+      },
+      "event_persistence": {
+        "degraded": false,
+        "persisted_count": 0
+      },
+      "visualization": null
+    }
+  },
+  "no_extrinsics": {
+    "validSnapshot": true,
+    "validState": true,
+    "groundRender": "unavailable",
+    "groundRenderReason": "no_ground_render",
+    "support": "unavailable",
+    "cloudBytes": 1843,
+    "cloudHeader": {
+      "seq": 7,
+      "secs": 1000,
+      "nsecs": 0
+    },
+    "cloudFrameKeys": [
+      "S|7@1000.0",
+      "D|/human_fall/display_points|7@1000.0"
+    ],
+    "snapshotFrameKeys": [
+      "S|7@1000.0"
+    ],
+    "candidateGroundBoxFrom": "unavailable",
+    "snapshot": {
+      "schema_version": 1,
+      "kind": "candidate_snapshot",
+      "session_id": "syn",
+      "snapshot_id": "seq:7",
+      "time_epoch": 0,
+      "source": {
+        "seq": 7,
+        "stamp_secs": 1000,
+        "stamp_nsecs": 0,
+        "source_stamp_s": 1000,
+        "frame_id": "innolidar"
+      },
+      "units": {
+        "length": "m",
+        "angle": "rad"
+      },
+      "coordinate": {
+        "source_frame": "innolidar",
+        "reference_frame": null,
+        "horizontal_basis": "raw_xy_uncalibrated",
+        "ground_relative_available": false,
+        "ground_frame": null,
+        "transform_status": "unknown",
+        "ground_derived_id": null
+      },
+      "calibration": {
+        "calibration_id": "syn-cal-1",
+        "schema_version": 1,
+        "ground_status": "invalid",
+        "ground_derived_id": null
+      },
+      "ground": null,
+      "settings": {},
+      "quality": {
+        "ground_valid": false,
+        "candidate_count": 1,
+        "input_point_count": 108
+      },
+      "candidates": [
+        {
+          "candidate_id": "c0000",
+          "semantic": "unknown",
+          "point_count": 27,
+          "center_source_m": [
+            3,
+            0.10000000000000003,
+            0.8
+          ],
+          "center_ground_m": null,
+          "bbox_source_min_m": [
+            2.85,
+            0.1,
+            0
+          ],
+          "bbox_source_max_m": [
+            3.15,
+            0.1,
+            1.5999999999999999
+          ],
+          "bbox_ground_min_m": null,
+          "bbox_ground_max_m": null,
+          "bbox_ground_from": "unavailable",
+          "range_m": {
+            "min": 3.1064449134018135,
+            "median": 3.1064449134018135,
+            "max": 3.1064449134018135
+          },
+          "axis": {
+            "ambiguous": false
+          },
+          "quality": {
+            "sufficient_points": true
+          }
+        }
+      ],
+      "verification": {
+        "ground_physical_verified": false,
+        "extrinsics_verified": false,
+        "imu_alignment_verified": false
+      },
+      "ground_render": null,
+      "note": "synthetic/offline GL-04 fixture"
+    },
+    "state": {
+      "schema_version": 1,
+      "kind": "target_state",
+      "session_id": "syn",
+      "time_epoch": 0,
+      "track_id": "t0001",
+      "track_status": "locked",
+      "fall_status": "upright",
+      "observability": "valid",
+      "position_source_m": [
+        3,
+        0.10000000000000003,
+        0.8
+      ],
+      "position_predicted": false,
+      "bbox_source_min_m": [
+        2.85,
+        0.1,
+        0
+      ],
+      "bbox_source_max_m": [
+        3.15,
+        0.1,
+        1.5999999999999999
+      ],
+      "bbox_ground_min_m": null,
+      "bbox_ground_max_m": null,
+      "bbox_ground_from": "unavailable",
+      "range_m": {
+        "median": 3.1064449134018135
+      },
+      "selection_version": 1,
+      "source": {
+        "seq": 7,
+        "stamp_secs": 1000,
+        "stamp_nsecs": 0,
+        "frame_id": "innolidar"
+      },
+      "calibration": {
+        "calibration_id": "syn-cal-1",
+        "ground_status": "invalid"
+      },
+      "baseline": {
+        "status": "ready"
+      },
+      "event_persistence": {
+        "degraded": false,
+        "persisted_count": 0
+      },
+      "visualization": null
+    }
+  }
+}

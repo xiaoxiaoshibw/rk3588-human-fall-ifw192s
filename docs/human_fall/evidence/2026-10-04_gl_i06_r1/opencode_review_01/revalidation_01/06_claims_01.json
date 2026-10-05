@@ -1,0 +1,228 @@
+{
+  "worst_normal_dev": [
+    [
+      0.411852477597209,
+      "wall_19_False",
+      1,
+      "seen_pairwise_closed",
+      0.011593347400419507
+    ],
+    [
+      0.40479906981609887,
+      "wall_41_False",
+      1,
+      "seen_pairwise_closed",
+      0.010256650040136206
+    ],
+    [
+      0.323418438988271,
+      "high_noise_41_True",
+      2,
+      "unresolved",
+      0.0029300873625874857
+    ],
+    [
+      0.32341843898489026,
+      "high_noise_41_False",
+      2,
+      "unresolved",
+      0.002930087362588152
+    ],
+    [
+      0.31662326491330756,
+      "high_noise_41_True",
+      1,
+      "unresolved",
+      0.001024369493153321
+    ]
+  ],
+  "worst_region_dev": [
+    [
+      0.04311677072657712,
+      "high_noise_19_True",
+      2,
+      "v1",
+      "hold1",
+      "unresolved"
+    ],
+    [
+      0.04311592885747703,
+      "high_noise_19_True",
+      1,
+      "v1",
+      "hold1",
+      "unresolved"
+    ],
+    [
+      0.04309267156855649,
+      "high_noise_19_True",
+      3,
+      "v1",
+      "hold1",
+      "unresolved"
+    ],
+    [
+      0.041975959915693715,
+      "high_noise_41_False",
+      1,
+      "v1",
+      "hold1",
+      "unresolved"
+    ],
+    [
+      0.0417188286456736,
+      "high_noise_7_False",
+      1,
+      "v0",
+      "hold0",
+      "unresolved"
+    ]
+  ],
+  "worst_normal_case": [
+    0.411852477597209,
+    "wall_19_False",
+    1,
+    "seen_pairwise_closed",
+    0.011593347400419507
+  ],
+  "worst_region_case": [
+    0.04311677072657712,
+    "high_noise_19_True",
+    2,
+    "v1",
+    "hold1",
+    "unresolved"
+  ],
+  "correction_00_review": {
+    "old_claim": "A06 worst region attributed to wall K1",
+    "actual_worst_region": [
+      "high_noise_19_True",
+      2,
+      "v1",
+      "hold1",
+      "unresolved"
+    ],
+    "actual_worst_normal": [
+      "wall_19_False",
+      1,
+      "seen_pairwise_closed",
+      0.011593347400419507
+    ],
+    "note": "worst normal (0.4118524776 deg) is a wall single-plane case; worst region (0.0431167707 m) is high_noise_19_True K2, matching development_metrics; 00_review.md said both together as wall and was imprecise"
+  },
+  "multiplicity": {
+    "toy": {
+      "produced": 3,
+      "W_equals_produced": true,
+      "witnesses_stored": 1,
+      "retained": 1,
+      "merged_exact": 2,
+      "unstored": 0,
+      "trace_actions": [
+        "retained_witness",
+        "merged_exact",
+        "merged_exact"
+      ],
+      "identity": "produced==retained+merged_exact+unstored; W length==produced; witnesses length==retained"
+    },
+    "real_high_noise_K2": {
+      "W": 683,
+      "witnesses": 512,
+      "retained": 512,
+      "produced": 683,
+      "merged_exact": 1,
+      "unstored": 170,
+      "qualified": 683
+    },
+    "exact_merge_relation": "retained=1, merged_exact=2 for three identical signatures; not a general 'retained+2*merged' rule"
+  },
+  "validation_naming": {
+    "sample": {
+      "clean_7_False": {
+        "region_ids": [
+          "v0",
+          "v1",
+          "v2"
+        ],
+        "frame_groups": [
+          "hold0",
+          "hold1",
+          "hold2"
+        ]
+      }
+    },
+    "region_ids": [
+      "v0",
+      "v1",
+      "v2"
+    ],
+    "frame_groups": [
+      "hold0",
+      "hold1",
+      "hold2"
+    ],
+    "distinct_frame_groups": true,
+    "no_fit": true
+  },
+  "catkin_reparse": {
+    "before": {
+      "unreadable_winerror": 1920,
+      "lstat_mode": 33206,
+      "size": 0,
+      "attributes": 1056
+    },
+    "submission": {
+      "unreadable_winerror": 1920,
+      "lstat_mode": 33206,
+      "size": 0,
+      "attributes": 1056
+    },
+    "after": {
+      "unreadable_winerror": 1920,
+      "lstat_mode": 33206,
+      "size": 0,
+      "attributes": 1056
+    },
+    "identical": true,
+    "note": "unreadable Windows reparse point, metadata preserved, never treated as a content change or repaired"
+  },
+  "integrity_failure": {
+    "same_name_edit_files": [
+      "01_manifest_verify_01.py",
+      "04_probe_a02_a03_a05_01.py",
+      "06_probe_a06_validation_02.py",
+      "08_probe_final_holdout_oracle_01.py"
+    ],
+    "same_name_edit_calls": 8,
+    "writes": 10,
+    "edits": 8,
+    "failed_executions": [
+      [
+        14,
+        1,
+        "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/openco"
+      ],
+      [
+        15,
+        1,
+        "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/openco"
+      ],
+      [
+        31,
+        1,
+        "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/openco"
+      ],
+      [
+        35,
+        1,
+        "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/openco"
+      ],
+      [
+        43,
+        1,
+        "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/openco"
+      ]
+    ],
+    "note": "same-path edits violated 'each revision/new number, never overwrite'; 00_review.md sentence 'revisions did not overwrite old files' is incorrect and is corrected here; old report left untouched"
+  }
+}

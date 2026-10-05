@@ -1,0 +1,52 @@
+{
+  "scalar_checks": [
+    {
+      "session": "cap_20261004_202456",
+      "ordinal": 0,
+      "scalar_all_roi_count": 840,
+      "scalar_floor_count": 485,
+      "scalar_raised_count": 62,
+      "exact_match": true,
+      "source_sha_unchanged": true
+    },
+    {
+      "session": "cap_20261004_203135",
+      "ordinal": 0,
+      "scalar_all_roi_count": 775,
+      "scalar_floor_count": 408,
+      "scalar_raised_count": 63,
+      "exact_match": true,
+      "source_sha_unchanged": true
+    },
+    {
+      "session": "cap_20261004_203349",
+      "ordinal": 0,
+      "scalar_all_roi_count": 841,
+      "scalar_floor_count": 483,
+      "scalar_raised_count": 61,
+      "exact_match": true,
+      "source_sha_unchanged": true
+    }
+  ],
+  "human_fall_source_drift": [],
+  "oracle_initial_attempt": "default GBK failed reading prior UTF8 baseline, no 04 artifact written; corrected UTF8 then completed",
+  "commands": [
+    {
+      "command": "python -B -W error check_sessions.py",
+      "exit_code": 0
+    },
+    {
+      "command": "python -B -W error check_voxel_changes.py",
+      "exit_code": 0
+    }
+  ],
+  "files": {
+    "00_SCOPE_AND_BASELINE.json": "8a0a6dff7023683e9d43810ea6ea149c19dd3a7cda3ed1364ebfa3ff6d7433c6",
+    "01_RESULTS.json": "34d16dfc0a57f25a07037f3b63ec4ead61351ef5dcacf86ef7158a7a68f3f1c2",
+    "02_VOXEL_RESULTS.json": "81c7f42736cb1df3d1974b142d92b8ab5698e23f2731275ec50087bcfab7c31c",
+    "03_SESSION_ORDER_REPORT.md": "02fad6e9045ee80885e79904f4753e84eb365afa725076a50892c9728228a39a",
+    "04_ORACLE_AND_SCOPE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "check_sessions.py": "f589605e4fb7cb6d8103e933d32ad68b93270493864b084835508b7f4cb33a93",
+    "check_voxel_changes.py": "58c3ba245ce37052e472205ae31eba584e0f12431274c8cdea4668b48f8bab79"
+  }
+}

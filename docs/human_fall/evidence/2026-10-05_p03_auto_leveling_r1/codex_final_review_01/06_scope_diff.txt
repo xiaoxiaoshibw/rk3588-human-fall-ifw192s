@@ -1,0 +1,5 @@
+git diff --stat: exit 128
+error: open("src/CMakeLists.txt"): Invalid argument
+fatal: cannot hash src/CMakeLists.txt
+See 06_scope_diff_without_symlink.txt (git diff --stat -- . ':!src/CMakeLists.txt', exit 0).
+See 06_scope_status.txt and 01_sha_before.txt for untracked files.

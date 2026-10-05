@@ -1,0 +1,20 @@
+# 41902 opencode serve 清理保险丝 — 2026-10-02
+
+## 动作
+检查发现 127.0.0.1:41902 仍有 `opencode serve` 残留（源会话的停止动作未生效），
+本会话执行精确终止。
+
+## 残留进程（精确匹配命令行同时含 'opencode serve' 与 '41902'）
+- PID 324   sh.exe /c/Users/30680/AppData/Roaming/npm/opencode serve --port 41902
+  （父 PID 33888）
+- PID 13620 C:\Users\30680\AppData\Roaming\npm\node_modules\opencode-ai\bin\opencode.exe serve --port 41902
+  （父 PID 324；netstat 显示其为 127.0.0.1:41902 LISTENING 持有者）
+
+## 执行
+Stop-Process -Id 13620 -Force
+Stop-Process -Id 324 -Force
+仅终止上述两个精确匹配的 PID；未按名字批量杀其他 opencode 进程，
+未触碰 auth.json / opencode DB / 其他服务。
+
+## 结果
+终止后 `netstat -ano | findstr 41902` 无任何输出，端口已释放，无残留。

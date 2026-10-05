@@ -1,0 +1,95 @@
+{
+  "kind": "gli05_final_summary",
+  "physical_verified": false,
+  "closure_scope": "only the finite seen sequence; unseen hypotheses never excluded",
+  "cases_total": 32,
+  "oracle_match_all": true,
+  "closure_safe_all": true,
+  "by_class": {
+    "clean": {
+      "n": 6,
+      "prototype_status": [
+        "seen_pairwise_closed"
+      ],
+      "baseline_status": [
+        "valid"
+      ]
+    },
+    "noise": {
+      "n": 6,
+      "prototype_status": [
+        "seen_pairwise_closed"
+      ],
+      "baseline_status": [
+        "valid"
+      ]
+    },
+    "high_noise": {
+      "n": 6,
+      "prototype_status": [
+        "unresolved"
+      ],
+      "baseline_status": [
+        "valid"
+      ]
+    },
+    "dual": {
+      "n": 6,
+      "prototype_status": [
+        "unresolved"
+      ],
+      "baseline_status": [
+        "orientation_unverified"
+      ]
+    },
+    "close": {
+      "n": 6,
+      "prototype_status": [
+        "unresolved"
+      ],
+      "baseline_status": [
+        "invalid"
+      ]
+    },
+    "approved": {
+      "n": 1,
+      "prototype_status": [
+        "unresolved"
+      ],
+      "baseline_status": [
+        "invalid"
+      ]
+    },
+    "negative_X": {
+      "n": 1,
+      "prototype_status": [
+        "unresolved"
+      ],
+      "baseline_status": [
+        "orientation_unverified"
+      ]
+    }
+  },
+  "cost": {
+    "synthetic_median_ratio": 3.063,
+    "synthetic_max_ratio": 4.756,
+    "real": {
+      "approved": {
+        "baseline_s": 0.49,
+        "search_s": 0.076
+      },
+      "negative_X": {
+        "baseline_s": 0.523,
+        "search_s": 14.814
+      }
+    }
+  },
+  "notes": [
+    "12 clean/noise cases closed seen_pairwise_closed; oracle/proto identical",
+    "18 dual/close/high_noise cases unresolved; all NEAR fail true distinct, none misclosed",
+    "approved real has 0 qualified raw draw under prior; research cannot force real success",
+    "negative_X WHAT_IF unresolved: 458 unique valid witnesses still pairwise distinct",
+    "no dominant_pool_closed appeared in measured data (clean bands and true-distinct bands only)",
+    "no refine-reuse cache introduced: profile showed oracle O(n^2) python loop was the hotspot, not refine; vectorising oracle removed the dominant cost without touching search/refine"
+  ]
+}

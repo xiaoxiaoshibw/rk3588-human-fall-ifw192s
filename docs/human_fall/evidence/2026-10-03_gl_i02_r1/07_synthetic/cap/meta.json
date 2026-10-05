@@ -1,0 +1,111 @@
+{
+ "format": "human_capture_session",
+ "format_version": 1,
+ "session_id": "cap_synthetic_gli02",
+ "created_iso": "2026-10-03T00:00:00+08:00",
+ "sensor": {
+  "model": "IFW192S",
+  "frame_id": "innolidar"
+ },
+ "time_domain": "device_stamp_s_unanchored",
+ "point_layout": {
+  "fields": [
+   "x",
+   "y",
+   "z",
+   "intensity",
+   "ring",
+   "timestamp"
+  ],
+  "dtypes": [
+   "<f4",
+   "<f4",
+   "<f4",
+   "<f4",
+   "<u2",
+   "<f4"
+  ],
+  "stride_bytes": 28,
+  "endian": "little",
+  "pad_offsets_bytes": [
+   18,
+   24
+  ]
+ },
+ "point_file": "points.bin",
+ "point_stride_bytes": 28,
+ "total_points": 730,
+ "total_dropped_points": 0,
+ "frames": [
+  {
+   "seq": 1979000,
+   "stamp_sec": 100,
+   "stamp_nanosec": 1000,
+   "bag_time_sec": 1.0,
+   "offset_points": 0,
+   "count_points": 400,
+   "dropped_points": 0
+  },
+  {
+   "seq": 1979001,
+   "stamp_sec": 101,
+   "stamp_nanosec": 1001,
+   "bag_time_sec": 2.0,
+   "offset_points": 400,
+   "count_points": 100,
+   "dropped_points": 0
+  },
+  {
+   "seq": 1979002,
+   "stamp_sec": 102,
+   "stamp_nanosec": 1002,
+   "bag_time_sec": 3.0,
+   "offset_points": 500,
+   "count_points": 100,
+   "dropped_points": 0
+  },
+  {
+   "seq": 1979003,
+   "stamp_sec": 103,
+   "stamp_nanosec": 1003,
+   "bag_time_sec": 4.0,
+   "offset_points": 600,
+   "count_points": 100,
+   "dropped_points": 0
+  },
+  {
+   "seq": 1979004,
+   "stamp_sec": 104,
+   "stamp_nanosec": 1004,
+   "bag_time_sec": 5.0,
+   "offset_points": 700,
+   "count_points": 10,
+   "dropped_points": 0
+  },
+  {
+   "seq": 1979005,
+   "stamp_sec": 105,
+   "stamp_nanosec": 1005,
+   "bag_time_sec": 6.0,
+   "offset_points": 710,
+   "count_points": 10,
+   "dropped_points": 0
+  },
+  {
+   "seq": 1979006,
+   "stamp_sec": 106,
+   "stamp_nanosec": 1006,
+   "bag_time_sec": 7.0,
+   "offset_points": 720,
+   "count_points": 10,
+   "dropped_points": 0
+  }
+ ],
+ "extraction": {
+  "tool": "bag2session/0.1.0",
+  "source_bag": "/x/y.bag",
+  "source_bag_sha256": "abababababababababababababababababababababababababababababababab",
+  "point_step_bytes_src": 26,
+  "dropped_frames": 0
+ }
+}

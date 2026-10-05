@@ -1,0 +1,29 @@
+{
+  "kind": "scene_layer_reference_height_diagnostic",
+  "schema": 1,
+  "domain": "all VAL_side spatial scene rows, split solely for diagnostic band comparison",
+  "method": "largest adjacent nominal-Z gap with >=20 percent of rows each side; no FIT residual; no label/export promotion",
+  "method_predeclared_reference_not_used_in_split": true,
+  "total_scene_rows": 687,
+  "split_gap_m": 0.5432912822217151,
+  "split_edge_z_m": [
+    -0.08182332227525668,
+    0.4614679599464584
+  ],
+  "lower_band_count": 468,
+  "upper_band_count": 219,
+  "lower_median_nominal_z_m": -0.21472455938005897,
+  "upper_median_nominal_z_m": 0.6129127589140968,
+  "observed_layer_height_difference_m": 0.8276373182941558,
+  "user_reference_height_m": 0.75,
+  "observed_minus_reference_m": 0.07763731829415577,
+  "reference_uncertainty_m": null,
+  "origin": "user-confirmed semantic bands + current nominal geometry diagnostic, not physical precision acceptance",
+  "selection_source_rows_exported": false,
+  "physical_verified": false,
+  "source_csv_sha256": "84b4580646486e505753a54c30e705e2275262a3d545336d307a02d3737be172",
+  "references": [
+    "17_user_scene_confirmation_01.json",
+    "24_user_workbench_height_01.json"
+  ]
+}

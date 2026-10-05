@@ -1,0 +1,44 @@
+test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board) ... [15:52:43] "GET /api/leveling/sessions HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/source?sid=cap_20990101_000001 HTTP/1.1" 200 -
+[15:52:43] "POST /api/leveling/run HTTP/1.1" 400 -
+[15:52:43] "POST /api/leveling/run HTTP/1.1" 409 -
+[15:52:43] "POST /api/leveling/run HTTP/1.1" 202 -
+[15:52:43] "GET /api/leveling/job?id=f80c9b53c2cd484384cd26f8e7726efe HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/job?id=f80c9b53c2cd484384cd26f8e7726efe HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/job?id=f80c9b53c2cd484384cd26f8e7726efe HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/job?id=f80c9b53c2cd484384cd26f8e7726efe HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/job?id=f80c9b53c2cd484384cd26f8e7726efe HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/artifact?id=f80c9b53c2cd484384cd26f8e7726efe&method=tls&name=dataset.zip HTTP/1.1" 200 -
+[15:52:43] "POST /api/leveling/run HTTP/1.1" 202 -
+[15:52:43] "GET /api/leveling/job?id=498d1867c55d40d48393faf95b81a92c HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/job?id=498d1867c55d40d48393faf95b81a92c HTTP/1.1" 200 -
+[15:52:43] "POST /api/leveling/run HTTP/1.1" 202 -
+[15:52:43] "GET /api/leveling/job?id=677e4342a7384719a9efb94317230fb2 HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/job?id=677e4342a7384719a9efb94317230fb2 HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/job?id=677e4342a7384719a9efb94317230fb2 HTTP/1.1" 200 -
+[15:52:43] "GET /api/leveling/job?id=677e4342a7384719a9efb94317230fb2 HTTP/1.1" 200 -
+[15:52:44] "GET /api/leveling/job?id=677e4342a7384719a9efb94317230fb2 HTTP/1.1" 200 -
+[15:52:44] "GET /api/leveling/job?id=677e4342a7384719a9efb94317230fb2 HTTP/1.1" 200 -
+[15:52:44] "GET /api/leveling/leveled_latest?sid=cap_20990101_000001 HTTP/1.1" 200 -
+[15:52:44] "GET /api/leveling/leveled_latest?sid=nonexistent_ HTTP/1.1" 404 -
+ok
+test_line_domain_and_ls_majority_cannot_override_conflict (leveling_test.WorkbenchTest.test_line_domain_and_ls_majority_cannot_override_conflict) ... ok
+test_request_boundary_source_drift_and_owned_config (leveling_test.WorkbenchTest.test_request_boundary_source_drift_and_owned_config) ... ok
+test_transform_export_and_frozen_disjoint_rows (leveling_test.WorkbenchTest.test_transform_export_and_frozen_disjoint_rows) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.507s
+
+OK
+test_plane_below_sensor_floor_rejects (leveling_auto_test.DetectTest.test_plane_below_sensor_floor_rejects) ... ok
+test_synthetic_favorite_four_regions (leveling_auto_test.DetectTest.test_synthetic_favorite_four_regions) ... ok
+test_two_connected_components_rejects (leveling_auto_test.DetectTest.test_two_connected_components_rejects) ... ok
+test_wall_like_scene_rejects_with_reason (leveling_auto_test.DetectTest.test_wall_like_scene_rejects_with_reason) ... ok
+test_real_sessions_detect_four_regions (leveling_auto_test.RealSessionAnchorTest.test_real_sessions_detect_four_regions) ...
+
+Continuation (write_stdin session 5124): exit 0
+ok
+Ran 5 tests in 104.566s
+OK
+AUTO_ANCHOR sid=cap_20261004_202456 pitch=26.9265 roll=-1.2585 d=1.33222 support=0.3190
+AUTO_ANCHOR sid=cap_20261004_203349 pitch=26.9459 roll=-0.8432 d=1.34130 support=0.3105

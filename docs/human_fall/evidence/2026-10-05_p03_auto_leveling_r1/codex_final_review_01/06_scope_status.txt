@@ -1,0 +1,239 @@
+ M .gitignore
+ M AGENTS.md
+ M CLAUDE.md
+ D build_ros1.sh
+ D build_ros2.sh
+ M docs/human_fall/CLI_RECOVERY.md
+ M docs/human_fall/DISPATCH.md
+ M docs/human_fall/GL03_ACCEPTANCE.md
+ M docs/human_fall/GROUND_LEVELING_PLAN.md
+ M docs/human_fall/README.md
+ M docs/human_fall/REVIEW_LOG.md
+ M docs/human_fall/WORKFLOW.md
+ M docs/human_fall/returns/GL-03.md
+ M docs/human_fall/tickets/GL-03_candidates_geometry.md
+ M docs/human_fall/tickets/GL-04_webui_level_view.md
+ M docs/human_fall/tickets/INDEX.md
+ M docs/sidequests/REVIEW.md
+ D open_webui.bat
+ M pc_apps/console/Console.spec
+ M pc_apps/console/console.html
+ M pc_apps/console/console_gui.py
+ D pc_apps/console/index.html
+ M pc_apps/human_replay/human_replay_lib.js
+ M pc_apps/human_replay/human_replay_lib.py
+ M pc_apps/human_replay/human_replay_lib.test.js
+ M pc_apps/human_replay/index.html
+ M pc_apps/human_replay/replay.js
+ D rk.txt
+ M src/CMakeLists.txt
+ M src/human_capture/scripts/capture_server.py
+ M webui/dist/webui-minimal.zip
+ M webui/dist/webui-minimal/README.md
+ M webui/human_fall_preview/human_fall.js
+ M webui/human_fall_preview/human_fall_lib.js
+ M webui/human_fall_preview/human_fall_lib.test.js
+ M webui/human_fall_preview/index.html
+ D "\346\226\207\346\241\243/10-1/README.md"
+ D "\346\226\207\346\241\243/10-1/manifest.json"
+ D "\346\226\207\346\241\243/10-1/notes/\346\225\260\346\215\256\351\233\206\344\270\216\350\257\204\346\265\213.md"
+ D "\346\226\207\346\241\243/10-1/notes/\346\226\271\346\263\225\345\257\271\347\205\247.md"
+ D "\346\226\207\346\241\243/10-1/notes/\350\256\272\346\226\207\347\254\224\350\256\260.md"
+ D "\346\226\207\346\241\243/10-1/papers/1804.04976_\345\234\250\347\272\277\350\267\214\345\200\222\346\243\200\346\265\213RNN.pdf"
+ D "\346\226\207\346\241\243/10-1/papers/2003.02386_mmFall_\346\257\253\347\261\263\346\263\242\347\202\271\344\272\221\350\267\214\345\200\222.pdf"
+ D "\346\226\207\346\241\243/10-1/papers/2205.05918_\345\244\232\346\250\241\346\200\201\350\267\214\345\200\222\346\243\200\346\265\213.pdf"
+ D "\346\226\207\346\241\243/10-1/papers/2311.08755_IMM\347\216\257\345\242\203\346\227\240\345\205\263\346\257\253\347\261\263\346\263\242\350\267\214\345\200\222.pdf"
+ D "\346\226\207\346\241\243/10-1/papers/2312.04037_Radar\350\267\214\345\200\222\346\243\200\346\265\213\347\273\274\350\277\260.pdf"
+ D "\346\226\207\346\241\243/10-1/papers/2508.10469_\347\250\200\347\226\217\347\202\271\344\272\221\345\212\250\344\275\234\350\257\206\345\210\253_DBSCAN\345\214\210\347\211\231\345\210\251KF.pdf"
+ D "\346\226\207\346\241\243/10-1/papers/2509.23255_LiDAR\344\272\272\344\275\223\346\264\273\345\212\250\350\257\206\345\210\253_\346\213\211\346\231\256\346\213\211\346\226\257\350\260\261.pdf"
+ D "\346\226\207\346\241\243/10-1/\346\225\260\346\215\256\351\233\206\350\260\203\347\240\224/2003.05093_\350\207\252\345\212\250\346\240\207\346\263\250LiDAR\344\272\272\344\275\223\345\210\206\345\211\262.pdf"
+ D "\346\226\207\346\241\243/10-1/\346\225\260\346\215\256\351\233\206\350\260\203\347\240\224/2211.10598_LidarGait\345\237\272\345\207\206.pdf"
+ D "\346\226\207\346\241\243/10-1/\346\225\260\346\215\256\351\233\206\350\260\203\347\240\224/2303.09095_SLOPER4D\346\225\260\346\215\256\351\233\206\350\256\272\346\226\207.pdf"
+ D "\346\226\207\346\241\243/10-1/\346\225\260\346\215\256\351\233\206\350\260\203\347\240\224/2305.10345_MMFi\346\225\260\346\215\256\351\233\206\350\256\272\346\226\207.pdf"
+ D "\346\226\207\346\241\243/10-1/\346\225\260\346\215\256\351\233\206\350\260\203\347\240\224/2402.17171_LiveHPS\346\225\260\346\215\256\351\233\206.pdf"
+ D "\346\226\207\346\241\243/10-1/\346\225\260\346\215\256\351\233\206\350\260\203\347\240\224/2509.12197_LiDAR\344\272\272\344\275\223\345\247\277\346\200\201\344\274\260\350\256\241\347\273\274\350\277\260.pdf"
+ D "\346\226\207\346\241\243/10-1/\346\225\260\346\215\256\351\233\206\350\260\203\347\240\224/README.md"
+ D "\346\226\207\346\241\243/10-1/\346\225\260\346\215\256\351\233\206\350\260\203\347\240\224/manifest.json"
+ D "\346\226\207\346\241\243/AISC-3830\347\224\250\346\210\267\346\211\213\345\206\214.pdf"
+ D "\346\226\207\346\241\243/\350\267\214\345\200\222\346\243\200\346\265\213\346\226\207\347\214\256/06_\350\267\214\345\200\222\346\243\200\346\265\213_\345\256\236\351\252\214\346\226\271\346\241\210\344\270\216\345\277\205\350\257\273\346\226\207\347\214\256.md"
+ D "\346\226\207\346\241\243/\350\267\214\345\200\222\346\243\200\346\265\213\346\226\207\347\214\256/Lai_2026_LiDAR\344\272\272\344\275\223\350\277\220\345\212\250\345\210\206\346\236\220\347\273\274\350\277\260.pdf"
+ D "\346\226\207\346\241\243/\350\267\214\345\200\222\346\243\200\346\265\213\346\226\207\347\214\256/Qi_2017_PointNet++_\346\255\243\346\226\207\344\270\216\350\241\245\345\205\205.pdf"
+ D "\346\226\207\346\241\243/\350\267\214\345\200\222\346\243\200\346\265\213\346\226\207\347\214\256/Qi_2017_PointNet++_\347\213\254\347\253\213\350\241\245\345\205\205\346\235\220\346\226\231.pdf"
+ D "\346\226\207\346\241\243/\350\267\214\345\200\222\346\243\200\346\265\213\346\226\207\347\214\256/README.md"
+ D "\346\226\207\346\241\243/\350\267\214\345\200\222\346\243\200\346\265\213\346\226\207\347\214\256/Yan_2018_ST-GCN.pdf"
+ D "\346\226\207\346\241\243/\350\267\214\345\200\222\346\243\200\346\265\213\346\226\207\347\214\256/manifest.json"
+ D "\346\226\207\346\241\243/\351\227\256\351\242\230.assets/image-20260930234145126.png"
+ D "\346\226\207\346\241\243/\351\227\256\351\242\230.md"
+?? .mirasim/
+?? ML/
+?? docs/human_capture/FALL_HARD_NEGATIVES_PLAN_DRAFT.md
+?? docs/human_capture/evidence/2026-10-04_hr02_sid_r1/
+?? docs/human_capture/returns/HR-07.md
+?? docs/human_capture/returns/HR-08.md
+?? docs/human_capture/tickets/HR-06.md
+?? docs/human_capture/tickets/HR-07.md
+?? docs/human_capture/tickets/HR-08.md
+?? docs/human_capture/tickets/HR-09.md
+?? docs/human_capture/tickets/INDEX.md
+?? docs/human_fall/ADAPTIVE_GROUND_LEVELING_CONTRACT.md
+?? docs/human_fall/ADAPTIVE_GROUND_LEVELING_FINAL_PLAN.md
+?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R3.md
+?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R4.md
+?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R5.md
+?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R6.md
+?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R7.md
+?? docs/human_fall/AI_PROMPT_GL04_CODEX_R5_CLOSEOUT.md
+?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R1.md
+?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R2.md
+?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R3.md
+?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R4.md
+?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R5.md
+?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R6.md
+?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R7.md
+?? docs/human_fall/AI_PROMPT_GLE02_CODEX_R1.md
+?? docs/human_fall/AI_PROMPT_GLI01_OPENCODE_R1_DIAG.md
+?? docs/human_fall/AI_PROMPT_GLI01_OPENCODE_R1_IMPLEMENT.md
+?? docs/human_fall/AI_PROMPT_GLI02_OPENCODE_R1_DIAG.md
+?? docs/human_fall/AI_PROMPT_GLI02_OPENCODE_R1_IMPLEMENT.md
+?? docs/human_fall/AI_PROMPT_GLI03_OPENCODE_R1.md
+?? docs/human_fall/AI_PROMPT_GLI03_OPENCODE_R1_IMPLEMENT.md
+?? docs/human_fall/AI_PROMPT_GLI03_OPENCODE_R1_RESUME.md
+?? docs/human_fall/AI_PROMPT_GLI03_OPENCODE_SECOND_REVIEW_R1.md
+?? docs/human_fall/AI_PROMPT_GLI04_CODEX_R1.md
+?? docs/human_fall/AI_PROMPT_GLI04_OPENCODE_SECOND_REVIEW_R1.md
+?? docs/human_fall/AI_PROMPT_GLI05_CODEX_R1.md
+?? docs/human_fall/AI_PROMPT_GLI05_OPENCODE_SECOND_REVIEW_R1.md
+?? docs/human_fall/AI_PROMPT_GLI06_CODEX_R1.md
+?? docs/human_fall/AI_PROMPT_GLP01_OPENCODE_R1.md
+?? docs/human_fall/AI_PROMPT_GLP01_OPENCODE_R2.md
+?? docs/human_fall/AI_PROMPT_P03_CLAUDE_R1.md
+?? docs/human_fall/AI_PROMPT_P03_CODEX_FINAL_REVIEW_R1.md
+?? docs/human_fall/AI_PROMPT_PA01_OPENCODE_R1.md
+?? docs/human_fall/CLAUDE_STANDBY.md
+?? docs/human_fall/CODEX_HANDOVER.md
+?? docs/human_fall/GL04_ACCEPTANCE.md
+?? docs/human_fall/GLB01_ACCEPTANCE.md
+?? docs/human_fall/GLC01_ACCEPTANCE.md
+?? docs/human_fall/GLE01_ACCEPTANCE.md
+?? docs/human_fall/GLE02_ACCEPTANCE.md
+?? docs/human_fall/GLI01_ACCEPTANCE.md
+?? docs/human_fall/GLI01_INPUT_CONTRACT.md
+?? docs/human_fall/GLI02_ACCEPTANCE.md
+?? docs/human_fall/GLI02_CANDIDATE_PLAN.md
+?? docs/human_fall/GLI03_ACCEPTANCE.md
+?? docs/human_fall/GLI04_ACCEPTANCE.md
+?? docs/human_fall/GLI04_TASK.md
+?? docs/human_fall/GLI05_ACCEPTANCE.md
+?? docs/human_fall/GLI05_TASK.md
+?? docs/human_fall/GLI06_ACCEPTANCE.md
+?? docs/human_fall/GLN01_ACCEPTANCE.md
+?? docs/human_fall/GLP01_ACCEPTANCE.md
+?? docs/human_fall/GLP01_MESSAGE_CONTRACT.md
+?? docs/human_fall/GLW01_ACCEPTANCE.md
+?? docs/human_fall/GROUND_LEVELING_ALGORITHM_DESIGN.md
+?? docs/human_fall/GROUND_LEVELING_NEXT_STAGE_PLAN.md
+?? docs/human_fall/GROUND_LEVELING_NEXT_STAGE_PLAN_V3.md
+?? docs/human_fall/P02_ACCEPTANCE.md
+?? docs/human_fall/P03_ACCEPTANCE.md
+?? docs/human_fall/evidence/2026-10-02_gl03_r2/
+?? docs/human_fall/evidence/2026-10-02_gl03_r3/
+?? docs/human_fall/evidence/2026-10-02_gl03_r4/
+?? docs/human_fall/evidence/2026-10-02_gl03_r5/
+?? docs/human_fall/evidence/2026-10-02_gl03_r6/
+?? docs/human_fall/evidence/2026-10-02_gl03_r7/
+?? docs/human_fall/evidence/2026-10-02_gl04_r1/
+?? docs/human_fall/evidence/2026-10-02_gl04_r2/
+?? docs/human_fall/evidence/2026-10-02_gl04_r3/
+?? docs/human_fall/evidence/2026-10-02_gl04_r4/
+?? docs/human_fall/evidence/2026-10-02_service_probe/
+?? docs/human_fall/evidence/2026-10-03_gl04_r5/
+?? docs/human_fall/evidence/2026-10-03_gl04_r6/
+?? docs/human_fall/evidence/2026-10-03_gl04_r7/
+?? docs/human_fall/evidence/2026-10-03_gl_i01_r1/
+?? docs/human_fall/evidence/2026-10-03_gl_i02_r1/
+?? docs/human_fall/evidence/2026-10-03_gl_i03_r1/
+?? docs/human_fall/evidence/2026-10-03_gl_i04_r1/
+?? docs/human_fall/evidence/2026-10-03_gl_i05_r1/
+?? docs/human_fall/evidence/2026-10-03_gl_p01_r1/
+?? docs/human_fall/evidence/2026-10-03_gl_p01_r2/
+?? docs/human_fall/evidence/2026-10-03_next_stage_plan_r1/
+?? docs/human_fall/evidence/2026-10-04_adaptive_plan_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_axis_diagnosis_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_axis_plan_review_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_b01_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_c01_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_e02_prompt_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_e02_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_i05_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_i05_r2/
+?? docs/human_fall/evidence/2026-10-04_gl_i06_r1/
+?? docs/human_fall/evidence/2026-10-04_gl_i06_r1_skeleton/
+?? docs/human_fall/evidence/2026-10-04_gl_n01_r1/
+?? docs/human_fall/evidence/2026-10-04_mainline_evidence_r1/
+?? docs/human_fall/evidence/2026-10-04_next_ground_stage_plan_r1/
+?? docs/human_fall/evidence/2026-10-04_p02_bias_review_r1/
+?? docs/human_fall/evidence/2026-10-04_p02_context_r1/
+?? docs/human_fall/evidence/2026-10-04_p02_four_roi_r1/
+?? docs/human_fall/evidence/2026-10-04_p02_ground_r1/
+?? docs/human_fall/evidence/2026-10-04_p02_ground_r2/
+?? docs/human_fall/evidence/2026-10-04_p02_html_algorithm_r1/
+?? docs/human_fall/evidence/2026-10-04_p02_html_columns_r1/
+?? docs/human_fall/evidence/2026-10-04_p02_level_preview_r1/
+?? docs/human_fall/evidence/2026-10-04_p02_r3_region_frame/
+?? docs/human_fall/evidence/2026-10-04_p02_r3_regional_frame/
+?? docs/human_fall/evidence/2026-10-04_p02_r3_regional_perframe/
+?? docs/human_fall/evidence/2026-10-04_p02_session_check_r1/
+?? docs/human_fall/evidence/2026-10-05_gl_w01_r1/
+?? docs/human_fall/evidence/2026-10-05_p03_auto_leveling_r1/
+?? docs/human_fall/evidence/2026-10-05_sdk_bias_probe/
+?? docs/human_fall/evidence/FIELD_CHECKLIST.md
+?? docs/human_fall/returns/AGL-PLAN.md
+?? docs/human_fall/returns/GL-04.md
+?? docs/human_fall/returns/GL-B01.md
+?? docs/human_fall/returns/GL-C01.md
+?? docs/human_fall/returns/GL-E01.md
+?? docs/human_fall/returns/GL-E02.md
+?? docs/human_fall/returns/GL-I01.md
+?? docs/human_fall/returns/GL-I02.md
+?? docs/human_fall/returns/GL-I03.md
+?? docs/human_fall/returns/GL-I04.md
+?? docs/human_fall/returns/GL-I05.md
+?? docs/human_fall/returns/GL-I06.md
+?? docs/human_fall/returns/GL-N01.md
+?? docs/human_fall/returns/GL-P01.md
+?? docs/human_fall/returns/GL-W01.md
+?? docs/human_fall/returns/P02.md
+?? docs/human_fall/tickets/GL-A_adaptive_estimator_interface.md
+?? docs/human_fall/tickets/GL-B_adaptive_quality.md
+?? docs/human_fall/tickets/GL-C_adaptive_consensus.md
+?? docs/human_fall/tickets/GL-D_adaptive_temporal.md
+?? docs/human_fall/tickets/GL-E_adaptive_offline_leveling.md
+?? docs/human_fall/tickets/GL-F_adaptive_replay_validation.md
+?? docs/human_fall/tickets/GL-G_adaptive_diagnostics_webui.md
+?? docs/human_fall/tickets/GL-H_adaptive_shadow_mode.md
+?? docs/human_fall/tickets/GL-I_adaptive_controlled_activation.md
+?? docs/human_fall/tickets/GL-W01_offline_workbench.md
+?? docs/human_fall/tickets/P03_replay_auto_leveling.md
+?? docs/sidequests/REVIEW_v1_archive.md
+?? docs/sidequests/lidata_pointcloud.png
+?? pc_apps/console/build/
+?? pc_apps/console/console_test.py
+?? pc_apps/console/dist/
+?? pc_apps/human_limb/
+?? pc_apps/human_ml/
+?? pc_apps/human_pcl/
+?? pc_apps/human_replay/LEVELING_README.md
+?? pc_apps/human_replay/annotator.html
+?? pc_apps/human_replay/leveling.html
+?? pc_apps/human_replay/leveling.js
+?? pc_apps/human_replay/leveling.py
+?? pc_apps/human_replay/leveling_auto_test.py
+?? pc_apps/human_replay/leveling_estimators/
+?? pc_apps/human_replay/leveling_lib.py
+?? pc_apps/human_replay/leveling_quality.py
+?? pc_apps/human_replay/leveling_test.py
+?? sidequests/
+?? src/human_fall_detection/
+?? tmp_gl_diag/
+?? tools/
+?? "\346\226\207\346\241\243\346\224\266\351\233\206\357\274\210\344\272\272\345\267\245\357\274\211/"

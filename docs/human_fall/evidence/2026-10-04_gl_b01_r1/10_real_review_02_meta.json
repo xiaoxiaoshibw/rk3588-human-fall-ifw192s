@@ -1,0 +1,21 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-W",
+    "error",
+    "src/human_fall_detection/scripts/review_ground_regions.py",
+    "--input",
+    "docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_candidate.adapted.npz",
+    "--nominal-run",
+    "docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01",
+    "--legacy-draft",
+    "docs/human_fall/evidence/2026-10-03_gl_i02_r1/codex_review_01/work/filled_real_draft.json",
+    "--plan",
+    "docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\02_review_plan_01.json",
+    "--output",
+    "docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\review_02"
+  ],
+  "exit": 0,
+  "tail": "{\"output\": \"D:\\\\Code\\\\ldiar\\\\docs\\\\human_fall\\\\evidence\\\\2026-10-04_gl_b01_r1\\\\review_02\", \"plan_id\": \"region-review:034d8fd43d87d355f0e899c293b4c64a1f31c805698e9465196e7cc9560fdaa6\", \"region_counts\": {\"FIT_near\": 1084, \"VAL_middle\": 752, \"VAL_far\": 436, \"VAL_side\": 687}, \"status\": \"pending_ground_selection\", \"physical_verified\": false}\r\n"
+}

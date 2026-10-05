@@ -206,6 +206,170 @@ function find_nearest_xy(xyzi, qx, qy) {
 /* localStorage 键名统一前缀，方便审 / 测试断言 */
 var LS_PREFIX = "human_replay.";
 
+/* ---------------- HR-05 标注编辑纯函数（新增） ---------------- */
+
+/* 标注工具标识：写入 human_annotations[].tool */
+var ANNOTATION_TOOL = "human_replay/0.1";
+
+/* 从地面矩形 + 点云推算轴对齐盒体；
+ * p0/p1: [x,y] 或 [x,y,*]，points 可选 Float32Array
+ * 返回 {center:[3], size:[3], yaw, zmin, zmax}。 */
+function bbox_from_ground_rect(p0, p1, xyzi) {
+    var xmin = Math.min(p0[0], p1[0]), xmax = Math.max(p0[0], p1[0]);
+    var ymin = Math.min(p0[1], p1[1]), ymax = Math.max(p0[1], p1[1]);
+    var cx = (xmin + xmax) / 2, cy = (ymin + ymax) / 2;
+    var sx = xmax - xmin, sy = ymax - ymin;
+    var zmin = 0.0, zmax = 1.8;   // 人形默认高度
+    if (xyzi && xyzi.length >= 4) {
+        var zvals = [];
+        for (var k = 0; k < xyzi.length; k += 4) {
+            var x = xyzi[k], y = xyzi[k + 1], z = xyzi[k + 2];
+            if (x >= xmin && x <= xmax && y >= ymin && y <= ymax) zvals.push(z);
+        }
+        if (zvals.length > 0) {
+            zvals.sort(function (a, b) { return a - b; });
+            zmin = quantile(zvals, 0.02);
+            zmax = quantile(zvals, 0.98);
+        }
+    }
+    return { center: [cx, cy, (zmin + zmax) / 2], size: [sx, sy, zmax - zmin], yaw: 0, zmin: zmin, zmax: zmax };
+}
+
+/* 无点云时兜底，与地面矩形同型 */
+function bbox_from_rect(p0, p1, zmin, zmax) {
+    var xmin = Math.min(p0[0], p1[0]), xmax = Math.max(p0[0], p1[0]);
+    var ymin = Math.min(p0[1], p1[1]), ymax = Math.max(p0[1], p1[1]);
+    return {
+        center: [(xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2],
+        size: [xmax - xmin, ymax - ymin, zmax - zmin],
+        yaw: 0, zmin: zmin, zmax: zmax,
+    };
+}
+
+/* 准星射线沿 direction 找最近点云点（用于「指哪放哪」）。
+ * 返回射线最近点 (在 MAX_DIST 垂直半径内，world 距离最小的点)，或 null。
+ * MAX_DIST：降低到 ~0.5m —— 用户期望"枪指到哪打到哪"，不是 1m 半径里糊掉一片。*/
+function pick_point_on_ray(origin, dir, xyzi, max_dist) {
+    var md = max_dist || 0.5;
+    var best = null, best_along = Infinity;
+    for (var k = 0; k < xyzi.length; k += 4) {
+        var px = xyzi[k], py = xyzi[k + 1], pz = xyzi[k + 2];
+        var vx = px - origin[0], vy = py - origin[1], vz = pz - origin[2];
+        /* v 投影到 dir 上 */
+        var along = vx * dir[0] + vy * dir[1] + vz * dir[2];
+        if (along < 0) continue;   /* 相机背后 */
+        /* v 垂直于 dir 的分量长度 = 点到射线的垂直距离 */
+        var perpx = vx - along * dir[0], perpy = vy - along * dir[1], perpz = vz - along * dir[2];
+        var d_perp2 = perpx * perpx + perpy * perpy + perpz * perpz;
+        if (d_perp2 > md * md) continue;
+        if (along < best_along) { best_along = along; best = { x: px, y: py, z: pz, along: along, d_perp: Math.sqrt(d_perp2) }; }
+    }
+    return best;
+}
+
+/* 人形默认定形参数（放框用）。随 v1 约定写死，与 README §5 D9 一致。*/
+var HUMAN_DEFAULT = { size: [0.5, 0.5, 1.8], yaw: 0 };
+
+/* 用 pick_point_on_ray 的结果生成默认人形框（center/size/yaw）。
+ * 决策：落点用射线找的点（x,y 用点位置），z 强制落地面 z=0（人脚），高度 = HUMAN_DEFAULT.size[2]。
+ * 这样跨视角放框，人都是在地面上站起来而不是空中飞。*/
+function human_box_from_pick(pick, ground_xy) {
+    var cx, cy;
+    if (pick) { cx = pick.x; cy = pick.y; }
+    else if (ground_xy) { cx = ground_xy[0]; cy = ground_xy[1]; }
+    else return null;
+    return {
+        center: [cx, cy, HUMAN_DEFAULT.size[2] / 2],
+        size: HUMAN_DEFAULT.size.slice(),
+        yaw: HUMAN_DEFAULT.yaw,
+        zmin: 0, zmax: HUMAN_DEFAULT.size[2],
+    };
+}
+
+/* 200ms 连击限制器：闭包模子。new 一个在 ANN 内持引用。*/
+function make_click_throttle(gap_ms) {
+    var last = 0, gap = gap_ms || 200;
+    return function () {
+        var now = Date.now ? Date.now() : performance.now();
+        if (now - last < gap) return false;
+        last = now; return true;
+    };
+}
+
+/* 已排序数组取分位（HR-05 专用；不引入 math 库） */
+function quantile(sorted, q) {
+    if (sorted.length === 0) return NaN;
+    var idx = q * (sorted.length - 1);
+    var lo = Math.floor(idx), hi = Math.ceil(idx);
+    if (lo === hi) return sorted[lo];
+    return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+}
+
+/* undo 栈（20 层，无 redo） */
+function undo_stack_new() { return { stack: [], capacity: 20 }; }
+function undo_stack_push(st, entry) {
+    var copy = st.stack.slice();
+    copy.push(entry);
+    while (copy.length > st.capacity) copy.shift();
+    return { stack: copy, capacity: st.capacity };
+}
+function undo_stack_pop(st) {
+    if (st.stack.length === 0) return { entry: null, new_stack: st };
+    var copy = st.stack.slice();
+    var entry = copy.pop();
+    return { entry: entry, new_stack: { stack: copy, capacity: st.capacity } };
+}
+
+/* 契约校验：box 字段完整、有限、尺寸合法 */
+function annotation_validate_box(box) {
+    if (!box || typeof box !== "object") return "box 不是对象";
+    var c = box.center, s = box.size, yaw = box.yaw;
+    if (!Array.isArray(c) || c.length !== 3 || !Array.isArray(s) || s.length !== 3) return "center/size 不是 3 元数组";
+    for (var i = 0; i < 3; i++) {
+        if (!isFinite(c[i]) || Math.abs(c[i]) > 100) return "center[" + i + "]=" + c[i] + " 超界 [-100,100]";
+        if (!isFinite(s[i]) || s[i] <= 0 || s[i] > 20) return "size[" + i + "]=" + s[i] + " 超界 (0,20]";
+    }
+    if (!isFinite(yaw) || yaw <= -Math.PI || yaw > Math.PI) return "yaw=" + yaw + " 超界 (-π,π]";
+    return true;
+}
+
+/* 捕捉步进：move 0.1m / rotate 5° / scale 0.05 */
+function annotation_snap_step(mode, value, ctrl) {
+    if (!ctrl) return value;
+    var step = mode === "move" ? 0.1 : mode === "rotate" ? Math.PI / 36 : mode === "scale" ? 0.05 : 0;
+    if (step <= 0) return value;
+    return Math.round(value / step) * step;
+}
+
+/* 序列化 output：把 frames-bucketed annotations 拍平为契约数组 */
+function annotation_serialize(annotations_by_seq, session_meta, include_unfinished) {
+    var frames = (session_meta && session_meta.frames) ? session_meta.frames : [];
+    var seq_set = {};
+    for (var i = 0; i < frames.length; i++) seq_set[frames[i].seq] = frames[i];
+    var out = [];
+    for (var seq in annotations_by_seq) {
+        var arr = annotations_by_seq[seq]; if (!Array.isArray(arr)) continue;
+        for (var k = 0; k < arr.length; k++) {
+            var a = arr[k];
+            if (!include_unfinished && !a.fixed) continue;
+            var f = seq_set[seq]; if (!f) continue;
+            out.push({
+                id: a.id,
+                source: "human",
+                label: a.label || "person",
+                frame_seq: Number(seq),
+                stamp_sec: f.stamp_sec,
+                stamp_nanosec: f.stamp_nanosec,
+                box: { center: a.center.slice(), size: a.size.slice(), yaw: a.yaw },
+                created_iso: new Date().toISOString(),
+                tool: ANNOTATION_TOOL,
+                frame_valid: true,
+            });
+        }
+    }
+    return out;
+}
+
 /* ---------------- HR-03 剪辑纯函数层（新增） ---------------- */
 
 /* 剪辑工具标识：写入 dst meta.extraction.tool */
@@ -355,6 +519,22 @@ var _api = {
     ray_ground_intersect: ray_ground_intersect,
     find_nearest_xy: find_nearest_xy,
     LS_PREFIX: LS_PREFIX,
+    // HR-05
+    ANNOTATION_TOOL: ANNOTATION_TOOL,
+    quantile: quantile,
+    bbox_from_ground_rect: bbox_from_ground_rect,
+    bbox_from_rect: bbox_from_rect,
+    undo_stack_new: undo_stack_new,
+    undo_stack_push: undo_stack_push,
+    undo_stack_pop: undo_stack_pop,
+    annotation_validate_box: annotation_validate_box,
+    annotation_snap_step: annotation_snap_step,
+    annotation_serialize: annotation_serialize,
+    /* HR-06 准星放框 */
+    HUMAN_DEFAULT: HUMAN_DEFAULT,
+    pick_point_on_ray: pick_point_on_ray,
+    human_box_from_pick: human_box_from_pick,
+    make_click_throttle: make_click_throttle,
 };
 
 if (typeof module !== "undefined" && module.exports) { module.exports = _api; }

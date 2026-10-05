@@ -1,0 +1,78 @@
+{
+  "kind": "gli05_second_review_cost_corrections",
+  "passed": 5,
+  "total": 6,
+  "results": [
+    {
+      "name": "close_fixture_clean_7",
+      "ok": true,
+      "detail": {
+        "status": "seen_pairwise_closed",
+        "reasons": [],
+        "budget": 9,
+        "unique": 860,
+        "baseline_status": "valid"
+      }
+    },
+    {
+      "name": "close_fixture_noise_7",
+      "ok": true,
+      "detail": {
+        "status": "seen_pairwise_closed",
+        "reasons": [],
+        "budget": 308,
+        "unique": 817,
+        "baseline_status": "valid"
+      }
+    },
+    {
+      "name": "close_fixture_noise_41",
+      "ok": true,
+      "detail": {
+        "status": "seen_pairwise_closed",
+        "reasons": [],
+        "budget": 363,
+        "unique": 814,
+        "baseline_status": "valid"
+      }
+    },
+    {
+      "name": "synthetic_vectorised_search_faster",
+      "ok": true,
+      "detail": {
+        "synthetic": {
+          "slow_median": 0.9698130500037223,
+          "slow_max": 1.493075799982762,
+          "final_median": 0.13452800000959542,
+          "final_max": 0.19618230001651682
+        },
+        "real": {
+          "slow": [
+            0.07882729999255389,
+            15.9776802000124
+          ],
+          "final": [
+            0.07572570000775158,
+            14.81385509998654
+          ]
+        }
+      }
+    },
+    {
+      "name": "narrative_46s_not_in_slow_artifact",
+      "ok": true,
+      "detail": {
+        "max_recorded_seconds": 15.9776802000124,
+        "note": "return/00_diag say 46s/case oracle; preserved slow ledger max prototype.elapsed_s is 15.98s"
+      }
+    },
+    {
+      "name": "staged_timing_only_in_final",
+      "ok": false,
+      "detail": {
+        "final_has_staged": true,
+        "slow_has_staged": false
+      }
+    }
+  ]
+}

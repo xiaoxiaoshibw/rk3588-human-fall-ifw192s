@@ -1,0 +1,207 @@
+{
+  "kind": "review_evidence_history_recovery",
+  "captured_prefix_sha256": "2b7b60be47b17c457f91c83265338d493f635735b5ae46e03991cc88d7a2a437",
+  "records": [
+    {
+      "index": 1,
+      "kind": "command",
+      "command": "Test-Path \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01\"; Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i05_r2\" -Directory | Select-Object Name",
+      "tool_exit": 0,
+      "raw_output": "False\r\n\r\nName       \r\n----       \r\nresearch_01\r\n\r\n\r\n",
+      "timestamp": 1791047797709
+    },
+    {
+      "index": 2,
+      "kind": "command",
+      "command": "New-Item -ItemType Directory -Path \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01\" -Force | Out-Null; Test-Path \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01\"",
+      "tool_exit": 0,
+      "raw_output": "True\r\n",
+      "timestamp": 1791047804637
+    },
+    {
+      "index": 3,
+      "kind": "script_version",
+      "original_name": "01_manifest_scope.py",
+      "mutation": "write",
+      "sha256": "59a8c15772811f5a387f89af2a388eaf7d93220c6bd5e2802ea5148aea456d50",
+      "recovered": "003_01_manifest_scope.py",
+      "timestamp": 1791047828985
+    },
+    {
+      "index": 4,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/01_manifest_scope.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"manifest_file_count\": 76, \"manifest_all_match\": true, \"manifest_sha_mismatch\": [], \"manifest_missing\": [], \"ledger_impl_count\": 6, \"ledger_impl_mismatch\": [], \"old_new_sha_mismatch\": [], \"changed_existing_outside_run_root\": [\"docs/human_fall/DISPATCH.md\", \"docs/human_fall/README.md\", \"docs/human_fall/WORKFLOW.md\", \"docs/human_fall/returns/GL-I05.md\"], \"head_match\": true}\r\n",
+      "timestamp": 1791047835352
+    },
+    {
+      "index": 5,
+      "kind": "script_version",
+      "original_name": "02_scalar_reference.py",
+      "mutation": "write",
+      "sha256": "97aa54a11c979e0b0ef098303f03b146277bf5b30364b9841cc8569b464f5c36",
+      "recovered": "005_02_scalar_reference.py",
+      "timestamp": 1791047864599
+    },
+    {
+      "index": 6,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/02_scalar_reference.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"checks\": [[\"0_4_8_all_similar_all_orders_closed\", true], [\"0_6_12_chain_all_orders_unresolved\", false], [\"chain_BEST_ONLY_diagnostic_closed\", true], [\"middle_best_swallowed\", true], [\"weak_distinct_dominant_positive_all_orders\", false], [\"ratio_0p8_boundary\", false], [\"ratio_below_floor_single_near\", true], [\"top_ties_whole\", true], [\"random_cross_check_4000\", false], [\"prototype_terminal_equals_scalar\", true], [\"malformed_events_reject\", true], [\"oracle_rejects_illegal\", true]], \"random_mismatch\": [{\"trial\": 0, \"ws\": [{\"normal\": [0.028350166135955708, 0.0, 0.9995980532594407], \"offset_m\": 1.05, \"support_count\": 320}, {\"normal\": [0.1431942970545785, 0.0, 0.9896945959694057], \"offset_m\": 1.0, \"support_count\": 500}], \"ref\": \"seen_dominant_pool_closed\", \"got\": \"seen_dominant_pool_closed\"}, {\"trial\": 1, \"ws\": [{\"normal\": [0.24666382710240004, 0.0, 0.9691011074182081], \"offset_m\": 1.2, \"support_count\": 400}, {\"normal\": [0.1871107523566424, 0.0, 0.9823388246183347], \"offset_m\": 1.0, \"support_count\": 100}], \"ref\": \"seen_dominant_pool_closed\", \"got\": \"seen_dominant_pool_closed\"}]}\r\n",
+      "timestamp": 1791047871477
+    },
+    {
+      "index": 7,
+      "kind": "script_version",
+      "original_name": "02_scalar_reference.py",
+      "mutation": "edit",
+      "sha256": "522824e3e607b343375afafa2597eb21649cc230d2c30d74e557472282a1532e",
+      "recovered": "007_02_scalar_reference.py",
+      "timestamp": 1791047905980
+    },
+    {
+      "index": 8,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/02_scalar_reference.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"checks\": [[\"0_4_8_all_similar_all_orders_closed\", true], [\"0_6_12_chain_all_orders_unresolved\", true], [\"chain_BEST_ONLY_diagnostic_closed\", true], [\"middle_best_swallowed\", true], [\"weak_distinct_dominant_positive_all_orders\", true], [\"ratio_0p8_boundary\", true], [\"ratio_below_floor_single_near\", true], [\"top_ties_whole\", true], [\"random_cross_check_4000\", true], [\"prototype_terminal_equals_scalar\", true], [\"malformed_events_reject\", true], [\"oracle_rejects_illegal\", true]], \"random_mismatch\": []}\r\n",
+      "timestamp": 1791047913754
+    },
+    {
+      "index": 9,
+      "kind": "script_version",
+      "original_name": "03_ledger_check.py",
+      "mutation": "write",
+      "sha256": "ebc06a25eed546889caf4c194aed49c95cb1737a80d5a0293c9a785fff63a8d9",
+      "recovered": "009_03_ledger_check.py",
+      "timestamp": 1791047947328
+    },
+    {
+      "index": 10,
+      "kind": "script_version",
+      "original_name": "03_ledger_check.py",
+      "mutation": "edit",
+      "sha256": "fcbb27c7ad4038159e10d438afc261ec5a5f137d8ec86e36ec5de1b26fc9edee",
+      "recovered": "010_03_ledger_check.py",
+      "timestamp": 1791047955592
+    },
+    {
+      "index": 11,
+      "kind": "script_version",
+      "original_name": "03_ledger_check.py",
+      "mutation": "edit",
+      "sha256": "525992d44cc1b2c88a817c1c1c9df9001382d316973c583501259c9c40dea44c",
+      "recovered": "011_03_ledger_check.py",
+      "timestamp": 1791047962710
+    },
+    {
+      "index": 12,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/03_ledger_check.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"03_ledger_check\", \"ledger\": \"experiment_results_identity_verified.json\", \"synthetic_cases\": 36, \"real_cases\": 2, \"all_oracle_match\": true, \"all_closure_safe\": true, \"all_sequence_digest_equal\": true, \"all_have_5_stages_3_repeats\": true, \"all_peak_positive_separate\": true, \"all_counts_identity\": true, \"all_old_i04_seq_match\": true, \"attribution_counts\": {\"actual_near_pool_competition\": 19, \"old_certificate_insufficient\": 25, \"processing_budget_gap\": 7}, \"old_cert_fail_scalar_closed\": [{\"case\": \"weak_seed7_permuteFalse\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed7_permuteTrue\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed19_permuteFalse\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed19_permuteTrue\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed41_permuteFalse\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed41_permuteTrue\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}], \"prototype_status_counts\": {\"seen_pai\r\n",
+      "timestamp": 1791047968700
+    },
+    {
+      "index": 13,
+      "kind": "command",
+      "command": "python -c \"\nimport json\nd=json.load(open('docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/03_ledger_check.json',encoding='utf-8'))\nfor k in ['prototype_status_counts','weak_dominant_cases','all_metric_holds_agree','metric_holds_mismatch','cases_with_pair_count_diff','merge_safety_ok','merge_safety_detail','active_ledger_matches_manifest','local_runtime']:\n    print(k,'=',json.dumps(d[k],ensure_ascii=False))\n\"",
+      "tool_exit": 0,
+      "raw_output": "prototype_status_counts = {\"seen_pairwise_closed\": 12, \"unresolved\": 20, \"seen_dominant_pool_closed\": 6}\r\nweak_dominant_cases = 6\r\nall_metric_holds_agree = true\r\nmetric_holds_mismatch = []\r\ncases_with_pair_count_diff = 44\r\nmerge_safety_ok = true\r\nmerge_safety_detail = []\r\nactive_ledger_matches_manifest = true\r\nlocal_runtime = {\"python\": \"3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]\", \"numpy\": \"1.26.4\", \"board_run\": false}\r\n",
+      "timestamp": 1791047975704
+    },
+    {
+      "index": 14,
+      "kind": "script_version",
+      "original_name": "04_old_i04_fixture.py",
+      "mutation": "write",
+      "sha256": "d3f0c053cc68c71e01ff7b4a4f8b4818fddc500e30411bb35b263f29a0de7dd9",
+      "recovered": "014_04_old_i04_fixture.py",
+      "timestamp": 1791048002947
+    },
+    {
+      "index": 15,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/04_old_i04_fixture.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"old_order_dependent\": true, \"new_all_closed\": true, \"scalar_all_closed\": true, \"chain\": [\"unresolved\", \"unresolved\", \"unresolved\"], \"old_vs_new_terminal_200\": {\"same\": 145, \"diff\": 55}, \"i04_first_two\": [{\"order\": [0, 4, 8], \"old\": \"unresolved\", \"old_reasons\": [\"similarity_envelope_not_closed\"], \"new\": \"seen_pairwise_closed\", \"scalar\": \"seen_pairwise_closed\"}, {\"order\": [0, 8, 4], \"old\": \"unresolved\", \"old_reasons\": [\"similarity_envelope_not_closed\"], \"new\": \"seen_pairwise_closed\", \"scalar\": \"seen_pairwise_closed\"}]}\r\n",
+      "timestamp": 1791048009314
+    },
+    {
+      "index": 16,
+      "kind": "script_version",
+      "original_name": "05_spatial_parse.py",
+      "mutation": "write",
+      "sha256": "64eab105bb70f4be2a5ab0443fe39155489c554768073c0b867070fbab86f599",
+      "recovered": "016_05_spatial_parse.py",
+      "timestamp": 1791048039968
+    },
+    {
+      "index": 17,
+      "kind": "script_version",
+      "original_name": "05_spatial_parse.py",
+      "mutation": "edit",
+      "sha256": "d3e257824cd7745dfd8654726da18ada117a233198eeb03b5a7afb94cfd3529c",
+      "recovered": "017_05_spatial_parse.py",
+      "timestamp": 1791048046475
+    },
+    {
+      "index": 18,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/05_spatial_parse.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"05_spatial_parse\", \"html\": \"D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_i05_r2/research_01/spatial_02/source_review.html\", \"frame_count\": 89, \"bounds\": [\"FIT\", \"v1\", \"v2\", \"v3\"], \"stats_keys\": 356, \"record_keys\": 356, \"jsonl_total_rows\": 351255, \"display_budget\": 100, \"frames_ordinals_unique\": true, \"frames_seq_int\": true, \"frames_ordinal_int\": true, \"frames_match_diag\": true, \"frame_groups_match\": true, \"bounds_match_draft\": true, \"stats_keys_match\": true, \"record_keys_match_stats\": true, \"sidecar_lines\": 351255, \"sidecar_total_matches\": true, \"records_content_match\": true, \"records_order_match\": true, \"stats_count_match\": true, \"empty_selections\": 0, \"xyz_outside_box\": 0, \"planes_count\": 3, \"plane_names\": [\"WHAT_IF_FIT_PCA_normal\", \"WHAT_IF_negative_X\", \"approved\"], \"plane_norm_unit\": true, \"plane_physical_false\": true, \"up_axis\": [0.438371, 0.0, 0.898794], \"up_axis_equals_draft_prior\": true, \"approved_origin_is_prior_label\": false, \"recording_extrinsic\": \"unknown\", \"physical_verified\": false}\r\n",
+      "timestamp": 1791048054736
+    },
+    {
+      "index": 19,
+      "kind": "command",
+      "command": "python -c \"\nimport json\nd=json.load(open('docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/05_spatial_parse.json',encoding='utf-8'))\nprint('origins',json.dumps(d['plane_origins'],ensure_ascii=False))\nimport json as j\nD=j.load(open('docs/human_fall/evidence/2026-10-03_gl_i04_r1/12_real_final/diagnostic.json',encoding='utf-8'))\nfor e in D['experiments']:\n    print(e['label'],'posthoc origin=',e['posthoc_plane'].get('origin'),'norm=',e['posthoc_plane']['normal'],'offset=',e['posthoc_plane']['offset_m'])\nprint('sidecar_count',D.get('sidecar_count'))\n\"",
+      "tool_exit": 0,
+      "raw_output": "origins {\"WHAT_IF_FIT_PCA_normal\": \"frozen_refined_candidate_posthoc_not_physical\", \"WHAT_IF_negative_X\": \"frozen_refined_candidate_posthoc_not_physical\", \"approved\": \"posthoc_PCA_all_approved_FIT_rows_not_physical\"}\r\napproved posthoc origin= posthoc_PCA_all_approved_FIT_rows_not_physical norm= [-0.44277541803147735, -0.0025461766264646135, 0.8966289344938839] offset= 1.3398051207556858\r\nWHAT_IF_negative_X posthoc origin= None norm= [-0.4426807202449877, -0.0023536420223774224, 0.89667621820399] offset= 1.3397188621853198\r\nWHAT_IF_FIT_PCA_normal posthoc origin= None norm= [-0.4426807202449878, -0.0023536420223770893, 0.89667621820399] offset= 1.3397188621853202\r\nsidecar_count 351255\r\n",
+      "timestamp": 1791048063821
+    },
+    {
+      "index": 20,
+      "kind": "script_version",
+      "original_name": "05b_spatial_residual.py",
+      "mutation": "write",
+      "sha256": "06cc5c9eb0eaedc7df03a5209881a883a947959324f0140fbad8ead610129f38",
+      "recovered": "020_05b_spatial_residual.py",
+      "timestamp": 1791048100760
+    },
+    {
+      "index": 21,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/05b_spatial_residual.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"05b_spatial_residual\", \"lines_checked\": 351255, \"exact_matches\": 351255, \"mismatches\": 0, \"max_abs_diff\": 6.661338147750939e-16, \"plane\": \"WHAT_IF_FIT_PCA_normal\", \"convention_confirmed\": true}\r\n",
+      "timestamp": 1791048107820
+    },
+    {
+      "index": 22,
+      "kind": "command",
+      "command": "node \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/06_js_consumer_independent.js\" 2>&1",
+      "tool_exit": 0,
+      "raw_output": "{\"status\":\"PASS\",\"actual_js\":true,\"first_row\":17474,\"residuals\":{\"WHAT_IF_FIT_PCA_normal\":-0.020068789967577327,\"WHAT_IF_negative_X\":-0.020068789967577383,\"approved\":-0.01996493334482774},\"residuals_differ\":true,\"index_lookup_ok\":true,\"click_lookup_ok\":true,\"display_cap_only_visual\":true,\"frame_switch_ok\":true,\"box_switch_ok\":true,\"actual_browser_DPR\":\"NOT_RUN\"}\n",
+      "timestamp": 1791048129104
+    },
+    {
+      "index": 23,
+      "kind": "script_version",
+      "original_name": "07_source_guards.py",
+      "mutation": "write",
+      "sha256": "11e8d79238de95afa78c0bd2cbf2726f53666ca05cf6853c7456a9ca27654007",
+      "recovered": "023_07_source_guards.py",
+      "timestamp": 1791048150652
+    }
+  ],
+  "overwritten_script_names": [
+    "02_scalar_reference.py",
+    "03_ledger_check.py",
+    "05_spatial_parse.py"
+  ],
+  "limitation": "prefix snapshot only; CLI may still be running. No original files overwritten. Initial false checker outputs remain raw command evidence, not author failures."
+}

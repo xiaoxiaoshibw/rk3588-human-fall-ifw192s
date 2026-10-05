@@ -1,0 +1,164 @@
+{
+  "info": {
+    "id": "ses_efd6bd751ffeiWAxy0tXJ3gTHg",
+    "slug": "swift-moon",
+    "projectID": "17f164c0b45183f5a0340f3d26c9d2fb79ecc3a8",
+    "directory": "D:\\Code\\ldiar",
+    "path": "",
+    "title": "PROBE_OK reply only",
+    "agent": "build",
+    "model": {
+      "id": "deepseek-v4.1-flash",
+      "providerID": "opencode-go",
+      "variant": "default"
+    },
+    "version": "1.18.34",
+    "summary": {
+      "additions": 0,
+      "deletions": 0,
+      "files": 0
+    },
+    "cost": 0.001278426,
+    "tokens": {
+      "input": 8323,
+      "output": 4,
+      "reasoning": 37,
+      "cache": {
+        "read": 1792,
+        "write": 0
+      }
+    },
+    "permission": [
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_enter",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_exit",
+        "pattern": "*",
+        "action": "deny"
+      }
+    ],
+    "time": {
+      "created": 1791044626606,
+      "updated": 1791044635972
+    }
+  },
+  "messages": [
+    {
+      "info": {
+        "role": "user",
+        "time": {
+          "created": 1791044626736
+        },
+        "agent": "build",
+        "model": {
+          "providerID": "opencode-go",
+          "modelID": "deepseek-v4.1-flash"
+        },
+        "summary": {
+          "diffs": []
+        },
+        "id": "msg_102942930001GNRG0jOGgB9xzu",
+        "sessionID": "ses_efd6bd751ffeiWAxy0tXJ3gTHg"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "\"No tool use, no file reads/writes, no commands. Reply only PROBE_OK\"",
+          "id": "prt_10294293c001NmiJ5Yw8ixZHv2",
+          "sessionID": "ses_efd6bd751ffeiWAxy0tXJ3gTHg",
+          "messageID": "msg_102942930001GNRG0jOGgB9xzu"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_102942930001GNRG0jOGgB9xzu",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "D:\\Code\\ldiar",
+          "root": "D:\\Code\\ldiar"
+        },
+        "cost": 0.001278426,
+        "tokens": {
+          "total": 10156,
+          "input": 8323,
+          "output": 4,
+          "reasoning": 37,
+          "cache": {
+            "write": 0,
+            "read": 1792
+          }
+        },
+        "modelID": "deepseek-v4.1-flash",
+        "providerID": "opencode-go",
+        "time": {
+          "created": 1791044627492,
+          "completed": 1791044635958
+        },
+        "finish": "stop",
+        "id": "msg_102942c23001h1sFxU2VywoRv3",
+        "sessionID": "ses_efd6bd751ffeiWAxy0tXJ3gTHg"
+      },
+      "parts": [
+        {
+          "snapshot": "8fb616dbd61e96dc6262fc4f3e646744c029c0b1",
+          "type": "step-start",
+          "id": "prt_1029442c400114AV3VJ9yP0rkK",
+          "sessionID": "ses_efd6bd751ffeiWAxy0tXJ3gTHg",
+          "messageID": "msg_102942c23001h1sFxU2VywoRv3"
+        },
+        {
+          "type": "reasoning",
+          "text": "The user says \"No tool use, no file reads/writes, no commands. Reply only PROBE_OK\". This is a test probe. I should just reply PROBE_OK.",
+          "time": {
+            "start": 1791044633288,
+            "end": 1791044633502
+          },
+          "id": "prt_1029442c8001JtbIKb0RstfYxi",
+          "sessionID": "ses_efd6bd751ffeiWAxy0tXJ3gTHg",
+          "messageID": "msg_102942c23001h1sFxU2VywoRv3"
+        },
+        {
+          "type": "text",
+          "text": "PROBE_OK",
+          "time": {
+            "start": 1791044633506,
+            "end": 1791044633511
+          },
+          "id": "prt_1029443a2001mEK2BOOQbnGk8d",
+          "sessionID": "ses_efd6bd751ffeiWAxy0tXJ3gTHg",
+          "messageID": "msg_102942c23001h1sFxU2VywoRv3"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "8fb616dbd61e96dc6262fc4f3e646744c029c0b1",
+          "type": "step-finish",
+          "tokens": {
+            "total": 10156,
+            "input": 8323,
+            "output": 4,
+            "reasoning": 37,
+            "cache": {
+              "write": 0,
+              "read": 1792
+            }
+          },
+          "cost": 0.001278426,
+          "id": "prt_1029447b00013IwyJ82jtJaBAW",
+          "sessionID": "ses_efd6bd751ffeiWAxy0tXJ3gTHg",
+          "messageID": "msg_102942c23001h1sFxU2VywoRv3"
+        }
+      ]
+    }
+  ]
+}

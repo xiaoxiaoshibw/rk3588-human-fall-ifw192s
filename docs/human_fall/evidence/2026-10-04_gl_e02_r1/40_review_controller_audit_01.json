@@ -1,0 +1,674 @@
+{
+  "export_exit": 0,
+  "session": "ses_efa155807ffeoMM5j4lHYnSRIa",
+  "models": [
+    [
+      "opencode-go",
+      "deepseek-v4.1-flash"
+    ]
+  ],
+  "last_finish": "stop",
+  "tool_records": [
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "skill",
+      "input": {
+        "name": "ponytail"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem -Recurse -File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_e02_prompt_r1\" | Select-Object -ExpandProperty FullName"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "git -C D:\\Code\\ldiar status --porcelain=v1; echo \"---HEAD---\"; git -C D:\\Code\\ldiar rev-parse HEAD; echo \"---BRANCH---\"; git -C D:\\Code\\ldiar branch --show-current"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem -Recurse -File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_e02_r1\" | Select-Object -ExpandProperty FullName; echo \"=== opencode_review_01 ===\"; Get-ChildItem -Recurse \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_e02_r1\" -Directory | Select-Object -ExpandProperty FullName"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem \"D:\\Code\\ldiar\\src\\human_fall_detection\\core\" -File | Select-Object Name,Length; echo \"=== scripts ===\"; Get-ChildItem \"D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\" -File | Select-Object Name,Length; echo \"=== tests ===\"; Get-ChildItem \"D:\\Code\\ldiar\\src\\human_fall_detection\\tests\" -File | Select-Object Name,Length"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "todowrite",
+      "input": {
+        "todos": [
+          {
+            "content": "Read governance docs (AGENTS, WORKFLOW v2, GLE02_ACCEPTANCE)",
+            "status": "in_progress",
+            "priority": "high"
+          },
+          {
+            "content": "Read work-item evidence (00,17,25,26,28) and EXECUTION_PROMPT_02",
+            "status": "pending",
+            "priority": "high"
+          },
+          {
+            "content": "Read 3 new source files + frozen load_adapted/gate_selection/select_group_region",
+            "status": "pending",
+            "priority": "high"
+          },
+          {
+            "content": "Verify manifest hashes and protected baseline before/after",
+            "status": "pending",
+            "priority": "high"
+          },
+          {
+            "content": "Run frozen tests + adversarial synthetic checks",
+            "status": "pending",
+            "priority": "high"
+          },
+          {
+            "content": "Cross-check acceptance IDs E01-E06/S01/P01/D01/Q01-Q07",
+            "status": "pending",
+            "priority": "high"
+          },
+          {
+            "content": "Deliver consolidated verdict in final text",
+            "status": "pending",
+            "priority": "high"
+          }
+        ]
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "C:\\Users\\30680\\.codex\\skills\\ponytail\\SKILL.md"
+      },
+      "status": "error",
+      "error": "The user rejected permission to use this specific tool call."
+    },
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\GLE02_ACCEPTANCE.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "32_readonly_review_01.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\WORKFLOW.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"import sys; sys.stdout.reconfigure(encoding='utf-8', errors='replace'); from pathlib import Path; print(Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1/00_diag_01.md').read_text(encoding='utf-8'))\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"import sys; sys.stdout.reconfigure(encoding='utf-8', errors='replace'); from pathlib import Path; b=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1'); [print('===== '+f+' =====\\n'+ (b/f).read_text(encoding='utf-8')) for f in ['17_SOURCE_MEASUREMENT_ROI_REVIEW_01.md','25_SELF_CHECK_SUBMISSION_01.md']]\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"import sys; sys.stdout.reconfigure(encoding='utf-8', errors='replace'); from pathlib import Path; b=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1'); [print('===== '+f+' =====\\n'+ (b/f).read_text(encoding='utf-8')) for f in ['26_scope_verify_01.json','28_submission_manifest_01.json']]\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "cd D:\\Code\\ldiar; rg -n \"def load_adapted|def gate_selection|def select_group_region|def _draft_region|def region_indices\" src/human_fall_detection --no-heading"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"import sys; sys.stdout.reconfigure(encoding='utf-8', errors='replace'); from pathlib import Path; b=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_prompt_r1'); [print('===== '+f+' =====\\n'+ (b/f).read_text(encoding='utf-8')) for f in ['EXECUTION_PROMPT_02.md']]\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\ground_evidence.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\prepare_ground_evidence.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\tests\\test_ground_evidence_input.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\capture_input.py",
+        "offset": 440,
+        "limit": 280
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, hashlib\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nman=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/28_submission_manifest_01.json').read_text(encoding='utf-8'))\ndef sha(p):\n    h=hashlib.sha256()\n    with open(p,'rb') as f:\n        for b in iter(lambda:f.read(1<<20),b''): h.update(b)\n    return h.hexdigest()\nbad=[]\nfor rel,exp in man['files'].items():\n    p=root/rel\n    if not p.is_file(): bad.append((rel,'MISSING',exp)); continue\n    got=sha(p)\n    if got!=exp: bad.append((rel,got,exp))\nprint('files_checked',len(man['files']))\nprint('mismatches',len(bad))\nfor b in bad: print('BAD',b)\nprint('acceptance_sha_match', sha(root/man['acceptance'])==man['acceptance_sha256'])\nprint('head_match', __import__('subprocess').run(['git','-C',str(root),'rev-parse','HEAD'],capture_output=True,text=True).stdout.strip()==man['head'])\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, hashlib, subprocess\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nman=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/28_submission_manifest_01.json').read_text(encoding='utf-8'))\ndef sha(p):\n    h=hashlib.sha256()\n    with open(p,'rb') as f:\n        for b in iter(lambda:f.read(1<<20),b''): h.update(b)\n    return h.hexdigest()\nprint('acceptance_sha_match', sha(root/'docs/human_fall/GLE02_ACCEPTANCE.md')==man['acceptance_sha256'])\nprint('head_match', subprocess.run(['git','-C',str(root),'rev-parse','HEAD'],capture_output=True,text=True).stdout.strip()==man['head'])\nprint('branch_match', subprocess.run(['git','-C',str(root),'branch','--show-current'],capture_output=True,text=True).stdout.strip()==man['branch'])\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nfor f in ('01_baseline_01.json','27_submitted_baseline_01.json'):\n    d=json.loads((root/f).read_text(encoding='utf-8'))\n    print('==',f,'type',type(d).__name__)\n    if isinstance(d,dict):\n        for k,v in d.items():\n            if isinstance(v,(dict,list)): print('  ',k,type(v).__name__,len(v))\n            else: print('  ',k,'=',v)\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nA=json.loads((root/'01_baseline_01.json').read_text(encoding='utf-8'))\nB=json.loads((root/'27_submitted_baseline_01.json').read_text(encoding='utf-8'))\nprint('A keys',sorted(A.keys()))\nprint('B keys',sorted(B.keys()))\nfor k in A:\n    if k=='files': continue\n    print('A',k,'=',A[k] if not isinstance(A[k],(dict,list)) else type(A[k]).__name__)\nfor k in B:\n    if k=='files': continue\n    print('B',k,'=',B[k] if not isinstance(B[k],(dict,list)) else type(B[k]).__name__)\nfa,fb=A['files'],B['files']\nprint('files counts',len(fa),len(fb))\nonlyA=set(fa)-set(fb); onlyB=set(fb)-set(fa)\nprint('onlyA',len(onlyA)); [print('  A',x) for x in sorted(onlyA)[:20]]\nprint('onlyB',len(onlyB)); [print('  B',x) for x in sorted(onlyB)[:20]]\nchanged=[k for k in set(fa)&set(fb) if fa[k]!=fb[k]]\nprint('changed_common',len(changed))\nfor x in sorted(changed)[:50]: print('  CH',x)\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, collections\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nA=json.loads((root/'01_baseline_01.json').read_text(encoding='utf-8'))\nB=json.loads((root/'27_submitted_baseline_01.json').read_text(encoding='utf-8'))\nonlyB=sorted(set(B['files'])-set(A['files']))\nc=collections.Counter()\nfor p in onlyB:\n    parts=p.replace('\\\\\\\\','/').split('/')\n    c['/'.join(parts[:5])]+=1\nfor k,v in c.items(): print(v,k)\nprint('TOTAL',len(onlyB))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nfor f in ['29_READONLY_REVIEW_DISPATCH_01.md','30_SCOPE_EXCEPTION_AND_STOP_01.md','07_user_reply_01.json','24_final_input_checks_01.json']:\n    print('===== '+f+' =====\\n'+(b/f).read_text(encoding='utf-8'))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, hashlib\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nnames=['ground_evidence_source_01.txt','ground_evidence_source_03.txt','ground_evidence_source_04.txt','prepare_ground_evidence_source_01.txt','test_ground_evidence_input_source_01.txt','test_ground_evidence_input_source_02.txt','test_ground_evidence_input_source_03.txt','test_ground_evidence_input_source_04.txt']\nfor n in names:\n    p=b/n\n    d=hashlib.sha256(p.read_bytes()).hexdigest()\n    print(d, n, p.stat().st_size)\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, difflib\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\ndef L(n): return (b/n).read_text(encoding='utf-8').splitlines()\nfor a,c in [('test_ground_evidence_input_source_01.txt','test_ground_evidence_input_source_02.txt'),('test_ground_evidence_input_source_02.txt','test_ground_evidence_input_source_03.txt'),('test_ground_evidence_input_source_03.txt','test_ground_evidence_input_source_04.txt')]:\n    print('#### DIFF',a,'->',c)\n    print('\\n'.join(difflib.unified_diff(L(a),L(c),a,c,lineterm='',n=2)))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, difflib\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\ndef L(n): return (b/n).read_text(encoding='utf-8').splitlines()\nfor a,c in [('ground_evidence_source_01.txt','ground_evidence_source_03.txt'),('ground_evidence_source_03.txt','ground_evidence_source_04.txt')]:\n    print('#### DIFF',a,'->',c)\n    print('\\n'.join(difflib.unified_diff(L(a),L(c),a,c,lineterm='',n=2)))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_fall_detection/tests -p test_ground_evidence_input.py -v 2>&1",
+        "workdir": "D:\\Code\\ldiar",
+        "timeout": 300000
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_fall_detection/tests -v 2>&1 | Select-Object -Last 15",
+        "timeout": 600000,
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_fall_detection/tests 2>&1 | Select-String -Pattern \"^Ran |^OK|^FAILED|Error|error\" | Select-Object -Last 10",
+        "timeout": 600000,
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nfor f in ['02_checks_01_meta.json','02_checks_01.log','03_checks_02.log','12_packet_reproducibility_01.json','21_real_cli_03_meta.json','22_real_cli_04_meta.json','23_existing_out_negative_02.log','23_existing_out_negative_02_meta.json']:\n    print('===== '+f+' =====\\n'+(b/f).read_text(encoding='utf-8'))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_follow_calibration/tests 2>&1 | Select-String -Pattern \"^Ran |^OK|^FAILED\" | Select-Object -Last 5",
+        "timeout": 300000,
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nprint((b/'20_real_request_03.json').read_text(encoding='utf-8'))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1/packet_03')\nfor f in ['pending_evidence_packet.json','selection_draft.json','gaps.json']:\n    print('===== '+f+' =====\\n'+(b/f).read_text(encoding='utf-8'))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1/packet_03')\nd=json.loads((b/'measurement_record.json').read_text(encoding='utf-8'))\nfor k,v in d['measurements'].items():\n    print(k, '=>', json.dumps({kk:v[kk] for kk in ('status','value','unit','frame','reference','method','uncertainty','recording_eligibility')},ensure_ascii=False))\nprint('-- evidence_index keys --')\nei=json.loads((b/'evidence_index.json').read_text(encoding='utf-8'))\nprint(sorted(ei.keys()))\nprint('photo_confirmation', json.dumps(ei['photo_confirmation'],ensure_ascii=False))\nprint('scene_plan statuses', [a['status'] for a in ei['scene_plan']])\nprint('binding', json.dumps(ei['binding'],ensure_ascii=False))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, copy, json, os\nfrom pathlib import Path\nsys.path.insert(0, str(Path('src/human_fall_detection')))\nsys.path.insert(0, str(Path('src/human_fall_detection/tests')))\nimport numpy as np\nfrom test_ground_evidence_input import GroundEvidenceTest\nfrom core import ground_evidence as ge\nfrom core.capture_input import CaptureInputError\n\ndef fresh():\n    t=GroundEvidenceTest('test_pending_positive_determinism_and_no_promotion_Q01_Q06')\n    t.setUp(); return t\n\nresults=[]\ndef expect_reject(label, t, fn, sign=True):\n    try:\n        fn(); t.sign()\n        p=t.run_packet()\n        results.append((label,'NOT-REJECTED'))\n    except (ValueError,OSError,KeyError,TypeError) as e:\n        results.append((label,'rejected:'+type(e).__name__))\n\n# 1 selection content changed, request_id stale\nt=fresh(); t.selections()\nt.request['selection']['fit']['indices']=[1,2,3]\nexpect_reject('sel-content/stale-request-id', t, lambda: t.run_packet(sign=False), sign=False)\n\n# 2 request_id updated but selection_id stale\nt=fresh(); t.selections()\nt.request['selection']['fit']['indices']=[1,2,3]\nt.request['request_id']=ge.request_id(t.request)\nexpect_reject('sel-content/stale-selection-id', t, lambda: t.run_packet(sign=False), sign=False)\n\n# 3 world_up frame mismatch\nt=fresh(); t.measured('world_up_source',[0,0,1],'unit_vector','world_up'); t.request['measurements']['world_up_source']['frame']='other'\nexpect_reject('world_up frame mismatch', t, lambda: None)\n\n# 4 source_axes enabled False + non-identity\nt=fresh()\nax=dict(axes=['f','l','u'],from_frame='sdk_native',to_frame='innolidar',rotation=[[0,1,0],[-1,0,0],[0,0,1]],translation_m=[0,0,0],enabled=False)\nt.measured('source_axes', ax, 'm')\nexpect_reject('disabled non-identity axes', t, lambda: None)\n\n# 5 improper rotation\nt=fresh()\nax=dict(axes=['f','l','u'],from_frame='sdk_native',to_frame='innolidar',rotation=[[1,0,0],[0,1,0],[0,0,-1]],translation_m=[0,0,0],enabled=True)\nt.measured('source_axes', ax, 'm')\nexpect_reject('improper rotation det=-1', t, lambda: None)\n\n# 6 enabled True non-identity proper R accepted\nt=fresh()\nax=dict(axes=['f','l','u'],from_frame='sdk_native',to_frame='innolidar',rotation=[[0,1,0],[-1,0,0],[0,0,1]],translation_m=[0.1,0.2,0.3],enabled=True)\nt.measured('source_axes', ax, 'm')\ntry:\n    t.sign(); t.run_packet(); results.append(('enabled proper R accepted','ACCEPTED'))\nexcept Exception as e:\n    results.append(('enabled proper R accepted','rejected:'+type(e).__name__))\n\n# 7 duplicate evidence_ref\nt=fresh(); t.request['run']['code_refs']=['code','code']\nexpect_reject('duplicate code_refs', t, lambda: None)\n\n# 8 photo binding installation_unchanged False\nt=fresh()\nt.measured('photo_recording_binding', dict(photo_sha256=t.request['files']['photo']['sha256'],installation_unchanged=False,scene_same=True),'statement')\nexpect_reject('photo installation_unchanged False', t, lambda: None)\n\n# 9 unknown measurement with non-null binding\nt=fresh(); t.request['measurements']['world_up_source']['binding']={'x':1}\nexpect_reject('unknown with binding', t, lambda: None)\n\n# 10 output == RUN_ROOT itself\nt=fresh()\nt.sign()\ntry:\n    t.run_packet(output=t.outbase); results.append(('output==RUN_ROOT','NOT-REJECTED'))\nexcept Exception as e:\n    results.append(('output==RUN_ROOT','rejected:'+type(e).__name__))\n\n# 11 output nested under RUN_ROOT but parent missing\nt=fresh()\nt.sign()\ntry:\n    t.run_packet(output=t.outbase/'a'/'b'); results.append(('missing parent','NOT-REJECTED'))\nexcept Exception as e:\n    results.append(('missing parent','rejected:'+type(e).__name__))\n\n# 12 selection validation group sharing same frame as fit via different indices\nt=fresh(); t.selections()\nt.request['selection']['validation'][0]['frame_group']=t.request['selection']['fit']['frame_group']\nt.request['selection']['validation'][0]['indices']=[0]\nt.sign()  # selection_id must be recomputed; sign handles it\nexpect_reject('validation same group as fit', t, lambda: t.run_packet(sign=False), sign=False)\n\n# 13 origin_height known while origin_definition unknown\nt=fresh(); t.measured('origin_height_m',1.4,'m','point_origin')\nexpect_reject('height without origin definition', t, lambda: None)\n\n# 14 known measurement eligibility remains unknown without full binding\nt=fresh(); t.measured('world_up_source',[0,0,1],'unit_vector','world_up')\nt.sign(); p=t.run_packet()\nresults.append(('known up eligibility', p['gaps'].count('world_up_source')==1 and 'world_up_source' in p['gaps']))\n\nfor r in results: print(r)\n\" 2>&1",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, hashlib\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nsys.path.insert(0, str(Path('src/human_fall_detection')))\nfrom core.capture_input import load_adapted, source_identity\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nreq=json.loads((b/'20_real_request_03.json').read_text(encoding='utf-8'))\ndef sha(p):\n    h=hashlib.sha256(); h.update(Path(p).read_bytes()); return h.hexdigest()\nfor n in ('npz','chain','audit','photo','photo_record'):\n    ref=req['files'][n]; print(n,'ref_ok',sha(ref['path'])==ref['sha256'])\nm,pts=load_adapted(req['files']['npz']['path'])\nsrc=m['source']\nprint('frames',len(m['frames']),'points',m['points']['shape'])\nexp=req['expected_source']\nprint('bag_match',src['source_bag_sha256_declared']==exp['bag_sha256'])\nprint('bin_match',src['bin_sha256']==exp['bin_sha256'])\nprint('source_id_match',source_identity(src['meta_sha256'],src['bin_sha256'])==exp['source_id'])\nprint('frame',m['declared']['frame'],'units',m['declared']['units'])\nprint('window',[m['frames'][0]['bag_time_sec'],m['frames'][-1]['bag_time_sec']]==exp['window_bag_time_sec'])\n# packet equality\nimport filecmp\np3=b/'packet_03'; p4=b/'packet_04'\nfor f in ['pending_evidence_packet.json','measurement_record.json','evidence_index.json','selection_draft.json','gaps.json']:\n    print('packet_equal',f,(p3/f).read_bytes()==(p4/f).read_bytes())\nprint('photo_png_sha',sha(req['files']['photo']['path']))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, os, hashlib\nfrom pathlib import Path\nfrom datetime import datetime\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nfor p in [Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_prompt_r1/annotated_roi_v6.meta.json'),\n          Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_prompt_r1/annotated_roi_v6.png'),\n          Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_prompt_r1/make_roi_annotation_v6.py'),\n          Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_prompt_r1/annotated_roi_v1.png')]:\n    st=p.stat()\n    print(p.name, hashlib.sha256(p.read_bytes()).hexdigest()[:16], datetime.fromtimestamp(st.st_mtime).isoformat(), st.st_size)\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\np=Path(r'D:/Code/ldiar/docs/human_fall/returns/GL-E02.md')\nprint('EXISTS',p.exists())\nif p.exists(): print(p.read_text(encoding='utf-8'))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "cd D:\\Code\\ldiar; rg -n \"def read_snapshot|def sha256_file|def source_identity|def _strict_indices|def _require\\b|def prepare_npz|def _canonical_json\" src/human_fall_detection/core/capture_input.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nfrom datetime import datetime\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nfor f in ['00_diag_01.md','01_baseline_01.json','27_submitted_baseline_01.json','28_submission_manifest_01.json','25_SELF_CHECK_SUBMISSION_01.md']:\n    print(f, datetime.fromtimestamp((b/f).stat().st_mtime).isoformat())\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\capture_input.py",
+        "limit": 100,
+        "offset": 55
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\capture_input.py",
+        "limit": 55,
+        "offset": 405
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nfor f in ['31_service_probe_01_meta.json','31_service_probe_01.jsonl','31_service_probe_01.stderr.txt']:\n    p=b/f\n    print('===== '+f+' ('+str(p.stat().st_size)+' bytes) =====')\n    print(p.read_text(encoding='utf-8',errors='replace')[:3000])\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_e02_r1\" -Filter \"32*\" | Select-Object Name,Length; Get-ChildItem \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_e02_r1\\opencode_review_01\" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName,Length"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nprint((b/'32_readonly_review_01_meta.json').read_text(encoding='utf-8'))\nprint('--- stderr ---'); print((b/'32_readonly_review_01.stderr.txt').read_text(encoding='utf-8',errors='replace'))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nlines=(b/'32_readonly_review_01.jsonl').read_text(encoding='utf-8',errors='replace').splitlines()\nprint('lines',len(lines))\nlast=[json.loads(l) for l in lines[-6:]]\nfor o in last:\n    t=o.get('type'); part=o.get('part',{})\n    txt=part.get('text') or part.get('tool') or part.get('reason') or ''\n    print(t, str(txt)[:300])\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "cd D:\\Code\\ldiar; git status --porcelain=v1 -- src/human_fall_detection; echo \"--- pycache ---\"; Get-ChildItem -Recurse -Directory -Filter \"__pycache__\" \"src\\human_fall_detection\" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, hashlib\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nman=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/28_submission_manifest_01.json').read_text(encoding='utf-8'))\ndef sha(p):\n    h=hashlib.sha256(); h.update(Path(p).read_bytes()); return h.hexdigest()\nbad=[k for k,v in man['files'].items() if sha(root/k)!=v]\nprint('post_review_manifest_mismatches',len(bad),bad[:5])\nA=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/01_baseline_01.json').read_text(encoding='utf-8'))\nB=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/27_submitted_baseline_01.json').read_text(encoding='utf-8'))\n# recompute current hash for all protected (A) files, compare to A and B\ndef sha2(p):\n    h=hashlib.sha256()\n    with open(p,'rb') as f:\n        for c in iter(lambda:f.read(1<<20),b''): h.update(c)\n    return h.hexdigest()\ndiffA=[]; diffB=[]; missing=[]\nfor rel in A['files']:\n    p=root/rel\n    if not p.is_file(): missing.append(rel); continue\n    cur=sha2(p)\n    if cur!=A['files'][rel]: diffA.append(rel)\n    if rel in B['files'] and cur!=B['files'][rel]: diffB.append(rel)\nprint('protected_missing',len(missing),missing[:5])\nprint('protected_changed_vs_before',len(diffA),diffA[:5])\nprint('protected_changed_vs_submitted',len(diffB),diffB[:5])\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, hashlib, os\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nA=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/01_baseline_01.json').read_text(encoding='utf-8'))\nB=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/27_submitted_baseline_01.json').read_text(encoding='utf-8'))\ndef sha2(p):\n    h=hashlib.sha256()\n    with open(p,'rb') as f:\n        for c in iter(lambda:f.read(1<<20),b''): h.update(c)\n    return h.hexdigest()\ndiffA=[]; diffB=[]; missingA=[]; broken=[]\nfor rel in A['files']:\n    p=root/rel\n    try:\n        st=os.lstat(p)\n    except OSError:\n        missingA.append(rel); continue\n    if os.path.islink(p) or not os.path.isfile(p):\n        broken.append(rel); continue\n    cur=sha2(p)\n    if cur!=A['files'][rel]: diffA.append(rel)\n    if rel in B['files'] and cur!=B['files'][rel]: diffB.append(rel)\nprint('A_protected',len(A['files']))\nprint('missingA',len(missingA),missingA[:5])\nprint('broken_symlink/win_catkin',len(broken),broken[:5])\nprint('changed_vs_01_before',len(diffA),diffA[:5])\nprint('changed_vs_27_submitted',len(diffB),diffB[:5])\npcA=[k for k in A['files'] if '__pycache__' in k]\npcB=[k for k in B['files'] if '__pycache__' in k]\nprint('pycache_in_A',len(pcA),'pycache_in_B',len(pcB))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, hashlib\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nA=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/01_baseline_01.json').read_text(encoding='utf-8'))\nB=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/27_submitted_baseline_01.json').read_text(encoding='utf-8'))\nfor k in ['.gitignore','AGENTS.md','src/human_fall_detection/core/ground_evidence.py']:\n    print('KEY',k)\n    print('  A',repr(A['files'].get(k)))\n    print('  B',repr(B['files'].get(k)))\n    p=root/k\n    print('  disk_sha', hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else 'NA')\nprint('A top keys',{k:(type(v).__name__, (len(v) if isinstance(v,(dict,list)) else v)) for k,v in A.items() if k!='files'})\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"import json; d=json.load(open(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1/01_baseline_01.json',encoding='utf-8')); v=list(d['files'].values())[0]; print(type(v).__name__); import pprint; pprint.pprint(list(d['files'].items())[:2])\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, hashlib, os\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nA=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/01_baseline_01.json').read_text(encoding='utf-8'))\nB=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/27_submitted_baseline_01.json').read_text(encoding='utf-8'))\ndef sha2(p):\n    h=hashlib.sha256()\n    with open(p,'rb') as f:\n        for c in iter(lambda:f.read(1<<20),b''): h.update(c)\n    return h.hexdigest()\ndiffA=[]; diffB=[]; missing=[]; broken=[]\nfor rel,meta in A['files'].items():\n    p=root/rel\n    try: os.lstat(p)\n    except OSError: missing.append(rel); continue\n    if os.path.islink(p) or not os.path.isfile(p): broken.append(rel); continue\n    cur=sha2(p)\n    if cur!=meta['sha256'] or p.stat().st_size!=meta['size']: diffA.append(rel)\n    bm=B['files'].get(rel)\n    if bm and (cur!=bm['sha256'] or p.stat().st_size!=bm['size']): diffB.append(rel)\nprint('protected',len(A['files']),'missing',len(missing),'broken',len(broken),broken)\nprint('changed_vs_01',len(diffA),diffA[:10])\nprint('changed_vs_27',len(diffB),diffB[:10])\n# A vs B value-level\nonlyA=set(A['files'])-set(B['files']); onlyB=set(B['files'])-set(A['files'])\ncommon=set(A['files'])&set(B['files'])\nvaldiff=[k for k in common if A['files'][k]!=B['files'][k]]\nprint('A_vs_B onlyA',len(onlyA),'onlyB',len(onlyB),'valdiff',len(valdiff))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\nfor f in ['18_checks_04_meta.json','19_fall_regression_03_meta.json','05_follow_regression_01_meta.json','09_real_cli_01_meta.json','10_real_cli_02_meta.json','11_existing_out_negative_01_meta.json']:\n    try: print(f, json.loads((b/f).read_text(encoding='utf-8')))\n    except Exception as e: print(f,'ERR',e)\nprint('--- python38 ast ---')\nfor f in ['06_python38_ast_01.json','15_python38_ast_02.json']:\n    print(f, (b/f).read_text(encoding='utf-8'))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport ast, sys\nfrom pathlib import Path\nfor f in ['core/ground_evidence.py','scripts/prepare_ground_evidence.py','tests/test_ground_evidence_input.py']:\n    p=Path('src/human_fall_detection')/f\n    src=p.read_text(encoding='utf-8')\n    try:\n        ast.parse(src, filename=str(p), feature_version=(3,8))\n        ok='3.8-OK'\n    except SyntaxError as e:\n        ok='3.8-SYNTAX-ERR '+str(e)\n    mods=set()\n    for n in ast.walk(ast.parse(src)):\n        if isinstance(n, ast.Import):\n            for a in n.names: mods.add(a.name.split('.')[0])\n        elif isinstance(n, ast.ImportFrom):\n            if n.level: mods.add('relative')\n            elif n.module: mods.add(n.module.split('.')[0])\n    print(f, ok, sorted(mods))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.path.insert(0, 'src/human_fall_detection')\nfrom core.capture_input import load_adapted\nreq=json.loads(Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1/20_real_request_03.json').read_text(encoding='utf-8'))\nm,pts=load_adapted(req['files']['npz']['path'])\nfg=m['frame_groups']\nprint('frames',len(m['frames']),'frame_groups',len(fg))\nords=[v['ordinal'] for v in fg.values()]\nprint('ordinals_unique',len(set(ords))==len(ords))\nspans=[(v['rows'][1]-v['rows'][0]) for v in fg.values()]\nprint('group_row_span_minmax',min(spans),max(spans))\nprint('sample_group',list(fg.items())[0])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.path.insert(0, 'src/human_fall_detection')\nfrom core.ground_evidence import request_id\nreq=json.loads(Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1/20_real_request_03.json').read_text(encoding='utf-8'))\nprint('declared ', req['request_id'])\nprint('computed ', request_id(req))\nprint('match', req['request_id']==request_id(req))\n# packet id\np=json.loads(Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1/packet_03/pending_evidence_packet.json').read_text(encoding='utf-8'))\nprint('packet_id==request_id', p['packet_id']==req['request_id'])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json, os\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nB=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/27_submitted_baseline_01.json').read_text(encoding='utf-8'))\nA=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/01_baseline_01.json').read_text(encoding='utf-8'))\nknown=set(A['files'])|set(B['files'])\nextra_src=[]; extra_pyc=0\nbase=root/'src/human_fall_detection'\nfor dirpath,dirs,files in os.walk(base):\n    for f in files:\n        p=Path(dirpath)/f\n        rel=str(p.relative_to(root)).replace('\\\\\\\\','/')\n        if rel not in known:\n            if '__pycache__' in rel: extra_pyc+=1\n            else: extra_src.append(rel)\nprint('unexpected_files_under_src_hfd (new since baseline/submit):',len(extra_src))\nfor x in extra_src[:30]: print(' ',x)\nprint('extra_pycache_files',extra_pyc)\n# count pycache now\nnow_pyc=sum(1 for dp,_,fs in os.walk(base) for f in fs if '__pycache__' in dp)\nprint('pycache_files_now',now_pyc)\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nB=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/27_submitted_baseline_01.json').read_text(encoding='utf-8'))\nA=json.loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/01_baseline_01.json').read_text(encoding='utf-8'))\nknown=set(A['files'])|set(B['files'])\nprint('sample known keys containing human_fall_detection:')\nprint([k for k in known if 'human_fall_detection' in k][:5])\nprint('total known',len(known))\nprint('cmakelists in known', 'src/human_fall_detection/CMakeLists.txt' in known)\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, os\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nroot=Path(r'D:/Code/ldiar')\nB=set(__import__('json').loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/27_submitted_baseline_01.json').read_text(encoding='utf-8'))['files'])\nA=set(__import__('json').loads((root/'docs/human_fall/evidence/2026-10-04_gl_e02_r1/01_baseline_01.json').read_text(encoding='utf-8'))['files'])\nknown=A|B\nextra=[]\nbase=root/'src/human_fall_detection'\nfor dp,_,fs in os.walk(base):\n    for f in fs:\n        rel=str((Path(dp)/f).relative_to(root)).replace(chr(92),'/')\n        if rel not in known: extra.append(rel)\nprint('count',len(extra))\nfor x in extra: print(x)\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1/packet_01')\nfor f in ['pending_evidence_packet.json','evidence_index.json']:\n    print('===== packet_01/'+f+' =====')\n    print((b/f).read_text(encoding='utf-8')[:2500])\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "bash",
+      "input": {
+        "command": "python -B -c \"\nimport sys, json\nfrom pathlib import Path\nsys.stdout.reconfigure(encoding='utf-8', errors='replace')\nb=Path(r'D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_e02_r1')\np1=json.loads((b/'packet_01/evidence_index.json').read_text(encoding='utf-8'))\np3=json.loads((b/'packet_03/evidence_index.json').read_text(encoding='utf-8'))\nfor k in ('packet_id','source_chain','source_unit_qualification','data_use','review_status','physical_verified','candidate_eligible','runtime_eligible'):\n    a=json.loads((b/'packet_01/pending_evidence_packet.json').read_text(encoding='utf-8'))[k]\n    c=json.loads((b/'packet_03/pending_evidence_packet.json').read_text(encoding='utf-8'))[k]\n    print(k,'|',a,'|',c,'| same' if a==c else '| DIFF')\nprint('--- evidence_index new keys packet_03 not in packet_01:', set(p3)-set(p1))\nprint('packet_01 keys',sorted(p1.keys()))\n# selection draft\nprint('p1 selection null?', json.loads((b/'packet_01/selection_draft.json').read_text(encoding='utf-8'))['selection'] is None)\n# check packet_01 photo_confirmation present?\nprint('p1 photo_confirmation' , p1.get('photo_confirmation') is not None)\nprint('p1 scene_plan' , p1.get('scene_plan'))\n\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "stream": "35_readonly_review_02.jsonl",
+      "tool": "todowrite",
+      "input": {
+        "todos": [
+          {
+            "content": "Read governance docs (AGENTS, WORKFLOW v2, GLE02_ACCEPTANCE)",
+            "priority": "high",
+            "status": "completed"
+          },
+          {
+            "content": "Read work-item evidence (00,17,25,26,28) and EXECUTION_PROMPT_02",
+            "priority": "high",
+            "status": "completed"
+          },
+          {
+            "content": "Read 3 new source files + frozen load_adapted/gate_selection/select_group_region",
+            "priority": "high",
+            "status": "completed"
+          },
+          {
+            "content": "Verify manifest hashes and protected baseline before/after",
+            "priority": "high",
+            "status": "completed"
+          },
+          {
+            "content": "Run frozen tests + adversarial synthetic checks",
+            "priority": "high",
+            "status": "completed"
+          },
+          {
+            "content": "Cross-check acceptance IDs E01-E06/S01/P01/D01/Q01-Q07",
+            "priority": "high",
+            "status": "completed"
+          },
+          {
+            "content": "Deliver consolidated verdict in final text",
+            "priority": "high",
+            "status": "in_progress"
+          }
+        ]
+      },
+      "status": "completed",
+      "error": null
+    }
+  ],
+  "forbidden_tool_calls": [],
+  "source_drift": [],
+  "manifest_drift": []
+}

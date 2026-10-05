@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>P02 R3 分区/逐帧地面建模 · 研究报告</title>
+<style>
+:root{--pass:#1a7f37;--fail:#cf222e;--warn:#9a6700;--ink:#1f2328;--mut:#59636e;--bg:#f6f8fa;--card:#fff}
+*{box-sizing:border-box}body{font:14px/1.55 "Segoe UI",system-ui,"Microsoft YaHei",sans-serif;color:var(--ink);margin:0;background:var(--bg)}
+header{padding:18px 24px;background:#0b3d62;color:#fff}
+header h1{font-size:18px;margin:0 0 4px}header p{margin:0;opacity:.85;font-size:12px}
+main{max-width:1220px;margin:0 auto;padding:18px 24px 60px}
+.card{background:var(--card);border:1px solid #d1d9e0;border-radius:8px;padding:16px 18px;margin:14px 0}
+h2{font-size:15px;margin:0 0 10px;border-left:4px solid #0b3d62;padding-left:8px}
+h3{font-size:13px;margin:14px 0 6px;color:var(--mut)}
+table{border-collapse:collapse;width:100%;font-size:12.5px;margin:6px 0}
+th,td{border:1px solid #d1d9e0;padding:4px 7px;text-align:right;white-space:nowrap}
+th{background:#f0f3f6;text-align:center;font-weight:600}
+td.l,th.l{text-align:left}
+tr.f td{color:var(--fail);font-weight:600}
+tr.p td::after{}td.pass{color:var(--pass);font-weight:700}td.fail{color:var(--fail);font-weight:700}td.warn{color:var(--warn);font-weight:700}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-weight:700;font-size:13px}
+.bA{background:#ffe9a8;color:#7a5b00}.bB{background:#ffd8b5;color:#8a4600}.bC{background:#ffb3b8;color:#a40e26}.bP{background:#b7f0c5;color:#116329}.bF{background:#ffb3b8;color:#a40e26}
+.small{font-size:12px;color:var(--mut)}
+canvas{width:100%;height:130px;display:block;background:#fff;border:1px solid #d1d9e0;border-radius:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+code{background:#eaeef2;padding:1px 5px;border-radius:4px;font-size:12px}
+.note{background:#fff8e6;border:1px solid #eedda0;border-radius:6px;padding:8px 12px;font-size:12.5px}
+.foot{font-size:11.5px;color:var(--mut);margin-top:28px}
+</style>
+</head>
+<body>
+<header>
+  <h1>P02 R3 · 分区 / 逐帧地面建模（离线研究，作者自验，SUBMITTED）</h1>
+  <p>冻结域：R2 <code>02_FROZEN_POINTS.npz</code>（392196 点，A91+C102 帧 × 4 ROI）。全部数值研究态：
+  <code>physical_verified=false · extrinsics_verified=false · runtime_eligible=false</code>；1.14 m 实测另存不绑定。不裁尾、不调 ROI、不降门，FAIL 保留。</p>
+</header>
+<main id="m">载入中…</main>
+<script>
+const $=id=>document.getElementById(id);
+const fmt=(x,f=4)=>x==null?'—':(+x).toFixed(f);
+const deg=x=>fmt(x,4)+'°';
+let DIAG,FRAMES,M1,M2;
+async function boot(){
+  [DIAG,FRAMES,M1,M2]=await Promise.all(['01_REGION_DIAG.json','02_FRAME_SEQUENCE.json','04_MODEL_I.json','05_MODEL_II.json'].map(u=>fetch(u).then(r=>{if(!r.ok)throw new Error(u+' '+r.status);return r.json()})));
+  render();
+}
+function badge(t){return t==='A'?'bA':t==='B'?'bB':'bC'}
+function clsBlock(){
+  const c=DIAG.classification,rp=DIAG.region_planes,pm=DIAG.pairwise_matrix;
+  let rows=Object.entries(rp).map(([r,p])=>`<tr><td class="l">#${r}</td><td>${deg(p.pitch)}</td><td>${deg(p.roll)}</td><td>${fmt(p.d,5)}</td><td>${p.points}</td><td>${fmt(p.rms_m,4)}</td><td>${fmt(p.p95_m,4)}</td><td>${fmt(p.support_fraction,3)}</td><td class="${p.quality==='PASS'?'pass':'fail'}">${p.quality}</td></tr>`).join('');
+  let pair=pm.map(p=>`<tr class="${p.cross_worst==='PASS'?'p':'f'}"><td class="l">#${p.pair[0]} ↔ #${p.pair[1]}</td><td>${deg(p.angle_deg)}</td><td>${fmt(p.d_gap_m,5)}</td><td>${fmt(p.plane_a_on_b.rms_m,4)}</td><td>${fmt(p.plane_a_on_b.p95_m,4)}</td><td>${fmt(p.plane_a_on_b.support_fraction,3)}</td><td>${fmt(p.plane_b_on_a.rms_m,4)}</td><td>${fmt(p.plane_b_on_a.p95_m,4)}</td><td>${fmt(p.plane_b_on_a.support_fraction,3)}</td><td class="${p.cross_worst==='PASS'?'pass':'fail'}">${p.cross_worst}</td></tr>`).join('');
+  return `<div class="card"><h2>3.1 分区诊断（门控） → 类型 <span class="badge ${badge(c.type)}">${c.type}</span></h2>
+  <p class="small">每 ROI 独立 TLS（向上符号对齐名义 Ry26）。数据门 RMS≤.03m / |P95|≤.05m / support(.05m)≥.8；跨区一致性参考（非物理精度门）normal&lt;0.5°、d&lt;5mm。四区各自拟合自身全点均 PASS；互预测 6 对全部 FAIL（最劣 1↔3：9.396°）。</p>
+  <h3>每 ROI 独立平面（4 参数）</h3>
+  <table><tr><th class="l">ROI</th><th>pitch</th><th>roll</th><th>d (m)</th><th>点数</th><th>RMS (m)</th><th>P95 (m)</th><th>support</th><th>门</th></tr>${rows}</table>
+  <h3>3.1a 成对一致性矩阵（6 对，全点互预测）</h3>
+  <table><tr><th class="l">对</th><th>法线夹角</th><th>d 差 (m)</th><th>a→b RMS</th><th>a→b P95</th><th>a→b sup</th><th>b→a RMS</th><th>b→a P95</th><th>b→a sup</th><th>门</th></tr>${pair}</table>
+  <div class="note"><b>判定量化依据</b>：max 成对夹角 ${deg(c.max_pairwise_angle_deg)}（&gt;0.5°）·max d 差 ${fmt(c.max_pairwise_d_gap_m,5)}m（&gt;5mm）→ 非 A；
+  分区内部逐帧 std max：pitch ${deg(c.max_cell_per_frame_std.pitch_deg)} / roll ${deg(c.max_cell_per_frame_std.roll_deg)} / d ${fmt(c.max_cell_per_frame_std.d_m,5)}m（&gt;0.05° / 5mm）→ 按提示词原文判定 <b>C</b>。<br>
+  ${c.basis.join('<br>')}</div></div>`;
+}
+function cellBlock(){
+  const cp=DIAG.cell_planes_session_x_region;
+  let rows=Object.entries(cp).map(([k,v])=>{const d=v.per_frame.decomposition;
+    return `<tr><td class="l">${k}</td><td>${deg(v.pitch_deg)}</td><td>${deg(v.roll_deg)}</td><td>${fmt(v.d,5)}</td><td>${v.points}</td><td>${v.per_frame.frames}</td><td>${deg(v.per_frame.pitch_std_deg)}</td><td>${deg(v.per_frame.roll_std_deg)}</td><td>${fmt(v.per_frame.d_std_m,5)}</td><td>${(d.within_frame_structure_share*100).toFixed(2)}%</td><td>${(d.true_noise_share*100).toFixed(2)}%</td></tr>`}).join('');
+  const g=DIAG.residual_decomposition_global;
+  return `<div class="card"><h2>3.1b/3.1c 分区×session 平面（8）与残差分解</h2>
+  <p class="small">逐帧 std 为「每帧独立重拟合 TLS」的整体参数散布（非残差 std）。分解定义：i 帧内结构=逐帧 median 能量占比、iii 真噪声=去帧 median 后能量占比、ii 分区慢变=region→cell 释放的能量。<b>i 与 iii 之和不补足 100%：</b>median 非能量正交投影，逐帧 ±1~2cm 尺度跳变×大点数使 median 项与去 median 项都接近原能量；该形态如实保留，不强行正交归一。</p>
+  <table><tr><th class="l">cell</th><th>pitch</th><th>roll</th><th>d (m)</th><th>点数</th><th>帧</th><th>帧std pitch</th><th>帧std roll</th><th>帧std d (m)</th><th>i 帧内结构</th><th>iii 真噪声</th></tr>${rows}</table>
+  <p class="small">全局慢变项（相对 region 平面残差能量）：<b>${(g.region_to_cell_slow_share_of_region_residual_energy*100).toFixed(4)}%</b> —— A/C 两 session 内的分区平面几乎不变；跨区不可预测主要来自「分区平面几何不一致」，不是帧级漂移。模型 II 逐帧序列的 A/C 之间慢漂移、段内趋势与 CUSUM 见下。</p></div>`;
+}
+function modelBlock(){
+  const j=M1.joint_evaluation_all_392196_points,s=M1.joint_single_plane_R2_recomputed_same_points,d=M1.comparison_delta;
+  const recs=M1.records.map(r=>`<tr><td class="l">${r.model_id}</td><td>${deg(r.pitch_deg)}</td><td>${deg(r.roll_deg)}</td><td>${fmt(r.translation_m[2],5)}</td><td>x[${r.footprint_display_xy_m.x.map(v=>fmt(v,2)).join(', ')}] y[${r.footprint_display_xy_m.y.map(v=>fmt(v,2)).join(', ')}]</td></tr>`).join('');
+  return `<div class="card"><h2>3.2 模型 I（分区平面集）与联合单平面对照</h2>
+  <table><tr><th class="l">模型</th><th>全点 392196 RMS (m)</th><th>P95 (m)</th><th>support</th><th>门</th></tr>
+  <tr><td class="l">模型 I 分区平面集</td><td><b>${fmt(j.rms_m,5)}</b></td><td><b>${fmt(j.p95_m,5)}</b></td><td><b>${fmt(j.support_fraction,4)}</b></td><td class="${j.quality==='PASS'?'pass':'fail'}">${j.quality}</td></tr>
+  <tr><td class="l">R2 联合单平面（同点重算）</td><td>${fmt(s.rms_m,5)}</td><td>${fmt(s.p95_m,5)}</td><td>${fmt(s.support_fraction,4)}</td><td class="${s.quality==='PASS'?'pass':'fail'}">${s.quality}</td></tr>
+  <tr><td class="l">差值（I − 单平面）</td><td class="warn">${fmt(d.rms_m,5)}</td><td class="warn">${fmt(d.p95_m,5)}</td><td class="warn">${fmt(d.support_fraction,4)}</td><td>—</td></tr></table>
+  <p class="small">模型 I 把全点 RMS 从 1.89cm 压到 1.33cm、P95 3.79→2.63cm——<b>跨区残差大部分是分区平面间几何差</b>，与 3.1a 六对互预测 FAIL、3.1 类型 C 一致。存储格式沿用 R2 <code>01_DISPLAY_MODEL.json</code> 的 source-frame 约定，每区一条记录 + display XY footprint（annotator ROI 各边再内缩 2cm 缓冲带）：</p>
+  <table><tr><th class="l">model_id</th><th>pitch</th><th>roll</th><th>tz=d (m)</th><th>footprint（display XY，m）</th></tr>${recs}</table>
+  <div class="note"><b>消费接口草案（纯文档）</b>：<code>${M1.consumer_api_draft.signature}</code> — ${M1.consumer_api_draft.lookup}<br><b>边界/回退</b>：${M1.consumer_api_draft.fallback}</div></div>`;
+}
+function seriesBlock(){
+  const cells=Object.keys(M2.series).sort();
+  if(cells.length!==8) throw new Error('M2.series 必须 8 cell，实际 '+cells.length);
+  for(const k of cells){const p=M2.series[k].param_summary;
+    if(!p||!p.pitch_deg||!p.d_m||!Number.isFinite(p.pitch_deg.median)) throw new Error('cell '+k+' param_summary 缺失或非法');}
+  let tbl=cells.map(k=>{const v=M2.series[k];const p=v.param_summary;
+    return `<tr><td class="l">${k}</td><td>${v.frames}</td><td>${fmt(p.pitch_deg.median,3)}/${fmt(p.pitch_deg.mad_scaled,3)}</td><td>${fmt(p.roll_deg.median,3)}/${fmt(p.roll_deg.mad_scaled,3)}</td><td>${fmt(p.d_m.median,5)}/${fmt(p.d_m.mad_scaled,5)}</td><td>${fmt(p.pitch_deg.adjacent_diff_mad_scaled,4)}</td><td>${fmt(p.d_m.adjacent_diff_mad_scaled,5)}</td><td>${fmt(p.d_m.linear_trend_per_frame*193,4)}</td><td>${p.pitch_deg.cusum_jumps_robust.length+ p.roll_deg.cusum_jumps_robust.length+p.d_m.cusum_jumps_robust.length}</td></tr>`}).join('');
+  return `<div class="card"><h2>3.2 模型 II（逐帧 TLS 序列，772=193×4 条 + 协方差）</h2>
+  <p class="small">协方差：一阶 delta sandwich（PPCF 型），非高斯稳健，sigma²=未修正 ML 残差方差；只作不确定度参照。逐帧分布重尾/双峰（±1~2cm 尺度跳变叠加局部平面），std/MAD 均非干净宽度，如实保留；d 通道在 A/C 之间有约 1~2cm 平移（见 CUSUM 与曲线）。</p>
+  <table><tr><th class="l">cell</th><th>帧</th><th>pitch med/mad (°)</th><th>roll med/mad (°)</th><th>d med/mad (m)</th><th>Δ帧 mad pitch (°)</th><th>Δ帧 mad d (m)</th><th>线性趋势 d/全段 (m)</th><th>CUSUM 点数</th></tr>${tbl}</table>
+  <h3>逐帧 d/pitch 序列（8 cell；A=91 帧、C=102 帧）</h3>
+  <div id="charts"></div>
+  <div class="note"><b>消费接口草案（纯文档）</b>：${M2.consumer_api_draft.options.join('；')}.<br><b>建议</b>：${M2.consumer_api_draft.recommendation}</div></div>`;
+}
+function charts(){
+  const cells=Object.keys(M2.series).sort();
+  const c4=['#0969da','#1a7f37','#9a6700','#cf222e'];
+  const wrap=$('charts');
+  for(const k of cells){
+    const rows=FRAMES.frames.filter(f=>(f.session+f.region)===k).sort((a,b)=>a.frame_ordinal-b.frame_ordinal);
+    const cv=document.createElement('canvas');cv.width=700;cv.height=130;
+    wrap.insertAdjacentHTML('beforeend',`<h3>${k} · d (紫) 与 pitch (蓝) 逐帧</h3>`);wrap.appendChild(cv);
+    const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,pad=30;
+    const ds=rows.map(f=>f.d_m),ps=rows.map(f=>f.pitch_deg);
+    const dmin=Math.min(...ds),dmax=Math.max(...ds),pmin=Math.min(...ps),pmax=Math.max(...ps);
+    ctx.strokeStyle='#d1d9e0';ctx.strokeRect(pad,5,W-pad-5,H-25);
+    ctx.fillStyle='#59636e';ctx.font='10px sans-serif';
+    ctx.fillText(fmt(dmax,3),2,12);ctx.fillText(fmt(dmin,3),2,H-18);
+    ctx.fillText(fmt(pmax,2)+'°',W-42,12);ctx.fillText(fmt(pmin,2)+'°',W-42,H-18);
+    const plot=(arr,lo,hi,color)=>{ctx.strokeStyle=color;ctx.beginPath();
+      arr.forEach((v,i)=>{const x=pad+(W-pad-5)*i/(arr.length-1),y=5+(H-30)*(1-(v-lo)/(hi-lo||1e-9));
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()};
+    plot(ds,dmin,dmax,'#8250df');plot(ps,pmin,pmax,'#0969da');
+  }
+}
+function upgradeBlock(){
+  return `<div class="card"><h2>3.3 升级建议（文档结论，不实施）</h2>
+  <ol class="small" style="line-height:1.8">
+  <li>P02 显示配平<b>从联合单平面改为「分区平面集」</b>：全点 RMS 1.89→1.33cm、P95 3.79→2.63cm，且正好补齐 R2 留一区诊断 #1/#3/#4 FAIL 的根因（成对互预测 6/6 FAIL）。</li>
+  <li>存储面：<code>04_MODEL_I.json</code> 每区一条 <code>display:regionN</code> 记录（schema 1 不变），新增 <code>footprint_display_xy_m</code>；HTML 渲染时按 display XY footprint 查表选区，未命中显式 None（不默认最近区）。</li>
+  <li>NPZ 结构：可沿用每帧 npz 增 region 列查表；本场地 ROI 互不相交，不存在边界重叠仲裁。</li>
+  <li>ground_local 契约：每区一组 R=<code>Rx(roll)@Ry(pitch)</code>/tz=d 已满足 properR/Rn=up/signedZ/inverse（本目录 06 检查全过）；契约本身不变，只多一个 region 参数。</li>
+  <li>显示页改动面最小：四色 ROI 已有，渲染循环内按点所在区选 R/t 即可，无新依赖。</li>
+  <li><b>维持不升级 physical/runtime：</b>平面 d（1.19~1.42m）与实测 1.14m 未闭合，分区模型只解释点云内部一致性，不解释传感器→物理 datum。</li>
+  <li>P1-01 物理标定仍差：(a) 雷达原点/安装 datum 的独立物理测量（激光测距到 ROI 面本身而非地板其他点）、(b) 未曝光区域 holdout、(c) 距离偏置（dist&amp;bias）来源证据。</li>
+  <li>类型 C 判定含重尾/慢漂移形态；若后续要「逐帧运行时模型」，须先实锤 C4 等 sparse-cell 的协方差可辨识性，当前只作序列参照。</li>
+  <li>降门/裁尾均不允许：四区 PASS 用的是自身拟合自身的全点，不是泛化。</li>
+  <li>本建议不授权任何生产/HTML/runtime 改动；落地须另开工单。</li></ol></div>`;
+}
+function render(){
+  $('m').innerHTML=clsBlock()+cellBlock()+modelBlock()+seriesBlock()+upgradeBlock()
+   +`<p class="foot">数据源 SHA 与全部判定见 01~05 JSON；逐帧 772 行见 02/03；数值核验 06。R3 状态 SUBMITTED（作者自验），指定独审/真实 browser NOT_RUN。R2 报告与模型原样保留。</p>`;
+  charts();
+}
+boot().catch(e=>{$('m').innerHTML='<div class="card"><b>加载失败（请用 http 服务打开，file:// 下 fetch 会拒绝）：</b> '+e.message+'</div>'});
+</script>
+</body>
+</html>

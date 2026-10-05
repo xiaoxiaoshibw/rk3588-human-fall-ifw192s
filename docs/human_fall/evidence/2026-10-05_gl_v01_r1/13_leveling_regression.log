@@ -1,0 +1,30 @@
+test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board) ... [16:27:36] "GET /api/leveling/sessions HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/source?sid=cap_20990101_000001 HTTP/1.1" 200 -
+[16:27:36] "POST /api/leveling/run HTTP/1.1" 400 -
+[16:27:36] "POST /api/leveling/run HTTP/1.1" 409 -
+[16:27:36] "POST /api/leveling/run HTTP/1.1" 202 -
+[16:27:36] "GET /api/leveling/job?id=b6e6806421f0433b88d7af2dae5a9cd7 HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/job?id=b6e6806421f0433b88d7af2dae5a9cd7 HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/job?id=b6e6806421f0433b88d7af2dae5a9cd7 HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/job?id=b6e6806421f0433b88d7af2dae5a9cd7 HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/artifact?id=b6e6806421f0433b88d7af2dae5a9cd7&method=tls&name=dataset.zip HTTP/1.1" 200 -
+[16:27:36] "POST /api/leveling/run HTTP/1.1" 202 -
+[16:27:36] "GET /api/leveling/job?id=7caa33c795c1450e8dff6f413740ba85 HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/job?id=7caa33c795c1450e8dff6f413740ba85 HTTP/1.1" 200 -
+[16:27:36] "POST /api/leveling/run HTTP/1.1" 202 -
+[16:27:36] "GET /api/leveling/job?id=cd645ab53a734879a253b632b048483e HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/job?id=cd645ab53a734879a253b632b048483e HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/job?id=cd645ab53a734879a253b632b048483e HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/job?id=cd645ab53a734879a253b632b048483e HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/job?id=cd645ab53a734879a253b632b048483e HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/leveled_latest?sid=cap_20990101_000001 HTTP/1.1" 200 -
+[16:27:36] "GET /api/leveling/leveled_latest?sid=nonexistent_ HTTP/1.1" 404 -
+ok
+test_line_domain_and_ls_majority_cannot_override_conflict (leveling_test.WorkbenchTest.test_line_domain_and_ls_majority_cannot_override_conflict) ... ok
+test_request_boundary_source_drift_and_owned_config (leveling_test.WorkbenchTest.test_request_boundary_source_drift_and_owned_config) ... ok
+test_transform_export_and_frozen_disjoint_rows (leveling_test.WorkbenchTest.test_transform_export_and_frozen_disjoint_rows) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.849s
+
+OK

@@ -1,0 +1,37 @@
+{
+  "kind": "gli05_r2_summary",
+  "status": "SUBMITTED",
+  "physical_verified": false,
+  "acceptance": "GLI05_ACCEPTANCE.md v1",
+  "cases": 38,
+  "oracle_match_all": true,
+  "closure_safe_all": true,
+  "sequence_digest_match_all": true,
+  "weak_dominant_positive_cases": 6,
+  "stages_s": {
+    "sampling": 0.0008153999951900914,
+    "raw": 0.1045091501873685,
+    "refine": 0.050446599823771976,
+    "decision": 0.03216560001601465,
+    "serialization": 0.012723250009003095
+  },
+  "real_cost": {
+    "approved": {
+      "search_median_s": 0.08786960001452826,
+      "peak_tracemalloc_bytes": 105733394,
+      "status": "unresolved"
+    },
+    "negative_X": {
+      "search_median_s": 0.34265929998946376,
+      "peak_tracemalloc_bytes": 112881317,
+      "status": "unresolved"
+    }
+  },
+  "decision": "retain research only, no refine cache; corrected diagnostics and evidence; independent second review pending",
+  "metric_domains": "oracle: full refined multiset W; prototype pair indices/counts: exact-signature representatives. Full multiplicity remains in produced/merged_exact and trace; holds/status invariant, pair counts are not claimed equal.",
+  "costs_boundary": "Frozen baseline_fit includes native validation and research_search includes all qualified refinements and exact decision. Serialization is reported separately. These are different phases, not an end-to-end acceleration claim. tracemalloc peak is a separate run and does not include process-wide RSS.",
+  "B01": "BLOCKED",
+  "B02": "BLOCKED",
+  "D01": "NOT_RUN",
+  "D02": "NOT_RUN"
+}

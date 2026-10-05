@@ -1,0 +1,139 @@
+{
+  "checks": {
+    "02_full_regression": true,
+    "03_follow_regression": true,
+    "P01_default_real": true,
+    "real_blocker_reproduced": true,
+    "second_gate_exact_counts": true,
+    "unchanged_wrapper_python38_ast": true
+  },
+  "commands_and_exits": {
+    "02_full_regression": {
+      "command": [
+        "C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe",
+        "-B",
+        "-W",
+        "error",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "src/human_fall_detection/tests",
+        "-v"
+      ],
+      "exit": 0
+    },
+    "03_follow_regression": {
+      "command": [
+        "C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe",
+        "-B",
+        "-W",
+        "error",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "src/human_follow_calibration/tests",
+        "-v"
+      ],
+      "exit": 0
+    },
+    "P01_default_real": {
+      "exit": 2,
+      "artifact_exists": false
+    }
+  },
+  "real_variant_result": {
+    "kind": "ground_plane",
+    "status": "invalid",
+    "valid": false,
+    "reason": "ground_degenerate",
+    "frame": "innolidar",
+    "point_count": 4372400,
+    "normal": null,
+    "offset_m": null,
+    "sensor_height_m": null,
+    "tilt_rad": null,
+    "fit_inlier_count": null,
+    "inlier_fraction": null,
+    "holdout_residual": null,
+    "holdout_support": null,
+    "valid_region": null,
+    "settings": {
+      "min_inliers": 100,
+      "min_fit_inlier_fraction": 0.2,
+      "fit_point_cap": 5000,
+      "holdout_point_cap": 10000,
+      "spatial_cell_m": 0.05,
+      "max_points_per_cell": 8,
+      "max_candidates": 3,
+      "ransac_iterations": 861,
+      "ransac_iteration_hard_cap": 2000,
+      "seed": 20261001,
+      "inlier_threshold_m": 0.05,
+      "max_angle_rad": 0.2617993877991494,
+      "min_sample_separation_m": 0.05,
+      "min_sample_triangle_area_m2": 0.0025,
+      "min_planar_eigenvalue_ratio": 0.02,
+      "support_close_ratio": 0.8,
+      "distinct_normal_deg": 10.0,
+      "distinct_offset_m": 0.05,
+      "independent_regions_min": 3,
+      "points_per_region_min": 20,
+      "untruncated_rms_max_m": 0.03,
+      "abs_residual_p95_max_m": 0.05,
+      "support_fraction_min": 0.8,
+      "normal_change_max_deg": 2.0,
+      "offset_change_max_m": 0.03
+    },
+    "constrained": true,
+    "up_axis": [
+      0.43837104645045616,
+      0.0,
+      0.8987940952375756
+    ],
+    "sensor_height_interval_m": [
+      1.2,
+      1.7
+    ],
+    "fit_frame_group": "frame:3d854c4e9c848ce08fb1e058",
+    "input_point_count": 4372400,
+    "valid_point_count": 3699085,
+    "fit_index_count": 1214,
+    "seed": 20261001,
+    "iterations": 861,
+    "iterations_cap": 861,
+    "sampled_fit_count": 1193,
+    "degenerate_samples": 31,
+    "ambiguous": false,
+    "raw_candidates": [],
+    "candidates": [],
+    "validation_regions": [],
+    "fit_support_indices": [],
+    "competition_candidates": [],
+    "competition_truncated": false
+  },
+  "counts": {
+    "distance_degenerate": 19,
+    "area_degenerate": 12,
+    "angle_rejected": 828,
+    "height_rejected_after_angle": 2,
+    "evaluated": 0
+  },
+  "pca_geometry_diagnostic_not_physical_calibration": {
+    "normal": [
+      -0.4425344914182997,
+      -0.0023980058018242545,
+      0.8967482776528325
+    ],
+    "offset_m": 1.3392689779001972,
+    "angle_to_approved_up_deg": 52.265906195653905,
+    "eigenvalue_ratio": 0.8331326396464513
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "numpy": "1.26.4"
+  },
+  "new_config_exists": false,
+  "new_tests_exists": false
+}

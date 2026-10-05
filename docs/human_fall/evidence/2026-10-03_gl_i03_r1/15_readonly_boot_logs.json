@@ -1,0 +1,34 @@
+{
+  "read_only_source": "C:\\Users\\30680\\.local\\share\\opencode\\log\\opencode.log",
+  "time_zone": "timestamps are UTC; add 8h for Asia/Shanghai",
+  "extracted": "2026-10-03T20:20:08.790542+08:00",
+  "runs": {
+    "14_resume_service_probe": [
+      "timestamp=2026-10-03T12:12:08.445Z level=INFO run=cb195cf5 message=\"creating instance\" directory=\"D:\\\\Code\\\\ldiar\"",
+      "timestamp=2026-10-03T12:12:08.447Z level=INFO run=cb195cf5 message=fromDirectory directory=\"D:\\\\Code\\\\ldiar\"",
+      "timestamp=2026-10-03T12:12:09.155Z level=INFO run=cb195cf5 message=bootstrapping directory=\"D:\\\\Code\\\\ldiar\"",
+      "timestamp=2026-10-03T12:12:09.162Z level=INFO run=cb195cf5 message=loading path=\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\config.json\"",
+      "timestamp=2026-10-03T12:12:09.169Z level=INFO run=cb195cf5 message=loading path=\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\opencode.json\"",
+      "timestamp=2026-10-03T12:12:09.170Z level=INFO run=cb195cf5 message=loading path=\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\opencode.jsonc\""
+    ],
+    "08_service_probe_historical_supplement": [
+      "timestamp=2026-10-03T11:48:19.616Z level=INFO run=b79ea463 message=\"creating instance\" directory=\"D:\\\\Code\\\\ldiar\"",
+      "timestamp=2026-10-03T11:48:19.617Z level=INFO run=b79ea463 message=fromDirectory directory=\"D:\\\\Code\\\\ldiar\"",
+      "timestamp=2026-10-03T11:48:20.246Z level=INFO run=b79ea463 message=bootstrapping directory=\"D:\\\\Code\\\\ldiar\"",
+      "timestamp=2026-10-03T11:48:20.252Z level=INFO run=b79ea463 message=loading path=\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\config.json\"",
+      "timestamp=2026-10-03T11:48:20.258Z level=INFO run=b79ea463 message=loading path=\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\opencode.json\"",
+      "timestamp=2026-10-03T11:48:20.259Z level=INFO run=b79ea463 message=loading path=\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\opencode.jsonc\"",
+      "timestamp=2026-10-03T11:48:29.708Z level=ERROR run=b79ea463 message=\"Failed to fetch models.dev\" cause=Cause([Fail(TimeoutError)])",
+      "timestamp=2026-10-03T11:49:07.216Z level=INFO run=b79ea463 message=init",
+      "timestamp=2026-10-03T11:49:07.437Z level=INFO run=b79ea463 message=\"event connected\"",
+      "timestamp=2026-10-03T11:49:07.895Z level=INFO run=b79ea463 message=loop session.id=ses_efe674b20ffe3V6mIAAtUY2Sdk step=0",
+      "timestamp=2026-10-03T11:49:07.916Z level=INFO run=b79ea463 message=stream providerID=opencode-go modelID=deepseek-v4.1-flash session.id=ses_efe674b20ffe3V6mIAAtUY2Sdk small=true agent=title mode=primary",
+      "timestamp=2026-10-03T11:49:07.933Z level=INFO run=b79ea463 message=\"llm runtime selected\" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4.1-flash",
+      "timestamp=2026-10-03T11:49:08.757Z level=INFO run=b79ea463 message=init count=2",
+      "timestamp=2026-10-03T11:49:10.509Z level=INFO run=b79ea463 message=stream providerID=opencode-go modelID=deepseek-v4.1-flash session.id=ses_efe674b20ffe3V6mIAAtUY2Sdk small=false agent=build mode=primary",
+      "timestamp=2026-10-03T11:49:10.513Z level=INFO run=b79ea463 message=\"llm runtime selected\" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4.1-flash",
+      "timestamp=2026-10-03T11:49:12.230Z level=ERROR run=b79ea463 message=\"stream error\" providerID=opencode-go modelID=deepseek-v4.1-flash session.id=ses_efe674b20ffe3V6mIAAtUY2Sdk small=false agent=build mode=primary error.error=\"AI_APICallError: Upstream request failed: An active OpenCode Go subscription is required to use Go models.\""
+    ]
+  },
+  "redaction": "lines potentially containing credentials omitted"
+}

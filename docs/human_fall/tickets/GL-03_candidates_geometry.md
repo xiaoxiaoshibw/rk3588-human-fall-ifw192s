@@ -1,6 +1,6 @@
 # GL-03 配平候选框与当前大候选诊断
 
-执行：Codex管理指定OpenCode CLI模型；审核：Codex。状态（2026-10-02）：软件前置已满足，未启动。GL-01软件已获审、GL02 R7软件PASS/设备NOT_RUN/物理BLOCKED。后续按[WORKFLOW.md](../WORKFLOW.md)建立本单验收表并按用户授权范围派发，下方旧派工附记只作历史。
+执行：Codex自动派指定OpenCode CLI `opencode-go/deepseek-v4.1-flash`；审核/编排：唯一生效Codex。R7 G01/G02/G03/G04/G05/G07/G08软件PASS，G06及真实身份BLOCKED，O01统计PASS，D01设备NOT_RUN/现场BLOCKED。[验收v1](../GL03_ACCEPTANCE.md)、[R7独立复审](../evidence/2026-10-02_gl03_r7/codex_review_01/CODEX_REVIEW.md)。无新FAIL，无活动写入者；整单未ACCEPTED，GL04等待用户授权，不部署采集。
 
 ## 问题与任务
 
@@ -21,4 +21,4 @@ lidar_candidates/features、必要pipeline/tracking/state消费入口、相关�
 - 原始点索引可还原，source与ground框正确对应相同候选和标定。
 - 真实大候选诊断前后同样本/配置对照，报告候选数量、成员、误合并和剩余限制；不能仅用框变小证明分割改善。
 - 接地/低卧目标仍保留，墙/家具未自动标human。真实样本不足则分割device结论BLOCKED。
-- 旧选择/跟踪/基线回归不退化，输出 `returns/GL-03.md`。Codex独立检查几何框与聚类证据后放行GL-04。
+- 旧选择/跟踪/基线回归不退化，输出 `returns/GL-03.md`。Codex独立检查几何框与聚类证据后收口本单；GL-04另需用户授权，不因本单软件PASS自动放行。

@@ -1,0 +1,81 @@
+{
+  "kind": "gli05_second_review_corrections",
+  "passed": 4,
+  "total": 5,
+  "results": [
+    {
+      "name": "corrected_boundary_inside_080",
+      "ok": true,
+      "detail": {
+        "mine": "unresolved",
+        "author": "unresolved",
+        "want": "unresolved"
+      }
+    },
+    {
+      "name": "corrected_boundary_outside_0799",
+      "ok": true,
+      "detail": {
+        "mine": "seen_dominant_pool_closed",
+        "author": "seen_dominant_pool_closed",
+        "want": "seen_dominant_pool_closed"
+      }
+    },
+    {
+      "name": "corrected_below_pool_similar",
+      "ok": true,
+      "detail": {
+        "mine": "seen_pairwise_closed",
+        "author": "seen_pairwise_closed",
+        "want": "seen_pairwise_closed"
+      }
+    },
+    {
+      "name": "best_only_holds_masks_best_vs_earlier_near",
+      "ok": true,
+      "detail": {
+        "my_best_only_pairs": [
+          [
+            0,
+            1
+          ]
+        ],
+        "author_best_only_pairs": [],
+        "author_holds": true
+      }
+    },
+    {
+      "name": "ledger_best_only_consistent",
+      "ok": false,
+      "detail": {
+        "mismatch_count": 3,
+        "examples": [
+          {
+            "case": "close_seed7_permuteFalse",
+            "my_holds": false,
+            "recorded_holds": false,
+            "my_count": 8,
+            "recorded_count": 2,
+            "status": "unresolved"
+          },
+          {
+            "case": "close_seed7_permuteTrue",
+            "my_holds": false,
+            "recorded_holds": true,
+            "my_count": 1,
+            "recorded_count": 0,
+            "status": "unresolved"
+          },
+          {
+            "case": "negative_X",
+            "my_holds": false,
+            "recorded_holds": false,
+            "my_count": 113,
+            "recorded_count": 44,
+            "status": "unresolved"
+          }
+        ]
+      }
+    }
+  ]
+}

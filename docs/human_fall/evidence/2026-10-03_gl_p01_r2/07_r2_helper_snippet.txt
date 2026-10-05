@@ -1,0 +1,34 @@
+527: def _coordinate_ground_projection(ground_derived, calibration):
+528:     """Project a validated ground-derived R/t into the additive wire form.
+529: 
+530:     Returns a fresh dict with newly built R/t lists so no caller can mutate the
+531:     cached artifact (or another snapshot's output) through the published
+532:     coordinate block; None when there is no validated block, so a legacy/absent
+533:     artifact never fabricates an identity transform.
+534: 
+535:     The shared GL-02 validator already guarantees a finite 3x3 R and triple t,
+536:     and accepts list or tuple containers alike (both carry the same JSON/GDID),
+537:     so no second container-schema gate is applied here: the validated values are
+538:     rebuilt into fresh lists.
+539:     """
+540:     if not isinstance(ground_derived, dict):
+541:         return None
+542:     rotation = ground_derived.get("R")
+543:     translation = ground_derived.get("t")
+544:     if rotation is None or translation is None:
+545:         return None
+546:     artifact = calibration if isinstance(calibration, dict) else {}
+547:     return {
+548:         "kind": "coordinate_ground",
+549:         "schema_version": 1,
+550:         "from_frame": ground_derived.get("from_frame"),
+551:         "to_frame": ground_derived.get("to_frame"),
+552:         "units": "m",
+553:         "calibration_id": artifact.get("calibration_id"),
+554:         "geometry_schema_version": artifact.get("schema_version"),
+555:         "ground_derived_id": ground_derived.get("ground_derived_id"),
+556:         "R": [list(row) for row in rotation],
+557:         "t": [float(value) for value in translation],
+558:     }
+559: 
+560: 

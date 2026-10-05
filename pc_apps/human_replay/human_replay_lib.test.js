@@ -6,6 +6,11 @@ const L = require("./human_replay_lib.js");
 let n = 0;
 function t(name, fn) { fn(); n++; console.log("ok", name); }
 
+t("replay.js: 浏览器脚本完整可解析（sid 接口注册前置）", () => {
+    const fs = require("fs"), path = require("path"), vm = require("vm");
+    new vm.Script(fs.readFileSync(path.join(__dirname, "replay.js"), "utf8"), { filename: "replay.js" });
+});
+
 // ---- frame_slice ----------------------------------------------------------
 t("frame_slice: 正常帧表 + 累计区间", () => {
     const meta = { frames: [
@@ -346,6 +351,148 @@ t("find_nearest_xy: 按 xy 最近点", () => {
 t("HR-04 exports: LS_PREFIX 非空前缀", () => {
     assert.ok(L.LS_PREFIX.startsWith("human_replay."));
     assert.ok(L.ORTHO_HALF_W > 0 && L.ORTHO_HALF_H > 0);
+});
+
+// ---- HR-05 标注编辑层（新增，0 依赖浏览器） -----------------------------------
+t("bbox_from_ground_rect: 无点云回退默认 1.8m", () => {
+    const b = L.bbox_from_ground_rect([1, 2], [5, 7], null);
+    assert.deepStrictEqual(b.center, [3, 4.5, 0.9]);
+    assert.deepStrictEqual(b.size, [4, 5, 1.8]);
+    assert.strictEqual(b.yaw, 0);
+});
+t("bbox_from_ground_rect: 点云 z 分位 = 2%/98%", () => {
+    // 50 点散布 z=0..1，框内人形在 z=0.5..1.5
+    const pts = new Float32Array(50 * 4);
+    for (let i = 0; i < 50; i++) pts.set([2 + (i % 10), 3 + (i / 10 | 0), 0.5 + (i % 20) * 0.05, 100], i * 4);
+    const b = L.bbox_from_ground_rect([0, 0], [10, 10], pts);
+    assert.ok(b.size[2] > 0.89 && b.size[2] < 1.11, "z 高度约 1m，got " + b.size[2]);
+    assert.ok(Math.abs(b.zmin - 0.5) < 0.06);
+    assert.ok(Math.abs(b.zmax - 1.45) < 0.06);
+});
+t("bbox_from_rect: 点云缺失/空时回退", () => {
+    const b = L.bbox_from_rect([1, 2], [5, 7], 0.1, 1.9);
+    function near(a, b, eps) { return Math.abs(a - b) < (eps || 1e-6); }
+    assert.ok(near(b.center[0], 3) && near(b.center[1], 4.5) && near(b.center[2], 1.0), "center");
+    assert.ok(near(b.size[0], 4) && near(b.size[1], 5) && near(b.size[2], 1.8), "size");
+});
+t("undo_stack: 20 层容量 + pop/push 往返", () => {
+    let st = L.undo_stack_new();
+    assert.strictEqual(st.capacity, 20);
+    for (let i = 0; i < 25; i++) st = L.undo_stack_push(st, { op: "add", id: i });
+    assert.strictEqual(st.stack.length, 20);
+    assert.strictEqual(st.stack[0].id, 5, "第 21 条推入后最老出局");
+    const pop1 = L.undo_stack_pop(st);
+    assert.strictEqual(pop1.entry.id, 24);
+    assert.strictEqual(pop1.new_stack.stack.length, 19);
+    // 空栈 pop 安全
+    let empty = L.undo_stack_new();
+    assert.strictEqual(L.undo_stack_pop(empty).entry, null);
+});
+t("annotation_validate_box: 字段/数值合法双通道", () => {
+    // 合法
+    assert.strictEqual(L.annotation_validate_box({ center: [1, 2, 0.5], size: [1, 1, 1.8], yaw: 0 }), true);
+    // 缺字段
+    assert.notStrictEqual(L.annotation_validate_box({}), true);
+    // NaN
+    assert.notStrictEqual(L.annotation_validate_box({ center: [NaN, 0, 0], size: [1, 1, 1], yaw: 0 }), true);
+    // 零/负 size
+    assert.notStrictEqual(L.annotation_validate_box({ center: [0, 0, 0], size: [0, 1, 1], yaw: 0 }), true);
+    // 超界 center
+    assert.notStrictEqual(L.annotation_validate_box({ center: [101, 0, 0], size: [1, 1, 1], yaw: 0 }), true);
+    // yaw 超 π
+    assert.notStrictEqual(L.annotation_validate_box({ center: [0, 0, 0], size: [1, 1, 1], yaw: Math.PI + 0.1 }), true);
+    assert.strictEqual(L.annotation_validate_box({ center: [0, 0, 0], size: [1, 1, 1], yaw: Math.PI }), true);
+});
+t("annotation_snap_step: 捕捉步进表", () => {
+    assert.strictEqual(L.annotation_snap_step("move", 0.234, true), 0.2);
+    assert.strictEqual(L.annotation_snap_step("move", 0.234, false), 0.234);
+    assert.ok(Math.abs(L.annotation_snap_step("rotate", Math.PI / 5, true) - 7 * Math.PI / 36) < 1e-9);
+    assert.strictEqual(L.annotation_snap_step("scale", 1.234, true), 1.25);
+});
+t("annotation_serialize: 只输出已定稿，契约字段全", () => {
+    const meta = {
+        frames: [
+            { seq: 100, stamp_sec: 1000, stamp_nanosec: 500 },
+            { seq: 101, stamp_sec: 1001, stamp_nanosec: 600 },
+        ],
+    };
+    const by_seq = {
+        100: [
+            { id: "ann_a", label: "person", center: [1, 2, 0.5], size: [1, 1, 1.8], yaw: 0, fixed: true },
+            { id: "ann_b", label: "person", center: [3, 4, 0.9], size: [1, 1, 1.8], yaw: 0, fixed: false },
+        ],
+        101: [
+            { id: "ann_c", label: "person", center: [5, 6, 0.5], size: [1, 1, 1.8], yaw: 0, fixed: true },
+        ],
+    };
+    const out = L.annotation_serialize(by_seq, meta, false);
+    assert.strictEqual(out.length, 2, "只收已定稿 2 条");
+    assert.strictEqual(out[0].id, "ann_a");
+    assert.strictEqual(out[1].id, "ann_c");
+    assert.strictEqual(out[0].source, "human");
+    assert.strictEqual(out[0].frame_seq, 100);
+    assert.strictEqual(out[0].stamp_sec, 1000);
+    assert.strictEqual(out[0].tool, L.ANNOTATION_TOOL);
+    assert.strictEqual(out[0].frame_valid, true);
+    // include_unfinished 也通
+    assert.strictEqual(L.annotation_serialize(by_seq, meta, true).length, 3);
+});
+t("HR-05 exports: 必备函数齐全", () => {
+    ["bbox_from_ground_rect", "bbox_from_rect", "undo_stack_new",
+     "annotation_validate_box", "annotation_snap_step", "annotation_serialize",
+     "ANNOTATION_TOOL"].forEach(k => {
+        assert.strictEqual(typeof L[k], k === "ANNOTATION_TOOL" ? "string" : "function",
+            k + " 未导出");
+    });
+});
+
+// ---- HR-06 准星放框 -------------------------------------------------------
+t("pick_point_on_ray: 射线正中挑到最近点", () => {
+    /* 相机在 (0,0,0) 向 +X 看，点云上 (3,0.1,0) (5,0.05,0) —— 3 更近应该被挑到 */
+    const pts = new Float32Array([3, 0.1, 0, 0.5, 5, 0.05, 0, 0.6]);
+    const pick = L.pick_point_on_ray([0, 0, 0], [1, 0, 0], pts, 0.5);
+    assert(pick, "ray 与 0.5m 半径内有点");
+    assert.strictEqual(pick.x, 3);
+    assert(pick.d_perp <= 0.5);
+});
+
+t("pick_point_on_ray: 距离半径太近/太远都落空", () => {
+    /* (3, 0.6, 0) 垂直超出 0.5 → null */
+    const pts = new Float32Array([3, 0.6, 0, 0.5]);
+    const pick = L.pick_point_on_ray([0, 0, 0], [1, 0, 0], pts, 0.5);
+    assert.strictEqual(pick, null);
+});
+
+t("pick_point_on_ray: 背后点被跳过", () => {
+    const pts = new Float32Array([-3, 0, 0, 0.5]);
+    assert.strictEqual(L.pick_point_on_ray([0, 0, 0], [1, 0, 0], pts, 0.5), null);
+});
+
+t("human_box_from_pick: 有 pick —— 落 pick 的 (x,y)", () => {
+    const b = L.human_box_from_pick({ x: 1.2, y: 3.4, z: 0.7 }, null);
+    assert.deepStrictEqual(b.center, [1.2, 3.4, 0.9]);
+    assert.deepStrictEqual(b.size, L.HUMAN_DEFAULT.size);
+    assert.strictEqual(b.zmax, 1.8);
+});
+t("human_box_from_pick: 无 pick 有 ray∩z=0 —— 落地面点 (x,y)", () => {
+    const b = L.human_box_from_pick(null, [2, 4, 0]);
+    assert.deepStrictEqual(b.center, [2, 4, 0.9]);
+    assert.deepStrictEqual(b.size, L.HUMAN_DEFAULT.size);
+});
+t("human_box_from_pick: 两者都无 → null（不放空）", () => {
+    assert.strictEqual(L.human_box_from_pick(null, null), null);
+});
+
+t("make_click_throttle: 200ms 门闸", () => {
+    const th = L.make_click_throttle(200);
+    assert.strictEqual(th(), true);   /* 第一次放 */
+    assert.strictEqual(th(), false);  /* 立刻被挡 */
+    /* 真睡 250ms 太拖，直接跳窗 —— 挂钩成只用 Date.now 的独件 */
+    const orig = Date.now;
+    Date.now = () => orig() + 500;
+    try {
+        assert.strictEqual(th(), true);   /* 显著时间已过 */
+    } finally { Date.now = orig; }
 });
 
 console.log("all " + n + " tests passed");

@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_roi_visual_annotation_pathA",
+  "version": "v1",
+  "source_image": "scene_reference_01.png",
+  "source_image_sha256": "b080a67e2fb63d8c2688230f3aa7dd0ce48e0e2e049bc82cb149c74ece7394d0",
+  "user_scene_confirmation": "user_confirmed",
+  "physical_verified": false,
+  "ai_estimated_pixel_regions": true,
+  "purpose": "现场贴 Zone-FIT-01 / Zone-VAL-01..03 贴纸时的视觉辅助",
+  "not_a_substitute_for": [
+    "激光测距仪 3 次重复测量 origin_to_floor_m",
+    "现场 ROI physical_description 文字描述",
+    "measurement_record.json 的 roi_list 字段绑定",
+    "GL-E02 E 项正式 evidence_pack"
+  ],
+  "roi_regions": [
+    {
+      "roi_id": "FIT_front_open",
+      "kind": "FIT",
+      "bbox_pixels": [
+        660,
+        580,
+        860,
+        730
+      ],
+      "label": "FIT  #1",
+      "approach_hint": "Center front area; sticker Zone-FIT-01",
+      "selection_basis": "scene_reference_01.png human-interpretation only",
+      "selection_made_by": "AI (path A, visual annotation helper)",
+      "physical_verified": false
+    },
+    {
+      "roi_id": "VAL_left_desk",
+      "kind": "VAL",
+      "bbox_pixels": [
+        170,
+        640,
+        350,
+        780
+      ],
+      "label": "VAL-L  #2",
+      "approach_hint": "Left desk, floor right of legs; Zone-VAL-01",
+      "selection_basis": "scene_reference_01.png human-interpretation only",
+      "selection_made_by": "AI (path A, visual annotation helper)",
+      "physical_verified": false
+    },
+    {
+      "roi_id": "VAL_right_walkway",
+      "kind": "VAL",
+      "bbox_pixels": [
+        1240,
+        500,
+        1420,
+        620
+      ],
+      "label": "VAL-R  #3",
+      "approach_hint": "Right walkway, below round mirror on floor; Zone-VAL-02",
+      "selection_basis": "scene_reference_01.png human-interpretation only",
+      "selection_made_by": "AI (path A, visual annotation helper)",
+      "physical_verified": false
+    },
+    {
+      "roi_id": "VAL_far_window",
+      "kind": "VAL",
+      "bbox_pixels": [
+        260,
+        480,
+        440,
+        600
+      ],
+      "label": "VAL-FAR  #4",
+      "approach_hint": "Far back wall, floor area; Zone-VAL-03",
+      "selection_basis": "scene_reference_01.png human-interpretation only",
+      "selection_made_by": "AI (path A, visual annotation helper)",
+      "physical_verified": false
+    }
+  ],
+  "lidar_position_hint": {
+    "xy_pixels": [
+      784,
+      850
+    ],
+    "note": "approximate; verify on site"
+  },
+  "version_history": [
+    {
+      "v": "v1",
+      "issue": "VAL-1/VAL-3 clips desk legs; CJK font fallback corrupted text"
+    },
+    {
+      "v": "v2",
+      "fix": "Repositioned VAL-1/VAL-3 fully onto floor; switched to English labels"
+    }
+  ],
+  "field_actions_required": [
+    "现场确认 4 个 bbox 对应物理位置均满足 §5.1 净空/间距条件",
+    "任何一条不满足 → 现场改贴位置,**不要**回来让我改像素框",
+    "贴完贴纸后续 FIELD_CHECKLIST §5.3 表 + §6.2 激光测距"
+  ]
+}

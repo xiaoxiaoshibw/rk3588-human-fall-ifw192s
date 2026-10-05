@@ -1,0 +1,145 @@
+--- a/src/human_fall_detection/core/calibration.py
++++ b/src/human_fall_detection/core/calibration.py
+@@ -308,6 +308,22 @@
+     return None
+ 
+ 
++# Constructor-exclusive full-product blocks (GL-03 G03 input classification):
++# a complete geometry-calibration artifact always carries these, so their
++# presence marks a full product whose missing/null ``kind`` is damage, not a
++# legacy minimal summary. The summary-visible fields (calibration_id,
++# schema_version, ground_status, ground_derived_id, frames, transforms, note)
++# are deliberately not markers, and unknown ordinary extensions are not
++# blacklisted.
++FULL_ARTIFACT_KEYS = ("units", "created_at_utc", "rotations", "verification",
++                      "status", "input", "ground", "ground_derived",
++                      "sensor_height_m")
++
++
++def _has_full_artifact_shape(calibration):
++    return any(key in calibration for key in FULL_ARTIFACT_KEYS)
++
++
+ def resolve_reference_transform(calibration=None, transform=None, frame_id=None):
+     """Effective lidar->reference transform for a producing frame, or ``None``.
+ 
+@@ -315,15 +331,17 @@
+     known ``T_reference_lidar`` a standalone caller transform that disagrees
+     with that record is a conflict and is never silently preferred; with no
+     known artifact record a legal standalone transform keeps the legacy
+-    support. A full artifact is validated end-to-end first, so a damaged,
+-    newer-version or id-less parent can never supply reference coordinates; an
+-    old minimal calibration summary (no ``kind``) keeps the legacy path, while
+-    a record that carries an explicit non-artifact ``kind`` is refused instead
+-    of being mistaken for that legacy summary. The effective record itself must
+-    be fully qualified (frames/direction/units/status/evidence/R/t), not merely
+-    numerically loadable, and a record whose ``from_frame`` differs from the
+-    actual producing ``frame_id`` or from the parent's declared ``frames.lidar``,
+-    or whose ``to_frame`` disagrees with the declared ``frames.reference``, can
++    support. Inputs are classified before validation: a supported artifact
++    ``kind`` or the constructor-exclusive full-product blocks force the full
++    validator, so deleting/nulling the ``kind`` of a complete product or an
++    unsupported schema/identity can never be downgraded to the legacy path; an
++    explicit non-artifact ``kind`` is refused. Only a true minimal summary (no
++    full-product block, no ``kind``, supported-or-absent ``schema_version``)
++    keeps the legacy path. The effective record itself must be fully qualified
++    (frames/direction/units/status/evidence/R/t), not merely numerically
++    loadable, and a record whose ``from_frame`` differs from the actual
++    producing ``frame_id`` or from the parent's declared ``frames.lidar``, or
++    whose ``to_frame`` disagrees with the declared ``frames.reference``, can
+     never supply reference coordinates. Returns
+     ``(record_or_None, reason_or_None)``
+     with a deep-copied record; an unusable reference is reported as ``None``
+@@ -331,17 +349,30 @@
+     the ordinary no-reference/source-only path is unchanged.
+     """
+     parent = calibration if isinstance(calibration, dict) else None
+-    if parent is not None and parent.get("kind") is not None \
+-            and parent.get("kind") != KIND:
+-        # An explicit non-artifact kind is a damaged/foreign record, never a
+-        # legacy minimal summary (which has no ``kind``): it must not bypass
+-        # the supported-parent validation below (GL-03 G03).
+-        return None, "reference_calibration_invalid"
+-    if parent is not None and parent.get("kind") == KIND:
+-        try:
+-            parent = validate_geometry_calibration(copy.deepcopy(parent))
+-        except (GeometryCalibrationError, TypeError, AttributeError, KeyError):
++    if parent is not None:
++        kind = parent.get("kind")
++        if kind == KIND or (kind is None and _has_full_artifact_shape(parent)):
++            # A supported kind -- or a complete product whose kind was removed/
++            # nulled -- must pass the supported validator end-to-end; a
++            # different/unknown schema or a damaged identity is refused, never
++            # silently treated as legacy (GL-03 G03).
++            try:
++                parent = validate_geometry_calibration(copy.deepcopy(parent))
++            except (GeometryCalibrationError, TypeError, AttributeError,
++                    KeyError):
++                return None, "reference_calibration_invalid"
++        elif kind is not None:
++            # Explicit non-artifact kind: a damaged/foreign record, never a
++            # legacy minimal summary (which has no ``kind``).
+             return None, "reference_calibration_invalid"
++        elif "schema_version" in parent:
++            # True minimal summary: an explicitly present version must be the
++            # one this module supports; a missing version keeps the old
++            # compatibility path (a 99/True/float version is not v1).
++            version = parent.get("schema_version")
++            if isinstance(version, bool) or not isinstance(version, int) \
++                    or version != SCHEMA_VERSION:
++                return None, "reference_calibration_invalid"
+     canonical = calibration_reference_transform(parent)
+     if canonical is not None:
+         try:
+--- a/src/human_fall_detection/tests/test_gl03_candidates_geometry.py
++++ b/src/human_fall_detection/tests/test_gl03_candidates_geometry.py
+@@ -425,6 +425,49 @@
+                        selection_version=1)
+         self.assertTrue(core.handle_request(release, 1.12)["accepted"])
+ 
++    def test_full_artifact_missing_kind_cannot_hide_behind_legacy_path(self):
++        # R6 (G03): a complete product (constructor-exclusive full-product
++        # blocks present) whose kind is removed/nulled is damage, not a legacy
++        # minimal summary; its unsupported schema can never ride the legacy
++        # path, and even a supported version cannot be downgraded by deleting
++        # the kind.
++        for mode, version in (("removed", 99), ("null", 99),
++                              ("removed", 1)):
++            with self.subTest(mode=mode, version=version):
++                artifact = reference_calibration(reference_transform())
++                artifact["schema_version"] = version
++                if mode == "removed":
++                    artifact.pop("kind")
++                else:
++                    artifact["kind"] = None
++                snap = snapshot(blob(), calibration=artifact)
++                self.assertTrue(all(c["center_reference_m"] is None
++                                    for c in snap["candidates"]))
++                self.assertEqual(snap["coordinate"]["transform_status"],
++                                 "unknown")
++
++    def test_legacy_summary_schema_version_is_classified(self):
++        # R6 (G03/G07): a true minimal summary (no full-product block, no
++        # kind) keeps the legacy path when the version is absent or the
++        # supported v1; an explicitly present unsupported/bool/float/null
++        # version is refused instead of being mistaken for v1.
++        transform = reference_transform()
++        base = {"calibration_id": "legacy",
++                "frames": {"lidar": FROM_FRAME, "reference": TO_FRAME},
++                "transforms": {"T_reference_lidar": transform}}
++        absent = snapshot(blob(), calibration=dict(base))
++        self.assertIsNotNone(absent["candidates"][0]["center_reference_m"])
++        supported = snapshot(blob(), calibration=dict(base, schema_version=1))
++        self.assertIsNotNone(supported["candidates"][0]["center_reference_m"])
++        for version in (99, True, 1.0, None):
++            with self.subTest(version=version):
++                summary = dict(base, schema_version=version)
++                snap = snapshot(blob(), calibration=summary)
++                self.assertTrue(all(c["center_reference_m"] is None
++                                    for c in snap["candidates"]), version)
++                self.assertEqual(snap["coordinate"]["transform_status"],
++                                 "unknown")
++
+ 
+ class GroundGeometryTest(unittest.TestCase):
+     """G02: ground geometry from ACTUAL points under the validated R/t."""

@@ -1,0 +1,25 @@
+bin appended 28B after prepare -> reload rejects           OK source points.bin changed since adaptation
+bin truncated by one row -> prepare rejects                OK points.bin size 84 disagrees with the declared 112 bytes
+offset gap at frame 1 -> prepare rejects                   OK frame 0 offset is not contiguous
+offset overlap reindex -> prepare rejects                  OK frame 1 offset is not contiguous
+bool dropped_frames -> prepare rejects                     OK extraction.dropped_frames must be an integer
+bag_time_sec string -> prepare rejects                     OK frame 0.bag_time_sec must be numeric
+bag_time_sec absent -> prepare rejects                     OK frame 0.bag_time_sec must be numeric
+units with whitespace 'm ' -> prepare rejects              OK declared units must be 'm' (no implicit mm)
+units 'M' case-mismatch -> prepare rejects                 OK declared units must be 'm' (no implicit mm)
+sensor.frame_id absent -> prepare rejects                  OK source sensor.frame_id must be a non-empty string
+frames=[] -> prepare rejects                               OK source frames must not be empty
+alias group id injected into manifest -> reload rejects    OK manifest is not the canonical manifest of its actual source
+frame_of_row around empty frames maps every row            OK 
+boundary rows around 0-width frames map to next non-empty  OK [0, 0, 2, 2, 2, 4]
+parent dir missing for output -> auto-created (link still atomic) OK 
+nested output parent created and target is a real file     OK 
+adapted NPZ renamed (source unchanged) -> reloads          OK 
+tampered frame seq swap -> reload rejects                  OK manifest is not the canonical manifest of its actual source
+points count lowered by one -> reload rejects              OK manifest is not the canonical manifest of its actual source
+np.int32 row indices accepted and mapped                   OK 
+np.bool_ element (pure) strictly rejected                  OK rows must be integer row indices
+np.float32 row index rejected                              OK rows must be integer row indices
+explicit fit indices within group accepted                 OK 
+explicit fit indices leaking across group rejected         OK fit_indices leave the declared fit frame_group
+total=24 failed=0

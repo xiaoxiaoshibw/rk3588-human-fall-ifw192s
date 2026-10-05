@@ -1,0 +1,55 @@
+{
+  "phase": "timing",
+  "k": 3,
+  "before": {
+    "peak_working_set_bytes": 35004416,
+    "working_set_bytes": 34500608,
+    "peak_private_commit_bytes": 663269376,
+    "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+  },
+  "after": {
+    "peak_working_set_bytes": 141099008,
+    "working_set_bytes": 99987456,
+    "peak_private_commit_bytes": 802750464,
+    "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+  },
+  "costs": [
+    {
+      "repeat": 0,
+      "sampling": 0.0006162000063341111,
+      "raw": 0.03441180000663735,
+      "LO": 0.10056249995250255,
+      "refine": 0.253384899959201,
+      "decision": 0.044124199979705736,
+      "serialization": 0.0759805999987293,
+      "includes_scalar_audit_total": 0.5442295999964699,
+      "serialized_bytes": 7431527
+    },
+    {
+      "repeat": 1,
+      "sampling": 0.0006227999983821064,
+      "raw": 0.03314099999261089,
+      "LO": 0.0932116006151773,
+      "refine": 0.24848059978103265,
+      "decision": 0.04451479998533614,
+      "serialization": 0.0793390000180807,
+      "includes_scalar_audit_total": 0.5559792999993078,
+      "serialized_bytes": 7431573
+    },
+    {
+      "repeat": 2,
+      "sampling": 0.0006406999891623855,
+      "raw": 0.03594860000885092,
+      "LO": 0.12203710034373216,
+      "refine": 0.2742940003518015,
+      "decision": 0.04770500000449829,
+      "serialization": 0.07939909998094663,
+      "includes_scalar_audit_total": 0.583694100001594,
+      "serialized_bytes": 7431542
+    }
+  ],
+  "semantic_sha": "2b34934dedd7dfd574dc9008eba39942cba0def73406f433db3f243df6deedea",
+  "status": "unresolved",
+  "runtime_scope": "desktop process includes imports; no RK3588 claim",
+  "physical_verified": false
+}

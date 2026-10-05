@@ -1,0 +1,109 @@
+{
+  "kind": "gli05_second_review_comparison_reasons",
+  "passed": 3,
+  "total": 6,
+  "unresolved_actual_distinct_cases": [
+    "high_noise_seed7_permuteFalse",
+    "high_noise_seed7_permuteTrue",
+    "high_noise_seed19_permuteFalse",
+    "high_noise_seed19_permuteTrue",
+    "high_noise_seed41_permuteFalse",
+    "high_noise_seed41_permuteTrue",
+    "dual_seed7_permuteFalse",
+    "dual_seed7_permuteTrue",
+    "dual_seed19_permuteFalse",
+    "dual_seed19_permuteTrue",
+    "dual_seed41_permuteFalse",
+    "dual_seed41_permuteTrue",
+    "close_seed7_permuteFalse",
+    "close_seed7_permuteTrue",
+    "close_seed19_permuteFalse",
+    "close_seed19_permuteTrue",
+    "close_seed41_permuteFalse",
+    "close_seed41_permuteTrue",
+    "negative_X"
+  ],
+  "unresolved_with_reasons_cases": [
+    "high_noise_seed7_permuteFalse",
+    "high_noise_seed7_permuteTrue",
+    "high_noise_seed19_permuteFalse",
+    "high_noise_seed19_permuteTrue",
+    "high_noise_seed41_permuteFalse",
+    "high_noise_seed41_permuteTrue",
+    "approved"
+  ],
+  "results": [
+    {
+      "name": "i04_prototype_module_exists",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "experiment_imports_i04_prototype",
+      "ok": false,
+      "detail": {
+        "mentions_gl_i04": true,
+        "replay_frozen_search_used": true
+      }
+    },
+    {
+      "name": "replay_frozen_search_is_not_envelope_prototype",
+      "ok": true,
+      "detail": {
+        "envelope_reason_present": false
+      }
+    },
+    {
+      "name": "unresolved_actual_competition_has_no_reason",
+      "ok": false,
+      "detail": {
+        "silent_actual_competition": [
+          {
+            "case": "dual_seed7_permuteFalse",
+            "near_distinct": 63
+          },
+          {
+            "case": "dual_seed7_permuteTrue",
+            "near_distinct": 61
+          },
+          {
+            "case": "dual_seed19_permuteFalse",
+            "near_distinct": 63
+          },
+          {
+            "case": "dual_seed19_permuteTrue",
+            "near_distinct": 63
+          },
+          {
+            "case": "dual_seed41_permuteFalse",
+            "near_distinct": 94
+          },
+          {
+            "case": "dual_seed41_permuteTrue",
+            "near_distinct": 96
+          }
+        ],
+        "note": "actual near-pool distinct is not added to reasons; it is only visible in metrics.NEAR.distinct_pairs"
+      }
+    },
+    {
+      "name": "no_certificate_insufficient_reason",
+      "ok": true,
+      "detail": {
+        "reason_vocabulary": [
+          "candidate_budget_incomplete",
+          "no_refined_witness"
+        ]
+      }
+    },
+    {
+      "name": "unresolved_case_count",
+      "ok": false,
+      "detail": {
+        "unresolved": 20,
+        "actual_near_distinct": 19,
+        "with_reasons": 7
+      }
+    }
+  ]
+}

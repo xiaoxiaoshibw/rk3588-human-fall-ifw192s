@@ -1,0 +1,47 @@
+PASS O1/O2/O3: local-first, offline click, timeout, recovery, selection, stale refresh
+ok replay.js: 浏览器脚本完整可解析（sid 接口注册前置）
+ok frame_slice: 正常帧表 + 累计区间
+ok frame_slice: 断裂 offset 报错
+ok frame_slice: 空帧表报错
+ok strided_f32_copy: 从 7-f32 跨步抽 [x,y,z,i]
+ok strided_f32_copy: 中间帧切片
+ok pick_intensity_range: 宽分布给 [p2,p98]
+ok pick_intensity_range: 常数强度退化为防零窗口
+ok intensity_to_gray: clamp 0..1
+ok format_hhmmss
+ok fly_aim: 鼠标右移=向右转（yaw&lt;旧值），下移=低头，pitch 钳位 ±88.8°
+ok fly_axes: 零角度时 fwd=+X right=-Y；俯仰 90° 时 fwd=+Z
+ok fly_aim_from_dir: 反推能得到正前方 (1,0,0) 的 yaw=0 pitch=0，向上看 pitch=π/2
+ok default_fps: 用 meta 值,异常回退 10
+ok trim: 合法 [s,e] 切片 → frames 重新 0 起累计 + byte_range 对齐
+ok trim: 越界 [s,e] 抛 '区间越界'
+ok trim: seq 断档抛 'seq 非连续'（中断 clip 视为不合法）
+ok trim: 累计和 ≠ bin 大小抛 '字节数不符'
+ok trim: rewrite_meta_for_trim 白名单 + extraction 重写 + 刻度继承
+ok trim: pre_trim_check 磁盘余量档位
+ok trim: trim_command_string 含 src/start/end
+ok trim.js: 端到端切片 byte-identical + 字段契约
+ok trim.js: 已存在 dst → exit 2
+ok view_preset: 四个预设 + home 字段齐全
+ok view_preset: front 与 VIEW_FRONT 同向（雷达后方朝 +X，驾驶第二视角）
+ok view_preset: 未知名称抛错
+ok measure_dist / measure_format: 欧氏距离 + 格式化
+ok ray_ground_intersect: 射线打地
+ok find_nearest_xy: 按 xy 最近点
+ok HR-04 exports: LS_PREFIX 非空前缀
+ok bbox_from_ground_rect: 无点云回退默认 1.8m
+ok bbox_from_ground_rect: 点云 z 分位 = 2%/98%
+ok bbox_from_rect: 点云缺失/空时回退
+ok undo_stack: 20 层容量 + pop/push 往返
+ok annotation_validate_box: 字段/数值合法双通道
+ok annotation_snap_step: 捕捉步进表
+ok annotation_serialize: 只输出已定稿，契约字段全
+ok HR-05 exports: 必备函数齐全
+ok pick_point_on_ray: 射线正中挑到最近点
+ok pick_point_on_ray: 距离半径太近/太远都落空
+ok pick_point_on_ray: 背后点被跳过
+ok human_box_from_pick: 有 pick —— 落 pick 的 (x,y)
+ok human_box_from_pick: 无 pick 有 ray∩z=0 —— 落地面点 (x,y)
+ok human_box_from_pick: 两者都无 → null（不放空）
+ok make_click_throttle: 200ms 门闸
+all 45 tests passed

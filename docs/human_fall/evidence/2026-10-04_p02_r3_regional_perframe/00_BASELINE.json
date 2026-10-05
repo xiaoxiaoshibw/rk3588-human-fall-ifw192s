@@ -1,0 +1,27 @@
+{
+  "round": "P02 R3 regional/per-frame ground modeling",
+  "date": "2026-10-04",
+  "head": "3fc1338fc306444959433a41bdeaeefd705f58ec",
+  "scope": "offline analysis on frozen 392196 points only; new files in this evidence dir + P02_ACCEPTANCE.md R3 rows + returns/P02.md append; no production code, no HTML, no device/capture/deploy/network/commit/push/reset",
+  "skills": [
+    "C:/Users/30680/.claude/skills/ponytail/SKILL.md"
+  ],
+  "inputs": {
+    "docs/human_fall/evidence/2026-10-04_p02_four_roi_r1/02_FROZEN_POINTS.npz": "d5f29b8609525a677e1f4e25c26d134a47f0bf572c6808834ff36c5c2e436012",
+    "docs/human_fall/evidence/2026-10-04_p02_four_roi_r1/03_RESULTS.json": "1d534cb230942b6444da1116db7a32849c0bf71fa1cfde0b8223a9ca959af0ca",
+    "docs/human_fall/evidence/2026-10-04_p02_ground_r2/p02_same_domain_estimators.py": "8efa98c7d29585029cb298ddb29c60612890419d9fa17939ad3f1da7a0011402",
+    "docs/human_fall/evidence/2026-10-04_p02_ground_r2/01_SELECTION.json": "d94b4717a156061967d564132efa164158dd5ef88e4765fb8d76c0757eb28823",
+    "pc_apps/human_replay/annotator.html": "58af6bdd3ee9a1fda371a1bba9108d798109ed8e32d2242c627c8f3bfb57f902"
+  },
+  "frozen_point_sha256": "9f487008c7fa526bf636fef48915e9c966c475c03c38ede3b43e6315329c4fca",
+  "frozen_row_sha256": "12d9ce957bc7df79da6b258179add1bd10649966b0583d96d481d79ba85cd7b0",
+  "frozen_point_count": 392196,
+  "user_diffs_in_scope": "none; working tree has pre-existing user modifications outside this round's write scope (see git status snapshot in returns/P02.md R3 entry)",
+  "gates": {
+    "quality": "RMS<=.03m, |P95|<=.05m, support(.05m)>=.8, count>=20",
+    "regional_consistency_reference": "normal angle <0.5deg, d gap <5mm (engineering reference, not physical accuracy)",
+    "type_classification": "A: all pairwise normal<0.5deg and d<5mm and inter-region gaps within per-frame std; B: any pairwise normal>=0.5deg or d>=5mm but every region per-frame normal std<0.05deg; C: any region per-frame normal std>=0.05deg or d std>=5mm"
+  },
+  "physical_verified": false,
+  "runtime_eligible": false
+}

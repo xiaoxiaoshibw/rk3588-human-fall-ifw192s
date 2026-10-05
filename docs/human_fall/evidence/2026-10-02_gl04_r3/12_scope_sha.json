@@ -1,0 +1,36 @@
+{
+  "item": "GL-04",
+  "round": "R3",
+  "session_model": "opencode-go/deepseek-v4.1-flash",
+  "db": "default",
+  "written_scope": [
+    "webui/human_fall_preview/human_fall_lib.js",
+    "webui/human_fall_preview/human_fall.js",
+    "webui/human_fall_preview/index.html",
+    "webui/human_fall_preview/human_fall_lib.test.js"
+  ],
+  "preview_after_sha256": {
+    "webui/human_fall_preview/human_fall_lib.js": "73231ab179a9f4ffcda098e3e2e132d96c18c325528944be7cf57496eb9907f4",
+    "webui/human_fall_preview/human_fall.js": "54673f87f46aa958204592783df135475489a7db6e149b5c3a454033784c105e",
+    "webui/human_fall_preview/index.html": "6e687d95d77144e04fa67fc473e3f8437dcca1e36f8717d72466d338f78cd62f",
+    "webui/human_fall_preview/human_fall_lib.test.js": "5f801baeebbdc0420d5ff631f559841e90d1d4e35c09a36215164a49186478a1"
+  },
+  "new_evidence_only": [
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/00_diag.md",
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/r3_selfcheck.js",
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/r3_selfcheck.json",
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/r3_selfcheck.stdout.txt",
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/r3_lib_test.stdout.txt",
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/make_fixtures_r3.js",
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/fixtures/normal.json",
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/fixtures/tilted.json",
+    "docs/human_fall/evidence/2026-10-02_gl04_r3/fixtures/no_extrinsics.json"
+  ],
+  "frozen_untouched": [
+    "docs/human_fall/evidence/2026-10-02_gl04_r2/* (Codex r2 results/logs/fixtures not overwritten)",
+    "webui/human_fall/* (formal page external Q/E retained, not written)",
+    "src/human_fall_detection/* (core/config/topics unchanged)",
+    "src/inno_lidar_ros/* (driver unchanged)"
+  ],
+  "notes": "Shared tree was already dirty (external HR-02/root-doc/tool moves and untracked src/human_fall_detection/); this round wrote only the four preview files plus new r3 evidence/fixtures/logs. No commit/push/reset/deploy/capture/board-network."
+}

@@ -1,0 +1,46 @@
+test_default_and_explicit_frozen_ground_are_identical (test_gli03_candidate_override.CandidateConfigOverrideTest.test_default_and_explicit_frozen_ground_are_identical) ... ok
+test_emit_draft_does_not_consume_config (test_gli03_candidate_override.CandidateConfigOverrideTest.test_emit_draft_does_not_consume_config) ... ok
+test_invalid_configs_refuse_without_candidate (test_gli03_candidate_override.CandidateConfigOverrideTest.test_invalid_configs_refuse_without_candidate) ... gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: while parsing a flow node
+expected the node content, but found '<stream end>'
+  in "C:\Users\30680\AppData\Local\Temp\gli02-kb1y5mte\syntax.yaml", line 1, column 22
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: config needs a ground_constrained mapping
+gli02 candidate refused: constrained config refused: unknown constrained ground setting: unknown
+gli02 candidate refused: constrained config refused: spatial_cell_m must be a finite number
+gli02 candidate refused: constrained config refused: spatial_cell_m must be finite
+gli02 candidate refused: constrained config refused: spatial_cell_m must be finite
+gli02 candidate refused: constrained config refused: spatial_cell_m must be a positive number
+gli02 candidate refused: constrained config refused: max_points_per_cell must be an integer
+gli02 candidate refused: constrained config refused: min_inliers must be >= 100
+gli02 candidate refused: constrained config refused: int too large to convert to float
+gli02 candidate refused: constrained config refused: [Errno 2] No such file or directory: 'C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-kb1y5mte\\absent.yaml'
+gli02 candidate refused: constrained config refused: [Errno 2] No such file or directory: ''
+gli02 candidate refused: constrained config refused: [Errno 13] Permission denied: 'C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-kb1y5mte'
+gli02 candidate refused: constrained config refused: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+ok
+test_only_two_variant_values_change (test_gli03_candidate_override.CandidateConfigOverrideTest.test_only_two_variant_values_change) ... ok
+test_optional_yaml_dependency_and_loader_error (test_gli03_candidate_override.CandidateConfigOverrideTest.test_optional_yaml_dependency_and_loader_error) ... gli02 candidate refused: constrained config requires PyYAML: import of yaml halted; None in sys.modules
+gli02 candidate refused: constrained config refused: PyYAML is required
+ok
+test_same_path_reload_and_defaults_are_isolated (test_gli03_candidate_override.CandidateConfigOverrideTest.test_same_path_reload_and_defaults_are_isolated) ... ok
+test_variant_candidate_is_labeled_and_exclusive (test_gli03_candidate_override.CandidateConfigOverrideTest.test_variant_candidate_is_labeled_and_exclusive) ... gli02 candidate refused: output already exists: C:\Users\30680\AppData\Local\Temp\gli02-36dp6dyx\variant.json
+ok
+test_variant_keeps_prior_and_frame_gate (test_gli03_candidate_override.CandidateConfigOverrideTest.test_variant_keeps_prior_and_frame_gate) ... gli02 candidate refused: constrained fit refused: up_axis is required
+gli02 candidate refused: CLI frame 'other' disagrees with the adapted manifest frame 'innolidar'
+ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.042s
+
+OK
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-i_gpnw0o\\default.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-i_gpnw0o\\frozen.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"draft_out": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-pt3utztv\\blank.json", "status": "pending_human_review"}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-2n3s54y5\\without_yaml_default.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-r2u6a0kp\\first.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-r2u6a0kp\\reloaded.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}
+{"output": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-36dp6dyx\\variant.json", "status": {"extrinsics": "unknown", "imu_alignment": "unknown", "ground": "candidate", "geometry_params": "candidate"}, "ground_status": "valid", "source": "synthetic_fixture", "points": 730, "sensor_height_m": 1.0001321855828595, "fit_frame_group": "frame:4a275a3b0e21b90d131f2a18", "validation_regions": 3}

@@ -1,0 +1,33 @@
+{
+  "phase": "memory",
+  "k": 2,
+  "before": {
+    "peak_working_set_bytes": 35213312,
+    "working_set_bytes": 34656256,
+    "peak_private_commit_bytes": 663572480,
+    "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+  },
+  "after": {
+    "peak_working_set_bytes": 78929920,
+    "working_set_bytes": 71798784,
+    "peak_private_commit_bytes": 739872768,
+    "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+  },
+  "costs": [
+    {
+      "repeat": 0,
+      "sampling": 0.0006310000026132911,
+      "raw": 0.03265759997884743,
+      "LO": 0.07037990013486706,
+      "refine": 0.188364899600856,
+      "decision": 0.047856700024567544,
+      "serialization": 0.053397799987578765,
+      "includes_scalar_audit_total": 0.49837710001156665,
+      "serialized_bytes": 5070504
+    }
+  ],
+  "semantic_sha": "746072f1b5e5486d4184a927a52f8f08f68ec8401f295ac7a858e04ad5d1241c",
+  "status": "unresolved",
+  "runtime_scope": "desktop process includes imports; no RK3588 claim",
+  "physical_verified": false
+}

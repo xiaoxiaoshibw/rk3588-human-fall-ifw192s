@@ -1,0 +1,323 @@
+--- leveling.py.before
++++ leveling.py
+@@ -230,18 +230,25 @@
+         initial = rotation(config["pitch_deg"], config["roll_deg"])
+         raw = np.memmap(directory / "points.bin", dtype="u1", mode="r")
+         xyz = np.ndarray((meta["total_points"], 3), dtype="<f4", buffer=raw, strides=(28, 4))
+-        all_points = []
+-        for frame in meta["frames"]:
++        all_points, frame_ids = [], []
++        nframes = len(meta["frames"])
++        excluded = {(nframes-1)//3, 2*(nframes-1)//3, nframes-1}
++        for ordinal, frame in enumerate(meta["frames"]):
++            if ordinal in excluded:
++                continue
+             segment = xyz[frame["offset_points"]:frame["offset_points"] + frame["count_points"]].astype(np.float64)
+             valid = np.isfinite(segment).all(axis=1) & np.any(segment != 0, axis=1)
+             all_points.append(segment[valid])
+-        detected = detect_ground_domain(np.concatenate(all_points), config["pitch_deg"],
+-                                        config["roll_deg"], initial[2])
++            frame_ids.append(np.full(int(valid.sum()), ordinal, dtype="i4"))
++        from floor_detector import detect_floor_regions
++        detected = detect_floor_regions(np.concatenate(all_points), np.concatenate(frame_ids),
++                                        config["pitch_deg"], config["roll_deg"])
+         config = {**config, "regions": detected["regions"],
+                   "auto_candidate": detected["candidate"],
+-                  "ground_confirmed": True,
++                  "ground_confirmed": False,
++                  "ground_identification": "algorithm_candidate",
+                   "basis": "auto: " + detected["candidate"]["basis"]}
+-        update("自动检测地面域完成，支持率 %.4f" % detected["candidate"]["support_ratio"])
++        update("自动识别低处连续地面候选，四区全高度无障碍；支持率 %.4f" % detected["candidate"]["support_ratio"])
+     points, rows, regions, ordinals, held, invalid, anchor = freeze_domain(directory, meta, config)
+     domain_id = identity({"source": binding, "config": config,
+                           "rows_sha256": hashlib.sha256(rows.tobytes()).hexdigest(),
+@@ -250,6 +257,7 @@
+     update("同域TLS / SVD / RANSAC与全点/逐区/留帧可行度评估")
+     comparison = compare(points, regions, held, anchor)
+     code_files = [Path(__file__), Path(__file__).with_name("leveling_quality.py")]
++    code_files += [Path(__file__).with_name("floor_detector.py")]
+     code_files += sorted(Path(__file__).with_name("leveling_estimators").glob("*.py"))
+     code_hashes = {p.name: sha(p) for p in code_files}
+     report = {"kind": "offline_leveling_report", "schema": 1, "job_id": job_id, "sid": request["sid"],
+@@ -381,6 +389,15 @@
+                         continue
+                     if meta_doc.get("recommended") != "tls":
+                         continue  # 只暴露三法一致推荐的 TLS；NO_RECOMMENDATION 回放不自动应用
++                    from validation import SESSIONS, floor_identified
++                    if sid in SESSIONS and not floor_identified(meta_doc):
++                        continue  # old numeric ROI success is not automatic floor identity
++                    if sid in SESSIONS:
++                        try:
++                            if meta_doc.get("source") != source(root, sid)[2]:
++                                continue
++                        except (ValueError, OSError):
++                            continue
+                     if sha(report_file) != manifest.get("report_sha256"):
+                         continue  # 产物被改动过，拒绝服务（与 artifact_path 完整性对齐）
+                     artifacts = manifest.get("artifacts", {}).get("tls", {})
+--- leveling.js.before
++++ leveling.js
+@@ -5,7 +5,7 @@
+     const validationMode = document.body.dataset.workbench === "validation";
+     const apiBase = validationMode ? "/api/validation" : "/api/leveling";
+     const colors = [0x95a9b8, 0xffcb75, 0x7fceff, 0xe39eff, 0x7be1aa];
+-    let state = {generation: 0, source: null, meta: null, raw: null, job: null, report: null, busy: false, loading:false};
++    let state = {generation: 0, source: null, meta: null, raw: null, job: null, report: null, busy: false, loading:false, floorIdentified:false, reference:null};
+     let bounds = [0, 4, -1.5, 1.5], drag = null, playing = false;
+     let rois = [[1.04,1.75,-.93,-.45],[1.94,2.40,-.94,.07],[1.32,1.76,-.38,.20],[2.64,3.31,-.57,.19]];
+     const viewers = [];
+@@ -40,9 +40,10 @@
+         const data = await response.json(); if (!response.ok) throw Error(data.error || "HTTP "+response.status); return data;
+     }
+     function clearResult() {
+-        state.generation++; state.report=null; state.job=null; $("result").hidden=true;
++        state.generation++; state.report=null; state.job=null;state.floorIdentified=false;state.reference=null; $("result").hidden=true;
+         $("method").replaceChildren(new Option("名义显示预览", "nominal"));
+         $("levelLabel").textContent="名义预览 · 未评估";
++        if($("autoSummary"))$("autoSummary").textContent="自动算法从三维点云识别地面；手画四区只作对照，不作为算法输入。";
+         if (state.raw) drawFrame();
+     }
+     function invalidate() { clearResult(); $("confirmed").checked=false; enable(); note("区域或参数已修改，请重新确认地面并配平。"); }
+@@ -83,7 +84,7 @@
+         if(!state.raw)return;
+         const index=Number($("frame").value),frame=state.meta.frames[index], seed=nominal();
+         const result=state.report&&state.report.estimators[$("method").value];
+-        const model=result&&result.valid?result:seed, pos=[[],[]],rgb=[[],[]];
++        const model=result&&result.valid&&(!validationMode||state.floorIdentified)?result:seed, pos=[[],[]],rgb=[[],[]];
+         const step=Math.max(1,Math.ceil(frame.count_points/12000));
+         for(let i=0;i<frame.count_points;i+=step){
+             const offset=(frame.offset_points+i)*7,p=[state.raw[offset],state.raw[offset+1],state.raw[offset+2]];
+@@ -93,9 +94,34 @@
+             const q=mapToCanvas(n[0],n[1]);ctx.fillStyle="#"+colors[code].toString(16).padStart(6,"0");ctx.fillRect(q[0],q[1],1.4,1.4);
+         }
+         rois.forEach((r,i)=>{const a=mapToCanvas(r[0],r[3]),b=mapToCanvas(r[1],r[2]);ctx.strokeStyle="#"+colors[i+1].toString(16);ctx.lineWidth=2;ctx.strokeRect(a[0],a[1],b[0]-a[0],b[1]-a[1]);ctx.fillStyle=ctx.strokeStyle;ctx.fillText("#"+(i+1),a[0]+4,a[1]+16);});
++        if(state.reference){ctx.save();ctx.setLineDash([7,5]);ctx.strokeStyle="#ffffff";state.reference.regions.forEach(r=>{const a=mapToCanvas(r[0],r[3]),b=mapToCanvas(r[1],r[2]);ctx.strokeRect(a[0],a[1],b[0]-a[0],b[1]-a[1]);});ctx.restore();}
++        drawHeightViews(frame,seed);
+         viewers.forEach((v,i)=>{if(v.points){v.scene.remove(v.points);v.points.geometry.dispose();v.points.material.dispose();}const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(pos[i],3));geo.setAttribute("color",new THREE.Float32BufferAttribute(rgb[i],3));v.points=new THREE.Points(geo,new THREE.PointsMaterial({size:.025,vertexColors:true}));v.points.frustumCulled=false;v.scene.add(v.points);});
+         $("frameInfo").textContent=(index+1)+" / "+state.meta.frames.length+" · seq "+frame.seq;
+-        $("levelLabel").textContent=result&&result.valid?$("method").value.toUpperCase()+" · 离线几何门通过":"名义预览 · 未评估";
++        $("levelLabel").textContent=result&&result.valid&&(!validationMode||state.floorIdentified)?$("method").value.toUpperCase()+" · 地面候选数值门通过":"名义预览 · 未确认地面";
++    }
++    function drawHeightViews(frame,seed){
++        if(!$("heightXZ"))return;
++        const groups=[[],[],[],[]],sample=[],step=Math.max(1,Math.ceil(frame.count_points/12000));
++        for(let i=0;i<frame.count_points;i++){
++            const offset=(frame.offset_points+i)*7,p=[state.raw[offset],state.raw[offset+1],state.raw[offset+2]];
++            if(!p.every(Number.isFinite)||p.every(v=>v===0))continue;
++            const n=apply(p,seed.R,seed.t),code=regionOf(n);
++            if(code)groups[code-1].push(n[2]);if(i%step===0)sample.push({p:n,code});
++        }
++        ["heightXZ","heightYZ"].forEach((id,axis)=>{
++            const c=$(id),cx=c.getContext("2d");cx.fillStyle="#0c1219";cx.fillRect(0,0,c.width,c.height);
++            if(!sample.length)return;
++            let lo=Infinity,hi=-Infinity,zlo=Infinity,zhi=-Infinity;
++            sample.forEach(q=>{lo=Math.min(lo,q.p[axis]);hi=Math.max(hi,q.p[axis]);zlo=Math.min(zlo,q.p[2]);zhi=Math.max(zhi,q.p[2]);});
++            const zs=Math.max(.2,zhi-zlo),xs=Math.max(.2,hi-lo),map=(x,z)=>[35+(x-lo)/xs*(c.width-45),c.height-25-(z-zlo)/zs*(c.height-40)];
++            cx.strokeStyle="#29445a";cx.fillStyle="#95adc1";cx.font="12px sans-serif";
++            for(let z=Math.ceil(zlo);z<=zhi;z++){const y=map(lo,z)[1];cx.beginPath();cx.moveTo(35,y);cx.lineTo(c.width,y);cx.stroke();cx.fillText(z+"m",2,y);}
++            sample.forEach(q=>{const at=map(q.p[axis],q.p[2]);cx.fillStyle=q.code?"#"+colors[q.code].toString(16):"#687c8d";cx.fillRect(at[0],at[1],q.code?2:1,q.code?2:1);});
++            cx.fillStyle="#b6c8d8";cx.fillText((axis?"Y":"X")+" (m)",c.width-55,c.height-5);cx.fillText("名义 Z (m)",40,14);
++        });
++        const tbody=$("heightStats").tBodies[0];tbody.replaceChildren();
++        groups.forEach((g,i)=>{const row=tbody.insertRow();let min=null,max=null;g.forEach(z=>{min=min===null?z:Math.min(min,z);max=max===null?z:Math.max(max,z);});["#"+(i+1),g.length,min==null?"—":min.toFixed(3),max==null?"—":max.toFixed(3),min==null?"—":(max-min).toFixed(3)].forEach(v=>row.insertCell().textContent=v);});
+     }
+     $("roi").onpointerdown=ev=>{if(!state.raw||state.busy)return;drag=mapPoint(ev);$("roi").setPointerCapture(ev.pointerId);};
+     $("roi").onpointerup=ev=>{if(!drag)return;if(state.busy){drag=null;return;}const end=mapPoint(ev);let r=[Math.min(drag[0],end[0]),Math.max(drag[0],end[0]),Math.min(drag[1],end[1]),Math.max(drag[1],end[1])];drag=null;if(r[1]-r[0]<.05||r[3]-r[2]<.05)return;rois[Number($("activeRegion").value)]=r.map(v=>Math.round(v*1000)/1000);regionInputs();invalidate();drawFrame();};
+@@ -129,6 +155,9 @@
+     async function loadSession() {
+         playing=false;$("play").textContent="▶ 播放";clearResult();state.raw=null;state.meta=null;state.source=null;
+         $("frameInfo").textContent="未载入";$("frame").max=0;$("frame").value=0;
++        if(validationMode){rois=[];regionInputs();}
++        ["heightXZ","heightYZ"].forEach(id=>{if($(id))$(id).getContext("2d").clearRect(0,0,$(id).width,$(id).height);});
++        if($("heightStats"))$("heightStats").tBodies[0].replaceChildren();
+         viewers.forEach(v=>{if(v.points){v.scene.remove(v.points);v.points.geometry.dispose();v.points.material.dispose();v.points=null;}});
+         $("confirmed").checked=false;$("basis").value="";$("play").disabled=true;enable();drawFrame();
+         $("sourceInfo").textContent="载入 meta.json 与 points.bin 后可配平。";
+@@ -164,18 +193,26 @@
+     function artifact(job,method,name){return apiBase+"/artifact?id="+job+"&method="+method+"&name="+name+(validationMode?"&sid="+encodeURIComponent($("session").value):"");}
+     function showReport(job) {
+         state.report=job.report;state.job=job.job_id;const r=job.report;$("result").hidden=false;
++        state.floorIdentified=!validationMode||job.floor_identified===true||r.config.auto_candidate?.kind==="lowest_connected_floor_v1";
++        state.reference=job.manual_reference||null;
++        rois=state.floorIdentified?r.config.regions.map(v=>v.slice()):[];regionInputs();
++        if($("autoSummary")){
++            const c=r.config.auto_candidate;
++            $("autoSummary").textContent=c?.kind==="lowest_connected_floor_v1"?"自动识别：低处近水平连续面；面积 "+c.component_area_m2.toFixed(2)+" m²；选区完整高度厚度 "+c.selected_cells.map(s=>(s.height_span_m*100).toFixed(1)+"cm").join(" / ")+"。手画区域未参与检测。"+(state.reference?"白色虚线为原手选四区；平面差 "+fixed(state.reference.angle_deg)+"° / "+fixed(state.reference.offset_gap_m==null?null:state.reference.offset_gap_m*100,2)+"cm。":""):"旧选区没有通过三维地面识别，保留数值诊断，请运行新自动算法。";
++            if(job.reference_only)$("autoSummary").textContent="原手选四区配平参考已保留。点击自动找地面可进行独立算法对照，不用重新画区。";
++        }
+         $("method").replaceChildren(new Option("名义显示预览","nominal"));
+-        $("consensus").textContent=(r.recommended?"推荐 "+r.recommended.toUpperCase():"不推荐自动选择")+" · "+r.recommendation_basis;
+-        $("consensus").className=r.recommended?"pass":"fail";
++        $("consensus").textContent=(validationMode&&!state.floorIdentified?"旧选区尚未识别地面，仅作诊断":r.recommended?"推荐 "+r.recommended.toUpperCase():"不推荐自动选择")+" · "+r.recommendation_basis;
++        $("consensus").className=validationMode&&!state.floorIdentified?"fail":r.recommended?"pass":"fail";
+         const tbody=$("algorithms").tBodies[0];tbody.replaceChildren();$("downloads").replaceChildren();
+         Object.entries(r.estimators).forEach(([name,a])=>{
+             const row=tbody.insertRow(),values=[name.toUpperCase(),a.valid?"PASS":"FAIL",fixed(a.pitch_deg)+" / "+fixed(a.roll_deg),fixed(a.offset_source_m,6),a.full?fixed(a.full.rms_m*100)+" / "+fixed(a.full.p95_m*100):"—",a.full?fixed(a.full.support_ratio*100,1)+"%":"—",a.reject_reasons.join("；")||"四区及3帧留出通过"];
+             values.forEach((v,i)=>{const cell=row.insertCell();cell.textContent=v;if(i===1)cell.className=a.valid?"pass":"fail";});
+-            if(a.valid){$("method").add(new Option(name.toUpperCase(),name));const aLink=document.createElement("a");aLink.href=artifact(job.job_id,name,"dataset.zip");aLink.textContent="下载 "+name.toUpperCase()+" 配平数据";aLink.download=name+"_leveled.zip";$("downloads").append(aLink);}
++            if(a.valid&&state.floorIdentified){$("method").add(new Option(name.toUpperCase(),name));const aLink=document.createElement("a");aLink.href=artifact(job.job_id,name,"dataset.zip");aLink.textContent="下载 "+name.toUpperCase()+" 配平数据";aLink.download=name+"_leveled.zip";$("downloads").append(aLink);}
+         });
+         const reportLink=document.createElement("a");reportLink.href=artifact(job.job_id,"report","report.json");reportLink.textContent="下载评估报告";$("downloads").append(reportLink);
+         $("pairs").textContent=r.pairwise.map(p=>p.a.toUpperCase()+" ↔ "+p.b.toUpperCase()+": "+fixed(p.angle_deg)+"° / "+fixed(p.offset_gap_m*100)+"cm · "+p.status).join("　");
+-        const preview=r.recommended||(validationMode&&Object.keys(r.estimators).find(n=>r.estimators[n].valid))||"nominal";
++        const preview=state.floorIdentified?(r.recommended||(validationMode&&Object.keys(r.estimators).find(n=>r.estimators[n].valid))||"nominal"):"nominal";
+         $("report").textContent=JSON.stringify(r,null,2);$("method").value=preview;drawFrame();
+         note((job.persisted?"已恢复保存结果。":"评估完成。")+"拟合 "+r.fit_point_count.toLocaleString()+" 点；留出帧 "+r.holdout_ordinals.join(", ")+"。"+(!Object.keys(job.artifacts).length?" 所有方法拒绝，仅生成诊断报告。":"配平数据可下载。")+(validationMode&&!r.recommended&&preview!=="nominal"?"当前仅预览通过的 "+preview.toUpperCase()+"；三法未一致，不作自动推荐。":""));
+     }
+@@ -193,6 +230,7 @@
+     /* P03：算法自动找地面区域。与 run 共用同一 POST 与轮询；mode='auto' 服务端自算 regions。 */
+     $("runAuto").onclick=async()=>{
+         state.busy=true;drag=null;clearResult();const jobToken=state.generation;enable();note("提交自动配平（算法找地面）…");
++        rois=[];regionInputs();drawFrame(); // no stale/default boxes if detection fails
+         try{
+             const started=await api(apiBase+"/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),mode:"auto"}});
+             while(jobToken===state.generation){
+--- validation.py.before
++++ validation.py
+@@ -7,12 +7,23 @@
+ 
+ import leveling as W
+ 
+-SESSIONS = ("cap_20261004_203349", "cap_20261004_203135", "cap_20261004_202456")
++SESSIONS = ("cap_20261004_203349", "cap_20261004_203135", "cap_20261004_202456", "cap_20261002_223757")
++REFERENCE_JOB = "27f870c6c7be43f4b9dc50121a5fc03f"
++
++
++def floor_identified(report):
++    if report.get("job_id") == REFERENCE_JOB and report.get("sid") == "cap_20261004_202456":
++        return True  # user's previously established reference, not an automatic new result
++    candidate = report.get("config", {}).get("auto_candidate", {})
++    return (candidate.get("kind") == "lowest_connected_floor_v1"
++            and candidate.get("full_height_preserved") is True
++            and candidate.get("uses_manual_reference") is False
++            and candidate.get("fit_frame_count") == report.get("fit_frame_count"))
+ 
+ 
+ def member(sid):
+     if sid not in SESSIONS:
+-        raise ValueError("算法验证仅接受指定的三个会话")
++        raise ValueError("算法验证仅接受指定会话")
+     return sid
+ 
+ 
+@@ -73,8 +84,19 @@
+             raise ValueError("变换与报告/会话不一致")
+     if report.get("recommended") not in (None, "tls") or report.get("recommended") and not all(a["valid"] for a in estimators.values()):
+         raise ValueError("推荐结果不符合三法门")
+-    return {"job_id": job_id, "sid": actual_sid, "state": "ready", "message": "已恢复存盘评估",
+-            "report": report, "artifacts": artifacts, "persisted": True}
++    qualified = floor_identified(report)
++    result = {"job_id": job_id, "sid": actual_sid, "state": "ready", "message": "已恢复存盘评估",
++              "report": report, "artifacts": artifacts, "persisted": True, "floor_identified": qualified,
++              "reference_only":job_id==REFERENCE_JOB and actual_sid=="cap_20261004_202456"}
++    if actual_sid == "cap_20261004_202456" and job_id != REFERENCE_JOB and qualified:
++        reference = saved_job(root, outroot, REFERENCE_JOB, actual_sid, binding)
++        a, b = report["estimators"]["tls"], reference["report"]["estimators"]["tls"]
++        import numpy as np
++        result["manual_reference"] = {"job_id":REFERENCE_JOB,"regions":reference["report"]["config"]["regions"],
++            "angle_deg":float(np.degrees(np.arccos(np.clip(np.dot(a["normal_source"],b["normal_source"]),-1,1)))) if a["normal_source"] else None,
++            "offset_gap_m":abs(a["offset_source_m"]-b["offset_source_m"]) if a["offset_source_m"] is not None else None,
++            "used_for_detection":False}
++    return result
+ 
+ 
+ def latest(root, outroot, sid, binding=None):
+@@ -115,7 +137,11 @@
+             if job:
+                 report = job["report"]
+                 passed = [n.upper() for n, a in report["estimators"].items() if a["valid"]]
+-                status = "配平完成" if report["recommended"] else "部分通过 · " + "/".join(passed) if passed else "评估未通过"
++                status = ("旧选区未识别地面 · 待自动重算" if not job["floor_identified"] else
++                          "自动地面 · 三法通过" if report["recommended"] else
++                          "自动地面 · 部分通过 · " + "/".join(passed) if passed else "自动评估未通过")
++                if job["job_id"] == REFERENCE_JOB:
++                    status = "原配平参考（保留）"
+                 row.update(job_id=job["job_id"], status=status,
+                            recommended=report["recommended"],
+                            methods={n: a["valid"] for n, a in report["estimators"].items()})
+@@ -167,6 +193,8 @@
+         if parsed.path == "/api/validation/artifact":
+             job_id, name, algorithm = [query.get(k, [""])[0] for k in ("id", "name", "method")]
+             job = saved_job(root, outroot, job_id, sid)
++            if algorithm != "report" and not job["floor_identified"]:
++                raise ValueError("旧选区未经地面识别，只保留诊断报告；请运行新自动算法")
+             if algorithm == "report" and name == "report.json":
+                 path = outroot / job_id / name
+                 manifest = read_json(outroot / job_id / "manifest.json")
+--- validation.html.before
++++ validation.html
+@@ -4,23 +4,24 @@
+ <style>
+ *{box-sizing:border-box}body{margin:0;background:#10151c;color:#dce5f0;font:14px/1.5 "Microsoft YaHei",sans-serif}header{padding:16px 24px;border-bottom:1px solid #2d3c4d;display:flex;gap:18px;align-items:center}h1{font-size:20px;margin:0}a{color:#83caff}main{padding:18px;display:grid;grid-template-columns:340px 1fr;gap:18px}.card{background:#18222e;border:1px solid #2b3b4c;border-radius:9px;padding:16px;margin-bottom:14px}h2{font-size:16px;margin:0 0 12px}.muted{font-size:12px;color:#9aabbf}button,input,select,textarea{font:inherit;color:inherit;background:#101b27;border:1px solid #3d5368;border-radius:4px;padding:6px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}.primary{background:#2277a9;border-color:#4197c9;width:100%;font-weight:bold;padding:10px}label{display:block;margin:8px 0}input[type=number]{width:80px}input[type=checkbox]{width:auto}select,textarea{width:100%}textarea{height:60px;resize:vertical}table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;border-bottom:1px solid #304254;padding:7px 4px}#regions input{width:61px;font-size:12px;padding:3px}#regions td{padding:5px 1px}.pass{color:#81dbb2}.fail{color:#ff9c9c}#note{white-space:pre-wrap;overflow-wrap:anywhere;min-height:44px}#roi{display:block;width:100%;height:320px;touch-action:none;border:1px solid #3c5268;cursor:crosshair}#views{display:grid;grid-template-columns:1fr 1fr;gap:12px}.view{height:300px;background:#0c1219}.view canvas{display:block;width:100%;height:100%}.tools{display:flex;gap:10px;align-items:center;margin:10px 0}.tools input[type=range]{flex:1}.tools select{width:140px}#result[hidden]{display:none}#downloads{display:flex;gap:12px;flex-wrap:wrap}#downloads a{padding:7px 10px;border:1px solid #3b6176;border-radius:4px}details{margin-top:12px}summary{cursor:pointer}#report{white-space:pre-wrap;max-height:340px;overflow:auto;font-size:12px}.scroll{overflow-x:auto}@media(max-width:1050px){main{grid-template-columns:1fr}#regions input{width:70px}}@media(max-width:680px){#views{grid-template-columns:1fr}header{flex-wrap:wrap}}
+ </style></head><body data-workbench="validation">
+-<header><h1>🧪 算法验证工作台</h1><a href="/">← 会话回放</a><span class="muted">三个本地会话 · 配平前后 · 三算法对照</span></header>
+-<section class="card" style="margin:18px"><h2>验证会话</h2><p class="muted">只使用这三个本地录制。点击会话恢复已保存的配平与三算法报告。</p><table id="cohort"><thead><tr><th>会话</th><th>时长</th><th>帧</th><th>配平状态</th></tr></thead><tbody></tbody></table></section><main><aside>
++<header><h1>🧪 算法验证工作台</h1><a href="/">← 会话回放</a><span class="muted">四个本地会话 · 配平前后 · 三算法对照</span></header>
++<section class="card" style="margin:18px"><h2>验证会话</h2><p class="muted">只使用这四个本地录制。点击会话恢复已保存的配平与三算法报告。</p><table id="cohort"><thead><tr><th>会话</th><th>时长</th><th>帧</th><th>配平状态</th></tr></thead><tbody></tbody></table></section><main><aside>
+ <section class="card"><h2>1 · 选择录制会话</h2><label>本地会话<select id="session"><option value="">请选择…</option></select></label><button id="refresh">刷新本地列表</button><p id="sourceInfo" class="muted">载入 meta.json 与 points.bin 后可配平。</p></section>
+-<section class="card"><h2>2 · 确认地面区域</h2><p class="muted">名义角度用于俯视选区与法向符号锚点。高度仅保存为测量参考；最终平移由拟合 d 决定。</p>
++<section class="card"><h2>2 · 自动识别地面</h2><p class="muted">名义角度用于俯视选区与法向符号锚点。高度仅保存为测量参考；最终平移由拟合 d 决定。</p>
+ <label>名义 pitch (°) <input id="pitch" type="number" value="26" min="-75" max="75" step=".1"></label>
+ <label>名义 roll (°) <input id="roll" type="number" value="0" min="-45" max="45" step=".1"></label>
+ <label>测量参考高度 (m) <input id="height" type="number" value="1.14" min=".01" max="10" step=".01"></label>
+-<p class="muted">四区预设来自现有场景，仅供起点。每次换会话请在右侧核对，可拖框替换选中区，或编辑米制边界。全高度参与，无 Z／残差裁剪。</p>
++<button id="runAuto" class="primary" disabled>自动找地面 · 配平并验证三算法</button><p id="autoSummary" class="muted">算法从三维点云识别低处、连续、近水平地面，排除混入高处物体的整格。已有手画区域只作独立对照。</p><details><summary>手工对照区域与依据（可选）</summary>
+ <table id="regions"><thead><tr><th>区域</th><th>X min</th><th>X max</th><th>Y min</th><th>Y max</th></tr></thead><tbody></tbody></table>
+ <label><input id="confirmed" type="checkbox"> 我已确认四区包含要评估的地面</label>
+ <label>确认依据<textarea id="basis" placeholder="例如：本次录制中的木地板四个空置区域，已核对无遮挡"></textarea></label>
+ <button id="run" class="primary" disabled>配平 · 评估三种算法并生成数据</button>
+-<button id="runAuto" class="primary" disabled style="margin-left:8px">自动配平 · 算法找地面区域</button>
++</details>
+ <p id="note" role="status" aria-live="polite" class="muted">等待载入会话。</p></section>
+ <section class="card muted"><b>本次离线评估协议</b><p>拟合前固定共同域；三个独立帧留出验证。每区 ≥20 点；RMS ≤3 cm，P95 ≤5 cm，5 cm 内支持率 ≥80%。检查二维展开，拒绝线状域。</p><p>三方法全部有效且两两差 ≤2°／3 cm 时推荐 TLS。TLS 与 SVD 同属最小二乘家族，分歧时不以二票压 RANSAC。</p><p>输出仅为离线显示数据。数值通过不代表物理标定、全场范围或生产可用。</p></section>
+ </aside><div>
+ <section class="card"><h2>俯视选区 · 名义显示坐标 (m)</h2><div class="tools"><label>替换区域 <select id="activeRegion"><option value="0">#1</option><option value="1">#2</option><option value="2">#3</option><option value="3">#4</option></select></label><button id="mapReset">复位选区视野</button><span class="muted">拖动框选 · 滚轮缩放</span></div><canvas id="roi" width="1100" height="440" aria-label="俯视点云，拖框设置地面区域"></canvas></section>
++<section class="card"><h2>选区高度核查 · 完整高度</h2><div id="heightViews" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><b>X-Z 侧视</b><canvas id="heightXZ" width="560" height="250" style="width:100%;height:220px"></canvas></div><div><b>Y-Z 侧视</b><canvas id="heightYZ" width="560" height="250" style="width:100%;height:220px"></canvas></div></div><p class="muted">彩色是自动区域内的所有高度，灰色是场景背景。名义 Z=0 只是显示参考；不按 Z 或平面残差裁掉区域内的物体点。统计使用当前帧完整源点。</p><table id="heightStats"><thead><tr><th>区域</th><th>全部点</th><th>Z min (m)</th><th>Z max (m)</th><th>完整厚度 (m)</th></tr></thead><tbody></tbody></table></section>
+ <section class="card"><h2>同帧前后对照</h2><div class="tools"><button id="play" disabled>▶ 播放</button><input id="frame" type="range" min="0" max="0" value="0" aria-label="帧序号"><span id="frameInfo">未载入</span><select id="method" aria-label="右侧配平方法"><option value="nominal">名义显示预览</option></select><button id="cameraReset">复位视角</button></div>
+ <div id="views"><div><b>原始 source · innolidar</b><div id="rawView" class="view"></div></div><div><b id="levelLabel">名义预览 · 未评估</b><div id="levelView" class="view"></div></div></div><p class="muted">拖动旋转，滚轮缩放；两侧视角同步。网格是显示参考。显示每帧最多 12000 点，算法使用完整冻结域，导出保留全部源行。</p></section>
+ <section id="result" class="card" hidden><h2>三种算法 · 可行度与数据</h2><p id="consensus"></p><div class="scroll"><table id="algorithms"><thead><tr><th>方法</th><th>离线门</th><th>Pitch / Roll (°)</th><th>tz (m)</th><th>RMS / P95 (cm)</th><th>支持率</th><th>拒绝原因</th></tr></thead><tbody></tbody></table></div><p id="pairs" class="muted"></p><div id="downloads"></div><details><summary>逐区、三个留出帧、源 SHA 与完整报告</summary><pre id="report"></pre></details></section>
+--- leveling.html.before
++++ leveling.html
+@@ -7,20 +7,21 @@
+ <header><h1>⚖ 离线配平工作台</h1><a href="/">← 会话回放</a><span class="muted">本地录制 · 四区同域评估 · 新数据导出</span></header>
+ <main><aside>
+ <section class="card"><h2>1 · 选择录制会话</h2><label>本地会话<select id="session"><option value="">请选择…</option></select></label><button id="refresh">刷新本地列表</button><p id="sourceInfo" class="muted">载入 meta.json 与 points.bin 后可配平。</p></section>
+-<section class="card"><h2>2 · 确认地面区域</h2><p class="muted">名义角度用于俯视选区与法向符号锚点。高度仅保存为测量参考；最终平移由拟合 d 决定。</p>
++<section class="card"><h2>2 · 自动识别地面</h2><p class="muted">名义角度用于俯视选区与法向符号锚点。高度仅保存为测量参考；最终平移由拟合 d 决定。</p>
+ <label>名义 pitch (°) <input id="pitch" type="number" value="26" min="-75" max="75" step=".1"></label>
+ <label>名义 roll (°) <input id="roll" type="number" value="0" min="-45" max="45" step=".1"></label>
+ <label>测量参考高度 (m) <input id="height" type="number" value="1.14" min=".01" max="10" step=".01"></label>
+-<p class="muted">四区预设来自现有场景，仅供起点。每次换会话请在右侧核对，可拖框替换选中区，或编辑米制边界。全高度参与，无 Z／残差裁剪。</p>
++<button id="runAuto" class="primary" disabled>自动找地面 · 配平并验证三算法</button><p id="autoSummary" class="muted">算法从三维点云识别低处、连续、近水平地面，排除混入高处物体的整格。已有手画区域只作独立对照。</p><details><summary>手工对照区域与依据（可选）</summary>
+ <table id="regions"><thead><tr><th>区域</th><th>X min</th><th>X max</th><th>Y min</th><th>Y max</th></tr></thead><tbody></tbody></table>
+ <label><input id="confirmed" type="checkbox"> 我已确认四区包含要评估的地面</label>
+ <label>确认依据<textarea id="basis" placeholder="例如：本次录制中的木地板四个空置区域，已核对无遮挡"></textarea></label>
+ <button id="run" class="primary" disabled>配平 · 评估三种算法并生成数据</button>
+-<button id="runAuto" class="primary" disabled style="margin-left:8px">自动配平 · 算法找地面区域</button>
++</details>
+ <p id="note" role="status" aria-live="polite" class="muted">等待载入会话。</p></section>
+ <section class="card muted"><b>本次离线评估协议</b><p>拟合前固定共同域；三个独立帧留出验证。每区 ≥20 点；RMS ≤3 cm，P95 ≤5 cm，5 cm 内支持率 ≥80%。检查二维展开，拒绝线状域。</p><p>三方法全部有效且两两差 ≤2°／3 cm 时推荐 TLS。TLS 与 SVD 同属最小二乘家族，分歧时不以二票压 RANSAC。</p><p>输出仅为离线显示数据。数值通过不代表物理标定、全场范围或生产可用。</p></section>
+ </aside><div>
+ <section class="card"><h2>俯视选区 · 名义显示坐标 (m)</h2><div class="tools"><label>替换区域 <select id="activeRegion"><option value="0">#1</option><option value="1">#2</option><option value="2">#3</option><option value="3">#4</option></select></label><button id="mapReset">复位选区视野</button><span class="muted">拖动框选 · 滚轮缩放</span></div><canvas id="roi" width="1100" height="440" aria-label="俯视点云，拖框设置地面区域"></canvas></section>
++<section class="card"><h2>选区高度核查 · 完整高度</h2><div id="heightViews" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><b>X-Z 侧视</b><canvas id="heightXZ" width="560" height="250" style="width:100%;height:220px"></canvas></div><div><b>Y-Z 侧视</b><canvas id="heightYZ" width="560" height="250" style="width:100%;height:220px"></canvas></div></div><p class="muted">彩色是自动区域内的所有高度，灰色是场景背景。名义 Z=0 只是显示参考；不按 Z 或平面残差裁掉区域内的物体点。统计使用当前帧完整源点。</p><table id="heightStats"><thead><tr><th>区域</th><th>全部点</th><th>Z min (m)</th><th>Z max (m)</th><th>完整厚度 (m)</th></tr></thead><tbody></tbody></table></section>
+ <section class="card"><h2>同帧前后对照</h2><div class="tools"><button id="play" disabled>▶ 播放</button><input id="frame" type="range" min="0" max="0" value="0" aria-label="帧序号"><span id="frameInfo">未载入</span><select id="method" aria-label="右侧配平方法"><option value="nominal">名义显示预览</option></select><button id="cameraReset">复位视角</button></div>
+ <div id="views"><div><b>原始 source · innolidar</b><div id="rawView" class="view"></div></div><div><b id="levelLabel">名义预览 · 未评估</b><div id="levelView" class="view"></div></div></div><p class="muted">拖动旋转，滚轮缩放；两侧视角同步。网格是显示参考。显示每帧最多 12000 点，算法使用完整冻结域，导出保留全部源行。</p></section>
+ <section id="result" class="card" hidden><h2>三种算法 · 可行度与数据</h2><p id="consensus"></p><div class="scroll"><table id="algorithms"><thead><tr><th>方法</th><th>离线门</th><th>Pitch / Roll (°)</th><th>tz (m)</th><th>RMS / P95 (cm)</th><th>支持率</th><th>拒绝原因</th></tr></thead><tbody></tbody></table></div><p id="pairs" class="muted"></p><div id="downloads"></div><details><summary>逐区、三个留出帧、源 SHA 与完整报告</summary><pre id="report"></pre></details></section>
+--- validation_test.py.before
++++ validation_test.py
+@@ -34,12 +34,12 @@
+             sid = V.SESSIONS[2]
+             directory, meta, request = fixture(root, sid)
+             fixture(root, "cap_outside")
+-            job_id = "b" * 32
++            job_id = V.REFERENCE_JOB
+             report, artifacts = W.run_job(root, outroot, request, job_id, lambda m: None)
+             self.assertEqual(report["recommended"], "tls")
+             rows = V.sessions(root, outroot)
+             self.assertEqual([s["sid"] for s in rows], list(V.SESSIONS))
+-            self.assertEqual(rows[2]["status"], "配平完成")
++            self.assertEqual(rows[2]["status"], "原配平参考（保留）")
+             self.assertFalse(rows[0]["available"])
+             with patch.object(H.C, "DEST_ROOT", str(root)), patch.object(H, "_board_get", side_effect=AssertionError("board forbidden")):
+                 server = H.ThreadingHTTPServer(("127.0.0.1", 0), H.Handler)

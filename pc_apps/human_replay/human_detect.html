@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>离线人体识别工作台</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0f1419;color:#dce5f0;font:14px/1.5 "Microsoft YaHei",sans-serif;overflow:hidden}
+header{padding:10px 16px;border-bottom:1px solid #263240;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+h1{font-size:16px;margin:0}a{color:#83caff;font-size:12px}.muted{font-size:12px;color:#8fa2b5}
+main{display:grid;grid-template-columns:295px 1fr;gap:0;height:calc(100vh - 47px)}
+aside{padding:12px;border-right:1px solid #263240;overflow-y:auto;background:#131a21}
+#view{position:relative;background:#000}
+#hud{position:absolute;left:10px;top:10px;font:12px/1.6 Consolas;color:#9df;background:rgba(0,0,0,.55);padding:6px 10px;border-radius:6px;pointer-events:none;white-space:pre}
+#tip{position:absolute;left:10px;bottom:10px;font-size:12px;color:#8fa2b5;background:rgba(0,0,0,.5);padding:4px 10px;border-radius:5px;pointer-events:none}
+.card{background:#182230;border:1px solid #2a3a4c;border-radius:8px;padding:11px;margin-bottom:11px}
+h2{font-size:13px;margin:0 0 9px;color:#9fc3e0}
+button,select{font:inherit;color:#dce5f0;background:#101b27;border:1px solid #3d5368;border-radius:4px;padding:5px 9px;cursor:pointer}
+button:disabled{opacity:.45;cursor:default}.primary{background:#1d6b8f;border-color:#2e93bd;width:100%;padding:8px;font-weight:bold}
+input[type=range]{width:100%}label{display:block;margin:6px 0;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;padding:4px 3px;border-bottom:1px solid #263a4d}
+.tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px;font-weight:bold}
+.tag.ok{background:#1d4d33;color:#7be0a8}.tag.warn{background:#5a451a;color:#f2c266}.tag.bad{background:#5a2323;color:#f08a8a}.tag.unknown{background:#3a4450;color:#a9b7c4}
+#status{font-size:12px;min-height:18px;margin-top:6px}
+.posechip{font-size:15px;font-weight:bold}
+#featTable td:first-child{color:#8fa2b5}
+.mono{font-family:Consolas,monospace}
+</style></head><body>
+<header>
+  <h1>🧍 离线人体识别工作台</h1>
+  <a href="/">← 会话回放</a><a href="/leveling.html">← 离线配平</a>
+  <span class="muted">配平系纯几何 · pin ROI 辅助判别人/家具 · 不做全自动找人</span>
+</header>
+<main>
+  <aside>
+    <section class="card">
+      <h2>1 · 会话</h2>
+      <label>本地会话 <select id="session" style="width:100%"><option value="">请选择…</option></select></label>
+      <div id="metaInfo" class="muted">载入 meta + points.bin，并自动应用 leveled 配平。</div>
+    </section>
+    <section class="card">
+      <h2>2 · 锁定人体 ROI</h2>
+      <p class="muted">点地面/人体任一处 → 设圆柱 ROI。人 vs 家具由你裁决（肢体支线 6 代失败案例：沙发≈高柜≈直立人 完全同形）。</p>
+      <button id="pinModeBtn" style="width:100%">📍 点选 ROI（或按 K 对准星）</button>
+      <label>ROI 半径 <input id="roiR" type="range" min="0.4" max="1.4" step="0.05" value="0.8"><span class="mono" id="roiRVal">0.80 m</span></label>
+      <div class="muted mono" id="roiInfo">未锁定</div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button id="clearPinBtn" style="flex:1">清除锁定</button>
+        <button id="resetTrackBtn" style="flex:1">重置平滑</button>
+      </div>
+    </section>
+    <section class="card">
+      <h2>3 · 本帧几何判定</h2>
+      <div id="poseBlock" class="muted">载入并锁定 ROI 后显示</div>
+      <table id="featTable"><tbody></tbody></table>
+      <div id="status"></div>
+    </section>
+    <section class="card muted">
+      <b>方法与边界</b>
+      <p>画布展示的是已应用 TLS 配平的会话（z=0 即地板）。判定仅以**圆柱 ROI 内点云**算 PCA + 高度带，主扩散方向直立度 × 顶高 二线分三态。</p>
+      <p><b>边界（承 limb HR-07 教训）：</b>纯几何无法自动区分人 vs 沙发/高柜——能给出的只有量化证据（身高/躯干半径/直立度/score）。是否「真是人」仍需 ROI 锁到你确信是人的目标上。本工作台不做全自动找人。</p>
+    </section>
+  </aside>
+  <div id="view">
+    <div id="hud">载入会话后随帧更新</div>
+    <div id="tip">拖拽旋转 · 滚轮缩放 · 空格 播放 · K 对准星设 ROI · ←→ 步进帧</div>
+  </div>
+</main>
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="human_replay_lib.js"></script>
+<script src="human_detect_lib.js"></script>
+<script src="human_detect.js"></script>
+</body></html>

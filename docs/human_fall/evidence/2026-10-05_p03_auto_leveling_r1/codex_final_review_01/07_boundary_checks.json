@@ -1,0 +1,74 @@
+{
+  "scope_gate": "FAIL",
+  "reason": "console exe repacked with P03 source",
+  "previous_exe_sha256": "463889ef651bab9c9b6cc1b60b7fe96b66968c9370d35830f1797ca1919d2203",
+  "previous_bytes": 64701381,
+  "current_exe_sha256": "4a31b3c9b1d913c8edf9dda9717d90f293fae24f05bc36eecf1d1c2ebf337b36",
+  "current_bytes": 64427868,
+  "current_exe_mtime_ns": 1791181870743439600,
+  "embedded_source_comparisons": {
+    "leveling.py": {
+      "live_embedded_sha256": "cd0ef407916f1b24ff66303236bdd6ad8f2e8af94d7221f9b45688e92e7da148",
+      "current_source_sha256": "cd0ef407916f1b24ff66303236bdd6ad8f2e8af94d7221f9b45688e92e7da148",
+      "diagnostic_embedded_sha256": "05b234ea7438483175599be9d0b78f6f8e7bbbb553aacff9948cbdb95e101072",
+      "glw_source_sha256": "05b234ea7438483175599be9d0b78f6f8e7bbbb553aacff9948cbdb95e101072",
+      "live_embedded_equals_source": true,
+      "live_embedded_equals_diagnostic": false
+    },
+    "leveling.js": {
+      "live_embedded_sha256": "6ad79b1c99f5bfe13fa5d097bf56ac2f193c09492103bde27b0e69bd599f6abd",
+      "current_source_sha256": "6ad79b1c99f5bfe13fa5d097bf56ac2f193c09492103bde27b0e69bd599f6abd",
+      "diagnostic_embedded_sha256": "e53ebcde4ed922a53840a872d299d9b6329d4225f09ea828a66145df044a9687",
+      "glw_source_sha256": "e53ebcde4ed922a53840a872d299d9b6329d4225f09ea828a66145df044a9687",
+      "live_embedded_equals_source": true,
+      "live_embedded_equals_diagnostic": false
+    },
+    "leveling.html": {
+      "live_embedded_sha256": "49e97085060daa4d36f8e918c09faa835193865869c1c0cac7cee9216e0b2d7f",
+      "current_source_sha256": "49e97085060daa4d36f8e918c09faa835193865869c1c0cac7cee9216e0b2d7f",
+      "diagnostic_embedded_sha256": "a0afb65e2176402c942d4ed9c3760d5e71ae08c16fbb0c8041e424eb2d95cea9",
+      "glw_source_sha256": "a0afb65e2176402c942d4ed9c3760d5e71ae08c16fbb0c8041e424eb2d95cea9",
+      "live_embedded_equals_source": true,
+      "live_embedded_equals_diagnostic": false
+    },
+    "replay.js": {
+      "live_embedded_sha256": "b7ed9c8dea71ce234e83e36f1170ceb2364b59a4083f6efbb14aee3e35939b20",
+      "current_source_sha256": "b7ed9c8dea71ce234e83e36f1170ceb2364b59a4083f6efbb14aee3e35939b20",
+      "diagnostic_embedded_sha256": "680852cfb9b2f58579271a939b62ef3a6c9538f34c355dda23949c12f74f4b8b",
+      "glw_source_sha256": null,
+      "live_embedded_equals_source": true,
+      "live_embedded_equals_diagnostic": false
+    }
+  },
+  "protected_archive_members_unchanged": {
+    "human_replay\\__pycache__\\config.cpython-312.pyc": true,
+    "human_replay\\__pycache__\\human_replay_lib.cpython-312.pyc": false,
+    "human_replay\\annotator.html": true,
+    "human_replay\\config.py": true,
+    "human_replay\\fetch.py": true,
+    "human_replay\\fetch_lib_test.py": true,
+    "human_replay\\human_replay_lib.js": true,
+    "human_replay\\human_replay_lib.py": true,
+    "human_replay\\human_replay_lib.test.js": true,
+    "human_replay\\index.html": true,
+    "human_replay\\leveling_estimators\\__init__.py": true,
+    "human_replay\\leveling_estimators\\__pycache__\\__init__.cpython-312.pyc": true,
+    "human_replay\\leveling_estimators\\__pycache__\\ransac.cpython-312.pyc": true,
+    "human_replay\\leveling_estimators\\__pycache__\\svd.cpython-312.pyc": true,
+    "human_replay\\leveling_estimators\\__pycache__\\tls.cpython-312.pyc": true,
+    "human_replay\\leveling_estimators\\ransac.py": true,
+    "human_replay\\leveling_estimators\\svd.py": true,
+    "human_replay\\leveling_estimators\\tls.py": true,
+    "human_replay\\leveling_quality.py": true,
+    "human_replay\\open_replay.bat": true,
+    "human_replay\\panel.js": true,
+    "human_replay\\trim.bat": true,
+    "human_replay\\trim.js": true,
+    "human_replay\\vendor\\OrbitControls.js": true,
+    "human_replay\\vendor\\TrackballControls.js": true,
+    "human_replay\\vendor\\TransformControls.js": true,
+    "human_replay\\vendor\\three.min.js": true
+  },
+  "attribution": "repack actor and authorization not established by this evidence",
+  "gate_rule": "user final-review prompt section 1.2: REWORK, do not run per-ID checks"
+}

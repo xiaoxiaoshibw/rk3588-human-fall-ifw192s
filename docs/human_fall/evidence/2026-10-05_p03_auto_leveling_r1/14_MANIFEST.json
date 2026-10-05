@@ -1,0 +1,55 @@
+{
+  "kind": "P03 replay auto-leveling implementation manifest",
+  "schema": 1,
+  "date": "2026-10-05",
+  "head": "3fc1338fc306444959433a41bdeaeefd705f58ec",
+  "ponytail_skill_read": "C:\\Users\\30680\\.claude\\skills\\ponytail\\SKILL.md",
+  "scope_diff": [
+    "pc_apps/human_replay/leveling.py (M)",
+    "pc_apps/human_replay/leveling.js (M)",
+    "pc_apps/human_replay/leveling.html (M)",
+    "pc_apps/human_replay/leveling_test.py (M)",
+    "pc_apps/human_replay/replay.js (M)",
+    "pc_apps/human_replay/LEVELING_README.md (M)",
+    "pc_apps/human_replay/leveling_lib.py (new)",
+    "pc_apps/human_replay/leveling_auto_test.py (new)",
+    "docs/human_fall/P03_ACCEPTANCE.md (new)",
+    "docs/human_fall/tickets/P03_replay_auto_leveling.md (new)",
+    "docs/human_fall/tickets/INDEX.md (M)",
+    "docs/human_fall/AI_PROMPT_P03_CLAUDE_R1.md (new)",
+    "docs/human_fall/evidence/2026-10-05_p03_auto_leveling_r1/ (new)"
+  ],
+  "artifact_sha256": "see 13_SHA.txt",
+  "commands_exit_zero": [
+    "python -B -W error -m unittest leveling_test -v",
+    "python -B -W error -m unittest leveling_auto_test -v",
+    "node human_replay_lib.test.js",
+    "python -B -W error -m unittest discover -s . -p \"leveling*_test.py\" -v",
+    "real session auto job HTTP e2e (in leveling_test.py's HTTP block)",
+    "real session leveling job on cap_20261004_202456 (_replay_auto_e2e subset)"
+  ],
+  "not_run": {
+    "assigned_independent_review": true,
+    "real_browser": true,
+    "console_exe_repack": true,
+    "device_capture_deploy_network": true
+  },
+  "physical_verified": false,
+  "extrinsics_verified": false,
+  "runtime_eligible": false,
+  "physical_height_record_m": 1.14,
+  "anchors_r2": {
+    "note": "numbers imported from R2 evidence docs for comparison only; not duplicated as code constants",
+    "tls_pitch_deg": 26.623261360650194,
+    "tls_roll_deg": -1.3946707174625859,
+    "tls_d_m": 1.32190083447894,
+    "source_json": "docs/human_fall/evidence/2026-10-04_p02_four_roi_r1/03_RESULTS.json"
+  },
+  "auto_jobs_diagnostic": {
+    "sid": "cap_20261004_202456",
+    "job_id": "ef5df1eb377e4e0b8bed9b1f8f9c7b9c",
+    "consensus": "NO_RECOMMENDATION",
+    "reject_reason": "all three methods: GL_FULL_DOMAIN_QUALITY GL_REGION_QUALITY GL_HOLDOUT_QUALITY",
+    "meaning": "R3 type-C: detect 1m grid ROI crosses two non-coplanar ground blocks; quality gate is honest, not trimmed; the manual GLW01 jobs (27f870..) still pass their own same-source gate"
+  }
+}

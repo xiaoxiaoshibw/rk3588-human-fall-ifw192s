@@ -1,0 +1,239 @@
+{
+  "kind": "agl_a_sample_manifest",
+  "schema": 1,
+  "description": "GL-A synthetic sample: one shared PointDomain + three estimator records",
+  "estimator_config": {
+    "inlier_threshold_m": 0.05,
+    "min_inliers": 100,
+    "min_inlier_fraction": 0.2,
+    "ransac_iterations": 861,
+    "ransac_iteration_hard_cap": 2000,
+    "seed": 20261001
+  },
+  "point_domain": {
+    "kind": "adaptive_point_domain",
+    "schema": 1,
+    "domain_id": "agl-domain:6fed5f327a15e99da2aa5634c4e9790dc5f8da388ff0d9e8725e5cb2d6427c4e",
+    "frame_key": {
+      "stream_instance_id": "stream:synthetic",
+      "session_id": "session:agl-a-sample",
+      "reference_epoch": 0,
+      "ordinal": 0,
+      "seq": 0,
+      "source_frame": "innolidar",
+      "source_stamp": 0.0,
+      "time_domain": "device_seconds"
+    },
+    "selector": {
+      "selector_id": "synthetic-grid-v1",
+      "version": 1
+    },
+    "config_id": "agl-config:4f9ecb1bb6f6ba90fdbddeed1a8f8db7f38b3a4f8be98ef9bfe6ee5b6c6ac622",
+    "units": "m",
+    "point_count": 1681,
+    "point_sha256": "b6a5ae5a5bbdf2adcb6e4869c956cc8ea663d1ac13473ab636225cb518e2d54a",
+    "rows_sha256": "125adbb5486f13af07c6bd199717dec932a2018ec078ec837ab9034a17185656",
+    "weights_sha256": "1922db59522725d6b0e83e7814d33583f4c4a8b245341264f32879847a2e5e20",
+    "spatial_basis": {
+      "up_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "provenance": "synthetic identity reference",
+      "version": 1
+    },
+    "prefilter": {
+      "policy": "finite_nonzero_full_height_v1",
+      "input_row_count": 1681,
+      "kept_row_count": 1681,
+      "dropped_zero_count": 0,
+      "height_or_residual_trim": false
+    },
+    "source_provenance": "synthetic known plane (sample manifest, offline)"
+  },
+  "estimators": {
+    "tls": {
+      "kind": "adaptive_plane_estimate",
+      "schema": 1,
+      "estimator_id": "tls",
+      "implementation_version": "agl-a-v1",
+      "frame_key": {
+        "stream_instance_id": "stream:synthetic",
+        "session_id": "session:agl-a-sample",
+        "reference_epoch": 0,
+        "ordinal": 0,
+        "seq": 0,
+        "source_frame": "innolidar",
+        "source_stamp": 0.0,
+        "time_domain": "device_seconds"
+      },
+      "domain_id": "agl-domain:6fed5f327a15e99da2aa5634c4e9790dc5f8da388ff0d9e8725e5cb2d6427c4e",
+      "point_sha256": "b6a5ae5a5bbdf2adcb6e4869c956cc8ea663d1ac13473ab636225cb518e2d54a",
+      "rows_sha256": "125adbb5486f13af07c6bd199717dec932a2018ec078ec837ab9034a17185656",
+      "weights_sha256": "1922db59522725d6b0e83e7814d33583f4c4a8b245341264f32879847a2e5e20",
+      "config_id": "agl-config:4f9ecb1bb6f6ba90fdbddeed1a8f8db7f38b3a4f8be98ef9bfe6ee5b6c6ac622",
+      "selector_id": "synthetic-grid-v1",
+      "units": "m",
+      "sign_anchor": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "normal_source": [
+        -0.44786872480526185,
+        -0.024593134570910946,
+        0.8937610324204596
+      ],
+      "offset_source_m": 1.3198640714917604,
+      "pitch_deg": 26.61570913566176,
+      "roll_deg": -1.409224895361066,
+      "full_domain_residuals": {
+        "basis": "full_domain_untruncated",
+        "point_count": 1681,
+        "finite_count": 1681,
+        "rms_m": 0.003981452115375552,
+        "p95_m": 0.007758763599009955,
+        "signed_median_m": 9.385561323393965e-05,
+        "support_count": 1681,
+        "support_fraction": 1.0,
+        "threshold_m": 0.05
+      },
+      "eigenvalue_ratio": 0.9999999181187744,
+      "hypothesis_count": null,
+      "iterations_requested": null,
+      "resource_complete": true,
+      "numerical_valid": true,
+      "quality_status": "NOT_EVALUATED",
+      "confidence": 0.0,
+      "valid": false,
+      "reject_reasons": [
+        "GL_QUALITY_NOT_EVALUATED"
+      ],
+      "diagnostic_hypothesis": null
+    },
+    "svd": {
+      "kind": "adaptive_plane_estimate",
+      "schema": 1,
+      "estimator_id": "svd",
+      "implementation_version": "agl-a-v1",
+      "frame_key": {
+        "stream_instance_id": "stream:synthetic",
+        "session_id": "session:agl-a-sample",
+        "reference_epoch": 0,
+        "ordinal": 0,
+        "seq": 0,
+        "source_frame": "innolidar",
+        "source_stamp": 0.0,
+        "time_domain": "device_seconds"
+      },
+      "domain_id": "agl-domain:6fed5f327a15e99da2aa5634c4e9790dc5f8da388ff0d9e8725e5cb2d6427c4e",
+      "point_sha256": "b6a5ae5a5bbdf2adcb6e4869c956cc8ea663d1ac13473ab636225cb518e2d54a",
+      "rows_sha256": "125adbb5486f13af07c6bd199717dec932a2018ec078ec837ab9034a17185656",
+      "weights_sha256": "1922db59522725d6b0e83e7814d33583f4c4a8b245341264f32879847a2e5e20",
+      "config_id": "agl-config:4f9ecb1bb6f6ba90fdbddeed1a8f8db7f38b3a4f8be98ef9bfe6ee5b6c6ac622",
+      "selector_id": "synthetic-grid-v1",
+      "units": "m",
+      "sign_anchor": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "normal_source": [
+        -0.44786872480526146,
+        -0.024593134570911158,
+        0.8937610324204598
+      ],
+      "offset_source_m": 1.3198640714917602,
+      "pitch_deg": 26.615709135661735,
+      "roll_deg": -1.4092248953610782,
+      "full_domain_residuals": {
+        "basis": "full_domain_untruncated",
+        "point_count": 1681,
+        "finite_count": 1681,
+        "rms_m": 0.003981452115375555,
+        "p95_m": 0.007758763599010621,
+        "signed_median_m": 9.385561323349556e-05,
+        "support_count": 1681,
+        "support_fraction": 1.0,
+        "threshold_m": 0.05
+      },
+      "eigenvalue_ratio": 0.9999999181187752,
+      "hypothesis_count": null,
+      "iterations_requested": null,
+      "resource_complete": true,
+      "numerical_valid": true,
+      "quality_status": "NOT_EVALUATED",
+      "confidence": 0.0,
+      "valid": false,
+      "reject_reasons": [
+        "GL_QUALITY_NOT_EVALUATED"
+      ],
+      "diagnostic_hypothesis": null
+    },
+    "ransac": {
+      "kind": "adaptive_plane_estimate",
+      "schema": 1,
+      "estimator_id": "ransac",
+      "implementation_version": "agl-a-v1",
+      "frame_key": {
+        "stream_instance_id": "stream:synthetic",
+        "session_id": "session:agl-a-sample",
+        "reference_epoch": 0,
+        "ordinal": 0,
+        "seq": 0,
+        "source_frame": "innolidar",
+        "source_stamp": 0.0,
+        "time_domain": "device_seconds"
+      },
+      "domain_id": "agl-domain:6fed5f327a15e99da2aa5634c4e9790dc5f8da388ff0d9e8725e5cb2d6427c4e",
+      "point_sha256": "b6a5ae5a5bbdf2adcb6e4869c956cc8ea663d1ac13473ab636225cb518e2d54a",
+      "rows_sha256": "125adbb5486f13af07c6bd199717dec932a2018ec078ec837ab9034a17185656",
+      "weights_sha256": "1922db59522725d6b0e83e7814d33583f4c4a8b245341264f32879847a2e5e20",
+      "config_id": "agl-config:4f9ecb1bb6f6ba90fdbddeed1a8f8db7f38b3a4f8be98ef9bfe6ee5b6c6ac622",
+      "selector_id": "synthetic-grid-v1",
+      "units": "m",
+      "sign_anchor": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "normal_source": [
+        -0.4469124188369616,
+        -0.023289823198197928,
+        0.8942744959041898
+      ],
+      "offset_source_m": 1.319791071933213,
+      "pitch_deg": 26.553526255042904,
+      "roll_deg": -1.3345292383808303,
+      "full_domain_residuals": {
+        "basis": "full_domain_untruncated",
+        "point_count": 1681,
+        "finite_count": 1681,
+        "rms_m": 0.004106565549551114,
+        "p95_m": 0.008069641322768106,
+        "signed_median_m": 3.661347022010375e-06,
+        "support_count": 1681,
+        "support_fraction": 1.0,
+        "threshold_m": 0.05
+      },
+      "eigenvalue_ratio": null,
+      "hypothesis_count": 861,
+      "iterations_requested": 861,
+      "resource_complete": true,
+      "numerical_valid": true,
+      "quality_status": "NOT_EVALUATED",
+      "confidence": 0.0,
+      "valid": false,
+      "reject_reasons": [
+        "GL_QUALITY_NOT_EVALUATED"
+      ],
+      "diagnostic_hypothesis": null
+    }
+  },
+  "notes": [
+    "offline synthetic data only",
+    "physical_verified / extrinsics_verified / runtime flags are absent by design",
+    "records are JSON-safe for decoupled display consumption"
+  ]
+}

@@ -10,3 +10,27 @@ __pycache__/
 *.bag
 *.pcap
 *.db3
+
+# ML 训练数据集本体（约 643MB Blender+LiDAR 合成集），适配器见 sidequests/lidata_adapter
+/ML/LI-DATA/
+
+# 发布/打包产物（exe 与 zip 由 build 流水线重建，不入库；源码与 spec 入库）
+/pc_apps/console/dist/
+/pc_apps/console/build/
+
+# 用户人工收集的原始配置与草稿，已移到本地不入库
+/mirasim.txt
+/_archive/
+/tmp_*/
+/tmp_gl_diag/
+
+# HF evidence 中间产物大二进制：保留在工作树做审计，git 只记 hash/摘要在 SUBMISSION/README
+# （不用 git-lfs；这些是从 captures/leveled/* 派生的，可用 14/15 号 SHA 复核，不需要进对象库）
+docs/human_fall/evidence/**/points.bin
+docs/human_fall/evidence/**/*.npz
+docs/human_fall/evidence/**/*.exe
+docs/human_fall/evidence/**/source_indices.jsonl
+docs/human_fall/evidence/**/r*_case_real_historical_WHAT_IF_*.json
+docs/human_fall/evidence/**/experiment_results*.json
+docs/human_fall/evidence/**/*.zip.before
+docs/human_fall/evidence/**/source_review.html

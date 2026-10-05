@@ -1,0 +1,39 @@
+GL-A R1 范围与 SHA 复核（2026-10-05）
+====================================
+HEAD（提交时，与基线相同）: 8676bb479d4ae35cf22075cfe70225cf2220572a
+工作树: 仅新增未跟踪路径；范围内无对已跟踪文件的修改（未 commit/push/reset/checkout）。
+新增路径状态（git status --porcelain）:
+?? docs/human_fall/evidence/2026-10-05_agl_a_r1/
+?? src/human_fall_detection/core/adaptive_ground/
+?? src/human_fall_detection/tests/test_agl_a_estimators.py
+
+冻结依赖 git blob 哈希（= 00_baseline.txt，全部一致）:
+0150e5ebad0bbb8d6a0b35604904cf705712e09c src/human_fall_detection/core/ground.py
+ffa789e0c8d4e4eed3a4910a966f20219c297999 src/human_fall_detection/core/calibration.py
+060d75b7e2a4d16c77dfe114c9411ac0e3726bba src/human_fall_detection/core/joint_leveling.py
+6d683d3f810143322d99cc36ccd6270a294e866f src/human_fall_detection/core/ground_diagnostics.py
+9150cacd363e633b4fa6bdf9ef0b6416d166daf8 src/human_fall_detection/core/ground_evidence.py
+fb8b6974013c19b4b438a394186b8ed4b2ac08d8 src/human_fall_detection/core/numeric.py
+8409e1b6e151711202f03348eb1dccee8323f0b6 src/human_fall_detection/core/capture_input.py
+c1ff53144001715277790d13b798c75bcf49f352 pc_apps/human_replay/leveling_estimators/tls.py
+267d460c211d8721ce4777fc1ff6a74adac9d8cb pc_apps/human_replay/leveling_estimators/svd.py
+e79806e11d64f040082c60002e20c0cc51a40478 pc_apps/human_replay/leveling_estimators/ransac.py
+
+提交文件 SHA256:
+b9bca62acd6a30ba6df8852d44b613d92f03a387d1bac55cb4be3281a619c63d  src/human_fall_detection/core/adaptive_ground/__init__.py
+d879a82ad3a0543abd5267a07e833b91c9458c9af1a9609d0bc06f884405d687  src/human_fall_detection/core/adaptive_ground/contracts.py
+b4d8147baf0832a09067d19556ef603f801b6047661097369f024e1fe3b79476  src/human_fall_detection/core/adaptive_ground/selection.py
+b63e40aec09f74b777c28f4caae297cf96a2e61c6eb55b89e3b6421a81da85f9  src/human_fall_detection/core/adaptive_ground/estimators/__init__.py
+76ee48693909fa85377000f96c21bd5b15c28dfbbe5516510b34c41d0eea461c  src/human_fall_detection/core/adaptive_ground/estimators/tls.py
+051045b770726ef21e3729f4ea4bb5af2da061f57ecb04ec44693093343e7420  src/human_fall_detection/core/adaptive_ground/estimators/svd.py
+8d4cad60fb47c2c9dcd353ff3896150e4714bbe49619344da66b6aa2dfc760c7  src/human_fall_detection/core/adaptive_ground/estimators/ransac.py
+e37499f0f0446e9b97f89d8be147889347953801dc4fa2c41ff4003bbd540954  src/human_fall_detection/tests/test_agl_a_estimators.py
+5f16e5d679d8487160b1bba8a41cbe95bac958e5fa9e91e72e50455ae2835fa9  docs/human_fall/tickets/GL-A_adaptive_estimator_interface.md（唯一验收表 v1，未改动）
+442b840bd0c2272c241655b1a1fb6a5b497e074ebef2b78c9abca616ed102fb5  docs/human_fall/evidence/2026-10-05_agl_a_r1/20_sample_manifest.json
+
+回归:
+  GL-A 套件: python -B -W error -m unittest discover -s src/human_fall_detection/tests -p "test_agl_a_estimators.py" -v
+    → Ran 5 tests / OK / exit 0（20_test_agl_a_log.txt）
+  全量: python -B -W error -m unittest discover -s src/human_fall_detection/tests
+    → Ran 463 tests / OK / exit 0（21_regression_after.txt；改动前基线 458/OK/exit 0，见 01_regression_before.txt）
+样例 manifest 可复现: 两次独立生成 SHA256 一致 = 442b840bd0c2272c241655b1a1fb6a5b497e074ebef2b78c9abca616ed102fb5

@@ -1,0 +1,122 @@
+[
+ {
+  "case": "bin appended 28B after prepare -> reload rejects",
+  "ok": true,
+  "detail": "source points.bin changed since adaptation"
+ },
+ {
+  "case": "bin truncated by one row -> prepare rejects",
+  "ok": true,
+  "detail": "points.bin size 84 disagrees with the declared 112 bytes"
+ },
+ {
+  "case": "offset gap at frame 1 -> prepare rejects",
+  "ok": true,
+  "detail": "frame 0 offset is not contiguous"
+ },
+ {
+  "case": "offset overlap reindex -> prepare rejects",
+  "ok": true,
+  "detail": "frame 1 offset is not contiguous"
+ },
+ {
+  "case": "bool dropped_frames -> prepare rejects",
+  "ok": true,
+  "detail": "extraction.dropped_frames must be an integer"
+ },
+ {
+  "case": "bag_time_sec string -> prepare rejects",
+  "ok": true,
+  "detail": "frame 0.bag_time_sec must be numeric"
+ },
+ {
+  "case": "bag_time_sec absent -> prepare rejects",
+  "ok": true,
+  "detail": "frame 0.bag_time_sec must be numeric"
+ },
+ {
+  "case": "units with whitespace 'm ' -> prepare rejects",
+  "ok": true,
+  "detail": "declared units must be 'm' (no implicit mm)"
+ },
+ {
+  "case": "units 'M' case-mismatch -> prepare rejects",
+  "ok": true,
+  "detail": "declared units must be 'm' (no implicit mm)"
+ },
+ {
+  "case": "sensor.frame_id absent -> prepare rejects",
+  "ok": true,
+  "detail": "source sensor.frame_id must be a non-empty string"
+ },
+ {
+  "case": "frames=[] -> prepare rejects",
+  "ok": true,
+  "detail": "source frames must not be empty"
+ },
+ {
+  "case": "alias group id injected into manifest -> reload rejects",
+  "ok": true,
+  "detail": "manifest is not the canonical manifest of its actual source"
+ },
+ {
+  "case": "frame_of_row around empty frames maps every row",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "case": "boundary rows around 0-width frames map to next non-empty",
+  "ok": true,
+  "detail": "[0, 0, 2, 2, 2, 4]"
+ },
+ {
+  "case": "parent dir missing for output -> auto-created (link still atomic)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "case": "nested output parent created and target is a real file",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "case": "adapted NPZ renamed (source unchanged) -> reloads",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "case": "tampered frame seq swap -> reload rejects",
+  "ok": true,
+  "detail": "manifest is not the canonical manifest of its actual source"
+ },
+ {
+  "case": "points count lowered by one -> reload rejects",
+  "ok": true,
+  "detail": "manifest is not the canonical manifest of its actual source"
+ },
+ {
+  "case": "np.int32 row indices accepted and mapped",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "case": "np.bool_ element (pure) strictly rejected",
+  "ok": true,
+  "detail": "rows must be integer row indices"
+ },
+ {
+  "case": "np.float32 row index rejected",
+  "ok": true,
+  "detail": "rows must be integer row indices"
+ },
+ {
+  "case": "explicit fit indices within group accepted",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "case": "explicit fit indices leaking across group rejected",
+  "ok": true,
+  "detail": "fit_indices leave the declared fit frame_group"
+ }
+]

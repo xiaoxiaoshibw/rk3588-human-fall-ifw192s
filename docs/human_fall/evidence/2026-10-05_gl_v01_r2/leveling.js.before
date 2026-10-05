@@ -1,0 +1,206 @@
+"use strict";
+/* Local-only offline workflow. All algorithm/quality/export work happens in Python. */
+(function () {
+    const $ = id => document.getElementById(id);
+    const validationMode = document.body.dataset.workbench === "validation";
+    const apiBase = validationMode ? "/api/validation" : "/api/leveling";
+    const colors = [0x95a9b8, 0xffcb75, 0x7fceff, 0xe39eff, 0x7be1aa];
+    let state = {generation: 0, source: null, meta: null, raw: null, job: null, report: null, busy: false, loading:false};
+    let bounds = [0, 4, -1.5, 1.5], drag = null, playing = false;
+    let rois = [[1.04,1.75,-.93,-.45],[1.94,2.40,-.94,.07],[1.32,1.76,-.38,.20],[2.64,3.31,-.57,.19]];
+    const viewers = [];
+    const camera = new THREE.PerspectiveCamera(55, 1, .01, 200);
+    camera.up.set(0,0,1); camera.position.set(-1,-5,4);
+    ["rawView", "levelView"].forEach(id => {
+        const renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); $(id).appendChild(renderer.domElement);
+        const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0c1219);
+        const grid = new THREE.GridHelper(10,20,0x446078,0x253543); grid.rotation.x = Math.PI/2; scene.add(grid);
+        scene.add(new THREE.AxesHelper(1));
+        viewers.push({renderer, scene, host: $(id), points: null});
+    });
+    const controls = new THREE.OrbitControls(camera, viewers[0].renderer.domElement); controls.target.set(2,0,0);
+    const controls2 = new THREE.OrbitControls(camera, viewers[1].renderer.domElement); controls2.target.copy(controls.target);
+    controls.addEventListener("change", () => controls2.target.copy(controls.target));
+    controls2.addEventListener("change", () => controls.target.copy(controls2.target));
+    function resetCamera() { camera.position.set(-1,-5,4); controls.target.set(2,0,0); controls2.target.copy(controls.target); controls.update(); }
+    $("cameraReset").onclick = resetCamera;
+    function animate() {
+        requestAnimationFrame(animate);
+        viewers.forEach(v => {
+            const w = v.host.clientWidth, h = v.host.clientHeight;
+            if (v.renderer.domElement.width !== Math.round(w*v.renderer.getPixelRatio()) || v.renderer.domElement.height !== Math.round(h*v.renderer.getPixelRatio())) v.renderer.setSize(w,h,false);
+            camera.aspect=w/h; camera.updateProjectionMatrix(); v.renderer.render(v.scene,camera);
+        });
+    }
+    animate();
+    function note(text, error) { $("note").textContent = text; $("note").className = error ? "fail" : "muted"; }
+    async function api(url, body) {
+        const response = await fetch(url, body ? {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)} : undefined);
+        const data = await response.json(); if (!response.ok) throw Error(data.error || "HTTP "+response.status); return data;
+    }
+    function clearResult() {
+        state.generation++; state.report=null; state.job=null; $("result").hidden=true;
+        $("method").replaceChildren(new Option("名义显示预览", "nominal"));
+        $("levelLabel").textContent="名义预览 · 未评估";
+        if (state.raw) drawFrame();
+    }
+    function invalidate() { clearResult(); $("confirmed").checked=false; enable(); note("区域或参数已修改，请重新确认地面并配平。"); }
+    function enable() {
+        $("run").disabled = state.busy || state.loading || !state.raw || !$("confirmed").checked || $("basis").value.trim().length < 2;
+        $("runAuto").disabled = state.busy || state.loading || !state.raw;  /* P03：与人工确认解耦 */
+        ["session","refresh"].forEach(id => $(id).disabled = state.busy);
+        ["pitch","roll","height","confirmed","basis"].forEach(id => $(id).disabled = state.busy || state.loading);
+        document.querySelectorAll("#regions input").forEach(e => e.disabled=state.busy || state.loading);
+        document.querySelectorAll("#cohort button").forEach(e => e.disabled=state.busy || e.dataset.unavailable === "true");
+    }
+    function regionInputs() {
+        const body = $("regions").tBodies[0]; body.replaceChildren();
+        rois.forEach((roi,i) => {
+            const row = body.insertRow(); row.insertCell().textContent="#"+(i+1);
+            roi.forEach((value,j) => {
+                const input = document.createElement("input"); input.type="number"; input.step=".01"; input.value=value;
+                input.setAttribute("aria-label","区域"+(i+1)+"边界"+(j+1));
+                input.onchange=()=>{rois[i][j]=Number(input.value);invalidate();drawFrame();}; row.insertCell().append(input);
+            });
+        });
+    }
+    regionInputs();
+    function matrix(pitch,roll) {
+        const p=pitch*Math.PI/180,r=roll*Math.PI/180,cp=Math.cos(p),sp=Math.sin(p),cr=Math.cos(r),sr=Math.sin(r);
+        return [[cp,0,sp],[sr*sp,cr,-sr*cp],[-cr*sp,sr,cr*cp]];
+    }
+    function apply(p,R,t) {return R.map((row,i)=>row[0]*p[0]+row[1]*p[1]+row[2]*p[2]+t[i]);}
+    function regionOf(p) {return 1+rois.findIndex(r=>p[0]>=r[0]&&p[0]<r[1]&&p[1]>=r[2]&&p[1]<r[3]);}
+    function nominal() {return {R:matrix(Number($("pitch").value),Number($("roll").value)),t:[0,0,Number($("height").value)]};}
+    function mapToCanvas(x,y) {const c=$("roi");return [(x-bounds[0])/(bounds[1]-bounds[0])*c.width,(bounds[3]-y)/(bounds[3]-bounds[2])*c.height];}
+    function mapPoint(ev) {const box=$("roi").getBoundingClientRect();return [bounds[0]+(ev.clientX-box.left)/box.width*(bounds[1]-bounds[0]), bounds[3]-(ev.clientY-box.top)/box.height*(bounds[3]-bounds[2])];}
+    function drawFrame() {
+        const canvas=$("roi"), ctx=canvas.getContext("2d"); ctx.fillStyle="#0c1219";ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.strokeStyle="#263d50";ctx.fillStyle="#849bb0";ctx.font="12px sans-serif";
+        for(let x=Math.ceil(bounds[0]);x<=bounds[1];x++){let a=mapToCanvas(x,bounds[2]),b=mapToCanvas(x,bounds[3]);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();ctx.fillText(x+"m",a[0]+3,canvas.height-5);}
+        for(let y=Math.ceil(bounds[2]);y<=bounds[3];y++){let a=mapToCanvas(bounds[0],y),b=mapToCanvas(bounds[1],y);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();ctx.fillText(y+"m",3,a[1]-3);}
+        if(!state.raw)return;
+        const index=Number($("frame").value),frame=state.meta.frames[index], seed=nominal();
+        const result=state.report&&state.report.estimators[$("method").value];
+        const model=result&&result.valid?result:seed, pos=[[],[]],rgb=[[],[]];
+        const step=Math.max(1,Math.ceil(frame.count_points/12000));
+        for(let i=0;i<frame.count_points;i+=step){
+            const offset=(frame.offset_points+i)*7,p=[state.raw[offset],state.raw[offset+1],state.raw[offset+2]];
+            if(!p.every(Number.isFinite)||p.every(v=>v===0))continue;
+            const n=apply(p,seed.R,seed.t),code=regionOf(n),col=new THREE.Color(colors[code]);
+            pos[0].push(...p);pos[1].push(...apply(p,model.R,model.t));rgb[0].push(col.r,col.g,col.b);rgb[1].push(col.r,col.g,col.b);
+            const q=mapToCanvas(n[0],n[1]);ctx.fillStyle="#"+colors[code].toString(16).padStart(6,"0");ctx.fillRect(q[0],q[1],1.4,1.4);
+        }
+        rois.forEach((r,i)=>{const a=mapToCanvas(r[0],r[3]),b=mapToCanvas(r[1],r[2]);ctx.strokeStyle="#"+colors[i+1].toString(16);ctx.lineWidth=2;ctx.strokeRect(a[0],a[1],b[0]-a[0],b[1]-a[1]);ctx.fillStyle=ctx.strokeStyle;ctx.fillText("#"+(i+1),a[0]+4,a[1]+16);});
+        viewers.forEach((v,i)=>{if(v.points){v.scene.remove(v.points);v.points.geometry.dispose();v.points.material.dispose();}const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(pos[i],3));geo.setAttribute("color",new THREE.Float32BufferAttribute(rgb[i],3));v.points=new THREE.Points(geo,new THREE.PointsMaterial({size:.025,vertexColors:true}));v.points.frustumCulled=false;v.scene.add(v.points);});
+        $("frameInfo").textContent=(index+1)+" / "+state.meta.frames.length+" · seq "+frame.seq;
+        $("levelLabel").textContent=result&&result.valid?$("method").value.toUpperCase()+" · 离线几何门通过":"名义预览 · 未评估";
+    }
+    $("roi").onpointerdown=ev=>{if(!state.raw||state.busy)return;drag=mapPoint(ev);$("roi").setPointerCapture(ev.pointerId);};
+    $("roi").onpointerup=ev=>{if(!drag)return;if(state.busy){drag=null;return;}const end=mapPoint(ev);let r=[Math.min(drag[0],end[0]),Math.max(drag[0],end[0]),Math.min(drag[1],end[1]),Math.max(drag[1],end[1])];drag=null;if(r[1]-r[0]<.05||r[3]-r[2]<.05)return;rois[Number($("activeRegion").value)]=r.map(v=>Math.round(v*1000)/1000);regionInputs();invalidate();drawFrame();};
+    $("roi").onpointercancel=()=>{drag=null;};
+    $("roi").addEventListener("wheel",ev=>{ev.preventDefault();const p=mapPoint(ev),factor=ev.deltaY>0?1.2:.8;bounds=[p[0]+(bounds[0]-p[0])*factor,p[0]+(bounds[1]-p[0])*factor,p[1]+(bounds[2]-p[1])*factor,p[1]+(bounds[3]-p[1])*factor];drawFrame();},{passive:false});
+    $("mapReset").onclick=()=>{bounds=[0,4,-1.5,1.5];drawFrame();};
+    ["pitch","roll","height"].forEach(id=>$(id).oninput=()=>{invalidate();drawFrame();});
+    $("basis").oninput=()=>{clearResult();enable();note("确认依据已修改，请重新配平。");};
+    $("confirmed").onchange=()=>{clearResult();enable();note($("confirmed").checked?"确认后可点击配平。":"地面确认已取消，旧结果不再可选。");};
+    $("frame").oninput=drawFrame;$("method").onchange=drawFrame;
+    $("play").onclick=()=>{playing=!playing;$("play").textContent=playing?"Ⅱ 暂停":"▶ 播放";};
+    setInterval(()=>{if(playing&&state.meta){$("frame").value=(Number($("frame").value)+1)%state.meta.frames.length;drawFrame();}},100);
+    async function refresh() {
+        const {sessions}=await api(apiBase+"/sessions");const value=$("session").value;
+        $("session").replaceChildren(new Option("请选择…",""));sessions.forEach(s=>$("session").add(new Option(s.sid+" · "+s.frames+"帧",s.sid)));
+        $("session").value=value;
+        if(validationMode){
+            const body=$("cohort").tBodies[0];body.replaceChildren();
+            sessions.forEach(s=>{
+                const row=body.insertRow(),button=document.createElement("button");
+                button.textContent=s.sid.replace(/^cap_/,"");button.dataset.unavailable=String(!s.available);
+                button.onclick=()=>{$("session").value=s.sid;loadSession();};row.insertCell().append(button);
+                [s.duration_sec==null?"—":Number(s.duration_sec).toFixed(1)+"s",s.frames||"—",s.status].forEach(v=>row.insertCell().textContent=v);
+                row.lastChild.className=s.recommended?"pass":s.error||s.status==="评估未通过"?"fail":"muted";
+                row.title=s.error||"";
+            });enable();
+        }
+        return sessions;
+    }
+    $("refresh").onclick=()=>refresh().catch(e=>note(e.message,true));
+    async function loadSession() {
+        playing=false;$("play").textContent="▶ 播放";clearResult();state.raw=null;state.meta=null;state.source=null;
+        $("frameInfo").textContent="未载入";$("frame").max=0;$("frame").value=0;
+        viewers.forEach(v=>{if(v.points){v.scene.remove(v.points);v.points.geometry.dispose();v.points.material.dispose();v.points=null;}});
+        $("confirmed").checked=false;$("basis").value="";$("play").disabled=true;enable();drawFrame();
+        $("sourceInfo").textContent="载入 meta.json 与 points.bin 后可配平。";
+        const sid=$("session").value,token=state.generation;state.loading=!!sid;enable();if(!sid){note("请选择本地会话。");return;}
+        note("校验与载入原始数据…");
+        try{
+            const source=await api(apiBase+"/source?sid="+encodeURIComponent(sid));
+            const response=await fetch("/api/file?sid="+encodeURIComponent(sid)+"&name=points.bin");if(!response.ok)throw Error("源bin读取失败");
+            const buffer=await response.arrayBuffer();
+            const digest=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",buffer))).map(v=>v.toString(16).padStart(2,"0")).join("");
+            if(digest!==source.source.bin_sha256)throw Error("载入时bin发生变化，请重试");
+            if(token!==state.generation)return;
+            state.source=source.source;state.meta=source.meta;state.raw=new Float32Array(buffer);
+            $("frame").max=state.meta.frames.length-1;$("frame").value=0;$("play").disabled=false;
+            $("sourceInfo").textContent=sid+" · "+state.meta.frames.length+"帧 · "+state.meta.total_points.toLocaleString()+"点";
+            drawFrame();enable();note("已载入。核对四区并填写依据后，点击配平。");
+            if(validationMode){
+                note("读取该会话的已保存评估…");
+                const saved=await fetch(apiBase+"/latest?sid="+encodeURIComponent(sid));
+                if(token!==state.generation)return;
+                if(saved.status===404){note("该会话待配平，点击自动配平开始评估。");return;}
+                const job=await saved.json();if(!saved.ok)throw Error(job.error||"存盘结果不可用");
+                if(job.sid!==sid||job.report.source.meta_sha256!==state.source.meta_sha256||job.report.source.bin_sha256!==state.source.bin_sha256)throw Error("存盘结果与载入会话不一致");
+                const config=job.report.config;
+                $("pitch").value=config.pitch_deg;$("roll").value=config.roll_deg;$("height").value=config.physical_height_m;
+                rois=config.regions.map(r=>r.slice());regionInputs();$("basis").value=config.basis;
+                showReport(job);
+            }
+        }catch(e){if(token===state.generation)note(e.message,true);}finally{if(token===state.generation){state.loading=false;enable();}}
+    }
+    $("session").onchange=loadSession;
+    const fixed=(v,d=3)=>v==null?"—":Number(v).toFixed(d);
+    function artifact(job,method,name){return apiBase+"/artifact?id="+job+"&method="+method+"&name="+name+(validationMode?"&sid="+encodeURIComponent($("session").value):"");}
+    function showReport(job) {
+        state.report=job.report;state.job=job.job_id;const r=job.report;$("result").hidden=false;
+        $("method").replaceChildren(new Option("名义显示预览","nominal"));
+        $("consensus").textContent=(r.recommended?"推荐 "+r.recommended.toUpperCase():"不推荐自动选择")+" · "+r.recommendation_basis;
+        $("consensus").className=r.recommended?"pass":"fail";
+        const tbody=$("algorithms").tBodies[0];tbody.replaceChildren();$("downloads").replaceChildren();
+        Object.entries(r.estimators).forEach(([name,a])=>{
+            const row=tbody.insertRow(),values=[name.toUpperCase(),a.valid?"PASS":"FAIL",fixed(a.pitch_deg)+" / "+fixed(a.roll_deg),fixed(a.offset_source_m,6),a.full?fixed(a.full.rms_m*100)+" / "+fixed(a.full.p95_m*100):"—",a.full?fixed(a.full.support_ratio*100,1)+"%":"—",a.reject_reasons.join("；")||"四区及3帧留出通过"];
+            values.forEach((v,i)=>{const cell=row.insertCell();cell.textContent=v;if(i===1)cell.className=a.valid?"pass":"fail";});
+            if(a.valid){$("method").add(new Option(name.toUpperCase(),name));const aLink=document.createElement("a");aLink.href=artifact(job.job_id,name,"dataset.zip");aLink.textContent="下载 "+name.toUpperCase()+" 配平数据";aLink.download=name+"_leveled.zip";$("downloads").append(aLink);}
+        });
+        const reportLink=document.createElement("a");reportLink.href=artifact(job.job_id,"report","report.json");reportLink.textContent="下载评估报告";$("downloads").append(reportLink);
+        $("pairs").textContent=r.pairwise.map(p=>p.a.toUpperCase()+" ↔ "+p.b.toUpperCase()+": "+fixed(p.angle_deg)+"° / "+fixed(p.offset_gap_m*100)+"cm · "+p.status).join("　");
+        const preview=r.recommended||(validationMode&&Object.keys(r.estimators).find(n=>r.estimators[n].valid))||"nominal";
+        $("report").textContent=JSON.stringify(r,null,2);$("method").value=preview;drawFrame();
+        note((job.persisted?"已恢复保存结果。":"评估完成。")+"拟合 "+r.fit_point_count.toLocaleString()+" 点；留出帧 "+r.holdout_ordinals.join(", ")+"。"+(!Object.keys(job.artifacts).length?" 所有方法拒绝，仅生成诊断报告。":"配平数据可下载。")+(validationMode&&!r.recommended&&preview!=="nominal"?"当前仅预览通过的 "+preview.toUpperCase()+"；三法未一致，不作自动推荐。":""));
+    }
+    $("run").onclick=async()=>{
+        state.busy=true;drag=null;clearResult();const jobToken=state.generation;enable();note("提交本地配平任务…");
+        try{
+            const started=await api(apiBase+"/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),regions:rois.map(r=>r.slice()),ground_confirmed:$("confirmed").checked,basis:$("basis").value}});
+            while(jobToken===state.generation){
+                const job=await api(apiBase+"/job?id="+started.job_id+(validationMode?"&sid="+encodeURIComponent($("session").value):""));if(jobToken!==state.generation)break;
+                note(job.message);if(job.state==="failed")throw Error(job.error);if(job.state==="ready"){showReport(job);break;}
+                await new Promise(resolve=>setTimeout(resolve,700));
+            }if(validationMode)await refresh();
+        }catch(e){if(jobToken===state.generation)note(e.message,true);}finally{state.busy=false;enable();}
+    };
+    /* P03：算法自动找地面区域。与 run 共用同一 POST 与轮询；mode='auto' 服务端自算 regions。 */
+    $("runAuto").onclick=async()=>{
+        state.busy=true;drag=null;clearResult();const jobToken=state.generation;enable();note("提交自动配平（算法找地面）…");
+        try{
+            const started=await api(apiBase+"/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),mode:"auto"}});
+            while(jobToken===state.generation){
+                const job=await api(apiBase+"/job?id="+started.job_id+(validationMode?"&sid="+encodeURIComponent($("session").value):""));if(jobToken!==state.generation)break;
+                note(job.message);if(job.state==="failed")throw Error(job.error);if(job.state==="ready"){showReport(job);break;}
+                await new Promise(resolve=>setTimeout(resolve,700));
+            }if(validationMode)await refresh();
+        }catch(e){if(jobToken===state.generation)note(e.message,true);}finally{state.busy=false;enable();}
+    };
+    refresh().then(sessions=>{const sid=new URLSearchParams(location.search).get("sid")||(validationMode&&sessions[0]&&sessions[0].sid);if(sid){$("session").value=sid;loadSession();}}).catch(e=>note(e.message,true));
+})();

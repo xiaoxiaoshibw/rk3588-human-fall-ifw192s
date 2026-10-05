@@ -1,0 +1,109 @@
+# 地面识别、坐标配平与现有大框问题：开发 PLAN
+
+当前按[WORKFLOW.md](WORKFLOW.md) v2，用户手动派指定OpenCode、Codex独立复审。GL02软件PASS；GL03 R6分类已通过，软件仅G03结构资格FAIL/REWORK，G04/G05保持PASS。O01统计PASS/真实身份BLOCKED、设备NOT_RUN。当前[R6复审](evidence/2026-10-02_gl03_r6/codex_review_01/CODEX_REVIEW.md)、[结构审查](evidence/2026-10-02_gl03_r6/codex_review_01/PLAN_REVIEW.md)、[手动R7](AI_PROMPT_GL03_OPENCODE_R7.md)。不重做已过功能、不自动派工/GL04/设备操作。
+
+日期：2026-10-01。状态：方案已选定，六张工单已编制；数据审查、算法开发、板端操作与部署均未开始。本文是本阶段的执行入口，不重做已经通过的 HF 首版。
+
+最新状态：用户已成组批准并启动GL-00；DeepSeek模型探针通过，已做只读分析和用户批准的47帧有界采集。用户随后明确要求等待其测量，现PAUSED_USER，GL-00未PASS，后续单未派发。恢复锚点见 [CODEX_PAUSE](evidence/2026-10-01_gl00_r1/CODEX_PAUSE.md)，此状态优先于上方编制时快照。
+
+更新优先：用户恢复开发，机器人总高1.4m、眼球离地约1.1m、雷达向下看（具体角度未知）。GL-00 R4软件方案/参数/契约PASS，仅放行GL-01合成原型；真实物理BLOCKED。获审协议和补充实施口径见 [CODEX_REVIEW](evidence/2026-10-01_gl00_r4/CODEX_REVIEW.md)，覆盖上述暂停状态；旧失败/暂停记录保留。
+
+## 1. 目标与场景依据
+
+用户说明并提供四张多视角截图：左侧是工位与椅子，中间是地面通道，右侧是台子，红框标注机器人。这些说明用于提出采样位置和排除对象，不能替代原始 XYZ、地面真值或安装测量。截图上的网格为显示参考，黑色空洞不能作为地面点。
+
+阶段目标：识别可验证的地面，建立固定局部地面坐标，使离地高度、俯瞰视图、三维候选框、二维选择矩形和坐标读数一致；诊断当前背景/家具/机器人合并的大候选框，修复与地面及坐标直接有关的原因。
+
+本阶段不承诺通用人体语义识别或骨骼。不把机器人、椅子等 unknown 几何候选改标 human；不以变小的框冒充人体识别完成。
+
+## 2. 方法与引入决策
+
+选定方法：**确认地面区域 → 空间均衡采样 → 候选阶段带法向约束的 RANSAC → 内点 SVD 精修并重新计算支持 → 独立帧组/区域验证 → 固定 ground_local 变换 → 在线有符号高度与可信区域监测**。
+
+开源依据：
+
+- [PCL 约束平面实现](https://github.com/PointCloudLibrary/pcl/blob/master/sample_consensus/include/pcl/sample_consensus/impl/sac_model_perpendicular_plane.hpp)：借鉴 isModelValid 在支持计数前检查法向夹角的机制。现有 NumPy ground.py 中移植这一方法，首版不新增 PCL 绑定或完整 C++ 节点。
+- [PCL 法向估计说明](https://pointclouds.org/documentation/tutorials/normal_estimation.html)：复用现有内点 SVD，正确处理法向符号、退化与方向证据。
+- [PCL 平面分割教程](https://pointclouds.org/documentation/tutorials/planar_segmentation.html)：RANSAC/距离支持作为可复现基线；教程阈值不直接作为本雷达参数。
+
+选择改造已有实现，而非整库移入：现有算法/解析/契约已连接纯 Python 与 ROS，先补缺失约束和几何消费逻辑更容易验证。已有 NumPy、unittest、Three.js 足够覆盖首版计算与显示。若复制开源代码片段，执行者必须记录来源版本及保留原许可；方法借鉴与源码复制需分别说明。
+
+本阶段暂不引入 Open3D、Patchwork++、LineFit、学习模型、IMU融合或 SLAM。单平面前提失败才带数据返回方案审查；现有 NumPy 原型耗时不满足预算时，先定位采样/迭代热点，再评估已有 Linux PCL C++ 隔离实现，不能未经审查随意换库。
+
+完整调研及限制见 [方法审查](GROUND_LEVELING_METHOD_REVIEW.md)。该设计已经选定，具体 ROI、安装先验和数值门槛由 GL-00 提交证据并由 Codex 审核，不留给实现者边跑边改验收门槛。
+
+## 3. 需要针对性解决的问题
+
+| 现状 | 解决措施 | 归属 |
+|---|---|---|
+| 场景中墙/家具可能比地面点多，旧代码最大平面获胜后才检查方向 | 候选阶段约束；地面采样与竞争平面证据；有界候选核验 | GL-00/01 |
+| 旧全场景支持率门槛未通过，拟合残差无法单独证明地面身份 | 已知地面验证区域与独立帧；支持率、区域残差分开报告 | GL-00/01 |
+| 平面参数未形成可用配平坐标，安装外参保持未知 | 独立地面派生变换与明确原点/朝向，保持底盘/IMU未知 | GL-02 |
+| 参考框只转换 min/max 两角，旋转后几何错误 | 将候选实际点转换后重算 ground AABB；源 AABB保持原义 | GL-03 |
+| 大候选可能由地面连接家具和机器人 | 查证源索引与聚类连接；最小地面处理修复；保留近地人体证据 | GL-03 |
+| 点云/框/二维投影/网格/读数不统一地面坐标 | 同一标定版本显示与选择，增加真实地面俯瞰入口 | GL-04 |
+| 数学通过不等于真人场景可用 | 独立地面/高度/浏览器/性能验证与回滚 | GL-05 |
+
+## 4. 固定的几何与显示决定
+
+- `ground_local` 是局部地面坐标，不是绝对地图/底盘坐标。源 frame、原始话题与时间标识保留。
+- 单位 n 与 d 表示源系地面 `n·p+d=0`，向上方向需有依据。原点 `o=-d*n`；X为经确认的参考轴 a 在地面上的单位投影u，Y为 `v=n×u`，Z为n。
+- `R=[u.T;v.T;n.T]`，`t=-R*o`，`p_ground=R*p_source+t`。地面Z=0，雷达原点Z=d。参考轴投影退化明确报错。
+- 地面姿态来自测量，水平朝向/平面内原点来自约定；不能把派生记录写入已测外参字段后标 verified。
+- 固定安装冻结变换，不能每帧重新配平导致目标和背景坐标漂移。坡地法向不等于重力竖直，本阶段限制平整室内。
+- 原始模式显示源点云和源AABB；配平模式显示转换点云和由同一候选实际点重算的 ground AABB。二维框是当前三维框八角投影的外接矩形；选人仍发送原 snapshot/candidate_id，不发送裸像素坐标。
+- 保留既有 source/reference 字段冻结语义；新的 ground 字段使用明确版本化兼容扩展，不把旧字段静默改名或改义。源/地面中心明确各自计算定义，不能把旋转后的源中位数混称地面点集中位数。
+- 换标定使旧位置、快照和站姿基线资格失效；断流、未标定、范围外地面不能默认正常。
+
+## 5. 工单顺序与关卡
+
+| 工单 | 工作 | 前置 | 当前状态 |
+|---|---|---|---|
+| [GL-00](tickets/GL-00_data_roi_review.md) | 场景/真实数据/ROI/先验/参数与契约方案审查 | 本PLAN | R4软件/方案PASS，真实物理BLOCKED |
+| [GL-01](tickets/GL-01_constrained_ground.md) | 改造约束RANSAC与独立验证原型 | GL-00方法与参数方案获审；必要数据可用 | R4软件PASS，真实来源/物理BLOCKED |
+| [GL-02](tickets/GL-02_ground_frame.md) | 局部地面变换、产物与生命周期 | GL-00契约方案、GL-01软件获审 | R7软件PASS，设备NOT_RUN/物理BLOCKED；统一验收v1 |
+| [GL-03](tickets/GL-03_candidates_geometry.md) | 框坐标修复与大候选成因诊断/最小修复 | GL-01/02软件与契约获审 | R4软件REWORK（G03/G04/G05），先固定输入/有效绑定设计审查，真实身份BLOCKED/设备NOT_RUN |
+| [GL-04](tickets/GL-04_webui_level_view.md) | 配平点云/框/投影/俯瞰与交互 | GL-02/03接口获审 | WAIT_DEPENDENCY |
+| [GL-05](tickets/GL-05_device_acceptance.md) | 真机物理/性能/浏览器验收与发布 | GL-01～04对应软件PASS；现场与部署授权可用 | WAIT_DEPENDENCY |
+
+GL-00缺真实数据时可完成文档/契约草案，数据结论单列BLOCKED；Codex可放行不依赖现场的合成原型，但不得替代真实方法验证。后续工单同样区分软件与设备状态：缺尺量不阻止数学回归，缺真实流不虚标设备通过。
+
+工单串行写入，Codex逐关直接读取回传、复查源码/证据、给PASS/REWORK/BLOCKED；范围内返工续接同工单session。未通过不得跨关集成或部署。执行AI仅SUBMITTED/BLOCKED，Codex才可更新验收结论。
+
+## 6. 共同执行与交付要求
+
+按 CODEX_OPENCODE_WORKFLOW、DISPATCH、RETURN_TEMPLATE 与 ponytail 执行。记录开工HEAD/工作树/冻结资产哈希与未跟踪文件，保留用户修改。每张工单读本PLAN、方法审查、冻结契约及最新运行记录。
+
+实现者沿用项目已配置 DeepSeek v4.1 Flash，实际CLI/模型/会话需运行前核对；本PLAN不创建CLI或新的聊天。Codex负责审查；本阶段不需要并行实现AI。
+
+证据目录：`docs/human_fall/evidence/<实际日期>_gl00_r1/` 等；回传：`returns/GL-00.md` 等。轮次追加，原始失败保留；无实际结果不得预填。每张附修改清单、关键函数、命令/退出码、数据/配置/代码/标定哈希、synthetic/offline/device层级、未跑项和下一关建议。
+
+Windows纯函数与JS检查使用当前已核对的环境；Linux ROS/采集/性能验证在 RK3588实际环境，不升级系统/依赖。默认不改driver/厂商库/网络/自启，不commit/push，不覆盖旧数据。正式部署由GL-05按现有授权和可回退版本流程处理，未覆盖授权时提交具体待发布版本。
+
+## 7. 完成定义
+
+只有在独立地面/尺量高度通过、真实浏览器配平/俯瞰/框选一致、标定失效逻辑通过、板端新增耗时有实测时，本阶段才能称实际场地配平已验收。
+
+大框另列结果：证据是否证明地面连接、修复后哪些对象可分开、哪些仍因家具接触/遮挡合并。没有证据不能写“人体框准确”。界面候选保持unknown，confirmed/IMU融合继续禁用。
+
+用户最终收到：方法与参数版本、操作步骤、同一场景配平前后/俯瞰/地面支持截图、物理误差表、性能对比、可回退版本及剩余限制。
+
+## GL-01 R4独立软件复审PASS / 2026-10-01
+
+显式约束RANSAC、数值CLI与加载器经Codex244回归/12独立方法exit0及同SHA板端244验证，软件PASS；真实bag源索引/帧组适配、ROI与物理BLOCKED，未部署。原9/10独立失败已闭合，两次API400在同DeepSeek session压缩后恢复，日志保留。hardware_inventory.md外来人工截图约26度粗估保留，不据此标实测。详evidence/2026-10-01_gl01_r4/CODEX_REVIEW.md。允许串行GL02数学软件/未核验候选预览，不升级真实外参/IMU/confirmed。
+
+## 最新用户派工方式与GL02 R1复审 / 2026-10-01
+
+用户要求“接下来任务让我手动给cluadecode”。后续改为用户手动交Claude Code；Codex只准备具体工单/独立复审，不自动调用OpenCode继续返工或派后续。当前GL02 OpenCode R1已结束exit0，Codex262常规回归通过但独立6方法6失败，软件REWORK/真实物理BLOCKED，GL03未放行。手动下一步为AI_PROMPT_GL02_CLAUDE_REWORK.md，详细证据evidence/2026-10-01_gl02_r1/CODEX_REVIEW.md与40_*。GL00/01已审软件不重做。无活动实现写入者，不部署/采集，旧失败保留。
+
+## GL-02 Claude R2 Codex独立复审 / 2026-10-01
+
+软件REWORK，GL03不放行；继续用户手动派Claude Code。Codex独立262回归/原6方法exit0；新增集成5方法5失败，补类型检查后最终7方法7失败exit1（evidence/2026-10-01_gl02_r2/50～54）。R2闭合原反例，但实际加载仍可保留旧ground、裸块版本错配；monitor失效仍发布位置/继续相关观测、散点误报整体变化、重标定被一帧清除；float版本/mixed bool矩阵仍通过。详同目录CODEX_REVIEW.md；下一步手动AI_PROMPT_GL02_CLAUDE_R3.md。板端兼容NOT_RUN，真实物理BLOCKED，未改生产算法/部署/采集。
+
+## GL-02 Claude R3 Codex独立复审 / 2026-10-01
+
+R2原七方法/267全回归/R2静态六方法独立通过（GL02 R3 evidence50～52），已闭合部分保留；新增其他入口四方法四失败，补单侧遮挡后最终五方法五失败exit1（55_*）。软件REWORK，设备兼容NOT_RUN/真实物理BLOCKED，GL03不放行。剩余为配套局部更新calibration版本错配/caller引用、同GDID新calibration版本未清旧资格、monitor不可用仍accepted基线请求、10%单侧遮挡误锁存整片变化。详evidence/2026-10-01_gl02_r3/CODEX_REVIEW.md；用户手动下一步AI_PROMPT_GL02_CLAUDE_R4.md，不自动派工。生产算法未由Codex修改，未部署/采集。
+
+## GL-02 Claude R4 Codex独立复审 / 2026-10-01
+
+R3原五方法5/5、R2七方法7/7、静态6/6、fall 271/271、follow 2/2、两个webui各18/18均由Codex独立实跑通过。新增reload/已有pending三方法3失败exit1：空或相同配套reload沿用旧版本却丢input.sha256/evidence/note等完整产物字段；已accepted基线请求在随后monitor持续不可用超过10秒时仍pending且无终态回执。软件REWORK，GL-03不放行；设备兼容NOT_RUN、真实物理BLOCKED。详[evidence/2026-10-01_gl02_r4/CODEX_REVIEW.md](evidence/2026-10-01_gl02_r4/CODEX_REVIEW.md)与57_*。手动下一步[AI_PROMPT_GL02_CLAUDE_R5.md](AI_PROMPT_GL02_CLAUDE_R5.md)；只修这两项，不自动派工。生产源码/原测试/driver差异/Windows软链接表示保留，未部署/采集/commit/push/reset。

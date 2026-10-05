@@ -1,16 +1,42 @@
 # AI 工单总表
 
+2026-10-05新增已具体授权：[P03回放自动配平](P03_replay_auto_leveling.md)，唯一[P03 v1](../P03_ACCEPTANCE.md)，单writer Claude Code，NOT_RUN。该单不启动GL-A～I，不取消GL-W01人工确认哲学（auto只替画ROI，不替确认才消费）。
+
+2026-10-05新增已具体授权：[GL-W01离线配平工作台](GL-W01_offline_workbench.md)，唯一[GLW01 v1](../GLW01_ACCEPTANCE.md)，SUBMITTED/指定独审服务BLOCKED。该单复用静态P02，不将下面AGL-A～I实施状态提升。
+
 ## 地面配平后续阶段（2026-10-02当前）
 
+## 最终阶段新增：GL-A～GL-I 自适应地面配平（PLAN_READY，未实施）
+
+入口：[正式计划](../ADAPTIVE_GROUND_LEVELING_FINAL_PLAN.md) / [接口契约](../ADAPTIVE_GROUND_LEVELING_CONTRACT.md)。每ticket含自身唯一v1验收表，所有实现结果NOT_RUN；实时shadow/启用另有具体授权和证据门，不因计划就启动。
+
+| 工单 | 内容 | 依赖 / 当前状态 |
+|---|---|---|
+| [GL-A](GL-A_adaptive_estimator_interface.md) | 统一估计器与PointDomain接口 | 后续启动；PLANNED/NOT_RUN |
+| [GL-B](GL-B_adaptive_quality.md) | Quality/coverage/退化与单法confidence | A；PLANNED/NOT_RUN |
+| [GL-C](GL-C_adaptive_consensus.md) | 家族保护的三方法一致性仲裁 | A/B；PLANNED/NOT_RUN |
+| [GL-D](GL-D_adaptive_temporal.md) | 时间滤波/六状态/last_good/恢复 | C；PLANNED/NOT_RUN |
+| [GL-E](GL-E_adaptive_offline_leveling.md) | FINAL source R/t与离线应用 | D；PLANNED/NOT_RUN |
+| [GL-F](GL-F_adaptive_replay_validation.md) | Replay八场景/profile/独立验证 | E+数据；PLANNED/NOT_RUN |
+| [GL-G](GL-G_adaptive_diagnostics_webui.md) | 三列/FINAL/可信度/日志preview | D/E+F schema；PLANNED/NOT_RUN |
+| [GL-H](GL-H_adaptive_shadow_mode.md) | 目标机只计算shadow与性能 | F/G+具体授权；WAIT_DEPENDENCY/AUTH |
+| [GL-I](GL-I_adaptive_controlled_activation.md) | 人工受控接管/冻结/回退 | H+物理/consumer/启用授权；WAIT_DEPENDENCY/AUTH |
+
+以上GL-A～GL-I与下方GL-00～05/GL-B01/I01等历史单不同；验收ID采用AGL-X-*避免重名。下一可启动的软件单是GL-A，当前只交计划，不已派发。
+
 当前阶段入口：[GROUND_LEVELING_PLAN](../GROUND_LEVELING_PLAN.md)，方法依据：[调研与审查](../GROUND_LEVELING_METHOD_REVIEW.md)。GL00/01/02软件已分别获审，设备/真实物理独立记录；下方HF为历史验收。派工使用[WORKFLOW](../WORKFLOW.md)与对应工单验收表，不直接派旧宽范围提示词。
+
+| 缩写 | 英文 | 中文 | 说明 |
+|---|---|---|---|
+| **GL** | **Ground Leveling** | 地面配平 | HF 第一阶段暴露出候选框贴地、吞入机器人及地面的问题。先完成地面几何/配平方法调研与 Candidate 重算，再将配平结果接入现有候选生成链路。工单范围：**GL-00～GL-05**。
 
 | 编号 | 内容 | 前置/状态 |
 |---|---|---|
 | [GL-00](GL-00_data_roi_review.md) | 真实数据、地面ROI、先验与参数/契约审核 | R4软件/方案PASS，真实物理BLOCKED |
 | [GL-01](GL-01_constrained_ground.md) | PCL方法参考的约束RANSAC/SVD原型 | R4软件PASS，真实来源/物理BLOCKED |
 | [GL-02](GL-02_ground_frame.md) | 局部地面变换与标定生命周期 | R7 A01–A12软件PASS，设备NOT_RUN/物理BLOCKED |
-| [GL-03](GL-03_candidates_geometry.md) | 正确地面框与当前大候选诊断/最小修复 | 软件前置满足，未启动 |
-| [GL-04](GL-04_webui_level_view.md) | 点云/框/二维选择/俯瞰同坐标显示 | GL-02/03接口获审 / WAIT_DEPENDENCY |
+| [GL-03](GL-03_candidates_geometry.md) | 正确地面框与当前大候选诊断/最小修复 | R7 G01/G02/G03/G04/G05/G07/G08软件PASS；G06/真实身份BLOCKED，O01统计PASS，D01设备NOT_RUN；整单未ACCEPTED |
+| [GL-04](GL-04_webui_level_view.md) | 点云/框/二维选择/俯瞰同坐标显示 | WAIT_AUTHORIZATION：须用户另行授权，不因GL03软件PASS自动派发 |
 | [GL-05](GL-05_device_acceptance.md) | 物理/浏览器/性能验收与回退发布 | GL-01～04软件PASS及现场条件 / WAIT_DEPENDENCY |
 
 ## HF 首版工单与历史状态
@@ -21,7 +47,7 @@
 |---|---|---|---|
 | [HF-00](HF-00_sensor_inventory.md) | Luna；Codex/OpenCode 真机探测 | 硬件、话题、SDK、时间与环境盘点 | ACCEPTED（盘点范围）；未知项已分配 |
 | [HF-01](HF-01_contract_capture.md) | DeepSeek v4.1 Flash | 无相机契约、小 ROS 包、采集/健康工具 | ACCEPTED；第 2 轮复审通过，已实现范围冻结 |
-| [HF-02](HF-02_time_imu.md) | DeepSeek v4.1 Flash | 时间归一、IMU 语义与质量检查 | 第3轮：软件PASS，R1–R5全闭合；设备BLOCKED，整单未ACCEPTED |
+| [HF-02](HF-02_time_imu.md) | DeepSeek v4.1 Flash | 时间归一、IMU 语义与质量检查 | 第3轮：软件PASS，R1–R5全闭合；设备BLOCKED，整单未ACCEPTED——**2026-10-02 用户决定降级为备忘，不进 GL-05，仅当后续接入移动/非静止场景时再回头核验** |
 | [HF-03](HF-03_geometric_calibration.md) | DeepSeek v4.1 Flash | 安装变换、地面与 IMU 旋转标定 | 01/02 验收后 |
 | [HF-04](HF-04_perception_candidates.md) | DeepSeek v4.1 Flash | 点云候选、几何特征与难例 | 01～03 验收后 |
 | [HF-05](HF-05_target_lock.md) | DeepSeek v4.1 Flash | 网页选择后端、站姿基线、锁定跟踪 | 02～04 验收后 |
@@ -32,7 +58,7 @@
 | [HF-09](HF-09_deployment_profile.md) | DeepSeek v4.1 Flash | 板端算法与网页性能、必要优化、部署 | 07/11/08 验收后 |
 | [HF-10](HF-10_codex_review.md) | 当前 Codex | 独立复核、通过/返工/待真机 | 指定工单的每次回传由Codex直接读取并复审 |
 
-当前状态（2026-10-01）：软件首版与HF09可回退部署已完成独立复审，211两端回归/44独立Python边界/18网页纯检查PASS，最终HF10见returns/HF-10.md。HF00/01已冻结；HF02设备、HF03物理标定、HF06/08真人准确性与性能门槛仍缺证据，整体不虚标ACCEPTED；confirmed/融合禁用。所有原回传/失败和旧版本保留，当前无OpenCode运行任务。
+当前状态（2026-10-01）：软件首版与HF09可回退部署已完成独立复审，211两端回归/44独立Python边界/18网页纯检查PASS，最终HF10见returns/HF-10.md。HF00/01已冻结；**HF02 已于 2026-10-02 由用户决定降级为备忘——固定雷达判定跌倒不依赖 IMU，仅当未来移动/非静止场景再回头核验**；HF03物理标定、HF06/08真人准确性与性能门槛仍缺证据，整体不虚标ACCEPTED；confirmed/IMU融合禁用。所有原回传/失败和旧版本保留，当前无OpenCode运行任务。
 
 已按用户自主推进授权实现RK3588算法和现有网页选择/基线/状态交互，详见[WEBUI_SCOPE.md](../WEBUI_SCOPE.md)。现有12张工单，后续完成HF09并由当前Codex记录HF10最终软件审查与剩余真人条件。
 

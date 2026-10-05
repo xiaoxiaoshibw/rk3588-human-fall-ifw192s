@@ -1,0 +1,47 @@
+# HF-09 production node config: real live topics, no ground configured.
+#
+# Same contract as config/human_fall.yaml but with the optional node-side
+# `performance` diagnostic block enabled for the measured run. With no real
+# ground artifact the node stays honestly degraded/unknown; it never fabricates
+# a ground plane. Session/event output stays separate from the frozen HF-01
+# health/manifest.
+session_id: null                 # null -> hfd_<utc timestamp> at startup
+topics:
+  cloud: /innolidar_points
+  imu: /inno_imu
+  device_status: /device_status
+  candidates: /human_fall/candidates
+  state: /human_fall/state
+  event: /human_fall/event
+  selection_request: /human_fall/selection_request
+  selection_ack: /human_fall/selection_ack
+  display_points: /human_fall/display_points
+visualization:
+  # Read-only, stride-sampled display stream. The algorithm still subscribes,
+  # decodes and runs on the FULL /innolidar_points; only the browser-facing
+  # display topic is sampled (fields/units/endianness/coords unchanged).
+  enabled: true
+  stride: 4
+  max_points: 12000
+timeouts_s:
+  cloud_stale: 0.6
+  imu_stale: 0.3
+  device_stale: 0.6
+stamps:
+  max_forward_jump_s: 30.0
+checks:
+  expected_cloud_frame: innolidar
+publish_period_s: 0.5
+geometry:
+  # No verified real ground artifact yet: leave null -> wait. Candidates are
+  # published in uncalibrated radar coordinates and fall state stays unknown.
+  calibration_path: null
+  ground_path: null
+  background_path: null
+mode:
+  require_ground: false
+output:
+  session_dir: /root/catkin_ws/human_fall_sessions_prod
+  event_file: events.jsonl
+  recent_events: 64
+  performance: true              # optional state extension for HF-09 profiling

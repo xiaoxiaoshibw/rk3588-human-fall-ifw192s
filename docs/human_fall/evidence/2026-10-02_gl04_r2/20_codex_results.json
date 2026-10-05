@@ -1,0 +1,155 @@
+[
+  {
+    "id": "V01",
+    "name": "missing R/t never identity",
+    "result": "PASS"
+  },
+  {
+    "id": "V02",
+    "name": "exact requested ground.support_polygon entry",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "valid transform + unknown ground refuses mode",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "valid transform + none ground refuses mode",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "unsupported calibration schema refuses mode",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "verifier unavailable clears observed status",
+    "result": "PASS"
+  },
+  {
+    "id": "V07",
+    "name": "no candidate snapshot + ready baseline clears current status",
+    "result": "PASS"
+  },
+  {
+    "id": "V07",
+    "name": "candidate list empty + ready baseline clears current status",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "list closure same IDs changed candidate content rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "same IDs changed R/t rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "caller mutation after rendered button rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "silent expiry refuses old choice; history retained",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "disconnect preserves history and refuses old choice",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "future foreign snapshot cannot change current frame R/t",
+    "result": "PASS"
+  },
+  {
+    "id": "V03",
+    "name": "mode labels/current position use ground coordinates",
+    "result": "PASS"
+  },
+  {
+    "id": "V04",
+    "name": "DPR-only overlay backing changes after frame",
+    "result": "PASS"
+  },
+  {
+    "id": "V04",
+    "name": "CSS resize reprojection uses current camera and rect",
+    "result": "PASS"
+  },
+  {
+    "id": "V02",
+    "name": "budget 3001/9000 supports has provenance and <=3000",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "fresh list choice and same-content reload accepted original ID",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "raw cloud same seq/stamp foreign spatial frame rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V01",
+    "name": "two coordinate inputs with conflicting R/t rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "snapshot new calibration while state old is unknown and unselectable",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V06",
+    "name": "state new calibration while snapshot old is unknown",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V06",
+    "name": "unsupported matched calibration schema cannot green source or select",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V07",
+    "name": "target absent but unrelated current candidate and ready baseline exists",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V08",
+    "name": "publisher state.performance.queue_dropped field is displayed",
+    "result": "FAIL",
+    "error": "The expression evaluated to a falsy value:\n\n  assert.ok(w.$('gPerf').textContent.includes('queue_dropped 3'))\n"
+  },
+  {
+    "id": "V02",
+    "name": "explicit 3D support with null Z is not silently flattened",
+    "result": "FAIL",
+    "error": "Expected \"actual\" to be strictly unequal to:\n\n'ready'"
+  },
+  {
+    "id": "V03",
+    "name": "explicit non-metre ground transform is refused",
+    "result": "FAIL",
+    "error": "Expected \"actual\" to be strictly unequal to:\n\n'ready'"
+  },
+  {
+    "id": "V06",
+    "name": "quiet expiry invalidates GPU drawing as well as DOM/overlay",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+  }
+]

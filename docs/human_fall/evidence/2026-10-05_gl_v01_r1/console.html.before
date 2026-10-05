@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>总控制台</title>
+<link rel="icon" href="console_icon.png" type="image/png">
+<style>
+  :root{--bg:#16181d;--panel:#1e2128;--line:#2c3038;--fg:#cfd3dc;--hi:#3a6ea5}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
+    font:15px/1.5 "Microsoft YaHei",sans-serif}
+  .view{height:100%;display:none}
+  .view.on{display:flex;flex-direction:column}
+
+  /* ===== 首页 ===== */
+  #home{justify-content:center;align-items:center;gap:28px}
+  #home h1{font-size:22px;font-weight:600;letter-spacing:2px;margin:0}
+  #grid{display:grid;grid-template-columns:repeat(auto-fit,230px);gap:16px;
+    justify-content:center;max-width:820px;padding:0 24px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:22px 20px;cursor:pointer;transition:all .15s}
+  .card:hover{border-color:var(--hi);transform:translateY(-2px)}
+  .card .icon{font-size:28px}
+  .card .name{font-size:16px;color:#fff;margin-top:10px}
+  .card .desc{font-size:12px;opacity:.55;margin-top:4px}
+  .card.slot{border-style:dashed;opacity:.35;cursor:default}
+  .card.slot:hover{border-color:var(--line);transform:none}
+
+  /* ===== 不可达提示 ===== */
+  #err{display:flex;flex-direction:column;justify-content:center;align-items:center;
+    gap:14px;flex:1;background:#000;margin:0}
+  #err[hidden]{display:none}   /* [hidden] 的 UA 默认会被上面 display:flex 盖掉，须显式拉回 */
+  #err .ic{font-size:40px}
+  #err .t1{font-size:16px;color:#fff}
+  #err .t2{font-size:12px;opacity:.55}
+  #err button{background:transparent;border:1px solid var(--line);border-radius:4px;
+    color:var(--fg);padding:4px 16px;cursor:pointer}
+  #err button:hover{border-color:var(--hi)}
+
+  /* ===== 应用视图 ===== */
+  #bar{display:flex;gap:12px;align-items:center;padding:6px 14px;
+    background:var(--panel);border-bottom:1px solid var(--line);flex:none}
+  #bar button{background:transparent;border:1px solid var(--line);border-radius:4px;
+    color:var(--fg);padding:3px 12px;cursor:pointer}
+  #bar button:hover{border-color:var(--hi)}
+  #bar .sp{flex:1}
+  iframe{flex:1;border:0;width:100%;background:#000}
+  iframe[hidden]{display:none}
+</style>
+</head>
+<body>
+<section id="home" class="view on">
+  <h1>总控制台</h1>
+  <div id="grid"></div>
+</section>
+<section id="app" class="view">
+  <div id="bar">
+    <button id="back">← 总控</button>
+    <b id="appname"></b>
+    <span class="sp"></span>
+    <button id="pop" title="新窗口打开当前应用">↗</button>
+  </div>
+  <iframe id="f"></iframe>
+  <div id="err" hidden>
+    <div class="ic">📡</div>
+    <div class="t1" id="errmsg"></div>
+    <div class="t2" id="errurl"></div>
+    <button id="retry">重试</button>
+  </div>
+</section>
+<script>
+// ============ 扩展点：未来新入口在 APPS 数组追加即可 ============
+// mode: "iframe"(默认，嵌在控制台里)  / "tab"(应用视图点 ↗ 或条目直接开新标签，
+//         留给将来拒绝内嵌的站点，如服务端设了 X-Frame-Options)
+const requestedPort = Number(new URLSearchParams(location.search).get("replay_port") || 8901);
+const replayBase = "http://127.0.0.1:" + (Number.isInteger(requestedPort) && requestedPort > 0 && requestedPort <= 65535 ? requestedPort : 8901);
+const APPS = [
+  {name:"数据标注",  desc:"annotator · 本地服务",   icon:"✏️", url:replayBase + "/annotator.html"},
+  {name:"会话回放",  desc:"replay · 本地服务",      icon:"▶",  url:replayBase + "/"},
+  {name:"板端 WebUI", desc:"RK3588 · 192.168.3.125:8090", icon:"🖥️", url:"http://192.168.3.125:8090/",
+   fail:"当前不在内网，无法连接板端 WebUI"},
+  {name:"离线配平", desc:"四区评估 · TLS / SVD / RANSAC", icon:"⚖", url:replayBase + "/leveling.html"},
+];
+const SLOTS = 3; // 预留占位槽位（首页虚线卡片）
+// ============================================================
+const $ = s => document.querySelector(s);
+const home = $("#home"), appv = $("#app"), f = $("#f");
+let cur = 0, loaded = -1;
+
+// 卡片 + 预留槽位
+APPS.forEach((a, i) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.innerHTML = `<div class="icon">${a.icon}</div><div class="name">${a.name}</div><div class="desc">${a.desc}</div>`;
+  d.onclick = () => a.mode === "tab" ? window.open(a.url, "_blank") : open(i);
+  $("#grid").appendChild(d);
+});
+for (let k = 0; k < SLOTS; k++) {
+  const d = document.createElement("div");
+  d.className = "card slot";
+  d.innerHTML = `<div class="icon">＋</div><div class="name">预留槽位</div><div class="desc">未来功能入口</div>`;
+  $("#grid").appendChild(d);
+}
+
+const err = $("#err");
+
+// 跨域 iframe：连不上（ERR_CONNECTION_*）时浏览器一样触发 load，
+// 靠「读 location.host 是否可访问」识别浏览器错误页 → 显示 fail 提示
+function showErr(a) {
+  $("#errmsg").textContent = a.fail;
+  $("#errurl").textContent = new URL(a.url).origin;
+  f.hidden = true; err.hidden = false;
+}
+let navBan = null;  // 一次导航最多弹一次提示，防 onload 重入；「重试」可清零再探
+f.onload = () => {
+  if (!APPS[cur] || !APPS[cur].fail || !err.hidden) return;  // 无 fail 或已提示则不动
+  try { if (f.contentWindow.location.host) { return; } } catch (e) {}
+  // 没读到 host 或读时报 SOP 错 → 浏览器已加载错误页
+  if (navBan === APPS[cur].url) return;
+  navBan = APPS[cur].url;
+  showErr(APPS[cur]);
+};
+
+function open(i) {
+  cur = i;
+  $("#appname").textContent = APPS[i].name;
+  if (loaded !== i) {                                 // 重进同应用不重载，保留页内状态
+    loaded = i; navBan = null;
+    err.hidden = true; f.hidden = false; f.src = APPS[i].url;
+  }
+  home.classList.remove("on"); appv.classList.add("on");
+  if (location.hash !== "#" + i) history.replaceState(null, "", "#" + i);
+}
+function back() {
+  appv.classList.remove("on"); home.classList.add("on");
+  history.replaceState(null, "", location.pathname + location.search); // 保留本实例服务端口
+}
+$("#back").onclick = back;
+$("#pop").onclick = () => window.open(APPS[cur].url, "_blank");
+$("#retry").onclick = () => {
+  if (navBan === APPS[cur].url) navBan = null;      // 清空本次导航的弹窗封锁
+  err.hidden = true; f.hidden = false; f.src = APPS[cur].url;
+};
+
+// ponytail: iframe 内导航不跟踪；子站被 X-Frame-Options 挡时用 mode:"tab" 或 ↗
+const h = parseInt(location.hash.slice(1), 10);
+if (Number.isInteger(h) && APPS[h]) open(h);
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+[
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "explicit source provenance unavailable cannot read as current measured XYZ",
+    "actual": {
+      "valid_state": true,
+      "position": "3.00, 0.00, -0.50",
+      "fall": "unknown",
+      "prediction": "实测",
+      "track": "t1 / locked",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    },
+    "result": "FAIL",
+    "error": "explicit non-actual source position must be unavailable\n+ actual - expected\n\n+ '3.00, 0.00, -0.50'\n- '--'\n"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "explicit source provenance predicted cannot read as current measured XYZ",
+    "actual": {
+      "valid_state": true,
+      "position": "3.00, 0.00, -0.50",
+      "fall": "unknown",
+      "prediction": "实测",
+      "track": "t1 / locked",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    },
+    "result": "FAIL",
+    "error": "explicit non-actual source position must be unavailable\n+ actual - expected\n\n+ '3.00, 0.00, -0.50'\n- '--'\n"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "bbox flag alone does not erase actual_points raw center",
+    "actual": {
+      "position": "3.00, 0.00, -0.50",
+      "fall": "unknown",
+      "prediction": "实测",
+      "track": "t1 / locked",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    },
+    "result": "PASS"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "legacy omitted provenance retains current source XYZ",
+    "actual": {
+      "position": "3.00, 0.00, -0.50",
+      "fall": "upright",
+      "prediction": "实测",
+      "track": "t1 / locked",
+      "target_visible": true,
+      "target_color": "3ad07a"
+    },
+    "result": "PASS"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "lost is not a valid occluded prediction",
+    "actual": {
+      "valid_state": true,
+      "position": "--",
+      "fall": "unknown",
+      "prediction": "预测 age=0.50s",
+      "track": "t1 / 未对齐当前帧",
+      "target_visible": true,
+      "target_color": "6b7a90"
+    },
+    "result": "FAIL",
+    "error": "inactive/non-occluded target cannot reappear through prediction diagnostic\n\ntrue !== false\n"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "ambiguous is not a valid occluded prediction",
+    "actual": {
+      "valid_state": true,
+      "position": "--",
+      "fall": "unknown",
+      "prediction": "预测 age=0.50s",
+      "track": "t1 / 未对齐当前帧",
+      "target_visible": true,
+      "target_color": "6b7a90"
+    },
+    "result": "FAIL",
+    "error": "inactive/non-occluded target cannot reappear through prediction diagnostic\n\ntrue !== false\n"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "unselected is not a valid occluded prediction",
+    "actual": {
+      "valid_state": true,
+      "position": "--",
+      "fall": "unknown",
+      "prediction": "预测 age=0.50s",
+      "track": "未选目标 / 未对齐当前帧",
+      "target_visible": true,
+      "target_color": "6b7a90"
+    },
+    "result": "FAIL",
+    "error": "inactive/non-occluded target cannot reappear through prediction diagnostic\n\ntrue !== false\n"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "locked is not a valid occluded prediction",
+    "actual": {
+      "valid_state": true,
+      "position": "--",
+      "fall": "unknown",
+      "prediction": "预测 age=0.50s",
+      "track": "t1 / 未对齐当前帧",
+      "target_visible": true,
+      "target_color": "6b7a90"
+    },
+    "result": "FAIL",
+    "error": "inactive/non-occluded target cannot reappear through prediction diagnostic\n\ntrue !== false\n"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "explicit stale occluded prediction cannot redraw retained bbox",
+    "actual": {
+      "position": "--",
+      "fall": "unknown",
+      "prediction": "预测 age=9.00s",
+      "track": "t1 / occluded",
+      "target_visible": true,
+      "target_color": "6b7a90"
+    },
+    "result": "FAIL",
+    "error": "stale prediction cannot remain a current diagnostic box\n\ntrue !== false\n"
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "fresh occluded empty-candidate prediction retains grey diagnostic",
+    "actual": {
+      "position": "--",
+      "fall": "unknown",
+      "prediction": "预测 age=0.50s",
+      "track": "t1 / 未对齐当前帧",
+      "target_visible": true,
+      "target_color": "6b7a90"
+    },
+    "result": "PASS"
+  }
+]

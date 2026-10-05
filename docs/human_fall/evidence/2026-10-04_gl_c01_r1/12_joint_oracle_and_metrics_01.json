@@ -1,0 +1,54 @@
+{
+  "joint_parameters": {
+    "pitch_deg": 26.314310192213412,
+    "roll_deg": -0.6120612044525384,
+    "tz_m": 1.3231366999453702
+  },
+  "source_counts": {
+    "pick_03": 528,
+    "pick_01": 890,
+    "pick_02": 276,
+    "pick_04": 624
+  },
+  "quality": "FAIL",
+  "full_point_scalar_oracle_max_error_m": 4.440892098500626e-16,
+  "source_row_order_matches": true,
+  "orthogonal_pose_invariance_max_error_m": 6.661338147750939e-16,
+  "metrics": [
+    {
+      "region_id": "pick_03",
+      "role": "fit",
+      "same_plane_rms_m": 0.009201485388014637,
+      "same_plane_p95_m": 0.01832412928988711,
+      "same_plane_support_fraction": 1.0,
+      "quality": "PASS"
+    },
+    {
+      "region_id": "pick_01",
+      "role": "validation",
+      "same_plane_rms_m": 0.024627121452989197,
+      "same_plane_p95_m": 0.050762498846460155,
+      "same_plane_support_fraction": 0.9426966292134832,
+      "quality": "FAIL"
+    },
+    {
+      "region_id": "pick_02",
+      "role": "validation",
+      "same_plane_rms_m": 0.028317875111941428,
+      "same_plane_p95_m": 0.057538592029840074,
+      "same_plane_support_fraction": 0.9166666666666666,
+      "quality": "FAIL"
+    },
+    {
+      "region_id": "pick_04",
+      "role": "validation",
+      "same_plane_rms_m": 0.020217924601144972,
+      "same_plane_p95_m": 0.037626974207306596,
+      "same_plane_support_fraction": 0.9919871794871795,
+      "quality": "PASS"
+    }
+  ],
+  "no_residual_trim": true,
+  "model_and_measurement_separated": true,
+  "physical_verified": false
+}

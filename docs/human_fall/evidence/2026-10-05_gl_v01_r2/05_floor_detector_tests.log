@@ -1,0 +1,21 @@
+test_dense_table_never_wins_and_mixed_height_cells_are_not_ground (floor_detector_test.FloorDetectorTest.test_dense_table_never_wins_and_mixed_height_cells_are_not_ground) ... ok
+test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes (floor_detector_test.FloorDetectorTest.test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes) ... FAIL
+test_table_without_visible_floor_is_rejected (floor_detector_test.FloorDetectorTest.test_table_without_visible_floor_is_rejected) ... ok
+
+======================================================================
+FAIL: test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes (floor_detector_test.FloorDetectorTest.test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes)
+----------------------------------------------------------------------
+ValueError: floor_not_found: no horizontal plane in floor-height hypothesis
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Code\ldiar\pc_apps\human_replay\floor_detector_test.py", line 45, in test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes
+    with self.assertRaisesRegex(ValueError,"floor_regions_invalid"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "floor_regions_invalid" does not match "floor_not_found: no horizontal plane in floor-height hypothesis"
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.759s
+
+FAILED (failures=1)

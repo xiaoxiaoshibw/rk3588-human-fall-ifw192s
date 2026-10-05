@@ -1,0 +1,168 @@
+"""Joint data-plane pitch/roll/tz estimate from one frozen source frame.
+
+R=Rx(roll)@Ry(pitch). A plane normal fixes roll/pitch under this yaw convention;
+it cannot distinguish sensor tilt from physical ground slope. No runtime grant.
+"""
+import copy
+import hashlib
+import math
+
+import numpy as np
+
+from .calibration import apply_transform, validate_rotation, validate_translation
+from .capture_input import gate_selection, select_group_region, source_identity
+from .ground import resolve_constrained_settings
+from .ground_diagnostics import pca_plane, residual_stats
+from .ground_evidence import digest, keys, number, require, text
+from .numeric import strict_numeric_array
+
+
+def joint_rotation(pitch_deg, roll_deg):
+    p = math.radians(number(pitch_deg,"pitch_deg"))
+    r = math.radians(number(roll_deg,"roll_deg"))
+    cp,sp,cr,sr = math.cos(p),math.sin(p),math.cos(r),math.sin(r)
+    return validate_rotation([[cp,0,sp],[sr*sp,cr,-sr*cp],[-cr*sp,sr,cr*cp]])
+
+
+def validate_initial(initial, frame):
+    keys(initial,("pitch_deg","roll_deg","tz_m","from_frame","to_frame","provenance"),"initial pose")
+    require(initial["from_frame"] == frame,"initial source frame mismatch")
+    text(initial["to_frame"],"to_frame");text(initial["provenance"],"initial provenance")
+    require(initial["to_frame"] != frame,"same from/to frame")
+    rotation = joint_rotation(initial["pitch_deg"],initial["roll_deg"])
+    height = number(initial["tz_m"],"tz_m")
+    require(0 <= height <= 50,"initial tz numeric domain [0,50] m")
+    return {"status":"initial_estimate","rotation":rotation.tolist(),
+            "translation_m":validate_translation([0,0,height]).tolist()}
+
+
+def selection_binding(manifest):
+    s=manifest["source"]
+    return {"source_id":source_identity(s["meta_sha256"],s["bin_sha256"]),
+            "bin_sha256":s["bin_sha256"],"xyz_sha256":manifest["points"]["sha256"],
+            "frame":manifest["declared"]["frame"],"units":"m",
+            "window_bag_time_sec":[manifest["frames"][0]["bag_time_sec"],manifest["frames"][-1]["bag_time_sec"]]}
+
+
+def freeze_joint_selection(points, manifest, initial, regions):
+    require(isinstance(points,np.ndarray) and points.dtype == np.dtype('<f4')
+            and points.shape == tuple(manifest["points"]["shape"]),"canonical source float32 array required")
+    require(hashlib.sha256(points.tobytes()).hexdigest() == manifest["points"]["sha256"],
+            "caller-modified source array")
+    require(manifest["declared"]["units"] == "m","source units")
+    pose=validate_initial(initial,manifest["declared"]["frame"])
+    require(isinstance(regions,list) and len(regions)>=4,"FIT+three validation regions required")
+    groups,ids,selectors=set(),set(),[]
+    for region in regions:
+        keys(region,("region_id","role","frame_group","x_min_m","x_max_m","y_min_m","y_max_m"),"region")
+        text(region["region_id"],"region ID")
+        require(region["region_id"] not in ids and region["frame_group"] not in groups,"region/frame alias")
+        require(region["role"] in ("fit","validation") and region["frame_group"] in manifest["frame_groups"],"region role/group")
+        for axis in ('x','y'):
+            require(number(region[axis+'_min_m'],'low') < number(region[axis+'_max_m'],'high'),"ROI bounds")
+        ids.add(region['region_id']);groups.add(region['frame_group'])
+        lo,hi=manifest['frame_groups'][region['frame_group']]['rows'];rows=np.arange(lo,hi,dtype=np.int64)
+        rows=rows[np.isfinite(points[rows]).all(axis=1)&np.any(points[rows]!=0,axis=1)]
+        mapped=apply_transform(points[rows],pose)
+        mask=((mapped[:,0]>=region['x_min_m'])&(mapped[:,0]<=region['x_max_m'])
+              &(mapped[:,1]>=region['y_min_m'])&(mapped[:,1]<=region['y_max_m']))
+        selector={'region_id':region['region_id'],'frame_group':region['frame_group'],'indices':rows[mask].tolist()}
+        # Frozen group-first primitive validates row membership, no residual cut.
+        select_group_region(points,manifest,selector)
+        selectors.append((region['role'],selector))
+    fit=[s for role,s in selectors if role=='fit'];val=[s for role,s in selectors if role=='validation']
+    require(len(fit)==1,"exactly one FIT")
+    gate_selection(points,manifest,fit[0],None,fit[0]['frame_group'],val)
+    record={'kind':'frozen_joint_ground_selection','schema':1,'binding':selection_binding(manifest),
+            'initial':copy.deepcopy(initial),'regions':copy.deepcopy(regions),'fit':fit[0],'validation':val,
+            'selection_method':'initial_display_XY_all_heights_no_fitted_residual',
+            'ground_row_identity':'assumed_scene_ROI_not_exhaustive_human_labels'}
+    record['selection_id']='joint-selection:'+digest(record)
+    return record
+
+
+def validate_joint_selection(selection, points, manifest):
+    keys(selection,('kind','schema','binding','initial','regions','fit','validation',
+                    'selection_method','ground_row_identity','selection_id'),'selection')
+    expected=freeze_joint_selection(points,manifest,selection['initial'],selection['regions'])
+    require(digest(selection)==digest(expected),"selection content/ID/source rows changed or filtered")
+    return expected
+
+
+def validate_joint_model(model):
+    keys(model,('kind','schema','status','model_id','from_frame','to_frame','units','convention',
+                'pitch_deg','roll_deg','tz_m','rotation','translation_m','normal_source','offset_source_m',
+                'selection_id','binding','physical_verified','extrinsics_verified','runtime_eligible',
+                'candidate_eligible','method'),'joint model')
+    require(type(model['schema']) is int and model['schema']==1 and model['kind']=='joint_ground_level_estimate'
+            and model['status']=='data_estimate','model kind/schema/status')
+    require(model['units']=={'length':'m','angle':'deg'} and model['convention']=='R=Rx(roll)@Ry(pitch); p_to=R@p_from+(0,0,tz)',"model units/direction")
+    require(model['model_id']=='joint:'+digest({k:v for k,v in model.items() if k!='model_id'}),"model ID/content")
+    require(all(model[k] is False for k in ('physical_verified','extrinsics_verified','runtime_eligible','candidate_eligible')),'qualification promotion forbidden')
+    text(model['from_frame'],'from_frame');text(model['to_frame'],'to_frame')
+    require(model['from_frame']!=model['to_frame'],'same frame')
+    require(model['binding']['frame']==model['from_frame'] and model['binding']['units']=='m','model source binding')
+    r=joint_rotation(model['pitch_deg'],model['roll_deg']);t=validate_translation([0,0,number(model['tz_m'],'tz')])
+    recorded_r=strict_numeric_array(model['rotation'],(3,3),'model R')
+    recorded_t=strict_numeric_array(model['translation_m'],(3,),'model t')
+    recorded_n=strict_numeric_array(model['normal_source'],(3,),'model normal')
+    require(np.allclose(r,recorded_r,atol=1e-12,rtol=0) and np.allclose(t,recorded_t,atol=1e-12,rtol=0),'model R/t mismatch')
+    require(np.allclose(r[2],recorded_n,atol=1e-12,rtol=0)
+            and number(model['offset_source_m'],'plane offset')==model['tz_m'],'plane/pose mismatch')
+    return copy.deepcopy(model)
+
+
+def solve_joint_leveling(points, manifest, selection):
+    selection=validate_joint_selection(selection,points,manifest)
+    fit=selection['fit'];val=selection['validation'];settings=resolve_constrained_settings(None)
+    rows=np.asarray(fit['indices'],dtype=np.int64)
+    require(len(rows)>=settings['min_inliers'],'FIT below frozen minimum100')
+    initial_pose=validate_initial(selection['initial'],manifest['declared']['frame'])
+    up=np.asarray(initial_pose['rotation'])[2]
+    plane=pca_plane(points[rows],up)
+    require(plane['eigenvalue_ratio']>=settings['min_planar_eigenvalue_ratio'],'FIT planar spread degenerate')
+    n=np.asarray(plane['normal']);d=float(plane['offset_m'])
+    require(0<d<=50,'estimated ground plane not below source origin or beyond numeric mount domain')
+    pitch=float(np.degrees(np.arctan2(-n[0],n[2])))
+    roll=float(np.degrees(np.arcsin(np.clip(n[1],-1,1))))
+    rotation=joint_rotation(pitch,roll)
+    model={'kind':'joint_ground_level_estimate','schema':1,'status':'data_estimate',
+           'from_frame':manifest['declared']['frame'],'to_frame':selection['initial']['to_frame'],
+           'units':{'length':'m','angle':'deg'},'convention':'R=Rx(roll)@Ry(pitch); p_to=R@p_from+(0,0,tz)',
+           'pitch_deg':pitch,'roll_deg':roll,'tz_m':d,'rotation':rotation.tolist(),'translation_m':[0.,0.,d],
+           'normal_source':n.tolist(),'offset_source_m':d,'selection_id':selection['selection_id'],
+           'binding':selection['binding'],'physical_verified':False,'extrinsics_verified':False,
+           'runtime_eligible':False,'candidate_eligible':False,
+           'method':'single_source_frame_all_FIT_TLS_plane_closed_form_no_VAL_training'}
+    model['model_id']='joint:'+digest(model);validate_joint_model(model)
+    reports=[];invariance=0.0
+    for role,region in [('fit',fit)]+[('validation',r) for r in val]:
+        cloud=points[region['indices']].astype(float)
+        stats=residual_stats(cloud,n,d,settings['inlier_threshold_m'])
+        mapped=apply_transform(cloud,model)
+        before=apply_transform(cloud,initial_pose)
+        ni=np.asarray(initial_pose['rotation'])@n
+        di=d-float(ni@np.asarray(initial_pose['translation_m']))
+        signed=cloud@n+d
+        invariance=max(invariance,float(np.max(np.abs(signed-mapped[:,2]))),
+                       float(np.max(np.abs(signed-(before@ni+di)))))
+        passed=(stats['count']>=settings['points_per_region_min'] and stats['rms_m']<=settings['untruncated_rms_max_m']
+                and stats['p95_m']<=settings['abs_residual_p95_max_m'] and stats['support_fraction']>=settings['support_fraction_min'])
+        try:
+            local=pca_plane(cloud,n)
+            local_stats=residual_stats(cloud,local['normal'],local['offset_m'],settings['inlier_threshold_m'])
+        except ValueError as exc:
+            local_stats={'reason':str(exc),'count':len(cloud)}
+        reports.append({'region_id':region['region_id'],'role':role,'frame_group':region['frame_group'],
+            'selected_source_rows':region['indices'],'same_FIT_plane_full_point_stats':stats,
+            'fixed_plane_quality':'PASS' if passed else 'FAIL',
+            'local_self_fit_diagnostic_only':local_stats,
+            'local_plane_not_used_for_acceptance':True})
+    quality=all(r['fixed_plane_quality']=='PASS' for r in reports if r['role']=='validation')
+    report={'kind':'joint_ground_fixed_plane_quality_report','schema':1,'model_id':model['model_id'],
+            'selection_id':selection['selection_id'],'regions':reports,'validation_quality':'PASS' if quality else 'FAIL',
+            'orthogonal_residual_invariance_max_difference_m':invariance,'settings':settings,
+            'original_constrained_fitter_search_competition':'NOT_RUN_not_replaced_by_TLS_estimate',
+            'independent_physical_precision':'BLOCKED','physical_verified':False,
+            'interpretation':'roll includes floor slope; tz is observed plane distance, not measured installation height; remaining residual causes unverified'}
+    return model,report

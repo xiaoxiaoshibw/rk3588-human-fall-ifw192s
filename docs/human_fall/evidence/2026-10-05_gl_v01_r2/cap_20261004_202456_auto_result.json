@@ -1,0 +1,210 @@
+{
+  "sid": "cap_20261004_202456",
+  "job_id": "a480b987d176479a89e1730f9d6b7c09",
+  "regions": [
+    [
+      1.25,
+      1.5,
+      -0.75,
+      -0.5
+    ],
+    [
+      2.25,
+      2.5,
+      -0.75,
+      -0.5
+    ],
+    [
+      1.25,
+      1.5,
+      0.0,
+      0.25
+    ],
+    [
+      2.25,
+      2.5,
+      0.0,
+      0.25
+    ]
+  ],
+  "candidate": {
+    "kind": "lowest_connected_floor_v1",
+    "profile": {
+      "id": "lowest_connected_floor_v1",
+      "voxel_m": 0.1,
+      "cell_m": 0.25,
+      "normal_alignment_min": 0.94,
+      "offset_range_m": [
+        0.8,
+        1.8
+      ],
+      "discovery_band_m": 0.08,
+      "cell_height_span_max_m": 0.18,
+      "cell_floor_gap_max_m": 0.08,
+      "cell_local_rms_max_m": 0.025,
+      "min_points_per_fit_frame": 30,
+      "min_component_cells": 8,
+      "min_component_axis_m": 0.5,
+      "max_discovery_planes": 6
+    },
+    "normal_source": [
+      -0.4295555451064301,
+      -0.024154352740145324,
+      0.9027173427557611
+    ],
+    "offset_source_m": 1.2677440963852153,
+    "pitch_deg": 25.447311492073656,
+    "roll_deg": -1.384077077119125,
+    "support_ratio": 0.3124682159613999,
+    "discovery_voxels": 16984,
+    "plane_voxels": 1675,
+    "fit_frame_count": 88,
+    "component_cells": 37,
+    "component_area_m2": 2.3125,
+    "component_span_m": [
+      2.25,
+      1.5
+    ],
+    "selected_cells": [
+      {
+        "bounds": [
+          1.25,
+          1.5,
+          -0.75,
+          -0.5
+        ],
+        "count": 12640,
+        "min_frame_count": 137,
+        "z_min": -1.381912931074754,
+        "z_max": -1.287432283977052,
+        "height_span_m": 0.09448064709770199,
+        "local_rms_m": 0.013993666273550186,
+        "local_normal_z": 0.9981644579290102
+      },
+      {
+        "bounds": [
+          2.25,
+          2.5,
+          -0.75,
+          -0.5
+        ],
+        "count": 3622,
+        "min_frame_count": 40,
+        "z_min": -1.3263352195083102,
+        "z_max": -1.2778784316027734,
+        "height_span_m": 0.04845678790553687,
+        "local_rms_m": 0.006824086520155354,
+        "local_normal_z": 0.9927682346822799
+      },
+      {
+        "bounds": [
+          1.25,
+          1.5,
+          0.0,
+          0.25
+        ],
+        "count": 14865,
+        "min_frame_count": 162,
+        "z_min": -1.3430780882020077,
+        "z_max": -1.2434798082008471,
+        "height_span_m": 0.09959828000116056,
+        "local_rms_m": 0.012857015514056675,
+        "local_normal_z": 0.9945816635496622
+      },
+      {
+        "bounds": [
+          2.25,
+          2.5,
+          0.0,
+          0.25
+        ],
+        "count": 4738,
+        "min_frame_count": 51,
+        "z_min": -1.3097425628075028,
+        "z_max": -1.2416343601741744,
+        "height_span_m": 0.0681082026333284,
+        "local_rms_m": 0.007738579480724855,
+        "local_normal_z": 0.9984355323159927
+      }
+    ],
+    "full_height_preserved": true,
+    "uses_manual_reference": false,
+    "basis": "lowest horizontal connected sheet; full-height obstacle rejection; four interior patches; FIT frames only"
+  },
+  "recommended": "tls",
+  "artifacts": [
+    "tls",
+    "svd",
+    "ransac"
+  ],
+  "estimators": {
+    "tls": {
+      "valid": true,
+      "reject_reasons": [],
+      "full": {
+        "count": 35865,
+        "rms_m": 0.013910334783990144,
+        "p95_m": 0.027168737170270903,
+        "support_ratio": 0.9997490589711417,
+        "median_signed_m": -2.9039513815831697e-07,
+        "status": "PASS"
+      }
+    },
+    "svd": {
+      "valid": true,
+      "reject_reasons": [],
+      "full": {
+        "count": 35865,
+        "rms_m": 0.013910334783990144,
+        "p95_m": 0.027168737170270903,
+        "support_ratio": 0.9997490589711417,
+        "median_signed_m": -2.9039513815831697e-07,
+        "status": "PASS"
+      }
+    },
+    "ransac": {
+      "valid": true,
+      "reject_reasons": [],
+      "full": {
+        "count": 35865,
+        "rms_m": 0.01481724706355178,
+        "p95_m": 0.028116520834478322,
+        "support_ratio": 0.9999163529903806,
+        "median_signed_m": 0.0024323490625657307,
+        "status": "PASS"
+      }
+    }
+  },
+  "manual_reference_check": {
+    "angle_deg": 1.5863097888243751,
+    "offset_gap_m": 0.005015253752111759,
+    "reference_regions": [
+      [
+        1.04,
+        1.75,
+        -0.93,
+        -0.45
+      ],
+      [
+        1.94,
+        2.4,
+        -0.94,
+        0.07
+      ],
+      [
+        1.32,
+        1.76,
+        -0.38,
+        0.2
+      ],
+      [
+        2.64,
+        3.31,
+        -0.57,
+        0.19
+      ]
+    ],
+    "used_for_detection": false
+  },
+  "seconds": 24.625
+}

@@ -1,0 +1,21 @@
+PASS V06 C10 source raw XYZ survives ground unknown but physical fall/color are unknown
+PASS V06 C10 source raw XYZ survives ground none but physical fall/color are unknown
+PASS V06/V09 C01/C10 legacy source-only locked retains raw XYZ while physical fall/color are unknown
+PASS V07 C08 predicted pose without current target observation keeps diagnostic but physical fall is unknown
+PASS V07/V09 C08 lost rejects retained prior source observation while respecting validState
+PASS V07/V09 C08 ambiguous rejects retained prior source observation while respecting validState
+PASS V07/V09 C08 unselected rejects retained prior source observation while respecting validState
+PASS V06 C06/C10 schema2 existing source invalidation stays unknown/null
+PASS V06 C06/C10 verifier_unavailable existing source invalidation stays unknown/null
+PASS V05 C05/C11 source old rendered choice rejects in-place snapshot units.length
+PASS V05 C05/C11 ground old rendered choice rejects in-place snapshot units.length
+PASS V05 C05/C11 source old rendered choice rejects in-place candidate center_ground_m
+PASS V05 C05/C11 ground old rendered choice rejects in-place candidate center_ground_m
+PASS V05 C05/C11 source old rendered choice rejects in-place ground block kind
+PASS V05 C05/C11 ground old rendered choice rejects in-place ground block kind
+PASS V05 C05/C11 source old rendered choice rejects in-place ground block schema_version
+PASS V05 C05/C11 ground old rendered choice rejects in-place ground block schema_version
+PASS V03 C14 explicit source mm cannot be presented as measured source metres
+PASS V03/V06 C14 explicit source mm cannot qualify metre ground transform
+PASS V02/V03 C13 explicit support_units mm cannot qualify metre support layer
+{"pass":20,"fail":0}

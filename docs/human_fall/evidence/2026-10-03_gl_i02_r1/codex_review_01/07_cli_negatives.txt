@@ -1,0 +1,15 @@
+=== N1 legacy NPZ -> exit 2 no artifact
+gli02 input refused: input is not an adapted capture-input NPZ; the legacy route is not available here: docs/human_fall/evidence/2026-10-03_gl_i02_r1/codex_review_01/work/legacy_input.npz
+exit=2 artifact=no
+=== N2 overlapping fit/validation frames -> exit 2
+gli02 candidate refused: validation region v1 shares a source frame with the fit set
+exit=2 artifact=no
+=== N3 fit indices leaking across group -> exit 2
+gli02 candidate refused: region indices leave the declared frame_group frame:435d7f72bc8296756c2b9c07
+exit=2 artifact=no
+=== N4 invalid-fit (no points in fit bounds) -> exit 2 no artifact
+gli02 candidate refused: fit selection resolved to no frame members
+exit=2 artifact=no
+=== N5 real capture SHA unchanged
+meta: 675c23ded9dcee82e6e985f17665469a487d34520408582708601eb188b1d692
+bin : b81797f9825792655e5930edeb39c15275eb64e01999984884da61d252c599ff

@@ -1,0 +1,212 @@
+[
+  {
+    "id": "V01",
+    "name": "missing R/t never identity",
+    "result": "PASS"
+  },
+  {
+    "id": "V02",
+    "name": "exact requested ground.support_polygon entry",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "valid transform + unknown ground refuses mode",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "valid transform + none ground refuses mode",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "unsupported calibration schema refuses mode",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "verifier unavailable clears observed status",
+    "result": "PASS"
+  },
+  {
+    "id": "V07",
+    "name": "no candidate snapshot + ready baseline clears current status",
+    "result": "PASS"
+  },
+  {
+    "id": "V07",
+    "name": "candidate list empty + ready baseline clears current status",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "list closure same IDs changed candidate content rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "same IDs changed R/t rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "caller mutation after rendered button rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "silent expiry refuses old choice; history retained",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "disconnect preserves history and refuses old choice",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "future foreign snapshot cannot change current frame R/t",
+    "result": "PASS"
+  },
+  {
+    "id": "V03",
+    "name": "mode labels/current position use ground coordinates",
+    "result": "PASS"
+  },
+  {
+    "id": "V04",
+    "name": "DPR-only overlay backing changes after frame",
+    "result": "PASS"
+  },
+  {
+    "id": "V04",
+    "name": "CSS resize reprojection uses current camera and rect",
+    "result": "PASS"
+  },
+  {
+    "id": "V02",
+    "name": "budget 3001/9000 supports has provenance and <=3000",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "fresh list choice and same-content reload accepted original ID",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "raw cloud same seq/stamp foreign spatial frame rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V01",
+    "name": "two coordinate inputs with conflicting R/t rejected",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "snapshot new calibration while state old is unknown and unselectable",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "state new calibration while snapshot old is unknown",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "unsupported matched calibration schema cannot green source or select",
+    "result": "PASS"
+  },
+  {
+    "id": "V07",
+    "name": "target absent but unrelated current candidate and ready baseline exists",
+    "result": "PASS"
+  },
+  {
+    "id": "V08",
+    "name": "publisher state.performance.queue_dropped field is displayed",
+    "result": "PASS"
+  },
+  {
+    "id": "V02",
+    "name": "explicit 3D support with null Z is not silently flattened",
+    "result": "PASS"
+  },
+  {
+    "id": "V03",
+    "name": "explicit non-metre ground transform is refused",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "quiet expiry invalidates GPU drawing as well as DOM/overlay",
+    "result": "PASS"
+  },
+  {
+    "id": "V07",
+    "name": "source target absent while unrelated candidate survives",
+    "result": "PASS"
+  },
+  {
+    "id": "V07",
+    "name": "ground target stale fields cannot replace missing current target",
+    "result": "PASS"
+  },
+  {
+    "id": "V05",
+    "name": "unselected fresh current context can perform first selection",
+    "result": "PASS"
+  },
+  {
+    "id": "V09",
+    "name": "legacy no calibration no ground raw first selection preserved",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "one-sided missing GDID cannot match known state binding",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "known snapshot GDID with absent state GDID is not a match",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V06",
+    "name": "known snapshot calibration schema with unknown state schema is not a match",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V07",
+    "name": "prediction does not become current position when only other candidate exists",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ '3.00, 0.00, -0.50'\n- '--'\n"
+  },
+  {
+    "id": "V05",
+    "name": "old choice rejects an in-place coordinate source-frame change",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+  },
+  {
+    "id": "V05",
+    "name": "old leveled choice rejects changed transform units",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+  },
+  {
+    "id": "V07",
+    "name": "duplicate geometry has no unique current target",
+    "result": "PASS"
+  },
+  {
+    "id": "V07",
+    "name": "one matching target plus unrelated candidate remains observed",
+    "result": "PASS"
+  }
+]

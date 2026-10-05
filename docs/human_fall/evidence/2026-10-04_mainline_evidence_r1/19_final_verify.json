@@ -1,0 +1,60 @@
+{
+  "kind": "gle01_final_verify",
+  "status": "SOURCE_CHAIN_PASS_PHYSICAL_BLOCKED",
+  "head": "cbd0be1c86a1051a9a5800dfb7263f842896e1e6",
+  "administrative_changes": [
+    "docs/human_fall/CLI_RECOVERY.md",
+    "docs/human_fall/DISPATCH.md",
+    "docs/human_fall/README.md",
+    "docs/human_fall/REVIEW_LOG.md",
+    "docs/human_fall/WORKFLOW.md"
+  ],
+  "unexpected_changes": [],
+  "unexpected_new": [],
+  "manifest_administrative_differences": [
+    "docs/human_fall/GLE01_ACCEPTANCE.md",
+    "docs/human_fall/returns/GL-E01.md"
+  ],
+  "production_input_old_evidence_unchanged": true,
+  "review_checker_edits": [],
+  "acceptance_statuses": {
+    "A01": "PASS（指定独审）",
+    "A02": "PASS（指定独审）",
+    "A03": "PASS（指定独审）",
+    "A04": "PASS（指定独审）",
+    "A05": "PASS（指定独审）",
+    "S01": "PASS（指定独审）",
+    "B01": "PASS（仅来源链）",
+    "B02": "BLOCKED",
+    "D01": "NOT_RUN",
+    "D02": "BLOCKED",
+    "Q01": "PASS（指定独审）",
+    "Q02": "PASS（指定独审）",
+    "Q03": "PASS（指定独审）",
+    "Q04": "PASS（指定独审）",
+    "Q05": "PASS（指定独审）",
+    "Q06": "PASS（指定独审）"
+  },
+  "cli": {
+    "start": "2026-10-04T02:31:39.974104+08:00",
+    "model": "opencode-go/deepseek-v4.1-flash",
+    "db": "default",
+    "phase": "review",
+    "prompt_sha256": "ef68b38e606bf3716d018b1a61c400565706f745169fc6578888fd993d94e78e",
+    "pid": 24160,
+    "exit": 0,
+    "timed_out": false,
+    "end": "2026-10-04T02:49:59.462470+08:00",
+    "elapsed_s": 1099.5309999999881,
+    "sessions": [
+      "ses_efcf6b467ffewHbmcPqpeFNz16"
+    ],
+    "event_types": [
+      "step_finish",
+      "step_start",
+      "text",
+      "tool_use"
+    ],
+    "probe_ok": false
+  }
+}

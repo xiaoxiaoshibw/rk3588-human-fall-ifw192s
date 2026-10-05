@@ -1,0 +1,23 @@
+test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board) ... [12:14:37] "GET /api/leveling/sessions HTTP/1.1" 200 -
+[12:14:37] "GET /api/leveling/source?sid=cap_20990101_000001 HTTP/1.1" 200 -
+[12:14:37] "POST /api/leveling/run HTTP/1.1" 400 -
+[12:14:37] "POST /api/leveling/run HTTP/1.1" 409 -
+[12:14:37] "POST /api/leveling/run HTTP/1.1" 202 -
+[12:14:37] "GET /api/leveling/job?id=360ef774bf794e76a6a7374aa8614886 HTTP/1.1" 200 -
+[12:14:38] "GET /api/leveling/job?id=360ef774bf794e76a6a7374aa8614886 HTTP/1.1" 200 -
+[12:14:38] "GET /api/leveling/job?id=360ef774bf794e76a6a7374aa8614886 HTTP/1.1" 200 -
+[12:14:38] "GET /api/leveling/job?id=360ef774bf794e76a6a7374aa8614886 HTTP/1.1" 200 -
+[12:14:38] "GET /api/leveling/job?id=360ef774bf794e76a6a7374aa8614886 HTTP/1.1" 200 -
+[12:14:38] "GET /api/leveling/artifact?id=360ef774bf794e76a6a7374aa8614886&method=tls&name=dataset.zip HTTP/1.1" 200 -
+[12:14:38] "POST /api/leveling/run HTTP/1.1" 202 -
+[12:14:38] "GET /api/leveling/job?id=8bdc05b55f4e442b808e2f1c6ce947a9 HTTP/1.1" 200 -
+[12:14:38] "GET /api/leveling/job?id=8bdc05b55f4e442b808e2f1c6ce947a9 HTTP/1.1" 200 -
+ok
+test_line_domain_and_ls_majority_cannot_override_conflict (leveling_test.WorkbenchTest.test_line_domain_and_ls_majority_cannot_override_conflict) ... ok
+test_request_boundary_source_drift_and_owned_config (leveling_test.WorkbenchTest.test_request_boundary_source_drift_and_owned_config) ... ok
+test_transform_export_and_frozen_disjoint_rows (leveling_test.WorkbenchTest.test_transform_export_and_frozen_disjoint_rows) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.646s
+
+OK

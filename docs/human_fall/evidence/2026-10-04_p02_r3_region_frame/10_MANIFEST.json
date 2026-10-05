@@ -1,0 +1,51 @@
+{
+  "scope": "P02 R3 region/frame ground modeling, offline research only; no production calibration",
+  "head": "3fc1338fc306444959433a41bdeaeefd705f58ec",
+  "ponytail_skill_read": "C:\\Users\\30680\\.claude\\skills\\ponytail\\SKILL.md",
+  "input_frozen_npz_sha256": "d5f29b8609525a677e1f4e25c26d134a47f0bf572c6808834ff36c5c2e436012",
+  "input_r2_baseline_sha256": "5842e584916794d3ec37e28a2cfda0c106ec865ebc8308eeb65229ff7534e1d0",
+  "input_r2_fit_script_sha256": "5b0777ffb50b354df869593348e849831413a01edc453613caa7956051f9097c",
+  "input_r2_r2_estimators_sha256": "8efa98c7d29585029cb298ddb29c60612890419d9fa17939ad3f1da7a0011402",
+  "protected_annotator_sha256": "58af6bdd3ee9a1fda371a1bba9108d798109ed8e32d2242c627c8f3bfb57f902",
+  "protected_acceptance_before_sha256": "0d69eba634879aefbb3a857d6127cf6c422c6f491c013f574f70f27696813388",
+  "protected_returns_before_sha256": "71676c5bbe3022311b8a80acb83bfd73b8c1e6529881444e70791913f78cce8a",
+  "artifacts_sha256": {
+    "00_BASELINE.md": "c0f8c65617d90443b682fa6d61875f7b2a51c0e5b26a2f830df27f566fa32407",
+    "01_REGION_DIAG.json": "507012a33d121ca66ae8736cdbca11a8ae04e53b9648a191a68e96a80948fa81",
+    "02_FRAME_SEQUENCE.json": "55929d2666fd4c29c3ad38b1e7946ea94ce7ccf1abb418508a8308fa5699ad26",
+    "03_PER_FRAME_MODEL.npz": "e9d0a3e9c2082bdc2bc53c1d7e0aa5bc0ece4f182a0835ef09469444e1ceb974",
+    "04_MODEL_I.json": "385142d5186ce7e4f7f22708e32c0c977f39d4caf4e80c95c8fbe9c19a7c063f",
+    "05_MODEL_II.json": "9ebc6e31476f9b44d9ae264765347cda413f5f1c0df6067fc7b250ab66c500ae",
+    "06_NUMERICAL_CHECKS.json": "c4e5d873bc82b658a8ad1e6f3dfda93d12afbb06f0b7d240631f9d29e14a5cd7",
+    "07_REPORT.html": "f5094f3e1c83dc658f7e16b2768e55efbc041ce9fab8b8215e6bc9e5d88dfcbc",
+    "08_NODE_HTML_CHECKS.txt": "0b7e9a972f5b4b22c364fc7dd674b6b56a32c882623b94f55696341b6f4fc841",
+    "p02_r3_analysis.py": "c02ee2f1cbc3b312cc2adbd92ac6cca91cfa405f74f6d2ca433485164c7768ba",
+    "check_r3.py": "a6f40a93b38e2e1ee980c1b8efffc6533d0821e7e27fb1dce383007d83b7cb61",
+    "check_html.js": "efb8dc3955af842f763a65a2ad1741ab18452237af138595a11343fa6390d3db",
+    "09_REPORT.md": "84699d9cc38dfeac550334491308f5ddb05cd009d327609d12060bc0cbb561ce",
+    "11_REPORT_PREVIEW.png": "d1ed9bc53b03c3b3d000167626c148cf915b3f0f4eede19da884373f7e51ff12"
+  },
+  "commands_exit_zero": [
+    "python -B -W error p02_r3_analysis.py",
+    "python -B -W error check_r3.py",
+    "node check_html.js"
+  ],
+  "verification": {
+    "forward_inverse_signedZ_m_lt": 1e-12,
+    "proper_R_abs_det_minus_1_lt": 1e-12,
+    "Rn_up_max_abs_lt": 1e-12,
+    "tls_recompute_n_lt": 1e-9,
+    "tls_recompute_d_lt": 1e-9,
+    "covariance_psd": true,
+    "npz_json_value_match": true
+  },
+  "not_run": {
+    "assigned_independent_review": true,
+    "real_browser": true,
+    "device_capture_deploy_network": true
+  },
+  "physical_verified": false,
+  "extrinsics_verified": false,
+  "runtime_eligible": false,
+  "physical_height_record_m": 1.14
+}

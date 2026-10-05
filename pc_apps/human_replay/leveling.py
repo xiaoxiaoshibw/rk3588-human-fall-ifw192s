@@ -1,0 +1,438 @@
+"""Local offline workbench jobs and immutable derivatives; never contacts the board."""
+import copy
+import hashlib
+import json
+import math
+import re
+import threading
+import time
+import uuid
+import zipfile
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+import numpy as np
+from leveling_lib import detect_ground_domain
+from leveling_quality import PROFILE, compare, rotation
+
+_jobs = {}
+_job_lock = threading.Lock()
+_writer_lock = threading.Lock()
+_SID = re.compile(r"^[A-Za-z0-9_\-]{1,100}$")
+_JOB = re.compile(r"^[0-9a-f]{32}$")
+FILES = {"meta.json", "points.bin", "transform.json", "dataset.zip"}
+
+
+def sha(path):
+    h = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for block in iter(lambda: stream.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def identity(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+
+
+def dump(path, value):
+    with Path(path).open("x", encoding="utf-8") as stream:
+        json.dump(value, stream, ensure_ascii=False, indent=2, allow_nan=False)
+
+
+def session_path(root, sid):
+    if not isinstance(sid, str) or not _SID.fullmatch(sid):
+        raise ValueError("会话ID非法")
+    root = Path(root).resolve()
+    path = root / sid
+    if path.resolve() != path or not path.is_dir():
+        raise ValueError("会话不存在或目录为链接")
+    for name in ("meta.json", "points.bin"):
+        if (path / name).resolve() != path / name:
+            raise ValueError("源文件不得为链接")
+    return path
+
+
+def integer(value, name, minimum=0):
+    if type(value) is not int or value < minimum:
+        raise ValueError(name + "必须是合法整数")
+    return value
+
+
+def number(value, name, lo, hi):
+    if type(value) not in (int, float) or not math.isfinite(value) or not lo <= value <= hi:
+        raise ValueError(name + "必须是范围内有限数值")
+    return float(value)
+
+
+def source(root, sid):
+    directory = session_path(root, sid)
+    meta_bytes = (directory / "meta.json").read_bytes()
+    meta = json.loads(meta_bytes)
+    if not isinstance(meta, dict) or not isinstance(meta.get("sensor"), dict) or not isinstance(meta.get("point_layout"), dict):
+        raise ValueError("meta/sensor/point_layout必须是object")
+    if (meta.get("format") != "human_capture_session" or type(meta.get("format_version")) is not int
+            or meta["format_version"] != 1 or type(meta.get("point_stride_bytes")) is not int or meta["point_stride_bytes"] != 28
+            or meta.get("sensor", {}).get("frame_id") != "innolidar" or meta.get("point_file") != "points.bin"
+            or meta.get("session_id") != sid):
+        raise ValueError("只接受原始innolidar human_capture_session v1 / 28B")
+    layout = meta.get("point_layout", {})
+    if layout.get("endian") != "little" or layout.get("fields", [])[:3] != ["x", "y", "z"] or layout.get("dtypes", [])[:3] != ["<f4"] * 3:
+        raise ValueError("XYZ必须是little endian float32前三字段")
+    total = integer(meta.get("total_points"), "total_points", 1)
+    if (directory / "points.bin").stat().st_size != total*28:
+        raise ValueError("bin大小与meta点数不匹配")
+    frames = meta.get("frames")
+    if not isinstance(frames, list) or len(frames) < 4:
+        raise ValueError("至少4帧：fit与3个独立留出帧")
+    end, seqs = 0, set()
+    for frame in frames:
+        if not isinstance(frame, dict):
+            raise ValueError("frame必须是object")
+        count = integer(frame.get("count_points"), "count_points", 1)
+        if integer(frame.get("offset_points"), "offset_points") != end:
+            raise ValueError("frame源行必须连续且互斥")
+        seq = integer(frame.get("seq"), "seq")
+        if seq in seqs:
+            raise ValueError("frame seq重复")
+        seqs.add(seq)
+        end += count
+    if end != total:
+        raise ValueError("frame行数与total_points不一致")
+    binding = {"meta_sha256": hashlib.sha256(meta_bytes).hexdigest(), "bin_sha256": sha(directory / "points.bin")}
+    return directory, meta, binding
+
+
+def validate_request(body):
+    if not isinstance(body, dict) or set(body) != {"schema", "sid", "source", "config"} or type(body["schema"]) is not int or body["schema"] != 1:
+        raise ValueError("配平请求schema/字段非法")
+    binding = body["source"]
+    if not isinstance(binding, dict) or set(binding) != {"meta_sha256", "bin_sha256"} or any(not isinstance(v, str) or not re.fullmatch(r"[0-9a-f]{64}", v) for v in binding.values()):
+        raise ValueError("缺少载入源文件SHA绑定")
+    config = body["config"]
+    if not isinstance(config, dict) or set(config) != {"pitch_deg", "roll_deg", "physical_height_m", "regions", "ground_confirmed", "basis"} and not (
+            set(config) == {"pitch_deg", "roll_deg", "physical_height_m", "mode"} and config.get("mode") == "auto"):
+        raise ValueError("配置字段非法")
+    auto = set(config) == {"pitch_deg", "roll_deg", "physical_height_m", "mode"} and config.get("mode") == "auto"
+    owned = {"pitch_deg": number(config["pitch_deg"], "名义pitch", -75, 75),
+             "roll_deg": number(config["roll_deg"], "名义roll", -45, 45),
+             "physical_height_m": number(config["physical_height_m"], "测量参考高度", .01, 10)}
+    if auto:
+        return {"sid": body["sid"], "source": dict(binding), "schema": 1,
+                "config": {**owned, "mode": "auto"}}
+    if config["ground_confirmed"] is not True or not isinstance(config["basis"], str) or not 2 <= len(config["basis"].strip()) <= 500:
+        raise ValueError("请先确认四个区域的地面身份并填写依据")
+    owned.update(ground_confirmed=True, basis=config["basis"].strip())
+    regions = config["regions"]
+    if not isinstance(regions, list) or len(regions) != 4:
+        raise ValueError("必须定义四个不重叠XY区域")
+    owned["regions"] = []
+    for bounds in regions:
+        if not isinstance(bounds, list) or len(bounds) != 4:
+            raise ValueError("区域格式为[xmin,xmax,ymin,ymax]")
+        r = [number(v, "区域边界", -100, 100) for v in bounds]
+        if r[1] - r[0] < .05 or r[3] - r[2] < .05:
+            raise ValueError("区域每边至少5cm")
+        for other in owned["regions"]:
+            if min(r[1], other[1]) > max(r[0], other[0]) and min(r[3], other[3]) > max(r[2], other[2]):
+                raise ValueError("四个区域不得重叠")
+        owned["regions"].append(r)
+    return {"sid": body["sid"], "source": dict(binding), "config": owned, "schema": 1}
+
+
+def freeze_domain(directory, meta, config):
+    raw = np.memmap(directory / "points.bin", dtype="u1", mode="r")
+    xyz = np.ndarray((meta["total_points"], 3), dtype="<f4", buffer=raw, strides=(28, 4))
+    initial = rotation(config["pitch_deg"], config["roll_deg"])
+    nframes = len(meta["frames"])
+    held_indices = [(nframes - 1)//3, 2*(nframes - 1)//3, nframes - 1]
+    fit, rows, codes, ordinals, held = [], [], [], [], []
+    invalid_count = 0
+    for ordinal, frame in enumerate(meta["frames"]):
+        lo, count = frame["offset_points"], frame["count_points"]
+        points = xyz[lo:lo+count].astype(np.float64)
+        valid = np.isfinite(points).all(axis=1) & np.any(points != 0, axis=1)
+        invalid_count += int((~valid).sum())
+        indices = np.arange(lo, lo+count, dtype=np.int64)[valid]
+        points = points[valid]
+        display = points @ initial.T
+        membership = np.zeros(len(points), dtype=np.uint8)
+        for region, (xl, xh, yl, yh) in enumerate(config["regions"], 1):
+            mask = (display[:, 0] >= xl) & (display[:, 0] < xh) & (display[:, 1] >= yl) & (display[:, 1] < yh)
+            if np.any(membership[mask]):
+                raise ValueError("源行区域重叠")
+            membership[mask] = region
+        keep = membership > 0
+        points, indices, membership = points[keep], indices[keep], membership[keep]
+        if ordinal in held_indices:
+            held.append({"ordinal": ordinal, "points": points, "rows": indices, "regions": membership})
+        else:
+            fit.append(points); rows.append(indices); codes.append(membership)
+            ordinals.append(np.full(len(points), ordinal, dtype=np.int64))
+    points, rows, codes, ordinals = [np.concatenate(x) for x in (fit, rows, codes, ordinals)]
+    if len(points) < 80 or len(points) > 2000000:
+        raise ValueError("共同拟合域需80～2000000点；超限显式拒绝，不自动抽稀")
+    if any(np.count_nonzero(codes == i) < 20 for i in range(1, 5)):
+        raise ValueError("拟合域每个区域至少20点")
+    return points, rows, codes, ordinals, held, invalid_count, initial[2].copy()
+
+
+def export_dataset(output, directory, meta, name, result, report):
+    """Copy raw records, replace finite/nonzero XYZ only, keep frame/row/opaque bytes."""
+    target = output / name
+    target.mkdir()
+    R, t = np.array(result["R"]), np.array(result["t"])
+    with (directory / "points.bin").open("rb") as src, (target / "points.bin").open("xb") as dest:
+        for block in iter(lambda: src.read(28*65536), b""):
+            data = bytearray(block)
+            xyz = np.ndarray((len(data)//28, 3), dtype="<f4", buffer=data, strides=(28, 4))
+            valid = np.isfinite(xyz).all(axis=1) & np.any(xyz != 0, axis=1)
+            transformed = xyz[valid].astype(np.float64) @ R.T + t
+            if not np.isfinite(transformed).all() or np.any(np.abs(transformed) > np.finfo(np.float32).max):
+                raise ValueError("变换溢出")
+            xyz[valid] = transformed
+            dest.write(data)
+    transform = {"kind": "offline_ground_leveling_transform", "schema": 1, "units": "m",
+                 "from_frame": "innolidar", "to_frame": "ground_offline_display",
+                 "R": result["R"], "t": result["t"], "observed_tz_m": result["offset_source_m"],
+                 "pitch_deg": result["pitch_deg"], "roll_deg": result["roll_deg"], "estimator": name,
+                 "source": report["source"], "domain_id": report["domain_id"], "config_id": report["config_id"],
+                 "code_id": report["code_id"], "scope": "offline_display_only",
+                 "measurement_reference": {"height_m": report["config"]["physical_height_m"],
+                                           "basis": report["config"]["basis"], "verified": False},
+                 "physical_verified": False, "extrinsics_verified": False, "runtime_eligible": False}
+    transform["transform_id"] = identity(transform)
+    derived = copy.deepcopy(meta)
+    derived["session_id"] = report["sid"] + "_leveled_" + name + "_" + report["job_id"]
+    derived["sensor"]["frame_id"] = transform["to_frame"]
+    derived["source_annotations"] = derived.pop("human_annotations", [])
+    derived["human_annotations"] = []
+    derived["leveling"] = dict(transform, original_session_id=report["sid"],
+                               invalid_xyz_preserved=report["invalid_xyz_count"], source_rows="unchanged_global_row_index")
+    dump(target / "transform.json", transform)
+    dump(target / "meta.json", derived)
+    dump(target / "quality.json", result)
+    with zipfile.ZipFile(target / "dataset.zip", "x", compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
+        for artifact in ("meta.json", "points.bin", "transform.json", "quality.json"):
+            archive.write(target / artifact, artifact)
+        archive.write(output / "report.json", "report.json")
+        archive.write(output / "domain.npz", "domain.npz")
+    return {file: sha(target / file) for file in sorted(FILES)}
+
+
+def run_job(root, outroot, request, job_id, update):
+    directory, meta, binding = source(root, request["sid"])
+    if binding != request["source"]:
+        raise ValueError("源数据已变化，请重新载入会话")
+    update("冻结四区source rows与3个留出帧")
+    config = request["config"]
+    if config.get("mode") == "auto":  # P03：先 detect，再让既有 freeze/compare 吃算法 ROI
+        initial = rotation(config["pitch_deg"], config["roll_deg"])
+        raw = np.memmap(directory / "points.bin", dtype="u1", mode="r")
+        xyz = np.ndarray((meta["total_points"], 3), dtype="<f4", buffer=raw, strides=(28, 4))
+        all_points, frame_ids = [], []
+        nframes = len(meta["frames"])
+        excluded = {(nframes-1)//3, 2*(nframes-1)//3, nframes-1}
+        for ordinal, frame in enumerate(meta["frames"]):
+            if ordinal in excluded:
+                continue
+            segment = xyz[frame["offset_points"]:frame["offset_points"] + frame["count_points"]].astype(np.float64)
+            valid = np.isfinite(segment).all(axis=1) & np.any(segment != 0, axis=1)
+            all_points.append(segment[valid])
+            frame_ids.append(np.full(int(valid.sum()), ordinal, dtype="i4"))
+        from floor_detector import detect_floor_regions
+        detected = detect_floor_regions(np.concatenate(all_points), np.concatenate(frame_ids),
+                                        config["pitch_deg"], config["roll_deg"])
+        config = {**config, "regions": detected["regions"],
+                  "auto_candidate": detected["candidate"],
+                  "ground_confirmed": False,
+                  "ground_identification": "algorithm_candidate",
+                  "basis": "auto: " + detected["candidate"]["basis"]}
+        update("自动识别低处连续地面候选，四区全高度无障碍；支持率 %.4f" % detected["candidate"]["support_ratio"])
+    points, rows, regions, ordinals, held, invalid, anchor = freeze_domain(directory, meta, config)
+    domain_id = identity({"source": binding, "config": config,
+                          "rows_sha256": hashlib.sha256(rows.tobytes()).hexdigest(),
+                          "points_sha256": hashlib.sha256(points.tobytes()).hexdigest(),
+                          "holdouts": [{"ordinal": h["ordinal"], "rows_sha256": hashlib.sha256(h["rows"].tobytes()).hexdigest()} for h in held]})
+    update("同域TLS / SVD / RANSAC与全点/逐区/留帧可行度评估")
+    comparison = compare(points, regions, held, anchor)
+    code_files = [Path(__file__), Path(__file__).with_name("leveling_quality.py")]
+    code_files += [Path(__file__).with_name("floor_detector.py")]
+    code_files += sorted(Path(__file__).with_name("leveling_estimators").glob("*.py"))
+    code_hashes = {p.name: sha(p) for p in code_files}
+    report = {"kind": "offline_leveling_report", "schema": 1, "job_id": job_id, "sid": request["sid"],
+              "source": binding, "config": config, "config_id": identity({"config": config, "profile": PROFILE}),
+              "domain_id": domain_id, "code_id": identity(code_hashes), "code_hashes": code_hashes,
+              "profile": PROFILE, "fit_point_count": len(points), "fit_frame_count": len(meta["frames"])-3,
+              "holdout_ordinals": [h["ordinal"] for h in held], "invalid_xyz_count": invalid,
+              "weights": "equal_per_source_point", "selection": "nominal_R XY; finite/nonzero; full heights; no residual gate",
+              "physical_verified": False, "extrinsics_verified": False, "runtime_eligible": False,
+              **comparison}
+    outroot = Path(outroot).resolve()
+    outroot.mkdir(parents=True, exist_ok=True)
+    output = outroot / job_id
+    output.mkdir()  # exclusive UUID directory; never reuse a previous result
+    dump(output / "report.json", report)
+    np.savez_compressed(output / "domain.npz", source_points=points, source_rows=rows, region_codes=regions,
+                        frame_ordinals=ordinals, holdout_rows=np.concatenate([h["rows"] for h in held]),
+                        holdout_regions=np.concatenate([h["regions"] for h in held]),
+                        holdout_ordinals=np.concatenate([np.full(len(h["rows"]), h["ordinal"], dtype=np.int64) for h in held]))
+    artifacts = {}
+    for name, result in comparison["estimators"].items():
+        if result["valid"]:
+            update("生成 " + name.upper() + " 全帧配平数据")
+            artifacts[name] = export_dataset(output, directory, meta, name, result, report)
+    if source(root, request["sid"])[2] != binding:
+        raise ValueError("计算期间源文件发生变化，结果不可用")
+    if any(sha(p) != code_hashes[p.name] for p in code_files):
+        raise ValueError("运行期间算法版本发生变化，结果不可用")
+    dump(output / "manifest.json", {"job_id": job_id, "source": binding, "artifacts": artifacts,
+                                   "report_sha256": sha(output / "report.json"), "domain_sha256": sha(output / "domain.npz")})
+    return report, artifacts
+
+
+def start(root, outroot, body):
+    request = validate_request(body)
+    session_path(root, request["sid"])
+    if not _writer_lock.acquire(blocking=False):
+        raise RuntimeError("已有配平任务在运行，请等待完成")
+    job_id = uuid.uuid4().hex
+    with _job_lock:
+        _jobs[job_id] = {"job_id": job_id, "sid": request["sid"], "state": "running", "message": "校验原始数据与SHA", "created": time.time()}
+    def worker():
+        def update(message):
+            with _job_lock:
+                _jobs[job_id]["message"] = message
+        try:
+            report, artifacts = run_job(root, outroot, request, job_id, update)
+            with _job_lock:
+                _jobs[job_id].update(state="ready", message="评估完成", report=report, artifacts=artifacts,
+                                     report_sha256=sha(Path(outroot) / job_id / "report.json"))
+        except Exception as exc:
+            with _job_lock:
+                _jobs[job_id].update(state="failed", message=str(exc), error=str(exc))
+        finally:
+            _writer_lock.release()
+    threading.Thread(target=worker, daemon=True).start()
+    return {"job_id": job_id, "state": "running"}
+
+
+def artifact_path(outroot, job_id, method, name):
+    if not _JOB.fullmatch(job_id) or method not in ("tls", "svd", "ransac", "report"):
+        raise ValueError("结果ID或算法非法")
+    with _job_lock:
+        job = _jobs.get(job_id)
+        if not job or job["state"] != "ready":
+            raise ValueError("结果未完成或服务已重启，请重新配平")
+        if method == "report":
+            if name != "report.json":
+                raise ValueError("仅允许报告JSON")
+            path = Path(outroot).resolve() / job_id / name
+            expected = job["report_sha256"]
+        else:
+            if method not in job["artifacts"] or name not in FILES:
+                raise ValueError("算法未通过或文件非法")
+            path = Path(outroot).resolve() / job_id / method / name
+            expected = job["artifacts"][method][name]
+    if path.resolve() != path or not path.is_file():
+        raise ValueError("文件不存在或路径非法")
+    if sha(path) != expected:
+        raise ValueError("输出文件SHA已变化，拒绝提供旧任务结果")
+    return path
+
+
+def handle(handler, method, root):
+    """Dispatch only /api/leveling; callers retain every existing replay route."""
+    parsed = urlparse(handler.path)
+    query = parse_qs(parsed.query)
+    outroot = Path(root).resolve().parent / "leveled"
+    try:
+        if method == "POST":
+            origin = handler.headers.get("Origin")
+            if origin and origin != "http://" + handler.headers.get("Host", ""):
+                raise ValueError("仅接受本地工作台同源请求")
+            if parsed.path != "/api/leveling/run":
+                return handler.send_error(404)
+            size = int(handler.headers.get("Content-Length", "0"))
+            if not 0 < size <= 65536:
+                raise ValueError("请求大小非法")
+            body = json.loads(handler.rfile.read(size))
+            return handler._json(start(root, outroot, body), 202)
+        if parsed.path == "/api/leveling/sessions":
+            # Deliberately local scan only; no board proxy/timeouts for offline workflow.
+            from human_replay_lib import _local_sessions
+            return handler._json({"sessions": [{"sid": sid, **meta} for sid, meta in sorted(_local_sessions(root).items())]})
+        if parsed.path == "/api/leveling/source":
+            sid = query.get("sid", [""])[0]
+            _, meta, binding = source(root, sid)
+            return handler._json({"sid": sid, "meta": meta, "source": binding, "profile": PROFILE})
+        if parsed.path == "/api/leveling/leveled_latest":
+            sid = query.get("sid", [""])[0]
+            if not sid or "/" in sid or "\\" in sid or ".." in sid:
+                raise ValueError("sid 非法")
+            base = Path(outroot).resolve()
+            best = None
+            if base.is_dir():
+                for job in base.iterdir():
+                    if not job.is_dir() or not _JOB.fullmatch(job.name):
+                        continue
+                    report_file = job / "report.json"
+                    manifest_file = job / "manifest.json"
+                    if not report_file.is_file() or not manifest_file.is_file():
+                        continue
+                    try:
+                        meta_doc = json.loads(report_file.read_text(encoding="utf-8"))
+                        manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+                    except (OSError, json.JSONDecodeError):
+                        continue
+                    if meta_doc.get("sid") != sid:
+                        continue
+                    if meta_doc.get("recommended") != "tls":
+                        continue  # 只暴露三法一致推荐的 TLS；NO_RECOMMENDATION 回放不自动应用
+                    from validation import SESSIONS, floor_identified
+                    if sid in SESSIONS and not floor_identified(meta_doc):
+                        continue  # old numeric ROI success is not automatic floor identity
+                    if sid in SESSIONS:
+                        try:
+                            if meta_doc.get("source") != source(root, sid)[2]:
+                                continue
+                        except (ValueError, OSError):
+                            continue
+                    if sha(report_file) != manifest.get("report_sha256"):
+                        continue  # 产物被改动过，拒绝服务（与 artifact_path 完整性对齐）
+                    artifacts = manifest.get("artifacts", {}).get("tls", {})
+                    candidate = job / "tls" / "transform.json"
+                    if artifacts.get("transform.json") is None or not candidate.is_file():
+                        continue
+                    if sha(candidate) != artifacts["transform.json"]:
+                        continue
+                    if best is None or report_file.stat().st_mtime > best[0]:
+                        best = (report_file.stat().st_mtime, candidate)
+            if best is None:
+                return handler._json({"error": "未找到该会话的配平结果"}, 404)
+            t = json.loads(best[1].read_text(encoding="utf-8"))
+            return handler._json({"ok": True, "sid": sid, "transform": t})
+        if parsed.path == "/api/leveling/job":
+            with _job_lock:
+                job = copy.deepcopy(_jobs.get(query.get("id", [""])[0]))
+            if not job:
+                return handler._json({"error": "任务不存在或服务已重启"}, 404)
+            return handler._json(job)
+        if parsed.path == "/api/leveling/artifact":
+            path = artifact_path(outroot, query.get("id", [""])[0], query.get("method", [""])[0], query.get("name", [""])[0])
+            handler.send_response(200)
+            handler.send_header("Content-Type", "application/octet-stream")
+            handler.send_header("Content-Length", str(path.stat().st_size))
+            handler.send_header("Cache-Control", "no-store")
+            if path.suffix in (".zip", ".json"):
+                handler.send_header("Content-Disposition", 'attachment; filename="' + path.parent.name + "_" + path.name + '"')
+            handler.end_headers()
+            with path.open("rb") as stream:
+                for block in iter(lambda: stream.read(1 << 20), b""):
+                    handler.wfile.write(block)
+            return
+        return handler.send_error(404)
+    except RuntimeError as exc:
+        return handler._json({"error": str(exc)}, 409)
+    except (ValueError, TypeError, KeyError, OSError) as exc:
+        return handler._json({"error": str(exc)}, 400)

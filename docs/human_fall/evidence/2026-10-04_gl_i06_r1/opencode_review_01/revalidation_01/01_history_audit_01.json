@@ -1,0 +1,986 @@
+{
+  "history_kind": "immutable_review_history_capture",
+  "partial_stream": false,
+  "stream_sha256": "4680e9470ea3aaee289d18ab4246735d1b43284bb8d8e8cf7db53a28ce4b3bef",
+  "n_versions": 18,
+  "n_writes": 10,
+  "n_edits": 8,
+  "n_same_name_edit_files": 4,
+  "same_name_edit_total": 8,
+  "n_executions": 49,
+  "n_failed_executions": 5,
+  "version_content_hash_failures": [],
+  "latest_vs_file": {
+    "01_manifest_verify_01.py": {
+      "versions": 3,
+      "edit_calls": 2,
+      "latest_version": 3,
+      "latest_sha": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+      "latest_tool": "edit",
+      "exists": true,
+      "actual_sha": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+      "matches": true
+    },
+    "02_probe_a01_a03_01.py": {
+      "versions": 1,
+      "edit_calls": 0,
+      "latest_version": 4,
+      "latest_sha": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+      "latest_tool": "write",
+      "exists": true,
+      "actual_sha": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+      "matches": true
+    },
+    "03_probe_contract_recompute_01.py": {
+      "versions": 1,
+      "edit_calls": 0,
+      "latest_version": 5,
+      "latest_sha": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+      "latest_tool": "write",
+      "exists": true,
+      "actual_sha": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+      "matches": true
+    },
+    "04_probe_a02_a03_a05_01.py": {
+      "versions": 3,
+      "edit_calls": 2,
+      "latest_version": 8,
+      "latest_sha": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+      "latest_tool": "edit",
+      "exists": true,
+      "actual_sha": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+      "matches": true
+    },
+    "05_probe_a04_a06_a07_s01_01.py": {
+      "versions": 1,
+      "edit_calls": 0,
+      "latest_version": 9,
+      "latest_sha": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+      "latest_tool": "write",
+      "exists": true,
+      "actual_sha": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+      "matches": true
+    },
+    "06_probe_a06_validation_02.py": {
+      "versions": 4,
+      "edit_calls": 3,
+      "latest_version": 13,
+      "latest_sha": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+      "latest_tool": "edit",
+      "exists": true,
+      "actual_sha": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+      "matches": true
+    },
+    "07_probe_invalid_inputs_scope_01.py": {
+      "versions": 1,
+      "edit_calls": 0,
+      "latest_version": 14,
+      "latest_sha": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+      "latest_tool": "write",
+      "exists": true,
+      "actual_sha": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+      "matches": true
+    },
+    "08_probe_final_holdout_oracle_01.py": {
+      "versions": 2,
+      "edit_calls": 1,
+      "latest_version": 16,
+      "latest_sha": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e",
+      "latest_tool": "edit",
+      "exists": true,
+      "actual_sha": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e",
+      "matches": true
+    },
+    "09_summary_01.py": {
+      "versions": 1,
+      "edit_calls": 0,
+      "latest_version": 17,
+      "latest_sha": "70e9099f737a639d5acc478ffa82a23856677ba0ac03c8be003b4f53a4548440",
+      "latest_tool": "write",
+      "exists": true,
+      "actual_sha": "70e9099f737a639d5acc478ffa82a23856677ba0ac03c8be003b4f53a4548440",
+      "matches": true
+    },
+    "00_review.md": {
+      "versions": 1,
+      "edit_calls": 0,
+      "latest_version": 18,
+      "latest_sha": "a25d2beae9f445907bcddd6d1bf4495bac337d3ede0ae103e464373e93f812d6",
+      "latest_tool": "write",
+      "exists": true,
+      "actual_sha": "a25d2beae9f445907bcddd6d1bf4495bac337d3ede0ae103e464373e93f812d6",
+      "matches": true
+    }
+  },
+  "all_latest_match": true,
+  "same_name_edit_files": {
+    "01_manifest_verify_01.py": {
+      "versions": 3,
+      "edit_calls": 2,
+      "latest_version": 3,
+      "latest_sha": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+      "latest_tool": "edit",
+      "exists": true,
+      "actual_sha": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+      "matches": true
+    },
+    "04_probe_a02_a03_a05_01.py": {
+      "versions": 3,
+      "edit_calls": 2,
+      "latest_version": 8,
+      "latest_sha": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+      "latest_tool": "edit",
+      "exists": true,
+      "actual_sha": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+      "matches": true
+    },
+    "06_probe_a06_validation_02.py": {
+      "versions": 4,
+      "edit_calls": 3,
+      "latest_version": 13,
+      "latest_sha": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+      "latest_tool": "edit",
+      "exists": true,
+      "actual_sha": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+      "matches": true
+    },
+    "08_probe_final_holdout_oracle_01.py": {
+      "versions": 2,
+      "edit_calls": 1,
+      "latest_version": 16,
+      "latest_sha": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e",
+      "latest_tool": "edit",
+      "exists": true,
+      "actual_sha": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e",
+      "matches": true
+    }
+  },
+  "executions": [
+    {
+      "execution": 1,
+      "event_ordinal": 6,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "git status --short; echo \"---BRANCH---\"; git rev-parse --abbrev-ref HEAD; git rev-parse HEAD",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": " M .gitignore\n M AGENTS.md\n M CLAUDE.md\n D build_ros1.sh\n D build_ros2.sh\n M docs/human_fall/CLI_RECOVERY.md\n M docs/human_fall/DISPATCH.md\n M docs/human_fall/GL03_ACCEPTANCE.md\n M docs/human_fall/GRO"
+    },
+    {
+      "execution": 2,
+      "event_ordinal": 11,
+      "exit": 0,
+      "truncated": true,
+      "command_head": "Get-ChildItem -Recurse -File \"docs/human_fall/evidence/2026-10-04_gl_i06_r1\" | Select-Object FullName, Length | Format-Table -AutoSize",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "...\n\nr\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\research_01\\r1_case_dual_7_False_K1_01.json                \nD:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\research_01\\r1_case_dual_7"
+    },
+    {
+      "execution": 3,
+      "event_ordinal": 16,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i06_r1\" -File | Select-Object Name, Length; echo \"---DIRS---\"; Get-ChildItem \"docs/human_fall/evidence/202",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "\nName                                     Length\n----                                     ------\n00_diag.md                                 4873\n01_before_baseline.json                  695898\n02"
+    },
+    {
+      "execution": 4,
+      "event_ordinal": 28,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01\" -File | Where-Object {$_.Name -notlike 'r0_case_*' -and $_.Name -notlike 'r1_case_*'} ",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "\nName                                        Length\n----                                        ------\nactive_memory_K1_01.json                      1118\nactive_memory_K2_01.json                  "
+    },
+    {
+      "execution": 5,
+      "event_ordinal": 45,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "Get-ChildItem \"src/human_fall_detection/core\" -File | Select-Object Name; echo \"---SCRIPTS---\"; Get-ChildItem \"src/human_fall_detection/scripts\" -File | Select-",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "\nName                       \n----                       \nassociation.py             \nbaseline.py                \ncalibration.py             \ncapture_input.py           \nfall_state.py           "
+    },
+    {
+      "execution": 6,
+      "event_ordinal": 46,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "git diff --no-index \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01/refinement_04.py\" \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01/refi",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "warning: in the working copy of 'docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01/refinement_04.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of '"
+    },
+    {
+      "execution": 7,
+      "event_ordinal": 49,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "(Get-Content \"src/human_fall_detection/core/ground.py\").Count; (Get-Content \"src/human_fall_detection/core/ground_diagnostics.py\").Count; (Get-Content \"docs/hum",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "1499\n255\n174\n197\n"
+    },
+    {
+      "execution": 8,
+      "event_ordinal": 50,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "git log --oneline -5 -- src/human_fall_detection/core/ground.py; echo \"---\"; git status --short src/human_fall_detection/core/ground.py src/human_fall_detection",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "---\n?? src/human_fall_detection/core/ground.py\n?? src/human_fall_detection/core/ground_diagnostics.py\n"
+    },
+    {
+      "execution": 9,
+      "event_ordinal": 62,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python --version; python -c \"import numpy; print('numpy', numpy.__version__)\"; Test-Path \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01\"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "Python 3.12.10\nnumpy 1.26.4\nFalse\n"
+    },
+    {
+      "execution": 10,
+      "event_ordinal": 65,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "New-Item -ItemType Directory -Path \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01\" -Force | Out-Null; Test-Path \"docs/human_fall/evidence/202",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "True\n"
+    },
+    {
+      "execution": 11,
+      "event_ordinal": 66,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"import json; d=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_i06_r1/19_manifest_01.json',encoding='utf-8')); print(type(d)); print(list(d.k",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "<class 'dict'>\n['schema', 'status', 'time', 'files', 'frozen_dependencies', 'exclude', 'acceptance_sha256', 'physical_verified', 'ground_valid', 'head', 'branch']\n"
+    },
+    {
+      "execution": 12,
+      "event_ordinal": 67,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"import json; d=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_i06_r1/01_before_baseline.json',encoding='utf-8')); print('before',type(d), li",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "before <class 'dict'> ['time', 'branch', 'head', 'status', 'files']\nsub <class 'dict'> ['time', 'branch', 'head', 'status', 'files']\naudit <class 'dict'> ['status', 'self_check', 'required_table', '"
+    },
+    {
+      "execution": 13,
+      "event_ordinal": 70,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {},
+      "output_head": "status SUBMITTED\nexclude manifest itself; subsequent probe/review evidence not author submission\nhead cbd0be1c86a1051a9a5800dfb7263f842896e1e6 branch master\nacceptance 58983b71733056c19ccea7da62a6e"
+    },
+    {
+      "execution": 14,
+      "event_ordinal": 76,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/01_manifest_verify_01.py\"",
+      "expected_revision": {
+        "01_manifest_verify_01.py": 1
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "7f651eed02ec80e0f2769c44bd11c56aa0a4c7c9cb5d3ce8daa4d25b2e93f15f"
+      },
+      "output_head": "Traceback (most recent call last):\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py\", line 75, in <module>\n    main()\n  File \"D:\\Code\\"
+    },
+    {
+      "execution": 15,
+      "event_ordinal": 82,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/01_manifest_verify_01.py\"",
+      "expected_revision": {
+        "01_manifest_verify_01.py": 2
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "4a001063d7e3ec4cfffe4881271ea64c723d243c4e52ad5bb85b4ed21dc9c993"
+      },
+      "output_head": "Traceback (most recent call last):\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py\", line 83, in <module>\n    main()\n  File \"D:\\Code\\"
+    },
+    {
+      "execution": 16,
+      "event_ordinal": 85,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "4a001063d7e3ec4cfffe4881271ea64c723d243c4e52ad5bb85b4ed21dc9c993"
+      },
+      "output_head": ".gitignore <class 'dict'> [('sha256', '688ee27de37df9cabec6879681422388e5886228c4ccc02396eff78ae339048f'), ('size', 497)]\n.mirasim/limb_server.log <class 'dict'> [('sha256', '3b07389ac9fe51941ce63848"
+    },
+    {
+      "execution": 17,
+      "event_ordinal": 91,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/01_manifest_verify_01.py\"",
+      "expected_revision": {
+        "01_manifest_verify_01.py": 3
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff"
+      },
+      "output_head": "manifest_files ok=646/646 missing=0 mismatch=0\nmanifest_frozen_dependencies ok=2917/2922 missing=5 mismatch=0\nbefore_files ok=2919/2924 missing=5 mismatch=0\nsubmission_files ok=3560/3565 missing=5 "
+    },
+    {
+      "execution": 18,
+      "event_ordinal": 94,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff"
+      },
+      "output_head": "manifest_frozen_dependencies missing: ['build_ros1.sh', 'build_ros2.sh', 'open_webui.bat', 'rk.txt', 'src/CMakeLists.txt'] broken: []\nbefore_files missing: ['build_ros1.sh', 'build_ros2.sh', 'open_we"
+    },
+    {
+      "execution": 19,
+      "event_ordinal": 97,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff"
+      },
+      "output_head": "build_ros1.sh exists= False islink= False\nbuild_ros2.sh exists= False islink= False\nopen_webui.bat exists= False islink= False\nrk.txt exists= False islink= False\nsrc/CMakeLists.txt ERR [WinError 1"
+    },
+    {
+      "execution": 20,
+      "event_ordinal": 104,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff"
+      },
+      "output_head": "build_ros1.sh\n  before: {'missing_or_nonregular': True}\n  after : {'missing_or_nonregular': True}\nbuild_ros2.sh\n  before: {'missing_or_nonregular': True}\n  after : {'missing_or_nonregular': True}"
+    },
+    {
+      "execution": 21,
+      "event_ordinal": 107,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff"
+      },
+      "output_head": "build_ros1.sh {'missing_or_nonregular': True}\nbuild_ros2.sh {'missing_or_nonregular': True}\nopen_webui.bat {'missing_or_nonregular': True}\nrk.txt {'missing_or_nonregular': True}\nsrc/CMakeLists.txt"
+    },
+    {
+      "execution": 22,
+      "event_ordinal": 110,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "$files = \"02_r0_run_01.txt\",\"02_r0_exit_01.txt\",\"05_checks_run_01.txt\",\"05_checks_exit_01.txt\",\"06_r1_run_01.txt\",\"06_r1_exit_01.txt\",\"08_publication_run_01.txt",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff"
+      },
+      "output_head": "===== 02_r0_run_01.txt =====\nclean_7_False seen_pairwise_closed\nclean_7_True seen_pairwise_closed\nclean_19_False seen_pairwise_closed\nclean_19_True seen_pairwise_closed\nclean_41_False seen_pairwi"
+    },
+    {
+      "execution": 23,
+      "event_ordinal": 113,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01/r0_case_high_noise_7_False_01.json\",\"docs/human_fall/evidence/2026-10-04_gl_i06_r1/rese",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff"
+      },
+      "output_head": "\nName                                   Length\n----                                   ------\nr0_case_high_noise_7_False_01.json    9746621\nr1_case_high_noise_7_False_K1_01.json 3009578\nr1_case_hi"
+    },
+    {
+      "execution": 24,
+      "event_ordinal": 120,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/02_probe_a01_a03_01.py\"",
+      "expected_revision": {
+        "02_probe_a01_a03_01.py": 4
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58"
+      },
+      "output_head": "cases 62 failures 0\n"
+    },
+    {
+      "execution": 25,
+      "event_ordinal": 123,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58"
+      },
+      "output_head": "bias_evidence [\n {\n  \"iteration\": 0,\n  \"one_tls_error\": {\n   \"normal_deg\": 0.8273688078051794,\n   \"offset_m\": 0.014342049474819873\n  },\n  \"labeled_ground_all_tls_error\": {\n   \"normal_deg\": 0.0"
+    },
+    {
+      "execution": 26,
+      "event_ordinal": 129,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/03_probe_contract_recompute_01.py\"",
+      "expected_revision": {
+        "03_probe_contract_recompute_01.py": 5
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616"
+      },
+      "output_head": "contract fails 0 budget fails 0\nrecompute fails 0\n   {'case': 'clean_7_False', 'k': 1, 'W': 860, 'counts': {'full_k': 860, 'stable': 860, 'cycle': 0, 'nonconverged': 0, 'resource_gap': 0, 'violation"
+    },
+    {
+      "execution": 27,
+      "event_ordinal": 132,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "Get-Content \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/21_service_probe_01_meta.json\"; echo \"=====PROBE JSONL=====\"; Get-Content \"docs/human_fall/evidence/2",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616"
+      },
+      "output_head": "{\n  \"start\": \"2026-10-04T13:31:00.065188+08:00\",\n  \"model\": \"opencode-go/deepseek-v4.1-flash\",\n  \"db\": \"default\",\n  \"phase\": \"probe\",\n  \"prompt_sha256\": \"a2085f0dc922ab5914ff6d802e4c21e751b69cd1c"
+    },
+    {
+      "execution": 28,
+      "event_ordinal": 133,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616"
+      },
+      "output_head": "keys ['type', 'timestamp', 'sessionID', 'part']\n{\"type\": \"step_start\", \"timestamp\": 1791091921489, \"sessionID\": \"ses_efa9a4743ffeSwZQpegWTbN8DH\", \"part\": {\"id\": \"prt_10565d248001RVJYebmbGP33Rd\", \"mes"
+    },
+    {
+      "execution": 29,
+      "event_ordinal": 136,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616"
+      },
+      "output_head": "settings {\n \"min_inliers\": 100,\n \"min_fit_inlier_fraction\": 0.2,\n \"fit_point_cap\": 5000,\n \"holdout_point_cap\": 10000,\n \"spatial_cell_m\": 0.05,\n \"max_points_per_cell\": 8,\n \"max_candidates\": 3,\n"
+    },
+    {
+      "execution": 30,
+      "event_ordinal": 152,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/04_probe_a02_a03_a05_01.py\"",
+      "expected_revision": {
+        "04_probe_a02_a03_a05_01.py": 8
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619"
+      },
+      "output_head": "A02 fails 0 | ledger checked 186 fails 0 | W-changes-by-K 25 / 62 | J fails 0\n"
+    },
+    {
+      "execution": 31,
+      "event_ordinal": 158,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/05_probe_a04_a06_a07_s01_01.py\"",
+      "expected_revision": {
+        "05_probe_a04_a06_a07_s01_01.py": 9
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008"
+      },
+      "output_head": "A04 fails 0 | A06 vg 39 | A06 fs 0 | A06 fh 18 | A07 0 | S01 0\nreal_approved: {'angle': 828, 'sample_area': 12, 'sample_separation': 19, 'height': 2} W 0 unresolved\nwhatif: {'qualified': 693, 'sampl"
+    },
+    {
+      "execution": 32,
+      "event_ordinal": 161,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008"
+      },
+      "output_head": "vg failures sample: [['collinear_7_False', []], ['collinear_7_False', []], ['collinear_7_False', []], ['collinear_7_True', []], ['collinear_7_True', []], ['collinear_7_True', []], ['collinear_19_False"
+    },
+    {
+      "execution": 33,
+      "event_ordinal": 164,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008"
+      },
+      "output_head": "before files under RUN: ['docs/human_fall/evidence/2026-10-04_gl_i06_r1/00_diag.md', 'docs/human_fall/evidence/2026-10-04_gl_i06_r1/snapshot_01.py']\nmanifest files total 646 all under RUN True\ncurre"
+    },
+    {
+      "execution": 34,
+      "event_ordinal": 167,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i06_r1\" -File | Where-Object {$_.Name -like '2*'} | Select-Object Name,Length; echo \"=====23=====\"; Get-Co",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008"
+      },
+      "output_head": "...\n\nn iter(lambda: f.read(1 << 20), b\\\"\\\"):\\n            h.update(chunk)\\n    return h.hexdigest()\\n\\n\\ndef verify_mapping(label, mapping, out):\\n    missing, mismatch, ok = [], [], 0\\n    for rel, m"
+    },
+    {
+      "execution": 35,
+      "event_ordinal": 179,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/06_probe_a06_validation_02.py\"",
+      "expected_revision": {
+        "06_probe_a06_validation_02.py": 12
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "8d79379382f05c9091592d2da574e119d6297905840b1940cf4654efcb9df60d"
+      },
+      "output_head": "Traceback (most recent call last):\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py\", line 99, in <module>\n    main()\n  File \"D:\\"
+    },
+    {
+      "execution": 36,
+      "event_ordinal": 185,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/06_probe_a06_validation_02.py\"",
+      "expected_revision": {
+        "06_probe_a06_validation_02.py": 13
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4"
+      },
+      "output_head": "A06 validation scanned 147 skipped(emptyW) 39 fails 9\nregion geometry fails 0\nfinal holdout fails 0 kinds ['clean', 'collinear', 'density', 'dual', 'high_noise', 'low_noise', 'missing', 'narrow_band"
+    },
+    {
+      "execution": 37,
+      "event_ordinal": 188,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4"
+      },
+      "output_head": "{\n \"scanned\": 147,\n \"skipped_empty_W\": 39,\n \"fail_count\": 9,\n \"failures\": [\n  [\n   \"row_count_or_bounds\",\n   \"real_historical_WHAT_IF_negative_X\",\n   2064\n  ],\n  [\n   \"row_count_or_bounds\","
+    },
+    {
+      "execution": 38,
+      "event_ordinal": 194,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/07_probe_invalid_inputs_scope_01.py\"",
+      "expected_revision": {
+        "07_probe_invalid_inputs_scope_01.py": 14
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19"
+      },
+      "output_head": "invalid fails 0 []\nignored {'captures/remote/cap_20261002_163621/meta.json': 'ok', 'captures/remote/cap_20261002_163621/points.bin': 'ok', 'docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_"
+    },
+    {
+      "execution": 39,
+      "event_ordinal": 197,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19"
+      },
+      "output_head": "multiplicity actions ['retained_witness', 'merged_exact', 'merged_exact'] witnesses 1 merged 2\nmem K1 71970816 733319168\nmem K2 78929920 739872768\nmem K3 91549696 753819648\nreal K1 repeats 3 keys "
+    },
+    {
+      "execution": 40,
+      "event_ordinal": 200,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19"
+      },
+      "output_head": "closed with GT: 74\nmax closed GT error: [(0.411852477597209, 0.011593347400419507, 'wall_19_False', 1), (0.40479906981609887, 0.010256650040136206, 'wall_41_False', 1), (0.1738564554292323, 0.0036525"
+    },
+    {
+      "execution": 41,
+      "event_ordinal": 203,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19"
+      },
+      "output_head": "clean distinct source_sha across 7/19/41: 3\nhigh_noise distinct source_sha across 7/19/41: 3\nfixed clean distinct source_sha: 1 sampled_sha per seed: ['b429d669', 'f9babe52', '93fdeda8']\nfixed high"
+    },
+    {
+      "execution": 42,
+      "event_ordinal": 206,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "git diff --no-index \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01/refinement_02.py\" \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01/refi",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19"
+      },
+      "output_head": "diff --git a/docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01/refinement_02.py b/docs/human_fall/evidence/2026-10-04_gl_i06_r1/research_01/refinement_05.py\nindex a1b1d37..c46c1e7 100644\n--- a"
+    },
+    {
+      "execution": 43,
+      "event_ordinal": 212,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/08_probe_final_holdout_oracle_01.py\"",
+      "expected_revision": {
+        "08_probe_final_holdout_oracle_01.py": 15
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py": "f36f05d772042f3e1c2dc48da305c44d838bb277bfb047bde21f84819a9f0c27"
+      },
+      "output_head": "Traceback (most recent call last):\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py\", line 86, in <module>\n    main()\n  Fil"
+    },
+    {
+      "execution": 44,
+      "event_ordinal": 218,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/08_probe_final_holdout_oracle_01.py\"",
+      "expected_revision": {
+        "08_probe_final_holdout_oracle_01.py": 16
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e"
+      },
+      "output_head": "final ledgers checked 90 closed 36 fails 0\n"
+    },
+    {
+      "execution": 45,
+      "event_ordinal": 223,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_02\" -File | Select-Object Name; echo \"---\"; Get-ChildItem \"docs/human_fall/e",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e"
+      },
+      "output_head": "\nName                                 \n----                                 \n00_review.md                         \n01_manifest_scope.json               \n01_manifest_scope.py                 \n01_"
+    },
+    {
+      "execution": 46,
+      "event_ordinal": 232,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/09_summary_01.py\"",
+      "expected_revision": {
+        "09_summary_01.py": 17
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\09_summary_01.py": "70e9099f737a639d5acc478ffa82a23856677ba0ac03c8be003b4f53a4548440"
+      },
+      "output_head": "{\n \"A01\": \"PASS\",\n \"A02\": \"PASS\",\n \"A03\": \"PASS\",\n \"A04\": \"PASS\",\n \"A05\": \"PASS\",\n \"A06\": \"PASS_with_limitation\",\n \"A07\": \"PASS\",\n \"S01\": \"PASS_software\",\n \"B01\": \"BLOCKED\",\n \"D01\": \"NOT_RUN"
+    },
+    {
+      "execution": 47,
+      "event_ordinal": 242,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01\" -File | Select-Object Name,Length | Format-Table -AutoSize; echo \"---return tai",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\09_summary_01.py": "70e9099f737a639d5acc478ffa82a23856677ba0ac03c8be003b4f53a4548440",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\00_review.md": "a25d2beae9f445907bcddd6d1bf4495bac337d3ede0ae103e464373e93f812d6"
+      },
+      "output_head": "\nName                                  Length\n----                                  ------\n00_review.md                           10489\n01_manifest_verify_01.json             64904\n01_manifest_ve"
+    },
+    {
+      "execution": 48,
+      "event_ordinal": 246,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "python -c \"",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\09_summary_01.py": "70e9099f737a639d5acc478ffa82a23856677ba0ac03c8be003b4f53a4548440",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\00_review.md": "a25d2beae9f445907bcddd6d1bf4495bac337d3ede0ae103e464373e93f812d6"
+      },
+      "output_head": "['a02_fail_count', 'a02_failures', 'ledger_checked', 'ledger_fail_count', 'ledger_failures', 'cases_with_W_change_by_K', 'total_cases', 'J_recompute_fail_count', 'J_recompute_failures', 'count_records"
+    },
+    {
+      "execution": 49,
+      "event_ordinal": 250,
+      "exit": 0,
+      "truncated": false,
+      "command_head": "git status --short -- src webui docs/human_fall/returns/GL-I06.md 2>$null; echo \"===\"; git status --short -- docs/human_fall/evidence/2026-10-04_gl_i06_r1 2>$nu",
+      "expected_revision": {},
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py": "9339ded2615afe1f12fa1456470b1939db447b0e99a03cc205193d82653b189e",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\09_summary_01.py": "70e9099f737a639d5acc478ffa82a23856677ba0ac03c8be003b4f53a4548440",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\00_review.md": "a25d2beae9f445907bcddd6d1bf4495bac337d3ede0ae103e464373e93f812d6"
+      },
+      "output_head": " M src/CMakeLists.txt\n M src/human_capture/scripts/capture_server.py\n M webui/dist/webui-minimal.zip\n M webui/dist/webui-minimal/README.md\n M webui/human_fall/human_fall.js\n M webui/human_fall/human_f"
+    }
+  ],
+  "failed_executions": [
+    {
+      "execution": 14,
+      "event_ordinal": 76,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/01_manifest_verify_01.py\"",
+      "expected_revision": {
+        "01_manifest_verify_01.py": 1
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "7f651eed02ec80e0f2769c44bd11c56aa0a4c7c9cb5d3ce8daa4d25b2e93f15f"
+      },
+      "output_head": "Traceback (most recent call last):\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py\", line 75, in <module>\n    main()\n  File \"D:\\Code\\"
+    },
+    {
+      "execution": 15,
+      "event_ordinal": 82,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/01_manifest_verify_01.py\"",
+      "expected_revision": {
+        "01_manifest_verify_01.py": 2
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "4a001063d7e3ec4cfffe4881271ea64c723d243c4e52ad5bb85b4ed21dc9c993"
+      },
+      "output_head": "Traceback (most recent call last):\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py\", line 83, in <module>\n    main()\n  File \"D:\\Code\\"
+    },
+    {
+      "execution": 31,
+      "event_ordinal": 158,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/05_probe_a04_a06_a07_s01_01.py\"",
+      "expected_revision": {
+        "05_probe_a04_a06_a07_s01_01.py": 9
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008"
+      },
+      "output_head": "A04 fails 0 | A06 vg 39 | A06 fs 0 | A06 fh 18 | A07 0 | S01 0\nreal_approved: {'angle': 828, 'sample_area': 12, 'sample_separation': 19, 'height': 2} W 0 unresolved\nwhatif: {'qualified': 693, 'sampl"
+    },
+    {
+      "execution": 35,
+      "event_ordinal": 179,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/06_probe_a06_validation_02.py\"",
+      "expected_revision": {
+        "06_probe_a06_validation_02.py": 12
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "8d79379382f05c9091592d2da574e119d6297905840b1940cf4654efcb9df60d"
+      },
+      "output_head": "Traceback (most recent call last):\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py\", line 99, in <module>\n    main()\n  File \"D:\\"
+    },
+    {
+      "execution": 43,
+      "event_ordinal": 212,
+      "exit": 1,
+      "truncated": false,
+      "command_head": "python \"docs/human_fall/evidence/2026-10-04_gl_i06_r1/opencode_review_01/08_probe_final_holdout_oracle_01.py\"",
+      "expected_revision": {
+        "08_probe_final_holdout_oracle_01.py": 15
+      },
+      "source_revision_sha256_field": {
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\01_manifest_verify_01.py": "a70710945bd33921badfd5ba034c21b6c31a93a211b9f57ef065bf386f11a0ff",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\02_probe_a01_a03_01.py": "e45f8033faaf5d206a14d2da0ec59c8e59ab927aba91030e0bec2c74b39c3f58",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\03_probe_contract_recompute_01.py": "c25dfb7675d412e0bddde559f86c32b93ebfae6d7bdcf7b7318f8f05b026d616",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\04_probe_a02_a03_a05_01.py": "acd8e161d35bd17214cdc2a1b9baa2101144f7641e490d1ec052b6976b0d8619",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\05_probe_a04_a06_a07_s01_01.py": "f4e4ecad30dbb915e41c6ac6687a4f40ec5bfe80724a28d4997fe0bed0143008",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\06_probe_a06_validation_02.py": "ddee1ee5d9b22882080b4f9cad1bfc4987e6ddf445d4dbff0fa6fd7451cf45f4",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\07_probe_invalid_inputs_scope_01.py": "4c71c0d7060d310fb601ec0ba76abbecfea06d2c7f5dc27b6170ab542da18f19",
+        "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py": "f36f05d772042f3e1c2dc48da305c44d838bb277bfb047bde21f84819a9f0c27"
+      },
+      "output_head": "Traceback (most recent call last):\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i06_r1\\opencode_review_01\\08_probe_final_holdout_oracle_01.py\", line 86, in <module>\n    main()\n  Fil"
+    }
+  ],
+  "materialized_versions": [
+    "revalidation_01/recovered_versions/01_manifest_verify_01/v01_7f651eed02ec.py",
+    "revalidation_01/recovered_versions/01_manifest_verify_01/v02_4a001063d7e3.py",
+    "revalidation_01/recovered_versions/01_manifest_verify_01/v03_a70710945bd3.py",
+    "revalidation_01/recovered_versions/02_probe_a01_a03_01/v04_e45f8033faaf.py",
+    "revalidation_01/recovered_versions/03_probe_contract_recompute_01/v05_c25dfb7675d4.py",
+    "revalidation_01/recovered_versions/04_probe_a02_a03_a05_01/v06_43edec3e3a8c.py",
+    "revalidation_01/recovered_versions/04_probe_a02_a03_a05_01/v07_a4eaa81f6afd.py",
+    "revalidation_01/recovered_versions/04_probe_a02_a03_a05_01/v08_acd8e161d35b.py",
+    "revalidation_01/recovered_versions/05_probe_a04_a06_a07_s01_01/v09_f4e4ecad30db.py",
+    "revalidation_01/recovered_versions/06_probe_a06_validation_02/v10_36693390b736.py",
+    "revalidation_01/recovered_versions/06_probe_a06_validation_02/v11_6dd637b6a652.py",
+    "revalidation_01/recovered_versions/06_probe_a06_validation_02/v12_8d79379382f0.py",
+    "revalidation_01/recovered_versions/06_probe_a06_validation_02/v13_ddee1ee5d9b2.py",
+    "revalidation_01/recovered_versions/07_probe_invalid_inputs_scope_01/v14_4c71c0d7060d.py",
+    "revalidation_01/recovered_versions/08_probe_final_holdout_oracle_01/v15_f36f05d77204.py",
+    "revalidation_01/recovered_versions/08_probe_final_holdout_oracle_01/v16_9339ded2615a.py",
+    "revalidation_01/recovered_versions/09_summary_01/v17_70e9099f737a.py",
+    "revalidation_01/recovered_versions/00_review/v18_a25d2beae9f4.md"
+  ]
+}

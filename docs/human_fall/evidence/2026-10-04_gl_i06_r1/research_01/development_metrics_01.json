@@ -1,0 +1,116 @@
+{
+  "stages": {
+    "1": {
+      "status": {
+        "seen_pairwise_closed": 30,
+        "unresolved": 32
+      },
+      "worst_gt_normal_deg": 0.411852477597209,
+      "worst_gt_offset_m": 0.011593347400419507,
+      "worst_region_rms_m": 0.04311592885747703,
+      "worst_region_p95_m": 0.08114661205824372,
+      "counts": {
+        "full_k": 33370,
+        "stable": 20735,
+        "cycle": 0,
+        "nonconverged": 0,
+        "resource_gap": 0,
+        "violation": 0,
+        "tls_calls": 33370
+      },
+      "timing_max_by_stage_s": {
+        "sampling": 0.019115400005830452,
+        "raw": 0.10955870000179857,
+        "LO": 16.565870600374183,
+        "refine": 16.98360810003942,
+        "decision": 0.43693460000213236,
+        "serialization": 0.12535280000884086,
+        "variant_including_scalar_audit": 17.5782479000045
+      },
+      "cost_repeat_groups": 12
+    },
+    "2": {
+      "status": {
+        "seen_pairwise_closed": 20,
+        "unresolved": 42
+      },
+      "worst_gt_normal_deg": 0.323418438988271,
+      "worst_gt_offset_m": 0.002930087362588152,
+      "worst_region_rms_m": 0.04311677072657712,
+      "worst_region_p95_m": 0.07931811206446217,
+      "counts": {
+        "full_k": 29605,
+        "stable": 23386,
+        "cycle": 0,
+        "nonconverged": 6219,
+        "resource_gap": 0,
+        "violation": 0,
+        "tls_calls": 62975
+      },
+      "timing_max_by_stage_s": {
+        "sampling": 0.019639000005554408,
+        "raw": 0.10972869998659007,
+        "LO": 32.7403956001217,
+        "refine": 33.53032379987417,
+        "decision": 0.4052510999899823,
+        "serialization": 0.32167949998984113,
+        "variant_including_scalar_audit": 33.85187949999818
+      },
+      "cost_repeat_groups": 12
+    },
+    "3": {
+      "status": {
+        "seen_pairwise_closed": 25,
+        "unresolved": 37
+      },
+      "worst_gt_normal_deg": 0.2807286236334458,
+      "worst_gt_offset_m": 0.002742756458698148,
+      "worst_region_rms_m": 0.04309267156855649,
+      "worst_region_p95_m": 0.07916833945058756,
+      "counts": {
+        "full_k": 29605,
+        "stable": 23652,
+        "cycle": 0,
+        "nonconverged": 5953,
+        "resource_gap": 0,
+        "violation": 0,
+        "tls_calls": 92580
+      },
+      "timing_max_by_stage_s": {
+        "sampling": 0.019662100006826222,
+        "raw": 0.1069769999885466,
+        "LO": 44.81466810009442,
+        "refine": 45.99516700027743,
+        "decision": 0.3737021000124514,
+        "serialization": 0.32260740001220256,
+        "variant_including_scalar_audit": 46.275769800005946
+      },
+      "cost_repeat_groups": 12
+    }
+  },
+  "extra_unresolved": {
+    "2": [
+      "low_noise_7_False",
+      "low_noise_7_True",
+      "low_noise_19_False",
+      "low_noise_19_True",
+      "wall_7_False",
+      "wall_7_True",
+      "wall_19_False",
+      "wall_19_True",
+      "wall_41_False",
+      "wall_41_True"
+    ],
+    "3": [
+      "wall_7_False",
+      "wall_7_True",
+      "wall_19_False",
+      "wall_19_True",
+      "wall_41_False",
+      "wall_41_True"
+    ]
+  },
+  "false_closed": [],
+  "GT_scope": "single-plane synthetic cases only; table/dual not asserted one physical ground",
+  "costs_scope": "desktop; phase boundaries differ from native validated fitter"
+}

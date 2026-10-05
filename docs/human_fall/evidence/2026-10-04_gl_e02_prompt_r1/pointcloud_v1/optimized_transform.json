@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_optimized_transform",
+  "method": "joint (pitch, roll, tz) solve on frozen user-picked floor points (~230k pts, 4 boxes); iterative slope-correction to minimize global plane residual; tz = -median(Z_frozen)",
+  "initial": {
+    "pitch_deg": 26.0,
+    "roll_deg": 0.0,
+    "tz_m": 1.34,
+    "source": "user visual alignment 2026-10-04"
+  },
+  "optimized": {
+    "pitch_deg": 26.23376024722767,
+    "roll_deg": -1.3221021630991425,
+    "tz_m": 1.3221627094291313
+  },
+  "final_global_plane": {
+    "a": -0.0024108864916993155,
+    "b": -8.324369232901266e-06,
+    "c": 7.752605094295744e-05,
+    "rms_m": 0.01893326868910224
+  },
+  "final_global_plane_before": {
+    "a": 0.015012514817403282,
+    "b": 0.00407988597439882,
+    "c": 0.023075035793819115,
+    "rms_m": 0.01893848368904378
+  },
+  "history": [
+    {
+      "iter": 0,
+      "pitch_deg": 26.0,
+      "roll_deg": 0.0,
+      "tz_m": 1.34,
+      "slope_b": 0.00407988597439882,
+      "slope_c": 0.023075035793819115,
+      "residual_tilt_deg": 1.342608648436086,
+      "rms_m": 0.01893848368904378,
+      "n": 229691
+    },
+    {
+      "iter": 1,
+      "pitch_deg": 26.23376024722767,
+      "roll_deg": -1.3221021630991425,
+      "tz_m": 1.3221627094291313,
+      "slope_b": -8.324369232901266e-06,
+      "slope_c": 7.752605094295744e-05,
+      "residual_tilt_deg": 0.004467448485322603,
+      "rms_m": 0.01893326868910224,
+      "n": 229691
+    }
+  ],
+  "per_box_after": {
+    "pick_01": {
+      "n": 83113,
+      "mean_m": -0.00423886801696892,
+      "std_m": 0.020256062907067444,
+      "absres_p95_m": 0.042525766553485105
+    },
+    "pick_02": {
+      "n": 25594,
+      "mean_m": -0.012154445062075048,
+      "std_m": 0.018936840806896477,
+      "absres_p95_m": 0.04863495366946664
+    },
+    "pick_03": {
+      "n": 50436,
+      "mean_m": 0.00961558928963008,
+      "std_m": 0.009994946898503512,
+      "absres_p95_m": 0.026803408756023037
+    },
+    "pick_04": {
+      "n": 57551,
+      "mean_m": 0.002537670714361673,
+      "std_m": 0.01785446968312119,
+      "absres_p95_m": 0.03454357467774115
+    }
+  },
+  "per_box_before": {
+    "pick_01": {
+      "n": 88518,
+      "mean_m": -0.0034718867840003477,
+      "std_m": 0.020464617114938084,
+      "absres_p95_m": 0.04234221755614218
+    },
+    "pick_02": {
+      "n": 27009,
+      "mean_m": -0.012084167623745793,
+      "std_m": 0.018752171662376894,
+      "absres_p95_m": 0.04792453424330594
+    },
+    "pick_03": {
+      "n": 52473,
+      "mean_m": 0.009978832639019998,
+      "std_m": 0.0101953988117456,
+      "absres_p95_m": 0.027639753359432813
+    },
+    "pick_04": {
+      "n": 61691,
+      "mean_m": 0.0017844818957157174,
+      "std_m": 0.017972332977561938,
+      "absres_p95_m": 0.034610590942044814
+    }
+  },
+  "frozen_points": 229691,
+  "box_definitions": {
+    "pick_01": {
+      "X": [
+        1.022,
+        1.773
+      ],
+      "Y": [
+        -0.952,
+        -0.432
+      ]
+    },
+    "pick_02": {
+      "X": [
+        2.623,
+        3.333
+      ],
+      "Y": [
+        -0.585,
+        0.213
+      ]
+    },
+    "pick_03": {
+      "X": [
+        1.918,
+        2.415
+      ],
+      "Y": [
+        -0.964,
+        0.087
+      ]
+    },
+    "pick_04": {
+      "X": [
+        1.296,
+        1.776
+      ],
+      "Y": [
+        -0.4,
+        0.22
+      ]
+    }
+  },
+  "convention": "R = Rx(roll) @ Ry(pitch); Z += tz; box rectangles defined in display frame",
+  "notes": [
+    "This is a MODEL-BASED estimate (assumes floor is planar), not an instrument measurement; FIELD_CHECKLIST §2/§3 laser measurement still required.",
+    "frozen points = union of 4 boxes under initial transform, trimmed |Z-med|<0.12",
+    "before/after stats use the SAME frozen points for honest comparison"
+  ],
+  "physical_verified": false
+}

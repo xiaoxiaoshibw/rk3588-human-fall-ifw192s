@@ -238,10 +238,55 @@ class _Handler(BaseHTTPRequestHandler):
                                           "state": new_state or store.get(sid)["state"]})
                     return
                 if self.command == "DELETE":
-                    if not store.delete(sid):
+                    s = store.get(sid)
+                    if s is None:
                         self._send_error_json(404, "not_found", "会话不存在")
                         return
-                    self._send_json(200, {"deleted": sid})
+                    if s["state"] in ("recording", "transferring"):
+                        self._send_error_json(409, "busy",
+                                              "录制/传输中，不可删（%s）" % s["state"])
+                        return
+                    # 连文件一起删（限 staging_dir 内），仅剩登记会让文件成孤儿
+                    staging = os.path.realpath(self.server.cfg["staging_dir"])
+                    removed = []
+                    for key in ("bag_path", "manifest_path",
+                                "meta_json_path", "points_bin_path"):
+                        p = s.get(key)
+                        if not p:
+                            continue
+                        rp = os.path.realpath(p)
+                        if not (rp == staging or rp.startswith(staging + os.sep)):
+                            continue  # 路径在 staging 外，不动
+                        try:
+                            if os.path.isdir(rp):
+                                os.rmdir(rp)  # 只对空目录兜底，正常走下方显式删
+                            else:
+                                os.remove(rp)
+                            removed.append(os.path.basename(rp))
+                        except FileNotFoundError:
+                            pass
+                        except OSError:
+                            pass
+                    # 会话产物目录（含 meta+bin 的 <sid>/）：
+                    sdir = os.path.join(staging, sid)
+                    if os.path.isdir(os.path.realpath(sdir)):
+                        try:
+                            for f in os.listdir(sdir):
+                                os.remove(os.path.join(sdir, f))
+                            os.rmdir(sdir)
+                            removed.append(sid + "/")
+                        except OSError:
+                            pass
+                    # recorder 的容量预留占位（命名为 <sid>.reserve，注册表里无字段）
+                    rp = os.path.join(staging, sid + ".reserve")
+                    if os.path.isfile(os.path.realpath(rp)):
+                        try:
+                            os.remove(rp)
+                            removed.append(sid + ".reserve")
+                        except OSError:
+                            pass
+                    store.delete(sid)
+                    self._send_json(200, {"deleted": sid, "removed": removed})
                     return
 
         self._send_error_json(404, "no_route", "未匹配路由: %s %s" % (self.command, self.path))

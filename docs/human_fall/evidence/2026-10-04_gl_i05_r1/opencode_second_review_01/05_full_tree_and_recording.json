@@ -1,0 +1,618 @@
+{
+  "kind": "gli05_second_review_full_tree_diff",
+  "baseline_time": "2026-10-04T00:23:41.030748+08:00",
+  "baseline_files": 2507,
+  "current_files": 2733,
+  "added_count": 230,
+  "removed_count": 4,
+  "modified_count": 0,
+  "added_review_outputs": 15,
+  "added_foreign": [
+    "ML/LI-DATA/Dataset (Blender+LiDAR)1000poses.zip",
+    "captures/remote/cap_20261002_163621/ml_labels.json",
+    "captures/remote/cap_20261002_165321/meta.json",
+    "captures/remote/cap_20261002_165321/ml_labels.json",
+    "captures/remote/cap_20261002_165321/points.bin",
+    "captures/remote/cap_20261002_165321_clip_1989287-1989294/__trim_record.json",
+    "captures/remote/cap_20261002_165321_clip_1989287-1989294/meta.json",
+    "captures/remote/cap_20261002_165321_clip_1989287-1989294/points.bin",
+    "captures/remote/cap_20261002_182355/limb_labels.js",
+    "captures/remote/cap_20261002_182355/limb_labels.json",
+    "captures/remote/cap_20261002_182355/meta.json",
+    "captures/remote/cap_20261002_182355/ml_labels.json",
+    "captures/remote/cap_20261002_182355/points.bin",
+    "captures/remote/cap_20261002_223757/ai_labels.json",
+    "captures/remote/cap_20261002_223757/film/m_f000_f003.png",
+    "captures/remote/cap_20261002_223757/film/m_f004_f007.png",
+    "captures/remote/cap_20261002_223757/film/m_f008_f011.png",
+    "captures/remote/cap_20261002_223757/film/m_f012_f015.png",
+    "captures/remote/cap_20261002_223757/film/m_f016_f019.png",
+    "captures/remote/cap_20261002_223757/film/m_f020_f023.png",
+    "captures/remote/cap_20261002_223757/film/m_f024_f027.png",
+    "captures/remote/cap_20261002_223757/film/m_f028_f031.png",
+    "captures/remote/cap_20261002_223757/film/m_f032_f035.png",
+    "captures/remote/cap_20261002_223757/film/m_f036_f039.png",
+    "captures/remote/cap_20261002_223757/film/m_f040_f043.png",
+    "captures/remote/cap_20261002_223757/film/m_f044_f047.png",
+    "captures/remote/cap_20261002_223757/film/m_f048_f051.png",
+    "captures/remote/cap_20261002_223757/film/m_f052_f055.png",
+    "captures/remote/cap_20261002_223757/film/m_f056_f059.png",
+    "captures/remote/cap_20261002_223757/film/m_f060_f063.png",
+    "captures/remote/cap_20261002_223757/film/m_f064_f067.png",
+    "captures/remote/cap_20261002_223757/film/m_f068_f071.png",
+    "captures/remote/cap_20261002_223757/film/m_f072_f075.png",
+    "captures/remote/cap_20261002_223757/film/m_f076_f079.png",
+    "captures/remote/cap_20261002_223757/film/m_f080_f083.png",
+    "captures/remote/cap_20261002_223757/film/m_f084_f087.png",
+    "captures/remote/cap_20261002_223757/film/m_f088_f091.png",
+    "captures/remote/cap_20261002_223757/film/m_f092_f095.png",
+    "captures/remote/cap_20261002_223757/film/m_f096_f099.png",
+    "captures/remote/cap_20261002_223757/film/m_f100_f103.png",
+    "captures/remote/cap_20261002_223757/film/m_f104_f107.png",
+    "captures/remote/cap_20261002_223757/film/m_f108_f111.png",
+    "captures/remote/cap_20261002_223757/film/m_f112_f115.png",
+    "captures/remote/cap_20261002_223757/film/m_f116_f119.png",
+    "captures/remote/cap_20261002_223757/film/m_f120_f123.png",
+    "captures/remote/cap_20261002_223757/film/m_f124_f127.png",
+    "captures/remote/cap_20261002_223757/film/m_f128_f131.png",
+    "captures/remote/cap_20261002_223757/film/m_f132_f135.png",
+    "captures/remote/cap_20261002_223757/film/m_f136_f139.png",
+    "captures/remote/cap_20261002_223757/film/m_f140_f143.png",
+    "captures/remote/cap_20261002_223757/film/m_f144_f147.png",
+    "captures/remote/cap_20261002_223757/film/m_f148_f151.png",
+    "captures/remote/cap_20261002_223757/film/m_f152_f155.png",
+    "captures/remote/cap_20261002_223757/film/m_f156_f159.png",
+    "captures/remote/cap_20261002_223757/film/m_f160_f163.png",
+    "captures/remote/cap_20261002_223757/film/m_f164_f164.png",
+    "captures/remote/cap_20261002_223757/limb_v2_labels.json",
+    "captures/remote/cap_20261002_223757/limb_v2_report.md",
+    "captures/remote/cap_20261002_223757/meta.json",
+    "captures/remote/cap_20261002_223757/ml_labels.json",
+    "captures/remote/cap_20261002_223757/points.bin",
+    "captures/remote/cap_20261002_233210/meta.json",
+    "captures/remote/cap_20261002_233210/ml_labels.json",
+    "captures/remote/cap_20261002_233210/points.bin",
+    "captures/remote/synth_bend_v1/ai_labels.json",
+    "captures/remote/synth_bend_v1/limb_v2_labels.json",
+    "captures/remote/synth_bend_v1/limb_v2_report.md",
+    "captures/remote/synth_bend_v1/meta.json",
+    "captures/remote/synth_bend_v1/ml_labels.json",
+    "captures/remote/synth_bend_v1/points.bin",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/00_before_baseline.json",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/01_probe_session.json",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/01_service_probe.jsonl",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/01_service_probe.stderr.txt",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/01_service_probe_meta.json",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/02_SECOND_REVIEW_DISPATCH.md",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/03_second_review.jsonl",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/03_second_review.stderr.txt",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/04_codex_audit.json",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/05_author_research.txt",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/05_check_runner.py",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/05_checks_meta.json",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/05_fall_regression.txt",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/05_follow_regression.txt",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/06_PRELIMINARY_REWORK_DESIGN.md",
+    "docs/human_fall/evidence/2026-10-04_gl_i05_r1/codex_audit.py",
+    "pc_apps/human_limb/__pycache__/limb_lib.cpython-312.pyc",
+    "pc_apps/human_limb/__pycache__/limb_lib_test.cpython-312.pyc",
+    "pc_apps/human_limb/__pycache__/limb_v2.cpython-312.pyc",
+    "pc_apps/human_ml/__pycache__/frame_feature.cpython-312.pyc",
+    "pc_apps/human_ml/__pycache__/lidata_load.cpython-312.pyc",
+    "pc_apps/human_replay/__pycache__/config.cpython-312.pyc",
+    "pc_apps/human_replay/__pycache__/human_replay_lib.cpython-312.pyc",
+    "src/human_capture/core/__pycache__/__init__.cpython-312.pyc",
+    "src/human_capture/core/__pycache__/session_store.cpython-312.pyc",
+    "src/human_fall_detection/__pycache__/setup.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/__init__.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/association.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/baseline.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/calibration.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/capture_input.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/fall_state.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/features.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/ground.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/lidar_candidates.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/node_runtime.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/numeric.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/pipeline.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/selection.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/timebase.cpython-312.pyc",
+    "src/human_fall_detection/core/__pycache__/tracking.cpython-312.pyc",
+    "src/human_fall_detection/scripts/__pycache__/calibrate_sensors.cpython-312.pyc",
+    "src/human_fall_detection/scripts/__pycache__/evaluate_gli02_candidate.cpython-312.pyc",
+    "src/human_fall_detection/scripts/__pycache__/human_fall_node.cpython-312.pyc",
+    "src/human_fall_detection/scripts/__pycache__/prepare_capture_input.cpython-312.pyc",
+    "src/human_fall_detection/scripts/__pycache__/profile_pipeline.cpython-312.pyc",
+    "src/human_fall_detection/scripts/__pycache__/sensor_health.cpython-312.pyc",
+    "src/human_fall_detection/tests/__pycache__/test_gl01_constrained_ground.cpython-312.pyc",
+    "src/human_fall_detection/tests/__pycache__/test_gl02_ground_frame.cpython-312.pyc",
+    "src/human_fall_detection/tests/__pycache__/test_hf07_node.cpython-312.pyc",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/.gitignore",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/1.Audit & Cleaning Dataset/Audit_CleanDataset.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/1.Audit & Cleaning Dataset/Audit_Real.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/1.Audit & Cleaning Dataset/Cek_Kelengkapan.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/1.Audit & Cleaning Dataset/Cek_Kelengkapan_Test.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/1.Audit & Cleaning Dataset/Cleaning.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/1.Audit & Cleaning Dataset/Cleaning_Test.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/1.Audit & Cleaning Dataset/audit_similarity_dataset.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/2.Frame Analysis/Analisis_Frame.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/2.Frame Analysis/Audit_FRame_Visualisasi.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/2.Frame Analysis/Frame_builder.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/2.Frame Analysis/Visualisasi.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/2.Frame Analysis/bustan.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/3.Ground Correction & ROI Filtering Analysis/Audit dan Anlisis After GCZT/GC25ZT0.08.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/3.Ground Correction & ROI Filtering Analysis/Baseline.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/3.Ground Correction & ROI Filtering Analysis/Code/Trial0.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/3.Ground Correction & ROI Filtering Analysis/Trial_GC25ZT008.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/4.DBSCAN/Apply_DBSCAN.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/4.DBSCAN/Tuning.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/4.DBSCAN/visualisasi_afterDBSCAN.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/4.DBSCAN/visualisasi_validasi.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/5. Bootstrap Resampling/256.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/5. Bootstrap Resampling/369.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/5. Bootstrap Resampling/384.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/5. Bootstrap Resampling/512 copy.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/5. Bootstrap Resampling/512.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/5. Bootstrap Resampling/Analisis_Distribusi_PointCloud.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/5. Bootstrap Resampling/Visual_BefAft_Bootsrap.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/6.CSV To NPZ/Audit_NPZ.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/6.CSV To NPZ/Convert.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/7.Training DGCNN GRU/Baseline_Train.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/7.Training DGCNN GRU/Trial1.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/7.Training DGCNN GRU/Trial2.ipynb",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/D.DBSCAN Dataset/Summary/dbscan_apply_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/D.Preprocessing/DBSCAN_Calibration_GC25_Z080/_figures/dbscan_noise_vs_main_cluster_ratio.png",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/D.Preprocessing/DBSCAN_Calibration_GC25_Z080/_metrics/best_dbscan_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/D.Preprocessing/DBSCAN_Calibration_GC25_Z080/dbscan_tuning_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/E.Sampled Dataset/N0256/Summary/fixedN_sampling_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/E.Sampled Dataset/N0369/Summary/fixedN_sampling_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/E.Sampled Dataset/N0384/Summary/fixedN_sampling_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/E.Sampled Dataset/N0512/Summary/fixedN_sampling_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/E.Sampled Dataset/N1024/Summary/fixedN_sampling_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0369_T020_S002/configs/best_hpo_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0369_T020_S002/configs/final_train_val_split.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0369_T020_S002/configs/training_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0369_T020_S002/figures/confusion_matrix.png",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0369_T020_S002/figures/training_accuracy_curve.png",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0369_T020_S002/figures/training_loss_curve.png",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0369_T020_S002/hpo/hpo_skipped_info.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0369_T020_S002/reports/metrics_summary.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0512_T020_S002/configs/best_hpo_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0512_T020_S002/configs/final_train_val_split.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0512_T020_S002/configs/training_config.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/DGCNN_GRU_N0512_T020_S002/hpo/hpo_skipped_info.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/F.Training Results/best_hpo_config_recovered.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/G.NPZ Dataset/_audit_csv_vs_npz/csv_vs_npz_audit_summary.json",
+    "文档/10-1/github/Lidar-Based-Fall-Detection/G.NPZ Dataset/csv_to_npz_converter_config.json",
+    "文档/10-1/github/hdl_people_tracking/.gitignore",
+    "文档/10-1/github/hdl_people_tracking/CMakeLists.txt",
+    "文档/10-1/github/hdl_people_tracking/LICENSE",
+    "文档/10-1/github/hdl_people_tracking/README.md",
+    "文档/10-1/github/hdl_people_tracking/apps/hdl_people_detection_nodelet.cpp",
+    "文档/10-1/github/hdl_people_tracking/apps/hdl_people_tracking_nodelet.cpp",
+    "文档/10-1/github/hdl_people_tracking/data/boost_kidono.model",
+    "文档/10-1/github/hdl_people_tracking/data/boost_kidono.scale",
+    "文档/10-1/github/hdl_people_tracking/data/figs/packages.png",
+    "文档/10-1/github/hdl_people_tracking/data/figs/packages.svg",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_detection/background_subtractor.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_detection/cluster.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_detection/cluster_detector.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_detection/kidono_feature_extractor.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_detection/kidono_human_classifier.h",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_detection/marcel_people_detector.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_detection/people_detector.h",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_tracking/kalman_tracker.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/hdl_people_tracking/people_tracker.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/alg/data_association.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/alg/dp_means.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/alg/global_nearest_neighbor_association.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/alg/kalman_filter.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/alg/munkres.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/alg/nearest_neighbor_association.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/cvk/cvutils.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/math/gaussian.hpp",
+    "文档/10-1/github/hdl_people_tracking/include/kkl/ml/svm_scale.hpp",
+    "文档/10-1/github/hdl_people_tracking/launch/hdl_people_tracking.launch",
+    "文档/10-1/github/hdl_people_tracking/launch/hdl_people_tracking_static.launch",
+    "文档/10-1/github/hdl_people_tracking/msg/Cluster.msg",
+    "文档/10-1/github/hdl_people_tracking/msg/ClusterArray.msg",
+    "文档/10-1/github/hdl_people_tracking/msg/Track.msg",
+    "文档/10-1/github/hdl_people_tracking/msg/TrackArray.msg",
+    "文档/10-1/github/hdl_people_tracking/nodelet_plugins.xml",
+    "文档/10-1/github/hdl_people_tracking/package.xml",
+    "文档/10-1/github/hdl_people_tracking/src/kidono_human_classifier.cpp",
+    "文档/10-1/github/hdl_people_tracking/src/people_detector.cpp"
+  ],
+  "removed": [
+    "build_ros1.sh",
+    "build_ros2.sh",
+    "open_webui.bat",
+    "rk.txt"
+  ],
+  "modified": [],
+  "recording_related_total": 165,
+  "known_frozen_captures": [
+    {
+      "path": "captures/remote/cap_20261002_163621/meta.json",
+      "size": 18815,
+      "mtime": "2026-10-02 16:47:45"
+    },
+    {
+      "path": "captures/remote/cap_20261002_163621/ml_labels.json",
+      "size": 4718,
+      "mtime": "2026-10-03 23:51:16"
+    },
+    {
+      "path": "captures/remote/cap_20261002_163621/points.bin",
+      "size": 122427200,
+      "mtime": "2026-10-02 16:47:45"
+    },
+    {
+      "path": "captures/remote/cap_20261002_165321/meta.json",
+      "size": 6887,
+      "mtime": "2026-10-02 16:53:27"
+    },
+    {
+      "path": "captures/remote/cap_20261002_165321/ml_labels.json",
+      "size": 1658,
+      "mtime": "2026-10-03 23:51:17"
+    },
+    {
+      "path": "captures/remote/cap_20261002_165321/points.bin",
+      "size": 39891628,
+      "mtime": "2026-10-02 16:53:27"
+    },
+    {
+      "path": "captures/remote/cap_20261002_165321_clip_1989287-1989294/__trim_record.json",
+      "size": 568,
+      "mtime": "2026-10-02 19:25:16"
+    },
+    {
+      "path": "captures/remote/cap_20261002_165321_clip_1989287-1989294/meta.json",
+      "size": 2459,
+      "mtime": "2026-10-02 19:25:15"
+    },
+    {
+      "path": "captures/remote/cap_20261002_165321_clip_1989287-1989294/points.bin",
+      "size": 11004644,
+      "mtime": "2026-10-02 19:25:15"
+    },
+    {
+      "path": "captures/remote/cap_20261002_182355/limb_labels.js",
+      "size": 27900,
+      "mtime": "2026-10-03 20:08:59"
+    },
+    {
+      "path": "captures/remote/cap_20261002_182355/limb_labels.json",
+      "size": 27876,
+      "mtime": "2026-10-03 20:08:59"
+    },
+    {
+      "path": "captures/remote/cap_20261002_182355/meta.json",
+      "size": 4667,
+      "mtime": "2026-10-02 18:24:02"
+    },
+    {
+      "path": "captures/remote/cap_20261002_182355/ml_labels.json",
+      "size": 1097,
+      "mtime": "2026-10-03 23:51:17"
+    },
+    {
+      "path": "captures/remote/cap_20261002_182355/points.bin",
+      "size": 24760540,
+      "mtime": "2026-10-02 18:24:02"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/ai_labels.json",
+      "size": 1080,
+      "mtime": "2026-10-03 21:47:18"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f000_f003.png",
+      "size": 102014,
+      "mtime": "2026-10-03 21:41:27"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f004_f007.png",
+      "size": 102011,
+      "mtime": "2026-10-03 21:41:27"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f008_f011.png",
+      "size": 101816,
+      "mtime": "2026-10-03 21:41:27"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f012_f015.png",
+      "size": 102185,
+      "mtime": "2026-10-03 21:41:27"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f016_f019.png",
+      "size": 101707,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f020_f023.png",
+      "size": 102290,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f024_f027.png",
+      "size": 102092,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f028_f031.png",
+      "size": 101754,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f032_f035.png",
+      "size": 102234,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f036_f039.png",
+      "size": 101816,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f040_f043.png",
+      "size": 103156,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f044_f047.png",
+      "size": 102947,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f048_f051.png",
+      "size": 102577,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f052_f055.png",
+      "size": 102619,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f056_f059.png",
+      "size": 102265,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f060_f063.png",
+      "size": 101903,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f064_f067.png",
+      "size": 100343,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f068_f071.png",
+      "size": 100075,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f072_f075.png",
+      "size": 99906,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f076_f079.png",
+      "size": 100401,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f080_f083.png",
+      "size": 99578,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f084_f087.png",
+      "size": 98401,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f088_f091.png",
+      "size": 98325,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f092_f095.png",
+      "size": 98661,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f096_f099.png",
+      "size": 98709,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f100_f103.png",
+      "size": 98993,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f104_f107.png",
+      "size": 100222,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f108_f111.png",
+      "size": 99808,
+      "mtime": "2026-10-03 21:41:28"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f112_f115.png",
+      "size": 100946,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f116_f119.png",
+      "size": 99710,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f120_f123.png",
+      "size": 98896,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f124_f127.png",
+      "size": 98688,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f128_f131.png",
+      "size": 100105,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f132_f135.png",
+      "size": 100157,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f136_f139.png",
+      "size": 99239,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f140_f143.png",
+      "size": 98436,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f144_f147.png",
+      "size": 98616,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f148_f151.png",
+      "size": 100245,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f152_f155.png",
+      "size": 102500,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f156_f159.png",
+      "size": 101878,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f160_f163.png",
+      "size": 102052,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/film/m_f164_f164.png",
+      "size": 37726,
+      "mtime": "2026-10-03 21:41:29"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/limb_v2_labels.json",
+      "size": 107194,
+      "mtime": "2026-10-03 22:38:49"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/limb_v2_report.md",
+      "size": 594,
+      "mtime": "2026-10-03 22:38:49"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/meta.json",
+      "size": 33753,
+      "mtime": "2026-10-02 22:38:19"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/ml_labels.json",
+      "size": 8661,
+      "mtime": "2026-10-03 23:51:22"
+    },
+    {
+      "path": "captures/remote/cap_20261002_223757/points.bin",
+      "size": 226963464,
+      "mtime": "2026-10-02 22:38:19"
+    },
+    {
+      "path": "captures/remote/cap_20261002_233210/meta.json",
+      "size": 20698,
+      "mtime": "2026-10-02 23:32:25"
+    },
+    {
+      "path": "captures/remote/cap_20261002_233210/ml_labels.json",
+      "size": 5214,
+      "mtime": "2026-10-03 23:51:25"
+    },
+    {
+      "path": "captures/remote/cap_20261002_233210/points.bin",
+      "size": 136186036,
+      "mtime": "2026-10-02 23:32:25"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-01_autonomous_hf03_r1/synthetic_plane.npz",
+      "size": 192266,
+      "mtime": "2026-10-01 01:27:59"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i01_r1/codex_review_01/synthetic/legacy_cloud.npz",
+      "size": 72266,
+      "mtime": "2026-10-03 16:33:16"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i01_r1/prepared/cap_20261002_163621.npz",
+      "size": 52592250,
+      "mtime": "2026-10-03 16:01:29"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i01_r1/synthetic/cap_synthetic_01.npz",
+      "size": 38466,
+      "mtime": "2026-10-03 16:32:56"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i01_r1/synthetic/cap_synthetic_01/points.bin",
+      "size": 56000,
+      "mtime": "2026-10-03 16:32:55"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i02_r1/07_synthetic/candidate.adapted.npz",
+      "size": 23034,
+      "mtime": "2026-10-03 17:11:11"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i02_r1/07_synthetic/cap/points.bin",
+      "size": 20440,
+      "mtime": "2026-10-03 17:11:11"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_candidate.adapted.npz",
+      "size": 52592250,
+      "mtime": "2026-10-03 17:11:32"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i03_r1/codex_implementation_01/synthetic.adapted.npz",
+      "size": 23402,
+      "mtime": "2026-10-03 20:40:40"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i03_r1/codex_implementation_01/synthetic_capture/meta.json",
+      "size": 2214,
+      "mtime": "2026-10-03 20:40:40"
+    },
+    {
+      "path": "docs/human_fall/evidence/2026-10-03_gl_i03_r1/codex_implementation_01/synthetic_capture/points.bin",
+      "size": 20440,
+      "mtime": "2026-10-03 20:40:40"
+    }
+  ],
+  "physical_recording_audit_note": "No new pcap/bag/mcap/lidar recording material is present outside the frozen GL-I02 adapted NPZ and GL-I01 synthetic fixtures; no recording extrinsic/world-up identity is available, so E02 stays bounded and B01/B02 stay BLOCKED."
+}

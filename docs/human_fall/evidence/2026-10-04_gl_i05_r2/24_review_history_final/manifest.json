@@ -1,0 +1,467 @@
+{
+  "kind": "review_evidence_history_recovery",
+  "captured_prefix_sha256": "4199e48f7d73fe9f555e1b18583d5ba9e659f8898c054f1857dee3566e290283",
+  "records": [
+    {
+      "index": 1,
+      "kind": "command",
+      "command": "Test-Path \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01\"; Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i05_r2\" -Directory | Select-Object Name",
+      "tool_exit": 0,
+      "raw_output": "False\r\n\r\nName       \r\n----       \r\nresearch_01\r\n\r\n\r\n",
+      "timestamp": 1791047797709
+    },
+    {
+      "index": 2,
+      "kind": "command",
+      "command": "New-Item -ItemType Directory -Path \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01\" -Force | Out-Null; Test-Path \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01\"",
+      "tool_exit": 0,
+      "raw_output": "True\r\n",
+      "timestamp": 1791047804637
+    },
+    {
+      "index": 3,
+      "kind": "script_version",
+      "original_name": "01_manifest_scope.py",
+      "mutation": "write",
+      "sha256": "59a8c15772811f5a387f89af2a388eaf7d93220c6bd5e2802ea5148aea456d50",
+      "recovered": "003_01_manifest_scope.py",
+      "timestamp": 1791047828985
+    },
+    {
+      "index": 4,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/01_manifest_scope.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"manifest_file_count\": 76, \"manifest_all_match\": true, \"manifest_sha_mismatch\": [], \"manifest_missing\": [], \"ledger_impl_count\": 6, \"ledger_impl_mismatch\": [], \"old_new_sha_mismatch\": [], \"changed_existing_outside_run_root\": [\"docs/human_fall/DISPATCH.md\", \"docs/human_fall/README.md\", \"docs/human_fall/WORKFLOW.md\", \"docs/human_fall/returns/GL-I05.md\"], \"head_match\": true}\r\n",
+      "timestamp": 1791047835352
+    },
+    {
+      "index": 5,
+      "kind": "script_version",
+      "original_name": "02_scalar_reference.py",
+      "mutation": "write",
+      "sha256": "97aa54a11c979e0b0ef098303f03b146277bf5b30364b9841cc8569b464f5c36",
+      "recovered": "005_02_scalar_reference.py",
+      "timestamp": 1791047864599
+    },
+    {
+      "index": 6,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/02_scalar_reference.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"checks\": [[\"0_4_8_all_similar_all_orders_closed\", true], [\"0_6_12_chain_all_orders_unresolved\", false], [\"chain_BEST_ONLY_diagnostic_closed\", true], [\"middle_best_swallowed\", true], [\"weak_distinct_dominant_positive_all_orders\", false], [\"ratio_0p8_boundary\", false], [\"ratio_below_floor_single_near\", true], [\"top_ties_whole\", true], [\"random_cross_check_4000\", false], [\"prototype_terminal_equals_scalar\", true], [\"malformed_events_reject\", true], [\"oracle_rejects_illegal\", true]], \"random_mismatch\": [{\"trial\": 0, \"ws\": [{\"normal\": [0.028350166135955708, 0.0, 0.9995980532594407], \"offset_m\": 1.05, \"support_count\": 320}, {\"normal\": [0.1431942970545785, 0.0, 0.9896945959694057], \"offset_m\": 1.0, \"support_count\": 500}], \"ref\": \"seen_dominant_pool_closed\", \"got\": \"seen_dominant_pool_closed\"}, {\"trial\": 1, \"ws\": [{\"normal\": [0.24666382710240004, 0.0, 0.9691011074182081], \"offset_m\": 1.2, \"support_count\": 400}, {\"normal\": [0.1871107523566424, 0.0, 0.9823388246183347], \"offset_m\": 1.0, \"support_count\": 100}], \"ref\": \"seen_dominant_pool_closed\", \"got\": \"seen_dominant_pool_closed\"}]}\r\n",
+      "timestamp": 1791047871477
+    },
+    {
+      "index": 7,
+      "kind": "script_version",
+      "original_name": "02_scalar_reference.py",
+      "mutation": "edit",
+      "sha256": "522824e3e607b343375afafa2597eb21649cc230d2c30d74e557472282a1532e",
+      "recovered": "007_02_scalar_reference.py",
+      "timestamp": 1791047905980
+    },
+    {
+      "index": 8,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/02_scalar_reference.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"checks\": [[\"0_4_8_all_similar_all_orders_closed\", true], [\"0_6_12_chain_all_orders_unresolved\", true], [\"chain_BEST_ONLY_diagnostic_closed\", true], [\"middle_best_swallowed\", true], [\"weak_distinct_dominant_positive_all_orders\", true], [\"ratio_0p8_boundary\", true], [\"ratio_below_floor_single_near\", true], [\"top_ties_whole\", true], [\"random_cross_check_4000\", true], [\"prototype_terminal_equals_scalar\", true], [\"malformed_events_reject\", true], [\"oracle_rejects_illegal\", true]], \"random_mismatch\": []}\r\n",
+      "timestamp": 1791047913754
+    },
+    {
+      "index": 9,
+      "kind": "script_version",
+      "original_name": "03_ledger_check.py",
+      "mutation": "write",
+      "sha256": "ebc06a25eed546889caf4c194aed49c95cb1737a80d5a0293c9a785fff63a8d9",
+      "recovered": "009_03_ledger_check.py",
+      "timestamp": 1791047947328
+    },
+    {
+      "index": 10,
+      "kind": "script_version",
+      "original_name": "03_ledger_check.py",
+      "mutation": "edit",
+      "sha256": "fcbb27c7ad4038159e10d438afc261ec5a5f137d8ec86e36ec5de1b26fc9edee",
+      "recovered": "010_03_ledger_check.py",
+      "timestamp": 1791047955592
+    },
+    {
+      "index": 11,
+      "kind": "script_version",
+      "original_name": "03_ledger_check.py",
+      "mutation": "edit",
+      "sha256": "525992d44cc1b2c88a817c1c1c9df9001382d316973c583501259c9c40dea44c",
+      "recovered": "011_03_ledger_check.py",
+      "timestamp": 1791047962710
+    },
+    {
+      "index": 12,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/03_ledger_check.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"03_ledger_check\", \"ledger\": \"experiment_results_identity_verified.json\", \"synthetic_cases\": 36, \"real_cases\": 2, \"all_oracle_match\": true, \"all_closure_safe\": true, \"all_sequence_digest_equal\": true, \"all_have_5_stages_3_repeats\": true, \"all_peak_positive_separate\": true, \"all_counts_identity\": true, \"all_old_i04_seq_match\": true, \"attribution_counts\": {\"actual_near_pool_competition\": 19, \"old_certificate_insufficient\": 25, \"processing_budget_gap\": 7}, \"old_cert_fail_scalar_closed\": [{\"case\": \"weak_seed7_permuteFalse\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed7_permuteTrue\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed19_permuteFalse\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed19_permuteTrue\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed41_permuteFalse\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}, {\"case\": \"weak_seed41_permuteTrue\", \"old_status\": \"unresolved\", \"old_reasons\": [\"close_competition\", \"distinct_refined_witnesses\", \"similarity_envelope_not_closed\"], \"new_status\": \"seen_dominant_pool_closed\"}], \"prototype_status_counts\": {\"seen_pai\r\n",
+      "timestamp": 1791047968700
+    },
+    {
+      "index": 13,
+      "kind": "command",
+      "command": "python -c \"\nimport json\nd=json.load(open('docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/03_ledger_check.json',encoding='utf-8'))\nfor k in ['prototype_status_counts','weak_dominant_cases','all_metric_holds_agree','metric_holds_mismatch','cases_with_pair_count_diff','merge_safety_ok','merge_safety_detail','active_ledger_matches_manifest','local_runtime']:\n    print(k,'=',json.dumps(d[k],ensure_ascii=False))\n\"",
+      "tool_exit": 0,
+      "raw_output": "prototype_status_counts = {\"seen_pairwise_closed\": 12, \"unresolved\": 20, \"seen_dominant_pool_closed\": 6}\r\nweak_dominant_cases = 6\r\nall_metric_holds_agree = true\r\nmetric_holds_mismatch = []\r\ncases_with_pair_count_diff = 44\r\nmerge_safety_ok = true\r\nmerge_safety_detail = []\r\nactive_ledger_matches_manifest = true\r\nlocal_runtime = {\"python\": \"3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]\", \"numpy\": \"1.26.4\", \"board_run\": false}\r\n",
+      "timestamp": 1791047975704
+    },
+    {
+      "index": 14,
+      "kind": "script_version",
+      "original_name": "04_old_i04_fixture.py",
+      "mutation": "write",
+      "sha256": "d3f0c053cc68c71e01ff7b4a4f8b4818fddc500e30411bb35b263f29a0de7dd9",
+      "recovered": "014_04_old_i04_fixture.py",
+      "timestamp": 1791048002947
+    },
+    {
+      "index": 15,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/04_old_i04_fixture.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"old_order_dependent\": true, \"new_all_closed\": true, \"scalar_all_closed\": true, \"chain\": [\"unresolved\", \"unresolved\", \"unresolved\"], \"old_vs_new_terminal_200\": {\"same\": 145, \"diff\": 55}, \"i04_first_two\": [{\"order\": [0, 4, 8], \"old\": \"unresolved\", \"old_reasons\": [\"similarity_envelope_not_closed\"], \"new\": \"seen_pairwise_closed\", \"scalar\": \"seen_pairwise_closed\"}, {\"order\": [0, 8, 4], \"old\": \"unresolved\", \"old_reasons\": [\"similarity_envelope_not_closed\"], \"new\": \"seen_pairwise_closed\", \"scalar\": \"seen_pairwise_closed\"}]}\r\n",
+      "timestamp": 1791048009314
+    },
+    {
+      "index": 16,
+      "kind": "script_version",
+      "original_name": "05_spatial_parse.py",
+      "mutation": "write",
+      "sha256": "64eab105bb70f4be2a5ab0443fe39155489c554768073c0b867070fbab86f599",
+      "recovered": "016_05_spatial_parse.py",
+      "timestamp": 1791048039968
+    },
+    {
+      "index": 17,
+      "kind": "script_version",
+      "original_name": "05_spatial_parse.py",
+      "mutation": "edit",
+      "sha256": "d3e257824cd7745dfd8654726da18ada117a233198eeb03b5a7afb94cfd3529c",
+      "recovered": "017_05_spatial_parse.py",
+      "timestamp": 1791048046475
+    },
+    {
+      "index": 18,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/05_spatial_parse.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"05_spatial_parse\", \"html\": \"D:/Code/ldiar/docs/human_fall/evidence/2026-10-04_gl_i05_r2/research_01/spatial_02/source_review.html\", \"frame_count\": 89, \"bounds\": [\"FIT\", \"v1\", \"v2\", \"v3\"], \"stats_keys\": 356, \"record_keys\": 356, \"jsonl_total_rows\": 351255, \"display_budget\": 100, \"frames_ordinals_unique\": true, \"frames_seq_int\": true, \"frames_ordinal_int\": true, \"frames_match_diag\": true, \"frame_groups_match\": true, \"bounds_match_draft\": true, \"stats_keys_match\": true, \"record_keys_match_stats\": true, \"sidecar_lines\": 351255, \"sidecar_total_matches\": true, \"records_content_match\": true, \"records_order_match\": true, \"stats_count_match\": true, \"empty_selections\": 0, \"xyz_outside_box\": 0, \"planes_count\": 3, \"plane_names\": [\"WHAT_IF_FIT_PCA_normal\", \"WHAT_IF_negative_X\", \"approved\"], \"plane_norm_unit\": true, \"plane_physical_false\": true, \"up_axis\": [0.438371, 0.0, 0.898794], \"up_axis_equals_draft_prior\": true, \"approved_origin_is_prior_label\": false, \"recording_extrinsic\": \"unknown\", \"physical_verified\": false}\r\n",
+      "timestamp": 1791048054736
+    },
+    {
+      "index": 19,
+      "kind": "command",
+      "command": "python -c \"\nimport json\nd=json.load(open('docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/05_spatial_parse.json',encoding='utf-8'))\nprint('origins',json.dumps(d['plane_origins'],ensure_ascii=False))\nimport json as j\nD=j.load(open('docs/human_fall/evidence/2026-10-03_gl_i04_r1/12_real_final/diagnostic.json',encoding='utf-8'))\nfor e in D['experiments']:\n    print(e['label'],'posthoc origin=',e['posthoc_plane'].get('origin'),'norm=',e['posthoc_plane']['normal'],'offset=',e['posthoc_plane']['offset_m'])\nprint('sidecar_count',D.get('sidecar_count'))\n\"",
+      "tool_exit": 0,
+      "raw_output": "origins {\"WHAT_IF_FIT_PCA_normal\": \"frozen_refined_candidate_posthoc_not_physical\", \"WHAT_IF_negative_X\": \"frozen_refined_candidate_posthoc_not_physical\", \"approved\": \"posthoc_PCA_all_approved_FIT_rows_not_physical\"}\r\napproved posthoc origin= posthoc_PCA_all_approved_FIT_rows_not_physical norm= [-0.44277541803147735, -0.0025461766264646135, 0.8966289344938839] offset= 1.3398051207556858\r\nWHAT_IF_negative_X posthoc origin= None norm= [-0.4426807202449877, -0.0023536420223774224, 0.89667621820399] offset= 1.3397188621853198\r\nWHAT_IF_FIT_PCA_normal posthoc origin= None norm= [-0.4426807202449878, -0.0023536420223770893, 0.89667621820399] offset= 1.3397188621853202\r\nsidecar_count 351255\r\n",
+      "timestamp": 1791048063821
+    },
+    {
+      "index": 20,
+      "kind": "script_version",
+      "original_name": "05b_spatial_residual.py",
+      "mutation": "write",
+      "sha256": "06cc5c9eb0eaedc7df03a5209881a883a947959324f0140fbad8ead610129f38",
+      "recovered": "020_05b_spatial_residual.py",
+      "timestamp": 1791048100760
+    },
+    {
+      "index": 21,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/05b_spatial_residual.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"05b_spatial_residual\", \"lines_checked\": 351255, \"exact_matches\": 351255, \"mismatches\": 0, \"max_abs_diff\": 6.661338147750939e-16, \"plane\": \"WHAT_IF_FIT_PCA_normal\", \"convention_confirmed\": true}\r\n",
+      "timestamp": 1791048107820
+    },
+    {
+      "index": 22,
+      "kind": "command",
+      "command": "node \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/06_js_consumer_independent.js\" 2>&1",
+      "tool_exit": 0,
+      "raw_output": "{\"status\":\"PASS\",\"actual_js\":true,\"first_row\":17474,\"residuals\":{\"WHAT_IF_FIT_PCA_normal\":-0.020068789967577327,\"WHAT_IF_negative_X\":-0.020068789967577383,\"approved\":-0.01996493334482774},\"residuals_differ\":true,\"index_lookup_ok\":true,\"click_lookup_ok\":true,\"display_cap_only_visual\":true,\"frame_switch_ok\":true,\"box_switch_ok\":true,\"actual_browser_DPR\":\"NOT_RUN\"}\n",
+      "timestamp": 1791048129104
+    },
+    {
+      "index": 23,
+      "kind": "script_version",
+      "original_name": "07_source_guards.py",
+      "mutation": "write",
+      "sha256": "11e8d79238de95afa78c0bd2cbf2726f53666ca05cf6853c7456a9ca27654007",
+      "recovered": "023_07_source_guards.py",
+      "timestamp": 1791048150652
+    },
+    {
+      "index": 24,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/07_source_guards.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"all_ok\": true, \"checks\": {\"valid_build_ok\": true, \"empty_selection_kept\": true, \"display_budget_no_effect_on_data\": true, \"reject_bad_schema\": true, \"reject_bad_kind\": true, \"reject_bad_units\": true, \"reject_frame_mismatch\": true, \"reject_alias_group\": true, \"reject_duplicate_row\": true, \"reject_foreign_box\": true, \"reject_row_outside_group\": true, \"reject_bad_seq\": true, \"reject_nonfinite_xyz\": true, \"reject_xyz_outside_box\": true, \"reject_missing_stats\": true, \"reject_duplicate_stats_key\": true, \"reject_bad_display_budget\": true, \"reject_existing_output\": true, \"reject_outside_root\": true, \"render_has_interactions\": true, \"failed_wip_empty_retained\": true}}\r\n",
+      "timestamp": 1791048157036
+    },
+    {
+      "index": 25,
+      "kind": "script_version",
+      "original_name": "08_frozen_and_audit.py",
+      "mutation": "write",
+      "sha256": "fb41b512adac17607ae2f78babe8e5fd0b9a7a87c617e4a1843256721757ef9c",
+      "recovered": "025_08_frozen_and_audit.py",
+      "timestamp": 1791048184560
+    },
+    {
+      "index": 26,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/08_frozen_and_audit.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"08_frozen_and_audit\", \"record_count\": 7, \"record_sha_mismatch\": [], \"all_records_present_matching\": true, \"captures_modified_on_or_after_20261004\": [], \"unknowns_retained\": true, \"rotation_unknown\": true, \"config_binding_unknown\": true, \"physical_flags\": {\"B01\": \"BLOCKED\", \"B02\": \"BLOCKED\", \"D01\": \"NOT_RUN\", \"D02\": \"NOT_RUN\"}, \"diagnostic_sha_ok\": true, \"cache_tokens_in_new_files\": {\"oracle_analysis.py\": [], \"search_prototype.py\": [\"cache\"], \"experiment.py\": [\"memory_measurement_separate_from_timing\", \"memory_report\"], \"test_gli05_research.py\": [], \"source_review.py\": []}, \"no_cache_implemented\": false, \"py38_ast_failures\": {}, \"py38_ast_ok\": true}\r\n",
+      "timestamp": 1791048190807
+    },
+    {
+      "index": 27,
+      "kind": "script_version",
+      "original_name": "08_frozen_and_audit.py",
+      "mutation": "edit",
+      "sha256": "d72a83568a7b745e3ae83bac95c23f5291001618eb88c2a91b5f6b1c9fd67202",
+      "recovered": "027_08_frozen_and_audit.py",
+      "timestamp": 1791048201456
+    },
+    {
+      "index": 28,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/08_frozen_and_audit.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"08_frozen_and_audit\", \"record_count\": 7, \"record_sha_mismatch\": [], \"all_records_present_matching\": true, \"captures_modified_on_or_after_20261004\": [], \"unknowns_retained\": true, \"rotation_unknown\": true, \"config_binding_unknown\": true, \"physical_flags\": {\"B01\": \"BLOCKED\", \"B02\": \"BLOCKED\", \"D01\": \"NOT_RUN\", \"D02\": \"NOT_RUN\"}, \"diagnostic_sha_ok\": true, \"cache_impl_tokens_in_new_files\": {\"oracle_analysis.py\": [], \"search_prototype.py\": [], \"experiment.py\": [], \"test_gli05_research.py\": [], \"source_review.py\": []}, \"no_cache_implemented\": true, \"py38_ast_failures\": {}, \"py38_ast_ok\": true}\r\n",
+      "timestamp": 1791048208002
+    },
+    {
+      "index": 29,
+      "kind": "script_version",
+      "original_name": "09_frozen_compare.py",
+      "mutation": "write",
+      "sha256": "c17476f82d7750e9b3355ca5c2d031a84e6f3951f3d8bcb700f474b1d9e679e9",
+      "recovered": "029_09_frozen_compare.py",
+      "timestamp": 1791048267633
+    },
+    {
+      "index": 30,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/09_frozen_compare.py\"",
+      "tool_exit": 1,
+      "raw_output": "Traceback (most recent call last):\r\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i05_r2\\opencode_second_review_01\\09_frozen_compare.py\", line 45, in <module>\r\n    main()\r\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i05_r2\\opencode_second_review_01\\09_frozen_compare.py\", line 31, in main\r\n    if not p.exists() or sha(p) != v:\r\n           ^^^^^^^^^^\r\n  File \"C:\\Users\\30680\\scoop\\apps\\python312\\current\\Lib\\pathlib.py\", line 860, in exists\r\n    self.stat(follow_symlinks=follow_symlinks)\r\n  File \"C:\\Users\\30680\\scoop\\apps\\python312\\current\\Lib\\pathlib.py\", line 840, in stat\r\n    return os.stat(self, follow_symlinks=follow_symlinks)\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nOSError: [WinError 1920] ϵͳ�޷����ʴ��ļ���: 'D:\\\\Code\\\\ldiar\\\\src\\\\CMakeLists.txt'\r\n",
+      "timestamp": 1791048273557
+    },
+    {
+      "index": 31,
+      "kind": "script_version",
+      "original_name": "09_frozen_compare.py",
+      "mutation": "edit",
+      "sha256": "c49f3fa60bc0e9d08db18519d1bf54ece8c301c719d93d8af6d4f1517b5d15f3",
+      "recovered": "031_09_frozen_compare.py",
+      "timestamp": 1791048279760
+    },
+    {
+      "index": 32,
+      "kind": "script_version",
+      "original_name": "09_frozen_compare.py",
+      "mutation": "edit",
+      "sha256": "ee536ed671b53d77c00ce5570d63b9532d6ae992a0af3df043d69efb7e299b47",
+      "recovered": "032_09_frozen_compare.py",
+      "timestamp": 1791048286179
+    },
+    {
+      "index": 33,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/09_frozen_compare.py\" 2>&1",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"09_frozen_compare\", \"r1_prod_files\": 123, \"r2_prod_files\": 123, \"prod_changed_between_baselines\": [], \"prod_only_r1\": [], \"prod_only_r2\": [], \"current_tree_prod_mismatch\": [\"src/human_capture/CMakeLists.txt\", \"src/human_capture/__init__.py\", \"src/human_capture/config/capture.yaml\", \"src/human_capture/core/__init__.py\", \"src/human_capture/core/bag2session.py\", \"src/human_capture/core/fifo.py\", \"src/human_capture/core/recorder.py\", \"src/human_capture/core/session_store.py\", \"src/human_capture/launch/human_capture.launch\", \"src/human_capture/package.xml\", \"src/human_capture/scripts/capture_server.py\", \"src/human_capture/tests/test_hc01_health.py\", \"src/human_capture/tests/test_hc01_persistence.py\", \"src/human_capture/tests/test_hc01_sessions.py\", \"src/human_capture/tests/test_hc02_fifo.py\", \"src/human_capture/tests/test_hc02_recorder.py\", \"src/human_capture/tests/test_hc03_bag2session.py\", \"src/human_fall_detection/CMakeLists.txt\", \"src/human_fall_detection/config/default.yaml\", \"src/human_fall_detection/config/geometry.yaml\", \"src/human_fall_detection/config/geometry_constrained.yaml\", \"src/human_fall_detection/config/geometry_constrained_gli03_r1.yaml\", \"src/human_fall_detection/config/human_fall.yaml\", \"src/human_fall_detection/config/human_fall_prod.yaml\", \"src/human_fall_detection/config/perception.yaml\", \"src/human_fall_detection/core/__init__.py\", \"src/human_fall_detection/core/association.py\", \"src/human_fall_detection/core/baseline.py\", \"src/human_fall_detection/core/calibration.py\", \"src/human_fall_detection/core/capture_input.py\", \"src/human_fall_detection/core/fall_state.py\", \"src/human_fall_detection/core/features.py\", \"src/human_fall_detection/core/ground.py\", \"src/human_fall_detection/core/ground_diagnostics.py\", \"src/human_fall_detection/core/lidar_candidates.py\", \"src/human_fall_detection/core/node_runtime.py\", \"src/human_fall_detection/core/numeric.py\", \"src/human_fall_detection/core/pipeline.py\", \"src/human_fall_detection/core/selection.py\", \"src/human_fall_detection/core/sensor_quality.py\", \"src/human_fall_detection/core/timebase.py\", \"src/human_fall_detection/core/tracking.py\", \"src/human_fall_detection/launch/human_fall.launch\", \"src/human_fall_detection/package.xml\", \"src/human_fall_detection/scripts/calibrate_sensors.py\", \"src/human_fall_detection/scripts/deploy_human_fall.sh\", \"src/human_fall_detection/scripts/diagnose_gli04_geometry.py\", \"src/human_fall_detection/scripts/evaluate_gli02_candidate.py\", \"src/human_fall_detection/scripts/evaluate_sessions.py\", \"src/human_fall_detection/scripts/fall_replay.py\", \"src/human_fall_detection/scripts/human_fall_node.py\", \"src/human_fall_detection/scripts/prepare_capture_input.py\", \"src/human_fall_detection/scripts/profile_pipeline.py\", \"src/human_fall_detection/scripts/record_session.py\", \"src/human_fall_detection/scripts/sensor_health.py\", \"src/human_fall_detection/setup.py\", \"src/human_fall_detection/tests/glp01_consumer.js\", \"src/human_fall_detection/tests/hf08_synthetic_events.json\", \"src/human_fall_detection/tests/test_gl01_constrained_ground.py\", \"src/human_fall_detection/tests/test_gl02_ground_frame.py\", \"src/human_fall_detection/tests/test_gl03_candidates_geometry.py\", \"src/human_fall_detection/tests/test_gli01_capture_input.py\", \"src/human_fall_detection/tests/test_gli02_candidate.py\", \"src/human_fall_detection/tests/test_gli03_candidate_override.py\", \"src/human_fall_detection/tests/test_gli04_geometry.py\", \"src/human_fall_detection/tests/test_glp01_ground_projection.py\", \"src/human_fall_detection/tests/test_hf01_health.py\", \"src/human_fall_detection/tests/test_hf02_timebase.py\", \"src/human_fall_detection/tests/test_hf03_geometry.py\", \"src/human_fall_detection/tests/test_hf04_candidates.py\", \"src/human_fall_detection/tests/test_hf05_tracking.py\", \"src/human_fall_detection/tests/test_hf06_fall_state.py\", \"src/human_fall_detection/tests/test_hf07_node.py\", \"src/human_fall_detection/tests/test_hf08_evaluate_sessions.py\", \"src/human_fall_detection/tests/test_hf09_profile.py\", \"src/human_follow_calibration/.gitignore\", \"src/human_follow_calibration/CMakeLists.txt\", \"src/human_follow_calibration/README.md\", \"src/human_follow_calibration/package.xml\", \"src/human_follow_calibration/scripts/calibrate_human_follow.py\", \"src/human_follow_calibration/scripts/monitor_human_follow.py\", \"src/human_follow_calibration/tests/test_calibrate_human_follow.py\", \"src/inno_lidar_msg/CMakeLists.txt\", \"src/inno_lidar_msg/msg/DeviceStatus.msg\", \"src/inno_lidar_msg/package.xml\", \"src/inno_lidar_msg/package_ros1.xml\", \"src/inno_lidar_msg/package_ros2.xml\", \"src/inno_lidar_ros/CMakeLists.txt\", \"src/inno_lidar_ros/config/config.yaml\", \"src/inno_lidar_ros/config/ifw192s/ifw192s_azimuth_192x256.csv\", \"src/inno_lidar_ros/config/ifw192s/ifw192s_elevation_192x256.csv\", \"src/inno_lidar_ros/config/ifw192s/model_weights_no1.csv\", \"src/inno_lidar_ros/config/ifw192s/near_filter.csv\", \"src/inno_lidar_ros/launch/ros1_start.launch\", \"src/inno_lidar_ros/launch/ros2_start.launch.py\", \"src/inno_lidar_ros/node/inno_lidar_node.cpp\", \"src/inno_lidar_ros/package.xml\", \"src/inno_lidar_ros/package_ros1.xml\", \"src/inno_lidar_ros/package_ros2.xml\", \"src/inno_lidar_ros/rviz/rviz.rviz\", \"src/inno_lidar_ros/rviz/rviz2.rviz\", \"src/inno_lidar_ros/src/manager/node_manager.cpp\", \"src/inno_lidar_ros/src/manager/node_manager.h\", \"src/inno_lidar_ros/src/msg/cloud_types.hpp\", \"src/inno_lidar_ros/src/source/publish_manager.cpp\", \"src/inno_lidar_ros/src/source/publish_manager.h\", \"src/inno_lidar_ros/src/source/source_driver.cpp\", \"src/inno_lidar_ros/src/source/source_driver.hpp\", \"src/inno_lidar_ros/src/utility/sync_queue.hpp\", \"src/inno_lidar_ros/src/utility/yaml_reader.hpp\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/api/export.h\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/api/inno_driver.h\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/api/inno_driver_sdk.h\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/common/error_code.hpp\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/common/inno_common.hpp\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/common/inno_log.hpp\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/common/inno_tool.hpp\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/msg/data_types.hpp\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/msg/imu_types.hpp\", \"src/inno_lidar_ros/third_party/inno_driver/inno_driver/msg/point_types.hpp\", \"src/inno_lidar_ros/third_party/inno_driver/lib/aarch64/libinno_driver.so\", \"src/inno_lidar_ros/third_party/inno_driver/lib/x86_64/libinno_driver.so\"], \"unreadable_win_symlink\": [\"src/CMakeLists.txt\"], \"production_frozen_ok\": false}\r\n",
+      "timestamp": 1791048292306
+    },
+    {
+      "index": 34,
+      "kind": "script_version",
+      "original_name": "09_frozen_compare.py",
+      "mutation": "edit",
+      "sha256": "3ea768509a40fcc982da347a42c07367aff957c09669228cd5a732721325983a",
+      "recovered": "034_09_frozen_compare.py",
+      "timestamp": 1791048310067
+    },
+    {
+      "index": 35,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/09_frozen_compare.py\" 2>&1",
+      "tool_exit": 1,
+      "raw_output": "python : Traceback (most recent call last):\r\n����λ�� ��:1 �ַ�: 1\r\n+ python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second ...\r\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException\r\n    + FullyQualifiedErrorId : NativeCommandError\r\n \r\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i05_r2\\opencode_second_review_01\\09_frozen_compare.py\", li\r\nne 53, in <module>\r\n    main()\r\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i05_r2\\opencode_second_review_01\\09_frozen_compare.py\", li\r\nne 19, in main\r\n    r1 = {k: v[\"sha256\"] for k, v in\r\n             ~^^^^^^^^^^\r\nKeyError: 'sha256'\r\n",
+      "timestamp": 1791048316286
+    },
+    {
+      "index": 36,
+      "kind": "script_version",
+      "original_name": "09_frozen_compare.py",
+      "mutation": "edit",
+      "sha256": "d29ba755285824406155d0f2a58b0e2e030226a4ef79f29b7796377f25cc2b10",
+      "recovered": "036_09_frozen_compare.py",
+      "timestamp": 1791048331361
+    },
+    {
+      "index": 37,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/09_frozen_compare.py\" 2>&1",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"09_frozen_compare\", \"r1_prod_files\": 122, \"r2_prod_files\": 122, \"prod_changed_between_baselines\": [], \"prod_only_r1\": [], \"prod_only_r2\": [], \"current_tree_prod_mismatch\": [], \"unreadable_win_symlink\": [], \"production_frozen_ok\": false}\r\n",
+      "timestamp": 1791048337939
+    },
+    {
+      "index": 38,
+      "kind": "script_version",
+      "original_name": "09_frozen_compare.py",
+      "mutation": "edit",
+      "sha256": "a69c4914e6faa60e59b2c49403e88da7303af137a15abee9bc195c0beab6b315",
+      "recovered": "038_09_frozen_compare.py",
+      "timestamp": 1791048345562
+    },
+    {
+      "index": 39,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/09_frozen_compare.py\" 2>&1",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"09_frozen_compare\", \"r1_prod_files\": 122, \"r2_prod_files\": 122, \"prod_changed_between_baselines\": [], \"prod_only_r1\": [], \"prod_only_r2\": [], \"current_tree_prod_mismatch\": [], \"unreadable_win_symlink\": [], \"production_frozen_ok\": true}\r\n",
+      "timestamp": 1791048351704
+    },
+    {
+      "index": 40,
+      "kind": "script_version",
+      "original_name": "10_conservation_qmatrix.py",
+      "mutation": "write",
+      "sha256": "cf4e6e5d76ee792bbbfd2f3dbe22dd0f5ceb0079e3474e61ec37ae77ed0c6459",
+      "recovered": "040_10_conservation_qmatrix.py",
+      "timestamp": 1791048384645
+    },
+    {
+      "index": 41,
+      "kind": "script_version",
+      "original_name": "10_conservation_qmatrix.py",
+      "mutation": "edit",
+      "sha256": "4257f0beb7464a9f90693a9d59159678f1e6a9dc2d2deec8148f0fc03639f9f4",
+      "recovered": "041_10_conservation_qmatrix.py",
+      "timestamp": 1791048392363
+    },
+    {
+      "index": 42,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/10_conservation_qmatrix.py\" 2>&1",
+      "tool_exit": 0,
+      "raw_output": "{\"all_ok\": true, \"checks\": {\"determinism\": true, \"caller_mutation_changes_result\": true, \"late_strong_best_gap_stays_unresolved\": true, \"all_refine_reject_unresolved\": true, \"all_budgets_zero_block\": true, \"candidate_cap_unstored_unresolved\": true, \"gaps_flag_unresolved\": true, \"source_ceiling_incomplete\": true, \"trace_snapshot_independent\": true, \"multiplicity_in_counts_and_trace\": true, \"top_tie_merge_holds_agree\": true, \"dtype_parity_float32_vs_float64\": true, \"near_competition_reason_present\": true}, \"Q_matrix\": {\"Q01\": true, \"Q02\": true, \"Q03\": true, \"Q04\": true, \"Q05\": true, \"Q06\": true, \"Q07\": true, \"Q08\": true, \"Q09\": true, \"Q10\": true}}\r\n",
+      "timestamp": 1791048399349
+    },
+    {
+      "index": 43,
+      "kind": "script_version",
+      "original_name": "11_scope_diff.py",
+      "mutation": "write",
+      "sha256": "b5bf8f6bb9d8fad0264f683483e5fb59514e1af1b3b86d0a7c86846dbb61aaa0",
+      "recovered": "043_11_scope_diff.py",
+      "timestamp": 1791048437509
+    },
+    {
+      "index": 44,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/11_scope_diff.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"baseline_paths\": 2610, \"changed_existing\": [], \"removed\": [], \"unreadable\": [], \"new_path_count\": 96, \"unexpected_new\": [\"\\\"/346/226/207/346/241/243//345/215/253/347/224/237/351/227/264/350/200/201/344/272/272/350/267/214/345/200/222/346/243/200/346/265/213/344/274/240/346/204/237/345/231/250 /344/272/247/345/223/201/350/256/276/350/256/241/346/226/271/346/241/210(1).pdf\\\"\", \"\\\"/346/226/207/346/241/243//350/267/214/345/200/222/346/243/200/346/265/213/346/226/207/347/214/256/06_/350/267/214/345/200/222/346/243/200/346/265/213_/345/256/236/351/252/214/346/226/271/346/241/210/344/270/216/345/277/205/350/257/273/346/226/207/347/214/256.md\\\"\", \"\\\"/346/226/207/346/241/243//350/267/214/345/200/222/346/243/200/346/265/213/346/226/207/347/214/256/Lai_2026_LiDAR/344/272/272/344/275/223/350/277/220/345/212/250/345/210/206/346/236/220/347/273/274/350/277/260.pdf\\\"\", \"\\\"/346/226/207/346/241/243//350/267/214/345/200/222/346/243/200/346/265/213/346/226/207/347/214/256/Qi_2017_PointNet++_/346/255/243/346/226/207/344/270/216/350/241/245/345/205/205.pdf\\\"\", \"\\\"/346/226/207/346/241/243//350/267/214/345/200/222/346/243/200/346/265/213/346/226/207/347/214/256/Qi_2017_PointNet++_/347/213/254/347/253/213/350/241/245/345/205/205/346/235/220/346/226/231.pdf\\\"\", \"\\\"/346/226/207/346/241/243//350/267/214/345/200/222/346/243/200/346/265/213/346/226/207/347/214/256/README.md\\\"\", \"\\\"/346/226/207/346/241/243//350/267/214/345/200/222/346/243/200/346/265/213/346/226/207/347/214/256/Yan_2018_ST-GCN.pdf\\\"\", \"\\\"/346/226/207/346/241/243//350/267/214/345/200/222/346/243/200/346/265/213/346/226/207/347/214/256/manifest.json\\\"\", \"\\\"/346/226/207/346/241/243//351/227/256/351/242/230.assets/image-20260930234145126.png\\\"\", \"\\\"/346/226/207/346/241/243//351/227/256/351/242/230.md\\\"\", \"\\\"/346/226/207/346/241/243/10-1//346/225/260/346/215/256/351/233/206/350/260/203/347/240/224/2003.05093_/350/207/252/345/212/250/346/240/207/346/263/250LiDAR/344/272/272/344/275/223/345/210/206/345/211/262.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1//346/225/260/346/215/256/351/233/206/350/260/203/347/240/224/2211.10598_LidarGait/345/237/272/345/207/206.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1//346/225/260/346/215/256/351/233/206/350/260/203/347/240/224/2303.09095_SLOPER4D/346/225/260/346/215/256/351/233/206/350/256/272/346/226/207.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1//346/225/260/346/215/256/351/233/206/350/260/203/347/240/224/2305.10345_MMFi/346/225/260/346/215/256/351/233/206/350/256/272/346/226/207.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1//346/225/260/346/215/256/351/233/206/350/260/203/347/240/224/2402.17171_LiveHPS/346/225/260/346/215/256/351/233/206.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1//346/225/260/346/215/256/351/233/206/350/260/203/347/240/224/2509.12197_LiDAR/344/272/272/344/275/223/345/247/277/346/200/201/344/274/260/350/256/241/347/273/274/350/277/260.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1//346/225/260/346/215/256/351/233/206/350/260/203/347/240/224/README.md\\\"\", \"\\\"/346/226/207/346/241/243/10-1//346/225/260/346/215/256/351/233/206/350/260/203/347/240/224/manifest.json\\\"\", \"\\\"/346/226/207/346/241/243/10-1/README.md\\\"\", \"\\\"/346/226/207/346/241/243/10-1/manifest.json\\\"\", \"\\\"/346/226/207/346/241/243/10-1/notes//346/225/260/346/215/256/351/233/206/344/270/216/350/257/204/346/265/213.md\\\"\", \"\\\"/346/226/207/346/241/243/10-1/notes//346/226/271/346/263/225/345/257/271/347/205/247.md\\\"\", \"\\\"/346/226/207/346/241/243/10-1/notes//350/256/272/346/226/207/347/254/224/350/256/260.md\\\"\", \"\\\"/346/226/207/346/241/243/10-1/papers/1804.04976_/345/234/250/347/272/277/350/267/214/345/200/222/346/243/200/346/265/213RNN.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1/papers/2003.02386_mmFall_/346/257/253/347/261/263/346/263/242/347/202/271/344/272/221/350/267/214/345/200/222.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1/papers/2205.05918_/345/244/232/346/250/241/346/200/201/350/267/214/345/200/222/346/243/200/346/265/213.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1/papers/2311.08755_IMM/347/216/257/345/242/203/346/227/240/345/205/263/346/257/253/347/261/263/346/263/242/350/267/214/345/200/222.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1/papers/2312.04037_Radar/350/267/214/345/200/222/346/243/200/346/265/213/347/273/274/350/277/260.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1/papers/2508.10469_/347/250/200/347/226/217/347/202/271/344/272/221/345/212/250/344/275/234/350/257/206/345/210/253_DBSCAN/345/214/210/347/211/231/345/210/251KF.pdf\\\"\", \"\\\"/346/226/207/346/241/243/10-1/papers/2509.23255_LiDAR/344/272/272/344/275/223/346/264/273/345/212/250/350/257/206/345/210/253_/346/213/211/346/231/256/346/213/211/346/226/257/350/260/261.pdf\\\"\", \"\\\"/346/226/207/346/241/243/AISC-3830/347/224/250/346/210/267/346/211/213/345/206/214.pdf\\\"\", \"\\\"/346/226/207/346/241/243/design_extracted.txt\\\"\", \"\\\"/346/226/207/346/241/243/design_full.txt\\\"\", \"\\\"/346/226/207/346/241/243/design_raw.txt\\\"\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/17_scope_check.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/17_submitted_baseline.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/18_probe_session.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/18_service_probe.jsonl\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/18_service_probe.stderr.txt\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/18_service_probe_meta.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/19_SECOND_REVIEW_DISPATCH.md\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/20_second_review.jsonl\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/20_second_review.stderr.txt\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/21_codex_source_audit.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/21_codex_source_audit.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/21_codex_source_audit.txt\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/21_codex_source_audit_exit.txt\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_recover_review_history.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/001_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/002_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/003_01_manifest_scope.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/004_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/005_02_scalar_reference.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/006_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/007_02_scalar_reference.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/008_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/009_03_ledger_check.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/010_03_ledger_check.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/011_03_ledger_check.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/012_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/013_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/014_04_old_i04_fixture.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/015_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/016_05_spatial_parse.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/017_05_spatial_parse.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/018_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/019_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/020_05b_spatial_residual.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/021_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/022_command.json\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/023_07_source_guards.py\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/captured_cli_prefix.jsonl\", \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/22_review_history/manifest.json\"], \"scope_clean\": false}\r\n",
+      "timestamp": 1791048447771
+    },
+    {
+      "index": 45,
+      "kind": "script_version",
+      "original_name": "11_scope_diff.py",
+      "mutation": "edit",
+      "sha256": "42238d144e5a8abea3100d351ad1870d09157b879a29f9940ba77f998d377b42",
+      "recovered": "045_11_scope_diff.py",
+      "timestamp": 1791048464104
+    },
+    {
+      "index": 46,
+      "kind": "script_version",
+      "original_name": "11_scope_diff.py",
+      "mutation": "edit",
+      "sha256": "e3ac4a7e29a9409b311cb91644a3416e75bb87f7b04a4fd01035b796e2d2a566",
+      "recovered": "046_11_scope_diff.py",
+      "timestamp": 1791048496591
+    },
+    {
+      "index": 47,
+      "kind": "script_version",
+      "original_name": "11_scope_diff.py",
+      "mutation": "edit",
+      "sha256": "063a13db36cde4532479897d1bd33acfa09f0bd848532c41225283b03c5450c0",
+      "recovered": "047_11_scope_diff.py",
+      "timestamp": 1791048504282
+    },
+    {
+      "index": 48,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/11_scope_diff.py\"",
+      "tool_exit": 1,
+      "raw_output": "Exception in thread Thread-1 (_readerthread):\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\30680\\scoop\\apps\\python312\\current\\Lib\\threading.py\", line 1075, in _bootstrap_inner\r\n    self.run()\r\n  File \"C:\\Users\\30680\\scoop\\apps\\python312\\current\\Lib\\threading.py\", line 1012, in run\r\n    self._target(*self._args, **self._kwargs)\r\n  File \"C:\\Users\\30680\\scoop\\apps\\python312\\current\\Lib\\subprocess.py\", line 1599, in _readerthread\r\n    buffer.append(fh.read())\r\n                  ^^^^^^^^^\r\nUnicodeDecodeError: 'gbk' codec can't decode byte 0xab in position 104840: illegal multibyte sequence\r\nTraceback (most recent call last):\r\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i05_r2\\opencode_second_review_01\\11_scope_diff.py\", line 88, in <module>\r\n    main()\r\n  File \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_i05_r2\\opencode_second_review_01\\11_scope_diff.py\", line 43, in main\r\n    cwd=str(ROOT), capture_output=True, text=True).stdout.splitlines()\r\n                                                          ^^^^^^^^^^\r\nAttributeError: 'NoneType' object has no attribute 'splitlines'\r\n",
+      "timestamp": 1791048512413
+    },
+    {
+      "index": 49,
+      "kind": "script_version",
+      "original_name": "11_scope_diff.py",
+      "mutation": "edit",
+      "sha256": "585ff77aa7a7a9e53415ec96bae9bbf0f8f7c678fbd9ccea8aa30337218eb5fa",
+      "recovered": "049_11_scope_diff.py",
+      "timestamp": 1791048520260
+    },
+    {
+      "index": 50,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/11_scope_diff.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"baseline_paths\": 2610, \"changed_existing\": [], \"removed\": [], \"unreadable\": [], \"new_path_count\": 63, \"unexpected_new\": [], \"scope_clean\": true}\r\n",
+      "timestamp": 1791048528446
+    },
+    {
+      "index": 51,
+      "kind": "command",
+      "command": "Get-ChildItem \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01\" | Select-Object Name,Length; Write-Output \"---HEAD---\"; git rev-parse HEAD",
+      "tool_exit": 0,
+      "raw_output": "\r\ncbd0be1c86a1051a9a5800dfb7263f842896e1e6\nName                            Length\r\n----                            ------\r\n01_manifest_scope.json            1062\r\n01_manifest_scope.py              3570\r\n02_scalar_reference.json          1309\r\n02_scalar_reference.py           10440\r\n03_ledger_check.json              2826\r\n03_ledger_check.py                6574\r\n04_old_i04_fixture.json           1950\r\n04_old_i04_fixture.py             5243\r\n05b_spatial_residual.json          229\r\n05b_spatial_residual.py           1895\r\n05_spatial_parse.json             1445\r\n05_spatial_parse.py               4624\r\n06_js_consumer_independent.js     4424\r\n06_js_consumer_independent.json    430\r\n07_source_guards.json              821\r\n07_source_guards.py               5410\r\n08_frozen_and_audit.json           707\r\n08_frozen_and_audit.py            3192\r\n09_frozen_compare.json             277\r\n09_frozen_compare.py              2046\r\n10_conservation_qmatrix.json      1531\r\n10_conservation_qmatrix.py        9722\r\n11_scope_diff.json                6259\r\n11_scope_diff.py                  3570\r\n---HEAD---\r\n\r\n\r\n",
+      "timestamp": 1791048539512
+    },
+    {
+      "index": 52,
+      "kind": "script_version",
+      "original_name": "12_end_state.py",
+      "mutation": "write",
+      "sha256": "1b81992ee1b181059ea5979f389b31725fac381d76e240247581aa05c242bb80",
+      "recovered": "052_12_end_state.py",
+      "timestamp": 1791048565716
+    },
+    {
+      "index": 53,
+      "kind": "command",
+      "command": "python \"docs/human_fall/evidence/2026-10-04_gl_i05_r2/opencode_second_review_01/12_end_state.py\"",
+      "tool_exit": 0,
+      "raw_output": "{\"script\": \"12_end_state\", \"end_head\": \"cbd0be1c86a1051a9a5800dfb7263f842896e1e6\", \"manifest_head\": \"cbd0be1c86a1051a9a5800dfb7263f842896e1e6\", \"head_match\": true, \"manifest_mismatch_after_review\": [], \"author_files_unchanged\": true}\r\n",
+      "timestamp": 1791048572479
+    }
+  ],
+  "overwritten_script_names": [
+    "02_scalar_reference.py",
+    "03_ledger_check.py",
+    "05_spatial_parse.py",
+    "08_frozen_and_audit.py",
+    "09_frozen_compare.py",
+    "10_conservation_qmatrix.py",
+    "11_scope_diff.py"
+  ],
+  "limitation": "prefix snapshot only; CLI may still be running. No original files overwritten. Initial false checker outputs remain raw command evidence, not author failures."
+}

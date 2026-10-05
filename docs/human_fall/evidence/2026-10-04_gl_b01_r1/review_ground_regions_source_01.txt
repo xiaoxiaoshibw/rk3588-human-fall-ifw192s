@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+"""Prepare source-row review material from a frozen nominal run; no calibration."""
+import argparse
+import csv
+import json
+from pathlib import Path
+import sys
+
+import numpy as np
+
+PACKAGE = Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(PACKAGE))
+from core.capture_input import load_adapted, sha256_file
+from core.ground_evidence import read_json, require, keys
+from core.ground_region_review import (observe_review_regions, legacy_box_diagnostics,
+                                      validate_confirmed_rows)
+from core.nominal_leveling import validate_nominal_model
+from evaluate_gli02_candidate import _draft_region
+from level_capture_nominal import comparison_html
+
+
+def prepare_region_review(npz, nominal_run, legacy_draft, plan_path, output,
+                          repo_root, confirmed_path=None, evidence_files=None):
+    target = Path(output).absolute()
+    root = Path(repo_root).resolve()
+    allowed = root/'docs/human_fall/evidence/2026-10-04_gl_b01_r1'
+    require(target.resolve() == target and allowed in target.parents and not target.exists()
+            and target.parent.is_dir(),"new output must be inside this work item")
+    for p in [target]+list(target.parents):
+        require(not p.is_symlink(),"output aliases forbidden")
+    run = Path(nominal_run)
+    paths = [Path(npz),run/'nominal_model.json',run/'input_manifest.json',Path(legacy_draft),Path(plan_path)]
+    if confirmed_path:
+        paths.append(Path(confirmed_path))
+    evidence_files = evidence_files or {}
+    require(isinstance(evidence_files,dict),"evidence file map")
+    for name,ref in evidence_files.items():
+        keys(ref,("path","sha256"),"human evidence ref")
+        require(sha256_file(ref["path"]) == ref["sha256"],"human evidence SHA mismatch")
+        paths.append(Path(ref["path"]))
+    for p in paths:
+        require(target != p.resolve() and target not in p.resolve().parents,"output contains an input")
+    start_sha = {str(p.resolve()):sha256_file(p) for p in paths}
+    model,model_sha = read_json(run/'nominal_model.json'); model = validate_nominal_model(model)
+    source_info,info_sha = read_json(run/'input_manifest.json')
+    plan,plan_sha = read_json(plan_path)
+    draft,draft_sha = read_json(legacy_draft)
+    for p,s in [(run/'nominal_model.json',model_sha),(run/'input_manifest.json',info_sha),
+                (Path(plan_path),plan_sha),(Path(legacy_draft),draft_sha)]:
+        require(s == start_sha[str(p.resolve())],"parsed input snapshot changed")
+    require(source_info["npz_sha256"] == start_sha[str(Path(npz).resolve())],"source NPZ differs from nominal run")
+    require(source_info["model_id"] == model["model_id"],"nominal run model mismatch")
+    manifest,points = load_adapted(npz)
+    require(source_info["source"] == manifest["source"] and source_info["declared"] == manifest["declared"]
+            and source_info["source_xyz_sha256"] == manifest["points"]["sha256"],"nominal run source mismatch")
+    require(source_info["window_bag_time_sec"] == [manifest["frames"][0]["bag_time_sec"],manifest["frames"][-1]["bag_time_sec"]],"nominal run window mismatch")
+    require(type(draft.get("schema")) is int and draft["schema"] == 1
+            and draft.get("kind") == "gli02_capture_selection_draft", "legacy draft schema/kind")
+    legacy_source = draft.get("source")
+    require(isinstance(legacy_source,dict),"legacy source missing")
+    for key,expected in [("meta_sha256",manifest["source"]["meta_sha256"]),
+                         ("bin_sha256",manifest["source"]["bin_sha256"]),
+                         ("manifest_points_sha256",manifest["points"]["sha256"]),
+                         ("frame",manifest["declared"]["frame"]),("units","m")]:
+        require(legacy_source.get(key) == expected,"foreign legacy source: "+key)
+    regions = [("legacy_FIT",draft["fit_region"])] + [(r["region_id"],r) for r in draft["validation_regions"]]
+    selectors = [(name,_draft_region(region,name)) for name,region in regions]
+    observations,rows = observe_review_regions(points,manifest,model,plan)
+    observations["legacy_observations"] = legacy_box_diagnostics(points,manifest,model,selectors)
+    if confirmed_path:
+        selection,selection_sha = read_json(confirmed_path)
+        require(selection_sha == start_sha[str(Path(confirmed_path).resolve())],"confirmation file changed")
+        reviewed = validate_confirmed_rows(selection,observations,points,manifest,evidence_files)
+    else:
+        reviewed = {"kind":"pending_ground_selection", "schema":1, "selection":None,
+                    "plan_id":observations["plan_id"], "physical_verified":False,
+                    "candidate_eligible":False, "missing":["human-confirmed source rows/person/time/landmarks/evidence"]}
+    for p in paths:
+        require(sha256_file(p) == start_sha[str(p.resolve())],"input changed during review")
+    for name in ("meta","bin"):
+        require(sha256_file(manifest["source"][name+"_path"]) == manifest["source"][name+"_sha256"],"actual source changed")
+    draft_out = {"kind":"ground_region_pending_review_draft","schema":1,"plan_id":observations["plan_id"],
+                 "binding":observations["binding"],"model":model,"plan":plan,
+                 "regions":[{"region_id":r["region_id"],"role":r["role"],"frame_group":r["frame_group"],
+                             "available_scene_rows":r["source_rows"],"ground_confirmation":"pending"}
+                            for r in observations["regions"]],
+                 "instruction":"Review scene/3D landmarks; choose human-confirmed original rows independently of fitted residuals; no all-scene region is automatically ground.",
+                 "physical_verified":False,"candidate_eligible":False}
+    record = {"kind":"ground_region_review_input_record","schema":1,"files":start_sha,
+              "nominal_model_id":model["model_id"],"plan_id":observations["plan_id"],
+              "source":manifest["source"],"data_use":"exposed_development_data",
+              "qualification":"observation_or_reviewed_input_only_not_physical"}
+    samples = []
+    for region in observations["regions"]:
+        members = [r for r in rows if r["region_id"] == region["region_id"]]
+        chosen = np.linspace(0,len(members)-1,min(2000,len(members)),dtype=int) if members else []
+        samples.append({"ordinal":region["ordinal"],"seq":region["seq"],"valid_count":len(members),
+                        "points":[[members[i]["pooled_row"]]+members[i]["source_xyz_m"] for i in chosen]})
+    target.mkdir(exist_ok=False)
+    for name,obj in [("observations.json",observations),("review_draft.json",draft_out),
+                     ("selection_candidate.json",reviewed),("input_record.json",record)]:
+        with (target/name).open('x',encoding='utf8') as f:json.dump(obj,f,ensure_ascii=False,indent=2,allow_nan=False)
+    with (target/'scene_rows.csv').open('x',encoding='utf8',newline='') as f:
+        writer = csv.writer(f);writer.writerow(['region_id','pooled_row','source_row','ordinal','seq','frame_group','source_x_m','source_y_m','source_z_m','nominal_x_m','nominal_y_m','nominal_z_m','identity'])
+        for r in rows:
+            writer.writerow([r[k] for k in ['region_id','pooled_row','source_row','ordinal','seq','frame_group']]+r['source_xyz_m']+r['nominal_xyz_m']+[r['identity']])
+    with (target/'review_view.html').open('x',encoding='utf8') as f:f.write(comparison_html(model,samples))
+    return {"output":str(target),"plan_id":observations["plan_id"],"region_counts":{r["region_id"]:len(r["source_rows"]) for r in observations["regions"]},
+            "status":reviewed["kind"],"physical_verified":False}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    for flag in ('input','nominal-run','legacy-draft','plan','output'):
+        parser.add_argument('--'+flag,required=True)
+    parser.add_argument('--confirmed-selection')
+    parser.add_argument('--evidence-files')
+    args = parser.parse_args()
+    try:
+        refs = read_json(args.evidence_files)[0] if args.evidence_files else {}
+        result = prepare_region_review(args.input,args.nominal_run,args.legacy_draft,args.plan,
+                                       args.output,Path(__file__).resolve().parents[3],args.confirmed_selection,refs)
+        print(json.dumps(result,ensure_ascii=False));return 0
+    except (ValueError,OSError,KeyError,TypeError,OverflowError) as exc:
+        print('ground region review refused: '+str(exc),file=sys.stderr);return 2
+
+
+if __name__ == '__main__':sys.exit(main())

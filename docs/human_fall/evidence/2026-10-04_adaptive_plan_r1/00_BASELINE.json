@@ -1,0 +1,1424 @@
+{
+  "head": "3fc1338fc306444959433a41bdeaeefd705f58ec",
+  "branch": "master",
+  "status": " M .gitignore\n M AGENTS.md\n M CLAUDE.md\n D build_ros1.sh\n D build_ros2.sh\n M docs/human_fall/CLI_RECOVERY.md\n M docs/human_fall/DISPATCH.md\n M docs/human_fall/GL03_ACCEPTANCE.md\n M docs/human_fall/GROUND_LEVELING_PLAN.md\n M docs/human_fall/README.md\n M docs/human_fall/REVIEW_LOG.md\n M docs/human_fall/WORKFLOW.md\n M docs/human_fall/returns/GL-03.md\n M docs/human_fall/tickets/GL-03_candidates_geometry.md\n M docs/human_fall/tickets/GL-04_webui_level_view.md\n M docs/human_fall/tickets/INDEX.md\n M docs/sidequests/REVIEW.md\n D open_webui.bat\n M pc_apps/console/console.html\n D pc_apps/console/index.html\n M pc_apps/human_replay/human_replay_lib.js\n M pc_apps/human_replay/human_replay_lib.py\n M pc_apps/human_replay/human_replay_lib.test.js\n M pc_apps/human_replay/index.html\n M pc_apps/human_replay/replay.js\n D rk.txt\n M src/CMakeLists.txt\n M src/human_capture/scripts/capture_server.py\n M webui/dist/webui-minimal.zip\n M webui/dist/webui-minimal/README.md\n M webui/human_fall_preview/human_fall.js\n M webui/human_fall_preview/human_fall_lib.js\n M webui/human_fall_preview/human_fall_lib.test.js\n M webui/human_fall_preview/index.html\n?? .mirasim/\n?? ML/\n?? docs/human_capture/FALL_HARD_NEGATIVES_PLAN_DRAFT.md\n?? docs/human_capture/evidence/2026-10-04_hr02_sid_r1/\n?? docs/human_capture/returns/HR-07.md\n?? docs/human_capture/returns/HR-08.md\n?? docs/human_capture/tickets/HR-06.md\n?? docs/human_capture/tickets/HR-07.md\n?? docs/human_capture/tickets/HR-08.md\n?? docs/human_capture/tickets/HR-09.md\n?? docs/human_capture/tickets/INDEX.md\n?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R3.md\n?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R4.md\n?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R5.md\n?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R6.md\n?? docs/human_fall/AI_PROMPT_GL03_OPENCODE_R7.md\n?? docs/human_fall/AI_PROMPT_GL04_CODEX_R5_CLOSEOUT.md\n?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R1.md\n?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R2.md\n?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R3.md\n?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R4.md\n?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R5.md\n?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R6.md\n?? docs/human_fall/AI_PROMPT_GL04_OPENCODE_R7.md\n?? docs/human_fall/AI_PROMPT_GLE02_CODEX_R1.md\n?? docs/human_fall/AI_PROMPT_GLI01_OPENCODE_R1_DIAG.md\n?? docs/human_fall/AI_PROMPT_GLI01_OPENCODE_R1_IMPLEMENT.md\n?? docs/human_fall/AI_PROMPT_GLI02_OPENCODE_R1_DIAG.md\n?? docs/human_fall/AI_PROMPT_GLI02_OPENCODE_R1_IMPLEMENT.md\n?? docs/human_fall/AI_PROMPT_GLI03_OPENCODE_R1.md\n?? docs/human_fall/AI_PROMPT_GLI03_OPENCODE_R1_IMPLEMENT.md\n?? docs/human_fall/AI_PROMPT_GLI03_OPENCODE_R1_RESUME.md\n?? docs/human_fall/AI_PROMPT_GLI03_OPENCODE_SECOND_REVIEW_R1.md\n?? docs/human_fall/AI_PROMPT_GLI04_CODEX_R1.md\n?? docs/human_fall/AI_PROMPT_GLI04_OPENCODE_SECOND_REVIEW_R1.md\n?? docs/human_fall/AI_PROMPT_GLI05_CODEX_R1.md\n?? docs/human_fall/AI_PROMPT_GLI05_OPENCODE_SECOND_REVIEW_R1.md\n?? docs/human_fall/AI_PROMPT_GLI06_CODEX_R1.md\n?? docs/human_fall/AI_PROMPT_GLP01_OPENCODE_R1.md\n?? docs/human_fall/AI_PROMPT_GLP01_OPENCODE_R2.md\n?? docs/human_fall/AI_PROMPT_PA01_OPENCODE_R1.md\n?? docs/human_fall/CLAUDE_STANDBY.md\n?? docs/human_fall/CODEX_HANDOVER.md\n?? docs/human_fall/GL04_ACCEPTANCE.md\n?? docs/human_fall/GLB01_ACCEPTANCE.md\n?? docs/human_fall/GLC01_ACCEPTANCE.md\n?? docs/human_fall/GLE01_ACCEPTANCE.md\n?? docs/human_fall/GLE02_ACCEPTANCE.md\n?? docs/human_fall/GLI01_ACCEPTANCE.md\n?? docs/human_fall/GLI01_INPUT_CONTRACT.md\n?? docs/human_fall/GLI02_ACCEPTANCE.md\n?? docs/human_fall/GLI02_CANDIDATE_PLAN.md\n?? docs/human_fall/GLI03_ACCEPTANCE.md\n?? docs/human_fall/GLI04_ACCEPTANCE.md\n?? docs/human_fall/GLI04_TASK.md\n?? docs/human_fall/GLI05_ACCEPTANCE.md\n?? docs/human_fall/GLI05_TASK.md\n?? docs/human_fall/GLI06_ACCEPTANCE.md\n?? docs/human_fall/GLN01_ACCEPTANCE.md\n?? docs/human_fall/GLP01_ACCEPTANCE.md\n?? docs/human_fall/GLP01_MESSAGE_CONTRACT.md\n?? docs/human_fall/GROUND_LEVELING_ALGORITHM_DESIGN.md\n?? docs/human_fall/GROUND_LEVELING_NEXT_STAGE_PLAN.md\n?? docs/human_fall/GROUND_LEVELING_NEXT_STAGE_PLAN_V3.md\n?? docs/human_fall/P02_ACCEPTANCE.md\n?? docs/human_fall/evidence/2026-10-02_gl03_r2/\n?? docs/human_fall/evidence/2026-10-02_gl03_r3/\n?? docs/human_fall/evidence/2026-10-02_gl03_r4/\n?? docs/human_fall/evidence/2026-10-02_gl03_r5/\n?? docs/human_fall/evidence/2026-10-02_gl03_r6/\n?? docs/human_fall/evidence/2026-10-02_gl03_r7/\n?? docs/human_fall/evidence/2026-10-02_gl04_r1/\n?? docs/human_fall/evidence/2026-10-02_gl04_r2/\n?? docs/human_fall/evidence/2026-10-02_gl04_r3/\n?? docs/human_fall/evidence/2026-10-02_gl04_r4/\n?? docs/human_fall/evidence/2026-10-02_service_probe/\n?? docs/human_fall/evidence/2026-10-03_gl04_r5/\n?? docs/human_fall/evidence/2026-10-03_gl04_r6/\n?? docs/human_fall/evidence/2026-10-03_gl04_r7/\n?? docs/human_fall/evidence/2026-10-03_gl_i01_r1/\n?? docs/human_fall/evidence/2026-10-03_gl_i02_r1/\n?? docs/human_fall/evidence/2026-10-03_gl_i03_r1/\n?? docs/human_fall/evidence/2026-10-03_gl_i04_r1/\n?? docs/human_fall/evidence/2026-10-03_gl_i05_r1/\n?? docs/human_fall/evidence/2026-10-03_gl_p01_r1/\n?? docs/human_fall/evidence/2026-10-03_gl_p01_r2/\n?? docs/human_fall/evidence/2026-10-03_next_stage_plan_r1/\n?? docs/human_fall/evidence/2026-10-04_adaptive_plan_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_axis_diagnosis_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_axis_plan_review_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_b01_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_c01_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_e02_prompt_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_e02_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_i05_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_i05_r2/\n?? docs/human_fall/evidence/2026-10-04_gl_i06_r1/\n?? docs/human_fall/evidence/2026-10-04_gl_i06_r1_skeleton/\n?? docs/human_fall/evidence/2026-10-04_gl_n01_r1/\n?? docs/human_fall/evidence/2026-10-04_mainline_evidence_r1/\n?? docs/human_fall/evidence/2026-10-04_next_ground_stage_plan_r1/\n?? docs/human_fall/evidence/2026-10-04_p02_bias_review_r1/\n?? docs/human_fall/evidence/2026-10-04_p02_context_r1/\n?? docs/human_fall/evidence/2026-10-04_p02_four_roi_r1/\n?? docs/human_fall/evidence/2026-10-04_p02_ground_r1/\n?? docs/human_fall/evidence/2026-10-04_p02_ground_r2/\n?? docs/human_fall/evidence/2026-10-04_p02_html_algorithm_r1/\n?? docs/human_fall/evidence/2026-10-04_p02_html_columns_r1/\n?? docs/human_fall/evidence/2026-10-04_p02_level_preview_r1/\n?? docs/human_fall/evidence/2026-10-04_p02_session_check_r1/\n?? docs/human_fall/evidence/FIELD_CHECKLIST.md\n?? docs/human_fall/returns/GL-04.md\n?? docs/human_fall/returns/GL-B01.md\n?? docs/human_fall/returns/GL-C01.md\n?? docs/human_fall/returns/GL-E01.md\n?? docs/human_fall/returns/GL-E02.md\n?? docs/human_fall/returns/GL-I01.md\n?? docs/human_fall/returns/GL-I02.md\n?? docs/human_fall/returns/GL-I03.md\n?? docs/human_fall/returns/GL-I04.md\n?? docs/human_fall/returns/GL-I05.md\n?? docs/human_fall/returns/GL-I06.md\n?? docs/human_fall/returns/GL-N01.md\n?? docs/human_fall/returns/GL-P01.md\n?? docs/human_fall/returns/P02.md\n?? docs/sidequests/REVIEW_v1_archive.md\n?? docs/sidequests/lidata_pointcloud.png\n?? pc_apps/console/dist/\n?? pc_apps/human_limb/\n?? pc_apps/human_ml/\n?? pc_apps/human_pcl/\n?? pc_apps/human_replay/annotator.html\n?? sidequests/\n?? src/human_fall_detection/\n?? tmp_gl_diag/\n?? tools/\n?? 文档/design_extracted.txt\n?? 文档/design_full.txt\n?? 文档/design_raw.txt\n?? \"文档/卫生间老人跌倒检测传感器 产品设计方案(1).pdf\"\n",
+  "full_tree_reference": "../2026-10-04_p02_ground_r1/00_BASELINE.json",
+  "protected_tracked_untracked_captures": {
+    "src/CMakeLists.txt": {
+      "reparse_point": true,
+      "bytes": 0
+    },
+    "src/human_capture/CMakeLists.txt": {
+      "sha256": "5f7d9038ad30aa94cca5f2b404c7bd5b472d2e9b242e1b1d1c1a34a1393b7552",
+      "bytes": 387,
+      "mtime_ns": 1790928307217252200
+    },
+    "src/human_capture/package.xml": {
+      "sha256": "8ee41d50368ca7c62355497e4122fb04df234a7da14c7e5d72f93a83c734cc69",
+      "bytes": 462,
+      "mtime_ns": 1790928303383351500
+    },
+    "src/human_capture/__init__.py": {
+      "sha256": "f46123acf2d82db7dfadef1aad59e823f06b84fd9d59190e33e2f87e88db1d99",
+      "bytes": 130,
+      "mtime_ns": 1790928227561890300
+    },
+    "src/human_capture/config/capture.yaml": {
+      "sha256": "035638c1a1e3c14f52ed1506995444f86960b6524a0f3753a1fd8b75080fd2a2",
+      "bytes": 706,
+      "mtime_ns": 1790933515539729600
+    },
+    "src/human_capture/core/bag2session.py": {
+      "sha256": "e3c3a62cd581650c7c7439412e6b77d1b813f82f411e277c7b38af87310703b3",
+      "bytes": 9275,
+      "mtime_ns": 1790931022700417600
+    },
+    "src/human_capture/core/fifo.py": {
+      "sha256": "3e14677446be826aa2e71115ad1f47bfefc330437d0cc9e1f668f6ad55c4cbb7",
+      "bytes": 4568,
+      "mtime_ns": 1790929346595810200
+    },
+    "src/human_capture/core/recorder.py": {
+      "sha256": "4d2106544a3dfff5a7af8613ae7a8f2f0e82b254eee98ac55190080f6b450179",
+      "bytes": 11701,
+      "mtime_ns": 1790930103015265800
+    },
+    "src/human_capture/core/session_store.py": {
+      "sha256": "d9677d70f6074ffa08001febbe36101f1652f5d3e1bf49ec0946471cb064891c",
+      "bytes": 8248,
+      "mtime_ns": 1790928270305551700
+    },
+    "src/human_capture/core/__init__.py": {
+      "sha256": "4536bcbbbb12b6342eef44e66abd1a8f65138d0ed1d605a7d908b7900d098974",
+      "bytes": 70,
+      "mtime_ns": 1790928230485270500
+    },
+    "src/human_capture/launch/human_capture.launch": {
+      "sha256": "0c87d803c789cdbfb64ce7051bbab35e3c75e54ced55174b00a0d5faf7d9c849",
+      "bytes": 269,
+      "mtime_ns": 1790928317267179400
+    },
+    "src/human_capture/scripts/capture_server.py": {
+      "sha256": "9c1ce9976aaa1e29218779c3678e454a5e0bd7eae7f56d665e3c5e594d8abf7e",
+      "bytes": 18476,
+      "mtime_ns": 1790937461343465500
+    },
+    "src/human_capture/tests/test_hc01_health.py": {
+      "sha256": "8abb2200886999365dccd6721f84ce2d23475d7faa7a2a9abe58c7925789123f",
+      "bytes": 2977,
+      "mtime_ns": 1790928394701745500
+    },
+    "src/human_capture/tests/test_hc01_persistence.py": {
+      "sha256": "4ac9f3c83ed427aed69369f861b325f19f487e99f0d49d544a4a05351af3b99d",
+      "bytes": 4154,
+      "mtime_ns": 1790928377091468700
+    },
+    "src/human_capture/tests/test_hc01_sessions.py": {
+      "sha256": "7157d36c8cd59d84a32384b1a4e1d9fc2a4a5113d9e68ea93d1beba77008a1cb",
+      "bytes": 6679,
+      "mtime_ns": 1790928408228879000
+    },
+    "src/human_capture/tests/test_hc02_fifo.py": {
+      "sha256": "9ba50a367d5b119918e714ca4d8e3577439fd6ab8638a6d8e0f25731b35b2629",
+      "bytes": 6048,
+      "mtime_ns": 1790929670146529000
+    },
+    "src/human_capture/tests/test_hc02_recorder.py": {
+      "sha256": "eef2e0c4b1a23c5f0531cea9da36fde194410b8af5f6784592add35648ade66f",
+      "bytes": 6600,
+      "mtime_ns": 1790929578133256400
+    },
+    "src/human_capture/tests/test_hc03_bag2session.py": {
+      "sha256": "3efb903615d5b398fd085b88b355de96530611e1f78b5782b1297f2413af02a0",
+      "bytes": 2270,
+      "mtime_ns": 1790930940514730400
+    },
+    "src/human_fall_detection/CMakeLists.txt": {
+      "sha256": "26f2facdf08f25e69de8dc9a9dbca707fb8e6fb6938b78c2f2003332f2e40bb9",
+      "bytes": 559,
+      "mtime_ns": 1790798578030284200
+    },
+    "src/human_fall_detection/package.xml": {
+      "sha256": "4290d77154a213259646d67ad8a05efc2d6c56f9a6ab244b384567834184cbaa",
+      "bytes": 619,
+      "mtime_ns": 1790749848791212900
+    },
+    "src/human_fall_detection/setup.py": {
+      "sha256": "9c85816f19200148ac510f08bec30046f02c3f5fd503123fa869e14a53380888",
+      "bytes": 290,
+      "mtime_ns": 1790799728834543100
+    },
+    "src/human_fall_detection/config/default.yaml": {
+      "sha256": "221d9dad659039800c786f244ef2c8275da35adfd042fb8984237d817bf27ce4",
+      "bytes": 523,
+      "mtime_ns": 1790749850159936900
+    },
+    "src/human_fall_detection/config/geometry.yaml": {
+      "sha256": "be485148cfe20a3aa6a688c8a8b5f6d53a98027a45e833d0afbe2b20fc5edfd7",
+      "bytes": 628,
+      "mtime_ns": 1790790035713809500
+    },
+    "src/human_fall_detection/config/geometry_constrained.yaml": {
+      "sha256": "1c42c1534cb4ee1a110db44140a59df40f31f985028be4015828495f57267880",
+      "bytes": 1237,
+      "mtime_ns": 1790848564006245500
+    },
+    "src/human_fall_detection/config/geometry_constrained_gli03_r1.yaml": {
+      "sha256": "16c9d983c0202bb122be300db6faf70e7415300756392569acafa7d444cd49aa",
+      "bytes": 1237,
+      "mtime_ns": 1791031117727169800
+    },
+    "src/human_fall_detection/config/human_fall.yaml": {
+      "sha256": "4129ec429f69978a4e962e765a079816a7b090efc54f74342403ad8d399dfc8b",
+      "bytes": 1241,
+      "mtime_ns": 1790798542092412500
+    },
+    "src/human_fall_detection/config/human_fall_prod.yaml": {
+      "sha256": "c39ec467384f87a4803c71ab7292ebeae84ea0c93e0a725af8a5d5a4473bdb7b",
+      "bytes": 1699,
+      "mtime_ns": 1790823864127982100
+    },
+    "src/human_fall_detection/config/perception.yaml": {
+      "sha256": "70c8f04b635ae08de8577be9ee983f59d78560e9edbd96849700bbcf0aed3211",
+      "bytes": 1661,
+      "mtime_ns": 1790791760419185400
+    },
+    "src/human_fall_detection/core/association.py": {
+      "sha256": "c900826187bc0d7533a3ba458719a627a858e1999451adc673dbc793c34f8d62",
+      "bytes": 5763,
+      "mtime_ns": 1790791453997998700
+    },
+    "src/human_fall_detection/core/baseline.py": {
+      "sha256": "452fa52d3a8c5cf9a9c2498c49e5d757e4c337e0ce8160a4f1c2fd91176181d2",
+      "bytes": 10809,
+      "mtime_ns": 1790794144671127400
+    },
+    "src/human_fall_detection/core/calibration.py": {
+      "sha256": "d29519a1cdb5e495d23115bc89886e9071e4f2055ff529285e933cebdb7c58a3",
+      "bytes": 64295,
+      "mtime_ns": 1790934233419404200
+    },
+    "src/human_fall_detection/core/capture_input.py": {
+      "sha256": "56355e9594433d91c871685f58c6ae9f8fe0e47d2b3ad7d07f9b5b8050b85f16",
+      "bytes": 31306,
+      "mtime_ns": 1791014923355644300
+    },
+    "src/human_fall_detection/core/fall_state.py": {
+      "sha256": "bdf78158e95c0277bcea14ba31ae7706ac23382785ddaec4df493d55d4757126",
+      "bytes": 14499,
+      "mtime_ns": 1790795644156739800
+    },
+    "src/human_fall_detection/core/features.py": {
+      "sha256": "6508ba7739f4b285638c1e74e785d4c6ca2ec1fd75ea2d94e656c6b3951ba027",
+      "bytes": 9535,
+      "mtime_ns": 1790795644156739800
+    },
+    "src/human_fall_detection/core/ground.py": {
+      "sha256": "2d25ccfd9b41b4e16b36c07eec5b243ac50a63bf15230445d942e0f1bcebc4d3",
+      "bytes": 73181,
+      "mtime_ns": 1790866429160054200
+    },
+    "src/human_fall_detection/core/ground_diagnostics.py": {
+      "sha256": "80ef45ae59d0fbb4e01bd7fb334043d6bcde0f58e86aec057e42561e4c974e66",
+      "bytes": 13574,
+      "mtime_ns": 1791037881268918900
+    },
+    "src/human_fall_detection/core/ground_evidence.py": {
+      "sha256": "61149e65d085c64497517670f39a2a241d6b662ccd43f0a40e8a39c5e6f5cbd9",
+      "bytes": 20447,
+      "mtime_ns": 1791100277481260200
+    },
+    "src/human_fall_detection/core/ground_region_review.py": {
+      "sha256": "02382a314f7b97d984e0df7f4e7729df3435ec52fa22c2aaca8c9ff297b937c0",
+      "bytes": 10367,
+      "mtime_ns": 1791106244585467600
+    },
+    "src/human_fall_detection/core/joint_leveling.py": {
+      "sha256": "751ef7a8c4cdb47d18966cce404e9e43c054057d3e4c0a5ab0276593785ab046",
+      "bytes": 11188,
+      "mtime_ns": 1791111647597466500
+    },
+    "src/human_fall_detection/core/lidar_candidates.py": {
+      "sha256": "447e4003c12e114bdcac657fd980b302bf01da473e4a285e66e1312772db5373",
+      "bytes": 35217,
+      "mtime_ns": 1791011544522266900
+    },
+    "src/human_fall_detection/core/node_runtime.py": {
+      "sha256": "889ead5e24ea9553cb728d403fc2e47fd42634ba15a920124314225b0f13b06f",
+      "bytes": 74748,
+      "mtime_ns": 1790931072141136100
+    },
+    "src/human_fall_detection/core/nominal_leveling.py": {
+      "sha256": "bb86855e279a9fa082301dcdeaa175872a7512b5a0c245531f383f02c8f72a99",
+      "bytes": 3630,
+      "mtime_ns": 1791102783718841700
+    },
+    "src/human_fall_detection/core/numeric.py": {
+      "sha256": "8e9e51a2b0efde20db47b4d2f91e5a8f3750c7b203b67648b491f5bda0f2daee",
+      "bytes": 2189,
+      "mtime_ns": 1790866370581083300
+    },
+    "src/human_fall_detection/core/pipeline.py": {
+      "sha256": "db1fd9a6a23f556f1e394b74aadcb484ddcacb291299f5aa4b6a045bcb1ab6f7",
+      "bytes": 5792,
+      "mtime_ns": 1790794195836102000
+    },
+    "src/human_fall_detection/core/selection.py": {
+      "sha256": "9a5defc8f4b9bfea3471adda7e8ea5848ab7879e1ffd4bdf69d687a11c93cd58",
+      "bytes": 14659,
+      "mtime_ns": 1790870727399792200
+    },
+    "src/human_fall_detection/core/sensor_quality.py": {
+      "sha256": "06d57e2d7f621802dc40e119b4b123aa43085d5f9cc3d5d5990b50a74c50228a",
+      "bytes": 11077,
+      "mtime_ns": 1790799868269824100
+    },
+    "src/human_fall_detection/core/timebase.py": {
+      "sha256": "73d505e194d9b9d0b86a6c4ae952503a5bfc70e2cfda2873f6c2c018ef463100",
+      "bytes": 29618,
+      "mtime_ns": 1790799860276973500
+    },
+    "src/human_fall_detection/core/tracking.py": {
+      "sha256": "995caabe28f3eb3393e66df4625feebcee69ad074bba17cfd64d486d263d2a26",
+      "bytes": 15808,
+      "mtime_ns": 1790797544872814800
+    },
+    "src/human_fall_detection/core/__init__.py": {
+      "sha256": "91c65294b02ca1696f8a5243392733fb033f8a65c0823a92ea2e8b97ce9841c4",
+      "bytes": 1719,
+      "mtime_ns": 1790800147838246500
+    },
+    "src/human_fall_detection/launch/human_fall.launch": {
+      "sha256": "377e642c9b3ab4ae208a2dbd373a1b1ad81d65dab4aedaa72547f016bb901f93",
+      "bytes": 859,
+      "mtime_ns": 1790798549628953900
+    },
+    "src/human_fall_detection/scripts/calibrate_sensors.py": {
+      "sha256": "3f30cf945d70b06f0fce22bdec9ba738f774f98dde2f9a33ce466eeaf9c6c785",
+      "bytes": 23246,
+      "mtime_ns": 1791014406788931600
+    },
+    "src/human_fall_detection/scripts/deploy_human_fall.sh": {
+      "sha256": "9114dbe2dbbc00721153e7be53dd453d05da4a6d743755fcfa7c8d7f45ae319f",
+      "bytes": 10051,
+      "mtime_ns": 1790830233469177500
+    },
+    "src/human_fall_detection/scripts/diagnose_gli04_geometry.py": {
+      "sha256": "85a83b8835d00e186840071c2eec0e7a7860970243823779dab06d13ba517b9e",
+      "bytes": 13171,
+      "mtime_ns": 1791037793285439800
+    },
+    "src/human_fall_detection/scripts/evaluate_gli02_candidate.py": {
+      "sha256": "fddeeee0b4c6e014b608b64d8805b90997977b0e6eee357d6cc28f02726322c8",
+      "bytes": 13002,
+      "mtime_ns": 1791031117725657100
+    },
+    "src/human_fall_detection/scripts/evaluate_sessions.py": {
+      "sha256": "7a97ce4ff78ff4be59f8e57f80d765842b9b3a4e84dbbb9c0060f65706d2c936",
+      "bytes": 29987,
+      "mtime_ns": 1790810228334449500
+    },
+    "src/human_fall_detection/scripts/fall_replay.py": {
+      "sha256": "3f9077737e0074ad7b3d9916131c5b5cd03ef8479886688e0618c26957865cd6",
+      "bytes": 3982,
+      "mtime_ns": 1790927759339752200
+    },
+    "src/human_fall_detection/scripts/fit_joint_leveling.py": {
+      "sha256": "cb7e35ac04a323d28e9229f1b76064e8efbf4f9ff4198307bb4dd199d0bba69a",
+      "bytes": 3586,
+      "mtime_ns": 1791111647598468000
+    },
+    "src/human_fall_detection/scripts/human_fall_node.py": {
+      "sha256": "75d6d773fe62c449bd4630f016e2db0441ba49d507854676604b2768e6d8e1b8",
+      "bytes": 22178,
+      "mtime_ns": 1790870799317931000
+    },
+    "src/human_fall_detection/scripts/level_capture_nominal.py": {
+      "sha256": "5c16dc0481109960259608a9d106d7f4ff9c90fee5ef85c74272098b370e2f9c",
+      "bytes": 9738,
+      "mtime_ns": 1791102783719841400
+    },
+    "src/human_fall_detection/scripts/prepare_capture_input.py": {
+      "sha256": "648a8da63a6656b02d169957cede2df4aca3a48e94dcc787c3c48c7f10c5d000",
+      "bytes": 2266,
+      "mtime_ns": 1791013942348188300
+    },
+    "src/human_fall_detection/scripts/prepare_ground_evidence.py": {
+      "sha256": "b42f5797e2facb00417989f7efec7c1d3c86dfbe6887e15bd9dc099412cd1c46",
+      "bytes": 1304,
+      "mtime_ns": 1791099617390767000
+    },
+    "src/human_fall_detection/scripts/profile_pipeline.py": {
+      "sha256": "6ba94567cada22d87b43b38eb44e4a4985d7f1566cc2aa8add6e705773966623",
+      "bytes": 19303,
+      "mtime_ns": 1790820394311548600
+    },
+    "src/human_fall_detection/scripts/record_session.py": {
+      "sha256": "720335f1e9eb090d336a964f0572501c60ed84165593778cd2cc1ab21a58424a",
+      "bytes": 15746,
+      "mtime_ns": 1790752577880342300
+    },
+    "src/human_fall_detection/scripts/review_ground_regions.py": {
+      "sha256": "47100a095e6986223314f7fc53621f26d884aebad8d93691658e488584d3c800",
+      "bytes": 8994,
+      "mtime_ns": 1791106244587469800
+    },
+    "src/human_fall_detection/scripts/sensor_health.py": {
+      "sha256": "e77f9d7583b81661a26d8119181115307049863e1e94638a54475d1138d38ca1",
+      "bytes": 27026,
+      "mtime_ns": 1790752396672266200
+    },
+    "src/human_fall_detection/tests/glp01_consumer.js": {
+      "sha256": "a1f8fd55446d6a8212174b93d0be08727dac5e23afb13e8e04fbd2c4918efc50",
+      "bytes": 1744,
+      "mtime_ns": 1791011572751227100
+    },
+    "src/human_fall_detection/tests/hf08_synthetic_events.json": {
+      "sha256": "a930a7be56a57edcac13197c3a3c67dddf98544d63a24e9524291c859a2e0acd",
+      "bytes": 2007,
+      "mtime_ns": 1790809617572440500
+    },
+    "src/human_fall_detection/tests/test_gl01_constrained_ground.py": {
+      "sha256": "bee55d7db2dae2bcdb51f4503d4059cb5cb39f325180250dae05e2777e7b06dc",
+      "bytes": 22198,
+      "mtime_ns": 1790851273804203900
+    },
+    "src/human_fall_detection/tests/test_gl02_ground_frame.py": {
+      "sha256": "d9f4e3bc75c16122ad802522dcdde43230a5f8e0ede230cc4e286da84d226084",
+      "bytes": 29979,
+      "mtime_ns": 1790871643600999300
+    },
+    "src/human_fall_detection/tests/test_gl03_candidates_geometry.py": {
+      "sha256": "c8203bd65223672d825beb75336d5ceaffd74a16a0165d73073b4c2e90ee76ce",
+      "bytes": 62174,
+      "mtime_ns": 1790934350792408800
+    },
+    "src/human_fall_detection/tests/test_gli01_capture_input.py": {
+      "sha256": "50f615d7a5ffdc490f1011b316df30da1e65c958cce93f18ad4cf0c88547030e",
+      "bytes": 27039,
+      "mtime_ns": 1791014995123885400
+    },
+    "src/human_fall_detection/tests/test_gli02_candidate.py": {
+      "sha256": "0dad5771f1ac68a175c2075ffe8f8a49e64b50dfce104fc62adf6d499206a9b0",
+      "bytes": 11157,
+      "mtime_ns": 1791018549499053200
+    },
+    "src/human_fall_detection/tests/test_gli03_candidate_override.py": {
+      "sha256": "6433fa21200d1cbae0236c3701e31a5ec7b96d6d34549279909cacb6d948eccb",
+      "bytes": 7649,
+      "mtime_ns": 1791031117728175300
+    },
+    "src/human_fall_detection/tests/test_gli04_geometry.py": {
+      "sha256": "7a3df86ae6386cdd476429b3ac54b0b3fcead8e0e6fbce1ddd2baf4af8ffcb7c",
+      "bytes": 10719,
+      "mtime_ns": 1791037793285439800
+    },
+    "src/human_fall_detection/tests/test_glp01_ground_projection.py": {
+      "sha256": "03efe998fed0d15b879a35ebe1cc75c018e8f8144a354b82446e179a2ba224d9",
+      "bytes": 12789,
+      "mtime_ns": 1791011608207582100
+    },
+    "src/human_fall_detection/tests/test_ground_evidence_input.py": {
+      "sha256": "3691a3d8bcbb3adea56d88ba2bc5189397d32f06f20ca0ceb959b8390b962e9b",
+      "bytes": 18200,
+      "mtime_ns": 1791100277482265100
+    },
+    "src/human_fall_detection/tests/test_ground_region_review.py": {
+      "sha256": "ecdb06570234b04aee411de6f8c62f24aea03d45fc2ac73697750d0791cb58d6",
+      "bytes": 11231,
+      "mtime_ns": 1791106244589467500
+    },
+    "src/human_fall_detection/tests/test_hf01_health.py": {
+      "sha256": "ed55cc1dfbcdfc4ea4b848193d682fbd3be807af97c15e1f2634c647649e046a",
+      "bytes": 27622,
+      "mtime_ns": 1790752487833962800
+    },
+    "src/human_fall_detection/tests/test_hf02_timebase.py": {
+      "sha256": "e43b60096b3f415b6826c1aa5bf7c5990e22f17bb7f18640b3fe1621ce7f331c",
+      "bytes": 36126,
+      "mtime_ns": 1790785945269743500
+    },
+    "src/human_fall_detection/tests/test_hf03_geometry.py": {
+      "sha256": "5600c1392aced1ebe9ac87a526b984b00df407cb15b9239bea615eca4e3947b8",
+      "bytes": 16869,
+      "mtime_ns": 1790790015763515300
+    },
+    "src/human_fall_detection/tests/test_hf04_candidates.py": {
+      "sha256": "6be82ce67bfce7e2ea14909cf03bee9c64ab75bf73b22da0f815cc3dd1d207ab",
+      "bytes": 11976,
+      "mtime_ns": 1790791401330254700
+    },
+    "src/human_fall_detection/tests/test_hf05_tracking.py": {
+      "sha256": "6bb498fb393f41dd84006fdcdb2d95a0c87b952e5c12e352f1e9920a19d3fba0",
+      "bytes": 18758,
+      "mtime_ns": 1790795705153620900
+    },
+    "src/human_fall_detection/tests/test_hf06_fall_state.py": {
+      "sha256": "ab3451a35d119b719a16282e6145ff9b7e03b7ae9da2e1a956d7488dac3140ee",
+      "bytes": 20194,
+      "mtime_ns": 1790795710931783700
+    },
+    "src/human_fall_detection/tests/test_hf07_node.py": {
+      "sha256": "7a9310cc8b019b3575c3b3d24ad6054b912ce55aa6228904890898d51349a97d",
+      "bytes": 20186,
+      "mtime_ns": 1790820799419295300
+    },
+    "src/human_fall_detection/tests/test_hf08_evaluate_sessions.py": {
+      "sha256": "2e80f92677b5a4ad5d00c149d4590cf33591835624c0a6dfc90c5b9f577f234a",
+      "bytes": 12827,
+      "mtime_ns": 1790810228337442800
+    },
+    "src/human_fall_detection/tests/test_hf09_profile.py": {
+      "sha256": "20d7072d7fd40fd56466c09efd1ded7fcfc76399970370d7be46d62e61b27968",
+      "bytes": 8847,
+      "mtime_ns": 1790823907398669600
+    },
+    "src/human_fall_detection/tests/test_joint_leveling.py": {
+      "sha256": "8197db69bf03cde22068bbdefb519b8b05b8cae6c8a7a657e823a3673e0036c7",
+      "bytes": 6959,
+      "mtime_ns": 1791112261627099800
+    },
+    "src/human_fall_detection/tests/test_nominal_leveling.py": {
+      "sha256": "4fd3ec5cc2e8dccb284dbdc257ed7acd94d2feb5ec9e795ee0e1e35eff6b0a52",
+      "bytes": 6089,
+      "mtime_ns": 1791102783721840800
+    },
+    "src/human_follow_calibration/.gitignore": {
+      "sha256": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b",
+      "bytes": 13,
+      "mtime_ns": 1790662324267600900
+    },
+    "src/human_follow_calibration/CMakeLists.txt": {
+      "sha256": "84676dd7041fbf2eb2cb7a615a6151fe9bb50a3ba87869f5ca85def182dcfdb8",
+      "bytes": 305,
+      "mtime_ns": 1790699517765592400
+    },
+    "src/human_follow_calibration/package.xml": {
+      "sha256": "001f36c42d8454dd336764932186be83e149c569d79f26bb6cba7eaf562a42be",
+      "bytes": 476,
+      "mtime_ns": 1790699517766595500
+    },
+    "src/human_follow_calibration/README.md": {
+      "sha256": "f183e3502e6a84795732cfda988ceb60463c2cb81ac2466ab1baf4331003ba8c",
+      "bytes": 6281,
+      "mtime_ns": 1790755890273436000
+    },
+    "src/human_follow_calibration/scripts/calibrate_human_follow.py": {
+      "sha256": "f60cb48fda8f4ebe58ce38fcacbccc55b312577844e9e23e9fbaac91ac98e773",
+      "bytes": 16689,
+      "mtime_ns": 1790699416817433800
+    },
+    "src/human_follow_calibration/scripts/monitor_human_follow.py": {
+      "sha256": "de8e73eeafbca35d0140009bb8c3c0a0b6c20d8b09bf634cccc94b76217609b3",
+      "bytes": 7149,
+      "mtime_ns": 1790699762745675800
+    },
+    "src/human_follow_calibration/tests/test_calibrate_human_follow.py": {
+      "sha256": "6987dc0d1c8b261e50f143a64b8d85d3f56cfca758c2dedcc71fee1bf10e9adf",
+      "bytes": 5024,
+      "mtime_ns": 1790699517767596800
+    },
+    "src/inno_lidar_msg/CMakeLists.txt": {
+      "sha256": "b73ed13a421d2cb4fe2f47be9e6dfb476a8b5a0fa63aaa35a477521ee137f4ea",
+      "bytes": 1551,
+      "mtime_ns": 1790585281009190500
+    },
+    "src/inno_lidar_msg/package.xml": {
+      "sha256": "18eb29c4060e7cab005da3dd9bb06884fe28a47a9aecb598dfb064591a9b963e",
+      "bytes": 2769,
+      "mtime_ns": 1790585281031608000
+    },
+    "src/inno_lidar_msg/package_ros1.xml": {
+      "sha256": "18eb29c4060e7cab005da3dd9bb06884fe28a47a9aecb598dfb064591a9b963e",
+      "bytes": 2769,
+      "mtime_ns": 1790585281039595500
+    },
+    "src/inno_lidar_msg/package_ros2.xml": {
+      "sha256": "d6cf4e97040fb9bd48d600210e14df5b58e778224a1930effe2a4e1aee7ce062",
+      "bytes": 1186,
+      "mtime_ns": 1790585281047591600
+    },
+    "src/inno_lidar_msg/msg/DeviceStatus.msg": {
+      "sha256": "4cb517813536aa4dd32e3321fbc72b921700de0543a265be08e9dc05a92b0974",
+      "bytes": 128,
+      "mtime_ns": 1790585281025596700
+    },
+    "src/inno_lidar_ros/CMakeLists.txt": {
+      "sha256": "873b836f9025016ed780e0aeec6b91cd6ee27bbc9aabba4d0314c4d1a70abbd6",
+      "bytes": 6587,
+      "mtime_ns": 1790585281062636600
+    },
+    "src/inno_lidar_ros/package.xml": {
+      "sha256": "9acf64b5d657b33ec89798afba0dbbf083e4ccfbd7bb47481b999f35847fcac7",
+      "bytes": 612,
+      "mtime_ns": 1790585281183017000
+    },
+    "src/inno_lidar_ros/package_ros1.xml": {
+      "sha256": "9acf64b5d657b33ec89798afba0dbbf083e4ccfbd7bb47481b999f35847fcac7",
+      "bytes": 612,
+      "mtime_ns": 1790585281189016900
+    },
+    "src/inno_lidar_ros/package_ros2.xml": {
+      "sha256": "4d0d76b2d0b4bb45f0a507ddfbcfa74f29afc1d8dd19c247a33d71da045a4985",
+      "bytes": 777,
+      "mtime_ns": 1790585281196057600
+    },
+    "src/inno_lidar_ros/config/config.yaml": {
+      "sha256": "ccb76ab18334c3649518945d7fc13c894225fd972f1c67cc2fe7f5407048102c",
+      "bytes": 2431,
+      "mtime_ns": 1790585281080637200
+    },
+    "src/inno_lidar_ros/config/ifw192s/ifw192s_azimuth_192x256.csv": {
+      "sha256": "9effafb821ee25cf045dd5ba4e0ca9f4835b5fc8a87b35a33425e25618382a92",
+      "bytes": 270336,
+      "mtime_ns": 1790585281105042400
+    },
+    "src/inno_lidar_ros/config/ifw192s/ifw192s_elevation_192x256.csv": {
+      "sha256": "fba8aaf6cd99c00d4cc9fa21a1d0264b62b1ff38ff8a10166cde548d77c684e3",
+      "bytes": 270268,
+      "mtime_ns": 1790585281124999600
+    },
+    "src/inno_lidar_ros/config/ifw192s/model_weights_no1.csv": {
+      "sha256": "3cc4f55daa9ebe9f8b1052906fb4bcb4a47724fa714f0b57a1ccb132316c2989",
+      "bytes": 165,
+      "mtime_ns": 1790585281133998700
+    },
+    "src/inno_lidar_ros/config/ifw192s/near_filter.csv": {
+      "sha256": "858f9a401e2f65e0dd12db6fe49bd56095b55eda9a5ce2357d6f053999a13a8c",
+      "bytes": 26,
+      "mtime_ns": 1790585281141998000
+    },
+    "src/inno_lidar_ros/launch/ros1_start.launch": {
+      "sha256": "d0dc39e4a7ad915c4069a1bad6544a5313656cb4a9e720dd42e8a4daf43732b4",
+      "bytes": 272,
+      "mtime_ns": 1790585281157006700
+    },
+    "src/inno_lidar_ros/launch/ros2_start.launch.py": {
+      "sha256": "dcd406a4ece5b8fdfa26cca714416be598b455587fd5b9748da412ec7e190916",
+      "bytes": 874,
+      "mtime_ns": 1790585281166027700
+    },
+    "src/inno_lidar_ros/node/inno_lidar_node.cpp": {
+      "sha256": "7bd4654f2d47dd14cbba673d9b6c8135d4ea4de9608d947ae7ef698e06d0144a",
+      "bytes": 4314,
+      "mtime_ns": 1790585281178017900
+    },
+    "src/inno_lidar_ros/rviz/rviz.rviz": {
+      "sha256": "bd97837276b7836af569192536411d187bee39c2756b3d58f2394c40850ab530",
+      "bytes": 5810,
+      "mtime_ns": 1790585281209059200
+    },
+    "src/inno_lidar_ros/rviz/rviz2.rviz": {
+      "sha256": "6e391615799da83b292aa0f3c6b3baaa0a8c73a5f4a8a55e4d3baa51e4908d54",
+      "bytes": 5878,
+      "mtime_ns": 1790585281217998400
+    },
+    "src/inno_lidar_ros/src/manager/node_manager.cpp": {
+      "sha256": "17b53a1d01b8b42f0c0eb9135364a223350e4c764662d247f05c74ab54a553a1",
+      "bytes": 3247,
+      "mtime_ns": 1790585281242372500
+    },
+    "src/inno_lidar_ros/src/manager/node_manager.h": {
+      "sha256": "7f3b8ee328d7dd739f6611cf5c2a0f89c8c15b8d6aa8b7836652d9d3d4177383",
+      "bytes": 335,
+      "mtime_ns": 1790585281253371300
+    },
+    "src/inno_lidar_ros/src/msg/cloud_types.hpp": {
+      "sha256": "a4c72caa286dd359242a6ea2cb9b33a08cb30fa781fa8bbc28053b363e981a5b",
+      "bytes": 730,
+      "mtime_ns": 1790585281270370400
+    },
+    "src/inno_lidar_ros/src/source/publish_manager.cpp": {
+      "sha256": "1b3d57939dca511874eb66b42fd5d57132ad95220f85224d1dd090ed3edcb787",
+      "bytes": 12519,
+      "mtime_ns": 1790782563140786800
+    },
+    "src/inno_lidar_ros/src/source/publish_manager.h": {
+      "sha256": "a0498465df433da74873bc770d38bb0aa5a992e1aa4ab96efd35a9b922ddb655",
+      "bytes": 481,
+      "mtime_ns": 1790585281298931700
+    },
+    "src/inno_lidar_ros/src/source/source_driver.cpp": {
+      "sha256": "e1d92f42402a3cb994300276d1fb4d63a9bc45e9eac9a38cec2e9785e65998c9",
+      "bytes": 12292,
+      "mtime_ns": 1790585281307506300
+    },
+    "src/inno_lidar_ros/src/source/source_driver.hpp": {
+      "sha256": "55d895c3ae588a197b65b7bfcbd4ed00d302cd39246637fd7ae3b78206a2e910",
+      "bytes": 2591,
+      "mtime_ns": 1790585281316798300
+    },
+    "src/inno_lidar_ros/src/utility/sync_queue.hpp": {
+      "sha256": "4296b332f79aaf2ddadef762701fe008c5523b954919bc2054aafa9dd68d821f",
+      "bytes": 1284,
+      "mtime_ns": 1790585281333271600
+    },
+    "src/inno_lidar_ros/src/utility/yaml_reader.hpp": {
+      "sha256": "f40f08ddac49252256d1f814ecda918e1a321d8fbacb76682b1144105d81c0d8",
+      "bytes": 1116,
+      "mtime_ns": 1790585281343270600
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/api/export.h": {
+      "sha256": "fe322ab5a851fba3fbed1e1bcd6e9570ad16183e11582c61a6f2763f97f8008e",
+      "bytes": 397,
+      "mtime_ns": 1790585281397620500
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/api/inno_driver.h": {
+      "sha256": "4ce4e0051768916f76aabc8562af70bb7fa382c4bd56ad35a37b9ba19aeb041a",
+      "bytes": 3228,
+      "mtime_ns": 1790585281415665100
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/api/inno_driver_sdk.h": {
+      "sha256": "e71257adc4652dca3d05b824ba0acae1b2ebcef5d658d7c257490f4285d64e22",
+      "bytes": 244,
+      "mtime_ns": 1790585281432657500
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/common/error_code.hpp": {
+      "sha256": "a25d5c13d6417773b91eb1d53f075752f851a3faa1018f82130caacf29fd401b",
+      "bytes": 3189,
+      "mtime_ns": 1790585281464654000
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/common/inno_common.hpp": {
+      "sha256": "3763a668126322f2bd3cbe0b2c1e73d0898091e4b51e9b63885a54d6174616af",
+      "bytes": 1066,
+      "mtime_ns": 1790585281479652500
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/common/inno_log.hpp": {
+      "sha256": "b3c4fd946e0b20b9f182639d320845ea35c32818bd5a33f1dac53f064ed8fe09",
+      "bytes": 543,
+      "mtime_ns": 1790585281491655900
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/common/inno_tool.hpp": {
+      "sha256": "39f1aed992eea1870afc1a38a44b63f425ba3b9e354048ae5a00d7b568488ef7",
+      "bytes": 2156,
+      "mtime_ns": 1790585281505863400
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/msg/data_types.hpp": {
+      "sha256": "67d172475ea2c99a7b5a5f9edc87f14a17f5794d59360297a41352af906ecd3e",
+      "bytes": 6502,
+      "mtime_ns": 1790585281555014200
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/msg/imu_types.hpp": {
+      "sha256": "df90fc432a789de5010cdd1b741114ad86d4275ee7c9d23659c1df5f569e7baf",
+      "bytes": 2655,
+      "mtime_ns": 1790585281571397200
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/inno_driver/msg/point_types.hpp": {
+      "sha256": "b00be3d65a78fd2f1c8e57cab3024e63cfdd70a34e30123d5bba0ce79afe53a2",
+      "bytes": 1239,
+      "mtime_ns": 1790585281583423300
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/lib/aarch64/libinno_driver.so": {
+      "sha256": "863aab8818d766d66b76cb8f5f58342e5f9829e55fef443ce7ea2779ff6de944",
+      "bytes": 902504,
+      "mtime_ns": 1790585281664436200
+    },
+    "src/inno_lidar_ros/third_party/inno_driver/lib/x86_64/libinno_driver.so": {
+      "sha256": "2b709f39f158c6cca6b77992508bd6db5626ca87bdcc62e0df889ebf36014a44",
+      "bytes": 903600,
+      "mtime_ns": 1790585281720855100
+    },
+    "webui/index_board_20261001.html": {
+      "sha256": "e68dea5121d06c6fbf2fc2e8fa8ff947c05c6a87ba4635c0511ecf5b6491af5f",
+      "bytes": 37676,
+      "mtime_ns": 1790800390198443100
+    },
+    "webui/OrbitControls.js": {
+      "sha256": "02bb4ade710f3e607329e37a21f098bc3ac70eb6e33daf8a65e79f4db785e7b2",
+      "bytes": 26375,
+      "mtime_ns": 1790800441522434100
+    },
+    "webui/three.min.js": {
+      "sha256": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2",
+      "bytes": 603445,
+      "mtime_ns": 1790800415873562600
+    },
+    "webui/dist/README.md": {
+      "sha256": "dcef84a35ae057ffc46309e91ff25cf1ea2d7b3f88e4e5d3d9b8ed0c662187ac",
+      "bytes": 2132,
+      "mtime_ns": 1790921775888256400
+    },
+    "webui/dist/webui-minimal.zip": {
+      "sha256": "984521999b036cafa7bfff0f386d76467f9ca8678d06d7501b7d208bd43764f7",
+      "bytes": 176415,
+      "mtime_ns": 1790922616154346400
+    },
+    "webui/dist/webui-minimal/index_board_20261001.html": {
+      "sha256": "e68dea5121d06c6fbf2fc2e8fa8ff947c05c6a87ba4635c0511ecf5b6491af5f",
+      "bytes": 37676,
+      "mtime_ns": 1790921785692054200
+    },
+    "webui/dist/webui-minimal/OrbitControls.js": {
+      "sha256": "02bb4ade710f3e607329e37a21f098bc3ac70eb6e33daf8a65e79f4db785e7b2",
+      "bytes": 26375,
+      "mtime_ns": 1790921785861546700
+    },
+    "webui/dist/webui-minimal/README.md": {
+      "sha256": "3eaa021fcf5197257751c94b358d83312615647a19a8c41cd9d1ebdfa53c4b99",
+      "bytes": 4398,
+      "mtime_ns": 1790922517165468600
+    },
+    "webui/dist/webui-minimal/three.min.js": {
+      "sha256": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2",
+      "bytes": 603445,
+      "mtime_ns": 1790921785726726200
+    },
+    "webui/dist/webui-minimal/teamview/teamview.html": {
+      "sha256": "d4b5a14d2a6bf8305e456ed63c76f04989db0e2f80b86b0c9299f6fef34b6601",
+      "bytes": 12523,
+      "mtime_ns": 1790921785907877100
+    },
+    "webui/human_capture/capture.js": {
+      "sha256": "a55ac2eccfc8622e9e08e789c6d4ecd36b363357057e84f318b9303f954495aa",
+      "bytes": 6591,
+      "mtime_ns": 1790931480037406500
+    },
+    "webui/human_capture/capture_lib.js": {
+      "sha256": "b9be2ddd2825bdc0a3cc1f81a8b7e5493e31771e5dd2c59d7b48436e4e43a047",
+      "bytes": 3172,
+      "mtime_ns": 1790931444338228900
+    },
+    "webui/human_capture/capture_lib.test.js": {
+      "sha256": "3d70165fa7c04a4a18134cf584f268ba1c56ece1b6e4a1d5b9dc259290f2c965",
+      "bytes": 2927,
+      "mtime_ns": 1790931497528314300
+    },
+    "webui/human_capture/index.html": {
+      "sha256": "42750c57c0fe8a6dd23d39d63655b8f9eefad3f026366b822155beaa10aa7a3c",
+      "bytes": 4531,
+      "mtime_ns": 1790931430162421400
+    },
+    "webui/human_fall/human_fall.js": {
+      "sha256": "0d1d47a44a026f4c9d37e0eb002e0efcb85aaff7d39aa5a7e8801b7a66ca7064",
+      "bytes": 32451,
+      "mtime_ns": 1791122230784330800
+    },
+    "webui/human_fall/human_fall_lib.js": {
+      "sha256": "591f11ca0cce4d514b408982d106c9151527d1f955adb36e037152f985a6d74a",
+      "bytes": 13329,
+      "mtime_ns": 1791122207015472900
+    },
+    "webui/human_fall/human_fall_lib.test.js": {
+      "sha256": "82559a92110c6568b73d9cfe390686f9b5163107993b86472c57cf45ae70e5f3",
+      "bytes": 10304,
+      "mtime_ns": 1791122207015472900
+    },
+    "webui/human_fall/index.html": {
+      "sha256": "be99a3db5e90092443702a7a3ae595f3f04c50790e606482d740de723f04b18d",
+      "bytes": 44403,
+      "mtime_ns": 1791126675554529500
+    },
+    "webui/human_fall_preview/human_fall.js": {
+      "sha256": "afc702a74c26f1f8baf93b11b77b4a38492cf6fb6d7f187ddb90bf2439ffe300",
+      "bytes": 61796,
+      "mtime_ns": 1791121569150161500
+    },
+    "webui/human_fall_preview/human_fall_lib.js": {
+      "sha256": "3f633cf6ec71a237258a3c837c5f9774edbd656bcfefc2d43d5e26ebaa87b38e",
+      "bytes": 51431,
+      "mtime_ns": 1790977489568872900
+    },
+    "webui/human_fall_preview/human_fall_lib.test.js": {
+      "sha256": "42bb309311c42943f8c3ab61c19286bea76ca073257d84ff795ac4495ca4b9a1",
+      "bytes": 36748,
+      "mtime_ns": 1790977509664304400
+    },
+    "webui/human_fall_preview/index.html": {
+      "sha256": "a8eff2ea1b5c6eb228031934042ab007f13a2aedddc5cf806cbc36941dcb2798",
+      "bytes": 45643,
+      "mtime_ns": 1791121582202342500
+    },
+    "webui/teamview/teamview.html": {
+      "sha256": "d4b5a14d2a6bf8305e456ed63c76f04989db0e2f80b86b0c9299f6fef34b6601",
+      "bytes": 12523,
+      "mtime_ns": 1790917324326921000
+    },
+    "pc_apps/console/console.html": {
+      "sha256": "bb04d8270821bb90e7c29d086eb2b9a0652e459991648a19b74befd0bc1513f1",
+      "bytes": 4341,
+      "mtime_ns": 1791114730350137300
+    },
+    "pc_apps/console/Console.spec": {
+      "sha256": "691afd9274f17b80dc42663448f167f582813828385ac7f961d051cc29c2565e",
+      "bytes": 1019,
+      "mtime_ns": 1791111951816939200
+    },
+    "pc_apps/console/console_gui.py": {
+      "sha256": "c6805e17f0905ce569a45e5eea54e6d1a46c359fdd920be5a774976cde4e87e6",
+      "bytes": 3142,
+      "mtime_ns": 1791111390878397400
+    },
+    "pc_apps/console/console_icon.ico": {
+      "sha256": "bc72492e036f6763a33274fb130019f3ac9739b97dec1403364b4afcb75845e8",
+      "bytes": 218983,
+      "mtime_ns": 1791110613797279700
+    },
+    "pc_apps/console/console_icon.png": {
+      "sha256": "45aa5059e38f9816d018781f20e245b4f9e9a64c2e641aa8487c74b73239d84c",
+      "bytes": 1891238,
+      "mtime_ns": 1791110613732021400
+    },
+    "pc_apps/console/make_console_shortcut.py": {
+      "sha256": "4e50bae4d9bb781520abe7a993c82a16949763c95bf929340776d8214548e579",
+      "bytes": 780,
+      "mtime_ns": 1791110999703427000
+    },
+    "pc_apps/console/dist/Console.exe": {
+      "sha256": "0074ca5b2a49c454db405582aaba6bd9a6d6b6a049bacc9bb42138e86373016e",
+      "bytes": 50695596,
+      "mtime_ns": 1791115823214597400
+    },
+    "pc_apps/console/dist/LiDAR_Console.zip": {
+      "sha256": "b5e8b3d0e8581ac6a1ee3cd0438b535f70ceb67cbb9b5eee1d0484a400b250af",
+      "bytes": 50595502,
+      "mtime_ns": 1791115865914488500
+    },
+    "pc_apps/console/dist/LiDAR_Console/Console.exe": {
+      "sha256": "0074ca5b2a49c454db405582aaba6bd9a6d6b6a049bacc9bb42138e86373016e",
+      "bytes": 50695596,
+      "mtime_ns": 1791115843957460500
+    },
+    "pc_apps/console/dist/LiDAR_Console/console_icon.ico": {
+      "sha256": "bc72492e036f6763a33274fb130019f3ac9739b97dec1403364b4afcb75845e8",
+      "bytes": 218983,
+      "mtime_ns": 1791115843989496000
+    },
+    "pc_apps/console/dist/LiDAR_Console/README.txt": {
+      "sha256": "8f6fd9cd77d7971a0e071da250a59053a9b9803097a40710209738a2309a3bec",
+      "bytes": 1407,
+      "mtime_ns": 1791115857026274600
+    },
+    "pc_apps/human_limb/limb_lib.py": {
+      "sha256": "c8e2b43dfdd6769e55bff76943d40b9d62f41cb5e5e99243f1e669f56ad0b259",
+      "bytes": 23722,
+      "mtime_ns": 1791035137811385300
+    },
+    "pc_apps/human_limb/limb_lib_test.py": {
+      "sha256": "0eed1565d437acd56013ca2c39c696e656b82c4d6ac2bf0283fdab69ef6ccd39",
+      "bytes": 2055,
+      "mtime_ns": 1791029509113495500
+    },
+    "pc_apps/human_limb/limb_server.py": {
+      "sha256": "12b7aaf656e2355a30c27ba7ea34518ca3769a12c5b2fd5b3fbb50312ba507f5",
+      "bytes": 11990,
+      "mtime_ns": 1791030781990300400
+    },
+    "pc_apps/human_limb/limb_v2.py": {
+      "sha256": "b065152461bd929188c7e0e671f1154018d7a436bcb734a566c17b503f8cc39a",
+      "bytes": 12016,
+      "mtime_ns": 1791038858060081600
+    },
+    "pc_apps/human_limb/limb_viewer.html": {
+      "sha256": "d93d1876ed03487d1f17f66ff7779a9722f53205974796a3a537773a4bfc6e72",
+      "bytes": 15555,
+      "mtime_ns": 1791030790867288100
+    },
+    "pc_apps/human_limb/open_limb_demo.bat": {
+      "sha256": "e2986eb4e4eb4d4b44379e0f9c4ee3425cd70b5da4afff7a36fc9f6ff90a2321",
+      "bytes": 981,
+      "mtime_ns": 1791027849166984700
+    },
+    "pc_apps/human_limb/open_limb_server.bat": {
+      "sha256": "12e0d2ff5d1d6a64f00e98fb5e30e0c122b8412335503c51f6d34a99b9472c87",
+      "bytes": 126,
+      "mtime_ns": 1791029285146546400
+    },
+    "pc_apps/human_limb/README.md": {
+      "sha256": "8e5b1ee36e80c9bea37336b9adbda77c72e9bafa4afc2ebabaa80b9909e6c64d",
+      "bytes": 3569,
+      "mtime_ns": 1791032691891894100
+    },
+    "pc_apps/human_limb/render_frames.py": {
+      "sha256": "3ee2702193e7172dc2444677781eb3f7b41477b32f5491153ac81b5b07c41af2",
+      "bytes": 5280,
+      "mtime_ns": 1791034738642402700
+    },
+    "pc_apps/human_limb/run_limb_v2.py": {
+      "sha256": "aa564c9bc5491ad05e928236b36210a3ff58d5b43bd4bd4d4858a94c91ea80a2",
+      "bytes": 6847,
+      "mtime_ns": 1791038908351729600
+    },
+    "pc_apps/human_limb/run_session_limb.py": {
+      "sha256": "914c3ae07a1211a1e04c6b540d97259ab6c1e4b579b367a11e5a8382cc98679c",
+      "bytes": 5320,
+      "mtime_ns": 1791035154874866500
+    },
+    "pc_apps/human_limb/synth_bend_session.py": {
+      "sha256": "e33fae7575368409fa3c1ba14be26cceb75a131006a194ff4c0430afefa2ba65",
+      "bytes": 4819,
+      "mtime_ns": 1791038450484539000
+    },
+    "pc_apps/human_ml/apply_v1.py": {
+      "sha256": "c498ea50efae679f450f8d4110c6adf264a33cff5f8faa791d236bffde82f6f7",
+      "bytes": 3975,
+      "mtime_ns": 1791040482820700900
+    },
+    "pc_apps/human_ml/frame_feature.py": {
+      "sha256": "40554217642b6fd94e1d2c9be93734649b1653a3bd332c1e2d199c5bbe72e8eb",
+      "bytes": 4933,
+      "mtime_ns": 1791040217144364800
+    },
+    "pc_apps/human_ml/lidata_load.py": {
+      "sha256": "72a2be9c851b62074c0b57132d0593d84e2f48e08955c92859bb35149f3d13a2",
+      "bytes": 4541,
+      "mtime_ns": 1791040159163626700
+    },
+    "pc_apps/human_ml/train_rf_v0.py": {
+      "sha256": "2b44996506ad2acef55edaa0ac6f69cae49ab3a63c2466c0472e381f8d057280",
+      "bytes": 5161,
+      "mtime_ns": 1791040322245740300
+    },
+    "pc_apps/human_pcl/demo_ground_fit.py": {
+      "sha256": "662e81282ed5f70b8961dcf8b7ad6aafad1784c94e36193cdcf90ed80e0c8686",
+      "bytes": 2648,
+      "mtime_ns": 1790958553482601200
+    },
+    "pc_apps/human_pcl/README.md": {
+      "sha256": "259379b8bead34f3170935093c4854aec271576a21d371f92fdccf054cfa3206",
+      "bytes": 1704,
+      "mtime_ns": 1790958573167797200
+    },
+    "pc_apps/human_pcl/setup_env.bat": {
+      "sha256": "804d3aa1aea3a15f8c83c722b502ce36486fc9ffb5d2a34abb44e116a69b7636",
+      "bytes": 1192,
+      "mtime_ns": 1790958539735908500
+    },
+    "pc_apps/human_replay/annotator.html": {
+      "sha256": "58af6bdd3ee9a1fda371a1bba9108d798109ed8e32d2242c627c8f3bfb57f902",
+      "bytes": 20716,
+      "mtime_ns": 1791115497491481300
+    },
+    "pc_apps/human_replay/config.py": {
+      "sha256": "22be1ef3d1f062248f088cd20cf27101bec87b8baa5aaebd7dde27dc9a699887",
+      "bytes": 996,
+      "mtime_ns": 1790936455728877700
+    },
+    "pc_apps/human_replay/fetch.py": {
+      "sha256": "660b53c44dd96927e50cf7629d9ca2f5f8a8ca3d08f2414e215159a4cf1d24e2",
+      "bytes": 14579,
+      "mtime_ns": 1790936455699956000
+    },
+    "pc_apps/human_replay/fetch_lib_test.py": {
+      "sha256": "d02f6f3536ef12c2c598ac9f33d521a8ca46ee4df10e0c1be67245f30b33b679",
+      "bytes": 4556,
+      "mtime_ns": 1790934842810029600
+    },
+    "pc_apps/human_replay/human_replay_lib.js": {
+      "sha256": "bbcbc547f79da60d0e6f915eeccb403997b1c192a3a37ba00e6d3c4d367cf1cc",
+      "bytes": 22930,
+      "mtime_ns": 1791113889328518500
+    },
+    "pc_apps/human_replay/human_replay_lib.py": {
+      "sha256": "97c4aa5c4b529c07b21927066f05232203689961829a784c695c8c26fd53c515",
+      "bytes": 20907,
+      "mtime_ns": 1791113889329517900
+    },
+    "pc_apps/human_replay/human_replay_lib.test.js": {
+      "sha256": "36a67f80de8af67056b761232d3ad972cc26600c171299f21c93f410bd87bbfc",
+      "bytes": 24059,
+      "mtime_ns": 1791117582867159500
+    },
+    "pc_apps/human_replay/index.html": {
+      "sha256": "a87cd098ee0747e0d8bcc9d7debf5e7748284f6dbd9a11398c58b7fe8e7dcbb8",
+      "bytes": 9171,
+      "mtime_ns": 1791113889330516000
+    },
+    "pc_apps/human_replay/open_replay.bat": {
+      "sha256": "2a9f09b6e9d27e745b075f33117e6f707b4c0b6d0392d26021b3f45f2ef411ba",
+      "bytes": 122,
+      "mtime_ns": 1790936819190701800
+    },
+    "pc_apps/human_replay/panel.js": {
+      "sha256": "309fa3a225e3d352e07d9087219fd72a75bc681c9a29e768e40d80a2896f39f8",
+      "bytes": 10082,
+      "mtime_ns": 1790940246279658500
+    },
+    "pc_apps/human_replay/replay.js": {
+      "sha256": "680852cfb9b2f58579271a939b62ef3a6c9538f34c355dda23949c12f74f4b8b",
+      "bytes": 42475,
+      "mtime_ns": 1791117582866161800
+    },
+    "pc_apps/human_replay/trim.bat": {
+      "sha256": "f7ce15d6ac7dd0df19a4caf3763e762b1dfdcd04fca2d6e192a61962b4270061",
+      "bytes": 464,
+      "mtime_ns": 1791111980966732600
+    },
+    "pc_apps/human_replay/trim.js": {
+      "sha256": "e9952d218579a7319da3f0844de7f3fca1761256f5a7f6a16f0a9faf96945cf2",
+      "bytes": 5473,
+      "mtime_ns": 1791111980967730100
+    },
+    "pc_apps/human_replay/vendor/OrbitControls.js": {
+      "sha256": "02bb4ade710f3e607329e37a21f098bc3ac70eb6e33daf8a65e79f4db785e7b2",
+      "bytes": 26375,
+      "mtime_ns": 1790935578918683100
+    },
+    "pc_apps/human_replay/vendor/three.min.js": {
+      "sha256": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2",
+      "bytes": 603445,
+      "mtime_ns": 1790935578765248300
+    },
+    "pc_apps/human_replay/vendor/TrackballControls.js": {
+      "sha256": "a5f4d93e6dc1310a51ec4173c5b568b92770b414efbfa2f8013fc41a62b13a49",
+      "bytes": 17375,
+      "mtime_ns": 1790936917487504300
+    },
+    "pc_apps/human_replay/vendor/TransformControls.js": {
+      "sha256": "17a5b3498953add903009e43d98c1d8272c20dd928a9b38e9bb8c80209a26e3e",
+      "bytes": 44711,
+      "mtime_ns": 1790942986203497900
+    },
+    "captures/remote/cap_20261002_163621/meta.json": {
+      "sha256": "675c23ded9dcee82e6e985f17665469a487d34520408582708601eb188b1d692",
+      "bytes": 18815,
+      "mtime_ns": 1790930865000000000
+    },
+    "captures/remote/cap_20261002_163621/ml_labels.json": {
+      "sha256": "08a03f54b7f819228ebecdb2095e449040c268becaada8086e4b717a7352e0d9",
+      "bytes": 4718,
+      "mtime_ns": 1791042676684194900
+    },
+    "captures/remote/cap_20261002_163621/points.bin": {
+      "sha256": "b81797f9825792655e5930edeb39c15275eb64e01999984884da61d252c599ff",
+      "bytes": 122427200,
+      "mtime_ns": 1790930865000000000
+    },
+    "captures/remote/cap_20261002_165321/meta.json": {
+      "sha256": "985175739ef44e653b03afd7c5e57d3a80934baf1849f6bf4dc195928a187e71",
+      "bytes": 6887,
+      "mtime_ns": 1790931207000000000
+    },
+    "captures/remote/cap_20261002_165321/ml_labels.json": {
+      "sha256": "2284cda9324f72c7b93b920b79ccefb9633f44ee1f9f0a57c1c30baa1b09b1f8",
+      "bytes": 1658,
+      "mtime_ns": 1791042677509413900
+    },
+    "captures/remote/cap_20261002_165321/points.bin": {
+      "sha256": "b2a706b7405f5d243d96d5cd239d750486472192a06de99f967fd45ce96943fa",
+      "bytes": 39891628,
+      "mtime_ns": 1790931207000000000
+    },
+    "captures/remote/cap_20261002_165321_clip_1989287-1989294/meta.json": {
+      "sha256": "219895de7385c7bd29ff898ddbd73a594aeb4dbaa73c4efe973452fc1bbb1831",
+      "bytes": 2459,
+      "mtime_ns": 1790940315927288900
+    },
+    "captures/remote/cap_20261002_165321_clip_1989287-1989294/points.bin": {
+      "sha256": "a4a24c19b886a56e4ddd26b8ab16d7ce5c2dbd9a49d25c18773646b41ec66f49",
+      "bytes": 11004644,
+      "mtime_ns": 1790940315967325200
+    },
+    "captures/remote/cap_20261002_165321_clip_1989287-1989294/__trim_record.json": {
+      "sha256": "22c84d1aeec349f151f7300c0c4a06aedb2e0e74dd3112cedc9eae10edbd702d",
+      "bytes": 568,
+      "mtime_ns": 1790940316004455500
+    },
+    "captures/remote/cap_20261002_182355/limb_labels.js": {
+      "sha256": "ca722148ce423f450bfc1aa9c3ddb2ecd06b9be930f871f8f44bfa36d6575622",
+      "bytes": 27900,
+      "mtime_ns": 1791029339398405600
+    },
+    "captures/remote/cap_20261002_182355/limb_labels.json": {
+      "sha256": "dd6d6f17889a5fda53df49c21be8c0ca2c7db9d67a9ce435fb999b532f8c4ef9",
+      "bytes": 27876,
+      "mtime_ns": 1791029339394611600
+    },
+    "captures/remote/cap_20261002_182355/meta.json": {
+      "sha256": "0735f9de274d13d408d92ffa1b990f80e6cdba0fb30e4758666cdf70ee493db0",
+      "bytes": 4667,
+      "mtime_ns": 1790936642000000000
+    },
+    "captures/remote/cap_20261002_182355/ml_labels.json": {
+      "sha256": "1361f234091830c00ffe026770366e13fd700fa8f11484ba381525950eb76c00",
+      "bytes": 1097,
+      "mtime_ns": 1791042677982134100
+    },
+    "captures/remote/cap_20261002_182355/points.bin": {
+      "sha256": "dec812974c1fe420bf8770b35edf0c60477a92cc6c39cdc60ca0402489d476a3",
+      "bytes": 24760540,
+      "mtime_ns": 1790936642000000000
+    },
+    "captures/remote/cap_20261002_223757/ai_labels.json": {
+      "sha256": "26dc9dbb926dd0e7be5d72b7fcdbc4a5212f3589ef4b388923a39e0bda50b8f6",
+      "bytes": 1080,
+      "mtime_ns": 1791035238257925500
+    },
+    "captures/remote/cap_20261002_223757/limb_v2_labels.json": {
+      "sha256": "6300d04b39249c509df5455be6387ed37ad680a209602d73ffdc73f53c33606c",
+      "bytes": 107194,
+      "mtime_ns": 1791038329755304100
+    },
+    "captures/remote/cap_20261002_223757/limb_v2_report.md": {
+      "sha256": "248097ff056fc9589f34e04f20ab62759fb36af6ca99d08ceeafcae4a97caa1b",
+      "bytes": 594,
+      "mtime_ns": 1791038329756807300
+    },
+    "captures/remote/cap_20261002_223757/meta.json": {
+      "sha256": "71915d5181b8fc409d83a8e1650671801d2d50cf09ef4a3832d43b51ec3f4ca8",
+      "bytes": 33753,
+      "mtime_ns": 1790951899000000000
+    },
+    "captures/remote/cap_20261002_223757/ml_labels.json": {
+      "sha256": "39abeea57f746ac76a1b55963486f8015c0f4728fca4868fa1679f2266937608",
+      "bytes": 8661,
+      "mtime_ns": 1791042682393913900
+    },
+    "captures/remote/cap_20261002_223757/points.bin": {
+      "sha256": "8afb660b7bf0631462d4cde6f82bd89884b2e83acea1da25c07316c87b5fbb37",
+      "bytes": 226963464,
+      "mtime_ns": 1790951899000000000
+    },
+    "captures/remote/cap_20261002_223757/film/m_f000_f003.png": {
+      "sha256": "ae0d69cb21592c39c51104109c1505132cfb0c303ef00397e75e9c373eb774a5",
+      "bytes": 102014,
+      "mtime_ns": 1791034887825908800
+    },
+    "captures/remote/cap_20261002_223757/film/m_f004_f007.png": {
+      "sha256": "e8903cb6b89290013fa4d4b07f31dda0bfc23ed8e7d17dd07e0365d73a4c190c",
+      "bytes": 102011,
+      "mtime_ns": 1791034887868619600
+    },
+    "captures/remote/cap_20261002_223757/film/m_f008_f011.png": {
+      "sha256": "d407b1a0feb0755c0ea757fe24ee9cc390bcc592993d89d048b1a950468ade2b",
+      "bytes": 101816,
+      "mtime_ns": 1791034887921468200
+    },
+    "captures/remote/cap_20261002_223757/film/m_f012_f015.png": {
+      "sha256": "00ac8718268a2e1934518d9299488ab9f2eeb7fae27652bb00a101c3b42ad2df",
+      "bytes": 102185,
+      "mtime_ns": 1791034887966027000
+    },
+    "captures/remote/cap_20261002_223757/film/m_f016_f019.png": {
+      "sha256": "6555b705eb66046bd71f1b567b280a9e182215efbf53a5484ec22a56cb7097d2",
+      "bytes": 101707,
+      "mtime_ns": 1791034888008768600
+    },
+    "captures/remote/cap_20261002_223757/film/m_f020_f023.png": {
+      "sha256": "b5aca38e177ed631d953714881584bff3ecaa6375bfef47e0124ddd509bbdaf3",
+      "bytes": 102290,
+      "mtime_ns": 1791034888050020400
+    },
+    "captures/remote/cap_20261002_223757/film/m_f024_f027.png": {
+      "sha256": "d6df16e355332d9346f300316d0fc56b8300e09b6af92552b41490528808c240",
+      "bytes": 102092,
+      "mtime_ns": 1791034888091868000
+    },
+    "captures/remote/cap_20261002_223757/film/m_f028_f031.png": {
+      "sha256": "8acaaeba645b9cdb77d3a9e81d422c870fd7f09c1665972ea286d8c20d4ee990",
+      "bytes": 101754,
+      "mtime_ns": 1791034888141725600
+    },
+    "captures/remote/cap_20261002_223757/film/m_f032_f035.png": {
+      "sha256": "55347c9a629b7e6f326cf93a75a59be379b2ed6a05e6ea9dd0ca4a45c31cc136",
+      "bytes": 102234,
+      "mtime_ns": 1791034888184343200
+    },
+    "captures/remote/cap_20261002_223757/film/m_f036_f039.png": {
+      "sha256": "3ab89425b7677b1b3cbc3637b9ee61d6cf3e12f4c448cfbab4181ad655e81b02",
+      "bytes": 101816,
+      "mtime_ns": 1791034888231836100
+    },
+    "captures/remote/cap_20261002_223757/film/m_f040_f043.png": {
+      "sha256": "2819ba9d0bdee9a61b10b5a1ff9de1c112b78123f1bebcb2839077a16007a3f8",
+      "bytes": 103156,
+      "mtime_ns": 1791034888277277700
+    },
+    "captures/remote/cap_20261002_223757/film/m_f044_f047.png": {
+      "sha256": "96b8995f714fd8595c8e86a3a8a6eaf3b512eeeabfb8926fd1fd4dccf982b743",
+      "bytes": 102947,
+      "mtime_ns": 1791034888319356400
+    },
+    "captures/remote/cap_20261002_223757/film/m_f048_f051.png": {
+      "sha256": "b461c9fb566466b5549085efe0b37f7f77b7c06470d538a18584c0a1be74e010",
+      "bytes": 102577,
+      "mtime_ns": 1791034888360516600
+    },
+    "captures/remote/cap_20261002_223757/film/m_f052_f055.png": {
+      "sha256": "8874569101a48b93b82d86ee3e299933287d532b5062c9f24afbf0fc4a47c315",
+      "bytes": 102619,
+      "mtime_ns": 1791034888403477700
+    },
+    "captures/remote/cap_20261002_223757/film/m_f056_f059.png": {
+      "sha256": "d23087fd2b15becc86a474ebfb1754d429f8a877f0b60e394c3f3782fa90f6ff",
+      "bytes": 102265,
+      "mtime_ns": 1791034888446017300
+    },
+    "captures/remote/cap_20261002_223757/film/m_f060_f063.png": {
+      "sha256": "bd22a1f0d91bc37a554af8504d411bbc5df9d10e64912ecef4935c192456d92b",
+      "bytes": 101903,
+      "mtime_ns": 1791034888487877400
+    },
+    "captures/remote/cap_20261002_223757/film/m_f064_f067.png": {
+      "sha256": "1b3156d170eddbeb70bd3d70fd25a627102505136b7fa2dc7ae51c08551b5e6b",
+      "bytes": 100343,
+      "mtime_ns": 1791034888527941300
+    },
+    "captures/remote/cap_20261002_223757/film/m_f068_f071.png": {
+      "sha256": "2fa9d0b1c6710a28e80008a10282822d469c1e0720e9aba12bb417b0dbf2d41a",
+      "bytes": 100075,
+      "mtime_ns": 1791034888572174000
+    },
+    "captures/remote/cap_20261002_223757/film/m_f072_f075.png": {
+      "sha256": "825b9b1cda467c299e4b1b70feef8e591b396a6f8eda3fc8b22fa694c45acdf9",
+      "bytes": 99906,
+      "mtime_ns": 1791034888614779000
+    },
+    "captures/remote/cap_20261002_223757/film/m_f076_f079.png": {
+      "sha256": "e92ec1b05860ea976e572a309a644bf209155c35558dbd24ab4b855b14be19f4",
+      "bytes": 100401,
+      "mtime_ns": 1791034888655192900
+    },
+    "captures/remote/cap_20261002_223757/film/m_f080_f083.png": {
+      "sha256": "b069c0c09d05d559c2b4f47a7154672fc41587b9876d7a8dc75543e5f0a46b83",
+      "bytes": 99578,
+      "mtime_ns": 1791034888696241400
+    },
+    "captures/remote/cap_20261002_223757/film/m_f084_f087.png": {
+      "sha256": "b29cf2edaf66dff7363a50ae62b35051969fb4999fbdd7435c53882a1930f310",
+      "bytes": 98401,
+      "mtime_ns": 1791034888737642300
+    },
+    "captures/remote/cap_20261002_223757/film/m_f088_f091.png": {
+      "sha256": "b277e01a9609f17f71345309abfd146b4ce21888bde09333bca5a1b614749bde",
+      "bytes": 98325,
+      "mtime_ns": 1791034888780728800
+    },
+    "captures/remote/cap_20261002_223757/film/m_f092_f095.png": {
+      "sha256": "07aa5e5d94f651e861cc631b5614c508875fcee3a5d2ee555bb24c7451ae0013",
+      "bytes": 98661,
+      "mtime_ns": 1791034888820102000
+    },
+    "captures/remote/cap_20261002_223757/film/m_f096_f099.png": {
+      "sha256": "3d6bd3608bef372699b280ab62b057a3d733f88819ec45365e47d441736a0c8e",
+      "bytes": 98709,
+      "mtime_ns": 1791034888860708200
+    },
+    "captures/remote/cap_20261002_223757/film/m_f100_f103.png": {
+      "sha256": "325768036b0c6a68626b80fbf205b5afc6f7d9ea3b80e08c0218891615434451",
+      "bytes": 98993,
+      "mtime_ns": 1791034888900152900
+    },
+    "captures/remote/cap_20261002_223757/film/m_f104_f107.png": {
+      "sha256": "f077f8cef6c57cddad30d467fc3a435995cdc08bf62d09166016b4a60bc1b677",
+      "bytes": 100222,
+      "mtime_ns": 1791034888941141900
+    },
+    "captures/remote/cap_20261002_223757/film/m_f108_f111.png": {
+      "sha256": "7c34513e46223923764e6aec81c5843d8d28c057c0bf3ae96dfb05a8cac8a916",
+      "bytes": 99808,
+      "mtime_ns": 1791034888982806500
+    },
+    "captures/remote/cap_20261002_223757/film/m_f112_f115.png": {
+      "sha256": "2c5376dec6630f034ecb2a1b516ad5ab3f0dbe32b4e85758def2bdb7e83c2a9d",
+      "bytes": 100946,
+      "mtime_ns": 1791034889024572300
+    },
+    "captures/remote/cap_20261002_223757/film/m_f116_f119.png": {
+      "sha256": "79d1275366a6bb77b2302ee560f72b43eda23a4cef9c2952310b50d142042a76",
+      "bytes": 99710,
+      "mtime_ns": 1791034889064760300
+    },
+    "captures/remote/cap_20261002_223757/film/m_f120_f123.png": {
+      "sha256": "b5d145c56425550e4fd5e94faa9333fa0436d700867a493094eae3798927644d",
+      "bytes": 98896,
+      "mtime_ns": 1791034889106801200
+    },
+    "captures/remote/cap_20261002_223757/film/m_f124_f127.png": {
+      "sha256": "943d35d043952bc147e384efc22a91d19ce33ceab54af28b5f8a54c836d65313",
+      "bytes": 98688,
+      "mtime_ns": 1791034889145929900
+    },
+    "captures/remote/cap_20261002_223757/film/m_f128_f131.png": {
+      "sha256": "7f031c42690052d972cd335930533514880e576fe6ac2d8d27355dea1228bcdb",
+      "bytes": 100105,
+      "mtime_ns": 1791034889187236700
+    },
+    "captures/remote/cap_20261002_223757/film/m_f132_f135.png": {
+      "sha256": "dd76623bbc12fee736489cfd87d3869c234d31b54bb63a56243e3e052b28ea32",
+      "bytes": 100157,
+      "mtime_ns": 1791034889227795200
+    },
+    "captures/remote/cap_20261002_223757/film/m_f136_f139.png": {
+      "sha256": "0ba0bd716f4f40c43e91cc3868a479a22d5276d228b2d56d27e69679855cdb3f",
+      "bytes": 99239,
+      "mtime_ns": 1791034889269858700
+    },
+    "captures/remote/cap_20261002_223757/film/m_f140_f143.png": {
+      "sha256": "ec738df6dd0fbe7957cda8816dd6ce33892f62d4bd780991f76db1263131735f",
+      "bytes": 98436,
+      "mtime_ns": 1791034889312459400
+    },
+    "captures/remote/cap_20261002_223757/film/m_f144_f147.png": {
+      "sha256": "7961f9cca556c214f978d4420ec3524995cc0928deeecdc58347c5c9caa4138b",
+      "bytes": 98616,
+      "mtime_ns": 1791034889357200200
+    },
+    "captures/remote/cap_20261002_223757/film/m_f148_f151.png": {
+      "sha256": "2c21f2f5dff0d4fa310f991c7fd9334936b93352d245e1458a46353167eec437",
+      "bytes": 100245,
+      "mtime_ns": 1791034889398422200
+    },
+    "captures/remote/cap_20261002_223757/film/m_f152_f155.png": {
+      "sha256": "6ff4dfed9c940aba006993a2589f5d28c9e96c21e97ed1829b5648da69979d49",
+      "bytes": 102500,
+      "mtime_ns": 1791034889446931700
+    },
+    "captures/remote/cap_20261002_223757/film/m_f156_f159.png": {
+      "sha256": "5bd469d70156282b370dd0481cdc72113f5128bb684ba57e41c7f0e17bc9efe5",
+      "bytes": 101878,
+      "mtime_ns": 1791034889490083200
+    },
+    "captures/remote/cap_20261002_223757/film/m_f160_f163.png": {
+      "sha256": "203919ca5111a9d5084ccacfad03d8381e468210b20279931b72d43dba5513ac",
+      "bytes": 102052,
+      "mtime_ns": 1791034889534795500
+    },
+    "captures/remote/cap_20261002_223757/film/m_f164_f164.png": {
+      "sha256": "c5e6a6f2ddc1b509bea5346bd5036c8304088ac84db543c542e04d1357abba55",
+      "bytes": 37726,
+      "mtime_ns": 1791034889554294000
+    },
+    "captures/remote/cap_20261002_233210/meta.json": {
+      "sha256": "246170285a174d3859fbceed0c8b780b4f976d2237adc4b8c11dcbe6ebb4d648",
+      "bytes": 20698,
+      "mtime_ns": 1791102245681158700
+    },
+    "captures/remote/cap_20261002_233210/points.bin": {
+      "sha256": "d946b80b51258e4e0452fc3a40f9ebd7b47c9b3edac25df7aeb1c6ea9f322664",
+      "bytes": 136186036,
+      "mtime_ns": 1791102245643251000
+    },
+    "captures/remote/cap_20261004_202456/meta.json": {
+      "sha256": "7c6da56fd7d128e27aa06669530e5896d080334681eb72ea2d3ae3acbd4e2a95",
+      "bytes": 19205,
+      "mtime_ns": 1791116711000000000
+    },
+    "captures/remote/cap_20261004_202456/points.bin": {
+      "sha256": "2f1c707ee9017df99a835a052b1e6815b787e2ce3bca56d1e20a8402e400e56f",
+      "bytes": 125177696,
+      "mtime_ns": 1791116711000000000
+    },
+    "captures/remote/cap_20261004_203135/meta.json": {
+      "sha256": "1e19867276c1ec160d119264eed983c0bf21c4fbe7e4b74c16c683ad3c2d9ccc",
+      "bytes": 23587,
+      "mtime_ns": 1791117113000000000
+    },
+    "captures/remote/cap_20261004_203135/points.bin": {
+      "sha256": "df0a75b4dc9c138926f7a6e6f0b7e40f9dc359ef21d1b4948f8791e0ee0d0eb5",
+      "bytes": 155436092,
+      "mtime_ns": 1791117113000000000
+    },
+    "captures/remote/cap_20261004_203349/meta.json": {
+      "sha256": "c3b55d1e11ed8a043bd3645af7ed07e920024c05f3cb48b15d523405edd38392",
+      "bytes": 21400,
+      "mtime_ns": 1791117244000000000
+    },
+    "captures/remote/cap_20261004_203349/points.bin": {
+      "sha256": "2ed3fc60d99b3a2f42e0951835ad847fae2f490859e487b167fbccb1b5f10323",
+      "bytes": 140309932,
+      "mtime_ns": 1791117244000000000
+    },
+    "captures/remote/synth_bend_v1/ai_labels.json": {
+      "sha256": "da13f79848da0414af78631b116b415829655bf59ee5a259637fd201d35ed9e4",
+      "bytes": 259,
+      "mtime_ns": 1791038499826514800
+    },
+    "captures/remote/synth_bend_v1/limb_v2_labels.json": {
+      "sha256": "ed9e6ee3cc5d9b77ad4f0f85ce13819cbc71566862662d15e573b244da6a4052",
+      "bytes": 55235,
+      "mtime_ns": 1791038987488451400
+    },
+    "captures/remote/synth_bend_v1/limb_v2_report.md": {
+      "sha256": "4fd877988d5253f120e74ad50cda7e8b80a20261bfdda2027cb46c5bcf2bc276",
+      "bytes": 195,
+      "mtime_ns": 1791038987489956200
+    },
+    "captures/remote/synth_bend_v1/meta.json": {
+      "sha256": "fcb0dd5f45fb9c9d27b8de347801a2584ff8850cfe0516417f5dadc3805da2d5",
+      "bytes": 33766,
+      "mtime_ns": 1791038499826514800
+    },
+    "captures/remote/synth_bend_v1/ml_labels.json": {
+      "sha256": "f02138ed3571161dffe62d8a834a8e3de08a945cbb9caa952fd42e8866c22979",
+      "bytes": 9750,
+      "mtime_ns": 1791042689679063800
+    },
+    "captures/remote/synth_bend_v1/points.bin": {
+      "sha256": "27f4a9135d6a0956f3d61f8090a1477d6d267b39a37d613c412274201ea1508d",
+      "bytes": 16492000,
+      "mtime_ns": 1791038499822495800
+    }
+  },
+  "document_before_files": [
+    "GROUND_LEVELING_NEXT_STAGE_PLAN_V3.md",
+    "GROUND_LEVELING_NEXT_STAGE_PLAN.md",
+    "GROUND_LEVELING_PLAN.md",
+    "GROUND_LEVELING_ALGORITHM_DESIGN.md",
+    "README.md",
+    "DISPATCH.md",
+    "WORKFLOW.md",
+    "tickets/INDEX.md",
+    "REVIEW_LOG.md"
+  ],
+  "scope": "plans/module interfaces/ticket acceptance only; no production, HTML or runtime parameter edits"
+}

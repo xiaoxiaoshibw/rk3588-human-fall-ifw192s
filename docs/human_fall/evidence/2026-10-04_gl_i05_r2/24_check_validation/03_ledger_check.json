@@ -1,0 +1,97 @@
+{
+  "script": "03_ledger_check",
+  "ledger": "experiment_results_identity_verified.json",
+  "synthetic_cases": 36,
+  "real_cases": 2,
+  "all_oracle_match": true,
+  "all_closure_safe": true,
+  "all_sequence_digest_equal": true,
+  "all_have_5_stages_3_repeats": true,
+  "all_peak_positive_separate": true,
+  "all_counts_identity": true,
+  "all_old_i04_seq_match": true,
+  "attribution_counts": {
+    "actual_near_pool_competition": 19,
+    "old_certificate_insufficient": 25,
+    "processing_budget_gap": 7
+  },
+  "old_cert_fail_scalar_closed": [
+    {
+      "case": "weak_seed7_permuteFalse",
+      "old_status": "unresolved",
+      "old_reasons": [
+        "close_competition",
+        "distinct_refined_witnesses",
+        "similarity_envelope_not_closed"
+      ],
+      "new_status": "seen_dominant_pool_closed"
+    },
+    {
+      "case": "weak_seed7_permuteTrue",
+      "old_status": "unresolved",
+      "old_reasons": [
+        "close_competition",
+        "distinct_refined_witnesses",
+        "similarity_envelope_not_closed"
+      ],
+      "new_status": "seen_dominant_pool_closed"
+    },
+    {
+      "case": "weak_seed19_permuteFalse",
+      "old_status": "unresolved",
+      "old_reasons": [
+        "close_competition",
+        "distinct_refined_witnesses",
+        "similarity_envelope_not_closed"
+      ],
+      "new_status": "seen_dominant_pool_closed"
+    },
+    {
+      "case": "weak_seed19_permuteTrue",
+      "old_status": "unresolved",
+      "old_reasons": [
+        "close_competition",
+        "distinct_refined_witnesses",
+        "similarity_envelope_not_closed"
+      ],
+      "new_status": "seen_dominant_pool_closed"
+    },
+    {
+      "case": "weak_seed41_permuteFalse",
+      "old_status": "unresolved",
+      "old_reasons": [
+        "close_competition",
+        "distinct_refined_witnesses",
+        "similarity_envelope_not_closed"
+      ],
+      "new_status": "seen_dominant_pool_closed"
+    },
+    {
+      "case": "weak_seed41_permuteTrue",
+      "old_status": "unresolved",
+      "old_reasons": [
+        "close_competition",
+        "distinct_refined_witnesses",
+        "similarity_envelope_not_closed"
+      ],
+      "new_status": "seen_dominant_pool_closed"
+    }
+  ],
+  "prototype_status_counts": {
+    "seen_pairwise_closed": 12,
+    "unresolved": 20,
+    "seen_dominant_pool_closed": 6
+  },
+  "weak_dominant_cases": 6,
+  "metric_holds_mismatch": [],
+  "all_metric_holds_agree": true,
+  "cases_with_pair_count_diff": 44,
+  "merge_safety_ok": true,
+  "merge_safety_detail": [],
+  "active_ledger_matches_manifest": true,
+  "local_runtime": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "numpy": "1.26.4",
+    "board_run": false
+  }
+}

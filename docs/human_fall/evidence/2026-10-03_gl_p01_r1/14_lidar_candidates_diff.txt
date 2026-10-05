@@ -1,0 +1,59 @@
+﻿diff --git a/docs/human_fall/evidence/2026-10-03_gl_p01_r1/02_lidar_candidates_before.txt b/src/human_fall_detection/core/lidar_candidates.py
+index 22e6266..4552ba8 100644
+--- a/docs/human_fall/evidence/2026-10-03_gl_p01_r1/02_lidar_candidates_before.txt
++++ b/src/human_fall_detection/core/lidar_candidates.py
+@@ -524,6 +524,35 @@ def _same_ground_record(left, right):
+         return False
+ 
+ 
++def _coordinate_ground_projection(ground_derived, calibration):
++    """Project a validated ground-derived R/t into the additive wire form.
++
++    Returns a fresh dict with newly built R/t lists so no caller can mutate the
++    cached artifact (or another snapshot's output) through the published
++    coordinate block; None when there is no validated block, so a legacy/absent
++    artifact never fabricates an identity transform.
++    """
++    if not isinstance(ground_derived, dict):
++        return None
++    rotation = ground_derived.get("R")
++    translation = ground_derived.get("t")
++    if not isinstance(rotation, list) or not isinstance(translation, list):
++        return None
++    artifact = calibration if isinstance(calibration, dict) else {}
++    return {
++        "kind": "coordinate_ground",
++        "schema_version": 1,
++        "from_frame": ground_derived.get("from_frame"),
++        "to_frame": ground_derived.get("to_frame"),
++        "units": "m",
++        "calibration_id": artifact.get("calibration_id"),
++        "geometry_schema_version": artifact.get("schema_version"),
++        "ground_derived_id": ground_derived.get("ground_derived_id"),
++        "R": [list(row) for row in rotation],
++        "t": [float(value) for value in translation],
++    }
++
++
+ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id,
+                    seq=None, stamp_secs=None, stamp_nsecs=None,
+                    source_stamp_s=None, frame_id="innolidar", ground=None,
+@@ -617,6 +646,7 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
+         "ground_frame": ground.get("frame") if isinstance(ground, dict) else None,
+         "transform_status": reference.get("status") if isinstance(reference, dict) else "unknown",
+         "ground_derived_id": ground_derived_id,
++        "ground": _coordinate_ground_projection(ground_derived, calibration),
+     }
+     calibration_block = {
+         "calibration_id": (calibration or {}).get("calibration_id"),
+@@ -654,6 +684,10 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
+             "status": ground.get("status"), "frame": ground.get("frame"),
+             "normal": ground.get("normal"), "offset_m": ground.get("offset_m"),
+             "sensor_height_m": ground.get("sensor_height_m"),
++            # No trusted support outline is derived here; an auto AABB/trusted
++            # ROI is deliberately not promoted to a support polygon (P05).
++            "support_polygon": None, "support_polyline": None,
++            "support_reason": "no_trusted_support_outline_available",
+         },
+         "settings": resolved,
+         "quality": quality,

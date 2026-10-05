@@ -1,0 +1,33 @@
+{
+ "acceptance": {
+  "docs/human_fall/GL03_ACCEPTANCE.md": "6c8f5e3d90686b16c76be458681dfe52c80301bd61f2ccbba8d77ea0cf0de687"
+ },
+ "branch": "master",
+ "data": {
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_planes.json": "f238294ee42f9161ec4ee7a804a5448de617fbfe6e689125e022408e04bc43e8",
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_roi_points.csv": "4c9ccaacb4f941cb995532620fb5af6886b98b6ac18855d8a6870c56db30660f",
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_sample.csv.tgz": "528d8ed29430d7a9037dc46d69123b310b280aedeb0f4fff1a6e231d347f9a0e"
+ },
+ "head": "8a5a2b28f922794bc25277319fd8dc85681802f1",
+ "no_git_actions": "no commit/push/reset/checkout/clean",
+ "not_modified_frozen": "no config/default.yaml, geometry.yaml, geometry_constrained.yaml, human_fall.yaml, human_fall_prod.yaml, perception.yaml, driver, webui, raw data, historical evidence",
+ "o01_evidence_applicability": {
+  "depends_on": "src/human_fall_detection/core/lidar_candidates.py",
+  "note": "R7 changed calibration.py, the GL03 test file and a coordinate-metadata safety read in lidar_candidates.py; node_runtime.py keeps the R5 passed logic. Because the lidar_candidates dependency SHA changed, the R3 O01 ablation script was rerun into R7 (read-only inputs, R7 output path) and its JSON is byte-identical (same SHA) to the R3 report; candidate geometry/indices are unaffected.",
+  "r3_report": "docs/human_fall/evidence/2026-10-02_gl03_r3/21_o01_planes_ablation_r3.json",
+  "r7_report": "docs/human_fall/evidence/2026-10-02_gl03_r7/24_o01_planes_ablation_r7.json"
+ },
+ "round": "GL-03 R7 / 2026-10-02",
+ "sources": {
+  "docs/human_fall/evidence/2026-10-02_gl03_r6/codex_review_01/input_matrix_checks.py": "5fc2e2c17a9b7a61f116abf3d4073c43baf519e7889d6a05808d20a6fa194beb",
+  "docs/human_fall/evidence/2026-10-02_gl03_r7/20_ast38_check.py": "58943d2f6d7ce42978a261c459da77688db5c7f28e284adf46bf738dbee53187",
+  "docs/human_fall/evidence/2026-10-02_gl03_r7/21_scope_check.py": "c75c1f49017de31f84e3b64bb917fa29e1fd0a7772e7dd3cda88e7d9d57835ec",
+  "docs/human_fall/evidence/2026-10-02_gl03_r7/23_make_diff.py": "5006e1ab2c9a133b37e6ac2e1f92b1c3c5c89a9e2a4dbe9d03e87fc22841a2fa",
+  "docs/human_fall/evidence/2026-10-02_gl03_r7/24_o01_planes_ablation_r7.py": "c5ff9e07ae56168f81ab9dbcacb5c863d61c6c22e7d8e9b0806f14773be005c0",
+  "docs/human_fall/evidence/2026-10-02_gl03_r7/run_r7.py": "4593b8fd4364c707a7d2ddd8e2ae23ee146386559ec92b3e8b4be81a4d420f53",
+  "src/human_fall_detection/core/calibration.py": "d29519a1cdb5e495d23115bc89886e9071e4f2055ff529285e933cebdb7c58a3",
+  "src/human_fall_detection/core/lidar_candidates.py": "30330e9a793565964310363fa2c2bea2fdce62448e2783f6edd24bdf3bd7fb75",
+  "src/human_fall_detection/core/node_runtime.py": "889ead5e24ea9553cb728d403fc2e47fd42634ba15a920124314225b0f13b06f",
+  "src/human_fall_detection/tests/test_gl03_candidates_geometry.py": "c8203bd65223672d825beb75336d5ceaffd74a16a0165d73073b4c2e90ee76ce"
+ }
+}

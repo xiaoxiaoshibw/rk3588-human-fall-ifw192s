@@ -1,0 +1,91 @@
+{
+  "kind": "gle01_r1_independent_ast_boundaries",
+  "schema": 1,
+  "scripts": [
+    {
+      "file": "02_board_file_probe.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "03_read_bag_chain.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "04_local_chain_audit.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "05_recording_context_probe.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "06_chain_negative_checks.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "08_submit.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "run_cli.py",
+      "parsed_38": true,
+      "forbidden_hits": [
+        "Popen("
+      ]
+    },
+    {
+      "file": "export_session.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "snapshot.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "opencode_review_01\\01_remote_raw_probe.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "opencode_review_01\\02_local_chain_verify.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "opencode_review_01\\02b_local_chain_verify.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "opencode_review_01\\03_remote_timestamp_loss.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "opencode_review_01\\04_fixture_checks.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "opencode_review_01\\05_remote_context_probe.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    },
+    {
+      "file": "opencode_review_01\\06_manifest_scope_check.py",
+      "parsed_38": true,
+      "forbidden_hits": []
+    }
+  ],
+  "all_parse_py38": true,
+  "any_forbidden": true,
+  "note": "remote scripts additionally executed on board python3.8 via docker exec stdin with exit 0"
+}

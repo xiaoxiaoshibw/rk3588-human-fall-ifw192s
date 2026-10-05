@@ -1,0 +1,31 @@
+{
+ "acceptance": {
+  "docs/human_fall/GL03_ACCEPTANCE.md": "f6a19887049d9140df702cba01e62b39ffd88a85e149e6e44e1993bfdfdec5f5"
+ },
+ "branch": "master",
+ "data": {
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_planes.json": "f238294ee42f9161ec4ee7a804a5448de617fbfe6e689125e022408e04bc43e8",
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_roi_points.csv": "4c9ccaacb4f941cb995532620fb5af6886b98b6ac18855d8a6870c56db30660f",
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_sample.csv.tgz": "528d8ed29430d7a9037dc46d69123b310b280aedeb0f4fff1a6e231d347f9a0e"
+ },
+ "head": "49eb7581faabdda031642e04d3ef4ffe75d48331",
+ "no_git_actions": "no commit/push/reset/checkout/clean",
+ "not_modified_frozen": "no config/default.yaml, geometry.yaml, geometry_constrained.yaml, human_fall.yaml, human_fall_prod.yaml, perception.yaml, driver, webui, raw data, historical evidence",
+ "o01_evidence_applicability": {
+  "depends_on": "src/human_fall_detection/core/lidar_candidates.py",
+  "note": "R6 changed calibration.py and the GL03 test file only; node_runtime.py keeps the R5 passed logic and lidar_candidates.py is SHA-unchanged, so the R3 O01 recomputation stays applicable and was not rerun.",
+  "r3_report": "docs/human_fall/evidence/2026-10-02_gl03_r3/21_o01_planes_ablation_r3.json"
+ },
+ "round": "GL-03 R6 / 2026-10-02",
+ "sources": {
+  "docs/human_fall/evidence/2026-10-02_gl03_r5/codex_review_01/closure_checks.py": "167103cd22f6be8321b2d74b2d4178e73788d4a813d80355c3f0f412620f9563",
+  "docs/human_fall/evidence/2026-10-02_gl03_r6/20_ast38_check.py": "8e8803e19044813157bc24f8a47947efddf782e91ef9f83664010ff1e5aa8ff3",
+  "docs/human_fall/evidence/2026-10-02_gl03_r6/21_scope_check.py": "843067a31ade394f54151ada20558f22d83f9fa9e84869bdbb65ee55cf6c233d",
+  "docs/human_fall/evidence/2026-10-02_gl03_r6/23_make_diff.py": "dd80de5bdb404478743122d1ed3c92e0e3083973635a7f644d695524933661d4",
+  "docs/human_fall/evidence/2026-10-02_gl03_r6/run_r6.py": "f8bf7b88c5d7cd8ef7842734a5d00ee7d33e241132cd924761c33dba9b8bd644",
+  "src/human_fall_detection/core/calibration.py": "913cc2df8f87965e9060789394b90a3d41a82b896a14264dc6788a438d50090c",
+  "src/human_fall_detection/core/lidar_candidates.py": "318abc786f49bb5d87e0a1e2030c017a2e489d302a038a814e56203fdd5bf1c5",
+  "src/human_fall_detection/core/node_runtime.py": "889ead5e24ea9553cb728d403fc2e47fd42634ba15a920124314225b0f13b06f",
+  "src/human_fall_detection/tests/test_gl03_candidates_geometry.py": "63eabfd5c1970e2046cb9419f57381815a1621af677d0395d56e30ef426c2a8d"
+ }
+}

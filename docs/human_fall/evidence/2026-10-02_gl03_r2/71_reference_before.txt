@@ -1,0 +1,59 @@
+test_G03_no_ground_reference_node_masks_foreign_frame (__main__.ReferenceBinding.test_G03_no_ground_reference_node_masks_foreign_frame) ... FAIL
+test_G03_reference_source_mismatch_does_not_project (__main__.ReferenceBinding.test_G03_reference_source_mismatch_does_not_project) ... FAIL
+test_G03_reference_target_cannot_conflict_with_known_label (__main__.ReferenceBinding.test_G03_reference_target_cannot_conflict_with_known_label) ... FAIL
+test_G05_full_reload_uses_current_artifact_reference_transform (__main__.ReferenceBinding.test_G05_full_reload_uses_current_artifact_reference_transform) ... FAIL
+
+======================================================================
+FAIL: test_G03_no_ground_reference_node_masks_foreign_frame (__main__.ReferenceBinding.test_G03_no_ground_reference_node_masks_foreign_frame)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r2\codex_reference_checks.py", line 64, in test_G03_no_ground_reference_node_masks_foreign_frame
+    self.assertEqual(foreign['state']['observability'], 'invalid')
+AssertionError: 'degraded' != 'invalid'
+- degraded
++ invalid
+
+
+======================================================================
+FAIL: test_G03_reference_source_mismatch_does_not_project (__main__.ReferenceBinding.test_G03_reference_source_mismatch_does_not_project)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r2\codex_reference_checks.py", line 39, in test_G03_reference_source_mismatch_does_not_project
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_G03_reference_target_cannot_conflict_with_known_label (__main__.ReferenceBinding.test_G03_reference_target_cannot_conflict_with_known_label)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r2\codex_reference_checks.py", line 47, in test_G03_reference_target_cannot_conflict_with_known_label
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_G05_full_reload_uses_current_artifact_reference_transform (__main__.ReferenceBinding.test_G05_full_reload_uses_current_artifact_reference_transform)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r2\codex_reference_checks.py", line 83, in test_G05_full_reload_uses_current_artifact_reference_transform
+    np.testing.assert_allclose(candidate['center_reference_m'], expected, atol=1e-9)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\site-packages\numpy\testing\_private\utils.py", line 1504, in assert_allclose
+    assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\site-packages\numpy\testing\_private\utils.py", line 797, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Not equal to tolerance rtol=1e-07, atol=1e-09
+
+Mismatched elements: 3 / 3 (100%)
+Max absolute difference: 1.
+Max relative difference: 1.69023742
+ x: array([ 3.006022, -1.90591 ,  0.204184])
+ y: array([ 4.006022, -0.90591 , -0.295816])
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.191s
+
+FAILED (failures=4)
+exit=1

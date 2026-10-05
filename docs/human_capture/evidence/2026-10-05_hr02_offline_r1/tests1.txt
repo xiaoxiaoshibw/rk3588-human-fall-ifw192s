@@ -1,0 +1,33 @@
+test_local_and_failed_board_keep_loadable_files (sessions_test.OfflineSessionsTest.test_local_and_failed_board_keep_loadable_files) ... [15:49:56] "GET /api/sessions?scope=local HTTP/1.1" 200 -
+[15:49:56] "GET /api/file?sid=cap_20261005_120000&name=points.bin HTTP/1.1" 200 -
+[15:49:56] "GET /api/file?sid=cap_20261005_120000&name=meta.json HTTP/1.1" 200 -
+[15:49:56] "GET /api/sessions HTTP/1.1" 200 -
+[15:49:56] "GET /api/sessions HTTP/1.1" 200 -
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.595s
+
+OK
+test_frozen_capture_root_ignores_shortcut_cwd (console_test.ConsoleStartupTest.test_frozen_capture_root_ignores_shortcut_cwd) ... ok
+test_occupied_default_port_uses_new_instance_server (console_test.ConsoleStartupTest.test_occupied_default_port_uses_new_instance_server) ... [15:49:57] "GET /api/leveling/sessions HTTP/1.1" 200 -
+ok
+test_replay_dir_found_in_source_layout (console_test.ConsoleStartupTest.test_replay_dir_found_in_source_layout) ... ok
+test_shell_url_is_relative_not_file_scheme (console_test.ConsoleStartupTest.test_shell_url_is_relative_not_file_scheme) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.742s
+
+OK
+human_replay ���� http://127.0.0.1:61478/�������̨�˳���
+test_accepts_real_board_layout (fetch_lib_test.TestMetaValidate.test_accepts_real_board_layout) ... ok
+test_rejects_frames_beyond_bin (fetch_lib_test.TestMetaValidate.test_rejects_frames_beyond_bin) ... ok
+test_rejects_old_16b_layout (fetch_lib_test.TestMetaValidate.test_rejects_old_16b_layout) ... ok
+test_filters (fetch_lib_test.TestPick.test_filters) ... ok
+test_order_stable_oldest_first (fetch_lib_test.TestPick.test_order_stable_oldest_first) ... ok
+test_region_ignores_trailing_pad (fetch_lib_test.TestSha256PointsRegion.test_region_ignores_trailing_pad) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.014s
+
+OK

@@ -1,0 +1,48 @@
+GL-A R2 返工范围与 SHA 复核（2026-10-05）
+=========================================
+HEAD（提交时，与 R1 相同）: 8676bb479d4ae35cf22075cfe70225cf2220572a
+工作树: 仅新增未跟踪路径（R1/R2 新增）+ 用户既有 dirty；R2 仅修改 R1 新增的两个文件；
+       未修改任何已跟踪文件，未 commit/push/reset/checkout。
+
+R2 变更文件 SHA256:
+625ff68225510af3e2ad9ef0e77d988a183f388e110f046040cbb14a1225e7fd  src/human_fall_detection/core/adaptive_ground/contracts.py
+d7f1045e098a341a5cfffa643d2fa735be8faa7023e9d007cf5f23f822f3cc4d  src/human_fall_detection/tests/test_agl_a_estimators.py
+
+R1→R2 对照:
+contracts.py  R1=d879a82ad3a0543abd5267a07e833b91c9458c9af1a9609d0bc06f884405d687（=修复前字节，已与临时回退核对一致）
+              R2=625ff68225510af3e2ad9ef0e77d988a183f388e110f046040cbb14a1225e7fd
+test 文件     R1=e37499f0f0446e9b97f89d8be147889347953801dc4fa2c41ff4003bbd540954
+              R2=d7f1045e098a341a5cfffa643d2fa735be8faa7023e9d007cf5f23f822f3cc4d（+2 回归用例，7 tests）
+
+回归:
+  修复前（最终用例版本；contracts.py 临时回退到 R1 提交字节后运行）:
+    python -B -W error -m unittest discover -s src/human_fall_detection/tests -p "test_agl_a_estimators.py" -v
+    → Ran 7 / FAILED (failures=2) / exit 1（AssertionError: Tuples differ ([0.0,0.0,1.0],-2.64)!=(…,-1.32)；2.64 != 1.32）
+    日志 10_regression_before_fix.txt
+  修复后:
+    AGL 专项 → Ran 7 / OK / exit 0（20_test_agl_a_log.txt）
+    全量     → Ran 465 / OK / exit 0（21_regression_after.txt；R1 基线 458，R1 提交 463，R2 +2 回归）
+
+样例 manifest 字节对照（同场景同 seed）:
+  R1（修复前）sha256=442b840bd0c2272c241655b1a1fb6a5b497e074ebef2b78c9abca616ed102fb5
+  R2（修复后）sha256=62588541d5ca71644e08443d16fe6854f188d1d6a96c2e531dfd9cb68679fee0
+  差异（20_manifest_diff.txt）：仅 /estimators/svd 的 offset_source_m、full_domain_residuals/p95_m、
+  signed_median_m 各 1 ulp（2.220446049250313e-16）；TLS/RANSAC 节点逐字节不变。
+  R1 目录内原 manifest 未被覆盖（历史产物保留）。
+
+冻结依赖 git blob 哈希（=基线，全部一致）:
+0150e5ebad0bbb8d6a0b35604904cf705712e09c src/human_fall_detection/core/ground.py
+ffa789e0c8d4e4eed3a4910a966f20219c297999 src/human_fall_detection/core/calibration.py
+060d75b7e2a4d16c77dfe114c9411ac0e3726bba src/human_fall_detection/core/joint_leveling.py
+6d683d3f810143322d99cc36ccd6270a294e866f src/human_fall_detection/core/ground_diagnostics.py
+9150cacd363e633b4fa6bdf9ef0b6416d166daf8 src/human_fall_detection/core/ground_evidence.py
+fb8b6974013c19b4b438a394186b8ed4b2ac08d8 src/human_fall_detection/core/numeric.py
+8409e1b6e151711202f03348eb1dccee8323f0b6 src/human_fall_detection/core/capture_input.py
+c1ff53144001715277790d13b798c75bcf49f352 pc_apps/human_replay/leveling_estimators/tls.py
+267d460c211d8721ce4777fc1ff6a74adac9d8cb pc_apps/human_replay/leveling_estimators/svd.py
+e79806e11d64f040082c60002e20c0cc51a40478 pc_apps/human_replay/leveling_estimators/ransac.py
+
+新路径状态（git status --porcelain）:
+?? docs/human_fall/evidence/2026-10-05_agl_a_r2/
+?? src/human_fall_detection/core/adaptive_ground/
+?? src/human_fall_detection/tests/test_agl_a_estimators.py

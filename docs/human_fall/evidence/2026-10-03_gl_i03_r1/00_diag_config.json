@@ -1,0 +1,132 @@
+{
+  "frozen_config": {
+    "load_type": "dict",
+    "top_keys": [
+      "ground_constrained"
+    ],
+    "resolved_equals_default": true
+  },
+  "missing_path": {
+    "load": "raised",
+    "exc_type": "FileNotFoundError",
+    "exc_module": "builtins",
+    "is_valueerror": false,
+    "is_oserror": true,
+    "is_yamlerror": false,
+    "caught_by_current_wrapper": true,
+    "message": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\gli03-cfg-jnrnbjhl\\\\missing.yaml'"
+  },
+  "yaml_syntax_error": {
+    "load": "raised",
+    "exc_type": "ParserError",
+    "exc_module": "yaml.parser",
+    "is_valueerror": false,
+    "is_oserror": false,
+    "is_yamlerror": false,
+    "caught_by_current_wrapper": false,
+    "message": "while parsing a flow sequence\n  in \"C:\\Users\\30680\\AppData\\Local\\Temp\\gli03-cfg-jnrnbjhl\\yaml_syntax_error.yaml\", line 1, column 21\nexpected ',' or ']', but got"
+  },
+  "empty_file": {
+    "load": "ok",
+    "load_type": "dict",
+    "section_present": false,
+    "note": "missing section would need an explicit refuse"
+  },
+  "top_level_list": {
+    "load": "ok",
+    "load_type": "list",
+    "section_present": false,
+    "note": "missing section would need an explicit refuse"
+  },
+  "missing_section": {
+    "load": "ok",
+    "load_type": "dict",
+    "section_present": false,
+    "note": "missing section would need an explicit refuse"
+  },
+  "section_not_mapping": {
+    "load": "raised",
+    "load_type": "dict",
+    "section_present": true,
+    "resolved_via": "resolve_constrained_settings",
+    "exc_type": "AttributeError",
+    "exc_module": "builtins",
+    "is_valueerror": false,
+    "is_oserror": false,
+    "is_yamlerror": false,
+    "caught_by_current_wrapper": false,
+    "message": "'int' object has no attribute 'items'"
+  },
+  "unknown_key": {
+    "load": "raised",
+    "load_type": "dict",
+    "section_present": true,
+    "resolved_via": "resolve_constrained_settings",
+    "exc_type": "ValueError",
+    "exc_module": "builtins",
+    "is_valueerror": true,
+    "is_oserror": false,
+    "is_yamlerror": false,
+    "caught_by_current_wrapper": true,
+    "message": "unknown constrained ground setting: bogus_key"
+  },
+  "bool_value": {
+    "load": "raised",
+    "load_type": "dict",
+    "section_present": true,
+    "resolved_via": "resolve_constrained_settings",
+    "exc_type": "ValueError",
+    "exc_module": "builtins",
+    "is_valueerror": true,
+    "is_oserror": false,
+    "is_yamlerror": false,
+    "caught_by_current_wrapper": true,
+    "message": "min_inliers must be an integer"
+  },
+  "nan_value": {
+    "load": "raised",
+    "load_type": "dict",
+    "section_present": true,
+    "resolved_via": "resolve_constrained_settings",
+    "exc_type": "ValueError",
+    "exc_module": "builtins",
+    "is_valueerror": true,
+    "is_oserror": false,
+    "is_yamlerror": false,
+    "caught_by_current_wrapper": true,
+    "message": "spatial_cell_m must be finite"
+  },
+  "negative_value": {
+    "load": "raised",
+    "load_type": "dict",
+    "section_present": true,
+    "resolved_via": "resolve_constrained_settings",
+    "exc_type": "ValueError",
+    "exc_module": "builtins",
+    "is_valueerror": true,
+    "is_oserror": false,
+    "is_yamlerror": false,
+    "caught_by_current_wrapper": true,
+    "message": "max_points_per_cell must be a positive integer"
+  },
+  "floor_violation": {
+    "load": "raised",
+    "load_type": "dict",
+    "section_present": true,
+    "resolved_via": "resolve_constrained_settings",
+    "exc_type": "ValueError",
+    "exc_module": "builtins",
+    "is_valueerror": true,
+    "is_oserror": false,
+    "is_yamlerror": false,
+    "caught_by_current_wrapper": true,
+    "message": "min_inliers must be >= 100"
+  },
+  "two_value_variant_ok": {
+    "load": "ok",
+    "load_type": "dict",
+    "section_present": true,
+    "resolved_via": "resolve_constrained_settings",
+    "resolved_equal_default": false
+  }
+}

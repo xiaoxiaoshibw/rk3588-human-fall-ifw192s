@@ -1,0 +1,703 @@
+{
+  "status": "SUBMITTED",
+  "self_check": {
+    "A01": "PASS",
+    "A02": "PASS",
+    "A03": "PASS",
+    "A04": "PASS",
+    "A05": "PASS",
+    "A06": "PASS",
+    "A07": "PASS",
+    "S01": "NOT_RUN",
+    "B01": "BLOCKED",
+    "D01": "NOT_RUN",
+    "Q01": "PASS",
+    "Q02": "PASS",
+    "Q03": "PASS",
+    "Q04": "PASS",
+    "Q05": "PASS",
+    "Q06": "NOT_RUN"
+  },
+  "required_table": "docs/human_fall/GLI06_ACCEPTANCE.md v1",
+  "development": {
+    "stages": {
+      "1": {
+        "status": {
+          "seen_pairwise_closed": 30,
+          "unresolved": 32
+        },
+        "worst_gt_normal_deg": 0.411852477597209,
+        "worst_gt_offset_m": 0.011593347400419507,
+        "worst_region_rms_m": 0.04311592885747703,
+        "worst_region_p95_m": 0.08114661205824372,
+        "counts": {
+          "full_k": 33370,
+          "stable": 20735,
+          "cycle": 0,
+          "nonconverged": 0,
+          "resource_gap": 0,
+          "violation": 0,
+          "tls_calls": 33370
+        },
+        "timing_max_by_stage_s": {
+          "sampling": 0.019115400005830452,
+          "raw": 0.10955870000179857,
+          "LO": 16.565870600374183,
+          "refine": 16.98360810003942,
+          "decision": 0.43693460000213236,
+          "serialization": 0.12535280000884086,
+          "variant_including_scalar_audit": 17.5782479000045
+        },
+        "cost_repeat_groups": 12
+      },
+      "2": {
+        "status": {
+          "seen_pairwise_closed": 20,
+          "unresolved": 42
+        },
+        "worst_gt_normal_deg": 0.323418438988271,
+        "worst_gt_offset_m": 0.002930087362588152,
+        "worst_region_rms_m": 0.04311677072657712,
+        "worst_region_p95_m": 0.07931811206446217,
+        "counts": {
+          "full_k": 29605,
+          "stable": 23386,
+          "cycle": 0,
+          "nonconverged": 6219,
+          "resource_gap": 0,
+          "violation": 0,
+          "tls_calls": 62975
+        },
+        "timing_max_by_stage_s": {
+          "sampling": 0.019639000005554408,
+          "raw": 0.10972869998659007,
+          "LO": 32.7403956001217,
+          "refine": 33.53032379987417,
+          "decision": 0.4052510999899823,
+          "serialization": 0.32167949998984113,
+          "variant_including_scalar_audit": 33.85187949999818
+        },
+        "cost_repeat_groups": 12
+      },
+      "3": {
+        "status": {
+          "seen_pairwise_closed": 25,
+          "unresolved": 37
+        },
+        "worst_gt_normal_deg": 0.2807286236334458,
+        "worst_gt_offset_m": 0.002742756458698148,
+        "worst_region_rms_m": 0.04309267156855649,
+        "worst_region_p95_m": 0.07916833945058756,
+        "counts": {
+          "full_k": 29605,
+          "stable": 23652,
+          "cycle": 0,
+          "nonconverged": 5953,
+          "resource_gap": 0,
+          "violation": 0,
+          "tls_calls": 92580
+        },
+        "timing_max_by_stage_s": {
+          "sampling": 0.019662100006826222,
+          "raw": 0.1069769999885466,
+          "LO": 44.81466810009442,
+          "refine": 45.99516700027743,
+          "decision": 0.3737021000124514,
+          "serialization": 0.32260740001220256,
+          "variant_including_scalar_audit": 46.275769800005946
+        },
+        "cost_repeat_groups": 12
+      }
+    },
+    "extra_unresolved": {
+      "2": [
+        "low_noise_7_False",
+        "low_noise_7_True",
+        "low_noise_19_False",
+        "low_noise_19_True",
+        "wall_7_False",
+        "wall_7_True",
+        "wall_19_False",
+        "wall_19_True",
+        "wall_41_False",
+        "wall_41_True"
+      ],
+      "3": [
+        "wall_7_False",
+        "wall_7_True",
+        "wall_19_False",
+        "wall_19_True",
+        "wall_41_False",
+        "wall_41_True"
+      ]
+    },
+    "false_closed": [],
+    "GT_scope": "single-plane synthetic cases only; table/dual not asserted one physical ground",
+    "costs_scope": "desktop; phase boundaries differ from native validated fitter"
+  },
+  "final_holdout": {
+    "stages": {
+      "1": {
+        "status": {
+          "seen_pairwise_closed": 15,
+          "unresolved": 15
+        },
+        "worst_gt_normal_deg": 0.5295493815761029,
+        "worst_gt_offset_m": 0.0081249629496698,
+        "worst_region_rms_m": 0.038112582315197686,
+        "worst_region_p95_m": 0.07174572177457042,
+        "counts": {
+          "full_k": 16332,
+          "stable": 10353,
+          "cycle": 0,
+          "nonconverged": 0,
+          "resource_gap": 0,
+          "violation": 0,
+          "tls_calls": 16332
+        },
+        "timing_max_by_stage_s": {
+          "sampling": 0.0,
+          "raw": 0.0,
+          "LO": 0.0,
+          "refine": 0.0,
+          "decision": 0.0,
+          "serialization": 0.0,
+          "variant_including_scalar_audit": 0.0
+        },
+        "cost_repeat_groups": 0
+      },
+      "2": {
+        "status": {
+          "seen_pairwise_closed": 9,
+          "unresolved": 21
+        },
+        "worst_gt_normal_deg": 0.1856215466580551,
+        "worst_gt_offset_m": 0.008977169931887019,
+        "worst_region_rms_m": 0.038978301243905146,
+        "worst_region_p95_m": 0.07234962316075645,
+        "counts": {
+          "full_k": 14451,
+          "stable": 11431,
+          "cycle": 0,
+          "nonconverged": 3020,
+          "resource_gap": 0,
+          "violation": 0,
+          "tls_calls": 30783
+        },
+        "timing_max_by_stage_s": {
+          "sampling": 0.0,
+          "raw": 0.0,
+          "LO": 0.0,
+          "refine": 0.0,
+          "decision": 0.0,
+          "serialization": 0.0,
+          "variant_including_scalar_audit": 0.0
+        },
+        "cost_repeat_groups": 0
+      },
+      "3": {
+        "status": {
+          "seen_pairwise_closed": 12,
+          "unresolved": 18
+        },
+        "worst_gt_normal_deg": 0.16567231185245238,
+        "worst_gt_offset_m": 0.003290227110431143,
+        "worst_region_rms_m": 0.038112582315197686,
+        "worst_region_p95_m": 0.07207555561498595,
+        "counts": {
+          "full_k": 14451,
+          "stable": 11471,
+          "cycle": 0,
+          "nonconverged": 2980,
+          "resource_gap": 0,
+          "violation": 0,
+          "tls_calls": 45234
+        },
+        "timing_max_by_stage_s": {
+          "sampling": 0.0,
+          "raw": 0.0,
+          "LO": 0.0,
+          "refine": 0.0,
+          "decision": 0.0,
+          "serialization": 0.0,
+          "variant_including_scalar_audit": 0.0
+        },
+        "cost_repeat_groups": 0
+      }
+    },
+    "extra_unresolved": {
+      "2": [
+        "low_noise_1707",
+        "low_noise_1719",
+        "low_noise_1741",
+        "wall_1707",
+        "wall_1719",
+        "wall_1741"
+      ],
+      "3": [
+        "wall_1707",
+        "wall_1719",
+        "wall_1741"
+      ]
+    },
+    "false_closed": [],
+    "GT_scope": "single-plane synthetic cases only; table/dual not asserted one physical ground",
+    "costs_scope": "desktop; phase boundaries differ from native validated fitter"
+  },
+  "seed_stability": [
+    {
+      "kind": "clean",
+      "k": 1,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.0,
+      "max_offset_pair_m": 0.0,
+      "offset_std_m": 0.0,
+      "normal_components_std": [
+        7.190007525061137e-33,
+        7.368789611317241e-34,
+        0.0
+      ]
+    },
+    {
+      "kind": "clean",
+      "k": 2,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.0,
+      "max_offset_pair_m": 0.0,
+      "offset_std_m": 0.0,
+      "normal_components_std": [
+        7.190007525061137e-33,
+        7.368789611317241e-34,
+        0.0
+      ]
+    },
+    {
+      "kind": "clean",
+      "k": 3,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.0,
+      "max_offset_pair_m": 0.0,
+      "offset_std_m": 0.0,
+      "normal_components_std": [
+        7.190007525061137e-33,
+        7.368789611317241e-34,
+        0.0
+      ]
+    },
+    {
+      "kind": "low_noise",
+      "k": 1,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.001708637640280931,
+      "max_offset_pair_m": 2.538496675796864e-05,
+      "offset_std_m": 1.1966588089836476e-05,
+      "normal_components_std": [
+        9.053566788227598e-06,
+        1.0754438496306106e-05,
+        2.8853001898652206e-09
+      ]
+    },
+    {
+      "kind": "low_noise",
+      "k": 2,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 8.537736462515939e-07,
+      "max_offset_pair_m": 0.0,
+      "offset_std_m": 0.0,
+      "normal_components_std": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "kind": "low_noise",
+      "k": 3,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 8.537736462515939e-07,
+      "max_offset_pair_m": 0.0,
+      "offset_std_m": 0.0,
+      "normal_components_std": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "kind": "high_noise",
+      "k": 1,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.2855474016552138,
+      "max_offset_pair_m": 0.005470214522643069,
+      "offset_std_m": 0.0023079038873942003,
+      "normal_components_std": [
+        0.0001213498980996335,
+        0.002039469789262301,
+        1.4775773716721323e-06
+      ]
+    },
+    {
+      "kind": "high_noise",
+      "k": 2,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.19313916360044175,
+      "max_offset_pair_m": 0.0018574101561137368,
+      "offset_std_m": 0.0007582847747719245,
+      "normal_components_std": [
+        0.0008398205520033725,
+        0.001219771864094463,
+        5.676638119929269e-07
+      ]
+    },
+    {
+      "kind": "high_noise",
+      "k": 3,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.19797365180439488,
+      "max_offset_pair_m": 0.0009399059178547553,
+      "offset_std_m": 0.0003837514754524604,
+      "normal_components_std": [
+        0.0008221408664425314,
+        0.0012539118647019532,
+        7.31399683908723e-07
+      ]
+    },
+    {
+      "kind": "wall",
+      "k": 1,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.006064449649427642,
+      "max_offset_pair_m": 0.00014874701810274615,
+      "offset_std_m": 6.38757119816135e-05,
+      "normal_components_std": [
+        4.275023407460877e-05,
+        2.5241649378697002e-05,
+        3.1822836061626223e-09
+      ]
+    },
+    {
+      "kind": "wall",
+      "k": 2,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.002416083782462437,
+      "max_offset_pair_m": 6.107543629219059e-05,
+      "offset_std_m": 2.4948526470372186e-05,
+      "normal_components_std": [
+        1.595963129775919e-05,
+        9.914866758846976e-06,
+        3.2635597554283676e-09
+      ]
+    },
+    {
+      "kind": "wall",
+      "k": 3,
+      "scope": "same source+FIT+validation; only RANSAC seed changes",
+      "max_normal_pair_deg": 0.006064449649427642,
+      "max_offset_pair_m": 0.00014874701810274615,
+      "offset_std_m": 6.38757119816135e-05,
+      "normal_components_std": [
+        4.275023407460877e-05,
+        2.5241649378697002e-05,
+        3.1822836061626223e-09
+      ]
+    }
+  ],
+  "active_costs": {
+    "1": {
+      "phase": "timing",
+      "k": 1,
+      "before": {
+        "peak_working_set_bytes": 35057664,
+        "working_set_bytes": 34541568,
+        "peak_private_commit_bytes": 663240704,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "after": {
+        "peak_working_set_bytes": 97382400,
+        "working_set_bytes": 83820544,
+        "peak_private_commit_bytes": 758059008,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "costs": [
+        {
+          "repeat": 0,
+          "sampling": 0.0008353999874088913,
+          "raw": 0.03338239999720827,
+          "LO": 0.03491299957386218,
+          "refine": 0.09726000067894347,
+          "decision": 0.09363909999956377,
+          "serialization": 0.036704400001326576,
+          "includes_scalar_audit_total": 0.47649749999982305,
+          "serialized_bytes": 3303235
+        },
+        {
+          "repeat": 1,
+          "sampling": 0.0006655000033788383,
+          "raw": 0.03341570001794025,
+          "LO": 0.03421180008444935,
+          "refine": 0.09022259945049882,
+          "decision": 0.07873830001335591,
+          "serialization": 0.03631120000500232,
+          "includes_scalar_audit_total": 0.49474220001138747,
+          "serialized_bytes": 3303252
+        },
+        {
+          "repeat": 2,
+          "sampling": 0.0006420999998226762,
+          "raw": 0.03298940000240691,
+          "LO": 0.033275000198045745,
+          "refine": 0.08690379990730435,
+          "decision": 0.07697829999960959,
+          "serialization": 0.03588029998354614,
+          "includes_scalar_audit_total": 0.4561684000073001,
+          "serialized_bytes": 3303263
+        }
+      ],
+      "semantic_sha": "045f77d11c16446e9e9b675696617ba680b87c4e705e2e75e88a000c08b4dead",
+      "status": "unresolved",
+      "runtime_scope": "desktop process includes imports; no RK3588 claim",
+      "physical_verified": false
+    },
+    "2": {
+      "phase": "timing",
+      "k": 2,
+      "before": {
+        "peak_working_set_bytes": 34963456,
+        "working_set_bytes": 34963456,
+        "peak_private_commit_bytes": 663261184,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "after": {
+        "peak_working_set_bytes": 113881088,
+        "working_set_bytes": 86011904,
+        "peak_private_commit_bytes": 775467008,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "costs": [
+        {
+          "repeat": 0,
+          "sampling": 0.0006947999936528504,
+          "raw": 0.03402330001699738,
+          "LO": 0.06559769983869046,
+          "refine": 0.17635180029901676,
+          "decision": 0.047732100007124245,
+          "serialization": 0.05217020001146011,
+          "includes_scalar_audit_total": 0.47487459998228587,
+          "serialized_bytes": 5070440
+        },
+        {
+          "repeat": 1,
+          "sampling": 0.0006347000016830862,
+          "raw": 0.0338186000008136,
+          "LO": 0.09205770085100085,
+          "refine": 0.19648299980326556,
+          "decision": 0.047946900012902915,
+          "serialization": 0.05375399999320507,
+          "includes_scalar_audit_total": 0.5154009999823757,
+          "serialized_bytes": 5070448
+        },
+        {
+          "repeat": 2,
+          "sampling": 0.0008302000060211867,
+          "raw": 0.033356300002196804,
+          "LO": 0.06847049965290353,
+          "refine": 0.17382279961020686,
+          "decision": 0.048115699988557026,
+          "serialization": 0.05349599997862242,
+          "includes_scalar_audit_total": 0.48446880001574755,
+          "serialized_bytes": 5070427
+        }
+      ],
+      "semantic_sha": "746072f1b5e5486d4184a927a52f8f08f68ec8401f295ac7a858e04ad5d1241c",
+      "status": "unresolved",
+      "runtime_scope": "desktop process includes imports; no RK3588 claim",
+      "physical_verified": false
+    },
+    "3": {
+      "phase": "timing",
+      "k": 3,
+      "before": {
+        "peak_working_set_bytes": 35004416,
+        "working_set_bytes": 34500608,
+        "peak_private_commit_bytes": 663269376,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "after": {
+        "peak_working_set_bytes": 141099008,
+        "working_set_bytes": 99987456,
+        "peak_private_commit_bytes": 802750464,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "costs": [
+        {
+          "repeat": 0,
+          "sampling": 0.0006162000063341111,
+          "raw": 0.03441180000663735,
+          "LO": 0.10056249995250255,
+          "refine": 0.253384899959201,
+          "decision": 0.044124199979705736,
+          "serialization": 0.0759805999987293,
+          "includes_scalar_audit_total": 0.5442295999964699,
+          "serialized_bytes": 7431527
+        },
+        {
+          "repeat": 1,
+          "sampling": 0.0006227999983821064,
+          "raw": 0.03314099999261089,
+          "LO": 0.0932116006151773,
+          "refine": 0.24848059978103265,
+          "decision": 0.04451479998533614,
+          "serialization": 0.0793390000180807,
+          "includes_scalar_audit_total": 0.5559792999993078,
+          "serialized_bytes": 7431573
+        },
+        {
+          "repeat": 2,
+          "sampling": 0.0006406999891623855,
+          "raw": 0.03594860000885092,
+          "LO": 0.12203710034373216,
+          "refine": 0.2742940003518015,
+          "decision": 0.04770500000449829,
+          "serialization": 0.07939909998094663,
+          "includes_scalar_audit_total": 0.583694100001594,
+          "serialized_bytes": 7431542
+        }
+      ],
+      "semantic_sha": "2b34934dedd7dfd574dc9008eba39942cba0def73406f433db3f243df6deedea",
+      "status": "unresolved",
+      "runtime_scope": "desktop process includes imports; no RK3588 claim",
+      "physical_verified": false
+    }
+  },
+  "independent_memory_peaks": {
+    "1": {
+      "phase": "memory",
+      "k": 1,
+      "before": {
+        "peak_working_set_bytes": 35115008,
+        "working_set_bytes": 35115008,
+        "peak_private_commit_bytes": 663425024,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "after": {
+        "peak_working_set_bytes": 71970816,
+        "working_set_bytes": 67256320,
+        "peak_private_commit_bytes": 733319168,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "costs": [
+        {
+          "repeat": 0,
+          "sampling": 0.0006319000094663352,
+          "raw": 0.03361409998615272,
+          "LO": 0.03795749993878417,
+          "refine": 0.10431629992672242,
+          "decision": 0.09031169998343103,
+          "serialization": 0.03451059997314587,
+          "includes_scalar_audit_total": 0.4706425000040326,
+          "serialized_bytes": 3303237
+        }
+      ],
+      "semantic_sha": "045f77d11c16446e9e9b675696617ba680b87c4e705e2e75e88a000c08b4dead",
+      "status": "unresolved",
+      "runtime_scope": "desktop process includes imports; no RK3588 claim",
+      "physical_verified": false
+    },
+    "2": {
+      "phase": "memory",
+      "k": 2,
+      "before": {
+        "peak_working_set_bytes": 35213312,
+        "working_set_bytes": 34656256,
+        "peak_private_commit_bytes": 663572480,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "after": {
+        "peak_working_set_bytes": 78929920,
+        "working_set_bytes": 71798784,
+        "peak_private_commit_bytes": 739872768,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "costs": [
+        {
+          "repeat": 0,
+          "sampling": 0.0006310000026132911,
+          "raw": 0.03265759997884743,
+          "LO": 0.07037990013486706,
+          "refine": 0.188364899600856,
+          "decision": 0.047856700024567544,
+          "serialization": 0.053397799987578765,
+          "includes_scalar_audit_total": 0.49837710001156665,
+          "serialized_bytes": 5070504
+        }
+      ],
+      "semantic_sha": "746072f1b5e5486d4184a927a52f8f08f68ec8401f295ac7a858e04ad5d1241c",
+      "status": "unresolved",
+      "runtime_scope": "desktop process includes imports; no RK3588 claim",
+      "physical_verified": false
+    },
+    "3": {
+      "phase": "memory",
+      "k": 3,
+      "before": {
+        "peak_working_set_bytes": 35160064,
+        "working_set_bytes": 34586624,
+        "peak_private_commit_bytes": 663343104,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "after": {
+        "peak_working_set_bytes": 91549696,
+        "working_set_bytes": 84484096,
+        "peak_private_commit_bytes": 753819648,
+        "method": "separate process Windows GetProcessMemoryInfo; includes imports and whole process"
+      },
+      "costs": [
+        {
+          "repeat": 0,
+          "sampling": 0.0006596999883186072,
+          "raw": 0.03472830000100657,
+          "LO": 0.10612479917472228,
+          "refine": 0.2660556995833758,
+          "decision": 0.04404219996649772,
+          "serialization": 0.0836284999968484,
+          "includes_scalar_audit_total": 0.5762206999934278,
+          "serialized_bytes": 7431535
+        }
+      ],
+      "semantic_sha": "2b34934dedd7dfd574dc9008eba39942cba0def73406f433db3f243df6deedea",
+      "status": "unresolved",
+      "runtime_scope": "desktop process includes imports; no RK3588 claim",
+      "physical_verified": false
+    }
+  },
+  "commands_exit": {
+    "02_r0_exit_01.txt": 0,
+    "05_checks_exit_01.txt": 0,
+    "06_r1_exit_01.txt": 0,
+    "08_publication_exit_01.txt": 0,
+    "09_checks_exit_02.txt": 0,
+    "10_fixed_source_exit_01.txt": 0,
+    "11_development_audit_exit_01.txt": 0,
+    "12_holdout_exit_01.txt": 0,
+    "13_memory_K1_exit_01.txt": 0,
+    "13_memory_K2_exit_01.txt": 0,
+    "13_memory_K3_exit_01.txt": 0,
+    "13_timing_K1_exit_01.txt": 0,
+    "13_timing_K2_exit_01.txt": 0,
+    "13_timing_K3_exit_01.txt": 0
+  },
+  "python38_AST_scripts": 30,
+  "scope_changed": [],
+  "scope_added_outside_run": [],
+  "head": "cbd0be1c86a1051a9a5800dfb7263f842896e1e6",
+  "branch": "master",
+  "real_active_K1_exact_W_and_metric_parity": true,
+  "robust_weights": "NOT_RUN condition branch; symmetric noise bias studied by bounded TLS; wall contamination sub-mm best validation, no material quality-gate failure requiring weights",
+  "robust_limits": "small wall effects are not claimed zero; no robust improvement claimed; independent review must confirm non-applicability",
+  "physical_verified": false,
+  "ground_valid": false,
+  "adoption": "retain_frozen_baseline_no_adoption",
+  "independent_review": "NOT_RUN pending fresh probe and specified model",
+  "stage_cost_scope": "Active per-call dtype conversion measured separately; historical 01 real timings not labeled active05 performance",
+  "regression_reuse": "GL-I05 R1 423/2 logs; src/human_fall_detection SHA matches GL-I05R2 baseline; no production/config change"
+}

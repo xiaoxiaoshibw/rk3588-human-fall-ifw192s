@@ -1,0 +1,273 @@
+{
+  "kind": "codex_gli05_independent_audit",
+  "checks": {},
+  "manifest_sha": "a6310dc1e2959feae63bb4592c3574c6a7b87aacb9a5de27d6c69069a3ee8086",
+  "manifest_mismatches": [
+    "docs/human_fall/CLI_RECOVERY.md"
+  ],
+  "python38_ast": [
+    "experiment.py",
+    "oracle_analysis.py",
+    "search_prototype.py",
+    "source_review.py",
+    "test_gli05_research.py"
+  ],
+  "scalar_metric_mismatches": [
+    {
+      "order": [
+        90,
+        100,
+        85
+      ],
+      "metric": "BEST_ONLY",
+      "expected": [
+        [
+          0,
+          1
+        ]
+      ],
+      "actual": []
+    },
+    {
+      "order": [
+        90,
+        85,
+        100
+      ],
+      "metric": "BEST_ONLY",
+      "expected": [
+        [
+          0,
+          2
+        ]
+      ],
+      "actual": []
+    },
+    {
+      "order": [
+        85,
+        90,
+        100
+      ],
+      "metric": "BEST_ONLY",
+      "expected": [
+        [
+          1,
+          2
+        ]
+      ],
+      "actual": []
+    }
+  ],
+  "accepted_nonunit_witnesses": [
+    {
+      "normal": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "status": "seen_pairwise_closed"
+    },
+    {
+      "normal": [
+        0.0,
+        0.0,
+        2.0
+      ],
+      "status": "seen_pairwise_closed"
+    }
+  ],
+  "accepted_nonfinite_settings": [
+    {
+      "key": "distinct_normal_deg",
+      "status": "seen_pairwise_closed"
+    },
+    {
+      "key": "distinct_offset_m",
+      "status": "unresolved"
+    },
+    {
+      "key": "support_close_ratio",
+      "status": "seen_dominant_pool_closed"
+    }
+  ],
+  "independent_terminal_cases": [
+    {
+      "order": [
+        0,
+        1,
+        2
+      ],
+      "expected": "seen_pairwise_closed",
+      "actual": "seen_pairwise_closed",
+      "matched": true
+    },
+    {
+      "order": [
+        0,
+        2,
+        1
+      ],
+      "expected": "seen_pairwise_closed",
+      "actual": "seen_pairwise_closed",
+      "matched": true
+    },
+    {
+      "order": [
+        1,
+        0,
+        2
+      ],
+      "expected": "seen_pairwise_closed",
+      "actual": "seen_pairwise_closed",
+      "matched": true
+    },
+    {
+      "order": [
+        1,
+        2,
+        0
+      ],
+      "expected": "seen_pairwise_closed",
+      "actual": "seen_pairwise_closed",
+      "matched": true
+    },
+    {
+      "order": [
+        2,
+        0,
+        1
+      ],
+      "expected": "seen_pairwise_closed",
+      "actual": "seen_pairwise_closed",
+      "matched": true
+    },
+    {
+      "order": [
+        2,
+        1,
+        0
+      ],
+      "expected": "seen_pairwise_closed",
+      "actual": "seen_pairwise_closed",
+      "matched": true
+    },
+    {
+      "order": [
+        0,
+        1,
+        2
+      ],
+      "expected": "unresolved",
+      "actual": "unresolved",
+      "matched": true
+    },
+    {
+      "order": [
+        0,
+        2,
+        1
+      ],
+      "expected": "unresolved",
+      "actual": "unresolved",
+      "matched": true
+    },
+    {
+      "order": [
+        1,
+        0,
+        2
+      ],
+      "expected": "unresolved",
+      "actual": "unresolved",
+      "matched": true
+    },
+    {
+      "order": [
+        1,
+        2,
+        0
+      ],
+      "expected": "unresolved",
+      "actual": "unresolved",
+      "matched": true
+    },
+    {
+      "order": [
+        2,
+        0,
+        1
+      ],
+      "expected": "unresolved",
+      "actual": "unresolved",
+      "matched": true
+    },
+    {
+      "order": [
+        2,
+        1,
+        0
+      ],
+      "expected": "unresolved",
+      "actual": "unresolved",
+      "matched": true
+    },
+    {
+      "order": [
+        0,
+        1
+      ],
+      "expected": "seen_dominant_pool_closed",
+      "actual": "seen_dominant_pool_closed",
+      "matched": true
+    },
+    {
+      "order": [
+        1,
+        0
+      ],
+      "expected": "seen_dominant_pool_closed",
+      "actual": "seen_dominant_pool_closed",
+      "matched": true
+    },
+    {
+      "order": [
+        0,
+        1
+      ],
+      "expected": "unresolved",
+      "actual": "unresolved",
+      "matched": true
+    },
+    {
+      "order": [
+        1,
+        0
+      ],
+      "expected": "unresolved",
+      "actual": "unresolved",
+      "matched": true
+    }
+  ],
+  "spatial_payload": {
+    "frames": 89,
+    "boxes": 4,
+    "records": 356,
+    "statistics_records": 356,
+    "jsonl_total_rows": 351255,
+    "residuals_for_first_point": {
+      "approved": -0.01996493334482774,
+      "WHAT_IF_negative_X": -0.020068789967577327,
+      "WHAT_IF_FIT_PCA_normal": -0.020068789967577327
+    },
+    "stored_residual": -0.020068789967577327,
+    "point_lookup_handler": false,
+    "selected_plane_used_for_color": true,
+    "posthoc_labeled_approved_prior": "approved_prior_from_human_draft"
+  },
+  "ledger_cost_fields": [
+    "baseline_fit",
+    "research_search",
+    "scoreboard_total"
+  ]
+}

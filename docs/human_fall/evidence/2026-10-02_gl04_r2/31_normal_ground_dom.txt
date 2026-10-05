@@ -1,0 +1,124 @@
+- banner:
+  - generic: IFW192S 雷达实时可视化
+  - textbox: ws://127.0.0.1:8765
+  - button "连接"
+  - button "● 录制"
+  - generic: 显示流 1.0 Hz
+  - generic: 丢帧 0
+  - generic: 呈现 1.0 Hz
+  - generic: 未呈现 0
+  - generic: 抽样 --
+  - generic: 帧龄(接收后) 0.00 s
+  - generic: 吞吐 0.0 MB/s
+  - generic: IMU -- Hz
+  - generic: 到达时刻 08:16:40
+- main:
+  - generic: 108 点 / 渲染 108 点 · 强度 10.0~200.0
+  - generic: HF-11 预览 · synthetic/offline normal · 静态fixture只读 · 不连接板端 · 参考网格≠已核验地面 · 未验收不产生 confirmed
+  - text: 点大小
+  - slider "点大小": "1.8"
+  - button "复位视角"
+  - complementary:
+    - heading "IMU 角速度 (原始值，单位待核验)" [level=3]
+    - heading "IMU 线加速度 (原始值，单位待核验)" [level=3]
+    - heading "设备状态 /device_status" [level=3]
+    - table:
+      - rowgroup:
+        - row "设备号 --":
+          - cell "设备号"
+          - cell "--"
+        - row "收发温度 ℃ --":
+          - cell "收发温度 ℃"
+          - cell "--"
+        - row "主板温度 ℃ --":
+          - cell "主板温度 ℃"
+          - cell "--"
+        - row "异常标志 --":
+          - cell "异常标志"
+          - cell "--"
+        - row "更新时刻 --":
+          - cell "更新时刻"
+          - cell "--"
+    - heading "坐标配平 (GL-04)" [level=3]
+    - button "原始雷达"
+    - button "配平 ground_local"
+    - button "俯瞰" [active]
+    - generic: 配平预览（未地面核验）
+    - table:
+      - rowgroup:
+        - row "坐标模式 ground_local（俯瞰 +Z 向下）":
+          - cell "坐标模式"
+          - cell "ground_local（俯瞰 +Z 向下）"
+        - 'row "frame / 单位 innolidar #7@1000.000 · m"':
+          - cell "frame / 单位"
+          - 'cell "innolidar #7@1000.000 · m"'
+        - row "源帧 / 显示帧 innolidar → ground_local":
+          - cell "源帧 / 显示帧"
+          - cell "innolidar → ground_local"
+        - row "标定 / schema syn-cal-1 / schema 1":
+          - cell "标定 / schema"
+          - cell "syn-cal-1 / schema 1"
+        - row "基底 / 变换 ground_tangent / unknown":
+          - cell "基底 / 变换"
+          - cell "ground_tangent / unknown"
+        - row "地面状态 valid · syn-gd-1":
+          - cell "地面状态"
+          - cell "valid · syn-gd-1"
+        - row "配平入口 可用（显式版本化 R/t）":
+          - cell "配平入口"
+          - cell "可用（显式版本化 R/t）"
+        - row "支持区 4/4pt 面 / - 线":
+          - cell "支持区"
+          - cell "4/4pt 面 / - 线"
+        - row "物理验证 地面核验=否 外参=否 IMU=否":
+          - cell "物理验证"
+          - cell "地面核验=否 外参=否 IMU=否"
+        - row "FPS / 队列 / 连接 1 render-fps · queue_dropped unknown · synthetic/offline":
+          - cell "FPS / 队列 / 连接"
+          - cell "1 render-fps · queue_dropped unknown · synthetic/offline"
+    - generic: 参考网格为无限装饰网格，≠ 已核验地面；配平仅应用板端显式版本化 R/t，不做浏览器拟合；支持区只消费显式字段。
+    - generic: 图例：装饰网格 = 灰蓝（始终显示，非地面）· 支持面 polygon = 青色（不透明 0.85）· 支持线 polyline = 蓝色（不透明 0.85）
+    - heading "人体跌倒 (HF-11，算法在 RK3588)" [level=3]
+    - button "选人模式：关"
+    - button "采集站姿基线"
+    - button "解除目标"
+    - table:
+      - rowgroup:
+        - row "请求通道 不可用 · /human_fall/":
+          - cell "请求通道"
+          - cell "不可用 · /human_fall/"
+        - row "目标 / 状态 t0001 / locked":
+          - cell "目标 / 状态"
+          - cell "t0001 / locked"
+        - row "跌倒状态 upright":
+          - cell "跌倒状态"
+          - cell "upright"
+        - row "可观测性 valid":
+          - cell "可观测性"
+          - cell "valid"
+        - row "位置 source (m) 3.00, 0.10, 0.80":
+          - cell "位置 source (m)"
+          - cell "3.00, 0.10, 0.80"
+        - row "距离 source (m) 3.08":
+          - cell "距离 source (m)"
+          - cell "3.08"
+        - row "坐标 / 标定 配平 ground_local（源 innolidar）· 标定 syn-cal-1 · 地面 valid":
+          - cell "坐标 / 标定"
+          - cell "配平 ground_local（源 innolidar）· 标定 syn-cal-1 · 地面 valid"
+        - row "目标基线 ready":
+          - cell "目标基线"
+          - cell "ready"
+        - row "预测 实测":
+          - cell "预测"
+          - cell "实测"
+        - row "事件保存 ok (0)":
+          - cell "事件保存"
+          - cell "ok (0)"
+    - generic: 拖框选择（选人模式下拖出矩形）或点下方候选；坐标均为雷达 source 系（innolidar），未标定为世界坐标。
+    - button "c0000 (3.00,0.10,-0.70) m d=3.08 pts=27"
+    - heading "跌倒事件历史" [level=3]
+    - heading "事件 / bridge 状态消息" [level=3]
+    - generic: "19:46:14 HF: 俯瞰 ground_local（+Z 向下，参考网格≠已核验地面）"
+    - generic: "19:45:14 HF: synthetic/offline 场景 normal 就绪（不连接板端、不发真实请求）"
+    - generic: "19:45:14 HF: synthetic/offline 加载静态fixture ../../docs/human_fall/evidence/2026-10-02_gl04_r2/fixtures/normal.json（浏览器只消费字段，不构造几何）"
+    - generic: 19:45:14 页面就绪，点击连接（默认地址已按页面域名填好）

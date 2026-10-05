@@ -1,0 +1,56 @@
+ok   packClientMessage has opcode+channel+uint32 string length+utf8
+ok   packClientMessage channel id is little endian
+ok   frameKey requires integer seq and finite stamps
+ok   sourceKey matches only exact seq+sec+nsec
+ok   headerFromPayload reads seq/secs/nsecs LE
+ok   parseRos1String honours uint32 length and rejects truncation
+ok   validSnapshot rejects unknown schema and non-finite geometry
+ok   validState rejects unknown version and non-finite position
+ok   projectNdc + ndcToPixels handle DPR/viewport offsets
+ok   boxRect / rectsIntersect handle missing corners
+ok   normalizePrefix defaults and forces trailing slash
+ok   cacheKey scopes a frame by its points topic
+ok   same raw frame must still belong to current session and epoch
+ok   nextPresentedFrame picks newest raw with output, forward-only
+ok   pruneRawFrames drops stale frames, preserves order, rejects negative age
+ok   displayKey/visualizationKey/frameKeys wire mapping
+ok   objectKeys isolates selected display/source topic and rejects mismatches
+ok   raw ROS header frame rejects invalid ranges and fractions
+ok   validRotation accepts proper rotations and rejects scale/reflect/NaN
+ok   applyRigid maps source point through R/t
+ok   parseGroundRender: missing block is unavailable, never identity
+ok   parseGroundRender: valid+bound block is ready and carries support budget
+ok   parseGroundRender: unsupported/invalid/unbound are refused without a matrix
+ok   parseSupport: frame mismatch is unavailable, binding and shape enforced
+ok   supportBudget: 0/3/3000/3001/9000 points, budget and original indices
+ok   candidateBox: ground box requires actual_points, never source corners
+ok   snapshotIdentity/sameSnapshot: same seq+stamp different frame does not match
+ok   projectPoint/boxProjectRect: behind and near/far clipping discard the box
+ok   validateSelection: rejects stale identity, stale age and unknown candidate
+ok   snapshotMeta reports frame/units/calibration/geometry/ground status honestly
+ok   packRos1String round-trips through parseRos1String
+ok   syntheticScenario: valid wire snapshot/state, frame-matched, explicit R/t
+ok   headerFrameFromPayload reads real frame_id and tolerates a short header
+ok   parseGroundRender consumes coordinate.ground + ground.support_polygon
+ok   parseGroundRender: identical alias ok, conflicting alias rejected
+ok   parseGroundRender: unknown/none ground and bad schema are unqualified
+ok   snapshotIdentity includes transform content (same id, changed R/t differs)
+ok   observationQualified requires current candidate and available verifier
+ok   parseGroundRender refuses unknown/non-metre transform units (C14/V03)
+ok   explicit 3D support with null/NaN Z is invalid, never flattened (C13/V02)
+ok   observationQualified requires snapshot/state calibration binding (C04/C06/V06)
+ok   observationQualified rejects source/session/snapshot_id mismatch (C04/C06)
+ok   observationQualified compares full nullable ground-derived binding (C05/V06)
+ok   selectionContextQualified separates selection from physical observation (V09/C01)
+ok   observationQualified rejects known-vs-missing/null binding both ways (C05/V06)
+ok   sourceAlignmentQualified accepts legacy source-only, gates verifier/schema (C01/C08/V09)
+ok   snapshotIdentity covers coordinate.source_frame and transform units (C11/V05)
+ok   parseGroundRender refuses a coordinate/source frame contradiction (V05/C05)
+ok   parseGroundRender refuses an explicit non-metre source units.length (V03/C14)
+ok   parseSupport refuses explicit non-metre support_units, tolerates legacy (V02/C13/C14)
+ok   snapshotIdentity covers units.length/ground kind+schema, candidateSignature covers center_ground_m (V05/C11)
+ok   actualObservationQualified rejects explicit negative actual-observation flags (V07/C08)
+ok   predictionDiagnosticQualified needs prediction+binding but not candidates (V07/C08)
+ok   selectionContextQualified refuses explicit wrong source units, tolerates legacy (V03/V09/C14)
+ok   sourcePositionQualified gates only explicit non-actual provenance (V07/V09/C08)
+HF lib checks: 55 passed

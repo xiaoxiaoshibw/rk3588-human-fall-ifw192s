@@ -1,0 +1,29 @@
+COMMAND: ['C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe', '-B', '-W', 'error', 'docs/human_fall/evidence/2026-10-02_gl03_r5/codex_review_01/closure_checks.py']
+test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind (__main__.ClosureChecks.test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind) ... 
+  test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind (__main__.ClosureChecks.test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind) (mode='removed') ... FAIL
+  test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind (__main__.ClosureChecks.test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind) (mode='null') ... FAIL
+test_G05_new_version_known_to_unknown_retires_old_track (__main__.ClosureChecks.test_G05_new_version_known_to_unknown_retires_old_track) ... ok
+test_G05_no_argument_reload_keeps_frozen_standalone (__main__.ClosureChecks.test_G05_no_argument_reload_keeps_frozen_standalone) ... ok
+
+======================================================================
+FAIL: test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind (__main__.ClosureChecks.test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind) (mode='removed')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r5\codex_review_01\closure_checks.py", line 25, in test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']),
+AssertionError: False is not true : complete unsupported artifact was treated as a minimal legacy summary
+
+======================================================================
+FAIL: test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind (__main__.ClosureChecks.test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind) (mode='null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\human_fall\evidence\2026-10-02_gl03_r5\codex_review_01\closure_checks.py", line 25, in test_G03_unsupported_full_parent_cannot_hide_behind_missing_kind
+    self.assertTrue(all(c['center_reference_m'] is None for c in snap['candidates']),
+AssertionError: False is not true : complete unsupported artifact was treated as a minimal legacy summary
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.185s
+
+FAILED (failures=2)
+
+EXIT=1

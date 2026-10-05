@@ -1,0 +1,73 @@
+PASS V01 missing R/t never identity
+FAIL V02 exact requested ground.support_polygon entry :: Expected values to be strictly equal:
++ actual - expected
+
++ 'unavailable'
+- 'ready'
+
+FAIL V06 valid transform + unknown ground refuses mode :: Expected values to be strictly equal:
+
+'ground' !== 'source'
+
+FAIL V06 valid transform + none ground refuses mode :: Expected values to be strictly equal:
+
+'ground' !== 'source'
+
+FAIL V06 unsupported calibration schema refuses mode :: Expected values to be strictly equal:
+
+'ground' !== 'source'
+
+FAIL V06 verifier unavailable clears observed status :: Expected values to be strictly equal:
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+FAIL V07 no candidate snapshot + ready baseline clears current status :: Expected values to be strictly equal:
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+FAIL V07 candidate list empty + ready baseline clears current status :: Expected values to be strictly equal:
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+FAIL V05 list closure same IDs changed candidate content rejected :: Expected values to be strictly equal:
+
+1 !== 0
+
+FAIL V05 same IDs changed R/t rejected :: Expected values to be strictly equal:
+
+1 !== 0
+
+FAIL V05 caller mutation after rendered button rejected :: Expected values to be strictly equal:
+
+1 !== 0
+
+PASS V06 silent expiry refuses old choice; history retained
+PASS V06 disconnect preserves history and refuses old choice
+FAIL V06 future foreign snapshot cannot change current frame R/t :: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
++   22.799999237060547,
+-   2.799999952316284,
+    -0.20000000298023224,
+    0.5,
++   23.200000762939453,
+-   3.200000047683716,
+    0.20000000298023224,
+    2
+  ]
+
+FAIL V03 mode labels/current position use ground coordinates :: The expression evaluated to a falsy value:
+
+  assert.ok(w.$('hfPos').textContent.includes('1.00'))
+
+PASS V04 DPR-only overlay backing changes after frame
+PASS V04 CSS resize reprojection uses current camera and rect
+PASS V02 budget 3001/9000 supports has provenance and <=3000
+{"pass":6,"fail":12}

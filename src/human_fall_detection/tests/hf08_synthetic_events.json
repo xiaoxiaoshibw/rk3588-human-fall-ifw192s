@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "dataset_version": "hf08-synthetic-hand-table-v1",
+  "event_time_domain": "device_stamp_s_unanchored",
+  "match_tolerance_s": 1.0,
+  "sessions": [
+    {
+      "session_id": "hf08_synthetic_hand_table",
+      "prediction_time_domain": "device_stamp_s_unanchored",
+      "labels_time_domain": "device_stamp_s_unanchored",
+      "time_epoch": 0,
+      "split_role": "synthetic",
+      "split_group": "hf08_synthetic_hand_table",
+      "dataset_kind": "synthetic",
+      "anonymous_subjects": ["person-a"],
+      "action": "known synthetic fall-event table; not human-performance data",
+      "capture_conditions": "hand-calculable event timing fixture",
+      "labels_status": "known_synthetic",
+      "labeled_events": [
+        {"event_id": "truth-1", "target_id": "person-a", "start_s": 10.0},
+        {"event_id": "truth-2", "target_id": "person-a", "start_s": 10.8}
+      ],
+      "event_target_bindings": [
+        {"event_id": "pred-early", "target_id": "person-a"},
+        {"event_id": "pred-near-1", "target_id": "person-a"},
+        {"event_id": "pred-near-2", "target_id": "person-a"},
+        {"event_id": "pred-negative", "target_id": "person-a"}
+      ],
+      "predicted_events": [
+        {"event_id": "pred-early", "track_id": "t0001", "time_s": 9.5},
+        {"event_id": "pred-near-1", "track_id": "t0001", "time_s": 10.7},
+        {"event_id": "pred-near-2", "track_id": "t0001", "time_s": 10.1},
+        {"event_id": "pred-negative", "track_id": "t0001", "time_s": 25.0}
+      ],
+      "negative_intervals": [
+        {"start_s": 20.0, "end_s": 30.0}
+      ],
+      "track_observations": [
+        {"time_epoch": 0, "target_id": "person-a", "track_id": "t0001", "time_s": 8.0},
+        {"time_epoch": 0, "target_id": "person-a", "track_id": "t0002", "time_s": 9.0}
+      ],
+      "observation_intervals": [
+        {"start_s": 0.0, "end_s": 5.0, "observability": "valid"},
+        {"start_s": 5.0, "end_s": 8.0, "observability": "degraded"}
+      ]
+    }
+  ]
+}

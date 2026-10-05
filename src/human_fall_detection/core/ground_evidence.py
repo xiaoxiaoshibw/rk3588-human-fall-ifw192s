@@ -1,0 +1,352 @@
+"""GL-E02: offline, content-bound evidence preparation; never fit or qualify.
+
+JSON schemas here are deliberately small and strict. ``known`` means a cited
+observation, not proof of truth. Unbound observations retain their value but
+cannot become recording-qualified inputs. No cache, runtime artifact or ROS.
+"""
+import copy
+import hashlib
+import json
+import math
+from datetime import datetime
+from pathlib import Path
+
+import numpy as np
+
+from .capture_input import (CaptureInputError, gate_selection, load_adapted,
+                            read_snapshot, sha256_file, source_identity)
+
+RUN_ROOT = "docs/human_fall/evidence/2026-10-04_gl_e02_r1"
+MEASUREMENTS = ("source_axes", "world_up_source", "origin_definition",
+                "origin_height_m", "installation_angle_deg",
+                "photo_recording_binding", "photo_capture_time",
+                "optical_window_height_m")
+METHODS = ("manufacturer_archive", "survey", "inclinometer",
+           "manual_landmark", "user_statement")
+
+
+def require(condition, message):
+    if not condition:
+        raise CaptureInputError(message)
+
+
+def keys(value, expected, name):
+    require(isinstance(value, dict) and set(value) == set(expected),
+            name + " has missing/unsupported keys")
+
+
+def text(value, name):
+    require(isinstance(value, str) and bool(value.strip()), name + " needs text")
+
+
+def number(value, name):
+    require(type(value) in (int, float) and math.isfinite(value),
+            name + " must be finite numeric")
+    return float(value)
+
+
+def digest(value):
+    try:
+        raw = json.dumps(value, sort_keys=True, separators=(",", ":"),
+                         ensure_ascii=False, allow_nan=False).encode("utf8")
+    except (TypeError, ValueError) as exc:
+        raise CaptureInputError("invalid JSON content: " + str(exc))
+    return hashlib.sha256(raw).hexdigest()
+
+
+def request_id(request):
+    return "gle02:" + digest({k: v for k, v in request.items() if k != "request_id"})
+
+
+def selection_id(selection):
+    return "selection:" + digest({k: v for k, v in selection.items() if k != "selection_id"})
+
+
+def read_json(path):
+    raw, sha = read_snapshot(path, "evidence")
+    try:
+        result = json.loads(raw.decode("utf8"))
+        digest(result)  # Reject NaN/Infinity throughout, including opaque notes.
+        return result, sha
+    except (ValueError, UnicodeError) as exc:
+        raise CaptureInputError("bad evidence JSON: " + str(exc))
+
+
+def read_bound_json(ref):
+    value, sha = read_json(ref["path"])
+    require(sha == ref["sha256"], "parsed JSON snapshot identity mismatch")
+    return value
+
+
+def timestamp(value, name):
+    text(value, name)
+    try:
+        require(datetime.fromisoformat(value).utcoffset() is not None,
+                name + " needs timezone")
+    except ValueError:
+        raise CaptureInputError(name + " needs ISO date/time with timezone")
+
+
+def references(names, files):
+    require(isinstance(names, list) and bool(names), "evidence_refs required")
+    require(len(set(names)) == len(names), "duplicate evidence_ref")
+    for name in names:
+        require(isinstance(name, str) and name in files, "unknown evidence_ref")
+
+
+def check_measurement(name, record, binding, files):
+    keys(record, ("status", "value", "unit", "uncertainty", "frame",
+                  "reference", "method", "evidence_refs", "binding",
+                  "observer", "observed_at", "basis"), name)
+    require(record["status"] in ("known", "unknown"), name + " status")
+    if record["status"] == "unknown":
+        require(record["value"] is None and record["binding"] is None,
+                "unknown value/binding must be null")
+        return dict(record, recording_eligibility="unknown")
+    require(record["method"] in METHODS, "independent measurement method required")
+    references(record["evidence_refs"], files)
+    text(record["observer"], "observer")
+    text(record["basis"], "measurement basis")
+    timestamp(record["observed_at"], "observed_at")
+    if record["binding"] is not None:
+        require(digest(record["binding"]) == digest(binding), "measurement binding mismatch")
+    value = record["value"]
+    if name in ("origin_height_m", "optical_window_height_m", "installation_angle_deg"):
+        require(record["unit"] == ("deg" if name.endswith("deg") else "m"), "measurement unit")
+        number(value, name)
+        if name.endswith("height_m"):
+            require(value >= 0, "height must be nonnegative")
+        require(number(record["uncertainty"], "uncertainty") >= 0, "negative uncertainty")
+        require(record["reference"] == ("optical_window" if name == "optical_window_height_m"
+                                        else "point_origin" if name == "origin_height_m"
+                                        else "mounting_direction"), "window is not point origin")
+        require(record["frame"] == binding["frame"], "measurement frame mismatch")
+    elif name == "world_up_source":
+        require(record["unit"] == "unit_vector" and record["frame"] == binding["frame"]
+                and record["reference"] == "world_up", "up frame/unit/reference")
+        require(isinstance(value, list) and len(value) == 3, "up needs 3 components")
+        v = np.array([number(x, "up") for x in value])
+        require(abs(float(np.linalg.norm(v)) - 1) <= 1e-6, "up must be unit vector")
+        require(number(record["uncertainty"], "up uncertainty degrees") >= 0, "up uncertainty")
+    elif name == "source_axes":
+        keys(value, ("axes", "from_frame", "to_frame", "rotation", "translation_m", "enabled"), name)
+        require(value["from_frame"] == "sdk_native" and value["to_frame"] == binding["frame"],
+                "SDK transform direction must be sdk_native -> effective source")
+        require(type(value["enabled"]) is bool, "SDK enabled must be bool")
+        require(isinstance(value["axes"], list) and len(value["axes"]) == 3, "three axis definitions")
+        for axis in value["axes"]:
+            text(axis, "axis definition")
+        require(record["unit"] == "m" and record["frame"] == binding["frame"], "axes frame/unit")
+        rotation = value["rotation"]
+        translation = value["translation_m"]
+        require(isinstance(rotation, list) and len(rotation) == 3
+                and all(isinstance(row, list) and len(row) == 3 for row in rotation)
+                and isinstance(translation, list) and len(translation) == 3, "SDK R/t shape")
+        r = np.array([[number(x, "SDK rotation") for x in row] for row in rotation])
+        t = np.array([number(x, "SDK translation") for x in translation])
+        require(r.shape == (3, 3) and t.shape == (3,) and np.isfinite(r).all()
+                and np.isfinite(t).all(), "SDK R/t shape/finite")
+        require(np.allclose(r.T.dot(r), np.eye(3), atol=1e-6, rtol=0)
+                and abs(np.linalg.det(r) - 1) <= 1e-6, "SDK R must be proper rotation")
+        if not value["enabled"]:
+            require(np.array_equal(r, np.eye(3)) and np.array_equal(t, np.zeros(3)),
+                    "disabled transform must be identity")
+        require(number(record["uncertainty"], "axes uncertainty degrees") >= 0, "axes uncertainty")
+    elif name == "origin_definition":
+        require(record["frame"] == binding["frame"] and record["reference"] == "point_origin"
+                and record["unit"] == "description", "origin definition frame/reference/unit")
+        text(value, "point origin definition")
+    elif name == "photo_recording_binding":
+        keys(value, ("photo_sha256", "installation_unchanged", "scene_same"), name)
+        require(value["photo_sha256"] == files["photo"]["sha256"]
+                and value["installation_unchanged"] is True and value["scene_same"] is True,
+                "photo/install/scene binding mismatch")
+        require(record["unit"] == "statement", "photo binding unit")
+    else:
+        require(record["unit"] == "statement", "photo capture time unit")
+        text(value, "photo capture time statement")
+    complete = all(binding[k] is not None for k in ("run_id", "config_sha256", "run_sha256", "sdk_sha256"))
+    return dict(record, recording_eligibility=("cited_pending_review" if complete
+                and record["binding"] is not None else "unknown"))
+
+
+def check_selection(selection, manifest, points, binding, files):
+    if selection is None:
+        return None
+    keys(selection, ("selection_id", "version", "binding", "fit", "validation"), "selection")
+    text(selection["selection_id"], "selection_id")
+    require(selection["selection_id"] == selection_id(selection), "same selection ID different content")
+    require(type(selection["version"]) is int and selection["version"] >= 1, "selection version")
+    require(digest(selection["binding"]) == digest(binding), "selection source/run binding mismatch")
+    require(isinstance(selection["validation"], list) and len(selection["validation"]) >= 3,
+            "need at least three validation groups")
+    resolved = []
+    ids = set()
+    for region in [selection["fit"]] + selection["validation"]:
+        keys(region, ("region_id", "frame_group", "indices", "source_sha256",
+                      "confirmation", "spatial_description", "selection_method"), "region")
+        text(region["region_id"], "region_id")
+        require(region["region_id"] not in ids, "ROI alias/duplicate ID")
+        ids.add(region["region_id"])
+        require(region["source_sha256"] == binding["bin_sha256"], "region source SHA mismatch")
+        require(region["selection_method"] == "independent_manual_source_rows",
+                "no model residual/fit-colored/pixel projection selection")
+        text(region["spatial_description"], "spatial_description")
+        rows = region["indices"]
+        require(isinstance(rows, list) and bool(rows) and all(type(x) is int for x in rows)
+                and len(set(rows)) == len(rows), "ROI rows must be unique integers")
+        confirmation = region["confirmation"]
+        keys(confirmation, ("status", "person", "time", "basis", "evidence_refs", "landmarks"), "confirmation")
+        require(confirmation["status"] in ("unknown", "user_confirmed"), "confirmation status")
+        if confirmation["status"] == "user_confirmed":
+            text(confirmation["person"], "confirming person")
+            timestamp(confirmation["time"], "confirmation time")
+            text(confirmation["basis"], "independent identity basis")
+            references(confirmation["evidence_refs"], files)
+            require(isinstance(confirmation["landmarks"], list) and bool(confirmation["landmarks"]),
+                    "manual scene/3D landmarks required")
+            for landmark in confirmation["landmarks"]:
+                text(landmark, "landmark")
+        resolved.append({k: region[k] for k in ("region_id", "frame_group", "indices")})
+    fit, validations = gate_selection(points, manifest, resolved[0], None,
+                                     resolved[0]["frame_group"], resolved[1:])
+    output = copy.deepcopy(selection)
+    for region, rows in zip([output["fit"]] + output["validation"],
+                            [fit.tolist()] + [r["indices"] for r in validations]):
+        group = manifest["frame_groups"][region["frame_group"]]
+        a = points[rows]
+        require(np.isfinite(a).all() and np.all(np.any(a != 0, axis=1)), "ROI invalid/zero points")
+        region["members"] = [{"pooled_row": row, "source_row": row - group["rows"][0],
+                               "ordinal": group["ordinal"], "seq": group["seq"]} for row in rows]
+    return output
+
+
+def prepare_packet(request, output, repo_root):
+    """Re-read all inputs, validate, then exclusively create five pending JSONs.
+
+    ``request_id`` is a digest of the entire request except the ID itself;
+    content changes need a new ID. Mutable callers and repeated runs never
+    reuse earlier validated state. Publication is confined to this work item.
+    """
+    request = copy.deepcopy(request)
+    digest(request)
+    keys(request, ("kind", "schema", "request_id", "units", "files", "run",
+                   "expected_source", "measurements", "selection", "scene_plan"), "request")
+    require(request["kind"] == "ground_evidence_request" and type(request["schema"]) is int
+            and request["schema"] == 1 and request["units"] == "m", "kind/schema/units")
+    require(request["request_id"] == request_id(request), "same-ID different content/caller mutation")
+    files = request["files"]
+    require(isinstance(files, dict) and {"npz", "chain", "audit", "photo", "photo_record"} <= set(files),
+            "required file refs missing")
+    for name, ref in files.items():
+        text(name, "file ref name")
+        keys(ref, ("path", "sha256"), "file ref")
+        text(ref["path"], "file path")
+        require(isinstance(ref["sha256"], str) and len(ref["sha256"]) == 64
+                and all(c in "0123456789abcdef" for c in ref["sha256"]), "file SHA")
+        require(sha256_file(ref["path"]) == ref["sha256"], "file identity mismatch: " + name)
+    manifest, points = load_adapted(files["npz"]["path"])
+    chain = read_bound_json(files["chain"])
+    audit = read_bound_json(files["audit"])
+    require(type(chain.get("schema")) is int and chain["schema"] == 1
+            and chain.get("kind") == "original_bag_canonical_chain_observation", "GL-E01 chain schema")
+    require(type(audit.get("schema")) is int and audit["schema"] == 1
+            and audit.get("kind") == "original_bag_bin_npz_chain_audit"
+            and audit.get("all_headers_layout_bytes_xyz_match") is True, "GL-E01 audit schema/result")
+    source = manifest["source"]
+    bag_sha = source["source_bag_sha256_declared"]
+    require(chain["source"]["sha256_before"] == chain["source"]["sha256_after"] == bag_sha
+            == audit["source_bag_sha256_verified"], "bag source mismatch")
+    for key, expected in (("meta_sha256", source["meta_sha256"]),
+                          ("bin_sha256", source["bin_sha256"]),
+                          ("npz_sha256", files["npz"]["sha256"]),
+                          ("xyz_sha256", manifest["points"]["sha256"])):
+        require(audit[key] == expected, "audit mismatch: " + key)
+    require(chain["canonical_bin_sha256"] == source["bin_sha256"]
+            and chain["canonical_xyz_sha256"] == manifest["points"]["sha256"], "chain digest mismatch")
+    require(len(chain["frames"]) == len(manifest["frames"]), "frame count mismatch")
+    for observed, frame in zip(chain["frames"], manifest["frames"]):
+        for key in ("ordinal", "seq", "stamp_sec", "stamp_nanosec", "offset_points", "count_points", "dropped_points", "bag_time_sec"):
+            value = round(observed[key], 6) if key == "bag_time_sec" else observed[key]
+            require(type(value) is type(frame[key]) and value == frame[key], "source frame mismatch: " + key)
+        require(observed["frame_id"] == manifest["declared"]["frame"], "chain frame mismatch")
+    run = request["run"]
+    keys(run, ("run_id", "config_ref", "run_ref", "sdk_ref", "code_refs"), "run")
+    for name in ("config_ref", "run_ref", "sdk_ref"):
+        if run[name] is not None:
+            require(isinstance(run[name], str) and run[name] in files, "run ref missing")
+    if run["run_id"] is not None:
+        text(run["run_id"], "run_id")
+    references(run["code_refs"], files)
+    binding = {"source_id": source_identity(source["meta_sha256"], source["bin_sha256"]),
+               "bag_sha256": bag_sha, "bin_sha256": source["bin_sha256"],
+               "frame": manifest["declared"]["frame"], "units": manifest["declared"]["units"],
+               "window_bag_time_sec": [manifest["frames"][0]["bag_time_sec"], manifest["frames"][-1]["bag_time_sec"]],
+               "run_id": run["run_id"],
+               "code_sha256": {n: files[n]["sha256"] for n in run["code_refs"]}}
+    for name in ("config", "run", "sdk"):
+        ref = run[name + "_ref"]
+        binding[name + "_sha256"] = files[ref]["sha256"] if ref is not None else None
+    require(digest(request["expected_source"]) == digest(binding), "source/window/run/config/version binding mismatch")
+    photo = read_bound_json(files["photo_record"])
+    require(type(photo.get("schema")) is int and photo["schema"] == 1
+            and photo.get("kind") == "gle02_user_scene_reference"
+            and photo.get("sha256") == files["photo"]["sha256"], "photo reference schema/hash mismatch")
+    require(photo.get("scene_authenticity") == "user_confirmed"
+            and photo.get("reference_view_direction") == "user_confirmed_correct"
+            and photo.get("physical_verified") is False, "photo confirmation/qualification")
+    keys(request["measurements"], MEASUREMENTS, "measurements")
+    measurements = {n: check_measurement(n, request["measurements"][n], binding, files) for n in MEASUREMENTS}
+    if measurements["origin_height_m"]["status"] == "known":
+        require(measurements["origin_definition"]["status"] == "known", "height needs independent origin definition")
+    selection = check_selection(request["selection"], manifest, points, binding, files)
+    plan = request["scene_plan"]
+    require(isinstance(plan, list), "scene plan list")
+    for area in plan:
+        keys(area, ("region_id", "description", "status"), "scene plan")
+        text(area["region_id"], "planned region")
+        text(area["description"], "planned description")
+        require(area["status"] == "spatial_plan_only", "photo areas are not source validation")
+    gaps = [n for n, r in measurements.items() if r["recording_eligibility"] == "unknown"]
+    if selection is None:
+        gaps.append("independent_fit_and_three_validation_source_rows")
+    elif any(r["confirmation"]["status"] != "user_confirmed" for r in [selection["fit"]] + selection["validation"]):
+        gaps.append("manual_ground_identity")
+    gaps.append("independent_physical_review_and_tolerances")
+    for name, ref in files.items():
+        require(sha256_file(ref["path"]) == ref["sha256"], "input changed during preparation: " + name)
+    # Also cover adapter's external inputs, absent from the caller ref list.
+    for name in ("meta", "bin"):
+        require(sha256_file(source[name + "_path"]) == source[name + "_sha256"], "source changed during preparation")
+    packet = {"kind": "pending_evidence_packet", "schema": 1,
+              "packet_id": request["request_id"], "binding": binding,
+              "physical_verified": False, "extrinsics_verified": False,
+              "candidate_eligible": False, "runtime_eligible": False,
+              "review_status": "pending", "source_chain": "GL-E01_cited_and_correlated",
+              "source_unit_qualification": "metadata_declared", "data_use": "exposed_development_data",
+              "gaps": gaps}
+    outputs = {"pending_evidence_packet.json": packet,
+               "measurement_record.json": {"kind": "measurement_record", "schema": 1, "measurements": measurements},
+               "evidence_index.json": {"kind": "evidence_index", "schema": 1, "files": files,
+                                        "photo_confirmation": photo, "scene_plan": plan, "binding": binding},
+               "selection_draft.json": {"kind": "ground_selection_pending_draft", "schema": 1,
+                                         "selection": selection, "review_status": "pending", "physical_verified": False},
+               "gaps.json": {"kind": "ground_evidence_gaps", "schema": 1, "P01": "BLOCKED", "gaps": gaps}}
+    root = Path(repo_root).resolve()
+    allowed = root / RUN_ROOT
+    target = Path(output).absolute()
+    # Reject junction/symlink aliases as well as traversal and protected trees.
+    require(target.resolve() == target, "output path alias/traversal")
+    require(allowed in target.parents and target != allowed, "output outside this work item")
+    require(not target.exists(), "output already exists")
+    for p in [target] + list(target.parents):
+        require(not p.is_symlink(), "output symlink alias")
+    for ref in files.values():
+        p = Path(ref["path"]).resolve()
+        require(target != p and target not in p.parents, "output contains an input")
+    require(target.parent.is_dir(), "output parent must already exist")
+    target.mkdir(exist_ok=False)
+    for name, value in outputs.items():
+        with (target / name).open("x", encoding="utf8") as handle:
+            json.dump(value, handle, ensure_ascii=False, indent=2, allow_nan=False)
+    return copy.deepcopy(packet)

@@ -1,0 +1,13 @@
+=== adapted real reload via core loader (independent of implement entry)
+points: (4372400, 3) dtype: float32
+frames: 89 groups: 89
+time_domain: device_stamp_s_unanchored
+provenance: {"point_index_domain": "capture_export_row", "original_bag_point_index": "unknown", "source_bag_hash_verified": false, "physical_verified": false}
+sample mapping: [0, 49129, 49130, 4372399] -> [0, 0, 1, 88]
+zero_rows independent recount: 673315
+real reload exit=0
+---
+=== compare stored reload.json against fresh reload points+manifest
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AttributeError: 'int' object has no attribute 'get'

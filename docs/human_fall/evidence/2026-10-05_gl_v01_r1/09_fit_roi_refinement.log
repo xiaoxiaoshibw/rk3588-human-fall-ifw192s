@@ -1,0 +1,11 @@
+cap_20261004_203349 69b62cb4580943118e8f5766fa13885b [[3.0, 3.25, 0.0, 0.25], [0.75, 1.0, -1.0, -0.75], [1.25, 1.5, 0.25, 0.5], [2.0, 2.25, -0.5, -0.25]]
+冻结四区source rows与3个留出帧
+同域TLS / SVD / RANSAC与全点/逐区/留帧可行度评估
+{"sid": "cap_20261004_203349", "job_id": "69b62cb4580943118e8f5766fa13885b", "recommended": null, "artifacts": [], "methods": {"tls": {"valid": false, "reject_reasons": ["GL_HOLDOUT_QUALITY"], "full": {"count": 43521, "rms_m": 0.01503353368007114, "p95_m": 0.029460916091500033, "support_ratio": 0.9993106776039153, "median_signed_m": 0.0005254640952805367, "status": "PASS"}}, "svd": {"valid": false, "reject_reasons": ["GL_HOLDOUT_QUALITY"], "full": {"count": 43521, "rms_m": 0.015033533680071138, "p95_m": 0.029460916091500255, "support_ratio": 0.9993106776039153, "median_signed_m": 0.0005254640952809808, "status": "PASS"}}, "ransac": {"valid": false, "reject_reasons": ["GL_HOLDOUT_QUALITY"], "full": {"count": 43521, "rms_m": 0.015453950717499622, "p95_m": 0.030136133499648166, "support_ratio": 0.9994485420831323, "median_signed_m": 0.0024276403040586203, "status": "PASS"}}}}
+cap_20261004_203135 7cb130bf4228417db41526299a438a31 [[2.75, 3.0, -0.75, -0.5], [1.0, 1.25, 0.25, 0.5], [0.75, 1.0, -1.0, -0.75], [2.0, 2.25, 0.0, 0.25]]
+冻结四区source rows与3个留出帧
+同域TLS / SVD / RANSAC与全点/逐区/留帧可行度评估
+生成 TLS 全帧配平数据
+生成 SVD 全帧配平数据
+生成 RANSAC 全帧配平数据
+{"sid": "cap_20261004_203135", "job_id": "7cb130bf4228417db41526299a438a31", "recommended": "tls", "artifacts": ["tls", "svd", "ransac"], "methods": {"tls": {"valid": true, "reject_reasons": [], "full": {"count": 51711, "rms_m": 0.016305960565745084, "p95_m": 0.030933734565285254, "support_ratio": 0.9985109551159328, "median_signed_m": -0.00040975099605544685, "status": "PASS"}}, "svd": {"valid": true, "reject_reasons": [], "full": {"count": 51711, "rms_m": 0.016305960565745084, "p95_m": 0.030933734565284365, "support_ratio": 0.9985109551159328, "median_signed_m": -0.00040975099605389254, "status": "PASS"}}, "ransac": {"valid": true, "reject_reasons": [], "full": {"count": 51711, "rms_m": 0.016579345947815443, "p95_m": 0.03157563797867091, "support_ratio": 0.9985689698516756, "median_signed_m": -0.0024263738743965924, "status": "PASS"}}}}

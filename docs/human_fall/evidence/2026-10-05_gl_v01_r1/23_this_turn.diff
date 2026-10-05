@@ -1,0 +1,189 @@
+--- pc_apps/human_replay/leveling.js.before
++++ pc_apps/human_replay/leveling.js
+@@ -2,6 +2,8 @@
+ /* Local-only offline workflow. All algorithm/quality/export work happens in Python. */
+ (function () {
+     const $ = id => document.getElementById(id);
++    const validationMode = document.body.dataset.workbench === "validation";
++    const apiBase = validationMode ? "/api/validation" : "/api/leveling";
+     const colors = [0x95a9b8, 0xffcb75, 0x7fceff, 0xe39eff, 0x7be1aa];
+     let state = {generation: 0, source: null, meta: null, raw: null, job: null, report: null, busy: false, loading:false};
+     let bounds = [0, 4, -1.5, 1.5], drag = null, playing = false;
+@@ -50,6 +52,7 @@
+         ["session","refresh"].forEach(id => $(id).disabled = state.busy);
+         ["pitch","roll","height","confirmed","basis"].forEach(id => $(id).disabled = state.busy || state.loading);
+         document.querySelectorAll("#regions input").forEach(e => e.disabled=state.busy || state.loading);
++        document.querySelectorAll("#cohort button").forEach(e => e.disabled=state.busy || e.dataset.unavailable === "true");
+     }
+     function regionInputs() {
+         const body = $("regions").tBodies[0]; body.replaceChildren();
+@@ -106,20 +109,33 @@
+     $("play").onclick=()=>{playing=!playing;$("play").textContent=playing?"Ⅱ 暂停":"▶ 播放";};
+     setInterval(()=>{if(playing&&state.meta){$("frame").value=(Number($("frame").value)+1)%state.meta.frames.length;drawFrame();}},100);
+     async function refresh() {
+-        const {sessions}=await api("/api/leveling/sessions");const value=$("session").value;
++        const {sessions}=await api(apiBase+"/sessions");const value=$("session").value;
+         $("session").replaceChildren(new Option("请选择…",""));sessions.forEach(s=>$("session").add(new Option(s.sid+" · "+s.frames+"帧",s.sid)));
+         $("session").value=value;
++        if(validationMode){
++            const body=$("cohort").tBodies[0];body.replaceChildren();
++            sessions.forEach(s=>{
++                const row=body.insertRow(),button=document.createElement("button");
++                button.textContent=s.sid.replace(/^cap_/,"");button.dataset.unavailable=String(!s.available);
++                button.onclick=()=>{$("session").value=s.sid;loadSession();};row.insertCell().append(button);
++                [s.duration_sec==null?"—":Number(s.duration_sec).toFixed(1)+"s",s.frames||"—",s.status].forEach(v=>row.insertCell().textContent=v);
++                row.lastChild.className=s.recommended?"pass":s.error||s.status==="评估未通过"?"fail":"muted";
++                row.title=s.error||"";
++            });enable();
++        }
++        return sessions;
+     }
+     $("refresh").onclick=()=>refresh().catch(e=>note(e.message,true));
+     async function loadSession() {
+         playing=false;$("play").textContent="▶ 播放";clearResult();state.raw=null;state.meta=null;state.source=null;
++        $("frameInfo").textContent="未载入";$("frame").max=0;$("frame").value=0;
+         viewers.forEach(v=>{if(v.points){v.scene.remove(v.points);v.points.geometry.dispose();v.points.material.dispose();v.points=null;}});
+         $("confirmed").checked=false;$("basis").value="";$("play").disabled=true;enable();drawFrame();
+         $("sourceInfo").textContent="载入 meta.json 与 points.bin 后可配平。";
+         const sid=$("session").value,token=state.generation;state.loading=!!sid;enable();if(!sid){note("请选择本地会话。");return;}
+         note("校验与载入原始数据…");
+         try{
+-            const source=await api("/api/leveling/source?sid="+encodeURIComponent(sid));
++            const source=await api(apiBase+"/source?sid="+encodeURIComponent(sid));
+             const response=await fetch("/api/file?sid="+encodeURIComponent(sid)+"&name=points.bin");if(!response.ok)throw Error("源bin读取失败");
+             const buffer=await response.arrayBuffer();
+             const digest=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",buffer))).map(v=>v.toString(16).padStart(2,"0")).join("");
+@@ -129,13 +145,26 @@
+             $("frame").max=state.meta.frames.length-1;$("frame").value=0;$("play").disabled=false;
+             $("sourceInfo").textContent=sid+" · "+state.meta.frames.length+"帧 · "+state.meta.total_points.toLocaleString()+"点";
+             drawFrame();enable();note("已载入。核对四区并填写依据后，点击配平。");
++            if(validationMode){
++                note("读取该会话的已保存评估…");
++                const saved=await fetch(apiBase+"/latest?sid="+encodeURIComponent(sid));
++                if(token!==state.generation)return;
++                if(saved.status===404){note("该会话待配平，点击自动配平开始评估。");return;}
++                const job=await saved.json();if(!saved.ok)throw Error(job.error||"存盘结果不可用");
++                if(job.sid!==sid||job.report.source.meta_sha256!==state.source.meta_sha256||job.report.source.bin_sha256!==state.source.bin_sha256)throw Error("存盘结果与载入会话不一致");
++                const config=job.report.config;
++                $("pitch").value=config.pitch_deg;$("roll").value=config.roll_deg;$("height").value=config.physical_height_m;
++                rois=config.regions.map(r=>r.slice());regionInputs();$("basis").value=config.basis;
++                showReport(job);
++            }
+         }catch(e){if(token===state.generation)note(e.message,true);}finally{if(token===state.generation){state.loading=false;enable();}}
+     }
+     $("session").onchange=loadSession;
+     const fixed=(v,d=3)=>v==null?"—":Number(v).toFixed(d);
+-    function artifact(job,method,name){return "/api/leveling/artifact?id="+job+"&method="+method+"&name="+name;}
++    function artifact(job,method,name){return apiBase+"/artifact?id="+job+"&method="+method+"&name="+name+(validationMode?"&sid="+encodeURIComponent($("session").value):"");}
+     function showReport(job) {
+         state.report=job.report;state.job=job.job_id;const r=job.report;$("result").hidden=false;
++        $("method").replaceChildren(new Option("名义显示预览","nominal"));
+         $("consensus").textContent=(r.recommended?"推荐 "+r.recommended.toUpperCase():"不推荐自动选择")+" · "+r.recommendation_basis;
+         $("consensus").className=r.recommended?"pass":"fail";
+         const tbody=$("algorithms").tBodies[0];tbody.replaceChildren();$("downloads").replaceChildren();
+@@ -146,31 +175,32 @@
+         });
+         const reportLink=document.createElement("a");reportLink.href=artifact(job.job_id,"report","report.json");reportLink.textContent="下载评估报告";$("downloads").append(reportLink);
+         $("pairs").textContent=r.pairwise.map(p=>p.a.toUpperCase()+" ↔ "+p.b.toUpperCase()+": "+fixed(p.angle_deg)+"° / "+fixed(p.offset_gap_m*100)+"cm · "+p.status).join("　");
+-        $("report").textContent=JSON.stringify(r,null,2);$("method").value=r.recommended||"nominal";drawFrame();
+-        note("评估完成。拟合 "+r.fit_point_count.toLocaleString()+" 点；留出帧 "+r.holdout_ordinals.join(", ")+"。新数据在 captures/leveled/"+job.job_id+"。"+(!Object.keys(job.artifacts).length?" 所有方法拒绝，仅生成诊断报告。":""));
++        const preview=r.recommended||(validationMode&&Object.keys(r.estimators).find(n=>r.estimators[n].valid))||"nominal";
++        $("report").textContent=JSON.stringify(r,null,2);$("method").value=preview;drawFrame();
++        note((job.persisted?"已恢复保存结果。":"评估完成。")+"拟合 "+r.fit_point_count.toLocaleString()+" 点；留出帧 "+r.holdout_ordinals.join(", ")+"。"+(!Object.keys(job.artifacts).length?" 所有方法拒绝，仅生成诊断报告。":"配平数据可下载。")+(validationMode&&!r.recommended&&preview!=="nominal"?"当前仅预览通过的 "+preview.toUpperCase()+"；三法未一致，不作自动推荐。":""));
+     }
+     $("run").onclick=async()=>{
+         state.busy=true;drag=null;clearResult();const jobToken=state.generation;enable();note("提交本地配平任务…");
+         try{
+-            const started=await api("/api/leveling/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),regions:rois.map(r=>r.slice()),ground_confirmed:$("confirmed").checked,basis:$("basis").value}});
++            const started=await api(apiBase+"/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),regions:rois.map(r=>r.slice()),ground_confirmed:$("confirmed").checked,basis:$("basis").value}});
+             while(jobToken===state.generation){
+-                const job=await api("/api/leveling/job?id="+started.job_id);if(jobToken!==state.generation)break;
++                const job=await api(apiBase+"/job?id="+started.job_id+(validationMode?"&sid="+encodeURIComponent($("session").value):""));if(jobToken!==state.generation)break;
+                 note(job.message);if(job.state==="failed")throw Error(job.error);if(job.state==="ready"){showReport(job);break;}
+                 await new Promise(resolve=>setTimeout(resolve,700));
+-            }
++            }if(validationMode)await refresh();
+         }catch(e){if(jobToken===state.generation)note(e.message,true);}finally{state.busy=false;enable();}
+     };
+     /* P03：算法自动找地面区域。与 run 共用同一 POST 与轮询；mode='auto' 服务端自算 regions。 */
+     $("runAuto").onclick=async()=>{
+         state.busy=true;drag=null;clearResult();const jobToken=state.generation;enable();note("提交自动配平（算法找地面）…");
+         try{
+-            const started=await api("/api/leveling/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),mode:"auto"}});
++            const started=await api(apiBase+"/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),mode:"auto"}});
+             while(jobToken===state.generation){
+-                const job=await api("/api/leveling/job?id="+started.job_id);if(jobToken!==state.generation)break;
++                const job=await api(apiBase+"/job?id="+started.job_id+(validationMode?"&sid="+encodeURIComponent($("session").value):""));if(jobToken!==state.generation)break;
+                 note(job.message);if(job.state==="failed")throw Error(job.error);if(job.state==="ready"){showReport(job);break;}
+                 await new Promise(resolve=>setTimeout(resolve,700));
+-            }
++            }if(validationMode)await refresh();
+         }catch(e){if(jobToken===state.generation)note(e.message,true);}finally{state.busy=false;enable();}
+     };
+-    refresh().then(()=>{const sid=new URLSearchParams(location.search).get("sid");if(sid){$("session").value=sid;loadSession();}}).catch(e=>note(e.message,true));
++    refresh().then(sessions=>{const sid=new URLSearchParams(location.search).get("sid")||(validationMode&&sessions[0]&&sessions[0].sid);if(sid){$("session").value=sid;loadSession();}}).catch(e=>note(e.message,true));
+ })();
+--- pc_apps/human_replay/human_replay_lib.py.before
++++ pc_apps/human_replay/human_replay_lib.py
+@@ -119,6 +119,8 @@
+     # ---------- 静态 ----------
+     def do_GET(self):  # noqa: N802（http.server 约定）
+         path = self.path.split("?", 1)[0]
++        if path.startswith("/api/validation/"):
++            return self._validation("GET")
+         if path.startswith("/api/leveling/"):
+             return self._leveling("GET")
+         if path == "/api/sessions":
+@@ -236,6 +238,8 @@
+ 
+     def do_POST(self):  # noqa: N802
+         path = self.path.split("?", 1)[0]
++        if path.startswith("/api/validation/"):
++            return self._validation("POST")
+         if path.startswith("/api/leveling/"):
+             return self._leveling("POST")
+         if path == "/api/board/record/start":
+@@ -264,6 +268,13 @@
+         except ImportError as exc:
+             return self._json({"error": "本地配平需要NumPy及完整工作台模块: " + str(exc)}, 503)
+         return leveling.handle(self, method, C.DEST_ROOT)
++
++    def _validation(self, method):
++        try:
++            import validation
++        except ImportError as exc:
++            return self._json({"error": "算法验证需要完整工作台模块: " + str(exc)}, 503)
++        return validation.handle(self, method, C.DEST_ROOT)
+ 
+     def _api_delete(self):
+         """删会话：scope=local|board|both。board 走 capture_server DELETE（连文件）。"""
+--- pc_apps/console/console.html.before
++++ pc_apps/console/console.html
+@@ -80,6 +80,7 @@
+   {name:"板端 WebUI", desc:"RK3588 · 192.168.3.125:8090", icon:"🖥️", url:"http://192.168.3.125:8090/",
+    fail:"当前不在内网，无法连接板端 WebUI"},
+   {name:"离线配平", desc:"四区评估 · TLS / SVD / RANSAC", icon:"⚖", url:replayBase + "/leveling.html"},
++  {name:"算法验证", desc:"三个会话 · 配平结果与算法对照", icon:"🧪", url:replayBase + "/validation.html"},
+ ];
+ const SLOTS = 3; // 预留占位槽位（首页虚线卡片）
+ // ============================================================
+--- pc_apps/human_replay/LEVELING_README.md.before
++++ pc_apps/human_replay/LEVELING_README.md
+@@ -16,6 +16,16 @@
+ 
+ `physical_height_m`是确认时填写的参考，不被拟合d覆盖；参考datum/精度未知保持未核验。derivative sensor.frame_id是ground_offline_display，保存完整源SHA和版本，只能当离线显示数据。physical_verified/extrinsics_verified/runtime_eligible始终false。当前使用已曝光会话的独立留帧诊断，不能称未曝光物理真值。不是规划中的AGL时间控制器，也不接生产ground消息/ROS。
+ 
+-原录制、旧证据均不写入。单任务后台执行，源文件变化或算法变化会拒绝发布结果。服务重启后旧结果仍在磁盘，任务轮询/下载URL不跨进程恢复，直接打开其ZIP或目录。离线配平页面不调用板端接口。
++原录制、旧证据均不写入。单任务后台执行，源文件变化或算法变化会拒绝发布结果。原离线配平页的任务轮询/下载URL不跨进程恢复，旧结果可直接打开ZIP或目录；下面的算法验证页支持绑定检查后恢复存盘结果和下载。离线配平页面不调用板端接口。
+ 
+ 检查：`python -B -W error -m unittest discover -s pc_apps/human_replay -p leveling_test.py -v`。
++
++## 三会话算法验证（GL-V01）
++
++总控制台第五项「算法验证」，或同一本地服务 `/validation.html`。只列 `cap_20261004_203349`（102帧）、`cap_20261004_203135`（113帧）、`cap_20261004_202456`（91帧），不查询板端。点击会话恢复保存的报告、当时的区域/参数、同帧前后点云及通过方法的ZIP。源内容或报告/变换变动时拒绝旧结果；下载逐文件校验SHA。
++
++202456复用既有 `27f870c6c7be43f4b9dc50121a5fc03f`；203135新结果 `7cb130bf4228417db41526299a438a31` 三法通过并推荐TLS；203349新结果 `4c6dfc6cb92342429b21296de6a4080e` TLS/SVD通过并有完整数据，RANSAC区域/留帧门及跨方法一致性失败，标「部分通过」，只显示有效方法的离线预览，不作自动推荐。历史auto/旧区域/稀疏区域失败保留。
++
++新两会话的区域只在FIT帧上重新选取完整XY格，区域内全高度源行保留。已曝光的留出帧仅作离线诊断，不称未曝光泛化或物理真值。原算法和门未变，原捕获及202456产物未覆盖。
++
++Windows桌面「总控制台」快捷方式更新到 `pc_apps/console/dist/gl_v01/Console.exe`，重开生效。检查：`python -B -W error -m unittest discover -s pc_apps/human_replay -p validation_test.py -v`。验收与证据：`docs/human_fall/GLV01_ACCEPTANCE.md`。

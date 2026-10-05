@@ -1,0 +1,104 @@
+[
+  {
+    "id": "V01",
+    "name": "missing R/t never identity",
+    "result": "PASS"
+  },
+  {
+    "id": "V02",
+    "name": "exact requested ground.support_polygon entry",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'unavailable'\n- 'ready'\n"
+  },
+  {
+    "id": "V06",
+    "name": "valid transform + unknown ground refuses mode",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\n'ground' !== 'source'\n"
+  },
+  {
+    "id": "V06",
+    "name": "valid transform + none ground refuses mode",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\n'ground' !== 'source'\n"
+  },
+  {
+    "id": "V06",
+    "name": "unsupported calibration schema refuses mode",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\n'ground' !== 'source'\n"
+  },
+  {
+    "id": "V06",
+    "name": "verifier unavailable clears observed status",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V07",
+    "name": "no candidate snapshot + ready baseline clears current status",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V07",
+    "name": "candidate list empty + ready baseline clears current status",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'upright'\n- 'unknown'\n"
+  },
+  {
+    "id": "V05",
+    "name": "list closure same IDs changed candidate content rejected",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+  },
+  {
+    "id": "V05",
+    "name": "same IDs changed R/t rejected",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+  },
+  {
+    "id": "V05",
+    "name": "caller mutation after rendered button rejected",
+    "result": "FAIL",
+    "error": "Expected values to be strictly equal:\n\n1 !== 0\n"
+  },
+  {
+    "id": "V06",
+    "name": "silent expiry refuses old choice; history retained",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "disconnect preserves history and refuses old choice",
+    "result": "PASS"
+  },
+  {
+    "id": "V06",
+    "name": "future foreign snapshot cannot change current frame R/t",
+    "result": "FAIL",
+    "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n+   22.799999237060547,\n-   2.799999952316284,\n    -0.20000000298023224,\n    0.5,\n+   23.200000762939453,\n-   3.200000047683716,\n    0.20000000298023224,\n    2\n  ]\n"
+  },
+  {
+    "id": "V03",
+    "name": "mode labels/current position use ground coordinates",
+    "result": "FAIL",
+    "error": "The expression evaluated to a falsy value:\n\n  assert.ok(w.$('hfPos').textContent.includes('1.00'))\n"
+  },
+  {
+    "id": "V04",
+    "name": "DPR-only overlay backing changes after frame",
+    "result": "PASS"
+  },
+  {
+    "id": "V04",
+    "name": "CSS resize reprojection uses current camera and rect",
+    "result": "PASS"
+  },
+  {
+    "id": "V02",
+    "name": "budget 3001/9000 supports has provenance and <=3000",
+    "result": "PASS"
+  }
+]

@@ -1,0 +1,17 @@
+# GL-I04 R1 independent OpenCode second review - concrete submission
+
+You are the independent reviewer, model opencode-go/deepseek-v4.1-flash, default DB. Codex has implemented and self-validated this work item and STOPPED production writes. This review authorizes only read-only inspection/execution and new review evidence in D:/Code/ldiar/docs/human_fall/evidence/2026-10-03_gl_i04_r1/opencode_second_review_01/. No production/config/tests/draft/capture changes, no milestone/deployment/device/network/model/DB/auth/permissions/global-config changes. Do not repair code in this session. Use native skill(name=ponytail), not the previously rejected external skill path. Read it before reviewing; record the actual skill use.
+
+run_root = D:/Code/ldiar/docs/human_fall/evidence/2026-10-03_gl_i04_r1
+Submission = run_root/11_submission_manifest.json (all relevant file SHAs and full-tree start/end baseline refs).
+Codex self-return = docs/human_fall/returns/GL-I04.md. All self PASS labels are provisional, not your conclusion.
+
+Read docs/human_fall/AI_PROMPT_GLI04_OPENCODE_SECOND_REVIEW_R1.md in full and follow it, plus current WORKFLOW role coverage, GLI04_TASK.md and the only GLI04_ACCEPTANCE.md v1. Then read this run's 00_diag.md, 19_PLAN_REVISION_AND_DECISION.md and actual 3 new production files/research prototype/experiment. No need for all historical logs. The initial failures 06/07 are retained; current sources passed 08/10/12/14 and research final18. The main CLI produces diagnostics only, not calibration.
+
+Independently inspect ALL L01-L06, R01-R06, S01, B01/B02/D01/D02 and Q01-Q10, even if failures appear. Verify submission hashes BEFORE/AFTER. Develop independent hand/adversarial checks beyond rerunning author tests: draft/source/group alias/units/output collision and protected capture path; all-point box/frame mapping/bin/display invariance; R versus R.T fixture and physical unknown; frozen replay parity/early returns; chain/order/drift, late distinct, exact duplicates, certificate boundary and candidate/refine/trace/iteration budget exhaustion. Closure only covers finite seen sequence and never physical uniqueness. High-noise/real unresolved is not automatically a bug; check it against contract and safety. A false acceptance or inability to close required clean/noisy positive is a real FAIL.
+
+Run local meaningful regression and independent real report checks where safe. You may place new scripts/reports and exclusive CLI outputs ONLY in your review subdirectory (temp synthetic fixtures allowed). Do not rerun author experiment into an existing ledger (exclusive write refuses); if using it, copy/adapt into your review directory or call its pure functions. Check core Python3.8 AST, stdlib+NumPy imports; local execution does not validate board Python3.8.10/NumPy1.17.4.
+
+Write opencode_second_review_01/00_review.md with real session/model/defaultDB/skill identity, BEFORE/AFTER SHA, every acceptance ID and Q row, exact commands/exit/results, independent probes, all defects grouped by root cause with original ID/source/trigger/actual/expected/minimal remedy, and adoption recommendation. B01/B02 remain BLOCKED, D01/D02 NOT_RUN unless new actual authorized evidence exists (none expected). Software findings must be independent, not author selftest totals. The diagnostic SVG is not GL04 DPR verification.
+
+Finish SECOND_REVIEW_SUBMITTED/STOPPED and a concise final message. Do not change acceptance/status docs, declare ACCEPTED, spawn another production writer or integrate prototype.

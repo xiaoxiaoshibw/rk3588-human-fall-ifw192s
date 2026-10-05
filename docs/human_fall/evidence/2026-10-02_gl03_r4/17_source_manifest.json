@@ -1,0 +1,27 @@
+{
+ "acceptance": {
+  "docs/human_fall/GL03_ACCEPTANCE.md": "4628be1828b7855557321410b3394021ef15130a224837f81f6a83af6bf3fe0a"
+ },
+ "branch": "master",
+ "data": {
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_planes.json": "f238294ee42f9161ec4ee7a804a5448de617fbfe6e689125e022408e04bc43e8",
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_roi_points.csv": "4c9ccaacb4f941cb995532620fb5af6886b98b6ac18855d8a6870c56db30660f",
+  "docs/human_fall/evidence/2026-10-01_gl00_r1/14_current_sample.csv.tgz": "528d8ed29430d7a9037dc46d69123b310b280aedeb0f4fff1a6e231d347f9a0e"
+ },
+ "head": "49eb7581faabdda031642e04d3ef4ffe75d48331",
+ "no_git_actions": "no commit/push/reset/checkout/clean",
+ "not_modified_frozen": "no config/default.yaml, geometry.yaml, geometry_constrained.yaml, human_fall.yaml, human_fall_prod.yaml, perception.yaml, driver, webui, raw data, historical evidence",
+ "o01_evidence_applicability": {
+  "depends_on": "src/human_fall_detection/core/lidar_candidates.py",
+  "note": "R4 changed calibration.py/node_runtime.py only; lidar_candidates.py is SHA-unchanged, so the R3 O01 recomputation stays applicable and was not rerun.",
+  "r3_report": "docs/human_fall/evidence/2026-10-02_gl03_r3/21_o01_planes_ablation_r3.json"
+ },
+ "round": "GL-03 R4 / 2026-10-02",
+ "sources": {
+  "docs/human_fall/evidence/2026-10-02_gl03_r4/06_r4_checks.py": "286e176b87923cf519823abad27913854a0c4f61cf22b0eceecf621398c6202e",
+  "src/human_fall_detection/core/calibration.py": "a2d06194248dfeee404fa9ec412d295876dd9318c26850540e800737a070ac24",
+  "src/human_fall_detection/core/lidar_candidates.py": "318abc786f49bb5d87e0a1e2030c017a2e489d302a038a814e56203fdd5bf1c5",
+  "src/human_fall_detection/core/node_runtime.py": "9bd65ff9adf82b520cb588d234cb75b69418a25febb7b2e7b6ef124aec3e15b8",
+  "src/human_fall_detection/tests/test_gl03_candidates_geometry.py": "1e7edb6b72b6ff8ad356231988524fdfd568856f28edcda3747feabc6072842b"
+ }
+}

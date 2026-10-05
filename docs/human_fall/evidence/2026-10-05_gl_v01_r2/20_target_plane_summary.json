@@ -1,0 +1,34 @@
+{
+  "source": "04_auto_results.json",
+  "semantic": "region = [x_min, x_max, y_min, y_max]; x = 雷达正前, y = 左(+)/右(-); candidate平面normal由FIT帧体素上发现, 区域框由连通面内部四个空间分区选取, 不读人工ROI",
+  "sessions": [
+    {
+      "sid": "cap_20261004_203349",
+      "job_id": "c9712acad48c4fb7a78cb119c08d4cdb",
+      "pitch_deg": 25.5635, "roll_deg": -2.2469,
+      "candidate_offset_source_m": 1.2769,
+      "region_extent": {"x": [1.25, 2.5], "y": [-0.75, 0.25]},
+      "selected_region_z_range_m": [-1.38, -1.29],
+      "reading": "自动地面约在前方1.25–2.5m、右侧0.25m到左侧0.75m带内(y±~1m窄带), 区域点z约-1.29..-1.38m(雷达坐标系, 名义安装高约1.3m一致性指示, 非标定)"
+    },
+    {
+      "sid": "cap_20261004_203135",
+      "job_id": "500314ff11484be58f44b3cf11ad033f",
+      "pitch_deg": 28.5982, "roll_deg": -1.4849,
+      "candidate_offset_source_m": 1.4024,
+      "region_extent": {"x": [1.0, 2.5], "y": [-0.75, 0.0]},
+      "selected_region_z_range_m": [-1.399, -1.252],
+      "reading": "自动地面约在前方1.0–2.5m、右侧0.75m到中线的带内, 区域点z约-1.25..-1.40m(名义指示, 非标定)"
+    },
+    {
+      "sid": "cap_20261004_202456",
+      "job_id": "a480b987d176479a89e1730f9d6b7c09",
+      "pitch_deg": 25.4473, "roll_deg": -1.3841,
+      "candidate_offset_source_m": 1.2677,
+      "region_extent": {"x": [1.25, 2.5], "y": [-0.75, 0.25]},
+      "selected_region_z_range_m": [-1.382, -1.242],
+      "independent_manual_reference_delta": {"angle_deg": 1.586310, "offset_m": 0.005015},
+      "note": "与手选四ROI参考平面的后置对照; 仅对照不参与检测"
+    }
+  ]
+}

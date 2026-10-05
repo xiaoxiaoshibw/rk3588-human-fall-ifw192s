@@ -1,0 +1,46 @@
+test_config_legacy_tampered_source_and_compute_failure (test_gli04_geometry.DiagnosticCLI.test_config_legacy_tampered_source_and_compute_failure) ... GL-I04 diagnostic refused: constrained config refused: seed must be an integer
+ok
+test_output_inside_capture_refused_and_frame_mismatch (test_gli04_geometry.DiagnosticCLI.test_output_inside_capture_refused_and_frame_mismatch) ... GL-I04 diagnostic refused: output must be outside capture and production package
+GL-I04 diagnostic refused: CLI frame 'wrong' disagrees with the adapted manifest frame 'innolidar'
+GL-I04 diagnostic refused: failed calculation
+GL-I04 diagnostic refused: adapted NPZ must contain exactly points and input_manifest, got ['points']
+GL-I04 diagnostic refused: source points.bin changed since adaptation
+ok
+test_positive_repeat_exclusive_not_calibration (test_gli04_geometry.DiagnosticCLI.test_positive_repeat_exclusive_not_calibration) ... GL-I04 diagnostic refused: exclusive output directory already exists
+ok
+test_rejected_drafts_no_output (test_gli04_geometry.DiagnosticCLI.test_rejected_drafts_no_output) ... GL-I04 diagnostic refused: unsupported draft schema/kind
+GL-I04 diagnostic refused: unsupported draft schema/kind
+GL-I04 diagnostic refused: unsupported draft schema/kind
+GL-I04 diagnostic refused: explicit reviewed draft required
+GL-I04 diagnostic refused: up_axis must be a unit vector (norm 2.000000)
+GL-I04 diagnostic refused: sensor_height_interval_m low must be below high
+GL-I04 diagnostic refused: draft source mismatch: frame
+GL-I04 diagnostic refused: draft source mismatch: units
+GL-I04 diagnostic refused: draft source mismatch: meta_sha256
+GL-I04 diagnostic refused: draft source mismatch: bin_sha256
+GL-I04 diagnostic refused: draft source mismatch: manifest_points_sha256
+GL-I04 diagnostic refused: draft source mismatch: time_domain
+GL-I04 diagnostic refused: validation region v1 shares a source frame with the fit set
+GL-I04 diagnostic refused: region x_min_m must be a finite number
+GL-I04 diagnostic refused: all four diagnostic regions must be fixed spatial boxes
+GL-I04 diagnostic refused: unique nonempty box ids required
+ok
+test_actual_replay_early_returns_and_degeneracy (test_gli04_geometry.HandFixtures.test_actual_replay_early_returns_and_degeneracy) ... FAIL
+test_frame_mapping_empty_and_fixed_bins_display (test_gli04_geometry.HandFixtures.test_frame_mapping_empty_and_fixed_bins_display) ... ok
+test_rotation_hand_inverse (test_gli04_geometry.HandFixtures.test_rotation_hand_inverse) ... ok
+test_signed_stats_zero_nonfinite_empty (test_gli04_geometry.HandFixtures.test_signed_stats_zero_nonfinite_empty) ... ok
+
+======================================================================
+FAIL: test_actual_replay_early_returns_and_degeneracy (test_gli04_geometry.HandFixtures.test_actual_replay_early_returns_and_degeneracy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Code\ldiar\src\human_fall_detection\tests\test_gli04_geometry.py", line 43, in test_actual_replay_early_returns_and_degeneracy
+    self.assertEqual(actual[key], replay[key], label)
+AssertionError: 0 != 50 : insufficient
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.138s
+
+FAILED (failures=1)
+{"output_dir": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-uzg00sk8\\one", "kind": "gli04_geometry_diagnostic", "physical_verified": false, "box_frame_records": 28, "sidecar_count": 2920}
+{"output_dir": "C:\\Users\\30680\\AppData\\Local\\Temp\\gli02-uzg00sk8\\two", "kind": "gli04_geometry_diagnostic", "physical_verified": false, "box_frame_records": 28, "sidecar_count": 2920}

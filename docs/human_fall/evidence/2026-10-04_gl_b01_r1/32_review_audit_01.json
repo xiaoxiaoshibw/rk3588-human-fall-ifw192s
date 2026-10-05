@@ -1,0 +1,702 @@
+{
+  "actual_sessions": {
+    "probe": {
+      "session": "ses_ef9aba776ffegmGhwWOhuyDecC",
+      "models": [
+        [
+          "opencode-go",
+          "deepseek-v4.1-flash"
+        ]
+      ],
+      "last_finish": "stop"
+    },
+    "review": {
+      "session": "ses_ef9aa0938ffeBSk4FK0RknFkjy",
+      "models": [
+        [
+          "opencode-go",
+          "deepseek-v4.1-flash"
+        ]
+      ],
+      "last_finish": "stop"
+    }
+  },
+  "manifest_drift": [],
+  "forbidden_tool_calls": [],
+  "tools": [
+    {
+      "tool": "glob",
+      "input": {
+        "pattern": "docs/human_fall/**/*GLB01*"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "glob",
+      "input": {
+        "pattern": "docs/human_fall/**/00_diag_01*"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "glob",
+      "input": {
+        "pattern": "docs/human_fall/**/2*_*.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "git -C D:\\Code\\ldiar status --porcelain=v1 2>&1 | Select-Object -First 100; echo \"---HEAD---\"; git -C D:\\Code\\ldiar rev-parse HEAD; echo \"---BRANCH---\"; git -C D:\\Code\\ldiar branch --show-current"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\GLB01_ACCEPTANCE.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem -LiteralPath \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\" -Recurse | Select-Object FullName, Length | Format-Table -AutoSize -Wrap"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\ground_region_review.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\00_diag_01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\20_DIAGNOSIS_AND_SUBMISSION_01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\17_user_scene_confirmation_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\24_user_workbench_height_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\18_identity_index_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\25_workbench_reference_diagnostic_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\02_review_plan_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\13_full_source_row_oracle_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\14_confirmed_branch_synthetic_check_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\16_reproducibility_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\19_html_logic_check_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\22_manifest_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\review_ground_regions.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\tests\\test_ground_region_review.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\capture_input.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\ground_evidence.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\ground_diagnostics.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\nominal_leveling.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\WORKFLOW.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\GROUND_LEVELING_NEXT_STAGE_PLAN_V3.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python --version; python -c \"import numpy; print('numpy', numpy.__version__)\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "$files = @(\n 'src\\human_fall_detection\\core\\ground_region_review.py',\n 'src\\human_fall_detection\\scripts\\review_ground_regions.py',\n 'src\\human_fall_detection\\tests\\test_ground_region_review.py',\n 'docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\review_02\\scene_rows.csv',\n 'docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\review_02\\observations.json',\n 'docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\review_02\\selection_candidate.json',\n 'docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\review_02\\review_draft.json',\n 'docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\review_02\\input_record.json',\n 'docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\review_02\\review_view.html'\n)\nforeach ($f in $files) { $h=(Get-FileHash -Algorithm SHA256 -LiteralPath $f).Hash.ToLower(); Write-Output \"$h  $f\" }",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import hashlib,sys; files=[r'src/human_fall_detection/core/ground_region_review.py',r'src/human_fall_detection/scripts/review_ground_regions.py',r'src/human_fall_detection/tests/test_ground_region_review.py',r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/scene_rows.csv',r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/observations.json',r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/selection_candidate.json',r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/review_draft.json',r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/input_record.json',r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/review_view.html',r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/22_manifest_01.json',r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/26_scope_02.json']; [print(hashlib.sha256(open(f,'rb').read()).hexdigest(),f) for f in files]\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import hashlib,json,os; m=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/22_manifest_01.json',encoding='utf8')); bad=[]; miss=[]; \nfor p,h in m['files'].items():\n    pp=p.replace('/',os.sep)\n    if not os.path.isfile(pp): miss.append(p); continue\n    a=hashlib.sha256(open(pp,'rb').read()).hexdigest()\n    if a!=h: bad.append((p,h,a))\nprint('total',len(m['files']),'bad',len(bad),'missing',len(miss)); [print('BAD',x) for x in bad]; [print('MISS',x) for x in miss]\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json,csv,collections\nbase=r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/'\nobs=json.load(open(base+'observations.json',encoding='utf8'))\nprint('OBS kind',obs['kind'],'schema',obs['schema'],'gate',obs['membership_gate'],'phys',obs['physical_verified'],'elig',obs['candidate_eligible'])\nprint('OBS plan_id',obs['plan_id'][:40])\nprint('OBS binding keys',sorted(obs['binding'].keys()),'frame',obs['binding']['frame'],'units',obs['binding']['units'])\nprint('OBS model_id',obs['binding']['model_id'])\nprint('OBS nregions',len(obs['regions']))\nfor r in obs['regions']:\n    o=r['observation']\n    print(' region',r['region_id'],'role',r['role'],'group',r['frame_group'][:14],'ord',r['ordinal'],'seq',r['seq'],'nrows',len(r['source_rows']),'method',r['selection_method'],'gid',r['ground_identity'],'conf',r['confirmation'],'count',o['count'],'domain',o['domain'])\nprint('OBS total source_rows',sum(len(r['source_rows']) for r in obs['regions']))\nprint('OBS has legacy_observations', 'legacy_observations' in obs, 'n', len(obs.get('legacy_observations',[])))\nleg=obs.get('legacy_observations',[])\nfor l in leg:\n    print(' LEG',l['region_id'],'group',l['frame_group'][:14],'count',l['count'],'pca',l['pca_reason'],'phys',l['physical_ground_error'],'plane?',bool(l['pca_scene_plane']))\n    if l['pca_scene_plane']:\n        p=l['pca_scene_plane']; print('   plane offset_nom',p['offset_nominal_m'],'tilt',p['tilt_to_nominal_z_deg'],'src_off',p['source_offset_observed_m'],'origin',p['origin'],'own',p['own_domain_residual']['count'])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\nbase=r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/'\nrec=json.load(open(base+'input_record.json',encoding='utf8'))\nprint('REC kind',rec['kind'],'model',rec['nominal_model_id'][:30],'data_use',rec['data_use'],'qual',rec['qualification'])\nfor k,v in rec['files'].items(): print(' FILE',k[:70],'=',v)\nprint()\nd=json.load(open(base+'review_draft.json',encoding='utf8'))\nprint('DRAFT kind',d['kind'],'schema',d['schema'],'phys',d['physical_verified'],'elig',d['candidate_eligible'])\nprint('DRAFT plan_id',d['plan_id'][:40],'model',d['model']['model_id'][:30])\nprint('DRAFT regions:')\nfor r in d['regions']: print('  ',r['region_id'],r['role'],r['frame_group'][:14],'avail',len(r['available_scene_rows']),'conf',r['ground_confirmation'])\nprint()\ns=json.load(open(base+'selection_candidate.json',encoding='utf8'))\nprint('SEL',json.dumps(s,ensure_ascii=False))\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import csv,collections,json,math\np=r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/scene_rows.csv'\nrows=list(csv.DictReader(open(p,encoding='utf8',newline='')))\nprint('header',list(rows[0].keys()))\nprint('nrows',len(rows))\nreg=collections.Counter(r['region_id'] for r in rows); print('per-region',dict(reg))\nids=collections.Counter(r['identity'] for r in rows); print('identities',dict(ids))\n# ordinal/seq per region\nseen={}\nfor r in rows:\n    k=r['region_id']; tup=(r['ordinal'],r['seq'],r['frame_group'])\n    seen.setdefault(k,set()).add(tup)\nfor k,v in seen.items(): print(' region',k,'ord/seq/group',v)\nprint('unique frame_groups',len(set(r['frame_group'] for r in rows)))\n# source_row == pooled - start? check consistency within region using min pooled\nfor k in reg:\n    pr=[int(r['pooled_row']) for r in rows if r['region_id']==k]\n    print(' region',k,'pooled min/max',min(pr),max(pr),'contiguous',len(pr)==max(pr)-min(pr)+1)\n# any empty numeric fields?\nbad=[i for i,r in enumerate(rows) if any(r[c]=='' for c in ('source_x_m','source_y_m','source_z_m','nominal_x_m','nominal_y_m','nominal_z_m'))]\nprint('empty numeric rows',len(bad))\n# z stats per region + mixed-height evidence\nfor k in reg:\n    zs=[float(r['nominal_z_m']) for r in rows if r['region_id']==k]\n    print(' region',k,'zmin',round(min(zs),4),'zmax',round(max(zs),4),'n_pos',sum(1 for z in zs if z>0),'n_neg',sum(1 for z in zs if z<0))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\06_real_review_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\10_real_review_02_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\nrec=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/input_record.json',encoding='utf8'))\nfor k,v in rec['files'].items(): print(repr(k)); print('   ',v)\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import sys,json,csv\nsys.path.insert(0,r'src/human_fall_detection')\nimport numpy as np\nfrom core.capture_input import load_adapted\nfrom core.ground_evidence import read_json\nfrom core.nominal_leveling import validate_nominal_model\nfrom core.ground_region_review import observe_review_regions\nnpz=r'docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_candidate.adapted.npz'\nrun=r'docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01'\nmodel,_=read_json(run+'/nominal_model.json'); model=validate_nominal_model(model)\nplan,_=read_json(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/02_review_plan_01.json')\nmanifest,points=load_adapted(npz)\nobs,recs=observe_review_regions(points,manifest,model,plan)\nrows=list(csv.DictReader(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/scene_rows.csv',encoding='utf8',newline='')))\ncsvset={}\nfor r in rows: csvset.setdefault(r['region_id'],[]).append(r)\nallok=True\nfor reg in obs['regions']:\n    rid=reg['region_id']; got=reg['source_rows']\n    exp=[int(r['pooled_row']) for r in csvset[rid]]\n    same=(got==exp); allok&=same\n    print(rid,'recomputed',len(got),'csv',len(exp),'exact_order_match',same)\n# coordinate recheck: recompute nominal for CSV source rows via model\nR=np.asarray(model['rotation']); t=np.asarray(model['translation_m'])\nmaxd=0.0\nfor r in rows:\n    s=np.array([float(r['source_x_m']),float(r['source_y_m']),float(r['source_z_m'])])\n    n=R@s+t\n    d=float(np.max(np.abs(n-np.array([float(r['nominal_x_m']),float(r['nominal_y_m']),float(r['nominal_z_m'])]))))\n    maxd=max(maxd,d)\nprint('max nominal recompute abs diff',maxd)\nprint('ALL source_rows exact',allok)\nprint('gate',obs['membership_gate'],'phys',obs['physical_verified'],'elig',obs['candidate_eligible'])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_fall_detection/tests -p \"test_ground_region_review.py\" -v 2>&1 | Select-Object -Last 40",
+        "workdir": "D:\\Code\\ldiar",
+        "timeout": 300000
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_fall_detection/tests -v 2>&1 | Select-Object -Last 15",
+        "workdir": "D:\\Code\\ldiar",
+        "timeout": 1200000
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_fall_detection/tests 2>&1 | rg -n \"Ran |^OK|FAILED|ERROR|Traceback\" | Select-Object -Last 20",
+        "workdir": "D:\\Code\\ldiar",
+        "timeout": 1200000
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\08_tests_02.log"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\08_tests_02_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\09_fall_regression_02_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\05_follow_regression_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\11_python38_ast_02.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\07_python38_ast_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import ast\nfor f in [r'src/human_fall_detection/core/ground_region_review.py',r'src/human_fall_detection/scripts/review_ground_regions.py',r'src/human_fall_detection/tests/test_ground_region_review.py']:\n    src=open(f,encoding='utf8').read()\n    try:\n        ast.parse(src,filename=f,feature_version=(3,8)); print('PY38 OK',f)\n    except SyntaxError as e: print('PY38 FAIL',f,e)\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\15_existing_out_negative_01.log"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\15_existing_out_negative_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\28_probe_01.jsonl"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\03_tests_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\28_probe_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "rg -n \"def _draft_region|def comparison_html\" src/human_fall_detection/scripts/",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\evaluate_gli02_candidate.py",
+        "offset": 130,
+        "limit": 50
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\level_capture_nominal.py",
+        "offset": 1,
+        "limit": 70
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\12_region_review_01.png"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\nfor f in ['21_scope_01.json','26_scope_02.json']:\n    p=r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/'+f\n    d=json.load(open(p,encoding='utf8'))\n    print('====',f,'type',type(d).__name__)\n    if isinstance(d,dict):\n        for k in d: \n            v=d[k]; print(' key',k,type(v).__name__, (len(v) if hasattr(v,'__len__') else v))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\nd=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/21_scope_01.json',encoding='utf8'))\nprint('21 branch',d['branch'],'head',d['head']); print(' protected_changed',d['protected_changed']); print(' external_added',d['external_added']); print(' source_sha256',json.dumps(d['source_sha256'],indent=0))\nd2=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/26_scope_02.json',encoding='utf8'))\nprint('26 branch',d2['branch'],'head',d2['head']); print(' protected_changed',d2['protected_changed']); print(' external_existing_changed',json.dumps(d2['external_existing_changed'],ensure_ascii=False)); print(' external_added',json.dumps(d2['external_added'],ensure_ascii=False)); print(' source_sha256',json.dumps(d2['source_sha256'],indent=0)); print(' prior_fail',d2['prior_scope_failure'])\n# compare files dicts\na=set(d['files']); b=set(d2['files']); print('21 files',len(a),'26 files',len(b)); print('only26',sorted(b-a)[:20]); print('only21',sorted(a-b)[:20])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import hashlib\nfor f in [r'pc_apps/human_replay/annotator.html', r'src/human_fall_detection/core/ground_region_review.py', r'src/human_fall_detection/scripts/review_ground_regions.py', r'src/human_fall_detection/tests/test_ground_region_review.py']:\n    d=open(f,'rb').read(); print(hashlib.sha256(d).hexdigest(), len(d), f)\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\nd=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/01_before_01.json',encoding='utf8'))\nprint('type',type(d).__name__)\nif isinstance(d,dict):\n    for k in d: \n        v=d[k]; print(' key',k,type(v).__name__, (len(v) if hasattr(v,'__len__') else v))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import sys,copy,json\nsys.path.insert(0,r'src/human_fall_detection'); sys.path.insert(0,r'src/human_fall_detection/tests'); sys.path.insert(0,r'src/human_fall_detection/scripts')\nimport numpy as np\nfrom test_ground_region_review import GroundRegionReviewTest as T\nfrom core.ground_region_review import observe_review_regions, validate_confirmed_rows\nfrom core.ground_evidence import selection_id\nt=T('test_all_heights_source_members_mapping_R02_R03'); t.setUp()\ndef expect(label, fn):\n    try:\n        fn(); print('NO-RAISE', label)\n    except ValueError as e: print('RAISED  ', label, '::', str(e)[:70])\n    except TypeError as e: print('TYPEERR ', label, '::', str(e)[:70])\norig=copy.deepcopy(t.plan)\n# 1 extra z key\np=copy.deepcopy(orig); p['regions'][0]['z_min_m']=-.3; t.plan=p; t.sign(); expect('extra z bound', lambda: t.observe())\n# 2 duplicate frame_group\np=copy.deepcopy(orig); p['regions'][1]['frame_group']=p['regions'][0]['frame_group']; t.plan=p; t.sign(); expect('dup frame_group', lambda: t.observe())\n# 3 two fits\np=copy.deepcopy(orig); p['regions'][1]['role']='fit'; t.plan=p; t.sign(); expect('two FIT roles', lambda: t.observe())\n# 4 zero fits\np=copy.deepcopy(orig); p['regions'][0]['role']='validation'; t.plan=p; t.sign(); expect('zero FIT roles', lambda: t.observe())\n# restore\nt.plan=copy.deepcopy(orig); t.sign()\nobs,rows=t.observe()\ndef sel():\n    s=t.confirmed(obs); return s\n# 5 empty indices in a validation region\ns=sel(); s['validation'][0]['indices']=[]; s['selection_id']=selection_id(s); expect('empty confirmed indices', lambda: validate_confirmed_rows(s,obs,t.points,t.manifest,{'fixture':{'path':'fixture','sha256':'ab'*32}},t.model,t.plan))\n# 6 caller-modified binding in observations\no2=copy.deepcopy(obs); o2['binding']=dict(o2['binding']); o2['binding']['bin_sha256']='00'*32\ns2=sel(); s2['selection_id']=selection_id(s2)\nexpect('caller-modified observation binding', lambda: validate_confirmed_rows(s2,o2,t.points,t.manifest,{'fixture':{'path':'fixture','sha256':'ab'*32}},t.model,t.plan))\n# 7 fit slot uses a validation region id\ns3=sel(); val=s3['validation'][0]; s3['fit']=dict(val); s3['selection_id']=selection_id(s3)\nexpect('fit uses validation region id', lambda: validate_confirmed_rows(s3,obs,t.points,t.manifest,{'fixture':{'path':'fixture','sha256':'ab'*32}},t.model,t.plan))\n# 8 missing one validation region\ns4=sel(); s4['validation']=s4['validation'][:2]; s4['selection_id']=selection_id(s4)\nexpect('missing validation region', lambda: validate_confirmed_rows(s4,obs,t.points,t.manifest,{'fixture':{'path':'fixture','sha256':'ab'*32}},t.model,t.plan))\n# 9 valid positive still passes\ns5=sel()\nr=validate_confirmed_rows(s5,obs,t.points,t.manifest,{'fixture':{'path':'fixture','sha256':'ab'*32}},t.model,t.plan)\nprint('POSITIVE ok status',r['status'],'phys',r['physical_verified'],'elig',r['candidate_eligible'])\nt.tearDown()\"",
+        "workdir": "D:\\Code\\ldiar",
+        "timeout": 300000
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "rg -n \"mixed|混杂|table|workbench|desk\" src/human_fall_detection/tests/test_ground_region_review.py; echo \"---\"; rg -ln \"mixed|混杂\" src/human_fall_detection/tests/",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json,hashlib\nB=r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/'\nplan=json.load(open(B+'02_review_plan_01.json',encoding='utf8'))\nobs=json.load(open(B+'review_02/observations.json',encoding='utf8'))\nc17=json.load(open(B+'17_user_scene_confirmation_01.json',encoding='utf8'))\nprint('plan.binding == obs.binding:', plan['binding']==obs['binding'])\nprint('plan.binding == 17.binding:', plan['binding']==c17['binding'])\nprint('plan_id plan==obs==17:', plan['plan_id']==obs['plan_id']==c17['plan_id'])\nfig=hashlib.sha256(open(B+'12_region_review_01.png','rb').read()).hexdigest()\nprint('figure sha actual==17:', fig==c17['figure_sha256'])\nprint('17 scope:', c17['scope'])\nprint('17 all_footprint_rows_are_ground:', c17['all_footprint_rows_are_ground'], 'confirmed_source_row_sets:', c17['confirmed_source_row_sets'], 'physical_verified:', c17['physical_verified'])\nprint('17 semantics:', c17['confirmed_semantics'])\n# region mapping\nregs={r['region_id']:r for r in obs['regions']}\nprint('regions match:', all(c17r['frame_group']==regs[c17r['region_id']]['frame_group'] and c17r['ordinal']==regs[c17r['region_id']]['ordinal'] and c17r['seq']==regs[c17r['region_id']]['seq'] for c17r in c17['regions']))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import csv,json,numpy as np\nrows=[r for r in csv.DictReader(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/scene_rows.csv',encoding='utf8',newline='')) if r['region_id']=='VAL_side']\nz=np.array([float(r['nominal_z_m']) for r in rows]); zs=np.sort(z); N=len(z)\nbest=(-1,None)\nfor i in range(N-1):\n    if (i+1)>=0.2*N and (N-(i+1))>=0.2*N:\n        g=zs[i+1]-zs[i]\n        if g>best[0]: best=(g,i)\ng,i=best\nlow=zs[:i+1]; up=zs[i+1:]\nprint('N',N,'split_gap',g,'edge',[zs[i],zs[i+1]])\nprint('lower_count',len(low),'upper_count',len(up))\nprint('lower_median',float(np.median(low)),'upper_median',float(np.median(up)))\nprint('diff',float(np.median(up)-np.median(low)))\nd=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/25_workbench_reference_diagnostic_01.json',encoding='utf8'))\nprint('25 split_gap',d['split_gap_m'],'lower_count',d['lower_band_count'],'upper_count',d['upper_band_count'])\nprint('25 lower_med',d['lower_median_nominal_z_m'],'upper_med',d['upper_median_nominal_z_m'],'diff',d['observed_layer_height_difference_m'])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\np=r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/29_review_01.jsonl'\nlines=[l for l in open(p,encoding='utf8') if l.strip()]\nprint('nl',len(lines))\nfor l in lines[:3]:\n    d=json.loads(l); print('TYPE',d.get('type'),'session',d.get('sessionID'))\n    part=d.get('part',{})\n    if part.get('type')=='text': print('  TEXT:',part['text'][:300])\nfor l in lines[-2:]:\n    d=json.loads(l); print('TAIL TYPE',d.get('type'))\n    part=d.get('part',{})\n    if part.get('type')=='text': print('  TEXT:',part['text'][:1500])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\np=r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/29_review_01.jsonl'\nfor l in open(p,encoding='utf8'):\n    if not l.strip(): continue\n    d=json.loads(l); part=d.get('part',{})\n    if part.get('type')=='text':\n        print('---TEXT---'); print(part['text'][:4000])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\23_READONLY_REVIEW_01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_b01_r1\\27_complete_review_prompt_01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import sys,json\nsys.path.insert(0,r'src/human_fall_detection')\nfrom core.capture_input import load_adapted\nfrom core.ground_evidence import read_json\nfrom core.nominal_leveling import validate_nominal_model\nnpz=r'docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_candidate.adapted.npz'\nrun=r'docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01'\nm,_=read_json(run+'/nominal_model.json'); m=validate_nominal_model(m)\nprint('model pitch',m['pitch_down_deg'],'height',m['height_m'],'from',m['from_frame'],'to',m['to_frame'],'status',m['status'])\nprint('model phys/extr/runtime',m['physical_verified'],m['extrinsics_verified'],m['runtime_eligible'])\nman,pts=load_adapted(npz)\nprint('frames',len(man['frames']),'points',pts.shape,'dtype',pts.dtype)\nprint('source meta',man['source']['meta_path']); print('source bin',man['source']['bin_path'])\nprint('meta_sha',man['source']['meta_sha256']); print('bin_sha',man['source']['bin_sha256']); print('xyz_sha',man['points']['sha256'])\nprint('first/last bag',man['frames'][0]['bag_time_sec'],man['frames'][-1]['bag_time_sec'])\nprint('declared',man['declared'])\nprint('first frames seq',[f['seq'] for f in man['frames'][:3]],'... last',[f['seq'] for f in man['frames'][-3:]])\nprint('group count',len(man['frame_groups']))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem -LiteralPath \"D:\\Code\\ldiar\\docs\\human_fall\\returns\" -ErrorAction SilentlyContinue | Select-Object Name, Length | Format-Table -AutoSize; echo \"---tickets GLB---\"; Get-ChildItem -LiteralPath \"D:\\Code\\ldiar\\docs\\human_fall\\tickets\" -Filter \"*GL*B*\" -ErrorAction SilentlyContinue | Select-Object Name; echo \"---grep GL-B01---\"; rg -n \"GL-B01|GLB01\" docs/human_fall/REVIEW_LOG.md docs/human_fall/tickets/INDEX.md docs/human_fall/README.md docs/human_fall/DISPATCH.md 2>$null | Select-Object -First 30",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\returns\\GL-B01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json,hashlib,os\nd=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/26_scope_02.json',encoding='utf8'))\nbad=[]; miss=[]\nfor p,h in d['files'].items():\n    pp=p.replace('/',os.sep)\n    if not os.path.isfile(pp): miss.append(p); continue\n    a=hashlib.sha256(open(pp,'rb').read()).hexdigest()\n    if a!=h: bad.append(p)\nprint('total',len(d['files']),'bad',len(bad),'missing',len(miss))\nfor b in bad: print('BAD',b)\nfor m in miss[:20]: print('MISS',m)\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\nd=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/26_scope_02.json',encoding='utf8'))\nf=d['files']\nfor k in list(f)[:3]:\n    print(repr(k), '->', type(f[k]).__name__, json.dumps(f[k])[:120])\nprint('ground_region_review ->', json.dumps(f.get('src/human_fall_detection/core/ground_region_review.py')))\nprint('annotator ->', json.dumps(f.get('pc_apps/human_replay/annotator.html')))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json,hashlib,os\nd=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/26_scope_02.json',encoding='utf8'))\nbad=[]; miss=[]\nfor p,rec in d['files'].items():\n    pp=p.replace('/',os.sep)\n    if not os.path.isfile(pp): miss.append(p); continue\n    b=open(pp,'rb').read(); a=hashlib.sha256(b).hexdigest()\n    if a!=rec['sha256'] or len(b)!=rec.get('size'): bad.append((p,rec['sha256'][:12],a[:12],rec.get('size'),len(b)))\nprint('total',len(d['files']),'bad',len(bad),'missing',len(miss))\nfor x in bad[:60]: print('BAD',x)\nfor m in miss[:20]: print('MISS',m)\n\" 2>&1 | Select-Object -Last 80",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json,os,hashlib\nb=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/01_before_01.json',encoding='utf8'))\ns=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/26_scope_02.json',encoding='utf8'))\nfor p in ['tmp_gl_diag/plane_vs_validation.py','tmp_gl_diag/floor_vs_declared.png','tmp_gl_diag/plane_vs_validation.png']:\n    print(p,'in01before',p in b['files'],'in26',p in s['files'])\nprint('01before total',len(b['files'])); print('26 total',len(s['files']))\nimport glob\nfor f in glob.glob('tmp_gl_diag/*'): print('EXISTS',f, os.path.getsize(f))\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "rg -n \"233210|cap_2026|R_y|yv|v8|v11|99frame|99.?frame\" src/human_fall_detection/core/ground_region_review.py src/human_fall_detection/scripts/review_ground_regions.py src/human_fall_detection/tests/test_ground_region_review.py 2>$null; echo \"---model R/t---\"; python -c \"import json; m=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01/nominal_model.json',encoding='utf8')); print('rotation',m['rotation']); print('translation',m['translation_m']); print('up_source',m['up_source'])\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import json\no=json.load(open(r'docs/human_fall/evidence/2026-10-04_gl_b01_r1/review_02/observations.json',encoding='utf8'))\nl=o['legacy_observations'][0]\nh=l['nominal_height_observation']\nprint('legacy FIT count',l['count'],'z domain',h['domain'],'median',h['z_stats']['signed_median_m'],'reason',h['reason'])\nprint('pca origin',l['pca_scene_plane']['origin'])\nprint('physical_ground_error',l['physical_ground_error'])\nfor r in o['regions']:\n    print(r['region_id'],'obs domain:',r['observation']['domain'],'| hist usage:',r['observation']['histogram']['usage'])\n\"",
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_follow_calibration/tests 2>&1 | rg -n \"Ran |^OK|FAILED|ERROR\" | Select-Object -Last 5; echo \"---node---\"; node --version 2>&1",
+        "workdir": "D:\\Code\\ldiar",
+        "timeout": 300000
+      },
+      "status": "completed",
+      "error": null
+    }
+  ],
+  "code_stopped": true
+}

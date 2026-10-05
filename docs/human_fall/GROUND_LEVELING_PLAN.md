@@ -1,6 +1,8 @@
 # 地面识别、坐标配平与现有大框问题：开发 PLAN
 
-当前执行按[WORKFLOW.md](WORKFLOW.md) v2，Codex直接派指定OpenCode模型并独立复审。GL00/GL01软件已获审，2026-10-02 GL02按[验收v1](GL02_ACCEPTANCE.md)软件PASS，设备NOT_RUN/真实物理BLOCKED；GL03软件前置已满足，GL03–05本轮未启动。最新[R7独立结果](evidence/2026-10-02_gl02_r7/CODEX_REVIEW.md)。以下旧暂停/派工附记只作历史，方法与冻结契约继续有效。
+最终阶段现行规划入口：[Adaptive Ground Leveling正式计划](ADAPTIVE_GROUND_LEVELING_FINAL_PLAN.md)、[模块/状态契约](ADAPTIVE_GROUND_LEVELING_CONTRACT.md)、[主线v3最终阶段§6](GROUND_LEVELING_NEXT_STAGE_PLAN_V3.md)。本轮PLAN_READY/仅文档；GL-A～GL-I实现均NOT_RUN，不替换已有固定方案，不改1.14m物理记录/运行参数。下方既有GL-00～05与历史授权保留追溯，由WORKFLOW最新边界控制。
+
+当前按[WORKFLOW.md](WORKFLOW.md) v2，用户手动派指定OpenCode、Codex独立复审。GL02软件PASS；GL03 R6分类已通过，软件仅G03结构资格FAIL/REWORK，G04/G05保持PASS。O01统计PASS/真实身份BLOCKED、设备NOT_RUN。当前[R6复审](evidence/2026-10-02_gl03_r6/codex_review_01/CODEX_REVIEW.md)、[结构审查](evidence/2026-10-02_gl03_r6/codex_review_01/PLAN_REVIEW.md)、[手动R7](AI_PROMPT_GL03_OPENCODE_R7.md)。不重做已过功能、不自动派工/GL04/设备操作。
 
 日期：2026-10-01。状态：方案已选定，六张工单已编制；数据审查、算法开发、板端操作与部署均未开始。本文是本阶段的执行入口，不重做已经通过的 HF 首版。
 
@@ -62,7 +64,7 @@
 | [GL-00](tickets/GL-00_data_roi_review.md) | 场景/真实数据/ROI/先验/参数与契约方案审查 | 本PLAN | R4软件/方案PASS，真实物理BLOCKED |
 | [GL-01](tickets/GL-01_constrained_ground.md) | 改造约束RANSAC与独立验证原型 | GL-00方法与参数方案获审；必要数据可用 | R4软件PASS，真实来源/物理BLOCKED |
 | [GL-02](tickets/GL-02_ground_frame.md) | 局部地面变换、产物与生命周期 | GL-00契约方案、GL-01软件获审 | R7软件PASS，设备NOT_RUN/物理BLOCKED；统一验收v1 |
-| [GL-03](tickets/GL-03_candidates_geometry.md) | 框坐标修复与大候选成因诊断/最小修复 | GL-01/02软件与契约获审 | 软件前置满足，未启动 |
+| [GL-03](tickets/GL-03_candidates_geometry.md) | 框坐标修复与大候选成因诊断/最小修复 | GL-01/02软件与契约获审 | R4软件REWORK（G03/G04/G05），先固定输入/有效绑定设计审查，真实身份BLOCKED/设备NOT_RUN |
 | [GL-04](tickets/GL-04_webui_level_view.md) | 配平点云/框/投影/俯瞰与交互 | GL-02/03接口获审 | WAIT_DEPENDENCY |
 | [GL-05](tickets/GL-05_device_acceptance.md) | 真机物理/性能/浏览器验收与发布 | GL-01～04对应软件PASS；现场与部署授权可用 | WAIT_DEPENDENCY |
 

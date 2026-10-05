@@ -1,0 +1,96 @@
+{
+  "kind": "gli05_second_review_ledger",
+  "passed": 12,
+  "total": 13,
+  "peak_bytes_no_cache_search": 1256504,
+  "results": [
+    {
+      "name": "coverage_30_synthetic",
+      "ok": true,
+      "detail": {
+        "missing": [],
+        "extra": []
+      }
+    },
+    {
+      "name": "coverage_real_labels",
+      "ok": true,
+      "detail": [
+        "approved",
+        "negative_X"
+      ]
+    },
+    {
+      "name": "ledger_physical_false",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ledger_local_runtime_board_false",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "status_matches_independent_scalar",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "ALL_NEAR_metrics_match",
+      "ok": false,
+      "detail": {
+        "mismatches": [
+          {
+            "case": "close_seed7_permuteTrue",
+            "metric": "BEST_ONLY",
+            "mine": false,
+            "recorded": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "counts_identities_hold",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "oracle_match_flag_consistent",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "no_closed_case_without_safe_flag",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "search_repeat_deterministic",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "search_memory_peak_recorded",
+      "ok": true,
+      "detail": {
+        "peak_bytes": 1256504
+      }
+    },
+    {
+      "name": "stage_timing_split_additive",
+      "ok": true,
+      "detail": {
+        "baseline_fit": 0.05170360000920482,
+        "research_search": 0.10365939998882823,
+        "scoreboard_total": 0.15536299999803305
+      }
+    },
+    {
+      "name": "slow_oracle_counterexample_present",
+      "ok": true,
+      "detail": {
+        "size": 2651647
+      }
+    }
+  ]
+}

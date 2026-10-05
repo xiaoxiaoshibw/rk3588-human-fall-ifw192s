@@ -1,0 +1,19 @@
+# HF-03 geometry calibration defaults. Independent of config/default.yaml
+# (HF-01 health/manifest, frozen) and of the human_follow calibration JSON.
+# Lengths in metres, angles in radians. Ground thresholds are the physical
+# tuning knobs; mount-rotation tolerances live in core/calibration.py.
+ground:
+  max_points: 100000
+  max_fit_points: 50000
+  range_min_m: 1.0
+  range_max_m: 30.0
+  ransac_iterations: 150
+  inlier_threshold_m: 0.05
+  min_inliers: 100
+  min_inlier_fraction: 0.2
+  normal_up_min_z: 0.5
+  holdout_fraction: 0.3
+  min_holdout_points: 20
+  max_holdout_rms_m: 0.12
+  min_holdout_support: 0.5
+  seed: 20261001

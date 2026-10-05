@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>GL-E02 ROI 标注 v11 — 旋转+高度滑杆</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#0b0e10;
+               color:#cfd8dc; font:13px/1.4 Consolas, "Microsoft YaHei", monospace; }
+  #view { position:absolute; inset:0; }
+  #hud  { position:absolute; top:8px; left:8px; padding:6px 10px;
+          background:rgba(0,0,0,.6); border-radius:4px; max-width:560px; }
+  #info { position:absolute; top:8px; right:8px; padding:6px 10px;
+          background:rgba(0,0,0,.6); border-radius:4px; text-align:right;
+          color:#9ccc9c; font-size:11px; max-width:380px; }
+  #ctl  { position:absolute; bottom:8px; left:8px; padding:6px 10px;
+          background:rgba(0,0,0,.6); border-radius:4px;
+          display:flex; gap:8px; align-items:center; flex-wrap:wrap; max-width:95vw; }
+  button { background:#1d262b; color:#cfd8dc; border:1px solid #37474f;
+           border-radius:3px; padding:4px 12px; cursor:pointer; }
+  button:hover { background:#26333a; }
+  button.on { background:#2a4d2a; border-color:#66bb6a; color:#b3e5b3; }
+  label { display:inline-flex; gap:4px; align-items:center; white-space:nowrap; }
+  #hVal { color:#ffd54f; min-width:64px; display:inline-block; }
+  #coordHud { position:absolute; bottom:64px; right:8px; padding:6px 10px;
+              background:rgba(0,0,0,.65); border-radius:4px;
+              color:#80d8ff; font-size:13px; white-space:pre; pointer-events:none; }
+  #selHud { position:absolute; top:70px; right:8px; padding:6px 10px;
+            background:rgba(0,0,0,.65); border-radius:4px;
+            color:#ffd54f; font-size:12px; white-space:pre;
+            display:none; user-select:text; -webkit-user-select:text; }
+</style>
+</head>
+<body>
+<div id="view"></div>
+
+<div id="hud">
+  <b>GL-E02 ROI 标注 v11.1</b> · 会话 cap_20261002_233210<br>
+  A=R_y(+26°) 已确认 · 高度 +1.340m (2026-10-04 用户对格校准,
+  待 §2 激光测距复核)
+</div>
+
+<div id="info">载入中 …</div>
+
+<div id="coordHud">鼠标 (移入画面)…</div>
+<div id="selHud"></div>
+
+<div id="ctl">
+  <button id="btnA" class="on">A: R_y(+26°)</button>
+  <button id="btnB">B: R_y(-26°)</button>
+  <button id="btnI">恒等</button>
+  <label>高度偏移 <input id="hSlider" type="range" min="-3" max="3" step="0.005" value="1.340" style="width:200px"></label>
+  <span id="hVal">+1.340 m</span>
+  <button id="btnSel">框选 OFF</button>
+  <button id="btnROI" class="on">ROI ON</button>
+  <button id="btnStrip" class="on">条带 ON</button>
+  <button id="btnFrame" class="on">切换叠加</button>
+  <label>帧:<input id="frameSlider" type="range" min="0" max="98" value="0" style="width:120px"></label>
+  <span id="frameLabel">帧 0</span>
+  <button id="btnReset">复位</button>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script>
+"use strict";
+
+const SID = "cap_20261002_233210";
+const PITCH_RAD = 26.0 * Math.PI / 180;
+
+/* ROIs 定义在"世界系"(地板系): X=前向, Y=侧向
+ * 数据源: 用户实测点 p2_cross_validation_pick_* (2026-10-04) */
+const ROIS = [
+    { id: "#1 FIT", color: 0x2ecc71, X: [1.02, 1.77], Y: [-0.95, -0.43] },  /* pick_01 首发"这一块平" */
+    { id: "#2 VAL", color: 0xf1c40f, X: [1.92, 2.42], Y: [-0.96,  0.09] },  /* pick_03 mid 中距区 */
+    { id: "#3 VAL", color: 0xe67e22, X: [1.30, 1.78], Y: [-0.40,  0.22] },  /* pick_04 near 近距/侧向 */
+    { id: "#4 VAL", color: 0x9b59b6, X: [2.62, 3.33], Y: [-0.59,  0.21] },  /* pick_02 far 远距跨电源走线槽 */
+];
+const STRIP = { x0: 2.50, x1: 2.55, color: 0xff00ff };
+
+/* ── 全局状态 ─────────────────────────────────────────────── */
+const S = window.S = {
+    renderer: null, scene: null, camera: null, controls: null,
+    pointsMat: null, points: null,
+    totalPoints: 0, frames: null,
+    sign: +1,            /* 旋转方向: A=+1, B=-1, I=0(恒等) */
+    tz: +1.340,          /* 高度平移 (滑杆实时改) — 2026-10-04 用户对格校准值 */
+    showROI: true, showStrip: true,
+    curFrame: 0,         /* -1 = 全部叠加; 默认单帧防万点同时溢出 */
+    roiMeshes: [], stripMesh: null,
+};
+
+/* ── 配平矩阵: R_y(sign*26°), 再平移 Z += tz ─────────────── */
+function buildMatrix() {
+    if (S.sign === 0) return new THREE.Matrix4();
+    const a = S.sign * PITCH_RAD;
+    const c = Math.cos(a), s = Math.sin(a);
+    const m = new THREE.Matrix4();
+    m.set(
+         c, 0, s, 0,
+         0, 1, 0, 0,
+        -s, 0, c, S.tz,
+         0, 0, 0, 1
+    );
+    return m;
+}
+function applyBalance() {
+    if (!S.pointsMat) return;
+    S.pointsMat.uniforms.uBalanced.value.copy(buildMatrix());
+    S.pointsMat.uniformsNeedUpdate = true;
+}
+
+/* ── IO ───────────────────────────────────────────────────── */
+async function loadMeta() {
+    const r = await fetch(`/api/file?sid=${encodeURIComponent(SID)}&name=meta.json`);
+    if (!r.ok) throw new Error("meta HTTP " + r.status);
+    return r.json();
+}
+async function loadBin() {
+    const r = await fetch(`/api/file?sid=${encodeURIComponent(SID)}&name=points.bin`);
+    if (!r.ok) throw new Error("bin HTTP " + r.status);
+    return r.arrayBuffer();
+}
+async function parseBin(meta, buf) {
+    const stride = meta.point_stride_bytes;
+    const totalPts = meta.total_points;
+    const frames = meta.frames;
+    const arr = new Float32Array(totalPts * 7);
+    const dv = new DataView(buf);
+    const info = document.getElementById("info");
+    let done = 0;
+    for (let fi = 0; fi < frames.length; fi++) {
+        const f = frames[fi];
+        const start = f.offset_points, cnt = f.count_points;
+        for (let i = 0; i < cnt; i++) {
+            const off = (start + i) * stride;
+            const base = (start + i) * 7;
+            arr[base    ] = dv.getFloat32(off,      true);
+            arr[base + 1] = dv.getFloat32(off +  4, true);
+            arr[base + 2] = dv.getFloat32(off +  8, true);
+            arr[base + 3] = dv.getFloat32(off + 12, true);
+            arr[base + 6] = fi;
+        }
+        done += cnt;
+        /* 每 10 帧让出主线程一次，防假死；进度写到 info */
+        if (fi % 10 === 0) {
+            info.textContent = `解析点云 … ${(done / 10000).toFixed(0)} 万 / ${(totalPts / 10000).toFixed(0)} 万`;
+            await new Promise(r => setTimeout(r, 0));
+        }
+    }
+    return { arr, totalPts, frames };
+}
+
+/* ── 场景装配 ─────────────────────────────────────────────── */
+function buildScene() {
+    S.renderer = new THREE.WebGLRenderer({ antialias: true });
+    S.renderer.setPixelRatio(window.devicePixelRatio);
+    S.renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById("view").appendChild(S.renderer.domElement);
+
+    S.scene = new THREE.Scene();
+    S.scene.background = new THREE.Color(0x0b0e10);
+
+    S.camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.05, 100);
+    S.camera.up.set(0, 0, 1);
+    S.camera.position.set(1.6, -4.2, 2.4);
+
+    S.controls = new THREE.OrbitControls(S.camera, S.renderer.domElement);
+    S.controls.target.set(1.6, 0, 0);
+    S.controls.enableDamping = true;
+
+    const grid = new THREE.GridHelper(10, 20, 0x37474f, 0x1a2327);
+    grid.rotation.x = Math.PI / 2;
+    S.scene.add(grid);
+    S.scene.add(new THREE.AxesHelper(0.5));
+
+    /* 雷达位置参考标记 (user 陈述安装高 ~1.1m) */
+    const origin = new THREE.Mesh(
+        new THREE.SphereGeometry(0.04, 16, 12),
+        new THREE.MeshBasicMaterial({ color: 0x00b0ff }));
+    origin.position.set(0, 0, 1.1);
+    S.scene.add(origin);
+    S.scene.add(new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,1.1)]),
+        new THREE.LineBasicMaterial({ color: 0x00b0ff })));
+
+    /* 电源走线槽条带 */
+    S.stripMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(STRIP.x1 - STRIP.x0, 3.0, 0.05),
+        new THREE.MeshBasicMaterial({ color: STRIP.color, transparent: true, opacity: 0.25, side: THREE.DoubleSide }));
+    S.stripMesh.position.set((STRIP.x0+STRIP.x1)/2, 0, 0.025);
+    S.scene.add(S.stripMesh);
+
+    /* 4 ROI 盒 */
+    for (const r of ROIS) {
+        const g = new THREE.BoxGeometry(r.X[1]-r.X[0], r.Y[1]-r.Y[0], 0.05);
+        const mesh = new THREE.Mesh(g, new THREE.MeshBasicMaterial({
+            color: r.color, transparent: true, opacity: 0.28, side: THREE.DoubleSide }));
+        mesh.position.set((r.X[0]+r.X[1])/2, (r.Y[0]+r.Y[1])/2, 0.025);
+        mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),
+            new THREE.LineBasicMaterial({ color: r.color })));
+        const cv = document.createElement("canvas");
+        cv.width = 256; cv.height = 64;
+        const cx2 = cv.getContext("2d");
+        cx2.fillStyle = "#000"; cx2.fillRect(0,0,256,64);
+        const hex = "#" + r.color.toString(16).padStart(6, "0");
+        cx2.strokeStyle = hex; cx2.lineWidth = 4; cx2.strokeRect(2,2,252,60);
+        cx2.font = "bold 28px Consolas"; cx2.textAlign = "center"; cx2.textBaseline = "middle";
+        cx2.fillStyle = hex; cx2.fillText(r.id, 128, 32);
+        const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv) }));
+        sp.scale.set(0.5, 0.125, 1); sp.position.set(0, 0, 0.12);
+        mesh.add(sp);
+        S.roiMeshes.push(mesh);
+        S.scene.add(mesh);
+    }
+}
+
+/* ── 点云装配 ─────────────────────────────────────────────── */
+function buildPoints(parsed) {
+    const N = parsed.totalPts;
+    const positions = new Float32Array(N * 3);
+    const grays     = new Float32Array(N * 3);
+    const frames    = new Float32Array(N);
+    for (let i = 0; i < N; i++) {
+        const b = i * 7;
+        positions[i*3  ] = parsed.arr[b];
+        positions[i*3+1] = parsed.arr[b+1];
+        positions[i*3+2] = parsed.arr[b+2];
+        const g = Math.min(1, Math.max(0, parsed.arr[b+3] / 200));
+        grays[i*3] = g; grays[i*3+1] = g; grays[i*3+2] = g;
+        frames[i] = parsed.arr[b+6];
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("aGray",    new THREE.BufferAttribute(grays, 3));
+    geo.setAttribute("aFrame",   new THREE.BufferAttribute(frames, 1));
+
+    S.pointsMat = new THREE.ShaderMaterial({
+        uniforms: {
+            uBalanced: { value: buildMatrix() },
+            uCurFrame: { value: 0 },
+            uPointSize: { value: 2.5 },
+        },
+        vertexShader: [
+            "uniform mat4 uBalanced;",
+            "uniform float uCurFrame;",
+            "uniform float uPointSize;",
+            "attribute vec3 aGray;",
+            "attribute float aFrame;",
+            "varying vec3 vColor;",
+            "void main() {",
+            "  vColor = aGray;",
+            "  bool ok = (uCurFrame < 0.0) || (abs(aFrame - uCurFrame) < 0.5);",
+            "  gl_Position = projectionMatrix * modelViewMatrix * uBalanced * vec4(position, 1.0);",
+            "  gl_PointSize = uPointSize;",
+            "  if (!ok) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);",
+            "}"
+        ].join("\n"),
+        fragmentShader: "varying vec3 vColor; void main(){ gl_FragColor = vec4(vColor, 1.0); }",
+        transparent: false,
+    });
+    S.points = new THREE.Points(geo, S.pointsMat);
+    S.scene.add(S.points);
+}
+
+/* ── 按钮接线 (init 前一次性绑好, init 崩了也能点) ────────── */
+(function bindUI() {
+    const $ = id => document.getElementById(id);
+    const hVal = () => $("hVal");
+    function refreshH() {
+        hVal().textContent = (S.tz >= 0 ? "+" : "") + S.tz.toFixed(3) + " m";
+    }
+    $("btnA").onclick = () => {
+        S.sign = +1;
+        $("btnA").classList.add("on"); $("btnB").classList.remove("on"); $("btnI").classList.remove("on");
+        applyBalance();
+    };
+    $("btnB").onclick = () => {
+        S.sign = -1;
+        $("btnB").classList.add("on"); $("btnA").classList.remove("on"); $("btnI").classList.remove("on");
+        applyBalance();
+    };
+    $("btnI").onclick = () => {
+        S.sign = 0;
+        $("btnI").classList.add("on"); $("btnA").classList.remove("on"); $("btnB").classList.remove("on");
+        applyBalance();
+    };
+    $("hSlider").oninput = e => {
+        S.tz = parseFloat(e.target.value);
+        refreshH();
+        applyBalance();
+    };
+    refreshH();
+    $("btnROI").onclick = () => {
+        S.showROI = !S.showROI;
+        $("btnROI").classList.toggle("on", S.showROI);
+        $("btnROI").textContent = S.showROI ? "ROI ON" : "ROI OFF";
+        for (const m of S.roiMeshes) m.visible = S.showROI;
+    };
+    $("btnStrip").onclick = () => {
+        S.showStrip = !S.showStrip;
+        $("btnStrip").classList.toggle("on", S.showStrip);
+        $("btnStrip").textContent = S.showStrip ? "条带 ON" : "条带 OFF";
+        if (S.stripMesh) S.stripMesh.visible = S.showStrip;
+    };
+    $("btnFrame").onclick = () => {
+        if (S.curFrame === -1) {
+            S.curFrame = parseInt($("frameSlider").value, 10);
+            $("btnFrame").textContent = "切换叠加";
+            $("btnFrame").classList.add("on");
+            $("frameLabel").textContent = "帧 " + S.curFrame;
+        } else {
+            S.curFrame = -1;
+            $("btnFrame").textContent = "切换单帧";
+            $("btnFrame").classList.remove("on");
+            $("frameLabel").textContent = "叠加";
+        }
+        if (S.pointsMat) S.pointsMat.uniforms.uCurFrame.value = S.curFrame;
+    };
+    $("frameSlider").oninput = e => {
+        S.curFrame = parseInt(e.target.value, 10);
+        $("frameLabel").textContent = "帧 " + S.curFrame;
+        if (S.pointsMat) S.pointsMat.uniforms.uCurFrame.value = S.curFrame;
+    };
+    $("btnReset").onclick = () => {
+        S.camera.position.set(1.6, -4.2, 2.4);
+        S.controls.target.set(1.6, 0, 0);
+        S.controls.update();
+    };
+})();
+
+/* ── 主流程 ─────────────────────────────────────────────── */
+async function init() {
+    buildScene();
+    const info = document.getElementById("info");
+    info.textContent = "下载 meta.json …";
+    const meta = await loadMeta();
+    info.textContent = "下载 points.bin (136 MB) …";
+    const buf = await loadBin();
+    info.textContent = "解析点云 …";
+    const parsed = await parseBin(meta, buf);
+    S.totalPoints = parsed.totalPts;
+    S.frames = parsed.frames;
+    buildPoints(parsed);
+    info.textContent = `${S.totalPoints.toLocaleString()} 点 / ${parsed.frames.length} 帧 — 拖拽旋转, 滚轮缩放`;
+    (function animate() {
+        requestAnimationFrame(animate);
+        S.controls.update();
+        S.renderer.render(S.scene, S.camera);
+    })();
+}
+
+window.addEventListener("resize", () => {
+    if (!S.renderer) return;
+    S.camera.aspect = window.innerWidth / window.innerHeight;
+    S.camera.updateProjectionMatrix();
+    S.renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ── 鼠标拾取器: XY 坐标实时显示 + 两点框选 ──────────────────
+ * 原理: 把鼠标屏幕位置反投影成 3D 射线, 与 z=0 地板平面求交
+ *       (交点在"配平后显示系"中, 与 ROI 盒同坐标系)
+ * 框选: 点击第一下记角点1, 第二下记角点2 → 画矩形 + 报 X/Y 范围
+ *       第三次点击开始新框选
+ */
+(function bindPicker() {
+    const raycaster = new THREE.Raycaster();
+    const ndc = new THREE.Vector2();
+    const floorPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);  // z=0
+    const hit = new THREE.Vector3();
+
+    let selMode = false;
+    let corner1 = null, corner2 = null;
+    let rectLine = null, marker1 = null, marker2 = null;
+
+    function toWorld(ev) {
+        if (!S.renderer || !S.camera) return null;
+        const rect = S.renderer.domElement.getBoundingClientRect();
+        ndc.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+        ndc.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(ndc, S.camera);
+        return raycaster.ray.intersectPlane(floorPlane, hit) ? hit.clone() : null;
+    }
+
+    function setSelMode(on) {
+        selMode = on;
+        const b = document.getElementById("btnSel");
+        b.classList.toggle("on", on);
+        b.textContent = on ? "框选 ON" : "框选 OFF";
+        if (S.controls) S.controls.enableRotate = !on;   // 框选时禁左键旋转
+    }
+
+    function clearSel() {
+        corner1 = corner2 = null;
+        if (rectLine) { S.scene.remove(rectLine); rectLine = null; }
+        for (const m of [marker1, marker2]) if (m) S.scene.remove(m);
+        marker1 = marker2 = null;
+        document.getElementById("selHud").style.display = "none";
+    }
+
+    function placeMarker(p, color) {
+        const m = new THREE.Mesh(new THREE.SphereGeometry(0.035, 12, 8),
+                                 new THREE.MeshBasicMaterial({ color }));
+        m.position.copy(p).setZ(0.03);
+        S.scene.add(m);
+        return m;
+    }
+
+    function reportSel() {
+        // X = 前向, Y = 侧向; 取两角点包络
+        const X0 = Math.min(corner1.x, corner2.x), X1 = Math.max(corner1.x, corner2.x);
+        const Y0 = Math.min(corner1.y, corner2.y), Y1 = Math.max(corner1.y, corner2.y);
+        // 画矩形 (画在显示系 z=0.03)
+        if (rectLine) S.scene.remove(rectLine);
+        const pts = [
+            new THREE.Vector3(X0, Y0, 0.03), new THREE.Vector3(X1, Y0, 0.03),
+            new THREE.Vector3(X1, Y1, 0.03), new THREE.Vector3(X0, Y1, 0.03),
+            new THREE.Vector3(X0, Y0, 0.03),
+        ];
+        rectLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+            new THREE.LineBasicMaterial({ color: 0x00e5ff }));
+        S.scene.add(rectLine);
+        const hud = document.getElementById("selHud");
+        hud.style.display = "block";
+        hud.textContent =
+            "X_range_m: [" + X0.toFixed(3) + ", " + X1.toFixed(3) + "]\n" +
+            "Y_range_m: [" + Y0.toFixed(3) + ", " + Y1.toFixed(3) + "]\n" +
+            "(再点一下开始新框选)";
+    }
+
+    document.getElementById("btnSel").onclick = () => setSelMode(!selMode);
+
+    // canvas 事件挂在 renderer 上 (buildScene 之后才有), 用惰性绑定
+    let bound = false;
+    function ensureBound() {
+        if (bound || !S.renderer) return;
+        bound = true;
+        const cv = S.renderer.domElement;
+        cv.addEventListener("mousemove", ev => {
+            const p = toWorld(ev);
+            const hud = document.getElementById("coordHud");
+            hud.textContent = p
+                ? "X(前) " + p.x.toFixed(3) + " m   Y(侧) " + p.y.toFixed(3) + " m"
+                : "鼠标指针未交到地板平面";
+        });
+        cv.addEventListener("click", ev => {
+            if (!selMode) return;
+            const p = toWorld(ev);
+            if (!p) return;
+            if (!corner1) {
+                clearSel();
+                corner1 = p; marker1 = placeMarker(p, 0x00e5ff);
+                document.getElementById("selHud").style.display = "block";
+                document.getElementById("selHud").textContent =
+                    "角点1: (" + p.x.toFixed(3) + ", " + p.y.toFixed(3) + ")\n再点角点2 …";
+            } else if (!corner2) {
+                corner2 = p; marker2 = placeMarker(p, 0x00e5ff);
+                reportSel();
+            } else {
+                clearSel();   // 第三次点击: 清掉重来
+                corner1 = p; marker1 = placeMarker(p, 0x00e5ff);
+                document.getElementById("selHud").style.display = "block";
+                document.getElementById("selHud").textContent =
+                    "角点1: (" + p.x.toFixed(3) + ", " + p.y.toFixed(3) + ")\n再点角点2 …";
+            }
+        });
+    }
+    // scene 建好后懒绑 (轮询 200ms, 一次性)
+    const t = setInterval(() => { ensureBound(); if (bound) clearInterval(t); }, 200);
+    window._pickerInit = ensureBound;
+})();
+
+init().catch(e => {
+    document.getElementById("info").textContent = "错误: " + e.message;
+    console.error(e);
+});
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # GL-04 配平视图、真实地面参考与俯瞰交互
 
-执行：OpenCode DeepSeek v4.1 Flash；审核：Codex。状态：WAIT_DEPENDENCY。前置：GL-02/03接口获审。先改隔离preview，正式源码按通过后的同版本同步，不切换板端活动服务。
+执行：OpenCode Go Flash；独立审核/编排：Codex。当前R7代码条目无FAIL，V04真实DPR-only NOT_RUN，GL04尚未软件收口；V10 BLOCKED/D01 NOT_RUN。无活动writer、不派R8，详[当前入口](../DISPATCH.md)/[R7复审](../evidence/2026-10-03_gl04_r7/CODEX_REVIEW.md)。正式未获审不并入，不GL05/部署/采集。
 
 ## 任务
 
@@ -19,3 +19,4 @@
 - 原始图和配平图的同场景截图注明synthetic/offline/device、frame与版本；未跑浏览器不得标视觉PASS。
 - 渲染性能与框/点云同步有记录，无过期绿框。
 - 输出 `returns/GL-04.md`，Codex浏览器独立复核后交GL-05。源码通过不等于正式页面已发布。
+

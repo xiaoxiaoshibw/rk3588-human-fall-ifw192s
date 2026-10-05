@@ -1,0 +1,6 @@
+4c6dfc6cb92342429b21296de6a4080e [[1.5, 1.75, -0.25, 0.0], [2.75, 3.0, -0.75, -0.5], [0.75, 1.0, -1.0, -0.75], [2.5, 2.75, 0.0, 0.25]]
+冻结四区source rows与3个留出帧
+同域TLS / SVD / RANSAC与全点/逐区/留帧可行度评估
+生成 TLS 全帧配平数据
+生成 SVD 全帧配平数据
+{"sid": "cap_20261004_203349", "job_id": "4c6dfc6cb92342429b21296de6a4080e", "recommended": null, "artifacts": ["tls", "svd"], "methods": {"tls": {"valid": true, "reject_reasons": [], "full": {"count": 38665, "rms_m": 0.013924104624463005, "p95_m": 0.029002880641189586, "support_ratio": 0.9991723781197466, "median_signed_m": -2.9011122566480196e-05, "status": "PASS"}}, "svd": {"valid": true, "reject_reasons": [], "full": {"count": 38665, "rms_m": 0.013924104624463007, "p95_m": 0.02900288064118932, "support_ratio": 0.9991723781197466, "median_signed_m": -2.9011122566036107e-05, "status": "PASS"}}, "ransac": {"valid": false, "reject_reasons": ["GL_REGION_QUALITY", "GL_HOLDOUT_QUALITY"], "full": {"count": 38665, "rms_m": 0.01746526071094763, "p95_m": 0.03471601249376288, "support_ratio": 0.9995085995085995, "median_signed_m": 0.0018075375242705416, "status": "PASS"}}}}

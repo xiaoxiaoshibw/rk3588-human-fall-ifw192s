@@ -1,0 +1,230 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_user_picks_verify_all",
+  "session_id": "cap_20261002_233210",
+  "transform": {
+    "rotation": "A: R_y(+26deg)",
+    "tz_m": 1.34
+  },
+  "picks": [
+    {
+      "id": "pick_01",
+      "zh": "flat #1",
+      "X": [
+        1.022,
+        1.773
+      ],
+      "Y": [
+        -0.952,
+        -0.432
+      ],
+      "n": 88518,
+      "center": [
+        1.3975,
+        -0.692
+      ],
+      "size": [
+        0.7509999999999999,
+        0.52
+      ],
+      "Z_p5_p50_p95": [
+        -0.03518515229225159,
+        0.004648089408874512,
+        0.026927238702774043
+      ],
+      "Z_std": 0.018926376476883888,
+      "plane_coef": [
+        -0.0856088176369667,
+        0.03465358912944794,
+        -0.05933490768074989
+      ],
+      "plane_rms_m": 0.014891231432557106,
+      "absres_p95_m": 0.02951679378747939,
+      "plane_slope_deg": 3.9307966232299805,
+      "frac_absZ_lt_05": 0.9903522447411826
+    },
+    {
+      "id": "pick_02",
+      "zh": "far",
+      "X": [
+        2.623,
+        3.333
+      ],
+      "Y": [
+        -0.585,
+        0.213
+      ],
+      "n": 27009,
+      "center": [
+        2.978,
+        -0.186
+      ],
+      "size": [
+        0.71,
+        0.7979999999999999
+      ],
+      "Z_p5_p50_p95": [
+        -0.02700207233428955,
+        0.013219952583312988,
+        0.03985137939453125
+      ],
+      "Z_std": 0.021095504984259605,
+      "plane_coef": [
+        0.12503981590270996,
+        -0.03543730080127716,
+        0.0524287149310112
+      ],
+      "plane_rms_m": 0.014963781461119652,
+      "absres_p95_m": 0.025902331620454785,
+      "plane_slope_deg": 3.620945692062378,
+      "frac_absZ_lt_05": 0.9903365544818394
+    },
+    {
+      "id": "pick_03",
+      "zh": "mid",
+      "X": [
+        1.918,
+        2.415
+      ],
+      "Y": [
+        -0.964,
+        0.087
+      ],
+      "n": 52473,
+      "center": [
+        2.1665,
+        -0.4385
+      ],
+      "size": [
+        0.4970000000000001,
+        1.051
+      ],
+      "Z_p5_p50_p95": [
+        0.008025789260864257,
+        0.023586034774780273,
+        0.04080362319946286
+      ],
+      "Z_std": 0.010328981094062328,
+      "plane_coef": [
+        0.01753060705959797,
+        0.005356552544981241,
+        0.012056470848619938
+      ],
+      "plane_rms_m": 0.009643559344112873,
+      "absres_p95_m": 0.018458005785942075,
+      "plane_slope_deg": 0.7558504343032837,
+      "frac_absZ_lt_05": 0.9883368589560345
+    },
+    {
+      "id": "pick_04",
+      "zh": "near/lateral",
+      "X": [
+        1.296,
+        1.776
+      ],
+      "Y": [
+        -0.4,
+        0.22
+      ],
+      "n": 61691,
+      "center": [
+        1.536,
+        -0.09000000000000001
+      ],
+      "size": [
+        0.48,
+        0.62
+      ],
+      "Z_p5_p50_p95": [
+        -0.012864232063293457,
+        0.020049452781677246,
+        0.055269837379455566
+      ],
+      "Z_std": 0.020957212895154953,
+      "plane_coef": [
+        0.004702125675976276,
+        0.01591232419013977,
+        0.09051990509033203
+      ],
+      "plane_rms_m": 0.013342002406716347,
+      "absres_p95_m": 0.025617205537855625,
+      "plane_slope_deg": 5.251180171966553,
+      "frac_absZ_lt_05": 0.9063072409265533
+    }
+  ],
+  "pair_geometry": [
+    {
+      "a": "pick_01",
+      "b": "pick_02",
+      "center_dist_m": 1.6595228983054138,
+      "overlap_x_m": 0.0,
+      "overlap_y_m": 0.15299999999999997,
+      "overlap_area_m2": 0.0,
+      "checklist_ge_1m": true,
+      "disjoint": true
+    },
+    {
+      "a": "pick_01",
+      "b": "pick_03",
+      "center_dist_m": 0.8097056563961994,
+      "overlap_x_m": 0.0,
+      "overlap_y_m": 0.52,
+      "overlap_area_m2": 0.0,
+      "checklist_ge_1m": false,
+      "disjoint": true
+    },
+    {
+      "a": "pick_01",
+      "b": "pick_04",
+      "center_dist_m": 0.6177266790417911,
+      "overlap_x_m": 0.47699999999999987,
+      "overlap_y_m": 0.0,
+      "overlap_area_m2": 0.0,
+      "checklist_ge_1m": false,
+      "disjoint": true
+    },
+    {
+      "a": "pick_02",
+      "b": "pick_03",
+      "center_dist_m": 0.8498755791290865,
+      "overlap_x_m": 0.0,
+      "overlap_y_m": 0.6719999999999999,
+      "overlap_area_m2": 0.0,
+      "checklist_ge_1m": false,
+      "disjoint": true
+    },
+    {
+      "a": "pick_02",
+      "b": "pick_04",
+      "center_dist_m": 1.44519202876296,
+      "overlap_x_m": 0.0,
+      "overlap_y_m": 0.613,
+      "overlap_area_m2": 0.0,
+      "checklist_ge_1m": true,
+      "disjoint": true
+    },
+    {
+      "a": "pick_03",
+      "b": "pick_04",
+      "center_dist_m": 0.7204044003197093,
+      "overlap_x_m": 0.0,
+      "overlap_y_m": 0.487,
+      "overlap_area_m2": 0.0,
+      "checklist_ge_1m": false,
+      "disjoint": true
+    }
+  ],
+  "power_strip_x_m": [
+    2.5,
+    2.55
+  ],
+  "p2_gate": {
+    "criterion": "absres_p95 <= 0.05 m",
+    "unit": "m"
+  },
+  "physical_verified": false,
+  "notes": [
+    "absres_p95 measured relative to per-box trimmed plane fit",
+    "plane_slope_deg reflects residual pitch error of the 26deg estimate"
+  ]
+}

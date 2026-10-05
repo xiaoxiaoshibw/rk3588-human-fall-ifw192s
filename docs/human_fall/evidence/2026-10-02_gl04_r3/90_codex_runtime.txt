@@ -1,0 +1,53 @@
+PASS V01 missing R/t never identity
+PASS V02 exact requested ground.support_polygon entry
+PASS V06 valid transform + unknown ground refuses mode
+PASS V06 valid transform + none ground refuses mode
+PASS V06 unsupported calibration schema refuses mode
+PASS V06 verifier unavailable clears observed status
+PASS V07 no candidate snapshot + ready baseline clears current status
+PASS V07 candidate list empty + ready baseline clears current status
+PASS V05 list closure same IDs changed candidate content rejected
+PASS V05 same IDs changed R/t rejected
+PASS V05 caller mutation after rendered button rejected
+PASS V06 silent expiry refuses old choice; history retained
+PASS V06 disconnect preserves history and refuses old choice
+PASS V06 future foreign snapshot cannot change current frame R/t
+PASS V03 mode labels/current position use ground coordinates
+PASS V04 DPR-only overlay backing changes after frame
+PASS V04 CSS resize reprojection uses current camera and rect
+PASS V02 budget 3001/9000 supports has provenance and <=3000
+PASS V05 fresh list choice and same-content reload accepted original ID
+PASS V06 raw cloud same seq/stamp foreign spatial frame rejected
+PASS V01 two coordinate inputs with conflicting R/t rejected
+PASS V06 snapshot new calibration while state old is unknown and unselectable
+PASS V06 state new calibration while snapshot old is unknown
+PASS V06 unsupported matched calibration schema cannot green source or select
+PASS V07 target absent but unrelated current candidate and ready baseline exists
+PASS V08 publisher state.performance.queue_dropped field is displayed
+PASS V02 explicit 3D support with null Z is not silently flattened
+PASS V03 explicit non-metre ground transform is refused
+PASS V06 quiet expiry invalidates GPU drawing as well as DOM/overlay
+FAIL V07 source target absent while unrelated candidate survives :: Expected values to be strictly equal:
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+FAIL V07 ground target stale fields cannot replace missing current target :: Expected values to be strictly equal:
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+PASS V05 unselected fresh current context can perform first selection
+FAIL V09 legacy no calibration no ground raw first selection preserved :: Expected values to be strictly equal:
+
+0 !== 1
+
+FAIL V06 one-sided missing GDID cannot match known state binding :: Expected values to be strictly equal:
++ actual - expected
+
++ 'upright'
+- 'unknown'
+
+{"pass":30,"fail":4}

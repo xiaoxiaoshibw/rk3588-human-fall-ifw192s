@@ -1,0 +1,35 @@
+GL-A R1 开工基线（2026-10-05, Asia/Shanghai；Windows 开发机）
+================================================================
+branch: master
+HEAD:   8676bb479d4ae35cf22075cfe70225cf2220572a
+worktree: dirty；git status --porcelain = 257 行（含全部未跟踪生产资料；本轮改动前记录）
+
+运行环境（开发机）: Python 3.12.10 / NumPy 1.26.4
+板端目标（兼容要求）: Python 3.8.10 / NumPy 1.17.4；纯 stdlib + NumPy，无 ROS/OpenCV/RKNN
+
+改动前完整回归:
+  python -B -W error -m unittest discover -s src/human_fall_detection/tests
+  → Ran 458 tests in 14.842s / OK / EXIT=0
+  日志: 01_regression_before.txt（本目录）
+
+依赖文件 git blob 哈希（git hash-object，改动前）:
+0150e5ebad0bbb8d6a0b35604904cf705712e09c  src/human_fall_detection/core/ground.py
+ffa789e0c8d4e4eed3a4910a966f20219c297999  src/human_fall_detection/core/calibration.py
+060d75b7e2a4d16c77dfe114c9411ac0e3726bba  src/human_fall_detection/core/joint_leveling.py
+6d683d3f810143322d99cc36ccd6270a294e866f  src/human_fall_detection/core/ground_diagnostics.py
+9150cacd363e633b4fa6bdf9ef0b6416d166daf8  src/human_fall_detection/core/ground_evidence.py
+fb8b6974013c19b4b438a394186b8ed4b2ac08d8  src/human_fall_detection/core/numeric.py
+8409e1b6e151711202f03348eb1dccee8323f0b6  src/human_fall_detection/core/capture_input.py
+4a578854af8488cf7f37d76df8c1e2bdaced8875  src/human_fall_detection/tests/test_joint_leveling.py
+7c43a87b7f0ff5244814e51e083f93e5286169c5  pc_apps/human_replay/leveling_estimators/__init__.py
+c1ff53144001715277790d13b798c75bcf49f352  pc_apps/human_replay/leveling_estimators/tls.py
+267d460c211d8721ce4777fc1ff6a74adac9d8cb  pc_apps/human_replay/leveling_estimators/svd.py
+e79806e11d64f040082c60002e20c0cc51a40478  pc_apps/human_replay/leveling_estimators/ransac.py
+
+本轮目标新路径开工前状态（git status --porcelain 为空 = 不存在）:
+  src/human_fall_detection/core/adaptive_ground/        不存在（本轮新建）
+  docs/human_fall/returns/GL-A.md                       不存在（本轮新建）
+  docs/human_fall/evidence/2026-10-05_agl_a_r1/         本轮新建证据目录
+
+范围冻结确认（不修改）: ground.py / calibration.py / config / driver / webui / 旧证据；
+pc_apps/human_replay/leveling_estimators 为只读数值参照（GB 工作台显示语义对齐），本轮不修改。

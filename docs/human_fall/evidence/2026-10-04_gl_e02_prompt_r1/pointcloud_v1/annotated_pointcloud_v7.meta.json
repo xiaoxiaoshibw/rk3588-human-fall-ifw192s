@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_roi_pointcloud_annotation",
+  "version": "v7",
+  "source": {
+    "bag_session_id": "cap_20261002_233210",
+    "points_sha256": "d946b80b51258e4e0452fc3a40f9ebd7b47c9b3edac25df7aeb1c6ea9f322664",
+    "meta_sha256": "246170285a174d3859fbceed0c8b780b4f976d2237adc4b8c11dcbe6ebb4d648",
+    "frames_merged": 99,
+    "total_points": 4863787,
+    "ground_points_kept": 425117,
+    "floor_z_estimate": -0.03769295662641525,
+    "ground_z_window": [
+      -0.21769295662641525,
+      0.14230704337358474
+    ]
+  },
+  "binding_to_field_today": {
+    "claim": "user stated radar pose @ 10/02 recording == radar pose @ 10/04 today",
+    "implication_for_GL_E01_A05": "PARTIALLY_UNBLOCKED",
+    "physical_verified": false,
+    "note": "lidar has not been moved since 10/02 recording per user statement; measurement_record.install_unchanged_since can be 2026-10-02"
+  },
+  "power_strip_geom_ref": {
+    "x_range": [
+      2.5,
+      2.55
+    ],
+    "user_description": "电源走线 (power cable conduit), no height step, geometric reference only",
+    "user_measured_distance_m": 2.5
+  },
+  "roi_definitions": [
+    {
+      "roi_id": "#1 FIT_near",
+      "x_range_m": [
+        0.5,
+        1.2
+      ],
+      "y_range_m": [
+        -0.4,
+        0.4
+      ],
+      "note": "FIT, nearest sticker",
+      "points_inside": 0,
+      "color": [
+        46,
+        204,
+        113
+      ]
+    },
+    {
+      "roi_id": "#2 VAL_mid_near",
+      "x_range_m": [
+        1.2,
+        1.8
+      ],
+      "y_range_m": [
+        -0.5,
+        0.5
+      ],
+      "note": "VAL near-mid",
+      "points_inside": 15247,
+      "color": [
+        241,
+        196,
+        15
+      ]
+    },
+    {
+      "roi_id": "#3 VAL_mid_far",
+      "x_range_m": [
+        1.8,
+        2.4
+      ],
+      "y_range_m": [
+        -0.5,
+        0.5
+      ],
+      "note": "VAL far-mid, stops before power strip",
+      "points_inside": 23747,
+      "color": [
+        230,
+        126,
+        34
+      ]
+    },
+    {
+      "roi_id": "#4 VAL_far",
+      "x_range_m": [
+        2.7,
+        3.4
+      ],
+      "y_range_m": [
+        -0.5,
+        0.5
+      ],
+      "note": "VAL far, PAST the 2.55m power-strip line",
+      "points_inside": 29739,
+      "color": [
+        155,
+        89,
+        182
+      ]
+    }
+  ],
+  "rendering": {
+    "color_scheme": "z (height) via viridis",
+    "projection": "top-down (y lateral, x forward)",
+    "alpha": 0.55,
+    "size_pt": 0.3
+  },
+  "physical_verified": false,
+  "next_actions": [
+    "User prints annotated_pointcloud_v7.png to field",
+    "Place Zone-FIT-01 .. Zone-VAL-03 stickers at field per ROIs",
+    "Laser-rangefinder: lidar origin -> each sticker x3",
+    "Record actual distances into measurement_record.json"
+  ]
+}

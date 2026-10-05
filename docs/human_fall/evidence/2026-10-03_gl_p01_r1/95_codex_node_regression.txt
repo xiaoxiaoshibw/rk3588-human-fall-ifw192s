@@ -1,0 +1,30 @@
+test_deduplicate_and_no_replay_after_reload (test_hf07_node.EventLogTest.test_deduplicate_and_no_replay_after_reload) ... ok
+test_disk_failure_is_explicit (test_hf07_node.EventLogTest.test_disk_failure_is_explicit) ... ok
+test_auxiliary_device_repeat_keeps_cloud_epoch (test_hf07_node.FallNodeCoreTest.test_auxiliary_device_repeat_keeps_cloud_epoch) ... ok
+test_baseline_completion_ack (test_hf07_node.FallNodeCoreTest.test_baseline_completion_ack) ... ok
+test_candidate_unique_continuity_accepted (test_hf07_node.FallNodeCoreTest.test_candidate_unique_continuity_accepted) ... ok
+test_epoch_mismatch_rejected (test_hf07_node.FallNodeCoreTest.test_epoch_mismatch_rejected) ... ok
+test_event_log_rejects_nonserializable_event (test_hf07_node.FallNodeCoreTest.test_event_log_rejects_nonserializable_event) ... ok
+test_ground_only_derives_version_and_reaches_upright (test_hf07_node.FallNodeCoreTest.test_ground_only_derives_version_and_reaches_upright) ... ok
+test_illegal_stamp_changes_epoch (test_hf07_node.FallNodeCoreTest.test_illegal_stamp_changes_epoch) ... ok
+test_malformed_request_is_explicit (test_hf07_node.FallNodeCoreTest.test_malformed_request_is_explicit) ... ok
+test_no_ground_degrades_and_stays_unknown (test_hf07_node.FallNodeCoreTest.test_no_ground_degrades_and_stays_unknown) ... ok
+test_process_publishes_candidates_and_merged_state (test_hf07_node.FallNodeCoreTest.test_process_publishes_candidates_and_merged_state) ... ok
+test_release_allowed_after_required_cloud_stalls (test_hf07_node.FallNodeCoreTest.test_release_allowed_after_required_cloud_stalls) ... ok
+test_release_clears_current_geometry (test_hf07_node.FallNodeCoreTest.test_release_clears_current_geometry) ... ok
+test_selection_ack_and_idempotent_replay (test_hf07_node.FallNodeCoreTest.test_selection_ack_and_idempotent_replay) ... ok
+test_stale_snapshot_rejected (test_hf07_node.FallNodeCoreTest.test_stale_snapshot_rejected) ... ok
+test_undecodable_frame_is_invalid_not_normal (test_hf07_node.FallNodeCoreTest.test_undecodable_frame_is_invalid_not_normal) ... ok
+test_keeps_only_latest (test_hf07_node.LatestFrameQueueTest.test_keeps_only_latest) ... ok
+test_wake_without_item (test_hf07_node.LatestFrameQueueTest.test_wake_without_item) ... ok
+test_build_core_always_monotonic_even_with_replay_flag (test_hf07_node.NodeClockBoundaryTest.test_build_core_always_monotonic_even_with_replay_flag) ... ok
+test_frame_age_exceeded_is_injectable (test_hf07_node.NodeClockBoundaryTest.test_frame_age_exceeded_is_injectable) ... ok
+test_request_uses_post_lock_clock (test_hf07_node.NodeClockBoundaryTest.test_request_uses_post_lock_clock) ... ok
+test_projection_drops_evidence_without_mutating_algorithm_snapshot (test_hf07_node.RosProjectionTest.test_projection_drops_evidence_without_mutating_algorithm_snapshot) ... ok
+test_before_first_frame_fall_state_is_unknown (test_hf07_node.StalledStreamWatchdogTest.test_before_first_frame_fall_state_is_unknown) ... ok
+test_stale_stream_hides_last_measured_geometry (test_hf07_node.StalledStreamWatchdogTest.test_stale_stream_hides_last_measured_geometry) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.043s
+
+OK

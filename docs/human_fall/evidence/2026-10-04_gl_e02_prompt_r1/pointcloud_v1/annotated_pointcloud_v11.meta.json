@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_roi_pointcloud_annotation",
+  "version": "v11",
+  "transform_user_confirmed": {
+    "rotation": "A: R_y(+26deg)",
+    "tz_m": 1.34,
+    "confirmed_at": "2026-10-04T17:5x+08:00 (annotator.html v11 slider)",
+    "confirmed_by": "user on-site visual alignment",
+    "physical_verified": false,
+    "note": "tz for flat floor ≈ mount height; cross-check at FIELD_CHECKLIST §2"
+  },
+  "source": {
+    "session_id": "cap_20261002_233210",
+    "points_sha256": "d946b80b51258e4e0452fc3a40f9ebd7b47c9b3edac25df7aeb1c6ea9f322664",
+    "frames_merged": 99,
+    "total_points": 4863787,
+    "floor_band_points": 1487041,
+    "floor_band_tol_m": 0.15
+  },
+  "roi_definitions": [
+    {
+      "roi_id": "#1 FIT_near",
+      "X_range_m": [
+        0.6,
+        1.2
+      ],
+      "Y_range_m": [
+        -0.4,
+        0.4
+      ],
+      "points_inside_floor_band": 92681,
+      "color_rgb": [
+        46,
+        204,
+        113
+      ]
+    },
+    {
+      "roi_id": "#2 VAL_mid_near",
+      "X_range_m": [
+        1.3,
+        1.8
+      ],
+      "Y_range_m": [
+        -0.5,
+        0.5
+      ],
+      "points_inside_floor_band": 99779,
+      "color_rgb": [
+        241,
+        196,
+        15
+      ]
+    },
+    {
+      "roi_id": "#3 VAL_mid_far",
+      "X_range_m": [
+        1.9,
+        2.4
+      ],
+      "Y_range_m": [
+        -0.5,
+        0.5
+      ],
+      "points_inside_floor_band": 47297,
+      "color_rgb": [
+        230,
+        126,
+        34
+      ]
+    },
+    {
+      "roi_id": "#4 VAL_far",
+      "X_range_m": [
+        2.7,
+        3.4
+      ],
+      "Y_range_m": [
+        -0.5,
+        0.5
+      ],
+      "points_inside_floor_band": 22673,
+      "color_rgb": [
+        155,
+        89,
+        182
+      ]
+    }
+  ],
+  "power_strip": {
+    "X_range_m": [
+      2.5,
+      2.55
+    ]
+  },
+  "version_history": [
+    {
+      "v": "v7",
+      "issue": "histogram-mode floor z; lidar x treated as world x"
+    },
+    {
+      "v": "v8",
+      "issue": "wrong rotation sign/tz; points off floor"
+    },
+    {
+      "v": "v10",
+      "issue": "identity transform experiment wrongly concluded SDK-leveled"
+    },
+    {
+      "v": "v11",
+      "fix": "user-confirmed A=R_y(+26), tz=+1.340 on annotator.html"
+    }
+  ]
+}

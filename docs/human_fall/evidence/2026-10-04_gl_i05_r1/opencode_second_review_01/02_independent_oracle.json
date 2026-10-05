@@ -1,0 +1,469 @@
+{
+  "kind": "gli05_second_review_independent_oracle",
+  "passed": 43,
+  "total": 46,
+  "results": [
+    {
+      "name": "hand_scalar_single",
+      "ok": true,
+      "detail": {
+        "got": "seen_pairwise_closed",
+        "want": "seen_pairwise_closed"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_single",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "seen_pairwise_closed",
+          "all_pairs": [],
+          "near_pairs": []
+        },
+        "theirs_status": "seen_pairwise_closed",
+        "theirs_all": [],
+        "theirs_near": []
+      }
+    },
+    {
+      "name": "hand_scalar_two_similar",
+      "ok": true,
+      "detail": {
+        "got": "seen_pairwise_closed",
+        "want": "seen_pairwise_closed"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_two_similar",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "seen_pairwise_closed",
+          "all_pairs": [],
+          "near_pairs": []
+        },
+        "theirs_status": "seen_pairwise_closed",
+        "theirs_all": [],
+        "theirs_near": []
+      }
+    },
+    {
+      "name": "hand_scalar_two_distinct_angle",
+      "ok": true,
+      "detail": {
+        "got": "unresolved",
+        "want": "unresolved"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_two_distinct_angle",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "unresolved",
+          "all_pairs": [
+            [
+              0,
+              1
+            ]
+          ],
+          "near_pairs": [
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "theirs_status": "unresolved",
+        "theirs_all": [
+          [
+            0,
+            1
+          ]
+        ],
+        "theirs_near": [
+          [
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "name": "hand_scalar_two_distinct_offset",
+      "ok": true,
+      "detail": {
+        "got": "unresolved",
+        "want": "unresolved"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_two_distinct_offset",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "unresolved",
+          "all_pairs": [
+            [
+              0,
+              1
+            ]
+          ],
+          "near_pairs": [
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "theirs_status": "unresolved",
+        "theirs_all": [
+          [
+            0,
+            1
+          ]
+        ],
+        "theirs_near": [
+          [
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "name": "hand_scalar_best_plus_weak_distinct",
+      "ok": true,
+      "detail": {
+        "got": "seen_dominant_pool_closed",
+        "want": "seen_dominant_pool_closed"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_best_plus_weak_distinct",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "seen_dominant_pool_closed",
+          "all_pairs": [
+            [
+              0,
+              1
+            ]
+          ],
+          "near_pairs": []
+        },
+        "theirs_status": "seen_dominant_pool_closed",
+        "theirs_all": [
+          [
+            0,
+            1
+          ]
+        ],
+        "theirs_near": []
+      }
+    },
+    {
+      "name": "hand_scalar_middle_best_chain",
+      "ok": true,
+      "detail": {
+        "got": "unresolved",
+        "want": "unresolved"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_middle_best_chain",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "unresolved",
+          "all_pairs": [
+            [
+              1,
+              2
+            ]
+          ],
+          "near_pairs": [
+            [
+              1,
+              2
+            ]
+          ]
+        },
+        "theirs_status": "unresolved",
+        "theirs_all": [
+          [
+            1,
+            2
+          ]
+        ],
+        "theirs_near": [
+          [
+            1,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "name": "hand_scalar_boundary_inside_080",
+      "ok": false,
+      "detail": {
+        "got": "unresolved",
+        "want": "seen_dominant_pool_closed"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_boundary_inside_080",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "unresolved",
+          "all_pairs": [
+            [
+              0,
+              1
+            ]
+          ],
+          "near_pairs": [
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "theirs_status": "unresolved",
+        "theirs_all": [
+          [
+            0,
+            1
+          ]
+        ],
+        "theirs_near": [
+          [
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "name": "hand_scalar_boundary_outside_0799",
+      "ok": false,
+      "detail": {
+        "got": "seen_dominant_pool_closed",
+        "want": "seen_pairwise_closed"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_boundary_outside_0799",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "seen_dominant_pool_closed",
+          "all_pairs": [
+            [
+              0,
+              1
+            ]
+          ],
+          "near_pairs": []
+        },
+        "theirs_status": "seen_dominant_pool_closed",
+        "theirs_all": [
+          [
+            0,
+            1
+          ]
+        ],
+        "theirs_near": []
+      }
+    },
+    {
+      "name": "hand_scalar_empty",
+      "ok": true,
+      "detail": {
+        "got": "unresolved",
+        "want": "unresolved"
+      }
+    },
+    {
+      "name": "oracle_cross_hand_empty",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "unresolved",
+          "all_pairs": [],
+          "near_pairs": []
+        },
+        "theirs_status": "unresolved",
+        "theirs_all": [],
+        "theirs_near": []
+      }
+    },
+    {
+      "name": "oracle_cross_gap_single",
+      "ok": true,
+      "detail": {
+        "mine": {
+          "status": "unresolved",
+          "all_pairs": [],
+          "near_pairs": []
+        },
+        "theirs_status": "unresolved",
+        "theirs_all": [],
+        "theirs_near": []
+      }
+    },
+    {
+      "name": "hand_gap_single",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "boundary_inside",
+      "ok": true,
+      "detail": {
+        "got": "unresolved",
+        "want": "unresolved"
+      }
+    },
+    {
+      "name": "boundary_outside",
+      "ok": true,
+      "detail": {
+        "got": "seen_dominant_pool_closed",
+        "want": "seen_dominant_pool_closed"
+      }
+    },
+    {
+      "name": "boundary_below_eps",
+      "ok": true,
+      "detail": "seen_dominant_pool_closed"
+    },
+    {
+      "name": "order_similar_first_last_all_perms",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "order_chain_all_perms_match_scalar",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "best_only_detects_best_vs_earlier_near",
+      "ok": false,
+      "detail": {
+        "my_best_only": [
+          [
+            0,
+            1
+          ]
+        ],
+        "author_best_only": [],
+        "author_holds": true
+      }
+    },
+    {
+      "name": "reject_witness_not_dict",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_short_normal",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_nan_normal",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_inf_normal",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_nan_offset",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_inf_offset",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_bool_support",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_float_support",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_negative_support",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_witness_missing_offset",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_setting_nan_ratio",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_setting_inf_ratio",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_setting_nan_deg",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_setting_zero_deg",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_setting_ratio_gt1",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_setting_unknown_key",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_setting_bool_seed",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "reject_budget_all_invalid",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "random_cross_4000",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "prototype_scalar_cross_300",
+      "ok": true,
+      "detail": null
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+[
+  {
+    "id": "V07",
+    "matrix": "C08",
+    "name": "empty-candidate occluded source prediction keeps grey box/age, unknown current/fall",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "prediction": "预测 age=0.50s",
+      "track": "t1 / 未对齐当前帧",
+      "target_visible": true,
+      "target_color": "6b7a90"
+    }
+  },
+  {
+    "id": "V07",
+    "matrix": "C08",
+    "name": "locked target with bbox_observed=false keeps physical fall unknown",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "3.00, 0.00, -0.50",
+      "prediction": "实测",
+      "track": "t1 / locked",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    }
+  },
+  {
+    "id": "V07",
+    "matrix": "C08",
+    "name": "locked target with position_source_from=unavailable keeps physical fall unknown",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "prediction": "无有效观测",
+      "track": "t1 / locked",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    }
+  },
+  {
+    "id": "V07",
+    "matrix": "C08",
+    "name": "locked target with position_source_from=predicted keeps physical fall unknown",
+    "result": "PASS",
+    "observed": {
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "prediction": "无有效观测",
+      "track": "t1 / locked",
+      "target_visible": true,
+      "target_color": "8fa0b8"
+    }
+  },
+  {
+    "id": "V07",
+    "matrix": "C08",
+    "name": "legacy missing actual-observation flags still endorse a valid physical fall",
+    "result": "PASS",
+    "observed": {
+      "fall": "upright",
+      "fall_class": "hf-ok",
+      "position": "3.00, 0.00, -0.50",
+      "prediction": "实测",
+      "track": "t1 / locked",
+      "target_visible": true,
+      "target_color": "3ad07a"
+    }
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "lost rejects retained ground pose in ground mode",
+    "result": "PASS",
+    "observed": {
+      "valid_state": true,
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "prediction": "-- / 无对齐观测",
+      "track": "t1 / 未对齐当前帧",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "ambiguous rejects retained ground pose in ground mode",
+    "result": "PASS",
+    "observed": {
+      "valid_state": true,
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "prediction": "-- / 无对齐观测",
+      "track": "t1 / 未对齐当前帧",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V07/V09",
+    "matrix": "C08",
+    "name": "unselected rejects retained ground pose in ground mode",
+    "result": "PASS",
+    "observed": {
+      "valid_state": true,
+      "fall": "unknown",
+      "fall_class": "hf-unk",
+      "position": "--",
+      "prediction": "-- / 无对齐观测",
+      "track": "未选目标 / 未对齐当前帧",
+      "target_visible": false,
+      "target_color": null
+    }
+  },
+  {
+    "id": "V03",
+    "matrix": "C14",
+    "name": "explicit source mm cannot qualify current list selection",
+    "result": "PASS",
+    "observed": {
+      "selection_context": {
+        "ok": false,
+        "reason": "source_units"
+      },
+      "requests_before": 0,
+      "requests_after": 0
+    }
+  },
+  {
+    "id": "V09",
+    "matrix": "C14",
+    "name": "legacy missing source units still qualifies selection",
+    "result": "PASS",
+    "observed": {
+      "selection_context": {
+        "ok": true,
+        "reason": "ok"
+      },
+      "requests_before": 0,
+      "requests_after": 1
+    }
+  },
+  {
+    "id": "V06",
+    "matrix": "C10",
+    "name": "ground unknown -> valid restores physical fall (recovery)",
+    "result": "PASS",
+    "observed": {
+      "before": "unknown",
+      "after": "upright"
+    }
+  },
+  {
+    "id": "V05",
+    "matrix": "C11",
+    "name": "mutated choice rejected then same-content reload accepted",
+    "result": "PASS",
+    "observed": {
+      "requests_before": 0,
+      "after_reject": 0,
+      "after_reload": 1
+    }
+  }
+]

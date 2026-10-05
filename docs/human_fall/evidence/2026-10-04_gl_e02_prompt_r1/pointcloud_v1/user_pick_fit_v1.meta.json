@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "kind": "gle02_user_roi_pick",
+  "pick_id": "user_pick_fit_v1",
+  "status": "USER_PICKED_FLATNESS_MEASURED",
+  "picked_via": "annotator.html v11 picker (2-point box)",
+  "picked_at_local": null,
+  "transform": {
+    "rotation": "A: R_y(+26deg)",
+    "tz_m": 1.34,
+    "source": "user-confirmed 2026-10-04"
+  },
+  "source": {
+    "session_id": "cap_20261002_233210",
+    "points_sha256": "d946b80b51258e4e0452fc3a40f9ebd7b47c9b3edac25df7aeb1c6ea9f322664",
+    "frames_merged": 99
+  },
+  "box_world_m": {
+    "X_range": [
+      1.022,
+      1.773
+    ],
+    "Y_range": [
+      -0.952,
+      -0.432
+    ]
+  },
+  "user_statement": "这一块平 (this block is flat) — chosen as ROI",
+  "measurements": {
+    "n_points_in_box": 88518,
+    "Z_p5_p25_p50_p75_p95": [
+      -0.03518515229225159,
+      -0.009894043207168579,
+      0.004648089408874512,
+      0.015111833810806274,
+      0.026927238702774043
+    ],
+    "core_cluster_n": 88518,
+    "core_cluster_Z_std_m": 0.018926376476883888,
+    "plane_fit_all": {
+      "coef_a_bX_cY": [
+        -0.0856088176369667,
+        0.03465358912944794,
+        -0.05933490768074989
+      ],
+      "rms_m": 0.014891231432557106
+    },
+    "plane_fit_trim15cm": {
+      "coef_a_bX_cY": [
+        -0.0856088176369667,
+        0.03465358912944794,
+        -0.05933490768074989
+      ],
+      "rms_m": 0.014891231432557106
+    }
+  },
+  "interpretation": "z_std_core is the empirical flatness of the user's pick under the user-confirmed transform; compare with GL-E02 P2 gate |residual|P95 <= 0.05m",
+  "physical_verified": false
+}

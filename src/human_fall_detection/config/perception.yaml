@@ -1,0 +1,62 @@
+# HF-04..06 perception/fall defaults. Independent of config/default.yaml
+# (HF-01 health/manifest, frozen) and config/geometry.yaml (HF-03). Lengths in
+# metres, durations in seconds, angles in radians. Every section maps directly
+# onto the corresponding core module's resolve_settings().
+candidates:
+  range_min_m: 0.8
+  range_max_m: 8.0
+  height_min_m: -0.3
+  height_max_m: 2.5
+  voxel_size_m: 0.08
+  cluster_cell_m: 0.25
+  max_points: 60000
+  min_cluster_points: 25
+  preferred_cluster_points: 80
+  pca_min_points: 12
+  pca_axis_ratio: 2.5
+  background_cell_m: 0.1
+  background_z_cell_m: 0.1
+association:
+  gate_m: 0.8
+  ambiguity_margin_m: 0.2
+  max_speed_m_s: 2.5
+  max_size_ratio: 3.0
+tracking:
+  gate_m: 0.8
+  ambiguity_margin_m: 0.2
+  max_speed_m_s: 2.5
+  occlusion_timeout_s: 1.5
+  lost_timeout_s: 3.0
+  velocity_smoothing: 0.5
+  max_size_ratio: 3.0
+  history_size: 64
+selection:
+  snapshot_ttl_s: 2.0
+  request_cache_size: 64
+  snapshot_cache_size: 16
+baseline:
+  require_seconds: 3.0
+  max_duration_s: 10.0
+  min_samples: 15
+  min_point_count: 60
+  max_position_spread_m: 0.25
+  height_min_m: 0.8
+  height_max_m: 2.2
+  max_height_std_m: 0.12
+features:
+  window_s: 1.2
+  max_history: 64
+  low_height_m: 0.7
+  near_ground_tolerance_m: 0.05
+fall:
+  descending_min_drop_m: 0.35
+  descending_min_rate_m_s: 0.35
+  low_height_m: 0.7
+  low_min_duration_s: 1.5
+  confirmed_min_low_duration_s: 3.0
+  recovery_fraction: 0.6
+  recovery_min_duration_s: 1.0
+  # Default OFF: the real geometric mode is not human-labelled/accepted, so
+  # online confirmed is disabled. Synthetic fixtures may enable both explicitly.
+  mode_verified: false
+  allow_confirmed: false

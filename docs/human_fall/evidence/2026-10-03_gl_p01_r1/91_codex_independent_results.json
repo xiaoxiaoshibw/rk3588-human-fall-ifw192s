@@ -1,0 +1,201 @@
+{
+  "source_sha256": "946b998d1ba7854906278e1ea39e49b38f74d55b3add26169fc4c9819afd5f78",
+  "checks": [
+    {
+      "name": "actual_node_tilted_nonzero_t_ros_json_js",
+      "ids": [
+        "P01",
+        "P03",
+        "P04",
+        "P05",
+        "P06",
+        "M02",
+        "M05",
+        "M12"
+      ],
+      "result": "FAIL",
+      "actual": "FallNodeCore.process() got an unexpected keyword argument 'now_s'"
+    },
+    {
+      "name": "existing_legal_tuple_artifact",
+      "ids": [
+        "P01",
+        "P02",
+        "P03",
+        "M02",
+        "M09"
+      ],
+      "result": "FAIL",
+      "actual": "validator accepted tuple R/t, but projection returned null"
+    },
+    {
+      "name": "artifact_only",
+      "ids": [
+        "P02",
+        "P03",
+        "P06",
+        "M03",
+        "M04",
+        "M08"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "legacy_ground_only",
+      "ids": [
+        "P02",
+        "P03",
+        "P06",
+        "M03",
+        "M04",
+        "M08"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "none",
+      "ids": [
+        "P02",
+        "P03",
+        "P06",
+        "M03",
+        "M04",
+        "M08"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "foreign_frame",
+      "ids": [
+        "P02",
+        "P03",
+        "P06",
+        "M03",
+        "M04",
+        "M08"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "different_parent",
+      "ids": [
+        "P02",
+        "P03",
+        "P06",
+        "M03",
+        "M04",
+        "M08"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "empty_candidate_transform",
+      "ids": [
+        "P01",
+        "P03",
+        "M01"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_parent_kind",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_parent_schema",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_parent_id",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_child_schema",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_child_units",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_child_id",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_child_R",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_child_t",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "bad_physical_flag",
+      "ids": [
+        "P02",
+        "M09"
+      ],
+      "result": "FAIL",
+      "actual": "invalid artifact published transform"
+    },
+    {
+      "name": "output_isolation",
+      "ids": [
+        "P02",
+        "P04",
+        "M07"
+      ],
+      "result": "PASS"
+    },
+    {
+      "name": "wire_size_delta",
+      "result": "PASS",
+      "bytes": 569,
+      "ids": [
+        "P06"
+      ]
+    },
+    {
+      "name": "old_message_compatibility",
+      "ids": [
+        "P06",
+        "M12"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "device": "NOT_RUN",
+  "physics": "NOT_RUN"
+}

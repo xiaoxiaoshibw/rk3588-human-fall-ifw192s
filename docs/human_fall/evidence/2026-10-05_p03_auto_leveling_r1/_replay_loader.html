@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;height:100%}</style></head><body>
+<iframe id="f" src="http://127.0.0.1:8902/replay.html" style="border:0;width:100%;height:100%"></iframe>
+<script>
+const f=document.getElementById('f');
+f.addEventListener('load',()=>{
+  setTimeout(()=>{
+    try{ f.contentWindow.__load_session_sid('cap_20261004_202456').then(()=>{document.title='loaded';}).catch(e=>{document.title='err:'+e.message;}); }
+    catch(e){document.title='outer:'+e.message;}
+  }, 800);
+});
+</script></body></html>

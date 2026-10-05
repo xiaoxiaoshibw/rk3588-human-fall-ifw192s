@@ -1,0 +1,18 @@
+=== A1 adapted without --constrained (main precheck)
+adapted capture input requires --constrained
+exit=2 exists=no
+=== A2 adapted + --diagnostics
+adapted capture input does not support --diagnostics: the full diagnostics live in artifact.constrained_ground
+exit=2 out=no diag=no
+=== A3 CLI frame conflict
+adapted capture input refused: CLI frame 'other_lidar' disagrees with the adapted manifest frame 'innolidar'
+exit=2 exists=no
+=== A4 overwrite existing target
+refusing to overwrite existing file docs/human_fall/evidence/2026-10-03_gl_i01_r1/codex_review_01/synthetic/codex_geometry.json: write a new version name instead
+exit=2
+=== A5 fit-selector missing
+adapted capture input refused: an explicit fit selector is required
+exit=2 exists=no
+=== A6 legacy npz still legacy-fit (M07)
+{"output": "docs/human_fall/evidence/2026-10-03_gl_i01_r1/codex_review_01/synthetic/legacy.json", "status": "valid", "reason": null, "points": 3000, "sensor_height_m": 1.1999835702268622, "tilt_rad": 1.4688267409302808e-05}
+exit=0 exists=yes

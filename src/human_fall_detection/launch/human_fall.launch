@@ -1,0 +1,17 @@
+<launch>
+  <!-- HF-07 node: geometry candidates / operator selection / fall state.
+       Read-only: subscribes to the point cloud + auxiliary streams and the
+       operator selection request topic; no vehicle command is ever published. -->
+  <arg name="config" default="$(find human_fall_detection)/config/human_fall.yaml"/>
+  <arg name="perception" default="$(find human_fall_detection)/config/perception.yaml"/>
+  <arg name="session_id" default=""/>
+  <arg name="output_dir" default=""/>
+
+  <node name="human_fall_node" pkg="human_fall_detection" type="human_fall_node.py"
+        output="screen" required="false">
+    <param name="config" value="$(arg config)"/>
+    <param name="perception" value="$(arg perception)"/>
+    <param name="session_id" value="$(arg session_id)"/>
+    <param name="output_dir" value="$(arg output_dir)"/>
+  </node>
+</launch>

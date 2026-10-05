@@ -1,0 +1,134 @@
+{
+ "input_joint_points_sha256": "42a5c6376775024c754977b18530d47e45c49ae617d28748e7ed168ec191c4cc",
+ "frozen_constants": {
+  "ransac_iterations": 861,
+  "seed": 20261001,
+  "inlier_threshold_m": 0.05,
+  "source": "ground.py CONSTRAINED_DEFAULT_SETTINGS:307-310"
+ },
+ "estimators": {
+  "ransac": {
+   "normal": [
+    -0.031941763924933475,
+    -0.10948449175534254,
+    0.9934751480446998
+   ],
+   "offset_m": 0.0077857008643071445,
+   "n_z": 0.9934751480446998,
+   "rms_m": 0.013393207210359599,
+   "p95_abs_m": 0.025834568932979033,
+   "mad_m": 0.009321484765126946,
+   "support_count_0.05m": 101944,
+   "support_fraction_0.05m": 0.9999607643112175,
+   "ransac_hypothesis_support": 101944
+  },
+  "tls": {
+   "normal": [
+    -0.03300925114893991,
+    -0.10214628817387339,
+    0.9942215674339832
+   ],
+   "offset_m": 0.007524009639504089,
+   "n_z": 0.9942215674339832,
+   "rms_m": 0.013103291832205075,
+   "p95_abs_m": 0.025219866778531136,
+   "mad_m": 0.009051304443278067,
+   "support_count_0.05m": 101938,
+   "support_fraction_0.05m": 0.9999019107780437
+  },
+  "svd": {
+   "normal": [
+    -0.03300925114894002,
+    -0.10214628817387345,
+    0.994221567433983
+   ],
+   "offset_m": 0.007524009639504252,
+   "n_z": 0.994221567433983,
+   "rms_m": 0.013103291832205073,
+   "p95_abs_m": 0.025219866778531122,
+   "mad_m": 0.009051304443278067,
+   "support_count_0.05m": 101938,
+   "support_fraction_0.05m": 0.9999019107780437
+  }
+ },
+ "pairwise": {
+  "ransac_vs_tls": {
+   "angle_deg": 0.4270214117515688,
+   "delta_d_m": 0.00026169122480305517,
+   "angle_within_2deg_ref": true,
+   "offset_within_0.03m_ref": true
+  },
+  "ransac_vs_svd": {
+   "angle_deg": 0.4270214117524223,
+   "delta_d_m": 0.0002616912248028921,
+   "angle_within_2deg_ref": true,
+   "offset_within_0.03m_ref": true
+  },
+  "tls_vs_svd": {
+   "angle_deg": 0.0,
+   "delta_d_m": 1.6306400674181987e-16,
+   "angle_within_2deg_ref": true,
+   "offset_within_0.03m_ref": true
+  }
+ },
+ "engineering_reference": {
+  "angle_deg": 2.0,
+  "offset_m": 0.03,
+  "meaning": "一致性参考，非物理精度声明"
+ },
+ "consensus_within_reference": true,
+ "per_frame_tls": {
+  "A": {
+   "pitch_deg": {
+    "min": 1.416780977499198,
+    "max": 2.4627919516441263,
+    "std": 0.21961305113258697,
+    "mean": 1.8736625341325879
+   },
+   "roll_deg": {
+    "min": -6.1523996781394334,
+    "max": -5.521021933617369,
+    "std": 0.1293272372785998,
+    "mean": -5.8485047452664
+   },
+   "offset_m": {
+    "min": -0.005208401841185808,
+    "max": 0.02242748815779182,
+    "std": 0.005839521586604661,
+    "mean": 0.006753341420116701
+   },
+   "frames": 91
+  },
+  "C": {
+   "pitch_deg": {
+    "min": 1.2904360794929357,
+    "max": 2.4048983691954913,
+    "std": 0.18010309301048452,
+    "mean": 1.9317708919255963
+   },
+   "roll_deg": {
+    "min": -6.210675178546267,
+    "max": -5.441974292026953,
+    "std": 0.13956192930427697,
+    "mean": -5.876286977248289
+   },
+   "offset_m": {
+    "min": -0.00825888469535332,
+    "max": 0.020967677244979836,
+    "std": 0.004862736841340567,
+    "mean": 0.008348614497153392
+   },
+   "frames": 102
+  }
+ },
+ "state_spread_A_vs_C": {
+  "pitch_deg_mean_abs_A_minus_C": 0.05810835779300838,
+  "roll_deg_mean_abs_A_minus_C": 0.027782231981889005,
+  "offset_m_mean_abs_A_minus_C": 0.0015952730770366907
+ },
+ "notes": [
+  "TLS 与 SVD 为同一正交最小二乘问题的两种数值实现，不构成独立物理证据",
+  "193 帧为已曝光训练/稳定性域，非未见 holdout",
+  "无 offset gate、无 inlier 精修、无点 cap、三法同一 float64 输入"
+ ]
+}

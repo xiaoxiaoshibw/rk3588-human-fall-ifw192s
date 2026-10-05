@@ -1,0 +1,210 @@
+{
+  "kind": "gli05_second_review_budget_trace_ast",
+  "passed": 18,
+  "total": 21,
+  "results": [
+    {
+      "name": "late_strong_best_cannot_heal_gap",
+      "ok": true,
+      "detail": {
+        "status": "unresolved",
+        "counts": {
+          "draws_seen": 6,
+          "qualified": 6,
+          "refined_calls": 4,
+          "rejected": 0,
+          "produced": 4,
+          "merged_exact": 3,
+          "retained": 1,
+          "unstored": 0,
+          "unprocessed": 2,
+          "trace_unrecorded": 0,
+          "peak_stored": 1
+        }
+      }
+    },
+    {
+      "name": "trace_gap_blocks_late_best",
+      "ok": true,
+      "detail": [
+        "trace_budget_incomplete"
+      ]
+    },
+    {
+      "name": "candidate_gap_blocks_closure",
+      "ok": true,
+      "detail": {
+        "draws_seen": 2,
+        "qualified": 2,
+        "refined_calls": 2,
+        "rejected": 0,
+        "produced": 2,
+        "merged_exact": 0,
+        "retained": 1,
+        "unstored": 1,
+        "unprocessed": 0,
+        "trace_unrecorded": 0,
+        "peak_stored": 1
+      }
+    },
+    {
+      "name": "iteration_gap_blocks_closure",
+      "ok": true,
+      "detail": [
+        "iteration_budget_incomplete",
+        "unprocessed_qualified_hypothesis"
+      ]
+    },
+    {
+      "name": "trace_draws_seen_identity",
+      "ok": true,
+      "detail": {
+        "draws": 861,
+        "trace": 861,
+        "unrecorded": 0
+      }
+    },
+    {
+      "name": "trace_indices_monotonic",
+      "ok": true,
+      "detail": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "name": "trace_action_counts_consistent",
+      "ok": true,
+      "detail": {
+        "actions": {
+          "retained_witness": 64,
+          "merged_exact": 507,
+          "raw_rejected": 43,
+          "candidate_budget_unstored": 246,
+          "refined_rejected": 1
+        },
+        "counts": {
+          "draws_seen": 861,
+          "qualified": 818,
+          "refined_calls": 818,
+          "rejected": 1,
+          "produced": 817,
+          "merged_exact": 507,
+          "retained": 64,
+          "unstored": 246,
+          "unprocessed": 0,
+          "trace_unrecorded": 0,
+          "peak_stored": 64
+        }
+      }
+    },
+    {
+      "name": "clean_low_noise_closes",
+      "ok": false,
+      "detail": {
+        "status": "unresolved",
+        "reasons": [
+          "candidate_budget_incomplete"
+        ]
+      }
+    },
+    {
+      "name": "baseline_parity_clean_7",
+      "ok": true,
+      "detail": {
+        "status": "seen_pairwise_closed",
+        "oracle": "seen_pairwise_closed",
+        "safe": true
+      }
+    },
+    {
+      "name": "baseline_parity_high_noise_19",
+      "ok": true,
+      "detail": {
+        "status": "unresolved",
+        "oracle": "unresolved",
+        "safe": true
+      }
+    },
+    {
+      "name": "baseline_parity_dual_41",
+      "ok": true,
+      "detail": {
+        "status": "unresolved",
+        "oracle": "unresolved",
+        "safe": true
+      }
+    },
+    {
+      "name": "py38_ast_oracle_analysis.py",
+      "ok": true,
+      "detail": {
+        "unexpected_imports": []
+      }
+    },
+    {
+      "name": "py38_ast_search_prototype.py",
+      "ok": true,
+      "detail": {
+        "unexpected_imports": []
+      }
+    },
+    {
+      "name": "py38_ast_experiment.py",
+      "ok": true,
+      "detail": {
+        "unexpected_imports": []
+      }
+    },
+    {
+      "name": "py38_ast_test_gli05_research.py",
+      "ok": true,
+      "detail": {
+        "unexpected_imports": []
+      }
+    },
+    {
+      "name": "py38_ast_source_review.py",
+      "ok": true,
+      "detail": {
+        "unexpected_imports": []
+      }
+    },
+    {
+      "name": "no_persistent_or_refine_cache",
+      "ok": true,
+      "detail": {
+        "markers": []
+      }
+    },
+    {
+      "name": "slow_oracle_ledger_preserved",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "final_ledger_has_search_times",
+      "ok": true,
+      "detail": 30
+    },
+    {
+      "name": "slow_ledger_present_times",
+      "ok": false,
+      "detail": {
+        "count": 0,
+        "median": null
+      }
+    },
+    {
+      "name": "vectorised_faster_than_slow",
+      "ok": false,
+      "detail": {
+        "fast_median": 0.13452800000959542,
+        "slow_median": null
+      }
+    }
+  ]
+}

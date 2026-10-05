@@ -1,0 +1,463 @@
+{
+  "actual_sessions": {
+    "probe": {
+      "session": "ses_ef9ec1fccffe1HTv8iWCU36sdm",
+      "models": [
+        [
+          "opencode-go",
+          "deepseek-v4.1-flash"
+        ]
+      ],
+      "last_finish": "stop"
+    },
+    "review": {
+      "session": "ses_ef9eb256bffeoe5S6fzhbsEqxd",
+      "models": [
+        [
+          "opencode-go",
+          "deepseek-v4.1-flash"
+        ]
+      ],
+      "last_finish": "stop"
+    }
+  },
+  "manifest_files": 40,
+  "manifest_drift": [],
+  "forbidden_tool_calls": [],
+  "tools": [
+    {
+      "tool": "skill",
+      "input": {
+        "name": "ponytail"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem -LiteralPath \"D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\" -Recurse | Select-Object FullName,Length | Format-Table -AutoSize"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "git -C D:/Code/ldiar rev-parse HEAD; git -C D:/Code/ldiar status --porcelain | Select-Object -First 60"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem -LiteralPath \"D:\\Code\\ldiar\\docs\\human_fall\" -Filter \"*ACCEPTANCE*\"; Get-ChildItem -LiteralPath \"D:\\Code\\ldiar\\docs\\human_fall\" -Filter \"*GROUND_LEVELING_NEXT*\"; Get-ChildItem -LiteralPath \"D:\\Code\\ldiar\\docs\\human_fall\" -Filter \"WORKFLOW*\""
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "Get-ChildItem -LiteralPath \"D:\\Code\\ldiar\\src\\human_fall_detection\\core\\nominal_leveling.py\",\"D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\level_capture_nominal.py\",\"D:\\Code\\ldiar\\src\\human_fall_detection\\tests\\test_nominal_leveling.py\" | Select-Object FullName,Length,LastWriteTime"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\GLN01_ACCEPTANCE.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\GROUND_LEVELING_NEXT_STAGE_PLAN_V3.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\nominal_leveling.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\scripts\\level_capture_nominal.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\tests\\test_nominal_leveling.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\00_diag_01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\12_SUBMISSION_01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\11_VISUAL_CHECK_01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\14_manifest_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\15_READONLY_REVIEW_01.md"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\calibration.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\numeric.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\src\\human_fall_detection\\core\\capture_input.py"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\02_checks_01.log"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\02_checks_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\05_real_level_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\05_real_level_01.log"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\06_python38_ast_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\09_html_logic_check_01.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\10_existing_out_negative_01.log"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\10_existing_out_negative_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\leveled_01\\input_manifest.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\leveled_01\\nominal_model.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json,hashlib,os\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\np=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/01_before_01.json\"\nd=json.loads(p.read_text(encoding=\"utf8\"))\nprint(\"01_before type\",type(d).__name__)\nif isinstance(d,dict):\n    print(\"keys\",list(d.keys())[:20])\n    for k in list(d.keys())[:5]:\n        v=d[k]\n        print(\" \",k,type(v).__name__, (list(v.keys())[:5] if isinstance(v,dict) else (v[:3] if isinstance(v,list) else str(v)[:80])))\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\np=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/13_scope_01.json\"\nd=json.loads(p.read_text(encoding=\"utf8\"))\nprint(\"scope type\",type(d).__name__)\nif isinstance(d,dict):\n    print(\"keys\",list(d.keys()))\n    for k,v in d.items():\n        if isinstance(v,(list,dict)):\n            print(\" \",k,type(v).__name__,\"len\",len(v))\n        else:\n            print(\" \",k,repr(v)[:120])\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nev=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1\"\nscope=json.loads((ev/\"13_scope_01.json\").read_text(encoding=\"utf8\"))\nprint(\"protected_changed\",json.dumps(scope[\"protected_changed\"],ensure_ascii=True))\nprint(\"allowed_document_changed\",json.dumps(scope[\"allowed_document_changed\"],ensure_ascii=True))\nprint(\"external_added\",json.dumps(scope[\"external_added\"],ensure_ascii=True))\nprint(\"source_sha256\",json.dumps(scope[\"source_sha256\"],ensure_ascii=True))\nprint(\"code_stopped\",scope[\"code_stopped\"])\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json,hashlib\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nev=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1\"\n\ndef sha(p):\n    h=hashlib.sha256()\n    with open(p,\"rb\") as f:\n        for c in iter(lambda:f.read(1<<20),b\"\"):\n            h.update(c)\n    return h.hexdigest()\n\n# 1) manifest listed SHAs\nman=json.loads((ev/\"14_manifest_01.json\").read_text(encoding=\"utf8\"))\nbad=[];missing=[]\nfor rel,expect in man[\"files\"].items():\n    p=root/rel\n    if not p.exists():\n        missing.append(rel);continue\n    got=sha(p)\n    if got!=expect: bad.append((rel,expect,got))\nprint(\"MANIFEST files\",len(man[\"files\"]),\"missing\",len(missing),\"mismatch\",len(bad))\nfor b in bad: print(\"  MISMATCH\",b)\nfor m in missing: print(\"  MISSING\",m)\n\n# 2) baseline 01_before files vs now\nbase=json.loads((ev/\"01_before_01.json\").read_text(encoding=\"utf8\"))\nfs=base[\"files\"]\nprint(\"BASELINE files\",len(fs))\nchanged=[];deleted=[]\nfor rel,h in fs.items():\n    p=root/rel\n    if not p.exists(): deleted.append(rel);continue\n    if sha(p)!=h: changed.append(rel)\nprint(\"baseline changed\",len(changed),\"deleted\",len(deleted))\nfor c in changed: print(\"  CHANGED\",c)\nfor m in deleted: print(\"  DELETED\",m)\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json,hashlib,os\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nev=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1\"\ndef sha(p):\n    h=hashlib.sha256()\n    with open(p,\"rb\") as f:\n        for c in iter(lambda:f.read(1<<20),b\"\"):\n            h.update(c)\n    return h.hexdigest()\nbase=json.loads((ev/\"01_before_01.json\").read_text(encoding=\"utf8\"))\nfs=base[\"files\"]\nprint(\"entry src/CMakeLists.txt =\",fs.get(\"src/CMakeLists.txt\"))\nchanged=[];deleted=[];err=[]\nfor rel,h in fs.items():\n    p=root/rel\n    try:\n        if not p.exists(): deleted.append(rel);continue\n        g=sha(p)\n        if g!=h: changed.append((rel,h,g))\n    except OSError as e:\n        err.append((rel,str(e)))\nprint(\"baseline changed\",len(changed),\"deleted\",len(deleted),\"err\",len(err))\nfor c in changed: print(\"  CHANGED\",c[0])\nfor m in deleted: print(\"  DELETED\",m)\nfor e in err: print(\"  ERR\",e)\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json,hashlib\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nev=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1\"\nbase=json.loads((ev/\"01_before_01.json\").read_text(encoding=\"utf8\"))\nfor rel in [\"docs/human_fall/returns/GL-00.md\",\"src/human_fall_detection/core/calibration.py\",\"src/human_fall_detection/core/nominal_leveling.py\"]:\n    p=root/rel\n    b=base[\"files\"].get(rel)\n    raw=p.read_bytes()\n    s256=hashlib.sha256(raw).hexdigest()\n    s1=hashlib.sha1(raw).hexdigest()\n    gh=hashlib.sha1(b\"blob %d\\0\"%len(raw)+raw).hexdigest()\n    print(rel)\n    print(\"  baseline\",b)\n    print(\"  sha256 \",s256)\n    print(\"  sha1   \",s1)\n    print(\"  gitsha1\",gh)\n# also show a couple more keys\nprint(\"sample keys:\",list(base[\"files\"].items())[:3])\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json,hashlib,os\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nev=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1\"\ndef sha(p):\n    h=hashlib.sha256()\n    with open(p,\"rb\") as f:\n        for c in iter(lambda:f.read(1<<20),b\"\"):\n            h.update(c)\n    return h.hexdigest()\nbase=json.loads((ev/\"01_before_01.json\").read_text(encoding=\"utf8\"))\nfs=base[\"files\"]\nchanged=[];deleted=[];err=[]\nfor rel,meta in fs.items():\n    p=root/rel\n    try:\n        if not p.exists(): deleted.append(rel);continue\n        g=sha(p)\n        exp=meta[\"sha256\"] if isinstance(meta,dict) else meta\n        if g!=exp: changed.append((rel,exp,g))\n    except OSError as e:\n        err.append((rel,str(e)[:60]))\nprint(\"baseline files\",len(fs),\"changed\",len(changed),\"deleted\",len(deleted),\"err\",len(err))\nfor c in changed: print(\"  CHANGED\",c[0])\nfor m in deleted: print(\"  DELETED\",m)\nfor e in err: print(\"  ERR\",e)\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nfor p in [\"docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_candidate.adapted.npz\",\n          \"captures/remote/cap_20261002_163621/meta.json\",\n          \"captures/remote/cap_20261002_163621/points.bin\"]:\n    q=root/p\n    print(p, q.exists(), (q.stat().st_size if q.exists() else None))\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport sys, json, math\nfrom pathlib import Path\nimport numpy as np\nroot=Path(\"D:/Code/ldiar\")\nsys.path.insert(0,str(root/\"src/human_fall_detection\"))\nfrom core.capture_input import load_adapted\nfrom core.nominal_leveling import build_nominal_model, apply_nominal, inverse_nominal\n\ninp=root/\"docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_candidate.adapted.npz\"\nout=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01\"\nmanifest, points = load_adapted(str(inp))\nprint(\"manifest pts shape\", manifest[\"points\"][\"shape\"], \"src sha\", manifest[\"declared\"][\"frame\"], manifest[\"declared\"][\"units\"])\nprint(\"frame_groups\", len(manifest[\"frame_groups\"]))\nsaved=np.load(out/\"nominal_leveled.npz\", allow_pickle=False)\nprint(\"npz keys\", sorted(saved.files))\nmpts=saved[\"points\"]; srows=saved[\"source_rows\"]\nmodel=json.loads(str(saved[\"model_json\"].reshape(()).item()))\ninfo=json.loads(str(saved[\"input_json\"].reshape(()).item()))\nprint(\"mpts dtype\",mpts.dtype,\"shape\",mpts.shape,\"srows\",srows.shape,srows.dtype)\nprint(\"model_id on disk\", model.get(\"model_id\"))\n# recompute independently\nrecomputed=build_nominal_model(26.0,1.1,\"innolidar\")\nprint(\"model_id recomputed\", recomputed.get(\"model_id\"))\nprint(\"model_id match\", model.get(\"model_id\")==recomputed.get(\"model_id\"))\nprint(\"saved model == recomputed\", json.dumps(model,sort_keys=True,allow_nan=False)==json.dumps(recomputed,sort_keys=True,allow_nan=False))\n# valid mask independent\nvalid=np.isfinite(points).all(axis=1) & np.any(points!=0,axis=1)\nsrows_expected=np.flatnonzero(valid)\nprint(\"valid count\", int(valid.sum()), \"input\", len(points))\nprint(\"srows match mask\", np.array_equal(srows,srows_expected))\n# independent scalar transform\na=math.radians(26.0); c=math.cos(a); s=math.sin(a); h=1.1\nsrc=points[srows].astype(np.float64)\ndst=np.empty_like(src)\ndst[:,0]=c*src[:,0]+s*src[:,2]\ndst[:,1]=src[:,1]\ndst[:,2]=-s*src[:,0]+c*src[:,2]+h\ndiff=np.abs(dst-mpts)\nprint(\"oracle max abs diff\", float(diff.max()), \"allclose 1e-9\", bool(np.allclose(dst,mpts,atol=1e-9)))\n# source origin and inverse spot\nprint(\"origin map\", apply_nominal(np.array([[0.,0.,0.]]),recomputed,\"innolidar\").tolist())\ninv=inverse_nominal(mpts[:1000],recomputed,\"ground_nominal\")\nprint(\"inverse max err\", float(np.abs(inv-src[:1000]).max()))\n# per-frame correspondence\nstats=json.loads((out/\"frame_stats.json\").read_text(encoding=\"utf8\"))\nprint(\"stats entries\", len(stats), \"groups\", len(manifest[\"frame_groups\"]))\nbad=[]\nfor st in stats:\n    gid=None\n    for k,v in manifest[\"frame_groups\"].items():\n        if v[\"ordinal\"]==st[\"ordinal\"] and v[\"seq\"]==st[\"seq\"]: gid=k;break\n    low,high=st[\"source_rows\"]\n    inrange=srows[(srows>=low)&(srows<high)]\n    first,last=st[\"output_rows\"]\n    if not (srows[first:last].tolist()==inrange.tolist()): bad.append((st[\"ordinal\"],\"rows\"))\n    finite=int(np.isfinite(points[low:high]).all(axis=1).sum())\n    nf=(high-low)-finite\n    zc=finite-len(inrange)\n    if (nf,zc,len(inrange),high-low)!=(st[\"nonfinite_count\"],st[\"zero_count\"],st[\"valid_count\"],st[\"source_count\"]): bad.append((st[\"ordinal\"],\"counts\"))\n    # saved points for this frame\n    seg=mpts[first:last]\n    exp=(inrange-(srows[first:last])).max() if len(inrange) else 0\n    if not np.array_equal(srows[first:last],inrange): bad.append((st[\"ordinal\"],\"idx\"))\nprint(\"frame stat mismatches\", bad[:10], \"total\", len(bad))\nprint(\"sum valid over frames\", sum(st[\"valid_count\"] for st in stats))\nprint(\"sum source counts\", sum(st[\"source_count\"] for st in stats))\nprint(\"total input points\", len(points))\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_fall_detection/tests -v 2>&1 | Select-Object -Last 25",
+        "workdir": "D:\\Code\\ldiar",
+        "timeout": 600000
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_follow_calibration/tests 2>&1 | Out-String -Stream | Where-Object { $_ -match '^(Ran |OK|FAILED|ERROR|FAIL:)' }",
+        "timeout": 300000,
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "python -B -W error -m unittest discover -s src/human_fall_detection/tests 2>&1 | Out-String -Stream | Where-Object { $_ -match '^(Ran |OK|FAILED|ERROR|FAIL:)' }",
+        "timeout": 600000,
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\07_before_after_frame05_01.png"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json, re\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nvh=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01/view.html\"\ntxt=vh.read_text(encoding=\"utf8\")\nprint(\"html bytes\", len(txt))\nprint(\"has __PAYLOAD__ leftover\", \"__PAYLOAD__\" in txt)\nprint(\"has literal <script\", txt.count(\"<script\"), \"has </script>\", txt.count(\"</script>\"))\ni=txt.index(\"const DATA=\")+len(\"const DATA=\")\nj=txt.index(\";\", i)\npayload=txt[i:j]\nprint(\"payload bytes\", len(payload))\nprint(\"payload has raw '<'\", \"<\" in payload)\ndata=json.loads(payload)\nprint(\"model_id\", data[\"model\"][\"model_id\"])\nprint(\"pitch/height\", data[\"model\"][\"pitch_down_deg\"], data[\"model\"][\"height_m\"])\nprint(\"frames\", len(data[\"frames\"]))\nf0=data[\"frames\"][0]\nprint(\"frame0 keys\", sorted(f0.keys()), \"valid_count\", f0[\"valid_count\"], \"pts\", len(f0[\"points\"]))\nprint(\"point sample\", f0[\"points\"][:2])\n# cross check with frame_stats\nstats=json.loads((root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01/frame_stats.json\").read_text(encoding=\"utf8\"))\nprint(\"stats0 valid\", stats[0][\"valid_count\"], \"ord\", stats[0][\"ordinal\"])\n# total displayed points\nprint(\"total displayed\", sum(len(f[\"points\"]) for f in data[\"frames\"]))\nprint(\"max per frame\", max(len(f[\"points\"]) for f in data[\"frames\"]))\n# script logic extraction (non-DATA)\nscript=txt[txt.index(\"function panel\"):]\nprint(\"--- script tail chars:\", len(script))\nprint(\"uses slice(1):\", \"p.slice(1)\" in script)\nprint(\"transform expr present:\", \"-s*p[0]+c*p[2]+h\" in script)\nprint(\"export line present:\", \"导出文件参数\" in script)\nprint(\"preview line present:\", \"当前预览\" in script)\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nvh=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01/view.html\"\ntxt=vh.read_text(encoding=\"utf8\")\nstart=txt.index(\"const DATA=\")+len(\"const DATA=\")\nend=txt.index(\"\\nconst fs=\")\npayload=txt[start:end].rstrip()\nif payload.endswith(\";\"): payload=payload[:-1]\nprint(\"payload bytes\", len(payload), \"raw '<'\", \"<\" in payload)\ndata=json.loads(payload)\nprint(\"model_id\", data[\"model\"][\"model_id\"])\nprint(\"pitch/height\", data[\"model\"][\"pitch_down_deg\"], data[\"model\"][\"height_m\"])\nprint(\"frames\", len(data[\"frames\"]))\nf0=data[\"frames\"][0]\nprint(\"frame0 keys\", sorted(f0.keys()), \"valid_count\", f0[\"valid_count\"], \"pts\", len(f0[\"points\"]))\nprint(\"point sample\", f0[\"points\"][:2])\nstats=json.loads((root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01/frame_stats.json\").read_text(encoding=\"utf8\"))\nprint(\"stats0 ord/seq/valid\", stats[0][\"ordinal\"],stats[0][\"seq\"],stats[0][\"valid_count\"])\nprint(\"frames match stats\", all(dfr[\"ordinal\"]==st[\"ordinal\"] and dfr[\"valid_count\"]==st[\"valid_count\"] for dfr,st in zip(data[\"frames\"],stats)))\nprint(\"total displayed\", sum(len(f[\"points\"]) for f in data[\"frames\"]), \"max/frame\", max(len(f[\"points\"]) for f in data[\"frames\"]))\nscript=txt[end:]\nprint(\"script has slice(1):\", \"p.slice(1)\" in script)\nprint(\"transform expr present:\", \"-s*p[0]+c*p[2]+h\" in script)\nprint(\"export label:\", \"导出文件参数\" in script, \"preview label:\", \"当前预览\" in script)\nprint(\"ground identity words:\", [w for w in [\"ground.valid\",\"support\",\"拟合残差\",\"ground identity\"] if w in script])\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport sys, json, math, copy\nfrom pathlib import Path\nimport numpy as np\nroot=Path(\"D:/Code/ldiar\")\nsys.path.insert(0,str(root/\"src/human_fall_detection\"))\nfrom core.nominal_leveling import (apply_nominal, build_nominal_model,\n    inverse_nominal, validate_nominal_model)\nfrom core.calibration import (validate_known_transform, validate_geometry_calibration,\n    resolve_reference_transform, apply_transform, make_transform)\n\nR=[]\ndef rec(name,ok,extra=\"\"):\n    R.append((name,bool(ok),extra))\n    print((\"PASS\" if ok else \"FAIL\"),name,extra)\n\nm=build_nominal_model(26.0,1.1,\"innolidar\")\n# rotation properties\nrot=np.asarray(m[\"rotation\"])\nrec(\"R_orthonormal\", np.allclose(rot@rot.T,np.eye(3),atol=1e-12))\nrec(\"R_det_plus1\", abs(np.linalg.det(rot)-1)<1e-12)\nrec(\"t_is_00h\", m[\"translation_m\"]==[0.0,0.0,1.1])\nrec(\"kind_status\", m[\"kind\"]==\"nominal_installation_leveling\" and m[\"status\"]==\"nominal\")\nrec(\"flags_false\", m[\"physical_verified\"] is False and m[\"extrinsics_verified\"] is False and m[\"runtime_eligible\"] is False)\nrec(\"frame_to\", m[\"to_frame\"]==\"ground_nominal\")\nrec(\"units\", m[\"units\"]=={\"length\":\"m\",\"angle\":\"deg\"})\n\n# tamper fields not covered by author tests\ntamper={\"provenance\":\"measured\",\"up_source\":[0,0,1],\"extrinsics_verified\":True,\n        \"model_id\":\"nominal:deadbeef\",\"from_frame\":\"other\",\"to_frame\":\"x\",\n        \"convention\":\"x\",\"schema\":1.0,\"schema\":True,\"extra\":1}\nfor k,v in tamper.items():\n    mm=copy.deepcopy(m); mm[k]=v\n    try:\n        validate_nominal_model(mm); rec(\"tamper_\"+k, False, \"accepted\")\n    except (ValueError,TypeError,OverflowError) as e:\n        rec(\"tamper_\"+k, True, type(e).__name__)\nmm=copy.deepcopy(m); del mm[\"height_m\"]\ntry:\n    validate_nominal_model(mm); rec(\"missing_height\",False)\nexcept (ValueError,TypeError,KeyError) as e:\n    rec(\"missing_height\",True,type(e).__name__)\n\n# numpy / bool / string types\nrec(\"np_scalars_ok\", build_nominal_model(np.float64(26),np.int64(1),\"innolidar\")[\"height_m\"]==1.0)\nfor bad in [np.bool_(True), True, \"26\", [26], np.array([26.0])]:\n    try:\n        build_nominal_model(bad,1.1,\"innolidar\"); rec(\"bad_pitch_%r\"%type(bad).__name__,False)\n    except (ValueError,TypeError) as e:\n        rec(\"bad_pitch_%r\"%type(bad).__name__,True,type(e).__name__)\nfor bad in [float(\"nan\"),float(\"inf\"),-1,1e9]:\n    try:\n        build_nominal_model(26,bad,\"innolidar\"); rec(\"bad_height_%s\"%bad,False)\n    except ValueError as e:\n        rec(\"bad_height_%s\"%bad,True)\nfor pitch in [-90,-10,0,26,40,90]:\n    try:\n        build_nominal_model(pitch,1.1,\"innolidar\"); rec(\"pitch_ok_%s\"%pitch,True)\n    except Exception as e:\n        rec(\"pitch_ok_%s\"%pitch,False,repr(e))\n# frame rules\nfor fr,to in [(\"a\",\"a\"),(\"\",\"b\"),(\"  \",\"b\"),(1,\"b\"),(\"a\",\"\")]:\n    try:\n        build_nominal_model(26,1.1,fr,to); rec(\"frame_bad_%r_%r\"%(fr,to),False)\n    except (ValueError,TypeError) as e:\n        rec(\"frame_bad_%r_%r\"%(fr,to),True)\n\n# content id changes on frames too\nrec(\"id_frame_change\", build_nominal_model(26,1.1,\"innolidar\",\"ground_nominal\")[\"model_id\"]\n    != build_nominal_model(26,1.1,\"innolidar2\")[\"model_id\"])\n\n# apply/inverse frame guards + input coercion\np=np.array([[2,-1,-.5],[0,1,2]],dtype=float)\nrec(\"apply_list_ok\", np.allclose(apply_nominal(p.tolist(),m,\"innolidar\"),\n    [[math.cos(math.radians(26))*2+math.sin(math.radians(26))*-0.5,-1, -math.sin(math.radians(26))*2+math.cos(math.radians(26))*-0.5+1.1],\n     [math.sin(math.radians(26))*2,1,math.cos(math.radians(26))*2+1.1]]))\nfor pts in [ [[1,True,0]], [[\"1\",0,0]], [[float(\"nan\"),0,0]], [[1,2]] ]:\n    try:\n        apply_nominal(pts,m,\"innolidar\"); rec(\"apply_bad_%r\"%pts,False)\n    except (ValueError,TypeError) as e:\n        rec(\"apply_bad_%r\"%pts,True)\nfor fn,f in [(\"apply_foreign\",lambda:apply_nominal([[1,2,3]],m,\"foreign\")),\n             (\"inverse_foreign\",lambda:inverse_nominal([[1,2,3]],m,\"innolidar\"))]:\n    try:\n        f(); rec(fn,False)\n    except ValueError as e:\n        rec(fn,True)\n\n# inverse roundtrip random\nrng=np.random.default_rng(0); X=rng.normal(size=(1000,3))*5\nrec(\"roundtrip_1e-12\", np.allclose(inverse_nominal(apply_nominal(X,m,\"innolidar\"),m,\"ground_nominal\"),X,atol=1e-12))\nrec(\"source_origin_maps_h\", np.allclose(apply_nominal(np.zeros((1,3)),m,\"innolidar\"),[[0,0,1.1]]))\n\n# nonpromotion\nfor name,fn in [(\"validate_known_transform\",lambda:validate_known_transform(m)),\n                (\"validate_geometry_calibration\",lambda:validate_geometry_calibration(m))]:\n    try:\n        fn(); rec(\"reject_\"+name,False,\"accepted!\")\n    except Exception as e:\n        rec(\"reject_\"+name,True,type(e).__name__)\nrr=resolve_reference_transform(m)\nrec(\"resolve_reference_reject\", rr==(None,\"reference_calibration_invalid\"), str(rr[1]))\n# arithmetic layer may still accept (documented)\ntry:\n    apply_transform(np.zeros((1,3)),m); rec(\"apply_transform_arith_accepts\",True)\nexcept Exception as e:\n    rec(\"apply_transform_arith_accepts\",False,repr(e))\nprint(\"TOTAL\", sum(1 for _,o,_ in R if o),\"/\",len(R))\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nev=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1\"\nbase=json.loads((ev/\"01_before_01.json\").read_text(encoding=\"utf8\"))[\"files\"]\nscope=json.loads((ev/\"13_scope_01.json\").read_text(encoding=\"utf8\"))\nsfiles=set(scope[\"files\"].keys())\nadded=sorted(sfiles-set(base.keys()))\nremoved=sorted(set(base.keys())-sfiles)\nprint(\"scope-added\",len(added))\nfor a in added: print(\"  +\",a)\nprint(\"scope-removed\",len(removed))\nfor r in removed[:20]: print(\"  -\",r)\n# new source files present in scope?\nfor rel in scope[\"source_sha256\"]:\n    print(\"source in scope\", rel, rel in sfiles)\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nvh=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01/view.html\"\nt=vh.read_text(encoding=\"utf8\")\nlabels={\n \"export_label\":\"\\u5bfc\\u51fa\\u6587\\u4ef6\\u53c2\\u6570\",\n \"preview_label\":\"\\u5f53\\u524d\\u9884\\u89c8\",\n \"fit_residual\":\"\\u62df\\u5408\\u6b8b\\u5dee\",\n \"no_ground_identity\":\"\\u5730\\u9762\\u8eab\\u4efd\",\n \"uniform_sample\":\"\\u5747\\u5300\\u62bd\\u6837\",\n}\nfor k,v in labels.items():\n    print(k, v in t)\nprint(\"has support word 'support':\", \"support\" in t)\nprint(\"has ground.valid:\", \"ground.valid\" in t)\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\WORKFLOW.md",
+        "limit": 130
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\17_probe_01_meta.json"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "read",
+      "input": {
+        "filePath": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-04_gl_n01_r1\\17_probe_01.jsonl"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "rg -n \"nominal_installation_leveling|nominal_leveling|level_capture_nominal|runtime_eligible\" --glob \"!.git\" D:\\Code\\ldiar\\src D:\\Code\\ldiar\\webui 2>$null"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport json\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nstats=json.loads((root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/leveled_01/frame_stats.json\").read_text(encoding=\"utf8\"))\ns=stats[5]\nprint(\"frame5 ord/seq\",s[\"ordinal\"],s[\"seq\"])\nprint(\"rows\",s[\"source_rows\"],\"out\",s[\"output_rows\"],\"counts\",s[\"source_count\"],s[\"valid_count\"],s[\"nonfinite_count\"],s[\"zero_count\"])\nprint(\"z quantiles\",s[\"nominal_z_quantiles_all_scene_m\"])\nprint(\"domain\",s[\"statistics_domain\"])\ntot_nf=sum(x[\"nonfinite_count\"] for x in stats); tot_z=sum(x[\"zero_count\"] for x in stats)\nprint(\"sum nonfinite\",tot_nf,\"sum zero\",tot_z,\"sum valid\",sum(x[\"valid_count\"] for x in stats))\nprint(\"any min z>=0 across frames:\", all((x[\"nominal_z_quantiles_all_scene_m\"] or [0])[0]>=0 for x in stats))\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "$env:PYTHONIOENCODING=\"utf-8\"; $inp=\"docs/human_fall/evidence/2026-10-03_gl_i02_r1/08_real/real_candidate.adapted.npz\"; $tmp=Join-Path $env:TEMP \"gln01_review_out\"; foreach($case in @(@(\"outside\",$tmp,26,1.1,\"innolidar\"),@(\"wrongframe\",\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/zz_review_should_not_exist\",26,1.1,\"wrongframe\"),@(\"badpitch\",\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/zz_review_should_not_exist2\",200,1.1,\"innolidar\"),@(\"missinginput\",\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/zz_review_should_not_exist3\",26,1.1,\"innolidar\"))){ $name=$case[0]; $out=$case[1]; $p=$case[2]; $h=$case[3]; $f=$case[4]; $i=$inp; if($name -eq \"missinginput\"){$i=\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/nope.adapted.npz\"}; python -B -W error src/human_fall_detection/scripts/level_capture_nominal.py --input $i --output $out --pitch-down-deg $p --height-m $h --source-frame $f 2>&1 | Out-Null; Write-Output \"$name exit=$LASTEXITCODE exists=$(Test-Path -LiteralPath $out)\" }",
+        "timeout": 300000,
+        "workdir": "D:\\Code\\ldiar"
+      },
+      "status": "completed",
+      "error": null
+    },
+    {
+      "tool": "bash",
+      "input": {
+        "command": "@'\nimport ast, hashlib, json\nfrom pathlib import Path\nroot=Path(\"D:/Code/ldiar\")\nfiles=[\"src/human_fall_detection/core/nominal_leveling.py\",\n       \"src/human_fall_detection/scripts/level_capture_nominal.py\",\n       \"src/human_fall_detection/tests/test_nominal_leveling.py\"]\nman=json.loads((root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1/14_manifest_01.json\").read_text(encoding=\"utf8\"))[\"files\"]\nfor f in files:\n    raw=(root/f).read_bytes()\n    h=hashlib.sha256(raw).hexdigest()\n    try:\n        ast.parse(raw.decode(\"utf8\"), filename=f, feature_version=(3,8)); py38=True\n    except SyntaxError as e:\n        py38=False\n    print(f, \"sha_match_manifest\", h==man[f], \"py38_ast\", py38)\n# forbidden imports scan\nfor f in files:\n    src=(root/f).read_text(encoding=\"utf8\")\n    bad=[m for m in [\"import cv2\",\"import rospy\",\"import rclpy\",\"import open3d\",\"import matplotlib\",\"import scipy\",\"import torch\",\"import sklearn\"] if m in src]\n    print(\"forbidden_imports\",f,bad)\n# work item dir pollution\nev=root/\"docs/human_fall/evidence/2026-10-04_gl_n01_r1\"\nprint(\"zz dirs present\", [p.name for p in ev.iterdir() if p.name.startswith(\"zz_review\")])\n'@ | python -B -"
+      },
+      "status": "completed",
+      "error": null
+    }
+  ],
+  "code_stopped": true
+}

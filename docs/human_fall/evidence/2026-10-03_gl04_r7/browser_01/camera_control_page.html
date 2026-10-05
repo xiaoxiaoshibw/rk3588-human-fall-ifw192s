@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IFW192S 雷达实时可视化 · HF-11 人体跌倒预览</title>
+<style>
+  :root { --bg:#0b0e14; --panel:#11151f; --line:#1e2634; --txt:#c9d4e3; --dim:#6b7a90; --ok:#3ad07a; --warn:#e8b23c; --err:#e05252; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { height:100%; }
+  body { background:var(--bg); color:var(--txt); font:13px/1.5 "Segoe UI","Microsoft YaHei",sans-serif; display:flex; flex-direction:column; overflow:hidden; }
+  header { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--panel); border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  header .title { font-weight:600; white-space:nowrap; }
+  .dot { width:9px; height:9px; border-radius:50%; background:var(--err); flex:none; }
+  .dot.on { background:var(--ok); } .dot.reconn { background:var(--warn); }
+  #url { flex:1 1 210px; min-width:180px; background:#0d1119; color:var(--txt); border:1px solid var(--line); border-radius:4px; padding:4px 8px; }
+  button { background:#1a2233; color:var(--txt); border:1px solid var(--line); border-radius:4px; padding:4px 12px; cursor:pointer; }
+  button:hover { background:#223050; }
+  button.recbtn { color:var(--err); }
+  button.recbtn.recording { background:#5a1f24; border-color:var(--err); color:#fff; }
+  #stats { display:flex; gap:14px; flex-wrap:wrap; color:var(--dim); font-size:12px; }
+  #stats b { color:var(--txt); font-weight:600; }
+  main { flex:1; display:flex; min-height:0; }
+  #view3d { flex:1; position:relative; min-width:0; }
+  #gl { width:100%; height:100%; display:block; touch-action:none; }
+  #overlay { position:absolute; left:10px; top:8px; color:var(--dim); font-size:12px; text-shadow:0 1px 2px #000; pointer-events:none; }
+  #view3d .tools { position:absolute; right:10px; top:8px; display:flex; gap:6px; align-items:center; }
+  #view3d .tools label { color:var(--dim); font-size:12px; }
+  aside { width:320px; flex:none; background:var(--panel); border-left:1px solid var(--line); display:flex; flex-direction:column; min-height:0; overflow-y:auto; }
+  aside section { padding:8px 10px; border-bottom:1px solid var(--line); }
+  aside h3 { font-size:12px; color:var(--dim); font-weight:600; margin-bottom:4px; }
+  aside canvas { width:100%; height:96px; display:block; background:#0d1119; border-radius:4px; }
+  table.kv { width:100%; border-collapse:collapse; font-size:12px; }
+  table.kv td { padding:2px 4px; border-bottom:1px dashed var(--line); }
+  table.kv td:last-child { text-align:right; font-variant-numeric:tabular-nums; }
+  .bad { color:var(--err); } .good { color:var(--ok); }
+  #log { font-size:11px; color:var(--dim); max-height:110px; overflow-y:auto; }
+  #log div { border-bottom:1px dashed var(--line); padding:1px 0; word-break:break-all; }
+  #log .l-warn { color:var(--warn); } #log .l-err { color:var(--err); }
+  @media (max-width:760px){ main{flex-direction:column;} aside{width:100%; height:42%;} }
+  /* ---- HF-11 预览专用 ---- */
+  #hfOverlay { position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; }
+  #hfBanner { position:absolute; left:10px; bottom:8px; color:var(--warn); font-size:11px;
+    text-shadow:0 1px 2px #000; pointer-events:none; }
+  #view3d.selecting { cursor:crosshair; }
+  #view3d.selecting #gl { cursor:crosshair; }
+  .hfpill { display:inline-block; padding:0 5px; border-radius:8px; font-size:11px; border:1px solid var(--line); }
+  .hf-cert { color:var(--err); } .hf-susp { color:var(--warn); }
+  .hf-unk { color:var(--dim); } .hf-ok { color:var(--ok); }
+  #hfCands div, #hfEvents div { border-bottom:1px dashed var(--line); padding:2px 0; cursor:pointer; }
+  #hfCands div:hover { background:#1a2233; }
+</style>
+</head>
+<body>
+<header>
+  <span class="title">IFW192S 雷达实时可视化</span>
+  <span class="dot" id="connDot"></span>
+  <input id="url" spellcheck="false">
+  <button id="btnConnect">连接</button>
+  <button id="btnRec" class="recbtn">● 录制</button>
+  <span id="recStat" style="color:var(--dim);font-size:12px;"></span>
+  <div id="stats">
+    <span>显示流 <b id="pcHz">--</b> Hz</span>
+    <span>丢帧 <b id="pcDrop">0</b></span>
+    <span>呈现 <b id="pcPresHz">--</b> Hz</span>
+    <span>未呈现 <b id="pcSkip">0</b></span>
+    <span>抽样 <b id="pcSample">--</b></span>
+    <span>帧龄(接收后) <b id="pcAge">--</b> s</span>
+    <span>吞吐 <b id="pcBW">--</b> MB/s</span>
+    <span>IMU <b id="imuHz">--</b> Hz</span>
+    <span>到达时刻 <b id="lastT">--</b></span>
+  </div>
+</header>
+<main>
+  <div id="view3d">
+    <canvas id="gl"></canvas>
+    <div id="overlay"></div>
+    <canvas id="hfOverlay"></canvas>
+    <div id="hfBanner">HF-11 预览 · 几何/合成模式 · 未验收模式不产生 confirmed</div>
+    <div class="tools">
+      <label>点大小 <input type="range" id="ptSize" min="0.5" max="5" step="0.1" value="1.8" style="vertical-align:middle;width:90px"></label>
+      <button id="btnFit">复位视角</button>
+    </div>
+  </div>
+  <aside>
+    <section><h3>IMU 角速度 (原始值，单位待核验)</h3><canvas id="gyro"></canvas></section>
+    <section><h3>IMU 线加速度 (原始值，单位待核验)</h3><canvas id="accel"></canvas></section>
+    <section><h3>设备状态 /device_status</h3><table class="kv" id="devTb">
+      <tr><td>设备号</td><td id="dvNum">--</td></tr>
+      <tr><td>收发温度 ℃</td><td id="dvTrx">--</td></tr>
+      <tr><td>主板温度 ℃</td><td id="dvMain">--</td></tr>
+      <tr><td>异常标志</td><td id="dvAbn">--</td></tr>
+      <tr><td>更新时刻</td><td id="dvTime">--</td></tr>
+    </table></section>
+    <section><h3>坐标配平 (GL-04)</h3>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+        <button id="hfModeSource">原始雷达</button>
+        <button id="hfModeGround">配平 ground_local</button>
+        <button id="hfOverhead">俯瞰</button>
+      </div>
+      <div id="hfLevelTag" style="font-size:11px;margin-bottom:4px;color:var(--warn);">
+        配平不可用：尚未收到显式版本化地面变换
+      </div>
+      <table class="kv">
+        <tr><td>坐标模式</td><td id="gMode">--</td></tr>
+        <tr><td>frame / 单位</td><td id="gFrame">--</td></tr>
+        <tr><td>源帧 / 显示帧</td><td id="gFrames">--</td></tr>
+        <tr><td>标定 / schema</td><td id="gCal">--</td></tr>
+        <tr><td>基底 / 变换</td><td id="gGeom">--</td></tr>
+        <tr><td>地面状态</td><td id="gGround">--</td></tr>
+        <tr><td>配平入口</td><td id="gRender">--</td></tr>
+        <tr><td>支持区</td><td id="gSupport">--</td></tr>
+        <tr><td>物理验证</td><td id="gPhys">--</td></tr>
+        <tr><td>FPS / 队列 / 连接</td><td id="gPerf">--</td></tr>
+      </table>
+      <div style="color:var(--dim);font-size:11px;margin-top:4px;">
+        参考网格为无限装饰网格，≠ 已核验地面；配平仅应用板端显式版本化 R/t，不做浏览器拟合；支持区只消费显式字段。
+      </div>
+      <div style="color:var(--dim);font-size:11px;margin-top:2px;">
+        图例：装饰网格 = 灰蓝（始终显示，非地面）·
+        <span style="color:#4ad0c0;">支持面 polygon = 青色</span>（不透明 0.85）·
+        <span style="color:#4a90d0;">支持线 polyline = 蓝色</span>（不透明 0.85）
+      </div>
+    </section>
+    <section><h3>人体跌倒 (HF-11，算法在 RK3588)</h3>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+        <button id="hfSelectMode">选人模式：关</button>
+        <button id="hfCapture">采集站姿基线</button>
+        <button id="hfRelease">解除目标</button>
+      </div>
+      <table class="kv">
+        <tr><td>请求通道</td><td id="hfCap">--</td></tr>
+        <tr><td>目标 / 状态</td><td id="hfTrack">--</td></tr>
+        <tr><td>跌倒状态</td><td id="hfFall">--</td></tr>
+        <tr><td>可观测性</td><td id="hfObs">--</td></tr>
+        <tr><td id="hfPosLabel">位置 source (m)</td><td id="hfPos">--</td></tr>
+        <tr><td id="hfRangeLabel">距离 source (m)</td><td id="hfRange">--</td></tr>
+        <tr><td>坐标 / 标定</td><td id="hfCoord">--</td></tr>
+        <tr><td>目标基线</td><td id="hfBaseline">--</td></tr>
+        <tr><td>预测</td><td id="hfPred">--</td></tr>
+        <tr><td>事件保存</td><td id="hfPersist">--</td></tr>
+      </table>
+      <div style="color:var(--dim);font-size:11px;margin-top:4px;">
+        拖框选择（选人模式下拖出矩形）或点下方候选；读数随所选模式：原始=雷达 source 系（innolidar，未标定为世界坐标），配平=ground_local。候选行同法标注所属系。
+      </div>
+      <div id="hfCands"></div>
+    </section>
+    <section><h3>跌倒事件历史</h3><div id="hfEvents"></div></section>
+    <section><h3>事件 / bridge 状态消息</h3><div id="log"></div></section>
+  </aside>
+</main>
+
+<script src="/webui/three.min.js"></script>
+<script src="/webui/OrbitControls.js"></script>
+<script>
+"use strict";
+/* ============================================================
+ * IFW192S 雷达 WebUI
+ * 数据面：直连板端 foxglove_bridge（Foxglove WebSocket v1 协议）
+ *  - 文本帧：JSON 操作；二进制帧：[opcode u8][subId u32 LE][logTime u64 LE ns][payload]
+ *  - 订阅必须用数组形式 {op:"subscribe",subscriptions:[{id,channelId}]}
+ *    （bridge 0.8.x handleSubscribe 只读 "subscriptions" 键，扁平形式会被拒绝）
+ *  - 服务器状态/撤销通告的 wire op 是 "status" / "unadvertise"
+ *  - ROS1 消息结构序列化为小端（roscpp 线格式，实测帧验证）、无对齐填充；
+ *    点云数据体字节序由 is_bigendian 字段单独指示（驱动为小端）
+ * 解析器按消息自带字段表通用解析，兼容 XYZI / XYZI_TIME / XYZI_SOURCE
+ * ============================================================ */
+
+const HF_QUERY = new URLSearchParams(location.search);
+// Default to the node's read-only sampled display stream; ?points=/innolidar_points
+// keeps the full source cloud available for diagnostics.
+const HF_DISPLAY_TOPIC = HF_QUERY.get("display") || "/human_fall/display_points";
+const HF_POINTS_TOPIC = HF_QUERY.get("points") || HF_DISPLAY_TOPIC;
+const TOPICS = [HF_POINTS_TOPIC, "/inno_imu", "/device_status"];
+const $ = id => document.getElementById(id);
+
+/* ---------- localStorage 安全封装（被禁用时页面仍可用） ---------- */
+function storeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function storeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+/* ---------- 日志与统计 ---------- */
+function log(msg, level) {
+  const el = $("log"), d = document.createElement("div");
+  if (level === 2) d.className = "l-err"; else if (level === 1) d.className = "l-warn";
+  d.textContent = new Date().toLocaleTimeString("zh-CN", { hour12: false }) + "  " + msg;
+  el.prepend(d);
+  while (el.childElementCount > 30) el.lastChild.remove();
+}
+// 简易滑动窗口测频：保留最近 5s 的到达时刻
+function makeRate() { const t = []; return function () { const now = Date.now();
+  t.push(now); while (t.length && now - t[0] > 5000) t.shift(); return t.length / 5; }; }
+const ratePc = makeRate(), rateImu = makeRate();
+let pcDrops = 0, pcPrevSeq = null, pcBytesAcc = 0, pcBwT0 = Date.now();
+
+/* ---------- 小端读取器（ROS1 线格式；o 为缓冲区绝对偏移） ---------- */
+const TXT_DEC = new TextDecoder();
+class Rd {
+  constructor(buf, base) { this.dv = new DataView(buf); this.u8v = new Uint8Array(buf);
+    this.o = base || 0; }
+  u8()  { return this.u8v[this.o++]; }
+  u16() { const v = this.dv.getUint16(this.o, true); this.o += 2; return v; }
+  u32() { const v = this.dv.getUint32(this.o, true); this.o += 4; return v; }
+  f64() { const v = this.dv.getFloat64(this.o, true); this.o += 8; return v; }
+  str() { const len = this.u32(); const s = TXT_DEC.decode(this.u8v.subarray(this.o, this.o + len));
+    this.o += len; return s; }
+}
+function parseHeader(r) { const seq = r.u32(), secs = r.u32(), nsecs = r.u32(), frameId = r.str();
+  return { seq, stamp: secs + nsecs / 1e9, frameId }; }
+
+/* ---------- sensor_msgs/PointCloud2（结构小端，数据体字节序见 is_bigendian） ---------- */
+function parsePC2(u8) {
+  const r = new Rd(u8.buffer, u8.byteOffset);
+  const header = parseHeader(r);
+  const height = r.u32(), width = r.u32();
+  const nf = r.u32(), fields = [];
+  for (let i = 0; i < nf; i++)
+    fields.push({ name: r.str(), offset: r.u32(), datatype: r.u8(), count: r.u32() });
+  const bigEndian = r.u8() !== 0;
+  const pointStep = r.u32(), rowStep = r.u32();
+  const dataLen = r.u32(), dataOff = r.o;
+  r.o += dataLen;
+  const dense = r.u8() !== 0;
+  return { header, height, width, fields, bigEndian, pointStep, rowStep, dataLen, dataOff, dense };
+}
+// 按字段描述构造取值函数（datatype: 1=i8,2=u8,3=i16,4=u16,5=i32,6=u32,7=f32,8=f64）
+function makeGetter(dv, f, bigEndian) {
+  const o = f.offset, le = !bigEndian;
+  switch (f.datatype) {
+    case 1: return b => dv.getInt8(b + o);
+    case 2: return b => dv.getUint8(b + o);
+    case 3: return b => dv.getInt16(b + o, le);
+    case 4: return b => dv.getUint16(b + o, le);
+    case 5: return b => dv.getInt32(b + o, le);
+    case 6: return b => dv.getUint32(b + o, le);
+    case 7: return b => dv.getFloat32(b + o, le);
+    case 8: return b => dv.getFloat64(b + o, le);
+    default: return null;
+  }
+}
+
+/* ---------- sensor_msgs/Imu（协方差为定长数组，无长度前缀） ---------- */
+function parseImu(buf) {
+  const r = new Rd(buf);
+  const header = parseHeader(r);
+  r.o += 32;                     // orientation 四元数 4×f64（不显示）
+  r.o += 72;                     // orientation_covariance 9×f64
+  const gx = r.f64(), gy = r.f64(), gz = r.f64();
+  r.o += 72;                     // angular_velocity_covariance
+  const ax = r.f64(), ay = r.f64(), az = r.f64();
+  return { header, gx, gy, gz, ax, ay, az };
+}
+
+/* ---------- inno_lidar_msg/DeviceStatus ---------- */
+function parseDevStatus(buf) {
+  const r = new Rd(buf);
+  const header = parseHeader(r);
+  const deviceNumber = r.u16(), trx = r.f64(), main = r.f64(), abnormal = r.u8();
+  return { header, deviceNumber, trx, main, abnormal };
+}
+function slicePayload(u8) { return u8.buffer.slice(u8.byteOffset, u8.byteOffset + u8.byteLength); }
+
+/* ---------- Foxglove WebSocket v1 客户端 ---------- */
+class FoxgloveClient {
+  constructor(url, handlers) {
+    this.url = url; this.h = handlers; this.ws = null;
+    this.subId = 0; this.chToSub = new Map(); this.subToTopic = new Map();
+    this.wantReconnect = true; this.retry = 0; this.timer = null;
+  }
+  connect() {
+    this.setDot("reconn");
+    let ws;
+    try { ws = new WebSocket(this.url, ["foxglove.websocket.v1"]); }
+    catch (e) { log("连接创建失败: " + e.message, 1); this.scheduleReconnect(); return; }
+    ws.binaryType = "arraybuffer";
+    this.ws = ws;
+    const sock = ws;                       // 旧 socket 的迟到期事件不得干扰新连接
+    ws.onopen = () => {
+      if (sock !== this.ws) return;
+      this.retry = 0; this.setDot("on");
+      this.chToSub.clear(); this.subToTopic.clear();
+      pcPrevSeq = null;                    // 重连后 seq 基线重置，避免误计丢帧
+      log("已连接 " + this.url);
+      if (this.h.state) this.h.state(true);
+    };
+    ws.onmessage = ev => { if (sock === this.ws) this.onMsg(ev.data); };
+    ws.onclose = ev => {
+      if (sock !== this.ws) return;
+      this.setDot(this.wantReconnect ? "reconn" : "");
+      if (this.h.state) this.h.state(false);
+      if (this.wantReconnect) { log("连接断开(" + ev.code + ")，准备重连", 2); this.scheduleReconnect(); }
+    };
+    ws.onerror = () => {};
+  }
+  scheduleReconnect() {
+    if (!this.wantReconnect || this.timer) return;
+    const delay = Math.min(1000 * Math.pow(2, this.retry++), 10000);
+    this.timer = setTimeout(() => { this.timer = null; this.connect(); }, delay);
+  }
+  disconnect() { this.wantReconnect = false; clearTimeout(this.timer); this.timer = null;
+    if (this.ws) this.ws.close(); this.setDot(""); }
+  get live() { return this.ws && (this.ws.readyState === 0 || this.ws.readyState === 1); }
+  setDot(cls) { $("connDot").className = "dot" + (cls ? " " + cls : ""); }
+  send(obj) { if (this.ws && this.ws.readyState === 1) this.ws.send(JSON.stringify(obj)); }
+  onMsg(data) {
+    if (typeof data === "string") {
+      try { this.onJson(JSON.parse(data)); }
+      catch (e) { log("JSON 解析失败: " + e.message, 1); }
+      return;
+    }
+    if (data.byteLength < 13) return;
+    // 二进制帧：opcode u8 + subId u32 LE + logTime u64 LE + payload
+    const dv = new DataView(data);
+    const op = dv.getUint8(0);
+    if (op !== 1) return;                  // 2 = TIME（仅仿真时钟），忽略
+    const subId = dv.getUint32(1, true);
+    // logTime u64 ns 精确读取（录制需要严格单调；显示端再转毫秒）
+    const logTimeNs = dv.getBigUint64(5, true);
+    const topic = this.subToTopic.get(subId);
+    if (!topic) return;
+    try { this.h.message(topic, logTimeNs, new Uint8Array(data, 13)); }
+    catch (e) { log("消息处理异常: " + e.message, 1); }
+  }
+  onJson(m) {
+    switch (m.op) {
+      case "serverInfo": log("bridge: " + (m.name || "foxglove_bridge")); break;
+      case "status": case "statusMessage":       // 规范 op 为 "status"；0=INFO 1=WARNING 2=ERROR
+        log("bridge: " + m.message, m.level);
+        break;
+      case "advertise":
+        for (const ch of m.channels || []) {
+          if (!TOPICS.includes(ch.topic)) continue;
+          const prev = this.chToSub.get(ch.id);
+          if (prev !== undefined) {              // 通道 id 被服务器复用且内容变化：退订重订
+            if (this.subToTopic.get(prev) === ch.topic) continue;
+            this.send({ op: "unsubscribe", subscriptionIds: [prev] });
+            this.subToTopic.delete(prev); this.chToSub.delete(ch.id);
+          }
+          if (ch.encoding !== "ros1") { log("话题 " + ch.topic + " 编码异常: " + ch.encoding, 2); continue; }
+          const id = ++this.subId;
+          this.chToSub.set(ch.id, id); this.subToTopic.set(id, ch.topic);
+          // 必须是数组形式（bridge 的 handleSubscribe 只认 "subscriptions" 键）
+          this.send({ op: "subscribe", subscriptions: [{ id, channelId: ch.id }] });
+          log("订阅 " + ch.topic + " (" + ch.schemaName + ")");
+        }
+        break;
+      case "unadvertise": case "removeChannels":
+        for (const id of m.channelIds || []) {
+          const sid = this.chToSub.get(id);
+          if (sid !== undefined) { this.chToSub.delete(id); this.subToTopic.delete(sid); }
+        }
+        break;
+    }
+  }
+}
+
+/* ---------- three.js 场景（WebGL 不可用时降级为纯遥测模式） ---------- */
+let renderer = null, scene = null, camera = null, controls = null, material = null;
+let geo = null, pointsObj = null, dirty3d = false, no3d = false, fitDone = false;
+let MAX_POINTS = 120000;                       // 预分配 2 倍余量（实测 49126 点/帧）
+let positions = new Float32Array(MAX_POINTS * 3);
+let colors = new Float32Array(MAX_POINTS * 3);
+let intens = new Float32Array(MAX_POINTS);
+
+try {
+  renderer = new THREE.WebGLRenderer({ canvas: $("gl"), antialias: false });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0b0e14);
+  camera = new THREE.PerspectiveCamera(55, 1, 0.05, 2000);
+  camera.up.set(0, 0, 1);                      // 雷达坐标系 z 朝上
+  camera.position.set(6, -6, 5);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.12;
+  controls.addEventListener("change", () => { dirty3d = true; });
+  scene.add(new THREE.AxesHelper(0.6));
+  const grid = new THREE.GridHelper(20, 20, 0x2a3550, 0x161d2c);
+  grid.rotation.x = Math.PI / 2;               // 铺在 XY 平面（z=0）
+  scene.add(grid);
+  geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage));
+  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3).setUsage(THREE.DynamicDrawUsage));
+  geo.setDrawRange(0, 0);
+  material = new THREE.PointsMaterial({ size: 1.8, vertexColors: true, sizeAttenuation: false });
+  pointsObj = new THREE.Points(geo, material);
+  pointsObj.frustumCulled = false;             // 每帧整体重写，包围球不更新，绝不能被剔除
+  scene.add(pointsObj);
+} catch (e) {
+  no3d = true;
+  log("WebGL 初始化失败，3D 视图禁用（遥测仍可用）: " + e.message, 2);
+}
+
+function resize3d() {
+  if (no3d) return;
+  const el = $("view3d"), w = el.clientWidth, h = el.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+  dirty3d = true;
+}
+window.addEventListener("resize", () => { resize3d(); fitCanvases(); });
+
+// 强度着色：viridis 渐变，预生成 256 项查找表（避免每点分配数组）
+const VIRIDIS = [[68,1,84],[59,82,139],[33,145,140],[94,201,98],[253,231,37]];
+function viridis(t) {
+  t = t < 0 ? 0 : t > 1 ? 1 : t;
+  const f = t * (VIRIDIS.length - 1), i = Math.min(f | 0, VIRIDIS.length - 2), k = f - i;
+  const a = VIRIDIS[i], b = VIRIDIS[i + 1];
+  return [(a[0]+(b[0]-a[0])*k)/255, (a[1]+(b[1]-a[1])*k)/255, (a[2]+(b[2]-a[2])*k)/255];
+}
+const LUT_N = 256, LUT = new Float32Array(LUT_N * 3);
+for (let i = 0; i < LUT_N; i++) {
+  const c = viridis(i / (LUT_N - 1));
+  LUT[i * 3] = c[0]; LUT[i * 3 + 1] = c[1]; LUT[i * 3 + 2] = c[2];
+}
+let iMin = 0, iMax = 1, iInit = false;
+
+function growBuffers(n) {
+  // 点数超过预分配容量时整体重建几何体（dispose 旧 VBO，防止 GPU 缓冲泄漏）
+  MAX_POINTS = Math.max(n, MAX_POINTS + 4096);
+  positions = new Float32Array(MAX_POINTS * 3);
+  colors = new Float32Array(MAX_POINTS * 3);
+  intens = new Float32Array(MAX_POINTS);
+  const old = geo;
+  geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage));
+  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3).setUsage(THREE.DynamicDrawUsage));
+  geo.setDrawRange(0, 0);
+  if (old) old.dispose();
+  if (pointsObj) pointsObj.geometry = geo;
+}
+// 收到一帧点云：抽取 x/y/z/intensity → 填充缓冲（零拷贝解析，不复制 1.28MB）
+function onPointCloud(logTimeNs, payload) {
+  if (no3d) return;
+  let m, dv, gx, gy, gz, gi, base0, n = 0;
+  try {
+    m = parsePC2(payload);
+    if (m.pointStep <= 0 || m.width === 0) return;
+    if (m.dataOff + m.dataLen > payload.byteOffset + payload.byteLength) {
+      log("点云数据长度异常，丢弃该帧", 1); return;
+    }
+    dv = new DataView(payload.buffer);       // 全缓冲视图 + 绝对偏移
+    const fx = m.fields.find(f => f.name === "x"), fy = m.fields.find(f => f.name === "y"),
+          fz = m.fields.find(f => f.name === "z"), fi = m.fields.find(f => f.name === "intensity");
+    if (!fx || !fy || !fz) { log("缺少 x/y/z 字段", 1); return; }
+    gx = makeGetter(dv, fx, m.bigEndian); gy = makeGetter(dv, fy, m.bigEndian);
+    gz = makeGetter(dv, fz, m.bigEndian); gi = fi ? makeGetter(dv, fi, m.bigEndian) : null;
+    if (!gx || !gy || !gz) { log("字段类型不支持", 1); return; }
+    base0 = m.dataOff;
+    if (m.width > MAX_POINTS) growBuffers(m.width);
+    let mn = Infinity, mx = -Infinity;
+    n = 0;
+    for (let i = 0; i < m.width; i++) {
+      const b = base0 + i * m.pointStep;
+      const x = gx(b), y = gy(b), z = gz(b);
+      if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(z)) continue;
+      positions[n * 3] = x; positions[n * 3 + 1] = y; positions[n * 3 + 2] = z;
+      if (gi) {
+        const v = gi(b);
+        intens[n] = v;
+        if (v < mn) mn = v; if (v > mx) mx = v;
+      }
+      n++;
+    }
+    if (n === 0) return;
+    if (gi && iInit) { iMin += (mn - iMin) * 0.15; iMax += (mx - iMax) * 0.15; }
+    else if (gi) { iMin = mn; iMax = mx; iInit = true; }
+    const span = (iMax - iMin) || 1;
+    for (let i = 0; i < n; i++) {
+      let li = gi ? ((intens[i] - iMin) / span * 255) | 0 : 128;
+      if (li < 0) li = 0; else if (li > 255) li = 255;
+      const j = li * 3;
+      colors[i * 3] = LUT[j]; colors[i * 3 + 1] = LUT[j + 1]; colors[i * 3 + 2] = LUT[j + 2];
+    }
+    geo.attributes.position.needsUpdate = true;
+    geo.attributes.color.needsUpdate = true;
+    geo.setDrawRange(0, n);
+  } catch (e) { log("点云帧处理异常: " + e.message, 1); return; }
+  if (!fitDone) { fitDone = true; fitView(); }
+  dirty3d = true;
+  $("overlay").textContent = m.width + " 点 / 渲染 " + n + " 点 · 强度 " + iMin.toFixed(1) + "~" + iMax.toFixed(1);
+}
+function fitView() {
+  if (no3d) return;
+  const n = geo.drawRange.count;
+  if (!n) return;
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9,z0=1e9,z1=-1e9;
+  for (let i = 0; i < n; i++) {
+    const x = positions[i*3], y = positions[i*3+1], z = positions[i*3+2];
+    if (x<x0)x0=x; if (x>x1)x1=x; if (y<y0)y0=y; if (y>y1)y1=y; if (z<z0)z0=z; if (z>z1)z1=z;
+  }
+  const cx=(x0+x1)/2, cy=(y0+y1)/2, cz=(z0+z1)/2;
+  const r = Math.max(x1-x0, y1-y0, z1-z0, 1) * 0.75 + 1;
+  camera.position.set(cx + r, cy - r, cz + r * 0.7);
+  controls.target.set(cx, cy, cz);
+  controls.update();
+  dirty3d = true;
+}
+$("btnFit").onclick = fitView;
+$("ptSize").oninput = e => { if (material) { material.size = parseFloat(e.target.value); dirty3d = true; } };
+
+/* ---------- IMU 曲线（环形缓冲 + rAF 节流重绘） ---------- */
+const IMU_N = 512;
+const gyroBuf = new Float32Array(IMU_N * 3), accelBuf = new Float32Array(IMU_N * 3);
+let imuHead = 0, imuFill = 0, imuDirty = false;
+function onImu(payload) {
+  try {
+    const m = parseImu(slicePayload(payload));
+    const i = imuHead * 3;
+    gyroBuf[i] = m.gx; gyroBuf[i + 1] = m.gy; gyroBuf[i + 2] = m.gz;
+    accelBuf[i] = m.ax; accelBuf[i + 1] = m.ay; accelBuf[i + 2] = m.az;
+    imuHead = (imuHead + 1) % IMU_N;
+    if (imuFill < IMU_N) imuFill++;
+    imuDirty = true;
+    const r = rateImu();                       // 每条消息都计入测频窗口
+    if ((imuHead & 63) === 0) $("imuHz").textContent = r.toFixed(0);   // DOM 仅每 64 条刷新
+  } catch (e) {}
+}
+
+const IMU_SERIES = [[65,170,255],[255,170,64],[120,220,120]];
+function drawImu(canvasId, buf) {
+  const cv = $(canvasId), ctx = cv.getContext("2d");
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  let mn = Infinity, mx = -Infinity;
+  for (let i = 0; i < imuFill * 3; i++) { const v = buf[i]; if (v < mn) mn = v; if (v > mx) mx = v; }
+  if (!isFinite(mn)) return;
+  if (mx - mn < 1e-6) { mx += 0.5; mn -= 0.5; }
+  const pad = (mx - mn) * 0.1; mn -= pad; mx += pad;
+  ctx.strokeStyle = "#1e2634"; ctx.beginPath(); ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2); ctx.stroke();
+  for (let s = 0; s < 3; s++) {
+    ctx.strokeStyle = "rgb(" + IMU_SERIES[s].join(",") + ")";
+    ctx.beginPath();
+    for (let k = 0; k < imuFill; k++) {
+      const idx = ((imuHead - imuFill + k + IMU_N) % IMU_N) * 3 + s;
+      const x = k / (IMU_N - 1) * w;
+      const y = h - (buf[idx] - mn) / (mx - mn) * h;
+      k ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    ctx.stroke();
+  }
+}
+function setupCanvas(cv) {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio, 2);
+  cv.width = Math.max(50, r.width * dpr); cv.height = Math.max(30, r.height * dpr);
+}
+function fitCanvases() { setupCanvas($("gyro")); setupCanvas($("accel")); imuDirty = true; }
+
+/* ---------- 设备状态 ---------- */
+function onDevStatus(payload) {
+  try {
+    const m = parseDevStatus(slicePayload(payload));
+    $("dvNum").textContent = m.deviceNumber;
+    $("dvTrx").textContent = m.trx.toFixed(1);
+    $("dvMain").textContent = m.main.toFixed(1);
+    const abn = $("dvAbn");
+    abn.textContent = m.abnormal === 0 ? "0" : m.abnormal + " (含义未知)";
+    abn.className = "";                       // 语义未核验，不据此判故障
+    $("dvTime").textContent = new Date().toLocaleTimeString("zh-CN", { hour12: false });
+  } catch (e) { log("device_status 解析失败: " + e.message, 1); }
+}
+
+/* ============================ 录制（MCAP 输出） ============================ */
+/* 浏览器内存模式：页面经 http 提供（非安全上下文），无法用 File System Access API
+ * 边录边写盘，改为内存攒 Blob、停止时下载。点云 ~12.4MB/s，单次建议 ≤2 分钟。
+ * 产物为标准 MCAP（ros1 编码 + ros1msg schema），Foxglove 桌面版可直接打开回放。 */
+/*MCAP-BEGIN*/
+const TXT_ENC = new TextEncoder();
+const MCAP_MAGIC = new Uint8Array([137, 77, 67, 65, 80, 48, 13, 10]);   // \x89MCAP0\r\n
+const CRC32_T = (() => { const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) { let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+    t[n] = c >>> 0; } return t; })();
+function crc32W(w) { let c = 0xffffffff;
+  for (const p of w.parts) for (let i = 0; i < p.length; i++)
+    c = CRC32_T[(c ^ p[i]) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0; }
+
+// 小端字节写入器（parts 拼接式，避免大缓冲整块拷贝）
+class ByteW {
+  constructor() { this.parts = []; this.len = 0; }
+  raw(a) { this.parts.push(a); this.len += a.length; return this; }
+  u8(v)  { const b = new Uint8Array(1); b[0] = v; return this.raw(b); }
+  u16(v) { const b = new Uint8Array(2); new DataView(b.buffer).setUint16(0, v, true); return this.raw(b); }
+  u32(v) { const b = new Uint8Array(4); new DataView(b.buffer).setUint32(0, v, true); return this.raw(b); }
+  u64(v) { const b = new Uint8Array(8); new DataView(b.buffer).setBigUint64(0, BigInt(v), true); return this.raw(b); }
+  str(s) { const b = TXT_ENC.encode(s);
+    this.u32(b.length); return this.raw(b); }
+  absorb(w) { for (const p of w.parts) this.parts.push(p); this.len += w.len; return this; }
+}
+
+// ros1msg 拼接式消息定义（MCAP schema encoding = "ros1msg"）
+const SEP80 = "=".repeat(80) + "\n";
+const DEF_HEADER = "uint32 seq\ntime stamp\nstring frame_id\n";
+const DEF_POINTFIELD = "uint8 INT8=1\nuint8 UINT8=2\nuint8 INT16=3\nuint8 UINT16=4\n" +
+  "uint8 INT32=5\nuint8 UINT32=6\nuint8 FLOAT32=7\nuint8 FLOAT64=8\n" +
+  "string name\nuint32 offset\nuint8 datatype\nuint32 count\n";
+const SCHEMAS = [
+  { id: 1, topic: "/innolidar_points", name: "sensor_msgs/PointCloud2",
+    def: "Header header\nuint32 height\nuint32 width\nPointField[] fields\n" +
+      "bool is_bigendian\nuint32 point_step\nuint32 row_step\nuint8[] data\nbool is_dense\n" +
+      SEP80 + "MSG: sensor_msgs/Header\n" + DEF_HEADER +
+      SEP80 + "MSG: sensor_msgs/PointField\n" + DEF_POINTFIELD },
+  { id: 2, topic: "/inno_imu", name: "sensor_msgs/Imu",
+    def: "Header header\ngeometry_msgs/Quaternion orientation\n" +
+      "float64[9] orientation_covariance\ngeometry_msgs/Vector3 angular_velocity\n" +
+      "float64[9] angular_velocity_covariance\ngeometry_msgs/Vector3 linear_acceleration\n" +
+      "float64[9] linear_acceleration_covariance\n" +
+      SEP80 + "MSG: sensor_msgs/Header\n" + DEF_HEADER +
+      SEP80 + "MSG: geometry_msgs/Quaternion\nfloat64 x\nfloat64 y\nfloat64 z\nfloat64 w\n" +
+      SEP80 + "MSG: geometry_msgs/Vector3\nfloat64 x\nfloat64 y\nfloat64 z\n" },
+  { id: 3, topic: "/device_status", name: "inno_lidar_msg/DeviceStatus",
+    def: "std_msgs/Header header\nuint16 device_number\nfloat64 trx_temperature\n" +
+      "float64 main_temperature\nuint8 abnormal_flag\n" +
+      SEP80 + "MSG: std_msgs/Header\n" + DEF_HEADER },
+];
+
+class McapRecorder {
+  constructor() {
+    this.file = new ByteW(); this.recording = false;
+    this.chan = new Map();               // topic -> {id, schema, seq, count, chunkCount}
+    this.chunk = new ByteW(); this.chunkT0 = 0n; this.chunkT1 = 0n;
+    this.chunkIdx = []; this.msgCount = 0n; this.t0 = 0n; this.t1 = 0n;
+    this.bytes = 0;
+  }
+  _rec(op, body) { this.file.u8(op).u64(body.len); this.file.absorb(body); }
+  start() {
+    this.file.raw(MCAP_MAGIC);
+    const h = new ByteW(); h.str(""); h.str("ifw192s-webui-1");
+    this._rec(0x01, h);                  // Header: profile="", library=...
+    // 数据段前置声明 Schema/Channel（流式读取器要求先声明后使用；summary 中还会再写副本）
+    for (const s of SCHEMAS) {
+      const b = new ByteW();
+      b.u16(s.id).str(s.name).str("ros1msg").u32(s.def.length).raw(TXT_ENC.encode(s.def));
+      this._rec(0x03, b);
+      const cb = new ByteW();
+      cb.u16(s.id).u16(s.id).str(s.topic).str("ros1").u32(0);   // metadata 空 map
+      this._rec(0x04, cb);
+    }
+    this.recording = true;
+  }
+  add(topic, logTimeNs, payload) {
+    if (!this.recording) return;
+    const ns = typeof logTimeNs === "bigint" ? logTimeNs : BigInt(Math.round(logTimeNs * 1e6));
+    let ch = this.chan.get(topic);
+    if (!ch) { const s = SCHEMAS.find(x => x.topic === topic); if (!s) return;
+      ch = { id: s.id, schema: s, seq: 0, count: 0n, chunkCount: 0n, idx: [] };
+      this.chan.set(topic, ch); }
+    const inner = new ByteW();
+    inner.u16(ch.id).u32(ch.seq++).u64(ns).u64(ns).raw(payload);
+    const m = new ByteW();
+    m.u8(0x05).u64(inner.len).absorb(inner);                   // Message 记录 = op + 长度 + 体
+    const off = this.chunk.len;                                // chunk 内偏移（供消息索引用）
+    this.chunk.absorb(m);
+    ch.idx.push([ns, off]);
+    // bridge 打点有 ~100µs 级抖动，chunk/全局时间范围必须取 min/max（索引读取器会校验）
+    if (this.chunkT0 === 0n || ns < this.chunkT0) this.chunkT0 = ns;
+    if (ns > this.chunkT1) this.chunkT1 = ns;
+    if (this.t0 === 0n || ns < this.t0) this.t0 = ns;
+    if (ns > this.t1) this.t1 = ns;
+    ch.count++; ch.chunkCount++; this.msgCount++;
+    this.bytes += m.len;
+    if (this.chunk.len >= 4 * 1024 * 1024) this._flushChunk();
+  }
+  _flushChunk() {
+    if (!this.chunk.len) return;
+    const body = this.chunk; this.chunk = new ByteW();
+    const counts = new Map(), idxOff = new Map();
+    for (const ch of this.chan.values())
+      if (ch.chunkCount) { counts.set(ch.id, ch.chunkCount); ch.chunkCount = 0n; }
+    const c = new ByteW();
+    c.u64(this.chunkT0).u64(this.chunkT1).u64(BigInt(body.len)).u32(crc32W(body))
+      .str("").u64(BigInt(body.len)).absorb(body);             // Chunk 记录（无压缩）
+    const chunkStart = this.file.len;
+    this._rec(0x06, c);
+    const chunkLen = this.file.len - chunkStart;
+    // Chunk 内消息索引（MessageIndex 记录紧跟 Chunk 记录；索引读取器要求必须提供）
+    for (const ch of this.chan.values()) {
+      if (!ch.idx.length) continue;
+      const b = new ByteW();
+      b.u16(ch.id).u32(ch.idx.length * 16);
+      for (const [t, o] of ch.idx) b.u64(t).u64(BigInt(o));
+      idxOff.set(ch.id, this.file.len);
+      this._rec(0x07, b);
+      ch.idx = [];
+    }
+    const idxLen = this.file.len - chunkStart - chunkLen;
+    this.chunkIdx.push({ start: chunkStart, len: chunkLen,
+      t0: this.chunkT0, t1: this.chunkT1, size: body.len, counts, idxOff, idxLen });
+    this.chunkT0 = 0n;
+  }
+  stop() {
+    if (!this.recording) return null;
+    this.recording = false;
+    this._flushChunk();
+    this._rec(0x0f, new ByteW().u32(0));                       // DataEnd（crc=0 跳过校验）
+    // ---- Summary 段：Schemas / Channels / ChunkIndexes / Statistics ----
+    const summaryStart = this.file.len;
+    const groups = [];
+    const usedIds = new Set([...this.chan.values()].map(ch => ch.schema.id));
+    let g = new ByteW();
+    for (const s of SCHEMAS) if (usedIds.has(s.id)) {
+      const b = new ByteW();
+      b.u16(s.id).str(s.name).str("ros1msg")
+        .u32(s.def.length).raw(TXT_ENC.encode(s.def));
+      g.u8(0x03).u64(b.len).absorb(b);
+    }
+    if (g.len) groups.push([0x03, g]);
+    g = new ByteW();
+    for (const ch of this.chan.values()) {
+      const b = new ByteW();
+      b.u16(ch.id).u16(ch.schema.id).str(ch.schema.topic).str("ros1").u32(0);  // metadata 空 map
+      g.u8(0x04).u64(b.len).absorb(b);
+    }
+    if (g.len) groups.push([0x04, g]);
+    g = new ByteW();
+    for (const ci of this.chunkIdx) {
+      const b = new ByteW();
+      b.u64(ci.t0).u64(ci.t1).u64(BigInt(ci.start)).u64(BigInt(ci.len))
+        .u32(ci.idxOff.size * 10);                             // message_index_offsets
+      for (const [k, v] of ci.idxOff) b.u16(k).u64(BigInt(v));
+      b.u64(BigInt(ci.idxLen))                                 // message_index_length
+        .str("")                                               // compression = ""
+        .u64(BigInt(ci.size)).u64(BigInt(ci.size));
+      for (const [k, v] of ci.counts) b.u16(k).u64(v);         // message_counts（至记录尾）
+      g.u8(0x08).u64(b.len).absorb(b);
+    }
+    if (g.len) groups.push([0x08, g]);
+    g = new ByteW();
+    { const b = new ByteW();
+      b.u64(this.msgCount).u16(usedIds.size).u32(this.chan.size)
+        .u32(0).u32(0).u32(this.chunkIdx.length)
+        .u64(this.t0).u64(this.t1)
+        .u32(this.chan.size * 10);         // channel_message_counts（u32 前缀 map）
+      for (const ch of this.chan.values()) b.u16(ch.id).u64(ch.count);
+      g.u8(0x0b).u64(b.len).absorb(b); }
+    groups.push([0x0b, g]);
+    for (const [, gw] of groups) this.file.absorb(gw);
+    // ---- SummaryOffset 段 + Footer + 收尾 magic ----
+    const sumOffStart = this.file.len;
+    let off = summaryStart;
+    const offW = new ByteW();
+    for (const [op, gw] of groups) {
+      const b = new ByteW(); b.u8(op).u64(BigInt(off)).u64(BigInt(gw.len));
+      offW.u8(0x0e).u64(b.len).absorb(b);
+      off += gw.len;
+    }
+    this.file.absorb(offW);
+    const f = new ByteW();
+    f.u64(BigInt(summaryStart)).u64(BigInt(sumOffStart)).u32(0);
+    this._rec(0x02, f);
+    this.file.raw(MCAP_MAGIC);
+    return new Blob(this.file.parts, { type: "application/octet-stream" });
+  }
+}
+/*MCAP-END*/
+
+/* ---------- 录制控制 ---------- */
+let rec = null, recTimer = null;
+const REC_LIMIT = 2 * 1024 * 1024 * 1024;    // 浏览器内存保险：2GB 自动截断下载
+function recFmt(ms) { const s = (ms / 1000) | 0;
+  return ((s / 60) | 0) + ":" + String(s % 60).padStart(2, "0"); }
+function recTick() {
+  if (!rec) return;
+  $("recStat").textContent = recFmt(Date.now() - rec.tStart) + " · " +
+    (rec.bytes / 1048576).toFixed(0) + "MB · " + rec.msgCount + " 帧";
+  if (rec.bytes >= REC_LIMIT) { log("录制达到 2GB 内存上限，自动停止并保存", 1); recStop(true); }
+}
+function recStart() {
+  if (rec) return;
+  if (!client || !client.live) { log("未连接，无法录制", 1); return; }
+  rec = new McapRecorder(); rec.start(); rec.tStart = Date.now();
+  $("btnRec").textContent = "■ 停止"; $("btnRec").classList.add("recording");
+  recTimer = setInterval(recTick, 500);
+  log("开始录制（内存模式，建议单次 ≤2 分钟）。注意：当前订阅的是抽样显示流，录到的是显示用抽样点云，不是原始全量 bag");
+}
+function recStop(auto) {
+  if (!rec) return;
+  clearInterval(recTimer); recTimer = null;
+  const blob = rec.stop(), dur = Date.now() - rec.tStart; rec = null;
+  const d = new Date(), p = n => String(n).padStart(2, "0");
+  const name = "ifw192s_" + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) +
+    "_" + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()) + ".mcap";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  $("btnRec").textContent = "● 录制"; $("btnRec").classList.remove("recording");
+  $("recStat").textContent = "";
+  log((auto ? "自动保存 " : "已保存 ") + name + "（" + (blob.size / 1048576).toFixed(1) +
+    "MB / " + recFmt(dur) + "），可用 Foxglove 直接打开");
+}
+$("btnRec").onclick = () => rec && rec.recording ? recStop(false) : recStart();
+
+/* ---------- 消息分发与统计 ---------- */
+// Raw receive statistics for one cloud message. Kept separate from rendering so
+// the HF layer can count raw arrival and presented rate independently: raw seq
+// gaps are counted here, while only the chosen (output-matched) frame is
+// rendered via renderPoints().
+function recordPointsStats(logTimeNs, payload) {
+  if (rec) rec.add(HF_POINTS_TOPIC, logTimeNs, payload);
+  $("pcHz").textContent = ratePc().toFixed(1);
+  pcBytesAcc += payload.byteLength;
+  const now = Date.now();
+  if (now - pcBwT0 >= 1000) {              // 1s 窗口平滑吞吐
+    $("pcBW").textContent = (pcBytesAcc * 1000 / (now - pcBwT0) / 1048576).toFixed(1);
+    pcBytesAcc = 0; pcBwT0 = now;
+  }
+  $("lastT").textContent = new Date(Number(logTimeNs) / 1e6).toLocaleTimeString("zh-CN", { hour12: false });
+  // seq 连续性统计（u32 全宽差值；回绕/清零按重同步处理，不计丢帧）
+  if (payload.byteLength >= 12) {
+    try {
+      const seq = new DataView(payload.buffer, payload.byteOffset, payload.byteLength).getUint32(0, true);
+      if (pcPrevSeq !== null) {
+        const d = (seq - pcPrevSeq) >>> 0;
+        if (d > 1 && d < 0x80000000) { pcDrops += d - 1; $("pcDrop").textContent = pcDrops; }
+      }
+      pcPrevSeq = seq;
+    } catch (e) { /* header unavailable: skip drop accounting for this frame */ }
+  }
+}
+// Render one (chosen) cloud frame into the shared point buffers.
+function renderPoints(logTimeNs, payload) { onPointCloud(logTimeNs, payload); }
+function handleMessage(topic, logTimeNs, payload) {
+  if (topic === HF_POINTS_TOPIC) {
+    recordPointsStats(logTimeNs, payload);
+    renderPoints(logTimeNs, payload);
+  } else if (topic === "/inno_imu") {
+    if (rec) rec.add(topic, logTimeNs, payload);
+    onImu(payload);
+  } else if (topic === "/device_status") {
+    if (rec) rec.add(topic, logTimeNs, payload);
+    onDevStatus(payload);
+  }
+}
+
+/* ---------- 连接控制 ---------- */
+let client = null;
+function connect() {
+  const url = $("url").value.trim();
+  if (!/^wss?:\/\//.test(url)) { log("URL 需以 ws:// 或 wss:// 开头", 2); return; }
+  storeSet("lidar_ws_url", url);
+  if (client) client.disconnect();
+  client = new FoxgloveClient(url, {
+    message: handleMessage,
+    state: open => { $("btnConnect").textContent = open ? "断开" : "连接";
+      if (window.hfConnectionState) window.hfConnectionState(open);
+      if (!open) ["pcHz", "pcBW", "pcPresHz", "pcSample", "pcAge", "imuHz", "lastT"].forEach(id => { $(id).textContent = "--"; });
+      if (!open && rec) { log("连接断开，录制自动保存", 1); recStop(true); } },
+  });
+  client.wantReconnect = true;
+  client.connect();
+}
+function toggle() {
+  if (client && client.live) { client.disconnect(); log("已手动断开"); }
+  else connect();
+}
+$("btnConnect").onclick = toggle;
+$("url").value = storeGet("lidar_ws_url") ||
+  "ws://" + (location.hostname || "192.168.3.125") + ":8765";
+
+/* ---------- 主循环 ---------- */
+function loop() {
+  requestAnimationFrame(loop);
+  if (imuDirty) { imuDirty = false; drawImu("gyro", gyroBuf); drawImu("accel", accelBuf); }
+  if (dirty3d && !no3d) { dirty3d = false; controls.update(); renderer.render(scene, camera); }
+}
+resize3d(); fitCanvases();
+if (location.protocol === "file:") log("提示：本地文件方式打开，直接点连接即可");
+else log("页面就绪，点击连接（默认地址已按页面域名填好）");
+loop();
+</script>
+<script src="/webui/human_fall_preview/human_fall_lib.js"></script>
+<script src="/webui/human_fall_preview/human_fall.js"></script>
+
+<div id="ct_bar" style="position:fixed;bottom:4px;left:4px;z-index:10000;background:#152033;padding:5px;font:12px sans-serif;max-width:80%">
+  Codex synthetic camera test only
+  <button onclick="ctCamera('reset')">CT reset</button>
+  <button onclick="ctCamera('near_partial')">CT near partial</button>
+  <button onclick="ctCamera('near_all')">CT near all</button>
+  <button onclick="ctCamera('far_all')">CT far all</button>
+  <button onclick="ctCamera('behind')">CT behind</button>
+  <button onclick="ctCamera('singular')">CT singular</button>
+  <button onclick="ctRead()">CT read overlay</button>
+  <span id="ct_status">ready</span><span id="ct_alpha"></span>
+</div>
+<script>
+// Evidence-only UI, no production-file edits. Actual camera/renderer and original HF assets.
+const ctSaved={near:camera.near,far:camera.far};
+function ctCamera(kind){
+  camera.near=ctSaved.near;camera.far=ctSaved.far;
+  if(kind==='reset'){fitView();}
+  else {
+    const ctZ=(window.__hf&&window.__hf.coordMode==='ground')?.8:-.7;
+    camera.position.set(3.2,.3,ctZ);camera.up.set(0,0,1);
+    controls.target.set(kind==='behind'?3.4:3,kind==='behind'?.5:.1,ctZ);
+    if(kind==='near_partial'){camera.near=.25;camera.far=20;}
+    if(kind==='near_all'){camera.near=.8;camera.far=20;}
+    if(kind==='far_all'){camera.near=.01;camera.far=.1;}
+    if(kind==='singular'){camera.near=1;camera.far=1;}
+    camera.lookAt(controls.target);controls.update();
+  }
+  camera.updateProjectionMatrix();camera.updateMatrixWorld();dirty3d=true;
+  document.getElementById('ct_status').textContent=kind+' near='+camera.near+' far='+camera.far;
+  document.getElementById('ct_alpha').textContent='';
+}
+function ctRead(){requestAnimationFrame(function(){
+  const c=document.getElementById('hfOverlay'),a=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+  let n=0;for(let i=3;i<a.length;i+=4)if(a[i])n++;
+  document.getElementById('ct_alpha').textContent=' alpha_pixels='+n;
+});}
+</script>
+</body>
+</html>
