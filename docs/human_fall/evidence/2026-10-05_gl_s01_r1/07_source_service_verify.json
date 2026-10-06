@@ -1,0 +1,25 @@
+{
+ "port": 60812,
+ "checks": [
+  {
+   "name": "validation sessions route",
+   "pass": true,
+   "detail": "['cap_20261004_203349', 'cap_20261004_203135', 'cap_20261004_202456', 'cap_20261002_223757']"
+  },
+  {
+   "name": "saved-report restore (203349)",
+   "pass": true,
+   "detail": "status=200 floor_identified=True job=c9712acad48c4fb7a78cb119c08d4cdb"
+  },
+  {
+   "name": "auto run accepted via validation route",
+   "pass": true,
+   "detail": "{'job_id': 'e6870d59a6a749348829a4480e543afc', 'state': 'running'}"
+  },
+  {
+   "name": "223757 classified via source service",
+   "pass": true,
+   "detail": "state=failed error=INSUFFICIENT_CLEAN_ROI_SUPPORT: clean_cells=6 independent=0 min_sep_m=0.354 condition=0.162"
+  }
+ ]
+}

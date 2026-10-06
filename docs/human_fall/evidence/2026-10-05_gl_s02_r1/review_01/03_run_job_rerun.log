@@ -1,0 +1,117 @@
+=== GL-S02 223757 å…¨æµç¨‹ run_job ===
+job 6bc5aabf8f0041ffa961758b4e84da94
+¶³½áËÄÇøsource rowsÓë3¸öÁô³öÖ¡
+×Ô¶¯Ê¶±ğµÍ´¦Á¬ĞøµØÃæºòÑ¡£¬ËÄÇøÈ«¸ß¶ÈÎŞÕÏ°­£»Ö§³ÖÂÊ 0.3111
+Í¬ÓòTLS / SVD / RANSACÓëÈ«µã/ÖğÇø/ÁôÖ¡¿ÉĞĞ¶ÈÆÀ¹À
+Éú³É TLS È«Ö¡ÅäÆ½Êı¾İ
+Éú³É SVD È«Ö¡ÅäÆ½Êı¾İ
+Éú³É RANSAC È«Ö¡ÅäÆ½Êı¾İ
+{
+ "sid": "cap_20261002_223757",
+ "job_id": "6bc5aabf8f0041ffa961758b4e84da94",
+ "regions": [
+  [
+   0.75,
+   0.8999999999999999,
+   0.75,
+   0.8999999999999999
+  ],
+  [
+   1.05,
+   1.2,
+   -0.8999999999999999,
+   -0.75
+  ],
+  [
+   1.05,
+   1.2,
+   1.5,
+   1.65
+  ],
+  [
+   1.5,
+   1.65,
+   -1.2,
+   -1.05
+  ]
+ ],
+ "candidate_kind": "lowest_floor_sheet_v3_fine_roi",
+ "candidate_roi": {
+  "grid_m": 0.15,
+  "clean_boxes": 34,
+  "min_sep_m": 0.540027824673672,
+  "independent_count": 4,
+  "condition": 0.17964527298115734
+ },
+ "recommended": "tls",
+ "artifacts": [
+  "tls",
+  "svd",
+  "ransac"
+ ],
+ "estimators": {
+  "tls": {
+   "valid": true,
+   "reject_reasons": [],
+   "full": {
+    "count": 29288,
+    "rms_m": 0.01458445231798546,
+    "p95_m": 0.02964831328204639,
+    "support_ratio": 0.9994878448511336
+   }
+  },
+  "svd": {
+   "valid": true,
+   "reject_reasons": [],
+   "full": {
+    "count": 29288,
+    "rms_m": 0.014584452317985462,
+    "p95_m": 0.029648313282046312,
+    "support_ratio": 0.9994878448511336
+   }
+  },
+  "ransac": {
+   "valid": true,
+   "reject_reasons": [],
+   "full": {
+    "count": 29288,
+    "rms_m": 0.017081958197065338,
+    "p95_m": 0.033339223462435244,
+    "support_ratio": 0.9998975689702267
+   }
+  }
+ },
+ "artifact_dirs": [
+  "domain.npz",
+  "manifest.json",
+  "ransac",
+  "report.json",
+  "svd",
+  "tls"
+ ],
+ "full_frame_files": {
+  "tls": [
+   "dataset.zip",
+   "meta.json",
+   "points.bin",
+   "quality.json",
+   "transform.json"
+  ],
+  "svd": [
+   "dataset.zip",
+   "meta.json",
+   "points.bin",
+   "quality.json",
+   "transform.json"
+  ],
+  "ransac": [
+   "dataset.zip",
+   "meta.json",
+   "points.bin",
+   "quality.json",
+   "transform.json"
+  ]
+ },
+ "seconds": 90.95
+}
+EXIT: 0

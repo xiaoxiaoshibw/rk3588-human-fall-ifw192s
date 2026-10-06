@@ -240,15 +240,20 @@ def run_job(root, outroot, request, job_id, update):
             valid = np.isfinite(segment).all(axis=1) & np.any(segment != 0, axis=1)
             all_points.append(segment[valid])
             frame_ids.append(np.full(int(valid.sum()), ordinal, dtype="i4"))
-        from floor_detector import detect_floor_regions
-        detected = detect_floor_regions(np.concatenate(all_points), np.concatenate(frame_ids),
-                                        config["pitch_deg"], config["roll_deg"])
+        from floor_roi import detect_floor_regions_v3
+        detected = detect_floor_regions_v3(np.concatenate(all_points), np.concatenate(frame_ids),
+                                           config["pitch_deg"], config["roll_deg"])
         config = {**config, "regions": detected["regions"],
                   "auto_candidate": detected["candidate"],
                   "ground_confirmed": False,
                   "ground_identification": "algorithm_candidate",
                   "basis": "auto: " + detected["candidate"]["basis"]}
         update("自动识别低处连续地面候选，四区全高度无障碍；支持率 %.4f" % detected["candidate"]["support_ratio"])
+    elif config.get("ground_confirmed") is True:
+        # HR-W02：人工圈定地面 —— 与 auto 路径对偶：auto 用 auto_candidate 作为 floor
+        # identity 证据；manual 用 human basis + ground_confirmed。两者等价可信，
+        # 都能拿到 recommended="tls" 时被 leveled_latest 视为 floor-ok。
+        config = {**config, "manual_confirmed": True}
     points, rows, regions, ordinals, held, invalid, anchor = freeze_domain(directory, meta, config)
     domain_id = identity({"source": binding, "config": config,
                           "rows_sha256": hashlib.sha256(rows.tobytes()).hexdigest(),
@@ -258,6 +263,8 @@ def run_job(root, outroot, request, job_id, update):
     comparison = compare(points, regions, held, anchor)
     code_files = [Path(__file__), Path(__file__).with_name("leveling_quality.py")]
     code_files += [Path(__file__).with_name("floor_detector.py")]
+    code_files += [Path(__file__).with_name("floor_sheet.py")]
+    code_files += [Path(__file__).with_name("floor_roi.py")]
     code_files += sorted(Path(__file__).with_name("leveling_estimators").glob("*.py"))
     code_hashes = {p.name: sha(p) for p in code_files}
     report = {"kind": "offline_leveling_report", "schema": 1, "job_id": job_id, "sid": request["sid"],
@@ -391,7 +398,11 @@ def handle(handler, method, root):
                         continue  # 只暴露三法一致推荐的 TLS；NO_RECOMMENDATION 回放不自动应用
                     from validation import SESSIONS, floor_identified
                     if sid in SESSIONS and not floor_identified(meta_doc):
-                        continue  # old numeric ROI success is not automatic floor identity
+                        # HR-W02: auto 路径用 auto_candidate 提供 floor 身份；manual 路径靠
+                        # ground_confirmed + basis 等价提供，仅此两处必须二选一，否则拒绝服务。
+                        if not (meta_doc.get("config", {}).get("manual_confirmed") is True
+                                and meta_doc.get("config", {}).get("basis")):
+                            continue  # old numeric ROI success is not automatic floor identity
                     if sid in SESSIONS:
                         try:
                             if meta_doc.get("source") != source(root, sid)[2]:

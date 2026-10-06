@@ -28,4 +28,4 @@ auto 模式（P03）：「自动配平」按钮让算法在源点云里自己找
 
 新两会话的区域只在FIT帧上重新选取完整XY格，区域内全高度源行保留。已曝光的留出帧仅作离线诊断，不称未曝光泛化或物理真值。原算法和门未变，原捕获及202456产物未覆盖。
 
-Windows桌面「总控制台」快捷方式更新到 `pc_apps/console/dist/gl_v01/Console.exe`，重开生效。检查：`python -B -W error -m unittest discover -s pc_apps/human_replay -p validation_test.py -v`。验收与证据：`docs/human_fall/GLV01_ACCEPTANCE.md`。
+Windows桌面「总控制台」快捷方式更新到 `pc_apps/console/dist/gl_s01/Console.exe`（含 floor_sheet v2；旧版 `dist/gl_v01_floor_r2` 保留，[回退说明](../console/dist/gl_s01/ROLLBACK.txt)），重开生效。检查：`python -B -W error -m unittest discover -s pc_apps/human_replay -p validation_test.py -v`。验收与证据：`docs/human_fall/GLV01_ACCEPTANCE.md`。

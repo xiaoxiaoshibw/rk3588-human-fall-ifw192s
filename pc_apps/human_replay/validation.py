@@ -15,7 +15,8 @@ def floor_identified(report):
     if report.get("job_id") == REFERENCE_JOB and report.get("sid") == "cap_20261004_202456":
         return True  # user's previously established reference, not an automatic new result
     candidate = report.get("config", {}).get("auto_candidate", {})
-    return (candidate.get("kind") == "lowest_connected_floor_v1"
+    return (candidate.get("kind") in ("lowest_connected_floor_v1", "lowest_floor_sheet_v2",
+                                      "lowest_floor_sheet_v3_fine_roi")
             and candidate.get("full_height_preserved") is True
             and candidate.get("uses_manual_reference") is False
             and candidate.get("fit_frame_count") == report.get("fit_frame_count"))

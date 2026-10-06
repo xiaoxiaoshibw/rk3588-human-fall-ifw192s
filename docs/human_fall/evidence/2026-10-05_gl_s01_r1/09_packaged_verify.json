@@ -1,0 +1,20 @@
+{
+ "port": 8901,
+ "checks": [
+  {
+   "name": "packaged validation sessions",
+   "pass": true,
+   "detail": "['cap_20261004_203349', 'cap_20261004_203135', 'cap_20261004_202456', 'cap_20261002_223757']"
+  },
+  {
+   "name": "packaged auto run accepted",
+   "pass": true,
+   "detail": "{'job_id': '54202faa5b9f4534b6fd58e6e93f8739', 'state': 'running'}"
+  },
+  {
+   "name": "packaged 223757 classification",
+   "pass": true,
+   "detail": "state=failed error=INSUFFICIENT_CLEAN_ROI_SUPPORT: clean_cells=6 independent=0 min_sep_m=0.354 condition=0.162"
+  }
+ ]
+}

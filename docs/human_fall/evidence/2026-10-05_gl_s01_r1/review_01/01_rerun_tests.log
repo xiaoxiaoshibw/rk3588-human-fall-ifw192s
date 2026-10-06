@@ -1,0 +1,141 @@
+=== GL-S01 Â§çÂÆ°ÂëΩ‰ª§Â§çË∑ëÔºàÂêå‰ºöËØùÂ∞±Âú∞Ôºâ ===
+
+--- ÂëΩ‰ª§ 1: floor_sheet_test.py ---
+test_adjacent_clean_cells_insufficient_support (floor_sheet_test.FloorSheetTest.test_adjacent_clean_cells_insufficient_support) ... ok
+test_bridge_requires_contact_and_bounded_gap (floor_sheet_test.FloorSheetTest.test_bridge_requires_contact_and_bounded_gap) ... ok
+test_clean_cell_normal_direction_regression (floor_sheet_test.FloorSheetTest.test_clean_cell_normal_direction_regression) ... ok
+test_contact_bridge_merges_fragmented_sheet (floor_sheet_test.FloorSheetTest.test_contact_bridge_merges_fragmented_sheet) ... ok
+test_leg_on_continuous_floor_identity_ok (floor_sheet_test.FloorSheetTest.test_leg_on_continuous_floor_identity_ok) ... ok
+test_low_platforms_with_empty_gaps_identity_rejected (floor_sheet_test.FloorSheetTest.test_low_platforms_with_empty_gaps_identity_rejected) ... ok
+test_out_of_band_surface_not_floor (floor_sheet_test.FloorSheetTest.test_out_of_band_surface_not_floor) ... ok
+test_scattered_clean_cells_on_one_sheet_succeed (floor_sheet_test.FloorSheetTest.test_scattered_clean_cells_on_one_sheet_succeed) ... ok
+test_scattered_coplanar_patches_identity_rejected (floor_sheet_test.FloorSheetTest.test_scattered_coplanar_patches_identity_rejected) ... ok
+test_small_satellite_fragment_ignored (floor_sheet_test.FloorSheetTest.test_small_satellite_fragment_ignored) ... ok
+test_undulating_floor_stays_connected (floor_sheet_test.FloorSheetTest.test_undulating_floor_stays_connected) ... ok
+test_v1_success_passthrough (floor_sheet_test.FloorSheetTest.test_v1_success_passthrough) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 3.961s
+
+OK
+EXIT: 0
+
+--- ÂëΩ‰ª§ 2: ÂÖ®Èáè human_replay ÂõûÂΩí ---
+test_accepts_real_board_layout (fetch_lib_test.TestMetaValidate.test_accepts_real_board_layout) ... ok
+test_rejects_frames_beyond_bin (fetch_lib_test.TestMetaValidate.test_rejects_frames_beyond_bin) ... ok
+test_rejects_old_16b_layout (fetch_lib_test.TestMetaValidate.test_rejects_old_16b_layout) ... ok
+test_filters (fetch_lib_test.TestPick.test_filters) ... ok
+test_order_stable_oldest_first (fetch_lib_test.TestPick.test_order_stable_oldest_first) ... ok
+test_region_ignores_trailing_pad (fetch_lib_test.TestSha256PointsRegion.test_region_ignores_trailing_pad) ... ok
+test_dense_table_never_wins_and_mixed_height_cells_are_not_ground (floor_detector_test.FloorDetectorTest.test_dense_table_never_wins_and_mixed_height_cells_are_not_ground) ... ok
+test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes (floor_detector_test.FloorDetectorTest.test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes) ... ok
+test_table_without_visible_floor_is_rejected (floor_detector_test.FloorDetectorTest.test_table_without_visible_floor_is_rejected) ... ok
+test_fine_boxes_keep_purity_gates (floor_roi_test.FineRoiTest.test_fine_boxes_keep_purity_gates) ... ok
+test_fine_roi_insufficient_when_even_fine_dirty (floor_roi_test.FineRoiTest.test_fine_roi_insufficient_when_even_fine_dirty) ... ok
+test_fine_roi_succeeds_where_25cm_fails (floor_roi_test.FineRoiTest.test_fine_roi_succeeds_where_25cm_fails) ... ok
+test_v3_identity_rejected (floor_roi_test.FineRoiTest.test_v3_identity_rejected) ... ok
+test_v3_returns_v1_verbatim (floor_roi_test.FineRoiTest.test_v3_returns_v1_verbatim) ... ok
+test_v3_returns_v2_verbatim_when_25cm_ok (floor_roi_test.FineRoiTest.test_v3_returns_v2_verbatim_when_25cm_ok) ... ok
+test_adjacent_clean_cells_insufficient_support (floor_sheet_test.FloorSheetTest.test_adjacent_clean_cells_insufficient_support) ... ok
+test_bridge_requires_contact_and_bounded_gap (floor_sheet_test.FloorSheetTest.test_bridge_requires_contact_and_bounded_gap) ... ok
+test_clean_cell_normal_direction_regression (floor_sheet_test.FloorSheetTest.test_clean_cell_normal_direction_regression) ... ok
+test_contact_bridge_merges_fragmented_sheet (floor_sheet_test.FloorSheetTest.test_contact_bridge_merges_fragmented_sheet) ... ok
+test_leg_on_continuous_floor_identity_ok (floor_sheet_test.FloorSheetTest.test_leg_on_continuous_floor_identity_ok) ... ok
+test_low_platforms_with_empty_gaps_identity_rejected (floor_sheet_test.FloorSheetTest.test_low_platforms_with_empty_gaps_identity_rejected) ... ok
+test_out_of_band_surface_not_floor (floor_sheet_test.FloorSheetTest.test_out_of_band_surface_not_floor) ... ok
+test_scattered_clean_cells_on_one_sheet_succeed (floor_sheet_test.FloorSheetTest.test_scattered_clean_cells_on_one_sheet_succeed) ... ok
+test_scattered_coplanar_patches_identity_rejected (floor_sheet_test.FloorSheetTest.test_scattered_coplanar_patches_identity_rejected) ... ok
+test_small_satellite_fragment_ignored (floor_sheet_test.FloorSheetTest.test_small_satellite_fragment_ignored) ... ok
+test_undulating_floor_stays_connected (floor_sheet_test.FloorSheetTest.test_undulating_floor_stays_connected) ... ok
+test_v1_success_passthrough (floor_sheet_test.FloorSheetTest.test_v1_success_passthrough) ... ok
+test_plane_below_sensor_floor_rejects (leveling_auto_test.DetectTest.test_plane_below_sensor_floor_rejects) ... ok
+test_synthetic_favorite_four_regions (leveling_auto_test.DetectTest.test_synthetic_favorite_four_regions) ... ok
+test_two_connected_components_rejects (leveling_auto_test.DetectTest.test_two_connected_components_rejects) ... ok
+test_wall_like_scene_rejects_with_reason (leveling_auto_test.DetectTest.test_wall_like_scene_rejects_with_reason) ... ok
+test_real_sessions_detect_four_regions (leveling_auto_test.RealSessionAnchorTest.test_real_sessions_detect_four_regions) ... ok
+test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board) ... [22:15:44] "GET /api/leveling/sessions HTTP/1.1" 200 -
+[22:15:44] "GET /api/leveling/source?sid=cap_20990101_000001 HTTP/1.1" 200 -
+[22:15:44] "POST /api/leveling/run HTTP/1.1" 400 -
+[22:15:44] "POST /api/leveling/run HTTP/1.1" 409 -
+[22:15:44] "POST /api/leveling/run HTTP/1.1" 202 -
+[22:15:44] "GET /api/leveling/job?id=99c286ec55fb461ebcd4bfb579e1607d HTTP/1.1" 200 -
+[22:15:44] "GET /api/leveling/job?id=99c286ec55fb461ebcd4bfb579e1607d HTTP/1.1" 200 -
+[22:15:44] "GET /api/leveling/job?id=99c286ec55fb461ebcd4bfb579e1607d HTTP/1.1" 200 -
+[22:15:44] "GET /api/leveling/job?id=99c286ec55fb461ebcd4bfb579e1607d HTTP/1.1" 200 -
+[22:15:44] "GET /api/leveling/job?id=99c286ec55fb461ebcd4bfb579e1607d HTTP/1.1" 200 -
+[22:15:44] "GET /api/leveling/artifact?id=99c286ec55fb461ebcd4bfb579e1607d&method=tls&name=dataset.zip HTTP/1.1" 200 -
+[22:15:44] "POST /api/leveling/run HTTP/1.1" 202 -
+[22:15:44] "GET /api/leveling/job?id=b92d20551951480095b2653bf75802dc HTTP/1.1" 200 -
+[22:15:44] "GET /api/leveling/job?id=b92d20551951480095b2653bf75802dc HTTP/1.1" 200 -
+[22:15:45] "POST /api/leveling/run HTTP/1.1" 202 -
+[22:15:45] "GET /api/leveling/job?id=5495f859bce343cbac203915cb54f03f HTTP/1.1" 200 -
+[22:15:45] "GET /api/leveling/job?id=5495f859bce343cbac203915cb54f03f HTTP/1.1" 200 -
+[22:15:45] "GET /api/leveling/job?id=5495f859bce343cbac203915cb54f03f HTTP/1.1" 200 -
+[22:15:45] "POST /api/leveling/run HTTP/1.1" 202 -
+[22:15:45] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:45] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:45] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:45] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:45] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:45] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:45] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:46] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/job?id=2d2c22c1dcfd4601839013919d20bb0e HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/leveled_latest?sid=cap_20990101_000002 HTTP/1.1" 200 -
+[22:15:47] "GET /api/leveling/leveled_latest?sid=nonexistent_ HTTP/1.1" 404 -
+ok
+test_line_domain_and_ls_majority_cannot_override_conflict (leveling_test.WorkbenchTest.test_line_domain_and_ls_majority_cannot_override_conflict) ... ok
+test_request_boundary_source_drift_and_owned_config (leveling_test.WorkbenchTest.test_request_boundary_source_drift_and_owned_config) ... ok
+test_transform_export_and_frozen_disjoint_rows (leveling_test.WorkbenchTest.test_transform_export_and_frozen_disjoint_rows) ... ok
+test_local_and_failed_board_keep_loadable_files (sessions_test.OfflineSessionsTest.test_local_and_failed_board_keep_loadable_files) ... [22:15:49] "GET /api/sessions?scope=local HTTP/1.1" 200 -
+[22:15:49] "GET /api/file?sid=cap_20261005_120000&name=points.bin HTTP/1.1" 200 -
+[22:15:49] "GET /api/file?sid=cap_20261005_120000&name=meta.json HTTP/1.1" 200 -
+[22:15:49] "GET /api/sessions HTTP/1.1" 200 -
+[22:15:49] "GET /api/sessions HTTP/1.1" 200 -
+ok
+test_cohort_restart_http_and_rejected_nonmembers (validation_test.ValidationTest.test_cohort_restart_http_and_rejected_nonmembers) ... [22:15:50] "GET /api/validation/latest?sid=cap_20261004_202456 HTTP/1.1" 200 -
+[22:15:50] "GET /api/validation/job?id=27f870c6c7be43f4b9dc50121a5fc03f&sid=cap_20261004_202456 HTTP/1.1" 200 -
+[22:15:50] "GET /api/validation/artifact?id=27f870c6c7be43f4b9dc50121a5fc03f&method=tls&name=points.bin&sid=cap_20261004_202456 HTTP/1.1" 200 -
+[22:15:50] "GET /api/validation/source?sid=cap_outside HTTP/1.1" 400 -
+[22:15:50] "GET /api/validation/latest?sid=cap_outside HTTP/1.1" 400 -
+[22:15:50] "GET /api/validation/job?id=27f870c6c7be43f4b9dc50121a5fc03f&sid=cap_20261004_203349 HTTP/1.1" 400 -
+[22:15:50] "GET /api/validation/artifact?id=27f870c6c7be43f4b9dc50121a5fc03f&method=tls&name=../points.bin HTTP/1.1" 400 -
+[22:15:50] "POST /api/validation/run HTTP/1.1" 400 -
+[22:15:50] "POST /api/validation/run HTTP/1.1" 400 -
+[22:15:50] "GET /api/validation/artifact?id=27f870c6c7be43f4b9dc50121a5fc03f&method=tls&name=points.bin&sid=cap_20261004_202456 HTTP/1.1" 400 -
+ok
+test_saved_binding_damage_and_latest_never_hides_newest_failure (validation_test.ValidationTest.test_saved_binding_damage_and_latest_never_hides_newest_failure) ... ok
+
+----------------------------------------------------------------------
+Ran 39 tests in 90.873s
+
+OK
+AUTO_ANCHOR sid=cap_20261004_202456 pitch=26.9265 roll=-1.2585 d=1.33222 support=0.3190 ¶§pitch=0.3033 ¶§roll=0.1362 ¶§d=0.01032
+AUTO_ANCHOR sid=cap_20261004_203349 pitch=26.9459 roll=-0.8432 d=1.34130 support=0.3105 ¶§pitch=0.3226 ¶§roll=0.5514 ¶§d=0.01939
+EXIT: 0

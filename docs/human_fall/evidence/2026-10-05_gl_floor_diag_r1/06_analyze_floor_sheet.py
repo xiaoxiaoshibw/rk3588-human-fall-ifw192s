@@ -118,7 +118,8 @@ def v1_cells(work, frame_ids, initial):
         if len(index) < 2:
             continue
         values, vectors = np.linalg.eigh(np.cov(cell.T))
-        if abs(vectors[0, 2]) < PROFILE["normal_alignment_min"]:
+        local_normal = vectors[:, 0]
+        if abs(local_normal[2]) < PROFILE["normal_alignment_min"]:
             continue
         if math.sqrt(max(0., float(values[0]))) > PROFILE["cell_local_rms_max_m"]:
             continue
@@ -232,20 +233,24 @@ def sheet_metrics(work, frame_ids, initial, plane, eps):
                 "contact_ratio": contact_ratio, "explained": explained,
                 "closest_pair": [[int(x0), int(y0)], [int(x1), int(y1)]]}
 
+    # gaps only matter between significant fragments (<=0.25 m2 satellite
+    # patches are reported but cannot invalidate an already-viable sheet);
+    # bridging is only *needed* when the largest fragment alone is too small.
+    sig = [c for c in comps if len(c) * GRID_M * GRID_M >= .25]
+    top = sig[:4]
     pairs = []
-    top = comps[:3]
     for a, b in itertools.combinations(range(len(top)), 2):
         pairs.append(corridor_stats(top[a], top[b]))
-    unexplained = [p for p in pairs if not p["explained"]]
-    max_unexplained = max((p["width_m"] for p in unexplained), default=0.)
-
-    # effective component: largest plus components bridgeable to it (greedy)
-    combos = list(itertools.combinations(range(len(top)), 2))
+    bridging_needed = (largest * GRID_M * GRID_M) < MIN_COMPONENT_AREA_M2
     effective = largest
-    for i in range(1, len(top)):
-        join = [pairs[k] for k, (a, b) in enumerate(combos) if i in (a, b)]
-        if join and all(p["explained"] for p in join):
-            effective += len(top[i])
+    if bridging_needed:
+        combos = list(itertools.combinations(range(len(top)), 2))
+        for i in range(1, len(top)):
+            join = [pairs[k] for k, (a, b) in enumerate(combos) if i in (a, b)]
+            if join and all(p["explained"] for p in join):
+                effective += len(top[i])
+    sig_unexplained = [p for p in pairs if not p["explained"]]
+    max_unexplained = max((p["width_m"] for p in sig_unexplained), default=0.)
 
     # temporal stability of the largest component
     temporal = {"p05": None, "median": None}
@@ -260,9 +265,12 @@ def sheet_metrics(work, frame_ids, initial, plane, eps):
                     "median": float(np.median(per_frame))}
     return {"eps_m": eps, "sheet_points": int(len(sheet)), "occupied_cells": total_occ,
             "components": [len(c) for c in comps[:5]], "largest_cells": largest,
-            "largest_area_m2": largest * GRID_M * GRID_M, "coverage": coverage,
+            "largest_area_m2": largest * GRID_M * GRID_M, "largest_coverage": coverage,
+            "significant_components": [len(c) for c in sig[:5]],
+            "bridging_needed": bool(bridging_needed),
             "effective_cells": effective, "effective_area_m2": effective * GRID_M * GRID_M,
-            "gap_pairs": pairs, "unexplained_gap_count": len(unexplained),
+            "effective_coverage": (effective / total_occ) if total_occ else 0.,
+            "gap_pairs": pairs, "unexplained_gap_count": len(sig_unexplained),
             "max_unexplained_gap_m": max_unexplained, "temporal": temporal,
             "occupancy_params": {"min_points": MIN_POINTS_PER_CELL, "min_frames": MIN_FRAMES_SEEN,
                                  "hit_ratio": FRAME_HIT_RATIO}}
@@ -290,8 +298,10 @@ def analyze(sid):
                          <= PROFILE["offset_range_m"][1] and margin >= LOWEST_MARGIN_MIN)
     dominant_enough = bool(share >= DOMINANCE_SHARE_MIN)
     connected_enough = bool(main["effective_area_m2"] >= MIN_COMPONENT_AREA_M2
-                            and main["coverage"] >= .5)
-    gap_ok = bool(main["max_unexplained_gap_m"] <= GAP_CELLS_MAX * GRID_M)
+                            and main["effective_coverage"] >= .5)
+    gap_ok = bool((not main["bridging_needed"])
+                  or (len(main["gap_pairs"]) > 0
+                      and all(p["explained"] for p in main["gap_pairs"])))
     temporal_stable = bool(main["temporal"]["p05"] is not None
                            and main["temporal"]["p05"] >= TEMPORAL_P05_MIN)
     identity_pass = lowest_enough and dominant_enough and connected_enough and gap_ok and temporal_stable
@@ -329,11 +339,11 @@ def main():
                         r["V2A_gates"]["lowest_enough"], r["V2A_gates"]["dominant_enough"]))
         for s in r["V2A_sheets"]:
             lines.append("      eps=%.2f sheet_pts=%d occ_cells=%d comps=%s largest=%d(%.2fm2) "
-                         "eff=%.2fm2 cov=%.2f gaps=%d unexp=%d max_unexp=%.2fm p05=%.2f"
+                         "eff=%.2fm2 cov=%.2f bridge=%s gaps=%d unexp=%d max_unexp=%.2fm p05=%.2f"
                          % (s["eps_m"], s["sheet_points"], s["occupied_cells"], s["components"],
                             s["largest_cells"], s["largest_area_m2"], s["effective_area_m2"],
-                            s["coverage"], len(s["gap_pairs"]), s["unexplained_gap_count"],
-                            s["max_unexplained_gap_m"],
+                            s["effective_coverage"], s["bridging_needed"], len(s["gap_pairs"]),
+                            s["unexplained_gap_count"], s["max_unexplained_gap_m"],
                             s["temporal"]["p05"] if s["temporal"]["p05"] is not None else -1))
         lines.append("  [B] clean_roi=%d independent=%d min_sep=%.2fm cond=%.3f roi_pass=%s"
                      % (r["V2B"]["clean_roi_count"], r["V2B"]["independent_count"],
