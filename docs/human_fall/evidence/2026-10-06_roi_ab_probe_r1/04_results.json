@@ -1,0 +1,1145 @@
+{
+ "goldens": {
+  "cap_20261004_202456": {
+   "role": "v1_ab",
+   "current": {
+    "layer_expected": "v1",
+    "v1_ok": true,
+    "clean_cells": 44,
+    "component_cells": 37,
+    "v1_regions": [
+     [
+      1.25,
+      1.5,
+      -0.75,
+      -0.5
+     ],
+     [
+      2.25,
+      2.5,
+      -0.75,
+      -0.5
+     ],
+     [
+      1.25,
+      1.5,
+      0.0,
+      0.25
+     ],
+     [
+      2.25,
+      2.5,
+      0.0,
+      0.25
+     ]
+    ],
+    "eval": {
+     "regions": [
+      [
+       1.25,
+       1.5,
+       -0.75,
+       -0.5
+      ],
+      [
+       2.25,
+       2.5,
+       -0.75,
+       -0.5
+      ],
+      [
+       1.25,
+       1.5,
+       0.0,
+       0.25
+      ],
+      [
+       2.25,
+       2.5,
+       0.0,
+       0.25
+      ]
+     ],
+     "centers": [
+      [
+       1.375,
+       -0.625
+      ],
+      [
+       2.375,
+       -0.625
+      ],
+      [
+       1.375,
+       0.125
+      ],
+      [
+       2.375,
+       0.125
+      ]
+     ],
+     "min_pairwise_sep_m": 0.75,
+     "condition": 0.75,
+     "fit_points": 35865,
+     "region_counts": {
+      "1": 12640,
+      "2": 3622,
+      "3": 14865,
+      "4": 4738
+     },
+     "domain_geometry": {
+      "lambda2_lambda3": 0.8130551106728179,
+      "tangent_extents_m": [
+       1.033069788941237,
+       1.2790654428234158
+      ]
+     },
+     "recommended": "tls",
+     "consensus": "GOOD",
+     "pairwise": [
+      {
+       "a": "tls",
+       "b": "svd",
+       "angle_deg": 0.0,
+       "offset_gap_m": 4.440892098500626e-16,
+       "status": "PASS"
+      },
+      {
+       "a": "tls",
+       "b": "ransac",
+       "angle_deg": 0.6179795011610715,
+       "offset_gap_m": 0.018904705451000536,
+       "status": "PASS"
+      },
+      {
+       "a": "svd",
+       "b": "ransac",
+       "angle_deg": 0.6179795011610715,
+       "offset_gap_m": 0.01890470545100098,
+       "status": "PASS"
+      }
+     ],
+     "estimators": {
+      "tls": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.986365854933783,
+       "roll_deg": -2.9399382496105293,
+       "offset_source_m": 1.3168382971377424,
+       "full_rms_m": 0.013910334783990144,
+       "full_p95_m": 0.027168737170270903,
+       "full_support": 0.9997490589711417
+      },
+      "svd": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.986365854933776,
+       "roll_deg": -2.939938249610539,
+       "offset_source_m": 1.316838297137742,
+       "full_rms_m": 0.013910334783990144,
+       "full_p95_m": 0.027168737170270903,
+       "full_support": 0.9997490589711417
+      },
+      "ransac": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 27.602400223382862,
+       "roll_deg": -2.99840700686521,
+       "offset_source_m": 1.335743002588743,
+       "full_rms_m": 0.01481724706355178,
+       "full_p95_m": 0.028116520834478322,
+       "full_support": 0.9999163529903806
+      }
+     },
+     "holdout_worst_region_rms_m": 0.01670091546313017,
+     "valid_estimator_count": 3,
+     "local_rms": [
+      0.013993666273550186,
+      0.006824086520155354,
+      0.012857015514056675,
+      0.007738579480724855
+     ],
+     "max_rms": 0.013993666273550186,
+     "mean_rms": 0.010353336947121768,
+     "min_frame_count": 40
+    }
+   },
+   "shadow": {
+    "K": 4,
+    "sep_gate": 0.5,
+    "cond_gate": 0.1,
+    "ok": true,
+    "eval": {
+     "regions": [
+      [
+       1.5,
+       1.75,
+       -0.75,
+       -0.5
+      ],
+      [
+       1.5,
+       1.75,
+       0.0,
+       0.25
+      ],
+      [
+       2.0,
+       2.25,
+       -0.75,
+       -0.5
+      ],
+      [
+       2.5,
+       2.75,
+       0.0,
+       0.25
+      ]
+     ],
+     "centers": [
+      [
+       1.625,
+       -0.625
+      ],
+      [
+       1.625,
+       0.125
+      ],
+      [
+       2.125,
+       -0.625
+      ],
+      [
+       2.625,
+       0.125
+      ]
+     ],
+     "min_pairwise_sep_m": 0.5,
+     "condition": 0.7207592200561262,
+     "fit_points": 29135,
+     "region_counts": {
+      "1": 9226,
+      "2": 10622,
+      "3": 5805,
+      "4": 3482
+     },
+     "domain_geometry": {
+      "lambda2_lambda3": 0.8171044462308563,
+      "tangent_extents_m": [
+       1.2278778106004222,
+       1.404794899788542
+      ]
+     },
+     "recommended": "tls",
+     "consensus": "GOOD",
+     "pairwise": [
+      {
+       "a": "tls",
+       "b": "svd",
+       "angle_deg": 0.0,
+       "offset_gap_m": 6.661338147750939e-16,
+       "status": "PASS"
+      },
+      {
+       "a": "tls",
+       "b": "ransac",
+       "angle_deg": 0.416802186085175,
+       "offset_gap_m": 0.0021514270690239368,
+       "status": "PASS"
+      },
+      {
+       "a": "svd",
+       "b": "ransac",
+       "angle_deg": 0.41680218608430053,
+       "offset_gap_m": 0.002151427069024603,
+       "status": "PASS"
+      }
+     ],
+     "estimators": {
+      "tls": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.304142539866348,
+       "roll_deg": -2.11051269934771,
+       "offset_source_m": 1.2969942657102354,
+       "full_rms_m": 0.01060854624408591,
+       "full_p95_m": 0.020723676501376114,
+       "full_support": 1.0
+      },
+      "svd": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.30414253986637,
+       "roll_deg": -2.110512699347712,
+       "offset_source_m": 1.296994265710236,
+       "full_rms_m": 0.01060854624408591,
+       "full_p95_m": 0.020723676501375958,
+       "full_support": 1.0
+      },
+      "ransac": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.20713444199059,
+       "roll_deg": -1.7051437800627542,
+       "offset_source_m": 1.2948428386412114,
+       "full_rms_m": 0.011038635561051323,
+       "full_p95_m": 0.02208009064227563,
+       "full_support": 1.0
+      }
+     },
+     "holdout_worst_region_rms_m": 0.013204797027764783,
+     "valid_estimator_count": 3,
+     "local_rms": [
+      0.008945216071888279,
+      0.01029401530258186,
+      0.0064644902472937305,
+      0.006181379731872499
+     ],
+     "max_rms": 0.01029401530258186,
+     "mean_rms": 0.007971275338409092,
+     "min_frame_count": 39
+    },
+    "debug": {
+     "combo_keys_sorted": [
+      [
+       6,
+       -3
+      ],
+      [
+       6,
+       0
+      ],
+      [
+       8,
+       -3
+      ],
+      [
+       10,
+       0
+      ]
+     ],
+     "pool_sizes": [
+      4,
+      4,
+      4,
+      4
+     ],
+     "combos_enumerated": 256
+    },
+    "changed": true
+   },
+   "seconds": 11.67
+  },
+  "cap_20261004_203135": {
+   "role": "v1_ab",
+   "current": {
+    "layer_expected": "v1",
+    "v1_ok": true,
+    "clean_cells": 30,
+    "component_cells": 28,
+    "v1_regions": [
+     [
+      1.25,
+      1.5,
+      -0.75,
+      -0.5
+     ],
+     [
+      2.25,
+      2.5,
+      -0.75,
+      -0.5
+     ],
+     [
+      1.0,
+      1.25,
+      -0.25,
+      0.0
+     ],
+     [
+      2.25,
+      2.5,
+      -0.25,
+      0.0
+     ]
+    ],
+    "eval": {
+     "regions": [
+      [
+       1.25,
+       1.5,
+       -0.75,
+       -0.5
+      ],
+      [
+       2.25,
+       2.5,
+       -0.75,
+       -0.5
+      ],
+      [
+       1.0,
+       1.25,
+       -0.25,
+       0.0
+      ],
+      [
+       2.25,
+       2.5,
+       -0.25,
+       0.0
+      ]
+     ],
+     "centers": [
+      [
+       1.375,
+       -0.625
+      ],
+      [
+       2.375,
+       -0.625
+      ],
+      [
+       1.125,
+       -0.125
+      ],
+      [
+       2.375,
+       -0.125
+      ]
+     ],
+     "min_pairwise_sep_m": 0.5,
+     "condition": 0.43515651029414365,
+     "fit_points": 46140,
+     "region_counts": {
+      "1": 15760,
+      "2": 4525,
+      "3": 20744,
+      "4": 5111
+     },
+     "domain_geometry": {
+      "lambda2_lambda3": 0.2719776259377208,
+      "tangent_extents_m": [
+       0.935129675698816,
+       1.5598348811062397
+      ]
+     },
+     "recommended": "tls",
+     "consensus": "GOOD",
+     "pairwise": [
+      {
+       "a": "tls",
+       "b": "svd",
+       "angle_deg": 0.0,
+       "offset_gap_m": 4.440892098500626e-16,
+       "status": "PASS"
+      },
+      {
+       "a": "tls",
+       "b": "ransac",
+       "angle_deg": 0.6965560090321519,
+       "offset_gap_m": 0.0048484474596490745,
+       "status": "PASS"
+      },
+      {
+       "a": "svd",
+       "b": "ransac",
+       "angle_deg": 0.6965560090321519,
+       "offset_gap_m": 0.004848447459649519,
+       "status": "PASS"
+      }
+     ],
+     "estimators": {
+      "tls": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 27.887598328681904,
+       "roll_deg": -0.2682179230665344,
+       "offset_source_m": 1.3729289826077924,
+       "full_rms_m": 0.01436693721395985,
+       "full_p95_m": 0.028944392306423393,
+       "full_support": 0.999393151278717
+      },
+      "svd": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 27.88759832868188,
+       "roll_deg": -0.26821792306652475,
+       "offset_source_m": 1.372928982607792,
+       "full_rms_m": 0.01436693721395985,
+       "full_p95_m": 0.028944392306423383,
+       "full_support": 0.999393151278717
+      },
+      "ransac": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 28.198020996417206,
+       "roll_deg": -0.8917873793089219,
+       "offset_source_m": 1.3777774300674415,
+       "full_rms_m": 0.014789750594524042,
+       "full_p95_m": 0.0298169174757208,
+       "full_support": 0.9995231902904205
+      }
+     },
+     "holdout_worst_region_rms_m": 0.017087912196718905,
+     "valid_estimator_count": 3,
+     "local_rms": [
+      0.01407697859311518,
+      0.007157060862300397,
+      0.01477314245624391,
+      0.007390833748460302
+     ],
+     "max_rms": 0.01477314245624391,
+     "mean_rms": 0.010849503915029948,
+     "min_frame_count": 39
+    }
+   },
+   "shadow": {
+    "K": 4,
+    "sep_gate": 0.5,
+    "cond_gate": 0.1,
+    "ok": true,
+    "eval": {
+     "regions": [
+      [
+       1.0,
+       1.25,
+       -0.25,
+       0.0
+      ],
+      [
+       1.5,
+       1.75,
+       -0.75,
+       -0.5
+      ],
+      [
+       2.0,
+       2.25,
+       -0.75,
+       -0.5
+      ],
+      [
+       2.0,
+       2.25,
+       -0.25,
+       0.0
+      ]
+     ],
+     "centers": [
+      [
+       1.125,
+       -0.125
+      ],
+      [
+       1.625,
+       -0.625
+      ],
+      [
+       2.125,
+       -0.625
+      ],
+      [
+       2.125,
+       -0.125
+      ]
+     ],
+     "min_pairwise_sep_m": 0.5,
+     "condition": 0.5484766833640441,
+     "fit_points": 46116,
+     "region_counts": {
+      "1": 20744,
+      "2": 11521,
+      "3": 7200,
+      "4": 6651
+     },
+     "domain_geometry": {
+      "lambda2_lambda3": 0.22005864895054605,
+      "tangent_extents_m": [
+       0.9534268371164707,
+       1.4253790736426553
+      ]
+     },
+     "recommended": "tls",
+     "consensus": "GOOD",
+     "pairwise": [
+      {
+       "a": "tls",
+       "b": "svd",
+       "angle_deg": 0.0,
+       "offset_gap_m": 6.661338147750939e-16,
+       "status": "PASS"
+      },
+      {
+       "a": "tls",
+       "b": "ransac",
+       "angle_deg": 0.39184413404854,
+       "offset_gap_m": 0.0036694233308001145,
+       "status": "PASS"
+      },
+      {
+       "a": "svd",
+       "b": "ransac",
+       "angle_deg": 0.39184413404854,
+       "offset_gap_m": 0.0036694233308007806,
+       "status": "PASS"
+      }
+     ],
+     "estimators": {
+      "tls": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 28.5410892205125,
+       "roll_deg": -0.6345676815751531,
+       "offset_source_m": 1.3832883224169132,
+       "full_rms_m": 0.01391087297893109,
+       "full_p95_m": 0.028580624139627753,
+       "full_support": 0.9993711510104952
+      },
+      "svd": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 28.54108922051247,
+       "roll_deg": -0.6345676815751561,
+       "offset_source_m": 1.3832883224169126,
+       "full_rms_m": 0.01391087297893109,
+       "full_p95_m": 0.028580624139627975,
+       "full_support": 0.9993711510104952
+      },
+      "ransac": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 28.6579008316567,
+       "roll_deg": -1.0085994005593495,
+       "offset_source_m": 1.3869577457477134,
+       "full_rms_m": 0.014284604229709928,
+       "full_p95_m": 0.029479271064413948,
+       "full_support": 0.999501257697979
+      }
+     },
+     "holdout_worst_region_rms_m": 0.01747309224759128,
+     "valid_estimator_count": 3,
+     "local_rms": [
+      0.01477314245624391,
+      0.008857507174090245,
+      0.00643685744007961,
+      0.007058969290913216
+     ],
+     "max_rms": 0.01477314245624391,
+     "mean_rms": 0.009281619090331745,
+     "min_frame_count": 55
+    },
+    "debug": {
+     "combo_keys_sorted": [
+      [
+       4,
+       -1
+      ],
+      [
+       6,
+       -3
+      ],
+      [
+       8,
+       -3
+      ],
+      [
+       8,
+       -1
+      ]
+     ],
+     "pool_sizes": [
+      4,
+      4,
+      4,
+      4
+     ],
+     "combos_enumerated": 256
+    },
+    "changed": true
+   },
+   "seconds": 22.03
+  },
+  "cap_20261004_203349": {
+   "role": "v1_ab",
+   "current": {
+    "layer_expected": "v1",
+    "v1_ok": true,
+    "clean_cells": 44,
+    "component_cells": 37,
+    "v1_regions": [
+     [
+      1.25,
+      1.5,
+      -0.75,
+      -0.5
+     ],
+     [
+      2.25,
+      2.5,
+      -0.75,
+      -0.5
+     ],
+     [
+      1.25,
+      1.5,
+      0.0,
+      0.25
+     ],
+     [
+      2.25,
+      2.5,
+      0.0,
+      0.25
+     ]
+    ],
+    "eval": {
+     "regions": [
+      [
+       1.25,
+       1.5,
+       -0.75,
+       -0.5
+      ],
+      [
+       2.25,
+       2.5,
+       -0.75,
+       -0.5
+      ],
+      [
+       1.25,
+       1.5,
+       0.0,
+       0.25
+      ],
+      [
+       2.25,
+       2.5,
+       0.0,
+       0.25
+      ]
+     ],
+     "centers": [
+      [
+       1.375,
+       -0.625
+      ],
+      [
+       2.375,
+       -0.625
+      ],
+      [
+       1.375,
+       0.125
+      ],
+      [
+       2.375,
+       0.125
+      ]
+     ],
+     "min_pairwise_sep_m": 0.75,
+     "condition": 0.75,
+     "fit_points": 40325,
+     "region_counts": {
+      "1": 14175,
+      "2": 4076,
+      "3": 16704,
+      "4": 5370
+     },
+     "domain_geometry": {
+      "lambda2_lambda3": 0.8113408523949972,
+      "tangent_extents_m": [
+       1.0372835811702104,
+       1.283160498291507
+      ]
+     },
+     "recommended": "tls",
+     "consensus": "GOOD",
+     "pairwise": [
+      {
+       "a": "tls",
+       "b": "svd",
+       "angle_deg": 0.0,
+       "offset_gap_m": 8.881784197001252e-16,
+       "status": "PASS"
+      },
+      {
+       "a": "tls",
+       "b": "ransac",
+       "angle_deg": 0.3305925889114207,
+       "offset_gap_m": 0.010959714229673123,
+       "status": "PASS"
+      },
+      {
+       "a": "svd",
+       "b": "ransac",
+       "angle_deg": 0.33059258891031823,
+       "offset_gap_m": 0.010959714229674011,
+       "status": "PASS"
+      }
+     ],
+     "estimators": {
+      "tls": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.993467154725117,
+       "roll_deg": -2.9477684154580692,
+       "offset_source_m": 1.3171145298379636,
+       "full_rms_m": 0.013832817589745715,
+       "full_p95_m": 0.027096035487002096,
+       "full_support": 0.9998760074395536
+      },
+      "svd": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.99346715472509,
+       "roll_deg": -2.947768415458079,
+       "offset_source_m": 1.3171145298379627,
+       "full_rms_m": 0.013832817589745718,
+       "full_p95_m": 0.027096035487001874,
+       "full_support": 0.9998760074395536
+      },
+      "ransac": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 27.247841512350345,
+       "roll_deg": -3.159354883213109,
+       "offset_source_m": 1.3280742440676367,
+       "full_rms_m": 0.014902949727196663,
+       "full_p95_m": 0.028995507300313327,
+       "full_support": 0.9999752014879107
+      }
+     },
+     "holdout_worst_region_rms_m": 0.0167426040571024,
+     "valid_estimator_count": 3,
+     "local_rms": [
+      0.013858725801855688,
+      0.006790458498380004,
+      0.012809324273599257,
+      0.007700247415945527
+     ],
+     "max_rms": 0.013858725801855688,
+     "mean_rms": 0.01028968899744512,
+     "min_frame_count": 39
+    }
+   },
+   "shadow": {
+    "K": 4,
+    "sep_gate": 0.5,
+    "cond_gate": 0.1,
+    "ok": true,
+    "eval": {
+     "regions": [
+      [
+       1.5,
+       1.75,
+       -0.75,
+       -0.5
+      ],
+      [
+       1.5,
+       1.75,
+       0.0,
+       0.25
+      ],
+      [
+       2.0,
+       2.25,
+       -0.75,
+       -0.5
+      ],
+      [
+       2.5,
+       2.75,
+       0.0,
+       0.25
+      ]
+     ],
+     "centers": [
+      [
+       1.625,
+       -0.625
+      ],
+      [
+       1.625,
+       0.125
+      ],
+      [
+       2.125,
+       -0.625
+      ],
+      [
+       2.625,
+       0.125
+      ]
+     ],
+     "min_pairwise_sep_m": 0.5,
+     "condition": 0.7207592200561262,
+     "fit_points": 32710,
+     "region_counts": {
+      "1": 10381,
+      "2": 11908,
+      "3": 6510,
+      "4": 3911
+     },
+     "domain_geometry": {
+      "lambda2_lambda3": 0.8169872243481847,
+      "tangent_extents_m": [
+       1.2334342170799513,
+       1.4071857059559423
+      ]
+     },
+     "recommended": "tls",
+     "consensus": "GOOD",
+     "pairwise": [
+      {
+       "a": "tls",
+       "b": "svd",
+       "angle_deg": 0.0,
+       "offset_gap_m": 8.881784197001252e-16,
+       "status": "PASS"
+      },
+      {
+       "a": "tls",
+       "b": "ransac",
+       "angle_deg": 0.2393356798578615,
+       "offset_gap_m": 0.0034821248775058766,
+       "status": "PASS"
+      },
+      {
+       "a": "svd",
+       "b": "ransac",
+       "angle_deg": 0.23933567985633863,
+       "offset_gap_m": 0.003482124877506765,
+       "status": "PASS"
+      }
+     ],
+     "estimators": {
+      "tls": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.30692827003285,
+       "roll_deg": -2.1180568918356033,
+       "offset_source_m": 1.2970776089278104,
+       "full_rms_m": 0.010633383394961171,
+       "full_p95_m": 0.020762623129387623,
+       "full_support": 1.0
+      },
+      "svd": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.30692827003287,
+       "roll_deg": -2.1180568918356126,
+       "offset_source_m": 1.2970776089278113,
+       "full_rms_m": 0.010633383394961171,
+       "full_p95_m": 0.020762623129387602,
+       "full_support": 1.0
+      },
+      "ransac": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.16190590975786,
+       "roll_deg": -1.9275934945625985,
+       "offset_source_m": 1.2935954840503046,
+       "full_rms_m": 0.01075537634316491,
+       "full_p95_m": 0.021213281429562792,
+       "full_support": 1.0
+      }
+     },
+     "holdout_worst_region_rms_m": 0.012491599325088594,
+     "valid_estimator_count": 3,
+     "local_rms": [
+      0.008926322370981635,
+      0.010377539544965399,
+      0.0063880524705813785,
+      0.006196902548699868
+     ],
+     "max_rms": 0.010377539544965399,
+     "mean_rms": 0.007972204233807071,
+     "min_frame_count": 39
+    },
+    "debug": {
+     "combo_keys_sorted": [
+      [
+       6,
+       -3
+      ],
+      [
+       6,
+       0
+      ],
+      [
+       8,
+       -3
+      ],
+      [
+       10,
+       0
+      ]
+     ],
+     "pool_sizes": [
+      4,
+      4,
+      4,
+      4
+     ],
+     "combos_enumerated": 256
+    },
+    "changed": true
+   },
+   "seconds": 12.42
+  },
+  "cap_20261002_223757": {
+   "role": "control_v3",
+   "current": {
+    "layer_expected": "v3",
+    "v1_ok": false,
+    "v1_error": "floor_regions_invalid: no connected unobstructed floor component; [{'offset_m': 1.2933695427321978, 'clean_floor_cells': 6}, {'offset_m': 1.0753702012470485, 'clean_floor_cells': 0}, {'offset_m': 0.8625756196676303, 'clean_floor_cells': 0}]",
+    "v2_result": "INSUFFICIENT_CLEAN_ROI_SUPPORT: clean_cells=6 independent=0 min_sep_m=0.354 cond",
+    "v3_kind": "lowest_floor_sheet_v3_fine_roi",
+    "v3_eval": {
+     "regions": [
+      [
+       0.75,
+       0.8999999999999999,
+       0.75,
+       0.8999999999999999
+      ],
+      [
+       1.05,
+       1.2,
+       -0.8999999999999999,
+       -0.75
+      ],
+      [
+       1.05,
+       1.2,
+       1.5,
+       1.65
+      ],
+      [
+       1.5,
+       1.65,
+       -1.2,
+       -1.05
+      ]
+     ],
+     "centers": [
+      [
+       0.825,
+       0.825
+      ],
+      [
+       1.125,
+       -0.825
+      ],
+      [
+       1.125,
+       1.575
+      ],
+      [
+       1.575,
+       -1.125
+      ]
+     ],
+     "min_pairwise_sep_m": 0.5408326913195983,
+     "condition": 0.17875613710020014,
+     "fit_points": 29288,
+     "region_counts": {
+      "1": 9385,
+      "2": 9614,
+      "3": 5134,
+      "4": 5155
+     },
+     "domain_geometry": {
+      "lambda2_lambda3": 0.0356470346918918,
+      "tangent_extents_m": [
+       0.6061474154854412,
+       2.907172362727272
+      ]
+     },
+     "recommended": "tls",
+     "consensus": "GOOD",
+     "pairwise": [
+      {
+       "a": "tls",
+       "b": "svd",
+       "angle_deg": 0.0,
+       "offset_gap_m": 4.440892098500626e-16,
+       "status": "PASS"
+      },
+      {
+       "a": "tls",
+       "b": "ransac",
+       "angle_deg": 1.7507707412199962,
+       "offset_gap_m": 0.028443235108277287,
+       "status": "PASS"
+      },
+      {
+       "a": "svd",
+       "b": "ransac",
+       "angle_deg": 1.750770741219788,
+       "offset_gap_m": 0.028443235108276843,
+       "status": "PASS"
+      }
+     ],
+     "estimators": {
+      "tls": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.466920627894904,
+       "roll_deg": -0.36611745955148645,
+       "offset_source_m": 1.3231915066972948,
+       "full_rms_m": 0.01458445231798546,
+       "full_p95_m": 0.02964831328204639,
+       "full_support": 0.9994878448511336
+      },
+      "svd": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 26.466920627894886,
+       "roll_deg": -0.3661174595514848,
+       "offset_source_m": 1.3231915066972944,
+       "full_rms_m": 0.014584452317985462,
+       "full_p95_m": 0.029648313282046312,
+       "full_support": 0.9994878448511336
+      },
+      "ransac": {
+       "valid": true,
+       "reject_reasons": [],
+       "pitch_deg": 24.71839541622198,
+       "roll_deg": -0.2769284841843551,
+       "offset_source_m": 1.2947482715890175,
+       "full_rms_m": 0.017081958197065338,
+       "full_p95_m": 0.033339223462435244,
+       "full_support": 0.9998975689702267
+      }
+     },
+     "holdout_worst_region_rms_m": 0.026662245574716754,
+     "valid_estimator_count": 3
+    }
+   },
+   "seconds": 125.14
+  }
+ },
+ "determinism": {
+  "cap_20261004_202456": {
+   "repeats": 20,
+   "byte_stable": true
+  },
+  "cap_20261004_203135": {
+   "repeats": 20,
+   "byte_stable": true
+  },
+  "cap_20261004_203349": {
+   "repeats": 20,
+   "byte_stable": true
+  }
+ },
+ "params": {
+  "SHADOW_K": 4,
+  "SEP_GATE": 0.5,
+  "COND_GATE": 0.1
+ }
+}
