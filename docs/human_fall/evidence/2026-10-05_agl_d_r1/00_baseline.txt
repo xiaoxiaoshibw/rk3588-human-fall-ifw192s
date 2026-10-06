@@ -1,0 +1,17 @@
+GL-D R1 开工基线（2026-10-05, Asia/Shanghai）
+=============================================
+HEAD: D 开工时 8676bb479d4ae35cf22075cfe70225cf2220572a（延续 A/B/C）；
+      D 实施期间出现外部提交 **0d5ab42**（"收敛性入库：HF/GL 全流程文档+…"，非本 writer 操作；
+      本 writer 未执行任何 git add/commit/push/reset/checkout）；提交时 HEAD=0d5ab42。
+      外部提交收录了部分 A/B/C 文件与测试（当前为已跟踪且干净）；C/D 最新源码文件仍为未跟踪。
+环境: Python 3.12.10 / NumPy 1.26.4（开发机）；板端 3.8/1.17，纯 stdlib+NumPy。
+回归基线: C 收口后全量 476/OK/exit0。
+冻结依赖 10 blob 在 D 提交时仍逐一=基线（ground/calibration/joint_leveling/ground_diagnostics/
+ground_evidence/numeric/capture_input/leveling_estimators{tls,svd,ransac}）。
+
+D 新增: core/adaptive_ground/temporal.py、controller.py、tests/test_agl_d_controller.py；
+配置语义取自计划 §10 temporal 块（DRAFT，测试显式传入）。
+ponytail SKILL.md 路径: C:\Users\30680\.config\opencode\skills\ponytail（复用 digest/display_rotation/
+limit 数原语；无新依赖；两小模块+单测试文件）。
+P02 fixture（E-05 将复用）: docs/human_fall/evidence/2026-10-04_p02_four_roi_r1/02_FROZEN_POINTS.npz
+SHA256=d5f29b8609525a677e1f4e25c26d134a47f0bf572c6808834ff36c5c2e436012（只读）。

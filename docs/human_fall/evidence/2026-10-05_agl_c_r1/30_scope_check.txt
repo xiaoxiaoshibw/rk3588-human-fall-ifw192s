@@ -1,0 +1,15 @@
+GL-C R1 范围与 SHA 复核（2026-10-05）
+====================================
+HEAD（不变）: 8676bb479d4ae35cf22075cfe70225cf2220572a
+工作树: 仅新增未跟踪文件（index 外部 staged 状态同 B 记录）；无已跟踪文件修改。
+
+C 变更/新增 SHA256:
+eb583d1ab269716ea045341f4d5e12653c98428525e434e8888297ab1905dbc4  src/human_fall_detection/core/adaptive_ground/consensus.py
+72be58acdd2f874de1a9148f775e74ee0c08ed3d3c6edcc424880b60f102c8ed  src/human_fall_detection/tests/test_agl_c_consensus.py
+验收表: docs/human_fall/tickets/GL-C_adaptive_consensus.md SHA256=216fcdd2f08cc30bc081389c18a5860ed944a43f8b198310e0e860625e8c2af5（未改动）
+P02 fixture: d5f29b8609525a677e1f4e25c26d134a47f0bf572c6808834ff36c5c2e436012（只读）
+
+回归:
+  C 专项: python -B -W error -m unittest discover -s src/human_fall_detection/tests -p "test_agl_c_consensus.py" -v → Ran 5 / OK / exit 0
+  全量: → Ran 476 / OK / exit 0（B 后 471 → +5）
+关键实景: P02 当前 TLS−RANSAC 夹角 0.74136°（±0.01 内复判）在 good .5° 门下为 DEGRADED、整体非 GOOD（C-05）。

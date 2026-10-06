@@ -1,0 +1,21 @@
+GL-B R1 范围与 SHA 复核（2026-10-05）
+====================================
+HEAD（提交时，与基线相同）: 8676bb479d4ae35cf22075cfe70225cf2220572a
+工作树: dirty；无对已跟踪文件的修改；新增文件均未跟踪（本 writer 未 commit/push/reset/checkout）。
+注意：开工后发现 index 中 adaptive_ground/* 与 evidence/* 呈 staged（A/AM）——非本 writer 操作
+（未执行 git add），未改动 index；记录以供复审核对。
+
+B 变更/新增文件 SHA256:
+c360875267f8c70a0f612d4a3cd15b627ff57b4f6dd44bbb6b9f67b97605aa95  src/human_fall_detection/core/adaptive_ground/selection.py（前置：region_codes_sha256/绑定/引用摘要）
+bc862be48a3574297d5a65eb910a5bee2f49d7c250e3ffd886fff00d32bc8ea2  src/human_fall_detection/core/adaptive_ground/contracts.py（前置：sign_anchor/domain 比对）
+965faa8a8eb8faafc8936417846bea43045ed5138925eb543a6d987b602d70b9  src/human_fall_detection/core/adaptive_ground/quality.py（新增质量模块）
+850f3a7994add0b84b91dfac5463f9e786be567109cea2a222c83222725a4af1  src/human_fall_detection/tests/test_agl_b_quality.py（新增 6 用例）
+验收表: docs/human_fall/tickets/GL-B_adaptive_quality.md SHA256=3f6f68cadc245fe152b93a19b078a279221e135f0ac15219393ae56b83de7539（未改动）
+P02 fixture: docs/human_fall/evidence/2026-10-04_p02_four_roi_r1/02_FROZEN_POINTS.npz SHA256=d5f29b8609525a677e1f4e25c26d134a47f0bf572c6808834ff36c5c2e436012（只读）
+
+回归:
+  B 专项: python -B -W error -m unittest discover -s src/human_fall_detection/tests -p "test_agl_b_quality.py" -v → Ran 6 / OK / exit 0（10_test_agl_b_log.txt）
+  全量: → Ran 471 / OK / exit 0（11_regression_after_b.txt；A R2 后基线 465 → +6）
+冻结依赖 git blob 哈希（= A 基线，全部一致）: ground.py 0150e5eb…、calibration.py ffa789e0…、joint_leveling.py 060d75b7…、
+ground_diagnostics.py 6d683d3f…、ground_evidence.py 9150cacd…、numeric.py fb8b6974…、capture_input.py 8409e1b6…、
+pc_apps/human_replay/leveling_estimators/{tls,c1ff5314…, svd 267d460c…, ransac e79806e1…}
