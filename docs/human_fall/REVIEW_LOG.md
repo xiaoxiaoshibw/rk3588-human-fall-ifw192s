@@ -1,5 +1,26 @@
 # 工单审查记录
 
+## 2026-10-05 GL-S01/S02/B/C/D/E 批量独审（六单复审 PASS；不报 ACCEPTED）
+
+用户 2026-10-05 授权《AI_PROMPT_GL_S01S02_BCDE_ONESHOT.md》：按流程独审 → 范围内修复 → 提交（commit，不 push）。复审者 Claude（claude-fable-5，通过 Mirasim 会话）与作者 OpenCode（opencode-go/deepseek-v4.1-flash）**不同提供方、不同模型**，未参与实现，ponytail 路径 `C:\Users\30680\.claude\skills\ponytail\SKILL.md`（full）。基线 `master @ b190834`。
+
+| 单 | 范围 | 复审结论 | 复跑证据 |
+|---|---|---|---|
+| GL-S01 地面身份层 v2 | floor_sheet.py + leveling.py + validation.py + floor_sheet_test.py | **软件 PASS**（A1–A3 / B1–B2 / C1–C3 / S01 全过；D01 NOT_RUN） | `evidence/2026-10-05_gl_s01_r1/review_01/00_review.md`；floor_sheet 12/12 OK + human_replay 39/39 OK + golden 223757 INSUFFICIENT（同字面值）+ 4 个独立边界探针 PASS；B 层门 20 处 `PROFILE[...]` 引用 0 个硬编码字面量 |
+| GL-S02 细粒度 ROI v3 | floor_roi.py + leveling.py + validation.py + floor_roi_test.py | **软件 PASS**（A1–A4 / B1–B2 / C1–C3 / S01 全过；D01 NOT_RUN） | `evidence/2026-10-05_gl_s02_r1/review_01/00_review.md`；floor_roi 6/6 OK + golden 223757 v2 仍 INSUFFICIENT/v3 成功（min_sep=0.540、indep=4、cond=0.180）+ run_job 三法全 valid / recommended=tls |
+| GL-B 质量/可信度 | quality.py + selection.py + contracts.py + test_agl_b_quality.py | **软件 PASS**（AGL-B-01..05 全过；D01 NOT_RUN） | `evidence/2026-10-05_agl_b_r1/review_01/00_review.md`；B 专项 6/6 OK + agl_* 30/30 OK + human_fall_detection 全量 504/504 OK；作者"required 区域缺失未入 hard gates"实现期自检修复落地（quality.py 行 299–300） |
+| GL-C 一致性仲裁 | consensus.py + test_agl_c_consensus.py | **软件 PASS**（AGL-C-01..05 全过；D01 NOT_RUN） | `evidence/2026-10-05_agl_c_r1/review_01/00_review.md`；C 专项 5/5 OK；pairwise/cliques 穷举无启发式；`canonical_plane` n≈−n 同步规范化 |
+| GL-D 时序/六状态/安全保持 | temporal.py + controller.py + test_agl_d_controller.py | **软件 PASS**（AGL-D-01..06 全过；D01 NOT_RUN） | `evidence/2026-10-05_agl_d_r1/review_01/00_review.md`；D 专项 7/7 OK；作者"BAD 清空 pending 后续 append 未回填 pending_start_s"实现期自检修复落地（controller.py 行 342–343/462–463）；六状态转移读得清晰 |
+| GL-E transform/只读离线应用 | transform.py + test_agl_e_offline.py | **软件 PASS**（AGL-E-01..05 全过；D01 NOT_RUN） | `evidence/2026-10-05_agl_e_r1/review_01/00_review.md`；E 专项 5/5 OK；`_valid_mask` 统一"有限且非全零"；无 accepted 不补 identity；physical 1.14 只读 + kind/physical/runtime 三字面 false |
+
+**Phase B 修复**：无。六单逐条均独立复跑通过，未触发修复授权。
+
+**未闭合（共享）**：六单 D01（设备/物理/采集/部署）一律 NOT_RUN；运行时间/生产接入 NEVER 启动；旧 GroundMonitor latch 未触碰；不冒称 ACCEPTED。
+
+**移交 git**：按提示 §5 三组 commit（GL-S01+S02；GL-B～E；登记与复审记录），工作树在用户既有脏文件上原样保留，不 push、不 reset、不部署、不采集。
+
+---
+
 ## 2026-10-05 GL-V01 三会话工作台作者提交 / SUBMITTED / STOPPED
 
 V01–V06及作者流程自验PASS；203349 RANSAC与跨方法一致性数值FAIL保持，203135三法通过，202456旧结果全保持。外部独审/设备物理NOT_RUN，不报ACCEPTED。原捕获、旧结果字节不变；8套导出独立逐记录重放通过。用户本次明确开发新工作台并在总控继续加卡片，故本地新版本打包属于GL-V01新授权，不追改P03旧范围结论。[唯一v1](GLV01_ACCEPTANCE.md)/[回传与完整证据](returns/GL-V01.md)。

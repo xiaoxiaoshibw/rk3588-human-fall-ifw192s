@@ -1,5 +1,13 @@
 # AI 工单总表
 
+2026-10-05 批量独审已闭合（GL-S01/S02/B/C/D/E 六单复审 PASS；D01 NOT_RUN；不报 ACCEPTED）。三 commit `10cd100`（GL-S01+S02）/`3d57b5b`（GL-B～E）/`登记`：复审 [REVIEW_LOG.md 顶部](../REVIEW_LOG.md)。
+
+2026-10-05新增已具体授权：[HF-12 感知链前置滤波降噪](HF-12_point_denoise.md)，唯一[HF12 v1](../HF12_ACCEPTANCE.md)，单 writer OpenCode/deepseek-v4.1-flash（本会话），作者自验 SUBMITTED：[回传](../returns/HF-12.md)。只加 `build_snapshot` 前置孤立点去噪（体素邻域计数）与 `perception.yaml` 启用（core 默认关闭）；不改配平/跟踪/网页/驱动，不动 `voxel_size_m`（HF-09 预留）。
+
+2026-10-05新增已具体授权：[GL-S02 细粒度 ROI lowest_floor_sheet_v3_fine_roi](GL-S02_fine_roi_selection.md)，唯一[GLS02 v1](../GLS02_ACCEPTANCE.md)，单writer OpenCode/deepseek-v4.1-flash（本会话），实施中。15cm ROI，A/B 门不动；223757 预期三法通过。依据探针 `../evidence/2026-10-05_gl_s01_r1/14_fine_roi_probe.py`。批量独审已 PASS（含 commit `10cd100`）。
+
+2026-10-05新增已具体授权：[GL-S01 地面身份层 lowest_floor_sheet_v2](GL-S01_floor_sheet_v2.md)，唯一[GLS01 v1](../GLS01_ACCEPTANCE.md)，单writer OpenCode/deepseek-v4.1-flash（本会话），作者自验 SUBMITTED，[回传](../returns/GL-S01.md)。只新增 A 层身份、B 层门不降；桥接须合成测试证明。依据只读探针 `../evidence/2026-10-05_gl_floor_diag_r1/`。批量独审已 PASS（含 commit `10cd100`）。
+
 2026-10-05新增已具体授权：[P03回放自动配平](P03_replay_auto_leveling.md)，唯一[P03 v1](../P03_ACCEPTANCE.md)，单writer Claude Code，NOT_RUN。该单不启动GL-A～I，不取消GL-W01人工确认哲学（auto只替画ROI，不替确认才消费）。
 
 2026-10-05新增已具体授权：[GL-W01离线配平工作台](GL-W01_offline_workbench.md)，唯一[GLW01 v1](../GLW01_ACCEPTANCE.md)，SUBMITTED/指定独审服务BLOCKED。该单复用静态P02，不将下面AGL-A～I实施状态提升。

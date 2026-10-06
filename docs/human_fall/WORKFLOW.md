@@ -1,5 +1,13 @@
 # 工单开发与验收流程 v2
 
+2026-10-05 用户明确授权《AI_PROMPT_GL_S01S02_BCDE_ONESHOT.md》：按流程独审 → 范围内修复 → 提交（commit，不 push）。复审者 Claude（claude-fable-5）对 GL-S01/S02/B/C/D/E 六单批量独审，**全部软件 PASS、无 FAIL 触发 Phase B 修复**；D01 设备/物理一律 NOT_RUN，**不报 ACCEPTED**。三组 commit 仅登记工单与复审产物，不 push。详见 [REVIEW_LOG.md 顶部](REVIEW_LOG.md)。下方历史条目不动。
+
+2026-10-05 用户明确授权 **HF-12 感知链前置滤波降噪**（本轮”好的定制工单并且开发”）：[工单](tickets/HF-12_point_denoise.md)/[唯一v1](HF12_ACCEPTANCE.md)。writer OpenCode（opencode-go/deepseek-v4.1-flash，本会话），作者自验 SUBMITTED / STOPPED：[回传](returns/HF-12.md)、[证据](evidence/2026-10-05_hf12_r1/)。仅 `build_snapshot` 前置孤立点去噪（体素邻域计数，稠密盒求和）与 `perception.yaml` 启用（core 默认关闭）；H01–H06/R01/S01 作者自验 PASS，D01 设备/实机/部署 NOT_RUN，不自行 ACCEPTED；不动 `voxel_size_m`（HF-09 预留）/配平/跟踪/网页/驱动。
+
+2026-10-05 用户明确授权 **GL-S02 细粒度 ROI lowest_floor_sheet_v3_fine_roi**（"很好的开始修法"）：[工单](tickets/GL-S02_fine_roi_selection.md)/[唯一v1](GLS02_ACCEPTANCE.md)。只新增 15cm ROI 粒度：A 层与 B 层门限不动（厚度/法向/RMS/贴面逐字相同，每帧点数折算 30→≥20 且 ≥holdout 每区下限；间距/独立/条件数一个不降）；223757 预期改为三法通过。writer OpenCode（opencode-go/deepseek-v4.1-flash，本会话），实施中；依据 `evidence/2026-10-05_gl_s01_r1/14_fine_roi_probe.py`（15cm：37 候选/间距 0.936m/独立 4/条件 0.208）。
+
+2026-10-05 用户明确授权 **GL-S01 地面身份层 lowest_floor_sheet_v2**（A/B 分层解耦：只新增地面身份层，不降低、不重写 B 层 ROI 质量契约；触面桥接须合成测试证明后才入正式路径）：[工单](tickets/GL-S01_floor_sheet_v2.md)/[唯一v1](GLS01_ACCEPTANCE.md)。writer OpenCode（opencode-go/deepseek-v4.1-flash，本会话），作者自验 SUBMITTED / STOPPED：[回传](returns/GL-S01.md)，只读探针依据 `evidence/2026-10-05_gl_floor_diag_r1/`（223757 A=PASS/B=FAIL、三个在范围会话不回归），设备/物理 NOT_RUN，外部独立复审另行安排。
+
 2026-10-05 GL-V01 R2当前地面纠错作者SUBMITTED / STOPPED：[唯一v2](GLV01_ACCEPTANCE.md)/[R2提交](evidence/2026-10-05_gl_v01_r2/15_SUBMISSION.md)。用户明确算法自己找，原手选四区只对照；三维最低连续面/完整格障碍检查，3指定源自动三法及原留帧门PASS；202456原参考保持。R1数值通过即完成的判断已纠正，旧FAIL不改。V02共享树第4列表扩展FAIL、独审与设备物理NOT_RUN，整体未ACCEPTED，不启动AGL在线/生产接管。下面R1入口为历史。
 
 2026-10-05 当前新增用户具体授权 **GL-V01三会话算法验证** 已作者自验 / SUBMITTED / STOPPED：[工单](tickets/GL-V01_algorithm_validation.md)/[唯一v1](GLV01_ACCEPTANCE.md)/[回传](returns/GL-V01.md)。总控制台第五项与新版本地exe；202456复用原结果，203135三法通过，203349TLS/SVD通过但RANSAC与一致性FAIL保留。旧数据/旧结果不写，外部独审与设备物理NOT_RUN，不报ACCEPTED；不改变下方GL-W01/P03历史范围审查或AGL在线边界。
