@@ -1,72 +1,137 @@
 <!doctype html>
-<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>离线人体识别工作台</title>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>人体识别 · LiDAR Workspace</title>
+<link rel="stylesheet" href="ui.css">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#0f1419;color:#dce5f0;font:14px/1.5 "Microsoft YaHei",sans-serif;overflow:hidden}
-header{padding:10px 16px;border-bottom:1px solid #263240;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-h1{font-size:16px;margin:0}a{color:#83caff;font-size:12px}.muted{font-size:12px;color:#8fa2b5}
-main{display:grid;grid-template-columns:295px 1fr;gap:0;height:calc(100vh - 47px)}
-aside{padding:12px;border-right:1px solid #263240;overflow-y:auto;background:#131a21}
-#view{position:relative;background:#000}
-#hud{position:absolute;left:10px;top:10px;font:12px/1.6 Consolas;color:#9df;background:rgba(0,0,0,.55);padding:6px 10px;border-radius:6px;pointer-events:none;white-space:pre}
-#tip{position:absolute;left:10px;bottom:10px;font-size:12px;color:#8fa2b5;background:rgba(0,0,0,.5);padding:4px 10px;border-radius:5px;pointer-events:none}
-.card{background:#182230;border:1px solid #2a3a4c;border-radius:8px;padding:11px;margin-bottom:11px}
-h2{font-size:13px;margin:0 0 9px;color:#9fc3e0}
-button,select{font:inherit;color:#dce5f0;background:#101b27;border:1px solid #3d5368;border-radius:4px;padding:5px 9px;cursor:pointer}
-button:disabled{opacity:.45;cursor:default}.primary{background:#1d6b8f;border-color:#2e93bd;width:100%;padding:8px;font-weight:bold}
-input[type=range]{width:100%}label{display:block;margin:6px 0;font-size:12px}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{text-align:left;padding:4px 3px;border-bottom:1px solid #263a4d}
-.tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px;font-weight:bold}
-.tag.ok{background:#1d4d33;color:#7be0a8}.tag.warn{background:#5a451a;color:#f2c266}.tag.bad{background:#5a2323;color:#f08a8a}.tag.unknown{background:#3a4450;color:#a9b7c4}
-#status{font-size:12px;min-height:18px;margin-top:6px}
-.posechip{font-size:15px;font-weight:bold}
-#featTable td:first-child{color:#8fa2b5}
-.mono{font-family:Consolas,monospace}
-</style></head><body>
-<header>
-  <h1>🧍 离线人体识别工作台</h1>
-  <a href="/">← 会话回放</a><a href="/leveling.html">← 离线配平</a>
-  <span class="muted">配平系纯几何 · pin ROI 辅助判别人/家具 · 不做全自动找人</span>
+  /* —— 三栏 Workbench：左控制 292px / 中 3D Viewer / 右 Inspector 300px —— */
+  .workbench{grid-template-columns:292px minmax(0,1fr) 300px}
+  #view{position:relative;background:var(--bg-inset)}
+  #hud{position:absolute;left:10px;top:10px;font:11.5px var(--font-mono);color:var(--text-secondary);
+       background:rgba(26,27,31,.88);border:1px solid var(--border-subtle);border-radius:var(--r-ctl);
+       padding:5px 9px;pointer-events:none;white-space:pre;z-index:10}
+  #tip{position:absolute;left:10px;bottom:10px;font-size:11px;color:var(--text-muted);
+       background:rgba(26,27,31,.85);border:1px solid var(--border-subtle);border-radius:var(--r-ctl);
+       padding:4px 9px;pointer-events:none;z-index:10}
+
+  /* 目标 / 事件行 */
+  #trackList .mono,#fallEvents .tag{font-size:11px}
+  #trackList > div{padding:4px 2px;border-bottom:1px solid var(--border-subtle);
+                   font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #fallEvents > div{margin:4px 0}
+  .tag{display:inline-flex;align-items:center;padding:1px 7px;border-radius:3px;font-size:10px;
+       font-weight:600;letter-spacing:.5px;vertical-align:middle}
+  .tag.ok{background:var(--success-soft);color:var(--success)}
+  .tag.warn{background:var(--warning-soft);color:var(--warning)}
+  .tag.bad{background:var(--danger-soft);color:var(--danger)}
+  .tag.info{background:var(--accent-soft);color:var(--accent)}
+  .tag.unknown{background:var(--bg-elevated);color:var(--text-secondary)}
+  #status{font-size:11.5px;min-height:18px;margin-top:8px;color:var(--text-secondary)}
+  .posechip{font-size:14px;font-weight:600;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  #featTable{margin-top:8px}
+  #featTable td{padding:4px 2px;border-bottom:1px solid var(--border-subtle);font-size:12px}
+  #featTable td:first-child{color:var(--text-muted)}
+  #featTable td:last-child{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+  #featTable tr:last-child td{border-bottom:none}
+  .diag-table td{padding:3px 0;font-size:11.5px}
+  .diag-table td:first-child{color:var(--text-muted);white-space:nowrap;padding-right:10px}
+  .diag-table td:last-child{font-family:var(--font-mono);color:var(--text-secondary)}
+  .side-sec p{font-size:11.5px;line-height:1.6}
+  .side-sec b{color:var(--text-secondary)}
+  @media (max-width:1280px){.workbench{grid-template-columns:270px minmax(0,1fr) 280px}}
+</style>
+</head>
+<body class="shell">
+<header class="topbar">
+  <a class="btn ghost sm" href="/">← 会话回放</a>
+  <a class="btn ghost sm" href="/validation.html">算法验证</a>
+  <span class="tb-div"></span>
+  <h1 class="tb-title">人体识别工作台</h1>
+  <span class="tb-sub">配平系纯几何 · pin ROI 辅助判别人/家具 · 不做全自动找人</span>
+  <span class="tb-sp"></span>
+  <span class="badge off">OFFLINE</span>
 </header>
-<main>
-  <aside>
-    <section class="card">
-      <h2>1 · 会话</h2>
-      <label>本地会话 <select id="session" style="width:100%"><option value="">请选择…</option></select></label>
-      <div id="metaInfo" class="muted">载入 meta + points.bin，并自动应用 leveled 配平。</div>
+
+<div class="workbench">
+  <!-- ===== 左：控制 ===== -->
+  <aside class="side">
+    <section class="side-sec">
+      <h2 class="sec-title">Session 会话</h2>
+      <select id="session" style="width:100%"><option value="">请选择…</option></select>
+      <div id="metaInfo" class="muted" style="font-size:11.5px;margin-top:8px;line-height:1.6">载入 meta + points.bin，并自动应用 leveled 配平。</div>
+      <div class="field" style="margin:10px 0 0"><label>进度</label></div>
+      <input id="seekBar" type="range" min="0" max="0" step="1" value="0" title="拖动跳转帧" style="width:100%">
     </section>
-    <section class="card">
-      <h2>2 · 锁定人体 ROI</h2>
-      <p class="muted">点地面/人体任一处 → 设圆柱 ROI。人 vs 家具由你裁决（肢体支线 6 代失败案例：沙发≈高柜≈直立人 完全同形）。</p>
-      <button id="pinModeBtn" style="width:100%">📍 点选 ROI（或按 K 对准星）</button>
-      <label>ROI 半径 <input id="roiR" type="range" min="0.4" max="1.4" step="0.05" value="0.8"><span class="mono" id="roiRVal">0.80 m</span></label>
-      <div class="muted mono" id="roiInfo">未锁定</div>
-      <div style="display:flex;gap:6px;margin-top:8px">
-        <button id="clearPinBtn" style="flex:1">清除锁定</button>
-        <button id="resetTrackBtn" style="flex:1">重置平滑</button>
+
+    <section class="side-sec">
+      <h2 class="sec-title">锁定人体 ROI</h2>
+      <p class="muted" style="margin:0 0 8px">点地面/人体任一处设圆柱 ROI。人 vs 家具由你裁决。</p>
+      <button id="pinModeBtn" class="btn primary" style="width:100%">点选 ROI（或按 K 对准星）</button>
+      <div class="field" style="margin:10px 0 4px"><label>ROI 半径</label><span class="val mono" id="roiRVal">0.80 m</span></div>
+      <input id="roiR" type="range" min="0.4" max="1.4" step="0.05" value="0.8" style="width:100%">
+      <div class="muted mono" id="roiInfo" style="font-size:11px;margin-top:6px">未锁定</div>
+      <div class="row" style="margin-top:8px">
+        <button id="clearPinBtn" class="btn sm grow">清除锁定</button>
+        <button id="resetTrackBtn" class="btn sm grow">重置平滑</button>
       </div>
     </section>
-    <section class="card">
-      <h2>3 · 本帧几何判定</h2>
-      <div id="poseBlock" class="muted">载入并锁定 ROI 后显示</div>
-      <table id="featTable"><tbody></tbody></table>
-      <div id="status"></div>
+
+    <section class="side-sec">
+      <h2 class="sec-title">自动管线（HR-W03 R2）</h2>
+      <label class="row" style="font-size:12px;color:var(--text-secondary);cursor:pointer">
+        <input id="pipeOn" type="checkbox" checked> 启用自动管线（背景建模后生效）
+      </label>
+      <div id="pipeStatus" class="muted" style="font-size:11.5px;margin-top:6px">载入会话后自动建模静态背景…</div>
     </section>
-    <section class="card muted">
-      <b>方法与边界</b>
-      <p>画布展示的是已应用 TLS 配平的会话（z=0 即地板）。判定仅以**圆柱 ROI 内点云**算 PCA + 高度带，主扩散方向直立度 × 顶高 二线分三态。</p>
-      <p><b>边界（承 limb HR-07 教训）：</b>纯几何无法自动区分人 vs 沙发/高柜——能给出的只有量化证据（身高/躯干半径/直立度/score）。是否「真是人」仍需 ROI 锁到你确信是人的目标上。本工作台不做全自动找人。</p>
+
+    <section class="side-sec" style="margin-top:auto">
+      <details>
+        <summary>方法与边界</summary>
+        <p class="muted" style="margin:8px 0 0">画布展示的是已应用 TLS 配平的会话（z=0 即地板）。判定仅以圆柱 ROI 内点云算 PCA + 高度带，主扩散方向直立度 × 顶高 二线分三态。</p>
+        <p class="muted" style="margin:8px 0 0"><b>自动管线边界（承 limb HR-07 教训）：</b>工作空间 z∈[0.10, 2.50]（顶棚/吊柜上沿不进）；静态背景 = 3D 体素两级判定（strong 占用率≥0.85 / supported ≥0.65 且形心抖动≤0.05m 且邻域 strong≥2）——静立 ≥85% 帧的人会被当背景吞掉（已知边界）；聚类前做保守孤立清理（体素 ≤1 点且 26 邻域无前景体素才删，单遍不传播）；颜色 = 硬门 × 证据联合判定：绿=确认人体（3/5 帧时间确认），蓝=候选，灰=非人。<b>不发「这是人」硬判</b>，最终由你 pin ROI 裁决。弯腰 vs 跌倒判别 = 主直立度崩&lt;0.45 且身高&lt;0.9m 持续 1s 且不回升——弯腰会回站，不触报。</p>
+      </details>
     </section>
   </aside>
+
+  <!-- ===== 中：3D Viewer ===== -->
   <div id="view">
     <div id="hud">载入会话后随帧更新</div>
     <div id="tip">拖拽旋转 · 滚轮缩放 · 空格 播放 · K 对准星设 ROI · ←→ 步进帧</div>
   </div>
-</main>
+
+  <!-- ===== 右：结果 Inspector ===== -->
+  <aside class="side inspector">
+    <section class="side-sec">
+      <h2 class="sec-title">本帧判定</h2>
+      <div id="poseBlock" class="muted" style="font-size:12px">载入并锁定 ROI 后显示</div>
+      <table id="featTable"><tbody></tbody></table>
+      <div id="status"></div>
+    </section>
+
+    <section class="side-sec">
+      <h2 class="sec-title">Targets 目标</h2>
+      <div id="trackList"><span class="muted" style="font-size:11px">本帧无活跃 track</span></div>
+      <h2 class="sec-title" style="margin-top:12px">Fall 事件</h2>
+      <div id="fallEvents"></div>
+    </section>
+
+    <section class="side-sec" style="margin-top:auto">
+      <details>
+        <summary>Diagnostics · 管线计数</summary>
+        <table class="diag-table" style="width:100%;margin-top:8px"><tbody>
+          <tr><td>点 原始→前景</td><td id="pipeCounts">—</td></tr>
+          <tr><td>簇 / 人形证据</td><td id="pipeClusters">—</td></tr>
+        </tbody></table>
+      </details>
+    </section>
+  </aside>
+</div>
 <script src="vendor/three.min.js"></script>
 <script src="vendor/OrbitControls.js"></script>
 <script src="human_replay_lib.js"></script>
 <script src="human_detect_lib.js"></script>
+<script src="human_pipe_lib.js"></script>
 <script src="human_detect.js"></script>
 </body></html>

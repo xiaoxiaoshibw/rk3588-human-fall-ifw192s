@@ -7,11 +7,12 @@
  *   每帧 human_detect_lib.frame_human_features + EmaTracker → 绿色/红色 Jan bbox overlay。
  */
 "use strict";
-/* global THREE, human_replay_lib, human_detect_lib */
+/* global THREE, human_replay_lib, human_detect_lib, human_pipe_lib */
 
 (function () {
     var RL = human_replay_lib;
     var DL = human_detect_lib;
+    var PL = human_pipe_lib;
 
     // ---- state ----------------------------------------------------------------
     var S = {
@@ -28,15 +29,27 @@
         pinArmed: false,           // 是否处于「点一下设 ROI」模式
         ringMesh: null, ballMesh: null, boxMesh: null, axisLine: null,
         lastFeat: null, lastSm: null,
+        // ---- HR-W03 自动管线状态 ----
+        pipe: {
+            static_keys: null,     // Set — 全帧背景模型（载入后建一次）
+            bg_building: false,
+            bg_done: false,
+            tracker: new PL.Tracker(),
+            cluster_objs: [],      // [{points:造的聚类高亮点, color}]
+            cluster_boxes: [],     // 判定 bbox 组（绿=HUMAN_SHAPE，紫/橙=SOLID_UNIFORM，灰=AMBIGUOUS）
+            last_frame_idx: -1,
+            fall_log: [],          // 时序 Fall 事件列表（跨帧持久）
+        },
     };
     var els = {};
-    ["session", "metaInfo", "pinModeBtn", "roiR", "roiRVal", "roiInfo", "clearPinBtn",
-     "resetTrackBtn", "poseBlock", "featTable", "status", "hud"]
+    ["session", "metaInfo", "seekBar", "pinModeBtn", "roiR", "roiRVal", "roiInfo", "clearPinBtn",
+     "resetTrackBtn", "poseBlock", "featTable", "status", "hud",
+     "pipeOn", "pipeStatus", "pipeCounts", "pipeClusters", "trackList", "fallEvents"]
         .forEach(function (id) { els[id] = document.getElementById(id); });
 
     function status(msg, is_err) {
         els.status.textContent = msg;
-        els.status.style.color = is_err ? "#f66" : "#8f8";
+        els.status.style.color = is_err ? "#d46a62" : "#a0a3ab";
     }
 
     // ---- 会话列表 ------------------------------------------------------------------
@@ -59,6 +72,7 @@
         status("载入 meta…");
         S.roi = null; S.tracker.reset(); S.lastFeat = null; S.lastSm = null;
         _clear_overlays();
+        _clear_pipe_overlays();   /* 换会话清旧 pipe bbox — 否则新会话场景里残留上个会话的家具框 */
         var metaF = { name: "meta.json", text: function () { return fetch("/api/file?sid=" + encodeURIComponent(sid) + "&name=meta.json").then(function (r) { if (!r.ok) throw new Error("meta HTTP " + r.status); return r.text(); }); } };
         var binF = { name: "points.bin", arrayBuffer: function () { return fetch("/api/file?sid=" + encodeURIComponent(sid) + "&name=points.bin").then(function (r) { if (!r.ok) throw new Error("bin HTTP " + r.status); return r.arrayBuffer(); }); } };
         return metaF.text().then(function (txt) {
@@ -89,12 +103,13 @@
                 build_geometry();
                 S.range = compute_range();
                 paint_colours();
+                build_static_background();
                 els.metaInfo.innerHTML =
                     "<b class='mono'>" + S.meta.session_id + "</b><br>" +
                     S.frames.length + " 帧 · " + S.total_pts + " 点 · " +
                     (S.meta.duration_sec || 0).toFixed(1) + "s · " + S.fps + "Hz · " +
-                    (S.leveled ? "<span style='color:#7be0a8'>已应用 TLS 配平 (z=0=地板)</span>"
-                               : "<span style='color:#f2c266'>未配平：仅供参考 — 请先在「离线配平」页评估</span>");
+                    (S.leveled ? "<span style='color:#4bab7d'>已应用 TLS 配平 (z=0=地板)</span>"
+                               : "<span style='color:#d0a75a'>未配平：仅供参考 — 请先在「算法验证」页评估</span>");
                 status("就绪 (" + Math.round(performance.now() - t0) + "ms)");
                 set_idx(0);
                 play(true);
@@ -158,21 +173,22 @@
 
     // ---- 场景 ---------------------------------------------------------------------
     function setup_scene() {
-        var w = window.innerWidth - 295, h = window.innerHeight - 47;
+        var vp = _viewport(), w = vp.w, h = vp.h;
         S.renderer = new THREE.WebGLRenderer({ antialias: true });
         S.renderer.setSize(w, h);
-        S.renderer.setClearColor(0x0a0f13);
+        S.renderer.setClearColor(0x101114);
+        els.seekBar.oninput = function () { play(false); set_idx(+els.seekBar.value); };
         document.getElementById("view").appendChild(S.renderer.domElement);
         S.scene = new THREE.Scene();
         S.camera = new THREE.PerspectiveCamera(62, w / h, 0.05, 400);
         S.camera.up.set(0, 0, 1);
         S.camera.position.set(-3.5, -4, 2.8);
         S.scene.add(new THREE.AxesHelper(1.2));
-        var grid = new THREE.GridHelper(40, 40, 0x335533, 0x223322);
+        var grid = new THREE.GridHelper(40, 40, 0x2e3238, 0x1f2226);
         grid.rotation.x = Math.PI / 2;
         S.scene.add(grid);
         var origin = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12),
-            new THREE.MeshBasicMaterial({ color: 0x66ccff }));
+            new THREE.MeshBasicMaterial({ color: 0x5c8ade }));
         S.scene.add(origin);
         if (typeof THREE.TrackballControls === "function") {
             S.controls = new THREE.TrackballControls(S.camera, S.renderer.domElement);
@@ -187,11 +203,42 @@
         /* 点选 ROI：点云/地面用 ray 打距离 */
         S.renderer.domElement.addEventListener("mousedown", on_canvas_click);
     }
+    function _viewport() {
+        var v = document.getElementById("view");
+        return { w: v.clientWidth, h: v.clientHeight };
+    }
     function on_resize() {
-        var w = window.innerWidth - 295, h = window.innerHeight - 47;
-        S.camera.aspect = w / h;
+        var vp = _viewport();
+        S.camera.aspect = vp.w / vp.h;
         S.camera.updateProjectionMatrix();
-        S.renderer.setSize(w, h);
+        S.renderer.setSize(vp.w, vp.h);
+    }
+
+    /* ---- HR-W03：静态背景一次建模（全帧扫一遍，离线 2-4s） ----
+     * 直后 pipe tracker/事件日志清空 — 因为前景是相对于新背景的。*/
+    function build_static_background() {
+        if (!S.frames || !S.buf_f32) return;
+        if (!els.pipeOn.checked) {
+            S.pipe.bg_done = false; S.pipe.static_keys = null;
+            els.pipeStatus.textContent = "自动管线已关停（pin ROI 仍可用）";
+            return;
+        }
+        S.pipe.bg_building = true; S.pipe.bg_done = false;
+        S.pipe.static_keys = null;
+        S.pipe.tracker = new PL.Tracker();
+        S.pipe.fall_log = [];
+        els.pipeStatus.textContent = "背景建模：扫全帧 3D 体素占用（strong/supported 两级）…（约 2-4s）";
+        var ded = S.frames.map(function (f) {
+            return PL.denoise(RL.strided_f32_copy(S.buf_f32, f.start_pts, f.count, RL.STRIDE_F32));
+        });
+        var t0 = performance.now();
+        S.pipe.static_keys = PL.build_static_map(ded, { drop_ground: true });
+        S.pipe.bg_done = true; S.pipe.bg_building = false;
+        els.pipeStatus.textContent = "静态背景 " + S.pipe.static_keys.size + " 个静态体素（"
+            + Math.round(performance.now() - t0) + "ms）· 每帧跑完整管线";
+        /* 已经停在末帧 — 手动刷新一次让新背景生效 */
+        S.pipe.last_frame_idx = -1;
+        set_idx(S.idx);
     }
 
     // ---- 帧推进 + 本帧检测 -----------------------------------------------------------
@@ -201,6 +248,7 @@
         S.idx = Math.min(Math.max(i, 0), n - 1);
         var f = S.frames[S.idx];
         S.geo.setDrawRange(f.start_pts, f.count);
+        if (els.seekBar) { els.seekBar.max = n - 1; els.seekBar.value = S.idx; }
         var t = (f.bag_time_sec != null) ? RL.format_hhmmss(f.bag_time_sec - S.frames[0].bag_time_sec) : "--:--";
         els.hud.textContent =
             "帧 " + (S.idx + 1) + "/" + n + "  seq=" + f.seq + "  t=" + t +
@@ -231,6 +279,10 @@
 
     // ---- 核心：本帧检测 + 叠加 ----------------------------------------------------------
     function run_detect() {
+        /* HR-W03 自动管线（独立于 pin ROI）：每帧跑 denoise→前景→聚类→证据→track→fall */
+        if (S.pipe.bg_done && els.pipeOn.checked) _run_pipe_frame();
+        else _clear_pipe_overlays();
+
         if (!S.roi || !S.frames) {
             els.poseBlock.innerHTML = "<span class='tag unknown'>—</span> 未锁定 ROI";
             els.featTable.tBodies[0].innerHTML = "";
@@ -250,12 +302,101 @@
         _render_panel(feat, sm, cyl.length / 4);
     }
 
+    /* ---- HR-W03 自动管线：每帧 ---- */
+    function _run_pipe_frame() {
+        if (S.pipe.last_frame_idx === S.idx) return;   /* 同帧不重跑 */
+        S.pipe.last_frame_idx = S.idx;
+        var f = S.frames[S.idx];
+        var slice = RL.strided_f32_copy(S.buf_f32, f.start_pts, f.count, RL.STRIDE_F32);
+        var r = PL.pipeline_frame(slice, S.idx, S.pipe);
+
+        /* 事件并入历史日志（跨帧）。躺姿期间同一 Fall 会逐帧重发（from_idx 不变），
+         * 只更新末条——否则一个 Fall 把 10 条日志全刷成重复。 */
+        for (var i = 0; i < r.events.length; i++) {
+            var e = r.events[i], last = S.pipe.fall_log[S.pipe.fall_log.length - 1];
+            if (last && last.track_id === e.track_id && last.from_idx === e.from_idx) {
+                last.to_idx = e.to_idx; last.reason = e.reason;
+            } else {
+                S.pipe.fall_log.push(e);
+            }
+        }
+        /* 只留最近 10 条，防 UI 无界增 */
+        while (S.pipe.fall_log.length > 10) S.pipe.fall_log.shift();
+
+        _render_pipe_overlays(r);
+        _render_pipe_panel(r);
+    }
+
+    function _clear_pipe_overlays() {
+        function _drop(o) {
+            S.scene.remove(o);
+            if (o.geometry) o.geometry.dispose();
+            if (o.material) o.material.dispose();   /* 每帧 new 2 个 MeshBasicMaterial — 只清 geometry 会漏 */
+        }
+        S.pipe.cluster_objs.forEach(_drop);
+        S.pipe.cluster_objs = [];
+        S.pipe.cluster_boxes.forEach(_drop);
+        S.pipe.cluster_boxes = [];
+        els.pipeCounts.textContent = "—"; els.pipeClusters.textContent = "—";
+        els.trackList.innerHTML = ""; els.fallEvents.innerHTML = "";
+    }
+
+    /* 簇 bbox：联合判定（R2.4）定色，绿须经 track 时间确认（R2.5）。
+     * 不重建 voxel→cluster 映射（画 bbox 足够，高亮点级覆盖在「细节不够时才需要」— 先不做） */
+    function _render_pipe_overlays(r) {
+        _clear_pipe_overlays();
+        r.clusters.forEach(function (cl) {
+            /* bbox：绿=CONFIRMED_HUMAN（且 3/5 帧确认）/ 蓝=HUMAN_CANDIDATE / 弱化灰=NON_HUMAN */
+            var color = 0x6b6f78;   /* NON_HUMAN：弱化，不抢注意力 */
+            if (cl.joint === "HUMAN_CANDIDATE") color = 0x5c8ade;
+            else if (cl.joint === "CONFIRMED_HUMAN") color = cl.track_confirmed ? 0x4bab7d : 0x5c8ade;
+            var sx = Math.max(0.2, cl.width_m * 2), sy = Math.max(0.2, cl.depth_m * 2);
+            var sz = Math.max(0.2, cl.height_m);
+            var box = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz),
+                new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.14, wireframe: false }));
+            box.position.set(cl.cx, cl.cy, cl.zmin + cl.height_m / 2);
+            S.scene.add(box); S.pipe.cluster_boxes.push(box);
+            /* bbox 线框 */
+            var wire = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz),
+                new THREE.MeshBasicMaterial({ color: color, wireframe: true, transparent: true, opacity: 0.9 }));
+            wire.position.copy(box.position);
+            S.scene.add(wire); S.pipe.cluster_boxes.push(wire);
+        });
+    }
+
+    function _render_pipe_panel(r) {
+        els.pipeCounts.textContent = r.n_in + " → " + r.n_denoise + " → " + r.n_foreground
+            + "（削 " + r.n_dropped + "）"
+            + " · 孤立清理：删除 " + r.iso_removed_points + " 点 / " + r.iso_removed_voxels + " voxel";
+        var by = { CONFIRMED_HUMAN: 0, HUMAN_CANDIDATE: 0, NON_HUMAN: 0 };
+        r.clusters.forEach(function (c) { by[c.joint] = (by[c.joint] || 0) + 1; });
+        els.pipeClusters.innerHTML =
+            r.clusters.length + " 簇 · "
+            + "<span style='color:#4bab7d'>确认 ×" + by.CONFIRMED_HUMAN + "</span> · "
+            + "<span style='color:#5c8ade'>候选 ×" + by.HUMAN_CANDIDATE + "</span> · "
+            + "<span style='color:#676b73'>非人 ×" + by.NON_HUMAN + "</span>";
+        /* track 列表 */
+        els.trackList.innerHTML = r.tracks.map(function (t) {
+            var cls = t.label === "CONFIRMED_HUMAN" ? "ok" : (t.label === "HUMAN_CANDIDATE" ? "info" : "unknown");
+            return "<div class='mono' style='font-size:11px'>#" + t.id + " "
+                + "<span class='tag " + cls + "'>" + t.label + "</span>"
+                + (t.human_confirmed ? " <span class='tag ok'>确认</span>" : "")
+                + " h=" + t.height.toFixed(2) + " upcos=" + t.upcos.toFixed(2)
+                + " n=" + t.n + "</div>";
+        }).join("") || "<span class='muted' style='font-size:11px'>本帧无活跃 track</span>";
+        /* Fall 历史 */
+        els.fallEvents.innerHTML = S.pipe.fall_log.map(function (e) {
+            return "<div class='tag bad' style='display:block;margin:3px 0'>Fall track#" + e.track_id
+                + " " + e.from_idx + "→" + e.to_idx + " · " + e.reason + "</div>";
+        }).join("");
+    }
+
     function _render_overlays(feat, sm) {
         /* ROI 圆柱（蓝色 wireframe） */
         if (!S.ringMesh) {
             S.ringMesh = new THREE.Mesh(
                 new THREE.CylinderGeometry(1, 1, 1, 24, 1, true),
-                new THREE.MeshBasicMaterial({ color: 0x4db8ff, wireframe: true, transparent: true, opacity: 0.4 }));
+                new THREE.MeshBasicMaterial({ color: 0x5c8ade, wireframe: true, transparent: true, opacity: 0.4 }));
             S.scene.add(S.ringMesh);
         }
         S.ringMesh.position.set(S.roi.x, S.roi.y, DL.DETECT.z_max_human / 2);
@@ -266,7 +407,7 @@
         if (!S.boxMesh) {
             S.boxMesh = new THREE.Mesh(
                 new THREE.BoxGeometry(1, 1, 1),
-                new THREE.MeshBasicMaterial({ color: 0x44dd66, transparent: true, opacity: 0.22, wireframe: false }));
+                new THREE.MeshBasicMaterial({ color: 0x4bab7d, transparent: true, opacity: 0.15, wireframe: false }));
             S.scene.add(S.boxMesh);
         }
         var box = DL.smoothed_to_box(sm);
@@ -274,10 +415,10 @@
             S.boxMesh.position.set(box.center[0], box.center[1], box.center[2]);
             S.boxMesh.scale.set(box.size[0], box.size[1], box.size[2]);
             var color = 0x9fbfdd;
-            if (!feat.is_human_like) color = 0xb366ff;         /* 几何说「不像人」 */
-            else if (feat.pose === "standing") color = 0x44dd66;
-            else if (feat.pose === "bending") color = 0xf2c266;
-            else if (feat.pose === "lying") color = 0xf05a5a;
+            if (!feat.is_human_like) color = 0x6b6f78;         /* 几何说「不像人」：弱化 */
+            else if (feat.pose === "standing") color = 0x4bab7d;
+            else if (feat.pose === "bending") color = 0xd0a75a;
+            else if (feat.pose === "lying") color = 0xd46a62;
             S.boxMesh.material.color.setHex(color);
             S.boxMesh.visible = true;
         } else {
@@ -287,7 +428,7 @@
         /* 主轴（eig0, 主扩散方向）画一条紫线在 ROI 心 */
         if (!S.axisLine) {
             var g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3(0, 0, 1)]);
-            S.axisLine = new THREE.Line(g, new THREE.LineBasicMaterial({ color: 0xc07bff }));
+            S.axisLine = new THREE.Line(g, new THREE.LineBasicMaterial({ color: 0x5c8ade }));
             S.scene.add(S.axisLine);
         }
         if (feat && feat.ok && feat.pca) {
@@ -304,7 +445,7 @@
         /* ROI 外圈停留球（设 ROI 时的可视反馈） */
         if (!S.ballMesh) {
             S.ballMesh = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16),
-                new THREE.MeshBasicMaterial({ color: S.leveled ? 0x4db8ff : 0xff8844 }));
+                new THREE.MeshBasicMaterial({ color: S.leveled ? 0x5c8ade : 0xd0a75a }));
             S.scene.add(S.ballMesh);
         }
         S.ballMesh.position.set(S.roi.x, S.roi.y, 0);
@@ -350,11 +491,12 @@
     function on_canvas_click(ev) {
         if (!S.pinArmed || !S.frames) return;
         S.pinArmed = false;
-        els.pinModeBtn.textContent = "📍 点选 ROI（或按 K 对准星）";
+        els.pinModeBtn.textContent = "点选 ROI（或按 K 对准星）";
         var r = parseFloat(els.roiR.value);
+        var vp = _viewport();
         var ndc = new THREE.Vector2(
-            (ev.clientX / (window.innerWidth - 295)) * 2 - 1,
-            -(ev.clientY / (window.innerHeight - 47)) * 2 + 1
+            (ev.clientX / vp.w) * 2 - 1,
+            -(ev.clientY / vp.h) * 2 + 1
         );
         var ray = new THREE.Raycaster();
         ray.setFromCamera(ndc, S.camera);
@@ -399,7 +541,7 @@
     });
     els.pinModeBtn.addEventListener("click", function () {
         S.pinArmed = !S.pinArmed;
-        els.pinModeBtn.textContent = S.pinArmed ? "📍 点图面任意位置…（再点取消）" : "📍 点选 ROI（或按 K 对准星）";
+        els.pinModeBtn.textContent = S.pinArmed ? "点图面任意位置…（再点取消）" : "点选 ROI（或按 K 对准星）";
     });
     els.clearPinBtn.addEventListener("click", function () {
         S.roi = null; S.tracker.reset();
@@ -410,6 +552,7 @@
         set_idx(S.idx);
     });
     els.resetTrackBtn.addEventListener("click", function () { S.tracker.reset(); status("平滑已重置"); });
+    els.pipeOn.addEventListener("change", build_static_background);
     els.roiR.addEventListener("input", function () { els.roiRVal.textContent = parseFloat(els.roiR.value).toFixed(2) + " m"; });
 
     window.addEventListener("keydown", function (ev) {
