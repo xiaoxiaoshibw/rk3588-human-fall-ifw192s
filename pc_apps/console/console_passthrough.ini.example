@@ -1,0 +1,16 @@
+; console_passthrough.ini — Console.exe 源码旁路配置模板（本文件入库存档）
+;
+; 用法：复制为 dist/console_passthrough.ini（与 Console.exe 同目录），
+; 把 replay_dir 填成本机 pc_apps/human_replay 的绝对路径。
+; dist/console_passthrough.ini 被 .gitignore 忽略，请勿提交真实路径。
+;
+; 优先级：valid 环境变量 INNO_HUMAN_REPLAY_DIR → valid 本 ini → PyInstaller 内嵌。
+; 配置失效时启动器打一条 WARN 并自动 fallback，不会启动失败。
+
+[human_replay]
+
+; Absolute path to pc_apps/human_replay.
+; Example:
+; replay_dir=D:\Code\ldiar\pc_apps\human_replay
+
+replay_dir=

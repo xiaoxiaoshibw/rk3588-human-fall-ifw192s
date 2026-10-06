@@ -10,6 +10,7 @@ pywebview 一行起窗口；UI 复用 console.html 单文件，零重复维护�
 启动：python console_gui.py  （或根目录 open_console.bat）
 依赖：pip install pywebview
 """
+import configparser
 import http.server
 import os
 import runpy
@@ -31,13 +32,81 @@ def _shell_url(port):
     return "console.html?replay_port=%d" % port
 
 
+def _is_valid_source_dir(d):
+    """源码目录最小校验：目录存在 + 至少含 human_replay_lib.py 与 human_detect.py。"""
+    if not d or not os.path.isdir(d):
+        return False
+    for required in ("human_replay_lib.py", "human_detect.py"):
+        if not os.path.isfile(os.path.join(d, required)):
+            return False
+    return True
+
+
+def _read_passthrough_ini():
+    """读取 console_passthrough.ini（与 exe 同目录），返回 replay_dir 或 None。
+
+    只认 [human_replay] replay_dir 一个键（模板见仓库内 console_passthrough.ini.example）。
+    ini 不存在→静默 None；存在但格式错/键缺失/目录无效→各打一条 ASCII WARN
+    后返回 None，不 raise，让 _replay_dir() 继续 fallback PACKAGED。
+    """
+    if not getattr(sys, "frozen", False):
+        return None  # 源码跑（python console_gui.py）时跳过 ini，直接用平级仓内目录
+    ini_path = os.path.join(os.path.dirname(os.path.abspath(sys.executable)),
+                            "console_passthrough.ini")
+    if not os.path.isfile(ini_path):
+        return None
+    parser = configparser.ConfigParser()
+    try:
+        parser.read(ini_path, encoding="utf-8-sig")
+    except configparser.Error as exc:
+        print("human_replay INI ignored: bad format (%s)" % exc)
+        return None
+    try:
+        src = parser.get("human_replay", "replay_dir").strip()
+    except (configparser.NoSectionError, configparser.NoOptionError):
+        print("human_replay INI ignored: no [human_replay] replay_dir key")
+        return None
+    if not src:
+        print("human_replay INI ignored: replay_dir empty")
+        return None
+    src = os.path.abspath(os.path.expandvars(os.path.expanduser(src)))
+    if not os.path.isdir(src):
+        print("human_replay INI ignored: directory not found (%s)" % src)
+        return None
+    if not _is_valid_source_dir(src):
+        print("human_replay INI ignored: missing human_replay_lib.py / human_detect.py (%s)" % src)
+        return None
+    return src
+
+
 def _replay_dir():
-    """human_replay 目录：冻结时在 _MEIPASS 下；源码运行时与 console/ 平级（pc_apps/）。"""
+    """返回 (source_dir, origin)：human_replay 目录与其来源标记。
+
+    优先级（配置存在且**有效**才生效，失效自动掉进下一档）：
+      1. valid ENV  INNO_HUMAN_REPLAY_DIR
+      2. valid INI  console_passthrough.ini 的 [human_replay] replay_dir
+      3. PACKAGED   PyInstaller _MEIPASS 内嵌；源码运行时退化为仓内平级目录
+    """
+    env_dir = os.environ.get("INNO_HUMAN_REPLAY_DIR", "").strip()
+    if env_dir:
+        env_dir = os.path.abspath(os.path.expandvars(os.path.expanduser(env_dir)))
+        if not os.path.isdir(env_dir):
+            print("human_replay ENV ignored: directory not found (%s)" % env_dir)
+        elif not _is_valid_source_dir(env_dir):
+            print("human_replay ENV ignored: missing human_replay_lib.py / human_detect.py (%s)" % env_dir)
+        else:
+            return env_dir, "ENV"
+
+    ini_dir = _read_passthrough_ini()
+    if ini_dir:
+        return ini_dir, "INI"
+
+    # 冻结：_MEIPASS 下打包内 human_replay；源码运行：console/ 平级
     for d in (os.path.join(HERE, "human_replay"),
               os.path.join(os.path.dirname(HERE), "human_replay")):
-        if os.path.isfile(os.path.join(d, "human_replay_lib.py")):
-            return d
-    return os.path.join(HERE, "human_replay")
+        if _is_valid_source_dir(d):
+            return d, "PACKAGED"
+    return os.path.join(HERE, "human_replay"), "PACKAGED"
 
 
 def _start_replay_server():
@@ -45,7 +114,7 @@ def _start_replay_server():
 
     不用其 main()：main 会 webbrowser.open 弹浏览器，而服务由控制台 iframe 消费。
     """
-    replay_dir = _replay_dir()
+    replay_dir, origin = _replay_dir()
     sys.path.insert(0, replay_dir)
     m = runpy.run_path(os.path.join(replay_dir, "human_replay_lib.py"))
     # 仓内 exe 与源码共用捕获目录；移动版的数据放 exe 旁，不依赖快捷方式 cwd。
@@ -100,6 +169,11 @@ if __name__ == "__main__":
         import multiprocessing
         multiprocessing.freeze_support()
 
+    replay_dir, origin = _replay_dir()
+    mode = "SOURCE_BYPASS" if origin in ("ENV", "INI") else "PYINSTALLER"
+    print("human_replay source=%s" % origin)
+    print("resolved root=%s" % replay_dir)
+    print("mode=%s" % mode)
     replay_port = _start_replay_server()
     _suppress_edge_save_bubble()
     webview.create_window(
