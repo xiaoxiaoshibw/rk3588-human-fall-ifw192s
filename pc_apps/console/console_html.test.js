@@ -51,11 +51,12 @@ function makeWindow(locationHref) {
   };
 }
 
-function loadShell(href) {
+function loadShell(href, fetchImpl) {
   const win = makeWindow(href || 'http://127.0.0.1/console.html?replay_port=8901');
   win.URLSearchParams = URLSearchParams;
   win.Number = Number;
   win.URL = URL;
+  win.fetch = () => fetchImpl || okFetch;
   vm.createContext(win);
   vm.runInContext(SRC, win, { filename: 'console.html<script>' });
   if (typeof win.open !== 'function') {
@@ -70,6 +71,10 @@ function t(name, fn) {
   catch (e) { failed++; console.log('FAIL ' + name + '\n  ' + e.message); }
 }
 function eq(a, b, msg) { if (a !== b) throw new Error(`${msg || '不等'}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`); }
+
+// 探活替身：同步 thenable，用例保持同步；真 Promise 的 resolve/reject 等价
+const okFetch = { then(onOk) { onOk({ type: 'opaque' }); } };
+const failFetch = { then(_, onErr) { onErr(new TypeError('Failed to fetch')); } };
 
 t('内联脚本能 parse 并转移出 <script> 块', () => {
   if (SRC.length < 500) throw new Error('脚本太短，疑似正则不匹配');
@@ -91,76 +96,48 @@ t('APPS[2] fail 文案 = 当前不在内网', () => {
   eq(APPS[3].fail, undefined);
 });
 
-t('onload 时若 iframe 有可读 location.host → 视为加载成功，不弹提示', () => {
-  const win = loadShell();
-  registry.f.contentWindow = { location: { host: '192.168.3.125:8090' } };
+t('探活成功 → 直接嵌 iframe，不弹提示', () => {
+  const win = loadShell(null, okFetch);
   vm.runInContext('open(2)', win);
   eq(registry.err.hidden, true, '应无提示');
   eq(registry.f.hidden, false, 'iframe 应可见');
+  eq(registry.f.src, 'http://192.168.3.125:8090/', '探活成功后才设 src');
 });
 
-t('onload 时 iframe location 不可读（跨域错误页）→ showErr 弹提示', () => {
-  const win = loadShell();
-  registry.f.contentWindow = { get location() { throw new Error('cross-origin'); } };
-  registry.err.hidden = true;
+t('探活失败（不在内网）→ 弹提示并隐藏 iframe', () => {
+  const win = loadShell(null, failFetch);
   vm.runInContext('open(2)', win);
-  if (typeof registry.f.onload !== 'function') throw new Error('f.onload 未挂（src 赋值前应先挂 onload）');
-  registry.f.onload();
   eq(registry.err.hidden, false, '应弹提示');
   eq(registry.f.hidden, true, 'iframe 应隐藏');
   eq(registry.errmsg.textContent, '当前不在内网，无法连接板端 WebUI');
   eq(registry.errurl.textContent, 'http://192.168.3.125:8090');
 });
 
-t('同一导航 onload 重入 → navBan 防重入，不重复弹', () => {
-  const win = loadShell();
-  registry.f.contentWindow = { get location() { throw new Error('cross-origin'); } };
-  registry.err.hidden = true;
-  vm.runInContext('open(2)', win);
-  registry.f.onload();
-  eq(registry.err.hidden, false);        // 首次 fail 已弹
-  registry.err.hidden = false;           // 保持触发态可观察（f.onload 已挂，再点也不会再写）
-  registry.errmsg.textContent = '';      // 清手动状态，再触发一次看是否被二次写
-  registry.f.onload();
-  eq(registry.err.hidden, false, '重入不重复弹');
-  eq(registry.errmsg.textContent, '', '重入不重写文案');
-});
-
-t('无 fail 文案的本地应用即使 location 抛错也不弹提示', () => {
-  const win = loadShell();
-  registry.f.contentWindow = { get location() { throw new Error('cross-origin'); } };
-  registry.err.hidden = true;
+t('无 fail 文案的本地应用不探活，直接嵌', () => {
+  const win = loadShell(null, { then() { throw new Error('本地应用不应探活'); } });
   vm.runInContext('open(0)', win);  // 数据标注（本地服务）
   eq(registry.err.hidden, true, '本地应用永不弹提示');
+  eq(registry.f.src, 'http://127.0.0.1:8901/annotator.html');
 });
 
-t('同一导航内 fail 后再 load 成功页（host 可读）→ 自动收起提示', () => {
-  const win = loadShell();
-  registry.f.contentWindow = { get location() { throw new Error('cross-origin'); } };
-  registry.err.hidden = true;
+t('重进同应用不重载（保留页内状态）', () => {
+  let probes = 0;
+  const win = loadShell(null, { then(onOk) { probes++; onOk({}); } });
   vm.runInContext('open(2)', win);
-  registry.f.onload();
-  eq(registry.err.hidden, false, '已弹提示');
-  // 用户点重试/或重新点卡片 → open(i) 里 err.hidden=true f.hidden=false
-  // 恢复内网后 load 成功 → host 可读 → 不弹
-  registry.err.hidden = true; registry.f.hidden = false;
-  registry.f.contentWindow = { location: { host: '192.168.3.125:8090' } };
-  registry.f.onload();
-  eq(registry.err.hidden, true, '恢复内网后 onload 自动收起');
-  eq(registry.f.hidden, false, 'iframe 恢复可见');
+  vm.runInContext('open(2)', win);
+  eq(probes, 1, '同应用只探活一次');
 });
 
-t('点击「重试」→ 清 navBan + 复位 iframe src', () => {
-  const win = loadShell();
-  registry.f.contentWindow = { get location() { throw new Error('cross-origin'); } };
-  registry.err.hidden = true;
+t('「重试」重新探活：先失败后成功 → 收起提示并嵌板端', () => {
+  let n = 0;
+  const win = loadShell(null, { then(onOk, onErr) { (n++ ? onOk : onErr)({}); } });
   vm.runInContext('open(2)', win);
-  registry.f.src = '';           // 假设错误后 src 被清空
+  eq(registry.err.hidden, false, '首次应弹提示');
   if (typeof registry.retry.onclick !== 'function') throw new Error('retry.onclick 未挂');
   registry.retry.onclick.call({});
   eq(registry.err.hidden, true);
   eq(registry.f.hidden, false);
-  eq(registry.f.src, 'http://192.168.3.125:8090/', '重试应重新指向板端');
+  eq(registry.f.src, 'http://192.168.3.125:8090/', '重试成功后应嵌板端');
 });
 
 t('CSS 回归：#err 在 hidden 时必须 display:none（防 #err{display:flex} 盖掉 [hidden]）', () => {
@@ -170,15 +147,8 @@ t('CSS 回归：#err 在 hidden 时必须 display:none（防 #err{display:flex} 
   if (!/#err\[hidden\]\{display:none/.test(css)) throw new Error('缺 #err[hidden]{display:none}，错误视图会永远盖住 iframe');
 });
 
-t('location.host 可读但为空字符串（错误页特征）→ 也弹提示', () => {
-  const win = loadShell();
-  registry.f.contentWindow = { location: { host: '' } };
-  registry.err.hidden = true;
-  vm.runInContext('open(2)', win);
-  registry.f.onload();
-  eq(registry.err.hidden, false, '空 host 应视为错误页');
-  eq(registry.f.hidden, true);
-  eq(registry.errmsg.textContent, '当前不在内网，无法连接板端 WebUI');
+t('回归：不再靠读 iframe location 判断（跨域必抛 SecurityError，成功/失败无法区分）', () => {
+  if (/contentWindow\.location/.test(SRC)) throw new Error('又读回了跨域 location，板端在线时也会误报「不在内网」');
 });
 
 console.log(`\n${passed} passed, ${failed} failed`);

@@ -323,7 +323,7 @@
         var w = window.innerWidth, h = window.innerHeight;
         S.renderer = new THREE.WebGLRenderer({ antialias: true });
         S.renderer.setSize(w, h);
-        S.renderer.setClearColor(0x101416);
+        S.renderer.setClearColor(0x101114);
         document.getElementById("view").appendChild(S.renderer.domElement);
 
         S.scene = new THREE.Scene();
@@ -331,10 +331,10 @@
         S.cam_persp = S.camera;
         S.axes = new THREE.AxesHelper(1.2);                          // 雷达原点三轴
         S.scene.add(S.axes);
-        S.grid = new THREE.GridHelper(40, 40, 0x335533, 0x223322); // 1m 网格
+        S.grid = new THREE.GridHelper(40, 40, 0x2e3238, 0x1f2226); // 1m 网格
         S.grid.rotation.x = Math.PI / 2;                              // 从 XZ → XY 平面（z-up 对齐）
         S.scene.add(S.grid);
-        S.grid_fine = new THREE.GridHelper(40, 400, 0x244024, 0x182818);  // 0.1m 细格
+        S.grid_fine = new THREE.GridHelper(40, 400, 0x24272c, 0x1a1c20);  // 0.1m 细格
         S.grid_fine.rotation.x = Math.PI / 2;
         S.grid_fine.visible = false;  // 默认关
         S.scene.add(S.grid_fine);

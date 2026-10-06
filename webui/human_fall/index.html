@@ -4,51 +4,59 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IFW192S 雷达实时可视化 · 人体跌倒检测</title>
+<link rel="stylesheet" href="../ui.css">
 <style>
-  :root { --bg:#0b0e14; --panel:#11151f; --line:#1e2634; --txt:#c9d4e3; --dim:#6b7a90; --ok:#3ad07a; --warn:#e8b23c; --err:#e05252; }
-  * { box-sizing:border-box; margin:0; padding:0; }
+  /* 页面布局样式；设计 token 见 ../ui.css */
+  * { margin:0; padding:0; }
   html,body { height:100%; }
-  body { background:var(--bg); color:var(--txt); font:13px/1.5 "Segoe UI","Microsoft YaHei",sans-serif; display:flex; flex-direction:column; overflow:hidden; }
-  header { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--panel); border-bottom:1px solid var(--line); flex-wrap:wrap; }
-  header .title { font-weight:600; white-space:nowrap; }
-  .dot { width:9px; height:9px; border-radius:50%; background:var(--err); flex:none; }
-  .dot.on { background:var(--ok); } .dot.reconn { background:var(--warn); }
-  #url { flex:1 1 210px; min-width:180px; background:#0d1119; color:var(--txt); border:1px solid var(--line); border-radius:4px; padding:4px 8px; }
-  button { background:#1a2233; color:var(--txt); border:1px solid var(--line); border-radius:4px; padding:4px 12px; cursor:pointer; }
-  button:hover { background:#223050; }
-  button.recbtn { color:var(--err); }
-  button.recbtn.recording { background:#5a1f24; border-color:var(--err); color:#fff; }
-  #stats { display:flex; gap:14px; flex-wrap:wrap; color:var(--dim); font-size:12px; }
-  #stats b { color:var(--txt); font-weight:600; }
+  body { display:flex; flex-direction:column; overflow:hidden; }
+  header { display:flex; align-items:center; gap:10px; padding:0 12px; height:var(--h-topbar);
+           background:var(--bg-sidebar); border-bottom:1px solid var(--border-subtle); flex-wrap:nowrap; overflow:hidden; }
+  header .title { font-weight:600; font-size:13px; white-space:nowrap; }
+  .dot { width:8px; height:8px; border-radius:50%; background:var(--danger); flex:none; }
+  .dot.on { background:var(--success); } .dot.reconn { background:var(--warning); }
+  #url { flex:0 1 240px; min-width:160px; height:26px; }
+  #stats { display:flex; gap:12px; flex-wrap:nowrap; color:var(--text-muted); font-size:11px; overflow:hidden; margin-left:auto; }
+  #stats b { color:var(--text-secondary); font-weight:500; font-variant-numeric:tabular-nums; }
+  button.recbtn { color:var(--danger); background:transparent; }
+  button.recbtn:hover { background:var(--danger-soft); }
+  button.recbtn.recording { background:var(--danger-soft); border-color:var(--danger); color:var(--danger); }
   main { flex:1; display:flex; min-height:0; }
-  #view3d { flex:1; position:relative; min-width:0; }
+  #view3d { flex:1; position:relative; min-width:0; background:var(--bg-inset); }
   #gl { width:100%; height:100%; display:block; touch-action:none; }
-  #overlay { position:absolute; left:10px; top:8px; color:var(--dim); font-size:12px; text-shadow:0 1px 2px #000; pointer-events:none; }
-  #view3d .tools { position:absolute; right:10px; top:8px; display:flex; gap:6px; align-items:center; }
-  #view3d .tools label { color:var(--dim); font-size:12px; }
-  aside { width:320px; flex:none; background:var(--panel); border-left:1px solid var(--line); display:flex; flex-direction:column; min-height:0; overflow-y:auto; }
-  aside section { padding:8px 10px; border-bottom:1px solid var(--line); }
-  aside h3 { font-size:12px; color:var(--dim); font-weight:600; margin-bottom:4px; }
-  aside canvas { width:100%; height:96px; display:block; background:#0d1119; border-radius:4px; }
-  table.kv { width:100%; border-collapse:collapse; font-size:12px; }
-  table.kv td { padding:2px 4px; border-bottom:1px dashed var(--line); }
-  table.kv td:last-child { text-align:right; font-variant-numeric:tabular-nums; }
-  .bad { color:var(--err); } .good { color:var(--ok); }
-  #log { font-size:11px; color:var(--dim); max-height:110px; overflow-y:auto; }
-  #log div { border-bottom:1px dashed var(--line); padding:1px 0; word-break:break-all; }
-  #log .l-warn { color:var(--warn); } #log .l-err { color:var(--err); }
+  #overlay { position:absolute; left:10px; top:8px; color:var(--text-muted); font-size:11.5px; font-family:var(--font-mono);
+             text-shadow:0 1px 2px #000; pointer-events:none; }
+  #view3d .tools { position:absolute; right:10px; top:8px; display:flex; gap:6px; align-items:center; padding:5px 7px;
+                   background:rgba(26,27,31,.92); border:1px solid var(--border-subtle); border-radius:var(--r-ctl); }
+  #view3d .tools label { color:var(--text-muted); font-size:11px; }
+  #view3d .tools button { height:24px; padding:0 8px; font-size:11.5px; }
+  aside { width:320px; flex:none; background:var(--bg-sidebar); border-left:1px solid var(--border-subtle);
+          display:flex; flex-direction:column; min-height:0; overflow-y:auto; }
+  aside section { padding:10px 12px; border-bottom:1px solid var(--border-subtle); }
+  aside h3 { font-size:11px; color:var(--text-muted); font-weight:600; letter-spacing:1px;
+             text-transform:uppercase; margin-bottom:6px; }
+  aside canvas { width:100%; height:96px; display:block; background:var(--bg-inset); border-radius:var(--r-ctl); }
+  table.kv td { border-bottom:1px dashed var(--border-subtle); }
+  table.kv td:last-child { color:var(--text-secondary); }
+  .bad { color:var(--danger); } .good { color:var(--success); }
+  #log { font-size:11px; color:var(--text-muted); max-height:110px; overflow-y:auto;
+         font-family:var(--font-mono); }
+  #log div { border-bottom:1px dashed var(--border-subtle); padding:1px 0; word-break:break-all; }
+  #log .l-warn { color:var(--warning); } #log .l-err { color:var(--danger); }
+  @media (max-width:1100px){ #stats{display:none;} }
   @media (max-width:760px){ main{flex-direction:column;} aside{width:100%; height:42%;} }
   /* ---- 人体跌倒检测页面 ---- */
   #hfOverlay { position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; }
-  #hfBanner { position:absolute; left:10px; bottom:8px; color:var(--warn); font-size:11px;
+  #hfBanner { position:absolute; left:10px; bottom:8px; color:var(--warning); font-size:11px;
     text-shadow:0 1px 2px #000; pointer-events:none; }
   #view3d.selecting { cursor:crosshair; }
   #view3d.selecting #gl { cursor:crosshair; }
-  .hfpill { display:inline-block; padding:0 5px; border-radius:8px; font-size:11px; border:1px solid var(--line); }
-  .hf-cert { color:var(--err); } .hf-susp { color:var(--warn); }
-  .hf-unk { color:var(--dim); } .hf-ok { color:var(--ok); }
-  #hfCands div, #hfEvents div { border-bottom:1px dashed var(--line); padding:2px 0; cursor:pointer; }
-  #hfCands div:hover { background:#1a2233; }
+  .hfpill { display:inline-block; padding:0 5px; border-radius:3px; font-size:11px; border:1px solid var(--border-subtle); }
+  .hf-cert { color:var(--danger); } .hf-susp { color:var(--warning); }
+  .hf-unk { color:var(--text-muted); } .hf-ok { color:var(--success); }
+  #hfCands div, #hfEvents div { border-bottom:1px dashed var(--border-subtle); padding:3px 0; cursor:pointer;
+    font-variant-numeric:tabular-nums; }
+  #hfCands div:hover { background:var(--bg-elevated); }
 </style>
 </head>
 <body>

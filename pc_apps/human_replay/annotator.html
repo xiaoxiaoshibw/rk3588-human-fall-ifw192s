@@ -2,32 +2,37 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>GL-E02 ROI 标注 v11 — 旋转+高度滑杆</title>
+<title>数据标注 · LiDAR Workspace</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ui.css">
 <style>
-  html, body { margin:0; height:100%; overflow:hidden; background:#0b0e10;
-               color:#cfd8dc; font:13px/1.4 Consolas, "Microsoft YaHei", monospace; }
+  html, body { margin:0; height:100%; overflow:hidden; background:var(--bg-inset);
+               color:var(--text-primary); font:13px/1.5 var(--font-ui); }
   #view { position:absolute; inset:0; }
-  #hud  { position:absolute; top:8px; left:8px; padding:6px 10px;
-          background:rgba(0,0,0,.6); border-radius:4px; max-width:560px; }
-  #info { position:absolute; top:8px; right:8px; padding:6px 10px;
-          background:rgba(0,0,0,.6); border-radius:4px; text-align:right;
-          color:#9ccc9c; font-size:11px; max-width:380px; }
-  #ctl  { position:absolute; bottom:8px; left:8px; padding:6px 10px;
-          background:rgba(0,0,0,.6); border-radius:4px;
-          display:flex; gap:8px; align-items:center; flex-wrap:wrap; max-width:95vw; }
-  button { background:#1d262b; color:#cfd8dc; border:1px solid #37474f;
-           border-radius:3px; padding:4px 12px; cursor:pointer; }
-  button:hover { background:#26333a; }
-  button.on { background:#2a4d2a; border-color:#66bb6a; color:#b3e5b3; }
-  label { display:inline-flex; gap:4px; align-items:center; white-space:nowrap; }
-  #hVal { color:#ffd54f; min-width:64px; display:inline-block; }
-  #coordHud { position:absolute; bottom:64px; right:8px; padding:6px 10px;
-              background:rgba(0,0,0,.65); border-radius:4px;
-              color:#80d8ff; font-size:13px; white-space:pre; pointer-events:none; }
-  #selHud { position:absolute; top:70px; right:8px; padding:6px 10px;
-            background:rgba(0,0,0,.65); border-radius:4px;
-            color:#ffd54f; font-size:12px; white-space:pre;
+  #hud  { position:absolute; top:10px; left:10px; padding:6px 10px; max-width:560px;
+          background:rgba(26,27,31,.88); border:1px solid var(--border-subtle); border-radius:var(--r-ctl);
+          color:var(--text-secondary); font-size:12px; }
+  #hud b { color:var(--text-primary); }
+  #info { position:absolute; top:10px; right:10px; padding:6px 10px;
+          background:rgba(26,27,31,.88); border:1px solid var(--border-subtle); border-radius:var(--r-ctl);
+          text-align:right; color:var(--text-secondary); font-size:11.5px; max-width:380px; }
+  #ctl  { position:absolute; bottom:10px; left:10px; padding:6px 8px;
+          background:rgba(26,27,31,.92); border:1px solid var(--border-subtle); border-radius:var(--r-ctl);
+          display:flex; gap:6px; align-items:center; flex-wrap:wrap; max-width:95vw; }
+  #ctl button { height:26px; padding:0 10px; font-size:11.5px; background:transparent;
+                border-color:transparent; color:var(--text-secondary); }
+  #ctl button:hover { background:var(--bg-elevated); color:var(--text-primary); }
+  #ctl button.on { background:var(--accent-soft); border-color:transparent; color:var(--accent); font-weight:600; }
+  label { display:inline-flex; gap:4px; align-items:center; white-space:nowrap;
+          color:var(--text-muted); font-size:11.5px; }
+  #hVal { color:var(--text-primary); min-width:70px; display:inline-block;
+          font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+  #coordHud { position:absolute; bottom:64px; right:10px; padding:5px 10px;
+              background:rgba(26,27,31,.88); border:1px solid var(--border-subtle); border-radius:var(--r-ctl);
+              color:var(--text-secondary); font:12px var(--font-mono); white-space:pre; pointer-events:none; }
+  #selHud { position:absolute; top:70px; right:10px; padding:5px 10px;
+            background:rgba(26,27,31,.88); border:1px solid var(--border-subtle); border-radius:var(--r-ctl);
+            color:var(--warning); font:11.5px var(--font-mono); white-space:pre;
             display:none; user-select:text; -webkit-user-select:text; }
 </style>
 </head>

@@ -5,7 +5,7 @@
     const validationMode = document.body.dataset.workbench === "validation";
     const apiBase = validationMode ? "/api/validation" : "/api/leveling";
     const colors = [0x95a9b8, 0xffcb75, 0x7fceff, 0xe39eff, 0x7be1aa];
-    let state = {generation: 0, source: null, meta: null, raw: null, job: null, report: null, busy: false, loading:false, floorIdentified:false, reference:null};
+    let state = {generation: 0, source: null, meta: null, raw: null, job: null, report: null, busy: false, loading:false, floorIdentified:false, reference:null, running:null};
     let bounds = [0, 4, -1.5, 1.5], drag = null, playing = false;
     let rois = [[1.04,1.75,-.93,-.45],[1.94,2.40,-.94,.07],[1.32,1.76,-.38,.20],[2.64,3.31,-.57,.19]];
     const viewers = [];
@@ -14,8 +14,8 @@
     ["rawView", "levelView"].forEach(id => {
         const renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); $(id).appendChild(renderer.domElement);
-        const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0c1219);
-        const grid = new THREE.GridHelper(10,20,0x446078,0x253543); grid.rotation.x = Math.PI/2; scene.add(grid);
+        const scene = new THREE.Scene(); scene.background = new THREE.Color(0x101114);
+        const grid = new THREE.GridHelper(10,20,0x394048,0x22252a); grid.rotation.x = Math.PI/2; scene.add(grid);
         scene.add(new THREE.AxesHelper(1));
         viewers.push({renderer, scene, host: $(id), points: null});
     });
@@ -50,6 +50,8 @@
     function enable() {
         $("run").disabled = state.busy || state.loading || !state.raw || !$("confirmed").checked || $("basis").value.trim().length < 2;
         $("runAuto").disabled = state.busy || state.loading || !state.raw;  /* P03：与人工确认解耦 */
+        $("run").classList.toggle("loading", state.running === "run");
+        $("runAuto").classList.toggle("loading", state.running === "auto");
         ["session","refresh"].forEach(id => $(id).disabled = state.busy);
         ["pitch","roll","height","confirmed","basis"].forEach(id => $(id).disabled = state.busy || state.loading);
         document.querySelectorAll("#regions input").forEach(e => e.disabled=state.busy || state.loading);
@@ -77,8 +79,8 @@
     function mapToCanvas(x,y) {const c=$("roi");return [(x-bounds[0])/(bounds[1]-bounds[0])*c.width,(bounds[3]-y)/(bounds[3]-bounds[2])*c.height];}
     function mapPoint(ev) {const box=$("roi").getBoundingClientRect();return [bounds[0]+(ev.clientX-box.left)/box.width*(bounds[1]-bounds[0]), bounds[3]-(ev.clientY-box.top)/box.height*(bounds[3]-bounds[2])];}
     function drawFrame() {
-        const canvas=$("roi"), ctx=canvas.getContext("2d"); ctx.fillStyle="#0c1219";ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.strokeStyle="#263d50";ctx.fillStyle="#849bb0";ctx.font="12px sans-serif";
+        const canvas=$("roi"), ctx=canvas.getContext("2d"); ctx.fillStyle="#101114";ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.strokeStyle="#26282d";ctx.fillStyle="#8a8f98";ctx.font="12px sans-serif";
         for(let x=Math.ceil(bounds[0]);x<=bounds[1];x++){let a=mapToCanvas(x,bounds[2]),b=mapToCanvas(x,bounds[3]);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();ctx.fillText(x+"m",a[0]+3,canvas.height-5);}
         for(let y=Math.ceil(bounds[2]);y<=bounds[3];y++){let a=mapToCanvas(bounds[0],y),b=mapToCanvas(bounds[1],y);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();ctx.fillText(y+"m",3,a[1]-3);}
         if(!state.raw)return;
@@ -110,15 +112,15 @@
             if(code)groups[code-1].push(n[2]);if(i%step===0)sample.push({p:n,code});
         }
         ["heightXZ","heightYZ"].forEach((id,axis)=>{
-            const c=$(id),cx=c.getContext("2d");cx.fillStyle="#0c1219";cx.fillRect(0,0,c.width,c.height);
+            const c=$(id),cx=c.getContext("2d");cx.fillStyle="#101114";cx.fillRect(0,0,c.width,c.height);
             if(!sample.length)return;
             let lo=Infinity,hi=-Infinity,zlo=Infinity,zhi=-Infinity;
             sample.forEach(q=>{lo=Math.min(lo,q.p[axis]);hi=Math.max(hi,q.p[axis]);zlo=Math.min(zlo,q.p[2]);zhi=Math.max(zhi,q.p[2]);});
             const zs=Math.max(.2,zhi-zlo),xs=Math.max(.2,hi-lo),map=(x,z)=>[35+(x-lo)/xs*(c.width-45),c.height-25-(z-zlo)/zs*(c.height-40)];
-            cx.strokeStyle="#29445a";cx.fillStyle="#95adc1";cx.font="12px sans-serif";
+            cx.strokeStyle="#26282d";cx.fillStyle="#8a8f98";cx.font="12px sans-serif";
             for(let z=Math.ceil(zlo);z<=zhi;z++){const y=map(lo,z)[1];cx.beginPath();cx.moveTo(35,y);cx.lineTo(c.width,y);cx.stroke();cx.fillText(z+"m",2,y);}
-            sample.forEach(q=>{const at=map(q.p[axis],q.p[2]);cx.fillStyle=q.code?"#"+colors[q.code].toString(16):"#687c8d";cx.fillRect(at[0],at[1],q.code?2:1,q.code?2:1);});
-            cx.fillStyle="#b6c8d8";cx.fillText((axis?"Y":"X")+" (m)",c.width-55,c.height-5);cx.fillText("名义 Z (m)",40,14);
+            sample.forEach(q=>{const at=map(q.p[axis],q.p[2]);cx.fillStyle=q.code?"#"+colors[q.code].toString(16):"#4a4e56";cx.fillRect(at[0],at[1],q.code?2:1,q.code?2:1);});
+            cx.fillStyle="#a0a3ab";cx.fillText((axis?"Y":"X")+" (m)",c.width-55,c.height-5);cx.fillText("名义 Z (m)",40,14);
         });
         const tbody=$("heightStats").tBodies[0];tbody.replaceChildren();
         groups.forEach((g,i)=>{const row=tbody.insertRow();let min=null,max=null;g.forEach(z=>{min=min===null?z:Math.min(min,z);max=max===null?z:Math.max(max,z);});["#"+(i+1),g.length,min==null?"—":min.toFixed(3),max==null?"—":max.toFixed(3),min==null?"—":(max-min).toFixed(3)].forEach(v=>row.insertCell().textContent=v);});
@@ -174,6 +176,7 @@
             $("frame").max=state.meta.frames.length-1;$("frame").value=0;$("play").disabled=false;
             $("sourceInfo").textContent=sid+" · "+state.meta.frames.length+"帧 · "+state.meta.total_points.toLocaleString()+"点";
             drawFrame();enable();note("已载入。核对四区并填写依据后，点击配平。");
+            if(window.UI)UI.toast("会话已载入",{kind:"pass",sub:sid+" · "+state.meta.frames.length+"帧"});
             if(validationMode){
                 note("读取该会话的已保存评估…");
                 const saved=await fetch(apiBase+"/latest?sid="+encodeURIComponent(sid));
@@ -186,7 +189,7 @@
                 rois=config.regions.map(r=>r.slice());regionInputs();$("basis").value=config.basis;
                 showReport(job);
             }
-        }catch(e){if(token===state.generation)note(e.message,true);}finally{if(token===state.generation){state.loading=false;enable();}}
+        }catch(e){if(token===state.generation){note(e.message,true);if(window.UI)UI.toast(e.message,{kind:"fail"});}}finally{if(token===state.generation){state.loading=false;enable();}}
     }
     $("session").onchange=loadSession;
     const fixed=(v,d=3)=>v==null?"—":Number(v).toFixed(d);
@@ -215,9 +218,10 @@
         const preview=state.floorIdentified?(r.recommended||(validationMode&&Object.keys(r.estimators).find(n=>r.estimators[n].valid))||"nominal"):"nominal";
         $("report").textContent=JSON.stringify(r,null,2);$("method").value=preview;drawFrame();
         note((job.persisted?"已恢复保存结果。":"评估完成。")+"拟合 "+r.fit_point_count.toLocaleString()+" 点；留出帧 "+r.holdout_ordinals.join(", ")+"。"+(!Object.keys(job.artifacts).length?" 所有方法拒绝，仅生成诊断报告。":"配平数据可下载。")+(validationMode&&!r.recommended&&preview!=="nominal"?"当前仅预览通过的 "+preview.toUpperCase()+"；三法未一致，不作自动推荐。":""));
+        if(window.UI)UI.toast(job.persisted?"已恢复保存结果":"评估完成",{kind:r.recommended?"pass":"warn",sub:r.recommended?r.recommended.toUpperCase()+" · 推荐":"无自动推荐"});
     }
     $("run").onclick=async()=>{
-        state.busy=true;drag=null;clearResult();const jobToken=state.generation;enable();note("提交本地配平任务…");
+        state.busy=true;state.running="run";drag=null;clearResult();const jobToken=state.generation;enable();note("提交本地配平任务…");
         try{
             const started=await api(apiBase+"/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),regions:rois.map(r=>r.slice()),ground_confirmed:$("confirmed").checked,basis:$("basis").value}});
             while(jobToken===state.generation){
@@ -225,11 +229,11 @@
                 note(job.message);if(job.state==="failed")throw Error(job.error);if(job.state==="ready"){showReport(job);break;}
                 await new Promise(resolve=>setTimeout(resolve,700));
             }if(validationMode)await refresh();
-        }catch(e){if(jobToken===state.generation)note(e.message,true);}finally{state.busy=false;enable();}
+        }catch(e){if(jobToken===state.generation){note(e.message,true);if(window.UI)UI.toast(e.message,{kind:"fail"});}}finally{state.busy=false;state.running=null;enable();}
     };
     /* P03：算法自动找地面区域。与 run 共用同一 POST 与轮询；mode='auto' 服务端自算 regions。 */
     $("runAuto").onclick=async()=>{
-        state.busy=true;drag=null;clearResult();const jobToken=state.generation;enable();note("提交自动配平（算法找地面）…");
+        state.busy=true;state.running="auto";drag=null;clearResult();const jobToken=state.generation;enable();note("提交自动配平（算法找地面）…");
         rois=[];regionInputs();drawFrame(); // no stale/default boxes if detection fails
         try{
             const started=await api(apiBase+"/run",{schema:1,sid:$("session").value,source:state.source,config:{pitch_deg:Number($("pitch").value),roll_deg:Number($("roll").value),physical_height_m:Number($("height").value),mode:"auto"}});
@@ -238,7 +242,7 @@
                 note(job.message);if(job.state==="failed")throw Error(job.error);if(job.state==="ready"){showReport(job);break;}
                 await new Promise(resolve=>setTimeout(resolve,700));
             }if(validationMode)await refresh();
-        }catch(e){if(jobToken===state.generation)note(e.message,true);}finally{state.busy=false;enable();}
+        }catch(e){if(jobToken===state.generation){note(e.message,true);if(window.UI)UI.toast(e.message,{kind:"fail"});}}finally{state.busy=false;state.running=null;enable();}
     };
     refresh().then(sessions=>{const sid=new URLSearchParams(location.search).get("sid")||(validationMode&&sessions[0]&&sessions[0].sid);if(sid){$("session").value=sid;loadSession();}}).catch(e=>note(e.message,true));
 })();
