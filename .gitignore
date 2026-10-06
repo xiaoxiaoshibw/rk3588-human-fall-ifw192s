@@ -12,7 +12,9 @@ __pycache__/
 *.db3
 
 # ML 训练数据集本体（约 643MB Blender+LiDAR 合成集），适配器见 sidequests/lidata_adapter
+# ML 支线 dormant/historical：只留 README/docs/.gitkeep；数据包、模型权重、训练产物不入库
 /ML/LI-DATA/
+/ML/models/
 
 # 发布/打包产物（exe 与 zip 由 build 流水线重建，不入库；源码与 spec 入库）
 /pc_apps/console/dist/
@@ -23,6 +25,13 @@ __pycache__/
 /_archive/
 /tmp_*/
 /tmp_gl_diag/
+
+# 人工文档收集（vendor 手册/文献/第三方仓库克隆，308MB 参考料，不入库）
+/文档收集（人工）/
+
+# 本地工具运行状态（mirasim 会话/调度、v2c 插件缓存）
+/.mirasim/
+/.v2c/
 
 # HF evidence 中间产物大二进制：保留在工作树做审计，git 只记 hash/摘要在 SUBMISSION/README
 # （不用 git-lfs；这些是从 captures/leveled/* 派生的，可用 14/15 号 SHA 复核，不需要进对象库）
