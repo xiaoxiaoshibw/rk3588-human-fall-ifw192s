@@ -5,6 +5,12 @@
 >
 > 创建：2026-10-02（Asia/Shanghai）。设计冻结：2026-10-02（用户两轮拍板后）。
 
+2026-10-06（三轮）用户判定 **W03-R3.2 跨会话 match audit = PASS**（归因修正：alignment 已证明重要——ICP 消掉 WD01 原始漏匹配 ~94%（0.854→0.991）；全文残余 ≠ matcher error，须在 known-static correspondence set 上归因）。`09_r32_summary.md` 已按评审修订（修订记录在文内）。**R3.3 controlled AB（离线，生产零改动）完成**：AABB（点到占用格盒距离 <0.12）有独立于 ICP 的收益——known-static ICP Δ+0.032、WD02 ICP Δ+0.051、WD01 ICP 0.994→1.000；干净人体 retention ≥97.7%；纯 containment 弱于 center；HP02 NOT_RUN。生产接入仍 **NOT AUTHORIZED**。[r5 证据](evidence/2026-10-06_hrw03_r5/14_r33_summary.md)；[R3.2 修订](evidence/2026-10-06_hrw03_r4/09_r32_summary.md)。
+
+2026-10-06（二轮）用户判定 **W03-R3.0 Static Leakage Audit = PASS（根因定位）**、同意停止 R2.6b 调参；WD01/WD02 金标锁定、新增 HP01–HP03 正样本门，[W03-R3 验收规范](W03_R3_ACCEPTANCE.md) 生效（**从 R3 起生产行为验收以 console leveled 管线为唯一权威口径，raw 仅诊断**）。判定记录：[11_user_verdict](evidence/2026-10-06_hrw03_r3/11_user_verdict.md)。**R3.1 reference builder 已交付**（离线 additive，未接 production）：[r4 证据](evidence/2026-10-06_hrw03_r4/04_summary.md)（203349 leveled：参考体素 5286、阈值 0.5 回收稀疏面 1632、同会话自吸收 0.9987、digest 复现一致；35 单测过）。下一步：R3.2 跨会话 leveled match audit（223757 vs 203349 reference）；未过 audit 不接 production。
+
+2026-10-06 用户登记《W01–W09 最终算法架构计划书》：[计划书](W01_W09_FINAL_ALGORITHM_PLAN.md)（仅记录 PLAN_RECORDED，不构成实施授权；W03 未冻结）。当前 W03-R2 动态背景链证据：[2026-10-06_hrw03_r1](evidence/2026-10-06_hrw03_r1/README.md)。
+
 ## 0. 目的与边界
 
 在板端远程控制采集 `/innolidar_points`（+IMU/设备状态）数据段，自动回传 PC，

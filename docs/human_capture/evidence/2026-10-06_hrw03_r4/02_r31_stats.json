@@ -1,0 +1,248 @@
+{
+ "sid": "cap_20261004_203349",
+ "generated": "2026-10-06T08:31:53.740Z",
+ "console_leveled": true,
+ "transform": {
+  "job": "c9712acad48c4fb7a78cb119c08d4cdb",
+  "transform_id": "5d8fd5c032f2b8131e5d5ef2027e0560605e9a7ba83376c55528b9c8edff6f03",
+  "R": [
+   [
+    0.8910582822387265,
+    0,
+    0.45388890452815644
+   ],
+   [
+    -0.023341496010013174,
+    0.9986768299427626,
+    0.04582318080937846
+   ],
+   [
+    -0.4532883323203725,
+    -0.051425570832752565,
+    0.8898792606004149
+   ]
+  ],
+  "t": [
+   0,
+   0,
+   1.3171145298379636
+  ]
+ },
+ "inputs": {
+  "meta_sha256": "c3b55d1e11ed8a043bd3645af7ed07e920024c05f3cb48b15d523405edd38392",
+  "points_sha256": "2ed3fc60d99b3a2f42e0951835ad847fae2f490859e487b167fbccb1b5f10323",
+  "human_pipe_lib_sha256": "5bce92a433e58d537c05bfd36f516077f94e80bf351a94aae8efad46b04142b4"
+ },
+ "params": {
+  "bg_ref_hit_min_pts": 1,
+  "bg_ref_occ_min": 0.5,
+  "bg_voxel_xy": 0.15,
+  "bg_voxel_z": 0.12,
+  "ground_keep_below_m": 0.1,
+  "z_max_m": 2.5
+ },
+ "nframes": 102,
+ "ref": {
+  "voxels_total": 5286,
+  "occupancy_hist": [
+   739,
+   295,
+   209,
+   166,
+   170,
+   161,
+   172,
+   190,
+   228,
+   2956
+  ]
+ },
+ "online": {
+  "size": 2063,
+  "strong": 1885,
+  "supported": 178
+ },
+ "sweep": [
+  {
+   "thr": 0.2,
+   "keys": 4252,
+   "sparse_lt2": 2379,
+   "in_online": 2063,
+   "online_not_ref": 0
+  },
+  {
+   "thr": 0.3,
+   "keys": 4043,
+   "sparse_lt2": 2170,
+   "in_online": 2063,
+   "online_not_ref": 0
+  },
+  {
+   "thr": 0.5,
+   "keys": 3707,
+   "sparse_lt2": 1834,
+   "in_online": 2063,
+   "online_not_ref": 0
+  },
+  {
+   "thr": 0.65,
+   "keys": 3455,
+   "sparse_lt2": 1582,
+   "in_online": 2063,
+   "online_not_ref": 0
+  },
+  {
+   "thr": 0.8,
+   "keys": 3184,
+   "sparse_lt2": 1312,
+   "in_online": 2063,
+   "online_not_ref": 0
+  },
+  {
+   "thr": 0.9,
+   "keys": 2956,
+   "sparse_lt2": 1087,
+   "in_online": 2061,
+   "online_not_ref": 2
+  },
+  {
+   "thr": 0.95,
+   "keys": 2762,
+   "sparse_lt2": 908,
+   "in_online": 2040,
+   "online_not_ref": 23
+  },
+  {
+   "thr": 1,
+   "keys": 2312,
+   "sparse_lt2": 582,
+   "in_online": 1879,
+   "online_not_ref": 184
+  }
+ ],
+ "self_absorb": {
+  "thr": 0.5,
+  "points": 3131751,
+  "cur_rule_ratio": 0.9987,
+  "nb_or_cur_ratio": 0.9999
+ },
+ "sparse_examples_top10": [
+  {
+   "key": 279407669261,
+   "x": 10.07,
+   "y": -1.572,
+   "z": 1.639,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 196,
+   "pts_per_frame": 1.922,
+   "jit": 0.0212
+  },
+  {
+   "key": 276320694280,
+   "x": 3.216,
+   "y": -1.008,
+   "z": 1.027,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 189,
+   "pts_per_frame": 1.853,
+   "jit": 0.0353
+  },
+  {
+   "key": 280145883153,
+   "x": 11.828,
+   "y": -1.251,
+   "z": 2.107,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 188,
+   "pts_per_frame": 1.843,
+   "jit": 0.0196
+  },
+  {
+   "key": 279944720393,
+   "x": 11.362,
+   "y": 1.743,
+   "z": 1.136,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 186,
+   "pts_per_frame": 1.824,
+   "jit": 0.018
+  },
+  {
+   "key": 280146219027,
+   "x": 11.719,
+   "y": 4.88,
+   "z": 2.308,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 186,
+   "pts_per_frame": 1.824,
+   "jit": 0.0203
+  },
+  {
+   "key": 278804131849,
+   "x": 8.776,
+   "y": 6.535,
+   "z": 1.15,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 185,
+   "pts_per_frame": 1.814,
+   "jit": 0.0209
+  },
+  {
+   "key": 278267269139,
+   "x": 7.625,
+   "y": 6.614,
+   "z": 2.351,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 185,
+   "pts_per_frame": 1.814,
+   "jit": 0.0195
+  },
+  {
+   "key": 275381145606,
+   "x": 1.118,
+   "y": -1.394,
+   "z": 0.771,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 184,
+   "pts_per_frame": 1.804,
+   "jit": 0.0166
+  },
+  {
+   "key": 279944663048,
+   "x": 11.371,
+   "y": 0.652,
+   "z": 1.056,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 183,
+   "pts_per_frame": 1.794,
+   "jit": 0.0198
+  },
+  {
+   "key": 278804131851,
+   "x": 8.79,
+   "y": 6.551,
+   "z": 1.369,
+   "occ": 1,
+   "obs": 102,
+   "pts_total": 183,
+   "pts_per_frame": 1.794,
+   "jit": 0.0174
+  }
+ ],
+ "sparse_total_ge_0p5_lt2_not_online": 1632,
+ "digest": {
+  "digest1": "14c1633be173a2622b2a2a83172cf174d59ec3e4f0c0806386568ee49481148d",
+  "digest2": "14c1633be173a2622b2a2a83172cf174d59ec3e4f0c0806386568ee49481148d",
+  "deterministic": true
+ },
+ "elapsed_ms": 1611
+}

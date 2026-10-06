@@ -1,0 +1,666 @@
+{
+ "generated": "2026-10-06T12:47:08.846Z",
+ "unit": "raw components（未过滤）",
+ "variants": [
+  "A",
+  "B",
+  "C",
+  "D-G0.00",
+  "D-G0.15",
+  "D-G0.30",
+  "D-G0.45"
+ ],
+ "cases": [
+  {
+   "id": "A",
+   "desc": "同 XY cell、Z 分离 (0.3–0.5 vs 1.8–2.0)",
+   "expect": {
+    "A": 1,
+    "B": 1,
+    "C": 2,
+    "D-G0.00": 1,
+    "D-G0.15": 1,
+    "D-G0.30": 1,
+    "D-G0.45": 1
+   },
+   "results": {
+    "A": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 1
+    },
+    "B": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 1
+    },
+    "C": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 4
+    },
+    "D-G0.00": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 1
+    },
+    "D-G0.15": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 1
+    },
+    "D-G0.30": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 1
+    },
+    "D-G0.45": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 1
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "B",
+   "desc": "XY 相邻、Z 重叠 [0.9,1.2]",
+   "expect": {
+    "A": 1,
+    "B": 1,
+    "C": 1,
+    "D-G0.00": 1,
+    "D-G0.15": 1,
+    "D-G0.30": 1,
+    "D-G0.45": 1
+   },
+   "results": {
+    "A": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    },
+    "B": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    },
+    "C": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 40,
+     "n_nodes": 4
+    },
+    "D-G0.00": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    },
+    "D-G0.15": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    },
+    "D-G0.30": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    },
+    "D-G0.45": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "C",
+   "desc": "XY 相邻、Z 完全不重叠 (0.2–0.5 vs 1.5–1.8)",
+   "expect": {
+    "A": 1,
+    "B": 1,
+    "C": 2,
+    "D-G0.00": 2,
+    "D-G0.15": 2,
+    "D-G0.30": 2,
+    "D-G0.45": 2
+   },
+   "results": {
+    "A": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    },
+    "B": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    },
+    "C": {
+     "raw": 2,
+     "filtered": 1,
+     "discarded": 20,
+     "largest_pts": 20,
+     "n_nodes": 5
+    },
+    "D-G0.00": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.15": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.30": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.45": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "D",
+   "desc": "2×2 块 + 2×2 块 + 唯一低层 bridge cell (2,0) z≈0.2",
+   "expect": {
+    "A": 1,
+    "B": 1,
+    "C": 1,
+    "D-G0.00": 3,
+    "D-G0.15": 1,
+    "D-G0.30": 1,
+    "D-G0.45": 1
+   },
+   "results": {
+    "A": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 323,
+     "n_nodes": 9
+    },
+    "B": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 323,
+     "n_nodes": 9
+    },
+    "C": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 323,
+     "n_nodes": 80
+    },
+    "D-G0.00": {
+     "raw": 3,
+     "filtered": 2,
+     "discarded": 3,
+     "largest_pts": 160,
+     "n_nodes": 9
+    },
+    "D-G0.15": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 323,
+     "n_nodes": 9
+    },
+    "D-G0.30": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 323,
+     "n_nodes": 9
+    },
+    "D-G0.45": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 323,
+     "n_nodes": 9
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "E",
+   "desc": "人体形 4 柱、Z 连续 [0.15,1.85]",
+   "expect": {
+    "A": 1,
+    "B": 1,
+    "C": 1,
+    "D-G0.00": 1,
+    "D-G0.15": 1,
+    "D-G0.30": 1,
+    "D-G0.45": 1
+   },
+   "results": {
+    "A": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 4
+    },
+    "B": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 4
+    },
+    "C": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 47
+    },
+    "D-G0.00": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 4
+    },
+    "D-G0.15": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 4
+    },
+    "D-G0.30": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 4
+    },
+    "D-G0.45": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 4
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "F1",
+   "desc": "人体 + 家具（间隔 1 cell）",
+   "expect": {
+    "A": 2,
+    "B": 2,
+    "C": 2,
+    "D-G0.00": 2,
+    "D-G0.15": 2,
+    "D-G0.30": 2,
+    "D-G0.45": 2
+   },
+   "results": {
+    "A": {
+     "raw": 2,
+     "filtered": 2,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 8
+    },
+    "B": {
+     "raw": 2,
+     "filtered": 2,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 8
+    },
+    "C": {
+     "raw": 2,
+     "filtered": 2,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 78
+    },
+    "D-G0.00": {
+     "raw": 2,
+     "filtered": 2,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 8
+    },
+    "D-G0.15": {
+     "raw": 2,
+     "filtered": 2,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 8
+    },
+    "D-G0.30": {
+     "raw": 2,
+     "filtered": 2,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 8
+    },
+    "D-G0.45": {
+     "raw": 2,
+     "filtered": 2,
+     "discarded": 0,
+     "largest_pts": 240,
+     "n_nodes": 8
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "F2",
+   "desc": "人体 + 家具 + 1 个低层残留 cell（bridge）",
+   "expect": {
+    "A": 1,
+    "B": 1,
+    "C": 1,
+    "D-G0.00": 2,
+    "D-G0.15": 1,
+    "D-G0.30": 1,
+    "D-G0.45": 1
+   },
+   "results": {
+    "A": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 483,
+     "n_nodes": 9
+    },
+    "B": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 483,
+     "n_nodes": 9
+    },
+    "C": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 483,
+     "n_nodes": 79
+    },
+    "D-G0.00": {
+     "raw": 2,
+     "filtered": 2,
+     "discarded": 0,
+     "largest_pts": 243,
+     "n_nodes": 9
+    },
+    "D-G0.15": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 483,
+     "n_nodes": 9
+    },
+    "D-G0.30": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 483,
+     "n_nodes": 9
+    },
+    "D-G0.45": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 483,
+     "n_nodes": 9
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "F3",
+   "desc": "人体 + 家具直接贴邻（无间隙）",
+   "expect": {
+    "A": 1,
+    "B": 1,
+    "C": 1,
+    "D-G0.00": 1,
+    "D-G0.15": 1,
+    "D-G0.30": 1,
+    "D-G0.45": 1
+   },
+   "results": {
+    "A": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 480,
+     "n_nodes": 8
+    },
+    "B": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 480,
+     "n_nodes": 8
+    },
+    "C": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 480,
+     "n_nodes": 78
+    },
+    "D-G0.00": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 480,
+     "n_nodes": 8
+    },
+    "D-G0.15": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 480,
+     "n_nodes": 8
+    },
+    "D-G0.30": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 480,
+     "n_nodes": 8
+    },
+    "D-G0.45": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 480,
+     "n_nodes": 8
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "G",
+   "desc": "对角 cell（4 邻不连）",
+   "expect": {
+    "A": 2,
+    "B": 1,
+    "C": 1,
+    "D-G0.00": 2,
+    "D-G0.15": 2,
+    "D-G0.30": 2,
+    "D-G0.45": 2
+   },
+   "results": {
+    "A": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "B": {
+     "raw": 1,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 40,
+     "n_nodes": 2
+    },
+    "C": {
+     "raw": 1,
+     "filtered": 1,
+     "discarded": 0,
+     "largest_pts": 40,
+     "n_nodes": 4
+    },
+    "D-G0.00": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.15": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.30": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.45": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    }
+   },
+   "pass": true
+  },
+  {
+   "id": "H",
+   "desc": "间隔 1 cell（0.15m 空隙）",
+   "expect": {
+    "A": 2,
+    "B": 2,
+    "C": 2,
+    "D-G0.00": 2,
+    "D-G0.15": 2,
+    "D-G0.30": 2,
+    "D-G0.45": 2
+   },
+   "results": {
+    "A": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "B": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "C": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 4
+    },
+    "D-G0.00": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.15": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.30": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    },
+    "D-G0.45": {
+     "raw": 2,
+     "filtered": 0,
+     "discarded": 40,
+     "largest_pts": 20,
+     "n_nodes": 2
+    }
+   },
+   "pass": true
+  }
+ ],
+ "all_pass": true
+}
