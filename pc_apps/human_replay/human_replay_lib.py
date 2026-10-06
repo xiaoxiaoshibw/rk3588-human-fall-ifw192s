@@ -39,7 +39,7 @@ _FETCH = os.path.join(_HERE, "fetch.py")
 
 # HR-W02: 静态服务文件白名单扩展位。打包/改 flist 时只在此追加，
 # 不许补 prefix/目录通配——保持「单文件 explicit」的最小攻击面（同 _serve_file 白名单精神）。
-_EXTRA_STATIC = frozenset({"human_detect_lib.js"})
+_EXTRA_STATIC = frozenset({"human_detect_lib.js", "human_pipe_lib.js"})
 _proc_lock = threading.Lock()
 _proc = None  # 当前同步子进程
 

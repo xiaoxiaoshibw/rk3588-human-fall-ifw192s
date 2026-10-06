@@ -90,7 +90,7 @@
       <details>
         <summary>方法与边界</summary>
         <p class="muted" style="margin:8px 0 0">画布展示的是已应用 TLS 配平的会话（z=0 即地板）。判定仅以圆柱 ROI 内点云算 PCA + 高度带，主扩散方向直立度 × 顶高 二线分三态。</p>
-        <p class="muted" style="margin:8px 0 0"><b>自动管线边界（承 limb HR-07 教训）：</b>工作空间 z∈[0.10, 2.50]（顶棚/吊柜上沿不进）；静态背景 = 3D 体素两级判定（strong 占用率≥0.85 / supported ≥0.65 且形心抖动≤0.05m 且邻域 strong≥2）——静立 ≥85% 帧的人会被当背景吞掉（已知边界）；聚类前做保守孤立清理（体素 ≤1 点且 26 邻域无前景体素才删，单遍不传播）；颜色 = 硬门 × 证据联合判定：绿=确认人体（3/5 帧时间确认），蓝=候选，灰=非人。<b>不发「这是人」硬判</b>，最终由你 pin ROI 裁决。弯腰 vs 跌倒判别 = 主直立度崩&lt;0.45 且身高&lt;0.9m 持续 1s 且不回升——弯腰会回站，不触报。</p>
+        <p class="muted" style="margin:8px 0 0"><b>自动管线边界（承 limb HR-07 教训）：</b>工作空间 z∈[0.10, 2.50]（顶棚/吊柜上沿不进）；静态背景 = 3D 体素两级判定（strong 占用率≥0.85 / supported ≥0.65 且形心抖动≤0.05m 且邻域 strong≥2）——静立 ≥85% 帧的人会被当背景吞掉（已知边界）；聚类前做拓扑保护型孤立清理（3D 体素 ≤1 点且 26 邻域无前景体素 → 候选；再用与聚类同款 XY 4 邻域拓扑 veto：cell 仍有其他占用→删、cell 将消失且度≤1→删、度≥2→保留；单遍快照不级联）；颜色 = 硬门 × 证据联合判定：绿=确认人体（3/5 帧时间确认），蓝=候选，灰=非人。<b>不发「这是人」硬判</b>，最终由你 pin ROI 裁决。弯腰 vs 跌倒判别 = 主直立度崩&lt;0.45 且身高&lt;0.9m 持续 1s 且不回升——弯腰会回站，不触报。</p>
       </details>
     </section>
   </aside>
@@ -122,6 +122,7 @@
         <summary>Diagnostics · 管线计数</summary>
         <table class="diag-table" style="width:100%;margin-top:8px"><tbody>
           <tr><td>点 原始→前景</td><td id="pipeCounts">—</td></tr>
+          <tr><td>孤立清理 / 拓扑</td><td id="pipeCleanup">—</td></tr>
           <tr><td>簇 / 人形证据</td><td id="pipeClusters">—</td></tr>
         </tbody></table>
       </details>

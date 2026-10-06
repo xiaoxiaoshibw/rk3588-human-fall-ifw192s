@@ -44,7 +44,7 @@
     var els = {};
     ["session", "metaInfo", "seekBar", "pinModeBtn", "roiR", "roiRVal", "roiInfo", "clearPinBtn",
      "resetTrackBtn", "poseBlock", "featTable", "status", "hud",
-     "pipeOn", "pipeStatus", "pipeCounts", "pipeClusters", "trackList", "fallEvents"]
+     "pipeOn", "pipeStatus", "pipeCounts", "pipeCleanup", "pipeClusters", "trackList", "fallEvents"]
         .forEach(function (id) { els[id] = document.getElementById(id); });
 
     function status(msg, is_err) {
@@ -337,7 +337,7 @@
         S.pipe.cluster_objs = [];
         S.pipe.cluster_boxes.forEach(_drop);
         S.pipe.cluster_boxes = [];
-        els.pipeCounts.textContent = "—"; els.pipeClusters.textContent = "—";
+        els.pipeCounts.textContent = "—"; els.pipeCleanup.textContent = "—"; els.pipeClusters.textContent = "—";
         els.trackList.innerHTML = ""; els.fallEvents.innerHTML = "";
     }
 
@@ -366,8 +366,14 @@
 
     function _render_pipe_panel(r) {
         els.pipeCounts.textContent = r.n_in + " → " + r.n_denoise + " → " + r.n_foreground
-            + "（削 " + r.n_dropped + "）"
-            + " · 孤立清理：删除 " + r.iso_removed_points + " 点 / " + r.iso_removed_voxels + " voxel";
+            + "（削 " + r.n_dropped + "）";
+        /* R2.6b 清理诊断：候选/ veto / 实际删除 / other-z 保活 / 簇前后（split 对照） */
+        els.pipeCleanup.innerHTML = "候选 " + r.isolated_3d_candidates
+            + " · veto " + r.xy_topology_vetoed
+            + " · 删 " + r.actually_removed_points + " 点 / " + r.actually_removed_voxels + " voxel"
+            + " · 其他z保活 " + r.xy_cells_preserved_by_other_z + " cell"
+            + " · 簇 " + r.clusters_before_cleanup + "→" + r.clusters_after_cleanup
+            + (r.topology_regression ? " <span class='tag bad'>TOPOLOGY_REGRESSION</span>" : "");
         var by = { CONFIRMED_HUMAN: 0, HUMAN_CANDIDATE: 0, NON_HUMAN: 0 };
         r.clusters.forEach(function (c) { by[c.joint] = (by[c.joint] || 0) + 1; });
         els.pipeClusters.innerHTML =

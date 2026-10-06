@@ -1,6 +1,7 @@
 /* HR-W03 人体识别算法初代 — 纯函数层：node 可测，零 DOM/THREE 依赖。
  *
- * 链路（用户 2026-10-05 拍板；2026-10-06 W03-R2 小步升级）：Raw → Denoise(有限+距离窗) →
+ * 链路（用户 2026-10-05 拍板；2026-10-06 W03-R2 小步升级，R2.6b 拓扑保护清理；
+ * R3.1 空场参考静态图 builder —— 仅离线构建，未接在线路径）：Raw → Denoise(有限+距离窗) →
  * [Ground Leveling 已在载入时 apply] → 工作空间裁剪(z) → 3D 背景体素去除 →
  * XY 体素聚类 → 簇特征 → 硬门 × 证据联合判定 → 跟踪 + 时间确认 → Fall 判别
  *
@@ -38,6 +39,11 @@ var PIPE = {
     bg_jitter_max: 0.05,      /* 逐帧形心 RMS 抖动上限（m） */
     bg_neighbor_min: 2,       /* 26 邻域内 strong 体素数下限 */
     bg_match_radius: 0.12,    /* 前景匹配半径：点到静态体素全帧形心的距离 */
+    /* 3b · 参考静态图（W03-R3.1 空场 immutable calibration artifact；只构建，不接在线路径） */
+    bg_ref_hit_min_pts: 1,    /* 参考图每帧 observed 门：≥1 点即当帧可见（用户 2026-10-06 评审指定）。
+                                 在线 ≥2 门会漏「每帧 1 点但长期稳定」的稀疏远场：
+                                 R3.0 实测 203349 occ(≥1) 中位 0.94 vs occ(≥2) 中位 0 */
+    bg_ref_occ_min: 0.5,      /* 参考图入图占用率（v1 候选值，未标定；R3.1 证据做阈值扫描，无删除权） */
     /* 4 · 聚类 */
     cluster_min_voxels: 3,    /* 候选簇最小体素数（≈0.34m 直排） */
     cluster_neighbor_hops: 1, /* XY 4 邻 BFS */
@@ -197,6 +203,72 @@ function build_static_map(frames_xyzi, opts) {
     return out;
 }
 
+/* ---- 3b · 参考静态图构建（W03-R3.1：空场 session → immutable reference static map）----
+ * 与在线 build_static_map 的差异（用户 2026-10-06 评审指定，针对 R3.0 根因 M1/M2）：
+ *   - 本帧 observed = 体素当帧点数 ≥ bg_ref_hit_min_pts（默认 1）。
+ *     在线每帧命中门 ≥2 会把「每帧 1 点但长期稳定」的稀疏远场直接归零
+ *     （R3.0 实测 203349：occ(≥1) 中位 0.94 vs occ(≥2) 中位 0）。
+ *   - occupancy_v = observed 帧数 / 参考帧总数 N（分母 = 无遮挡空场帧数，不被监视对象污染）。
+ * 输出每体素的完整统计（occ/形心/抖动/密度），不止 tier，供 R3.2 匹配审计、R3.3 融合；
+ * 本函数没有任何在线写入路径 —— 构建一次、运行期只读（LOCKED calibration artifact）。
+ * 工作空间裁剪与在线一致：z ∈ [ground_keep_below_m, z_max_m]（drop_ground 缺省 true）。
+ * 返回 { nframes, hit_min_pts, voxel_xy, voxel_z, drop_ground,
+ *        voxels: Map<key, {x,y,z,occ,obs,pts_total,pts_per_frame,jit,confidence}> }。 */
+function build_reference_map(frames_xyzi, opts) {
+    opts = opts || {};
+    var drop_ground = opts.drop_ground !== false;
+    var hit_min = opts.hit_min_pts !== undefined ? opts.hit_min_pts : PIPE.bg_ref_hit_min_pts;
+    var nframes = frames_xyzi ? frames_xyzi.length : 0;
+    var stats = new Map(), per = new Map();
+    for (var f = 0; f < nframes; f++) {
+        per.clear();
+        var frame = frames_xyzi[f];
+        for (var k = 0; k < frame.length; k += 4) {
+            var z = frame[k + 2];
+            if (drop_ground && z < PIPE.ground_keep_below_m) continue;
+            if (z > PIPE.z_max_m) continue;
+            var key = key_bg(frame[k], frame[k + 1], z);
+            var a = per.get(key);
+            if (!a) { a = { n: 0, sx: 0, sy: 0, sz: 0 }; per.set(key, a); }
+            a.n++; a.sx += frame[k]; a.sy += frame[k + 1]; a.sz += z;
+        }
+        per.forEach(function (a, key) {
+            if (a.n < hit_min) return;                          /* 参考图 observed 门（默认 ≥1） */
+            var s = stats.get(key);
+            if (!s) { s = { obs: 0, cx: 0, cy: 0, cz: 0, mx: 0, my: 0, mz: 0, pts: 0 }; stats.set(key, s); }
+            s.obs++; s.pts += a.n;
+            /* Welford：逐帧形心均值 + 偏差平方和（抖动口径与在线 builder 相同） */
+            var px = a.sx / a.n, py = a.sy / a.n, pz = a.sz / a.n;
+            var dx = px - s.cx, dy = py - s.cy, dz = pz - s.cz;
+            s.cx += dx / s.obs; s.mx += dx * (px - s.cx);
+            s.cy += dy / s.obs; s.my += dy * (py - s.cy);
+            s.cz += dz / s.obs; s.mz += dz * (pz - s.cz);
+        });
+    }
+    var voxels = new Map();
+    stats.forEach(function (s, key) {
+        var occ = nframes ? s.obs / nframes : 0;
+        voxels.set(key, { x: s.cx, y: s.cy, z: s.cz,
+                          occ: occ, obs: s.obs,
+                          pts_total: s.pts, pts_per_frame: nframes ? s.pts / nframes : 0,
+                          jit: Math.sqrt(Math.max(s.mx, s.my, s.mz) / s.obs),
+                          /* v1 置信 = 占用率（诊断/融合参考，无删除权） */
+                          confidence: occ });
+    });
+    return { nframes: nframes, hit_min_pts: hit_min,
+             voxel_xy: PIPE.bg_voxel_xy, voxel_z: PIPE.bg_voxel_z,
+             drop_ground: drop_ground, voxels: voxels };
+}
+
+/* 参考图 → 静态键集合（占用率阈值显式传入；缺省 PIPE.bg_ref_occ_min = 未标定候选值）。
+ * 只读导出，供 R3.2 跨会话 match audit / 后续融合门使用；此处只产 key 集合，不做几何匹配。 */
+function reference_static_keys(ref, min_occ) {
+    var thr = min_occ === undefined ? PIPE.bg_ref_occ_min : min_occ;
+    var keys = new Set();
+    ref.voxels.forEach(function (rec, key) { if (rec.occ >= thr) keys.add(key); });
+    return keys;
+}
+
 /* ---- 4· 前景 = 点级(工作空间裁剪 + 有界背景匹配)后再体素化 ----
  * 工作空间：z ∈ [ground_keep_below_m, z_max_m]（顶棚/吊柜上沿不进后续）。
  * 背景匹配：点的 3×3×3 体素邻域内任一静态体素，其全帧形心距点 < bg_match_radius
@@ -230,41 +302,92 @@ function _bg_match(static_map, x, y, z) {
     return false;
 }
 
-/* ---- 4b· 保守孤立前景清理（R2.6）----
- * 单遍快照语义：先按清理前的 3D 前景体素图算出全部删除集合，再一次性删点；
- * 不递归、不多轮、不传播（删掉的体素不参与第二轮邻域判定）。
- * 规则（严格）：voxel 点数 ≤1 且 26 邻域内不存在任何前景 voxel → 删该 voxel 的点；
- * 其余全保留。只判断「邻域是否存在前景 voxel」，不设邻居点数阈值。
- * 复用背景 3D 体素栅格（bg_voxel_xy/z），不新增参数；不是 SOR/ROR/形态学。
- * 返回 { xyzi, before, after, removed_points, removed_voxels, fg_voxels }。 */
+/* ---- 4b· 拓扑保护型孤立前景清理（R2.6b）----
+ * 单遍快照语义：先基于清理前的 XYZ/XY occupancy snapshot 标记全部 candidate 并完成
+ * 全部拓扑判定，收集删除集合后一次性删点；不递归、不传播（不级联）。
+ *
+ * candidate（3D，保留 R2.6 判据）：3D 体素点数 ≤1 且 26 邻域内无任何前景 3D 体素
+ *   → 只标记 isolated_3d_candidate，不立即删除。
+ * XY 拓扑保护（与 cluster_voxels 完全同款：key_vox 0.15m 网格 + 4 邻域）：
+ *   Case A 该 XY cell 在删除全部 candidate 后仍被其他（非 candidate）前景点占用
+ *          → SAFE REMOVE（XY graph node 保留，拓扑不变）。
+ *   Case B 该 XY cell 的 occupancy 全是 candidate（删后 node 消失）
+ *          → 查 original XY graph 中该 node 的 4 邻域 degree：
+ *             degree ≥2 → VETO（KEEP 该 cell 全部 candidate：可能改变连通性）
+ *             degree ≤1 → REMOVE（度≤1 的 node 不可能连接两个其余非空分量）
+ * 不新增参数（禁止 cleanup_xy_radius/grid 一类近似拓扑参数）；不是 SOR/ROR/形态学。
+ * 返回 { xyzi, fg_before_cleanup, fg_after_cleanup, isolated_3d_candidates,
+ *        xy_topology_vetoed, xy_cells_preserved_by_other_z, actually_removed_points,
+ *        actually_removed_voxels, fg_voxels,
+ *        兼容别名 before/after/removed_points/removed_voxels = 实际删除量 }。 */
 function cleanup_isolated_fg(xyzi) {
     var before = xyzi.length / 4;
-    var counts = new Map();
+    var counts3d = new Map(), vox_xy = new Map(), xy_counts = new Map();
     var i;
     for (i = 0; i < xyzi.length; i += 4) {
-        var key = key_bg(xyzi[i], xyzi[i + 1], xyzi[i + 2]);
-        counts.set(key, (counts.get(key) || 0) + 1);
+        var k3 = key_bg(xyzi[i], xyzi[i + 1], xyzi[i + 2]);
+        counts3d.set(k3, (counts3d.get(k3) || 0) + 1);
+        if (!vox_xy.has(k3)) vox_xy.set(k3, key_vox(xyzi[i], xyzi[i + 1]));
+        var kxy = key_vox(xyzi[i], xyzi[i + 1]);
+        xy_counts.set(kxy, (xy_counts.get(kxy) || 0) + 1);
     }
-    var doomed = new Set();
-    counts.forEach(function (n, key) {
-        if (n > 1) return;                              /* 多点体素永不删 */
-        var ij = _bg_decode(key);
+    /* 1) 标记全部 isolated_3d_candidate（只标记，不删） */
+    var candidates = [];
+    counts3d.forEach(function (n, k3) {
+        if (n > 1) return;                              /* 多点体素永不是 candidate */
+        var ij = _bg_decode(k3);
         for (var a = -1; a <= 1; a++) for (var b = -1; b <= 1; b++) for (var c = -1; c <= 1; c++) {
             if (!a && !b && !c) continue;
-            if (counts.has(_bg_key_ijk(ij[0] + a, ij[1] + b, ij[2] + c))) return;  /* 有前景邻居 → 保留 */
+            if (counts3d.has(_bg_key_ijk(ij[0] + a, ij[1] + b, ij[2] + c))) return;  /* 有 3D 前景邻居 → 不是 candidate */
         }
-        doomed.add(key);
+        candidates.push({ v3d: k3, xy: vox_xy.get(k3) });
     });
-    if (!doomed.size) return { xyzi: xyzi, before: before, after: before,
-                               removed_points: 0, removed_voxels: 0, fg_voxels: counts.size };
-    var out = [];
-    for (i = 0; i < xyzi.length; i += 4) {
-        if (doomed.has(key_bg(xyzi[i], xyzi[i + 1], xyzi[i + 2]))) continue;
-        out.push(xyzi[i], xyzi[i + 1], xyzi[i + 2], xyzi[i + 3]);
+    /* 2) XY 拓扑判定（snapshot 只读；同 XY cell 多 candidate 按 cell 整体判定） */
+    var cell_vox = new Map();
+    for (i = 0; i < candidates.length; i++) {
+        var cd = candidates[i], arr = cell_vox.get(cd.xy);
+        if (!arr) { arr = []; cell_vox.set(cd.xy, arr); }
+        arr.push(cd.v3d);
     }
-    return { xyzi: new Float32Array(out), before: before, after: out.length / 4,
-             removed_points: before - out.length / 4, removed_voxels: doomed.size,
-             fg_voxels: counts.size };
+    var removalSet = new Set(), vetoed = 0, preservedCells = 0;
+    cell_vox.forEach(function (voxels, xy) {
+        var cand_pts = voxels.length;                   /* candidate 体素恒单点：1 voxel = 1 点 */
+        if ((xy_counts.get(xy) || 0) - cand_pts > 0) {  /* Case A：cell 仍有其他前景占用 → node 保留 */
+            preservedCells++;
+            for (var v = 0; v < voxels.length; v++) removalSet.add(voxels[v]);
+            return;
+        }
+        /* Case B：该 cell 删后为空 → original 4 邻域 degree（与 cluster_voxels 同款邻接） */
+        var ij2 = xy.split(","), ix = +ij2[0], iy = +ij2[1];
+        var deg = 0;
+        if (xy_counts.has((ix - 1) + "," + iy)) deg++;
+        if (xy_counts.has((ix + 1) + "," + iy)) deg++;
+        if (xy_counts.has(ix + "," + (iy - 1))) deg++;
+        if (xy_counts.has(ix + "," + (iy + 1))) deg++;
+        if (deg >= 2) { vetoed += voxels.length; return; }   /* VETO：可能改变连通性 → KEEP */
+        for (var v2 = 0; v2 < voxels.length; v2++) removalSet.add(voxels[v2]);
+    });
+    /* 3) 一次性应用删除（single-pass） */
+    var after = before, out = null;
+    if (removalSet.size) {
+        out = [];
+        for (i = 0; i < xyzi.length; i += 4) {
+            if (removalSet.has(key_bg(xyzi[i], xyzi[i + 1], xyzi[i + 2]))) continue;
+            out.push(xyzi[i], xyzi[i + 1], xyzi[i + 2], xyzi[i + 3]);
+        }
+        after = out.length / 4;
+    }
+    return { xyzi: out ? new Float32Array(out) : xyzi,
+             fg_before_cleanup: before, fg_after_cleanup: after,
+             isolated_3d_candidates: candidates.length,
+             xy_topology_vetoed: vetoed,
+             xy_cells_preserved_by_other_z: preservedCells,
+             actually_removed_points: before - after,
+             actually_removed_voxels: removalSet.size,
+             fg_voxels: counts3d.size,
+             /* 兼容别名：= actually_*（旧字段语义即"实际删除量"，veto 后自然变小） */
+             before: before, after: after,
+             removed_points: before - after, removed_voxels: removalSet.size };
 }
 
 /* ---- 5· 聚类：XY 4 邻 BFS 连通体素团 ---- */
@@ -600,12 +723,19 @@ function _eig3(m) {
 function pipeline_frame(xyzi, frame_idx, ctx) {
     var clean = denoise(xyzi);
     var fg = extract_foreground(clean, ctx.static_keys);
-    /* R2.6：前景 → 聚类之间，保守孤立前景清理（单遍快照语义） */
+    /* R2.6b：前景 → 聚类之间，拓扑保护型孤立前景清理（单遍快照语义） */
     var iso = cleanup_isolated_fg(fg.fg_xyzi);
     var fg_pts = iso.xyzi;
-    var clusters_raw = (iso.removed_points > 0)
-        ? cluster_voxels(voxelize(iso.xyzi))
-        : cluster_voxels(fg.vox_fg);
+    var clusters_after, clusters_before;
+    if (iso.actually_removed_points > 0) {
+        clusters_after = cluster_voxels(voxelize(iso.xyzi));
+        clusters_before = cluster_voxels(fg.vox_fg);     /* 诊断：清理前簇数（split 对照） */
+    } else {
+        clusters_after = cluster_voxels(fg.vox_fg);      /* 无删除 → 前后同一输入，不双跑 */
+        clusters_before = clusters_after;
+    }
+    var clusters_raw = clusters_after;
+    var cleanup_split_delta = clusters_after - clusters_before;
     /* 5b 证据后处理：第二遍点级扫描 — 喂清理后的真簇点,
      * 否则地板/背景点又被计数进簇,污染逐带 spread_cv/aniso */
     var ev_pack = evidence_postpass(fg_pts, clusters_raw);
@@ -632,12 +762,23 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
     }
     return { n_in: xyzi.length / 4, n_denoise: clean.length / 4,
              n_foreground: fg.n_fg, n_dropped: fg.n_dropped,
-             /* R2.6 诊断：孤立清理前/后与删除量 */
-             fg_after_cleanup: iso.after,
-             iso_removed_points: iso.removed_points,
-             iso_removed_ratio: iso.before ? iso.removed_points / iso.before : 0,
+             /* R2.6b 诊断：清理前/后、candidate/veto、簇前后与 split 标记 */
+             fg_before_cleanup: iso.fg_before_cleanup,
+             fg_after_cleanup: iso.fg_after_cleanup,
+             isolated_3d_candidates: iso.isolated_3d_candidates,
+             xy_topology_vetoed: iso.xy_topology_vetoed,
+             xy_cells_preserved_by_other_z: iso.xy_cells_preserved_by_other_z,
+             actually_removed_points: iso.actually_removed_points,
+             actually_removed_voxels: iso.actually_removed_voxels,
+             clusters_before_cleanup: clusters_before,
+             clusters_after_cleanup: clusters_after,
+             cleanup_split_delta: cleanup_split_delta,
+             topology_regression: cleanup_split_delta > 0,
              fg_voxels: iso.fg_voxels,
-             iso_removed_voxels: iso.removed_voxels,
+             /* 兼容字段（R2.6 起）：语义 = 实际删除量（veto 后；R2.6 时代无 veto） */
+             iso_removed_points: iso.actually_removed_points,
+             iso_removed_ratio: iso.fg_before_cleanup ? iso.actually_removed_points / iso.fg_before_cleanup : 0,
+             iso_removed_voxels: iso.actually_removed_voxels,
              clusters: clusters,
              tracks: ctx.tracker.tracks.filter(function (t) { return t.active; }),
              events: events };
@@ -650,6 +791,8 @@ var _api = {
     key_vox: key_vox,
     key_bg: key_bg,
     build_static_map: build_static_map,
+    build_reference_map: build_reference_map,
+    reference_static_keys: reference_static_keys,
     extract_foreground: extract_foreground,
     cleanup_isolated_fg: cleanup_isolated_fg,
     cluster_voxels: cluster_voxels,

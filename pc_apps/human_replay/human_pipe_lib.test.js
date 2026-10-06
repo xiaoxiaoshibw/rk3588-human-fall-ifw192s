@@ -436,5 +436,159 @@ t("R2.6 孤立清理: 多点孤立体素（≥2 点） → 不删除", () => {
   ok(r.after === 2 && r.removed_points === 0, "多点体素不删, 实 removed=" + r.removed_points);
 });
 
+/* ================= R2.6b 拓扑保护型清理（Topology-Preserving Cleanup） ================= */
+
+t("R2.6b-A 真孤立单点: XY degree=0 → REMOVE", () => {
+  const r = L.cleanup_isolated_fg(voxPts(10, 10, 10, 1));
+  ok(r.isolated_3d_candidates === 1, "应标记 1 candidate, 实 " + r.isolated_3d_candidates);
+  ok(r.xy_topology_vetoed === 0, "度0不应 veto");
+  ok(r.actually_removed_points === 1 && r.actually_removed_voxels === 1,
+     "度0应删, 实 removed=" + r.actually_removed_points);
+  ok(r.fg_before_cleanup === 1 && r.fg_after_cleanup === 0, "清理前后点数 1→0");
+});
+
+t("R2.6b-B XY 叶子（度1, cell 最后占用） → REMOVE", () => {
+  const pts = concat_bufs(voxPts(10, 10, 10, 3), voxPts(11, 10, 12, 1));
+  const r = L.cleanup_isolated_fg(pts);
+  ok(r.isolated_3d_candidates === 1, "应只有 1 candidate, 实 " + r.isolated_3d_candidates);
+  ok(r.xy_topology_vetoed === 0, "叶子不应 veto");
+  ok(r.actually_removed_points === 1 && r.fg_after_cleanup === 3,
+     "叶子 candidate 应删, 实 removed=" + r.actually_removed_points);
+});
+
+t("R2.6b-C XY 桥（度2, cell 最后占用） → VETO / KEEP", () => {
+  const pts = concat_bufs(voxPts(10, 10, 10, 3), voxPts(12, 10, 10, 3), voxPts(11, 10, 12, 1));
+  const r = L.cleanup_isolated_fg(pts);
+  ok(r.isolated_3d_candidates === 1 && r.xy_topology_vetoed === 1,
+     "桥 candidate 应 veto, 实 veto=" + r.xy_topology_vetoed);
+  ok(r.actually_removed_points === 0, "不应删任何点, 实 " + r.actually_removed_points);
+  const cb = L.cluster_voxels(L.voxelize(pts)).length;
+  const ca = L.cluster_voxels(L.voxelize(r.xyzi)).length;
+  ok(cb === 1 && ca === 1, "cluster 数应保持 1→1, 实 " + cb + "→" + ca);
+});
+
+t("R2.6b-D 度3 → VETO / KEEP", () => {
+  const pts = concat_bufs(voxPts(10, 10, 10, 3), voxPts(12, 10, 10, 3),
+                          voxPts(11, 11, 10, 3), voxPts(11, 10, 12, 1));
+  const r = L.cleanup_isolated_fg(pts);
+  ok(r.xy_topology_vetoed === 1 && r.actually_removed_points === 0,
+     "度3应 veto, 实 veto=" + r.xy_topology_vetoed);
+});
+
+t("R2.6b-E 同 XY cell 其他 Z 层仍占用 → 直接删（Case A，无需 veto）", () => {
+  const pts = concat_bufs(voxPts(11, 10, 10, 2), voxPts(11, 10, 12, 1));
+  const r = L.cleanup_isolated_fg(pts);
+  ok(r.isolated_3d_candidates === 1 && r.xy_topology_vetoed === 0,
+     "同 cell 有其他占用不应 veto, 实 veto=" + r.xy_topology_vetoed);
+  ok(r.actually_removed_points === 1 && r.fg_after_cleanup === 2,
+     "candidate 应删且 cell 保留, 实 removed=" + r.actually_removed_points);
+  ok(r.xy_cells_preserved_by_other_z === 1,
+     "应记 1 个 other-z 保活 cell, 实 " + r.xy_cells_preserved_by_other_z);
+});
+
+t("R2.6b-F snapshot 语义: 链 q1-q2-q3 不级联（q2 按原图度2 veto）", () => {
+  // q1(10,10,z10) - q2(11,10,z12) - q3(12,10,z10)，三点互相 3D 孤立、XY 连成链。
+  // 若边删边重算（先删 q1/q3 再判 q2），q2 度变 0 会被误删；snapshot 语义必须 veto q2。
+  const pts = concat_bufs(voxPts(10, 10, 10, 1), voxPts(11, 10, 12, 1), voxPts(12, 10, 10, 1));
+  const r = L.cleanup_isolated_fg(pts);
+  ok(r.isolated_3d_candidates === 3, "3 个 candidate, 实 " + r.isolated_3d_candidates);
+  ok(r.xy_topology_vetoed === 1, "仅 q2 应 veto, 实 " + r.xy_topology_vetoed);
+  ok(r.actually_removed_points === 2 && r.fg_after_cleanup === 1,
+     "q1/q3 应删, 实 removed=" + r.actually_removed_points);
+  ok(r.isolated_3d_candidates === r.xy_topology_vetoed + r.actually_removed_voxels,
+     "candidate 分区守恒: candidates == vetoed + removed_voxels");
+});
+
+t("R2.6b-G frame16 型桥接回归: 长簇不得 split", () => {
+  // 左臂 6 格 + 右臂 6 格（每格 2 点，非 candidate），唯一 XY 桥接点单点且 3D 孤立。
+  const bufs = [];
+  for (let i = 0; i < 6; i++) bufs.push(voxPts(5 + i, 10, 10, 2));
+  for (let i = 0; i < 6; i++) bufs.push(voxPts(12 + i, 10, 10, 2));
+  bufs.push(voxPts(11, 10, 12, 1));   // 桥接 candidate：XY (11,10)，左邻 (10,10)、右邻 (12,10)
+  const pts = concat_bufs.apply(null, bufs);
+  const cb = L.cluster_voxels(L.voxelize(pts));
+  const r = L.cleanup_isolated_fg(pts);
+  const ca = L.cluster_voxels(L.voxelize(r.xyzi));
+  ok(cb.length === 1, "清理前应 1 个簇, 实 " + cb.length);
+  ok(ca.length === 1, "清理后不得 split, 实 " + ca.length);
+  ok(r.xy_topology_vetoed === 1, "桥接 candidate 应 veto, 实 " + r.xy_topology_vetoed);
+  ok(r.actually_removed_points === 0, "桥接场景不应删点, 实 " + r.actually_removed_points);
+});
+
+t("R2.6b 诊断分区: 混合场景 candidates == vetoed + removed_voxels", () => {
+  const pts = concat_bufs(voxPts(10, 10, 10, 1),                  // 度0 → 删
+                          voxPts(20, 20, 10, 3), voxPts(21, 20, 12, 1),   // 叶子 → 删
+                          voxPts(30, 30, 10, 3), voxPts(32, 30, 10, 3), voxPts(31, 30, 12, 1),  // 桥 → veto
+                          voxPts(40, 40, 10, 2), voxPts(40, 40, 12, 1));  // Case A → 删
+  const r = L.cleanup_isolated_fg(pts);
+  ok(r.isolated_3d_candidates === r.xy_topology_vetoed + r.actually_removed_voxels,
+     "分区守恒: " + r.isolated_3d_candidates + " == " + r.xy_topology_vetoed + " + " + r.actually_removed_voxels);
+  ok(r.xy_topology_vetoed === 1, "只有桥应 veto, 实 " + r.xy_topology_vetoed);
+  ok(r.xy_cells_preserved_by_other_z === 1, "Case A cell 数=1, 实 " + r.xy_cells_preserved_by_other_z);
+});
+
+/* ================= W03-R3.1 空场参考静态图（Reference Static Map builder） ================= */
+
+t("R3.1: 每帧仅 1 点也计 observed（≥1 门）；在线 ≥2 门看不见的稀疏面进参考图", () => {
+  // 同一体素每帧恰 1 点：在线 build_static_map 的「每帧 ≥2 点」命中门完全看不见它；
+  // 参考图按用户指定口径 observed = ≥1，occ 应 = 1（R3.0 根因 M1 的直接回归）。
+  const frames = [];
+  for (let f = 0; f < 10; f++) frames.push(voxPts(10, 10, 12, 1));
+  const on = L.build_static_map(frames);
+  ok(on.size === 0, "在线 ≥2 门: 每帧 1 点不应进在线 map, 实 size=" + on.size);
+  const ref = L.build_reference_map(frames);
+  ok(ref.voxels.size === 1, "参考图应见 1 个体素, 实 " + ref.voxels.size);
+  const p0 = voxPts(10, 10, 12, 1);
+  const key = L.key_bg(p0[0], p0[1], p0[2]);
+  const rec = ref.voxels.get(key);
+  ok(rec && rec.obs === 10 && Math.abs(rec.occ - 1) < 1e-9,
+     "occ 应 = 10/10 = 1, 实 " + JSON.stringify(rec));
+  ok(rec.pts_total === 10 && Math.abs(rec.pts_per_frame - 1) < 1e-9,
+     "密度字段: total=10 / 每帧=1, 实 " + rec.pts_total + "/" + rec.pts_per_frame);
+  ok(L.reference_static_keys(ref).has(key), "occ=1 ≥ 缺省 0.5 → 入图");
+});
+
+t("R3.1: persistence 抵御噪声（单帧噪声不入图）+ 阈值显式可控", () => {
+  const frames = [];
+  for (let f = 0; f < 10; f++) {
+    const bufs = [voxPts(20, 20, 12, 3)];              // 稳定体素 10/10
+    if (f < 1) bufs.push(voxPts(21, 20, 12, 3));       // 单帧噪声 1/10
+    if (f < 4) bufs.push(voxPts(22, 20, 12, 3));       // 偶发 4/10
+    if (f < 9) bufs.push(voxPts(23, 20, 12, 3));       // 近稳定 9/10
+    frames.push(concat_bufs.apply(null, bufs));
+  }
+  const ref = L.build_reference_map(frames);
+  const k = i => { const p = voxPts(i, 20, 12, 3); return L.key_bg(p[0], p[1], p[2]); };
+  ok(Math.abs(ref.voxels.get(k(20)).occ - 1.0) < 1e-9, "10/10 → occ 1");
+  ok(Math.abs(ref.voxels.get(k(21)).occ - 0.1) < 1e-9, "1/10 → occ 0.1");
+  const keys = L.reference_static_keys(ref);           // 缺省 0.5
+  ok(keys.has(k(20)) && keys.has(k(23)), "10/10、9/10 入图");
+  ok(!keys.has(k(21)) && !keys.has(k(22)), "1/10、4/10 不入图（persistence 抗噪）");
+  const strict = L.reference_static_keys(ref, 0.95);
+  ok(strict.has(k(20)) && !strict.has(k(23)), "显式阈值 0.95: 只有 10/10 入图");
+});
+
+t("R3.1: 统计字段（形心/抖动/密度）+ 工作空间裁剪与在线一致", () => {
+  const NF = 8;
+  const frames = [];
+  for (let f = 0; f < NF; f++) {
+    const bufs = [voxPts(30, 30, 12, 4)];              // 体素 (30,30,12) 中心 (4.575, 4.575, 1.5)
+    if (f === 0) bufs.push(new Float32Array([4.575, 4.575, 0.05, 50]));  // 地面以下 → 不计
+    if (f === 0) bufs.push(new Float32Array([4.575, 4.575, 2.60, 50]));  // z_max 以上 → 不计
+    frames.push(concat_bufs.apply(null, bufs));
+  }
+  const ref = L.build_reference_map(frames);
+  const p = voxPts(30, 30, 12, 4);
+  const rec = ref.voxels.get(L.key_bg(p[0], p[1], p[2]));
+  ok(ref.voxels.size === 1, "裁剪后只应剩工作空间内 1 个体素, 实 " + ref.voxels.size);
+  ok(rec.obs === NF && rec.pts_total === NF * 4,
+     "obs/点数只算工作空间内点, 实 obs=" + rec.obs + " pts=" + rec.pts_total);
+  ok(Math.abs(rec.x - 4.575) < 0.03 && Math.abs(rec.y - 4.575) < 0.03,
+     "形心 ≈ 体素中心, 实 (" + rec.x.toFixed(3) + "," + rec.y.toFixed(3) + ")");
+  ok(rec.jit <= 0.03, "同体素内点团抖动小, 实 " + rec.jit.toFixed(4));
+  ok(Math.abs(rec.pts_per_frame - 4) < 1e-9, "每帧 4 点, 实 " + rec.pts_per_frame);
+  ok(Math.abs(rec.confidence - rec.occ) < 1e-9, "v1 置信 = 占用率");
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);
