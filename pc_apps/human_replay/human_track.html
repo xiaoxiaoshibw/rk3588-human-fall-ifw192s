@@ -186,7 +186,6 @@
                 if (S.meta && S.meta.session_id) sessLabel.textContent = "会话: " + S.meta.session_id;
             }, 200);
         }
-        if (sessSel.options.length <= 1) load_local_sessions();
         /* URL 参数 ?sid= 处理: 支持从 console/其它页带 sid 跳入 */
         var params = new URLSearchParams(location.search);
         var qs = params.get("sid");
@@ -207,6 +206,10 @@
             try_init();
         })
         .catch(function () { try_init(); });
+
+    /* 会话列表与 overlay 初始化解耦: 即使 overlay 还没就绪也先把下拉填上,
+     * 否则用户没载入会话时 load_local_sessions 永远不会跑 (死锁). */
+    load_local_sessions();
 
     btn.addEventListener("click", function () { show(!on); });
 
