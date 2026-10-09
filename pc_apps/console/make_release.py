@@ -23,8 +23,18 @@ FILES = {  # zip 内路径 -> 源文件（相对脚本目录）
     "LiDAR_Console/源码/console_html.test.js": "console_html.test.js",
     "LiDAR_Console/源码/make_console_shortcut.py": "make_console_shortcut.py",
     "LiDAR_Console/源码/make_release.py": "make_release.py",
+    # B1 新增 (运行时 datas 已在 exe 内嵌 via spec, 源码副本在 ZIP 里参考用)
+    "LiDAR_Console/源码/human_replay/human_track.html": "../human_replay/human_track.html",
+    "LiDAR_Console/源码/human_replay/detect_overlay.js": "../human_replay/detect_overlay.js",
+    "LiDAR_Console/源码/human_replay/detect_ui.js": "../human_replay/detect_ui.js",
+    "LiDAR_Console/源码/human_replay/detect_overlay.test.js": "../human_replay/detect_overlay.test.js",
+    "LiDAR_Console/源码/human_replay/human_track_static.test.js": "../human_replay/human_track_static.test.js",
+    "LiDAR_Console/源码/human_replay/bg_envelope.json": "../human_replay/bg_envelope.json",
+    # 开发工具: 重新生成 bg_envelope.json 的运行脚本
+    "LiDAR_Console/源码/human_ml/dump_bg_envelope.py": "../human_ml/dump_bg_envelope.py",
 }
-DIRS = ("LiDAR_Console/", "LiDAR_Console/captures/", "LiDAR_Console/captures/remote/")
+DIRS = ("LiDAR_Console/", "LiDAR_Console/captures/", "LiDAR_Console/captures/remote/",
+        "LiDAR_Console/源码/human_replay/", "LiDAR_Console/源码/human_ml/")
 
 
 def main():

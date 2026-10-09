@@ -70,7 +70,7 @@
 <section id="home" class="view on">
   <div id="wrap">
     <h1 class="brand">LiDAR Workspace</h1>
-    <div class="brand-sub">IFW192S · 点云回放 / 算法验证 / 数据标注 / 人体识别</div>
+    <div class="brand-sub">IFW192S · 点云回放 / 算法验证 / 人体识别</div>
     <div id="grid"></div>
   </div>
 </section>
@@ -98,12 +98,12 @@ const replayBase = "http://127.0.0.1:" + (Number.isInteger(requestedPort) && req
 // 线性 SVG 图标（Lucide 风格内嵌，不引外部资源）
 const svg = p => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
 const APPS = [
-  {name:"数据标注",  desc:"annotator · 本地服务",   icon:svg('<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/>'), url:replayBase + "/annotator.html"},
   {name:"会话回放",  desc:"replay · 本地服务",      icon:svg('<path d="m6 4 14 8-14 8Z"/>'), url:replayBase + "/"},
-  {name:"板端 WebUI", desc:"RK3588 · 192.168.3.125:8090", icon:svg('<rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>'), url:"http://192.168.3.125:8090/",
+  {name:"板端 WebUI", desc:"RK3588 · 192.168.31.58:8090", icon:svg('<rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>'), url:"http://192.168.31.58:8090/",
    fail:"当前不在内网，无法连接板端 WebUI"},
   {name:"算法验证", desc:"四区评估 · TLS / SVD / RANSAC", icon:svg('<path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>'), url:replayBase + "/validation.html"},
-  {name:"人体识别", desc:"pin ROI · 姿态判定 · 几何量测", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html?sid=cap_20261002_223757"},
+  {name:"人体识别", desc:"路线 A · 聚类检测 · pin ROI 姿态判定", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html?sid=cap_20261002_223757"},
+  {name:"人检锁定", desc:"路线 B · 模型检测 · 实时 ROI 跟踪", icon:svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:replayBase + "/human_track.html"},
 ];
 // ============================================================
 const $ = s => document.querySelector(s);
