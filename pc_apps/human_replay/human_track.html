@@ -13,6 +13,9 @@
   .topbar .title { font-weight:600; font-size:13px; }
   .topbar .route { font-size:11px; color:var(--warning); padding:1px 7px;
                    border:1px solid var(--warning); border-radius:3px; }
+  .topbar select { background:var(--bg-elevated); color:var(--text-primary);
+                   border:1px solid var(--border-strong); border-radius:4px;
+                   font:12px var(--font-ui); height:28px; padding:0 6px; }
   .topbar .sp { flex:1; }
   .topbar button { display:inline-flex; align-items:center; height:30px; padding:0 12px;
                    color:var(--text-muted); background:transparent; border:1px solid var(--border-subtle);
@@ -38,7 +41,8 @@
   <span class="title">人检锁定</span>
   <span class="route">路线 B · 模型检测</span>
   <span class="sp"></span>
-  <span style="color:var(--text-muted); font-size:12px;" id="sessLabel">载会话: ?</span>
+  <select id="sessSel" title="从本机 captures\remote 载入会话"></select>
+  <span style="color:var(--text-muted); font-size:12px;" id="sessLabel">未载入</span>
   <button id="detectBtn" class="on">人检: 开</button>
   <button id="playBtnTop" title="空格">▶</button>
 </div>
@@ -127,6 +131,40 @@
 
     var on = true, bg_loaded = false, stop_hud_timer = null;
 
+    /* ---- 会话选择: 从 /api/sessions?scope=local 扫本机 captures\remote,
+     * 点击行 -> replay.js 暴露的 window.__load_session_sid(sid) 载入 ---- */
+    var sessSel = document.getElementById("sessSel");
+    function load_local_sessions() {
+        fetch("/api/sessions?scope=local")
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                if (!d) return;
+                /* 服务返回 {sessions: [...]} 或数组; 只要本地 local=true 的 */
+                var list = d.sessions || d;
+                if (!Array.isArray(list)) return;
+                list.sort(function (a, b) { return (b.sid || "").localeCompare(a.sid || ""); });
+                sessSel.innerHTML = '<option value="">— 选会话 —</option>';
+                list.forEach(function (s) {
+                    if (!s.local) return;
+                    var o = document.createElement("option");
+                    o.value = s.sid;
+                    var drt = s.duration_sec ? " (" + s.duration_sec.toFixed(1) + "s)" : "";
+                    o.textContent = (s.name || s.sid) + drt;
+                    sessSel.appendChild(o);
+                });
+            })
+            .catch(function () { /* fetch 失败或板端不在: 静默, 让用户重试 */ });
+    }
+    sessSel.addEventListener("change", function () {
+        var sid = sessSel.value;
+        if (!sid) return;
+        if (window.__load_session_sid) {
+            window.__load_session_sid(sid);
+            sessLabel.textContent = "载入中…";
+        }
+    });
+
+
     function show(v) {
         on = v;
         btn.classList.toggle("on", v);
@@ -147,6 +185,14 @@
                 hud.textContent = S.hud_extra || "扫描中";
                 if (S.meta && S.meta.session_id) sessLabel.textContent = "会话: " + S.meta.session_id;
             }, 200);
+        }
+        if (sessSel.options.length <= 1) load_local_sessions();
+        /* URL 参数 ?sid= 处理: 支持从 console/其它页带 sid 跳入 */
+        var params = new URLSearchParams(location.search);
+        var qs = params.get("sid");
+        if (qs && !S.meta) {
+            /* 等 replay S 起来后载入一次 */
+            if (window.__load_session_sid) window.__load_session_sid(qs);
         }
         show(true);
     }
