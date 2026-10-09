@@ -28,6 +28,8 @@ var HUMAN_DETECT_OVERLAY = (function () {
     var last = { t_id_next: 1, tracks: [], frame_no: 0 };
     var topView = null, tvCtx = null, colorBuf = null;
     var leveled_in_s = false;    /* 外部调 set_leveled_in_s(true) 后, 不再每帧乘 R/T */
+    var labelSprites = {};       /* track_id -> THREE.Sprite (3D 场景文字标签) */
+    var sceneRef = null;         /* 引用 replay 的 scene, 用于挂载 sprite */
 
     function dbg(msg) {
         if (typeof console !== "undefined") console.log("[detect] " + msg);
@@ -36,13 +38,54 @@ var HUMAN_DETECT_OVERLAY = (function () {
     function init(opts) {
         // opts: {scene, bgEnvelopeJson, topCanvas}
         if (opts.bgEnvelopeJson) {
-            try { BG = JSON.parse(opts.bgEnvelopeJson); } catch (e) { dbg("bg json 解析失败: " + e); }
+            try {
+                BG = typeof opts.bgEnvelopeJson === "string"
+                    ? JSON.parse(opts.bgEnvelopeJson)
+                    : opts.bgEnvelopeJson;
+            } catch (e) { dbg("bg json 解析失败: " + e); }
         }
         if (opts.topCanvas) {
             topView = opts.topCanvas;
             tvCtx = topView.getContext("2d");
         }
+        if (opts.scene) sceneRef = opts.scene;
         dbg("init: bg cells=" + (BG ? Object.keys(BG).length : 0));
+    }
+
+    /* 3D 场景上挂文字标签 (Sprite): 每 track 一个, 跟 track 位置随簇心走 */
+    function set_label(track_id, cx, cy, cz) {
+        if (!sceneRef) return;
+        var sp = labelSprites[track_id];
+        if (!sp) {
+            var cv = document.createElement("canvas");
+            cv.width = 128; cv.height = 64;
+            var ctx = cv.getContext("2d");
+            ctx.fillStyle = "#ff2020";
+            ctx.fillRect(0, 0, cv.width, cv.height);
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 34px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("#" + track_id, cv.width / 2, cv.height / 2);
+            var tex = new THREE.CanvasTexture(cv);
+            var mt = new THREE.SpriteMaterial({ map: tex, depthTest: false });
+            sp = new THREE.Sprite(mt);
+            sp.scale.set(0.4, 0.2, 1);
+            sceneRef.add(sp);
+            labelSprites[track_id] = sp;
+        }
+        sp.position.set(cx, cy, cz + 0.30);
+    }
+
+    function remove_label(track_id) {
+        if (!sceneRef) return;
+        var sp = labelSprites[track_id];
+        if (sp) {
+            sceneRef.remove(sp);
+            if (sp.material && sp.material.map) sp.material.map.dispose();
+            if (sp.material) sp.material.dispose();
+            delete labelSprites[track_id];
+        }
     }
 
     function color_scene(scene) {
@@ -81,6 +124,7 @@ var HUMAN_DETECT_OVERLAY = (function () {
         return gx * 4096 + gy;
     }
 
+    /* 高度高于 背景包络 5cm 网格 95 分位 + 0.25m 为热点 (与 Python auto_person_label.py 一致) */
     function find_hot(frame, z_lo, z_hi) {
         var hot = [];
         for (var k = 0; k < frame.n; k++) {
@@ -88,9 +132,10 @@ var HUMAN_DETECT_OVERLAY = (function () {
             if (z <= z_lo || z >= z_hi) continue;
             var key = grid_key(frame.x[k], frame.y[k]);
             var bg = BG && BG[key] !== undefined ? BG[key] : -10;
+            if (bg < -9) continue;                 /* 无参考 */
             if (z > bg + 0.25) hot.push(k);
         }
-        return hot;         // 索引列表
+        return hot;
     }
 
     // 粗连通: 5cm 网格, 漫水, min 30 点; 返回按尺寸降序簇列表, 每簇 {idx, cx, cy, r90, zmax, n}
@@ -185,8 +230,10 @@ var HUMAN_DETECT_OVERLAY = (function () {
         /* level 状态: 要么 buf 已经 leveled (meta.leveling / 外部 set_leveled_in_s) 要么每帧一次 R/T */
         var already_leveled = leveled_in_s || !!(S.meta && S.meta.leveling);
         var frame = level_frame(S.buf_f32, f.start_pts, f.count, already_leveled);
-        // z 带: stand 用 ±[0.6, 2.3]
-        var hot = find_hot(frame, 0.6, 2.3);
+        // z 带: stand 主体 0.3–2.3m
+        // 0.3m 下界: tied 鞋踝, 上界: 站姿头顶 2.2–2.3m;
+        // 与空场 z 带满度 比与 z 带满度判断是本地 +0.25m 即可
+        var hot = find_hot(frame, 0.3, 2.3);
         var clusters = find_clusters(frame, hot);
         associate(clusters, S.fps);
 
@@ -211,6 +258,16 @@ var HUMAN_DETECT_OVERLAY = (function () {
                 }
             }
             S.geo.attributes.color.needsUpdate = true;
+        }
+        // 3D 场景 sprite 文字标签 (跟 track 同步)
+        var shown_ids = {};
+        for (var si = 0; si < shown.length; si++) {
+            var cl = shown[si];
+            shown_ids[cl.track_id] = true;
+            set_label(cl.track_id, cl.cx, cl.cy, cl.zmax);
+        }
+        for (var tid in labelSprites) {
+            if (!shown_ids[tid]) remove_label(parseInt(tid));
         }
         // HUD 信息挂到 S.hud_extra, replay.js hook 去读
         S.hud_extra = "人 " + shown.length + " 个 (track " +
