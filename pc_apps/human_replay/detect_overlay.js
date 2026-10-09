@@ -30,13 +30,15 @@ var HUMAN_DETECT_OVERLAY = (function () {
     var leveled_in_s = false;    /* 外部调 set_leveled_in_s(true) 后, 不再每帧乘 R/T */
     var labelSprites = {};       /* track_id -> THREE.Sprite (3D 场景文字标签) */
     var sceneRef = null;         /* 引用 replay 的 scene, 用于挂载 sprite */
+    var rf = null;               /* RF_PERSON 引用 */
+    var RF_THRESHOLD = 0.55;     /* person 概率阈值; > 此值才确认人 */
 
     function dbg(msg) {
         if (typeof console !== "undefined") console.log("[detect] " + msg);
     }
 
     function init(opts) {
-        // opts: {scene, bgEnvelopeJson, topCanvas}
+        // opts: {scene, bgEnvelopeJson, topCanvas, rf}
         if (opts.bgEnvelopeJson) {
             try {
                 BG = typeof opts.bgEnvelopeJson === "string"
@@ -49,6 +51,7 @@ var HUMAN_DETECT_OVERLAY = (function () {
             tvCtx = topView.getContext("2d");
         }
         if (opts.scene) sceneRef = opts.scene;
+        if (opts.rf) rf = opts.rf;
         dbg("init: bg cells=" + (BG ? Object.keys(BG).length : 0));
     }
 
@@ -230,11 +233,29 @@ var HUMAN_DETECT_OVERLAY = (function () {
         /* level 状态: 要么 buf 已经 leveled (meta.leveling / 外部 set_leveled_in_s) 要么每帧一次 R/T */
         var already_leveled = leveled_in_s || !!(S.meta && S.meta.leveling);
         var frame = level_frame(S.buf_f32, f.start_pts, f.count, already_leveled);
-        // z 带: stand 主体 0.3–2.3m
-        // 0.3m 下界: tied 鞋踝, 上界: 站姿头顶 2.2–2.3m;
-        // 与空场 z 带满度 比与 z 带满度判断是本地 +0.25m 即可
-        var hot = find_hot(frame, 0.3, 2.3);
+        // z 带: stand 主体 0.1–2.3m
+        // 0.1m 下界: 脱离地面毛边但含脚底 (脚实际在 z≈0.05-0.15m);
+        // 上界: 站姿头顶 2.2–2.3m
+        var hot = find_hot(frame, 0.1, 2.3);
         var clusters = find_clusters(frame, hot);
+        /* B2a: RF 过滤 — 每簇按 RF 分类, 低于阈值滤掉 (柜子/椅子等但家具形) */
+        if (rf) {
+            clusters = clusters.filter(function (cl) {
+                var sub = { n: cl.members.length,
+                            x: new Float32Array(cl.members.length),
+                            y: new Float32Array(cl.members.length),
+                            z: new Float32Array(cl.members.length) };
+                var inten = new Float32Array(cl.members.length);
+                for (var mi = 0; mi < cl.members.length; mi++) {
+                    var k = cl.members[mi];
+                    sub.x[mi] = frame.x[k]; sub.y[mi] = frame.y[k]; sub.z[mi] = frame.z[k];
+                    inten[mi] = S.buf_f32[(f.start_pts + k) * 7 + 3];
+                }
+                var fv = rf.extract(sub, inten);
+                cl.person_prob = rf.predict_person(fv);
+                return cl.person_prob >= RF_THRESHOLD;
+            });
+        }
         associate(clusters, S.fps);
 
         // 只显示 age ≥ MIN_AGE 的 track (稳)

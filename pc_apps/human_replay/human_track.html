@@ -103,6 +103,7 @@
 <script src="vendor/OrbitControls.js"></script>
 <script src="vendor/TransformControls.js"></script>
 <script src="human_replay_lib.js"></script>
+<script src="rf_person.js"></script>
 <script src="detect_overlay.js"></script>
 
 <script src="replay.js"></script>
@@ -187,7 +188,7 @@
         if (S.originBall) S.originBall.visible = false;
         if (S.axes) S.axes.visible = false;
         if (S.grid_fine) S.grid_fine.visible = false;
-        HUMAN_DETECT_OVERLAY.init({ scene: S.scene, bgEnvelopeJson: null, topCanvas: topview });
+        HUMAN_DETECT_OVERLAY.init({ scene: S.scene, bgEnvelopeJson: null, topCanvas: topview, rf: RF_PERSON });
         HUMAN_DETECT_OVERLAY.attach_color(S.colour);
         if (!stop_hud_timer) {
             stop_hud_timer = setInterval(function () {
@@ -206,16 +207,24 @@
         show(true);
     }
 
-    fetch("/bg_envelope.json")
-        .then(function (r) { return r.ok ? r.text() : ""; })
-        .then(function (txt) {
-            if (txt) {
-                try { HUMAN_DETECT_OVERLAY.init({ bgEnvelopeJson: txt }); bg_loaded = true; }
-                catch (e) { console.log("bg_envelope 加载失败: " + e); }
-            }
-            try_init();
-        })
-        .catch(function () { try_init(); });
+    /* 并行拉三个静态资源: 背景包络 + RF json; 任何一个失败用空值继续 */
+    var bg_fetch = fetch("/bg_envelope.json").then(function (r) { return r.ok ? r.text() : ""; }).catch(function () { return ""; });
+    var rf_fetch = fetch("/rf_person_v1.json").then(function (r) { return r.ok ? r.text() : ""; }).catch(function () { return ""; });
+
+    Promise.all([bg_fetch, rf_fetch]).then(function (arr) {
+        var bg_txt = arr[0], rf_txt = arr[1];
+        if (bg_txt) {
+            try { HUMAN_DETECT_OVERLAY.init({ bgEnvelopeJson: bg_txt }); bg_loaded = true; }
+            catch (e) { console.log("bg_envelope 加载失败: " + e); }
+        }
+        if (rf_txt) {
+            try {
+                var n_trees = RF_PERSON.init(rf_txt);
+                console.log("RF loaded " + n_trees + " trees (19KB)");
+            } catch (e) { console.log("RF 加载失败: " + e); }
+        }
+        try_init();
+    });
 
     /* 会话列表与 overlay 初始化解耦: 即使 overlay 还没就绪也先把下拉填上,
      * 否则用户没载入会话时 load_local_sessions 永远不会跑 (死锁). */
