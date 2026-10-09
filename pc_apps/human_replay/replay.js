@@ -230,10 +230,19 @@
             fetch("/api/leveling/leveled_latest?sid=" + encodeURIComponent(S.meta.session_id))
                 .then(function (r) { return r.ok ? r.json() : null; })
                 .then(function (lv) {
-                    if (lv && lv.ok && lv.transform && lv.transform.R && lv.transform.t) {
-                        apply_Rt_inplace(lv.transform.R, lv.transform.t);
-                        var est = lv.transform.estimator || "tls";
-                        status("已应用自动配平 transform（" + est + "，" + (lv.transform.pitch_deg || 0).toFixed(2) + "°）");
+                    var tr = (lv && lv.ok && lv.transform && lv.transform.R && lv.transform.t)
+                        ? { R: lv.transform.R, t: lv.transform.t, est: (lv.transform.estimator || "tls") }
+                        : null;
+                    if (!tr) {
+                        /* 会话自身没配平 → 用空场 113611 的默认 TLS 变换 (人检流程是空场对齐的) */
+                        var d = L.DEFAULT_LEVEL_TRANSFORM;
+                        tr = { R: d.R, t: d.t, est: "default-113611 " + d.est };
+                    }
+                    apply_Rt_inplace(tr.R, tr.t);
+                    status("已应用配平 transform（" + tr.est + "）");
+                    /* human_track overlay: 现在 buf_f32 是 leveled 的了, 不必每帧再乘 R/T */
+                    if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY) {
+                        HUMAN_DETECT_OVERLAY.set_leveled_in_s(true);
                     }
                 })
                 .catch(function () { /* 无配平结果或网络异常：显示原样，不阻塞 */ })

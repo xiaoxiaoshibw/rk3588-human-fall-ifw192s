@@ -27,6 +27,7 @@ var HUMAN_DETECT_OVERLAY = (function () {
 
     var last = { t_id_next: 1, tracks: [], frame_no: 0 };
     var topView = null, tvCtx = null, colorBuf = null;
+    var leveled_in_s = false;    /* 外部调 set_leveled_in_s(true) 后, 不再每帧乘 R/T */
 
     function dbg(msg) {
         if (typeof console !== "undefined") console.log("[detect] " + msg);
@@ -181,7 +182,8 @@ var HUMAN_DETECT_OVERLAY = (function () {
         if (!S || !S.geo || !S.frames || !S.frames.length) return;
         last.frame_no++;
         var f = S.frames[S.idx];
-        var already_leveled = !!(S.meta && S.meta.leveling);
+        /* level 状态: 要么 buf 已经 leveled (meta.leveling / 外部 set_leveled_in_s) 要么每帧一次 R/T */
+        var already_leveled = leveled_in_s || !!(S.meta && S.meta.leveling);
         var frame = level_frame(S.buf_f32, f.start_pts, f.count, already_leveled);
         // z 带: stand 用 ±[0.6, 2.3]
         var hot = find_hot(frame, 0.6, 2.3);
@@ -198,14 +200,14 @@ var HUMAN_DETECT_OVERLAY = (function () {
 
         // 顶视 canvas 画框
         if (tvCtx && topView) draw_topview(shown, f);
-        // 3D 场景着色人簇点 (沿 buf 直接改 colour 缓冲, 下一帧再被 lut 覆盖)
+        // 3D 场景: 已配平视图下人簇点着红 (写入 colorBuf, replay 的 paint_colours 不再覆盖, 由 lut=gray 状态保持)
         if (colorBuf && S.points) {
             for (var ci = 0; ci < clusters.length; ci++) {
                 var members = clusters[ci].members;
                 for (var mi = 0; mi < members.length; mi++) {
                     var k = members[mi];
                     var base = (f.start_pts + k) * 3;
-                    colorBuf[base] = 1.0; colorBuf[base + 1] = 0.16; colorBuf[base + 2] = 0.16;
+                    colorBuf[base] = 1.0; colorBuf[base + 1] = 0.12; colorBuf[base + 2] = 0.12;
                 }
             }
             S.geo.attributes.color.needsUpdate = true;
@@ -217,36 +219,46 @@ var HUMAN_DETECT_OVERLAY = (function () {
 
     function draw_topview(clusters, f) {
         var W = topView.width, H = topView.height;
-        tvCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
+        tvCtx.fillStyle = "rgba(0, 0, 0, 0.7)";
         tvCtx.fillRect(0, 0, W, H);
-        // 当前帧全部点 (半透明, 灰)
-        // (完整点层画不动; 用稀线画热点)
         if (!clusters.length) {
             tvCtx.fillStyle = "#888";
-            tvCtx.font = "10px monospace";
-            tvCtx.fillText("n=0", 5, 12);
+            tvCtx.font = "11px monospace";
+            tvCtx.fillText("n=0", 5, 13);
             return;
         }
         for (var i = 0; i < clusters.length; i++) {
             var cl = clusters[i];
             var x = cl.cx * 30, y = H - cl.cy * 30;
-            var r = Math.max(cl.r90 * 30, 6);
+            var r = Math.max(cl.r90 * 30, 8);
+            /* 粗描边 + 高亮填充 + track id 文本框 */
+            tvCtx.fillStyle = "rgba(255, 32, 32, 0.18)";
+            tvCtx.fillRect(x - r, y - r, r * 2, r * 2);
             tvCtx.strokeStyle = "#ff2020";
-            tvCtx.lineWidth = 2;
+            tvCtx.lineWidth = 4;
             tvCtx.strokeRect(x - r, y - r, r * 2, r * 2);
             tvCtx.fillStyle = "#fff";
-            tvCtx.font = "bold 10px monospace";
-            tvCtx.fillText("#" + cl.track_id, x - r + 2, y - r - 2);
+            tvCtx.font = "bold 13px monospace";
+            var tid = "#" + cl.track_id;
+            var tw = tvCtx.measureText(tid).width;
+            tvCtx.fillStyle = "#ff2020";
+            tvCtx.fillRect(x - r, y - r - 18, tw + 8, 17);
+            tvCtx.fillStyle = "#fff";
+            tvCtx.fillText(tid, x - r + 4, y - r - 5);
         }
     }
 
     // 与 replay.js 的 BufferGeometry colour 通道建立联系 (外部传 a THREE.BufferAttribute 原始数组)
     function attach_color(attr_array) { colorBuf = attr_array; }
 
+    // 外部开关: buf 已经在外层被 leveling 预处理过时调用, 避免每帧重复 R/T
+    function set_leveled_in_s(v) { leveled_in_s = !!v; }
+
     return {
         init: init,
         on_frame: on_frame,
         attach_color: attach_color,
+        set_leveled_in_s: set_leveled_in_s,
         _dbg_state: last,
         _test: { level_frame: level_frame, grid_key: grid_key, find_clusters: find_clusters,
                  associate: associate, last: last, TRACK_GATE_M: TRACK_GATE_M, TRACK_MIN_AGE: TRACK_MIN_AGE },

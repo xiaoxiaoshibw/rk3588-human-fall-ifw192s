@@ -81,7 +81,7 @@
   <div id="auxMenu">
     <label><input id="auxGrid" type="checkbox" checked></label>
     <label><input id="auxGridFine" type="checkbox"></label>
-    <label><input id="auxAxes" type="checkbox" checked></label>
+    <label><input id="auxAxes" type="checkbox"></label>
     <label><input id="auxOrigin" type="checkbox" checked></label>
   </div>
   <div id="refMenu">
@@ -173,10 +173,20 @@
         hud.style.display = v ? "block" : "none";
     }
 
+    /* 页面载入时就调 lut=gray + 隐藏 lutSel, 这是页面自身的呈现选择, 不等几何就绪 */
+    (function early_lut_gray() {
+        var lutSel = document.getElementById("lutSel");
+        if (lutSel) { lutSel.value = "gray"; lutSel.disabled = true; lutSel.parentElement.style.display = "none"; }
+    })();
+
     function try_init() {
         if (typeof window.replay_internal === "undefined" || !window.replay_internal.S) { setTimeout(try_init, 100); return; }
         var S = window.replay_internal.S;
         if (!S.geo || !S.colour) { setTimeout(try_init, 100); return; }
+        /* human_track 简化场景: 轴/原点标记/大球全关 (检查点与 人主体) */
+        if (S.originBall) S.originBall.visible = false;
+        if (S.axes) S.axes.visible = false;
+        if (S.grid_fine) S.grid_fine.visible = false;
         HUMAN_DETECT_OVERLAY.init({ scene: S.scene, bgEnvelopeJson: null, topCanvas: topview });
         HUMAN_DETECT_OVERLAY.attach_color(S.colour);
         if (!stop_hud_timer) {

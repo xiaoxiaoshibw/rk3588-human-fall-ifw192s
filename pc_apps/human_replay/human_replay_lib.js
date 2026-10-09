@@ -486,9 +486,21 @@ function trim_command_string(src_dir, s_seq, e_seq, base_dir) {
         " --src \"" + src_dir + "\" --start " + s_seq + " --end " + e_seq;
 }
 
+/* 人检 B1 固定 leveled 变换: 空场模板 cap_20261009_113611 job 632eff1e189945d8915eb5af7a9ddcf9 的 TLS 结果。
+ * 用途: 会话无独立配平时作为默认； 把 lidar 系转换到 z=0 地面系。
+ * 后续浴室模板录制完成且新空场配平后, 替换此常量即可。 */
+var DEFAULT_LEVEL_TRANSFORM = {
+    R: [0.893544, 0.0, 0.448975,
+        -0.014337, 0.99949, 0.028533,
+        -0.448746, -0.031932, 0.893089],
+    t: [0.0, 0.0, 1.380286],
+    est: "tls"
+};
+
 var _api = {
     STRIDE_BYTES: STRIDE_BYTES,
     STRIDE_F32: STRIDE_F32,
+    DEFAULT_LEVEL_TRANSFORM: DEFAULT_LEVEL_TRANSFORM,
     frame_slice: frame_slice,
     strided_f32_copy: strided_f32_copy,
     pick_intensity_range: pick_intensity_range,
