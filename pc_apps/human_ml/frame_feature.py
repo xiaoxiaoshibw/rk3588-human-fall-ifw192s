@@ -49,7 +49,9 @@ def extract_features(xyz_i):
     out[1] = 10.0
     out[2] = float(max(n, 2000))
     out[3] = float(i_v.mean()) if n else 0.0
-    out[4] = float(i_v.std()) if n else 0.0
+    out[4] = float(np.log10(i_v.std() + 1.0)) if n else 0.0
+    # ponytail: n_pts * n_pts_ratio ≈ n_pts_near, 与 out[0] 恒等冗余; 用 RMS 强度抖动替代
+    # (RMSE of intensity, 比 std 稳一点且不再线性相关于 n_pts)
 
     # ---- [5..13] 位置分位 ----
     p = [10, 50, 90]
