@@ -476,6 +476,10 @@
         hud_refresh_view_label();
         els.frameInfo.textContent = "stamp=" + f.stamp_sec + "." +
             String(f.stamp_nanosec).padStart(9, "0");
+        /* HR-09 B1 实时检测钩子: 每帧顺带跑一下人簇提取, 不动 drawRange 语义 */
+        if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY) {
+            HUMAN_DETECT_OVERLAY.on_frame(S);
+        }
     }
 
     function play(on) {
@@ -915,5 +919,8 @@
     refs_init_from_ls();
     /* 绑定在 setup_scene 之后执行（S.renderer 才有值） */
     bind_person_drag();
+
+    /* HR-09 B1 实时检测钩子需要拿 S + set_idx: 显式导出 (不影响内部封装) */
+    window.replay_internal = { S: S, set_idx: set_idx };
 
 })();

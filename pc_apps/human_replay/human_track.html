@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人检锁定 · LiDAR Workspace</title>
+<link rel="stylesheet" href="../ui.css">
+<style>
+  body { margin:0; background:var(--bg-app); color:var(--text-primary);
+         font:13px/1.5 var(--font-ui); display:flex; flex-direction:column; height:100vh; }
+  .topbar { display:flex; align-items:center; gap:10px; padding:0 14px; height:44px;
+            background:var(--bg-sidebar); border-bottom:1px solid var(--border-subtle); flex:none; }
+  .topbar .title { font-weight:600; font-size:13px; }
+  .topbar .route { font-size:11px; color:var(--warning); padding:1px 7px;
+                   border:1px solid var(--warning); border-radius:3px; }
+  .topbar .sp { flex:1; }
+  .topbar button { display:inline-flex; align-items:center; height:30px; padding:0 12px;
+                   color:var(--text-muted); background:transparent; border:1px solid var(--border-subtle);
+                   font-size:12.5px; cursor:pointer; border-radius:4px; }
+  .topbar button.on { color:var(--text-primary); background:var(--bg-elevated);
+                      border-color:var(--border-strong); }
+  main { flex:1; display:flex; min-height:0; position:relative; }
+  #view { flex:1; position:relative; min-width:0; background:var(--bg-inset); }
+  #trackTopView { position:absolute; bottom:60px; right:10px; width:200px; height:200px;
+                  background:rgba(0,0,0,.55); border:1px solid var(--border-subtle);
+                  z-index:8; }
+  #trackHud { position:absolute; bottom:270px; right:10px; color:#ff9090; font-size:11.5px;
+              font-family:var(--font-mono); z-index:8; text-shadow:0 1px 2px #000; }
+  #metaBar { position:absolute; top:8px; left:10px; color:var(--text-muted); font-size:11.5px;
+             z-index:8; text-shadow:0 1px 2px #000; }
+  /* 隐藏 replay 里所有原件 — 本页只用它的数据装载+渲染基础 */
+  #hud, #flyHud, #frameInfo, #status, #toolbar, #trimBox, #auxMenu, #refMenu,
+  #coordHud, #metaBox, #metaToggle, #trimToggle, #bottom, #panel, #dirInput { display:none !important; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="title">人检锁定</span>
+  <span class="route">路线 B · 模型检测</span>
+  <span class="sp"></span>
+  <span style="color:var(--text-muted); font-size:12px;" id="sessLabel">载会话: ?</span>
+  <button id="detectBtn" class="on">人检: 开</button>
+  <button id="playBtnTop" title="空格">▶</button>
+</div>
+<main>
+  <div id="view"></div>
+  <canvas id="trackTopView"></canvas>
+  <div id="trackHud"></div>
+  <div id="metaBar"></div>
+
+  <!-- replay.js 必需的隐藏原件 -->
+  <div id="hud"></div>
+  <div id="flyHud"></div>
+  <div id="frameInfo"></div>
+  <div id="status"></div>
+  <div id="toolbar">
+    <button id="sessionsBtn">会话</button>
+    <button id="pickBtn">手动选目录</button><input id="dirInput" type="file" webkitdirectory>
+    <button id="playBtn" style="display:none">▶</button>
+    <select id="speedSel"></select>
+    <label><input id="loopChk" type="checkbox" checked></label>
+    <button id="resetBtn">复位</button>
+    <button id="frontBtn">正视</button>
+    <button id="topBtn">顶视</button>
+    <button id="sideBtn">侧视</button>
+    <button id="perspBtn">透视</button>
+    <label><select id="lutSel"><option>lut</option></select></label>
+    <button id="auxBtn">显示</button>
+    <button id="refBtn">参照</button>
+  </div>
+  <div id="trimBox">
+    <span id="trimInfo"></span>
+    <button id="trimStartBtn"></button><button id="trimEndBtn"></button>
+    <button id="trimClearBtn"></button><button id="trimCopyBtn"></button>
+    <textarea id="trimCmd"></textarea>
+  </div>
+  <div id="auxMenu">
+    <label><input id="auxGrid" type="checkbox" checked></label>
+    <label><input id="auxGridFine" type="checkbox"></label>
+    <label><input id="auxAxes" type="checkbox" checked></label>
+    <label><input id="auxOrigin" type="checkbox" checked></label>
+  </div>
+  <div id="refMenu">
+    <label><input id="refPersonStand" type="checkbox"></label>
+    <label><input id="refPersonLying" type="checkbox"></label>
+    <label><input id="refDoor21" type="checkbox"></label>
+    <label><input id="refDoor17" type="checkbox"></label>
+  </div>
+  <div id="coordHud"></div>
+  <div id="metaBox"></div>
+  <button id="metaToggle"></button>
+  <button id="trimToggle"></button>
+  <div id="bottom"><input id="slider" type="range" min="0" max="0"></div>
+  <div id="panel"></div>
+</main>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/TrackballControls.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="vendor/TransformControls.js"></script>
+<script src="human_replay_lib.js"></script>
+<script src="detect_overlay.js"></script>
+
+<script src="replay.js"></script>
+
+<script>
+/* 顶栏播放按钮 (playBtnTop) 仅作为转发器: 点击转给 replay.js 的隐藏 playBtn,
+ * 状态同步靠读按钮文本 (replay 内部每帧改 textContent). 不需改名/拆 replay 任何 API. */
+(function () {
+    var top = document.getElementById("playBtnTop");
+    var under = document.getElementById("playBtn");   /* replay.js 绑定 */
+    if (!top || !under) return;
+    top.addEventListener("click", function () { under.click(); });
+    /* 定时同步 (replay 每帧写 under.textContent, 频率 200ms足够) */
+    setInterval(function () { if (top.textContent !== under.textContent) top.textContent = under.textContent; }, 200);
+})();
+</script>
+
+<script>
+"use strict";
+(function () {
+    var btn = document.getElementById("detectBtn");
+    var topview = document.getElementById("trackTopView");
+    var hud = document.getElementById("trackHud");
+    var metaBar = document.getElementById("metaBar");
+    var sessLabel = document.getElementById("sessLabel");
+
+    var on = true, bg_loaded = false, stop_hud_timer = null;
+
+    function show(v) {
+        on = v;
+        btn.classList.toggle("on", v);
+        btn.textContent = v ? "人检: 开" : "人检: 关";
+        topview.style.display = v ? "block" : "none";
+        hud.style.display = v ? "block" : "none";
+    }
+
+    function try_init() {
+        if (typeof window.replay_internal === "undefined" || !window.replay_internal.S) { setTimeout(try_init, 100); return; }
+        var S = window.replay_internal.S;
+        if (!S.geo || !S.colour) { setTimeout(try_init, 100); return; }
+        HUMAN_DETECT_OVERLAY.init({ scene: S.scene, bgEnvelopeJson: null, topCanvas: topview });
+        HUMAN_DETECT_OVERLAY.attach_color(S.colour);
+        if (!stop_hud_timer) {
+            stop_hud_timer = setInterval(function () {
+                if (!on) return;
+                hud.textContent = S.hud_extra || "扫描中";
+                if (S.meta && S.meta.session_id) sessLabel.textContent = "会话: " + S.meta.session_id;
+            }, 200);
+        }
+        show(true);
+    }
+
+    fetch("/bg_envelope.json")
+        .then(function (r) { return r.ok ? r.text() : ""; })
+        .then(function (txt) {
+            if (txt) {
+                try { HUMAN_DETECT_OVERLAY.init({ bgEnvelopeJson: txt }); bg_loaded = true; }
+                catch (e) { console.log("bg_envelope 加载失败: " + e); }
+            }
+            try_init();
+        })
+        .catch(function () { try_init(); });
+
+    btn.addEventListener("click", function () { show(!on); });
+
+    if (typeof HUMAN_DETECT_OVERLAY === "undefined") {
+        console.error("detect_overlay.js 未加载");
+        btn.disabled = true;
+    }
+})();
+</script>
+</body>
+</html>

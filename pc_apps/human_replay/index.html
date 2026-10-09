@@ -107,6 +107,13 @@
   #sessTable .ok { color: var(--success); }
   #sessEmpty { color: var(--text-muted); padding: 8px 0; display: none; }
   #syncNote { color: var(--warning); font-size: 11px; margin-top: 6px; }
+  #recoverRow { display: none; margin-top: 6px; }
+  #recoverRow.open { display: flex; }
+  #recoverRow button { height: 26px; padding: 0 10px; font-size: 11.5px; }
+  #renameRow { display: none; gap: 6px; margin-top: 8px; align-items: center; }
+  #renameRow.open { display: flex; }
+  #renameRow input { flex: 1; min-width: 0; height: 26px; padding: 0 8px; font-size: 12px; }
+  #renameRow button { height: 26px; padding: 0 10px; font-size: 11.5px; }
   #panel .row button { height: 26px; padding: 0 10px; font-size: 11.5px; }
   #panel .row button#delBtn { margin-left: auto; }
 </style>
@@ -155,7 +162,12 @@
   </select></label>
   <button id="auxBtn" title="辅助显示开关">显示</button>
   <button id="refBtn" title="参照物">参照</button>
+  <span class="sep"></span>
+  <button id="detectBtn" title="HR-09 B1 实时人体锁定">人检:关</button>
 </div>
+
+<canvas id="detectTopView" width="180" height="180" style="position:absolute;bottom:60px;right:10px;background:rgba(0,0,0,0.3);border:1px solid var(--border-subtle);display:none;z-index:8"></canvas>
+<div id="detectHud" style="position:absolute;bottom:248px;right:10px;color:#ff8080;font-size:11px;font-family:var(--font-mono);display:none;z-index:8;text-shadow:0 1px 2px #000"></div>
 
 <div id="auxMenu">
   <div><b>辅助显示</b></div>
@@ -207,9 +219,18 @@
     <button id="refreshBtn">刷新</button>
     <button id="syncBtn">同步选中</button>
     <button id="browseBtn">手动选…</button>
+    <button id="renameBtn">改名</button>
     <button id="delBtn" class="danger">删除</button>
   </div>
+  <div id="renameRow">
+    <input id="renameInput" maxlength="60" placeholder="会话名称（留空=恢复默认）">
+    <button id="renameOk">保存</button>
+    <button id="renameCancel">取消</button>
+  </div>
   <div id="syncNote"></div>
+  <div id="recoverRow">
+    <button id="recoverBtn" title="板端卡在传输中：退回就绪并重新拉取">退回重试</button>
+  </div>
 </div>
 
 <script src="vendor/three.min.js"></script>
@@ -217,7 +238,9 @@
 <script src="vendor/OrbitControls.js"></script>
 <script src="vendor/TransformControls.js"></script>
 <script src="human_replay_lib.js"></script>
+<script src="detect_overlay.js"></script>
 <script src="replay.js"></script>
 <script src="panel.js"></script>
+<script src="detect_ui.js"></script>
 </body>
 </html>
