@@ -70,6 +70,16 @@
     return !!(s && s.state === "ready" && !s.transferred && !s.download_requested);
   }
 
+  /* 会话文件直下链接（免 SSH）：板端 8766 现供 meta.json/points.bin 本体，
+     浏览器另存后放进 Console 的 captures\remote\<sid>\ 即可回放。
+     已清理 / 还没抽取出文件的会话不渲染。*/
+  function fileLinksHtml(s, apiBase) {
+    if (!s || s.state === "purged" || !s.meta_json_path || !s.points_bin_path) return "";
+    var base = (apiBase || "") + "/api/v1/sessions/" + encodeURIComponent(s.session_id) + "/files/";
+    return '<a href="' + base + 'meta.json" title="下载 meta.json">↓meta</a> ' +
+           '<a href="' + base + 'points.bin" title="下载 points.bin">↓points</a>';
+  }
+
   /* elapsed 计算：从 created_iso 到现在。返回秒（number）。*/
   function elapsedSec(createdIso, nowMs) {
     if (!createdIso) return 0;
@@ -87,6 +97,7 @@
     stateLabel: stateLabel,
     sortSessionsDesc: sortSessionsDesc,
     canRequestDownload: canRequestDownload,
+    fileLinksHtml: fileLinksHtml,
     elapsedSec: elapsedSec,
     STATE_BADGE_CLASS: STATE_BADGE_CLASS,
     STATE_LABEL: STATE_LABEL

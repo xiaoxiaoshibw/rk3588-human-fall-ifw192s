@@ -1,44 +1,34 @@
 # -*- coding: utf-8 -*-
-"""HR-01: PC 侧轮询拉取板端 ready 会话（控制面 HTTP + 数据面 scp）。
+"""HR-01: PC 侧轮询拉取板端 ready 会话（控制面 + 数据面全 HTTP，免 SSH）。
 
 流程（README §1/§8 状态机）：
   GET /api/v1/sessions → 挑 state==ready 且 download_requested 且非 transferred
   → PATCH state=transferring（server 状态机决定成败，防重叠）
-  → scp -l 限速拉 meta.json/points.bin（.part 落盘，全绿后一步换名）
+  → HTTP 流式拉 meta.json/points.bin（.part 落盘，全绿后一步换名）
   → meta.json 静态契约校验 + sha256 校验（按 frame offset/count 实际点区，
     与 bag2session 的 write 动线同源）
   → PATCH extra.transferred=true + state=transferred 回报板端。
 
-传输前用 `ssh du` 预判盘余量，防止 100M 链路把时间浪费在注定失败的传输上。
+数据面走 capture_server 的 /api/v1/sessions/<sid>/files/<name>（8766）：
+同网段任何 PC 都无需 SSH key；限速在板端（download_limit_kbit，默认 ≈70Mbit，
+给 100M 链路的实时预览留 30%）。
 
-只 stdlib + 系统 ssh/scp（Win11 自带 OpenSSH；`scp -l` 单位 Kbit/s，
-以接近 70Mbit=70000 Kbit/s 限速，给 100M 链路的实时预览留 30%）。
+传输前用 HEAD Content-Length 预判盘余量，防止把时间浪费在注定失败的传输上。
+
+只 stdlib（urllib 流式）。
 """
 
 import argparse
 import hashlib
 import json
 import os
-import subprocess
+import shutil
 import sys
 import time
 import urllib.error
 import urllib.request
 
 import config as C
-
-# sessions.json 用容器内视角记路径（/root/catkin_ws/captures_remote/），
-# 板上已建 symlink 把它指到宿主机 SSD /mnt/captures/captures_remote/；
-# scp 走宿主机必须走 /mnt/captures/ 前缀，这里做字面映射。
-_CONTAINER_PREFIX = "/root/catkin_ws/captures_remote/"
-_HOST_PREFIX = "/mnt/captures/captures_remote/"
-
-
-def _host_path(paths):
-    """把 sessions.json 里的容器内路径映射成宿主/sshd 可 scp 的路径。"""
-    if paths.startswith(_CONTAINER_PREFIX):
-        return _HOST_PREFIX + paths[len(_CONTAINER_PREFIX):]
-    return paths
 
 # ---- HTTP（控制面，KB 级） -------------------------------------------------
 
@@ -65,6 +55,36 @@ def _http_error_status(exc):
     except BaseException:
         pass
     return status, detail
+
+
+def _file_url(sid, name):
+    return "%s/api/v1/sessions/%s/files/%s" % (C.BOARD_URL, sid, name)
+
+
+def _http_size(sid, name):
+    """HEAD 拿远端文件字节数；失败/无长度返回 0（调用方据此放弃本轮）。"""
+    req = urllib.request.Request(_file_url(sid, name), method="HEAD")
+    try:
+        with urllib.request.urlopen(req, timeout=C.HTTP_TIMEOUT_S) as resp:
+            return int(resp.headers.get("Content-Length") or 0)
+    except (urllib.error.URLError, OSError, ValueError):
+        return 0
+
+
+def _http_download(sid, name, local_path):
+    """流式下载单文件到 local_path（.part）；落盘字节数与 Content-Length 不符也算失败。"""
+    try:
+        with urllib.request.urlopen(_file_url(sid, name),
+                                    timeout=C.DOWNLOAD_TIMEOUT_S) as resp:
+            expect = int(resp.headers.get("Content-Length") or 0)
+            with open(local_path, "wb") as fh:
+                shutil.copyfileobj(resp, fh, 1 << 20)
+                fh.flush()
+                os.fsync(fh.fileno())
+                written = fh.tell()
+            return written > 0 and written == expect
+    except (urllib.error.URLError, OSError, ValueError):
+        return False
 
 
 # ---- 预选（纯函数，单测量靶） ----------------------------------------------
@@ -101,31 +121,11 @@ def select_job(sessions_json):
     return jobs[0] if jobs else None
 
 
-# ---- scp / ssh（数据面，容错部分下载） -------------------------------------
+# ---- 落盘小工具 -------------------------------------------------------------
 
 
 def _dst_tmp_path(dest_dir, name):
     return os.path.join(dest_dir, name + ".part")
-
-
-def _scp_one(remote_path, local_path, bwlimit_kbit=None):
-    cmd = ["scp", "-p"]
-    if bwlimit_kbit:
-        cmd += ["-l", str(bwlimit_kbit)]
-    cmd += ["%s:%s" % (C.SSH_TARGET, remote_path), local_path]
-    return subprocess.call(cmd, timeout=C.SCP_TIMEOUT_S)
-
-
-def _ssh_du_bytes(remote_paths):
-    """对远端 afford 文件估字节。任一失败/为 0 就拒绝，说服 du 返回 0。
-
-    防转移：size<=0 时本轮直接放回，避免把时间耗在注定崩的传输上。
-    """
-    quoted = " ".join("'%s'" % p.replace("'", "'\\''") for p in remote_paths)
-    cmd = ["ssh", "-o", "BatchMode=yes", C.SSH_TARGET,
-           "du -cb -- %s 2>/dev/null | tail -n1 | awk '{print $1}'" % quoted]
-    out = subprocess.check_output(cmd, timeout=C.SSH_TIMEOUT_S).decode().strip()
-    return int(out) if out.isdigit() else 0
 
 
 # ---- 校验（meta 静态 + bin 实际点区 sha256） -------------------------------
@@ -201,18 +201,16 @@ def _local_verify(meta_path, bin_path):
 # ---- 单个会话一轮的工作 -----------------------------------------------------
 
 
-def _remote_files(session):
-    meta_remote = _host_path(session["meta_json_path"])
-    bin_remote = _host_path(session["points_bin_path"])
-    return [(meta_remote, "meta.json"), (bin_remote, "points.bin")]
+def transfer_one(session, http, http_size, download, dest_root, log):
+    """返回 True=文件已落地,False=留给下一轮重试；所有失败已就地清理 .part。
 
-
-def transfer_one(session, http, ssh_du, scp, dest_root, bwlimit_kbit, log):
-    """返回 True=已置 transferred,False=留给下一轮重试；所有失败已就地清理 .part。
-
-    http/ssh_du/scp 用参数注入，单测混合你方便换，代码本体保持 1 层不抽象。
+    http/http_size/download 参数注入，单测好换，代码本体保持 1 层不抽象。
+    任何未预期异常也必走 _fail 退回 ready——绝不把会话卡在 transferring。
+    state=transferred 的会话走只读复制（别的 PC 拉过/本机删过再要）：文件直下，
+    不动状态机——transferred 只能转 purged，PATCH transferring 必被板端 409 拒绝。
     """
     sid = session["session_id"]
+    readonly = session.get("state") == "transferred"
     dest_dir = os.path.join(dest_root, sid)
     meta_tmp = _dst_tmp_path(dest_dir, "meta.json")
     bin_tmp = _dst_tmp_path(dest_dir, "points.bin")
@@ -227,47 +225,49 @@ def transfer_one(session, http, ssh_du, scp, dest_root, bwlimit_kbit, log):
     def _fail(reason):
         # 任何一步失败：清 .part、退回 ready、留下错误证据；下一轮会重新挑中本 session
         _cleanup_parts()
-        try:
-            http("PATCH", "/api/v1/sessions/%s" % sid,
-                 {"state": "ready", "extra": {"error": "hr01: %s" % reason}})
-        except Exception:
-            pass
+        if not readonly:
+            try:
+                http("PATCH", "/api/v1/sessions/%s" % sid,
+                     {"state": "ready", "extra": {"error": "hr01: %s" % reason}})
+            except Exception:
+                pass
         log("FAIL %s: %s" % (sid, reason))
         return False
 
-    # 1) 抢占：状态机硬约束，只有 ready→transferring 会成功
-    try:
-        http("PATCH", "/api/v1/sessions/%s" % sid, {"state": "transferring"})
-    except urllib.error.HTTPError as exc:
-        status, _ = _http_error_status(exc)
-        if status == 409:
-            log("SKIP %s: 已被他人抢走（409）" % sid)
-        elif status == 404:
-            log("SKIP %s: 板上会话已被删" % sid)
-        else:
-            log("SKIP %s: PATCH transferring 失败: %s" % (sid, exc))
-        return False
+    # 1) 抢占：状态机硬约束，只有 ready→transferring 会成功（只读复制不抢）
+    if not readonly:
+        try:
+            http("PATCH", "/api/v1/sessions/%s" % sid, {"state": "transferring"})
+        except urllib.error.HTTPError as exc:
+            status, _ = _http_error_status(exc)
+            if status == 409:
+                log("SKIP %s: 已被他人抢走（409）" % sid)
+            elif status == 404:
+                log("SKIP %s: 板上会话已被删" % sid)
+            else:
+                log("SKIP %s: PATCH transferring 失败: %s" % (sid, exc))
+            return False
 
     try:
-        # 2) 盘余量预估：先拒绝总比下到一半发现盘满好
-        files = _remote_files(session)
-        remote_paths = [r for r, _ in files]
-        size = ssh_du(remote_paths)
-        if size <= 0:
-            return _fail("du 拿不到远端大小")
+        # 2) 盘余量预估：HEAD 拿两文件大小；先拒绝总比下到一半发现盘满好
+        files = ("meta.json", "points.bin")
+        sizes = [http_size(sid, name) for name in files]
+        if min(sizes) <= 0:
+            return _fail("HEAD 拿不到远端大小")
+        total = sum(sizes)
         free = C.free_bytes(dest_root)
-        if free < size + C.SPACE_SLACK_BYTES:
-            return _fail("盘余量 %dB 装不下会话 %dB（含 slack）" % (free, size))
+        if free < total + C.SPACE_SLACK_BYTES:
+            return _fail("盘余量 %dB 装不下会话 %dB（含 slack）" % (free, total))
 
         os.makedirs(dest_dir, exist_ok=True)
 
-        # 3) 逐文件 scp；每个文件下来立刻落盘校验，失败立即清 .part 退回
+        # 3) 逐文件下载；每个文件下来立刻落盘校验，失败立即清 .part 退回
         meta_path = None
         bin_path = None
-        for remote, name in files:
+        for name in files:
             tmp = _dst_tmp_path(dest_dir, name)
-            if scp(remote, tmp) != 0:
-                return _fail("scp %s 失败" % name)
+            if not download(sid, name, tmp):
+                return _fail("下载 %s 失败" % name)
             final = os.path.join(dest_dir, name)
             # meta 下完先初步 parse；bin 下完再统一 sha256 校验
             if name == "meta.json":
@@ -293,40 +293,75 @@ def transfer_one(session, http, ssh_du, scp, dest_root, bwlimit_kbit, log):
         log("OK   %s: meta_points=%s digest=%s" % (sid, meta.get("total_points"), digest[:16]))
 
         # 5) 回报板端：extra.transferred=true + state=transferred（一次补丁）
-        try:
-            http("PATCH", "/api/v1/sessions/%s" % sid,
-                 {"state": "transferred", "extra": {"transferred": True}})
-        except urllib.error.HTTPError as exc:
-            # 极端竞争：你方板端在 transferred 前会话被删/FIFO 被清了；本地已验收
-            status, detail = _http_error_status(exc)
-            log("WARN %s: 本地已验收但板回报失败(%s %s)" % (sid, status, detail))
-            _cleanup_parts()
-            return False
+        if not readonly:
+            try:
+                http("PATCH", "/api/v1/sessions/%s" % sid,
+                     {"state": "transferred", "extra": {"transferred": True}})
+            except urllib.error.HTTPError as exc:
+                # 极端竞争：你方板端在 transferred 前会话被删/FIFO 被清了；本地已验收
+                status, detail = _http_error_status(exc)
+                log("WARN %s: 本地已验收但板回报失败(%s %s)" % (sid, status, detail))
+                _cleanup_parts()
+                return False
         return True
+    except BaseException as exc:
+        # 兜底：任何未预期异常都必须退回 ready（旧版 ssh 异常就让会话卡死在 transferring）
+        return _fail("异常 %s: %s" % (type(exc).__name__, exc))
     finally:
         # 非 success 路径统一再扫余下 .part；成功路径上方已逐文件清过
         _cleanup_parts()
+
+
+def recover(sid):
+    """人工把板端卡在 transferring 的会话退回 ready（面板「退回重试」调用）。
+
+    motivation：下载客户端在传输中被关/崩溃时，没人跑 _fail 的自动回退，
+    板端会话会永远停在 transferring，后续同步在抢占一步被 409 拒。
+    仅当板端当前确实是 transferring 时才 PATCH（状态机允许的回退），
+    返回 (ok, reason)；已 ready/已 transferred 等状态一律拒绝。
+    """
+    try:
+        sess = _http_json("GET", "/api/v1/sessions/%s" % sid)
+    except urllib.error.HTTPError as exc:
+        status, _ = _http_error_status(exc)
+        if status == 404:
+            return False, "板端无此会话（可能已被删）"
+        return False, "取会话失败(%s)" % status
+    except BaseException as exc:
+        return False, "取会话失败: %s" % exc
+    state = sess.get("state")
+    if state != "transferring":
+        return False, "板端状态为 %s，无需退回" % (state or "未知")
+    try:
+        _http_json("PATCH", "/api/v1/sessions/%s" % sid, {"state": "ready"})
+    except urllib.error.HTTPError as exc:
+        status, detail = _http_error_status(exc)
+        return False, "退回失败(%s): %s" % (status, detail)
+    except BaseException as exc:
+        return False, "退回失败: %s" % exc
+    return True, ""
 
 
 # ---- 主循环 -----------------------------------------------------------------
 
 
 def process_session(sid, dest_root=None, log=print):
-    """拉单个 ready 会话（回放器「同步」按钮的子进程入口）。返回 True=已 transferred。"""
+    """拉单个会话（回放器「同步」按钮的入口）。返回 True=文件已落地。
+
+    ready 走状态机；transferred 只读复制（板端已回传但本机没有：删过再要/别的 PC 拉过）。
+    """
     try:
         sess = _http_json("GET", "/api/v1/sessions/%s" % sid)
     except BaseException as exc:
         log("FAIL %s: 取会话失败: %s" % (sid, exc))
         return False
-    return transfer_one(sess, _http_json, _ssh_du_bytes,
-                        lambda r, l: _scp_one(r, l, C.SCP_LIMIT_KBIT),
-                        dest_root or C.DEST_ROOT, C.SCP_LIMIT_KBIT, log)
+    return transfer_one(sess, _http_json, _http_size, _http_download,
+                        dest_root or C.DEST_ROOT, log)
 
 
 def run(args):
     dest_root = args.dest or C.DEST_ROOT
     os.makedirs(dest_root, exist_ok=True)
-    bwlimit_kbit = args.kbit
 
     def log(msg):
         print("[%s] %s" % (time.strftime("%H:%M:%S"), msg), flush=True)
@@ -344,11 +379,8 @@ def run(args):
                 break
             time.sleep(args.interval)
             continue
-        ok = transfer_one(
-            job, _http_json,
-            lambda paths: _ssh_du_bytes(paths),
-            lambda remote, local: _scp_one(remote, local, bwlimit_kbit),
-            dest_root, bwlimit_kbit, log)
+        ok = transfer_one(job, _http_json, _http_size, _http_download,
+                          dest_root, log)
         transferred += 1 if ok else 0
         if args.once:
             break
@@ -360,12 +392,12 @@ def cli(argv=None):
     p.add_argument("--once", action="store_true", help="只拉一轮后退出（默认常驻轮询）")
     p.add_argument("--sid", metavar="SID", help="只拉指定会话（回放器内部调用）")
     p.add_argument("--interval", type=float, default=C.POLL_INTERVAL_S, help="轮询间隔秒")
-    p.add_argument("--kbit", type=int, default=C.SCP_LIMIT_KBIT, help="scp -l 限速 (Kbit/s)")
     p.add_argument("--dest", default=C.DEST_ROOT, help="本地落盘根目录")
     args = p.parse_args(argv)
     if args.sid:
         return 0 if process_session(args.sid, args.dest) else 1
-    transferred = run(args)
+    run(args)
+    return 0
 
 
 if __name__ == "__main__":

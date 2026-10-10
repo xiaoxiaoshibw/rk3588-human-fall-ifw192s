@@ -55,9 +55,14 @@
     }
     body.innerHTML = sessions.map(function (s) {
       var canDl = L.canRequestDownload(s);
-      var dlCell = canDl
-        ? '<button data-sid="' + s.session_id + '" class="js-dl">请求下载</button>'
-        : (s.download_requested ? "已请求" : (s.transferred ? "—" : "—"));
+      // 操作列：文件直下链接优先（谁都能用）；「请求下载」仍是为 PC fetch.py 打标记
+      var cell = L.fileLinksHtml(s, API_BASE);
+      if (canDl) {
+        cell += (cell ? " " : "") + '<button data-sid="' + s.session_id + '" class="js-dl">请求下载</button>';
+      } else if (!cell && s.download_requested) {
+        cell = "已请求";
+      }
+      if (!cell) cell = "—";
       return "<tr>" +
         "<td>" + s.session_id + "</td>" +
         "<td>" + L.stateBadgeHtml(s.state) + "</td>" +
@@ -67,7 +72,7 @@
         "<td>" + (s.transferred ? "✓" : "—") + "</td>" +
         "<td>" + (s.download_requested ? "✓" : "—") + "</td>" +
         "<td>" + (s.created_iso || "").replace("T", " ").slice(0, 19) + "</td>" +
-        "<td>" + dlCell + "</td>" +
+        "<td>" + cell + "</td>" +
         "</tr>";
     }).join("");
     body.querySelectorAll(".js-dl").forEach(function (btn) {

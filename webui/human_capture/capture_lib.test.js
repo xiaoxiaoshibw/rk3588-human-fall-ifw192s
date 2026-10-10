@@ -61,6 +61,14 @@ eq(LIB.elapsedSec("2026-10-02T10:00:00Z", t0 + 30 * 1000), 30, "elapsed 30s");
 eq(LIB.elapsedSec("garbage", t0), 0, "elapsed garbage");
 eq(LIB.elapsedSec("2026-10-02T11:00:00Z", t0), 0, "elapsed future→0");
 
+// fileLinksHtml（文件直下，免 SSH）
+eq(LIB.fileLinksHtml({ session_id: "cap_1" }), "", "links gated: 缺文件字段");
+eq(LIB.fileLinksHtml({ session_id: "cap_1", state: "purged", meta_json_path: "m", points_bin_path: "p" }), "", "links gated: purged");
+const links = LIB.fileLinksHtml({ session_id: "cap_20261002_143012", meta_json_path: "/x/m", points_bin_path: "/x/p" }, "http://192.168.3.125:8766");
+ok(links.includes("http://192.168.3.125:8766/api/v1/sessions/cap_20261002_143012/files/meta.json"), "links meta url");
+ok(links.includes("http://192.168.3.125:8766/api/v1/sessions/cap_20261002_143012/files/points.bin"), "links points url");
+ok(LIB.fileLinksHtml({ session_id: "cap x", meta_json_path: "m", points_bin_path: "p" }, "").includes("cap%20x"), "links sid encode");
+
 // 汇总
 console.log(`capture_lib.test.js: ${passed} passed, ${failed} failed`);
 if (failed > 0) {

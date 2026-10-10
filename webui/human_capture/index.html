@@ -49,6 +49,7 @@ tr:hover td { background:rgba(255,255,255,.025); }
 .current-rec .sid { color:var(--text-secondary); font-size:12px; }
 .empty { color:var(--text-muted); padding:8px 0; }
 .err { color:var(--danger); font-size:12px; margin-top:8px; }
+.hint { color:var(--text-muted); font-size:11px; margin-top:8px; line-height:1.6; }
 a { color:var(--accent); }
 .meta-actions { margin-top:8px; }
 </style>
@@ -88,6 +89,8 @@ a { color:var(--accent); }
       </tbody>
     </table>
     <div class="err" id="sessErr"></div>
+    <div class="hint">没装 SSH 的电脑：点 ↓meta / ↓points 直接下载两个文件，放进本机 Console 目录
+      captures\remote\&lt;会话 id&gt;\（自建同名文件夹），回放/标注刷新即可见。</div>
   </section>
 </main>
 

@@ -37,6 +37,9 @@ DEFAULT_CONFIG = {
     "fifo_keep": 10,
     "fifo_interval_sec": 30,
     "disk_floor_mb": 5120,
+    # 网页直下文件的速度上限（Kbit/s），与 fetch.py 的 scp -l 同口径：
+    # 100M 链路留 30% 给实时预览；0 = 不限速
+    "download_limit_kbit": 70000,
     "record_topics": ["/innolidar_points", "/inno_imu", "/device_status"],
     # HC-02
     "record_script": "/root/catkin_ws/src/human_fall_detection/scripts/record_session.py",
@@ -117,6 +120,57 @@ class _Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):  # 降噪：交给外层日志
         sys.stderr.write("[capture_server] %s %s\n" % (self.address_string(), fmt % args))
 
+    # ---------- 会话文件直下 ----------
+
+    def _serve_session_file(self, sid, name):
+        """GET/HEAD /api/v1/sessions/<sid>/files/<name>：meta.json / points.bin 本体。
+
+        给没配 SSH key 的普通 PC 一条免配置回传路（浏览器直接另存，再放进
+        Console 的 captures/remote/<sid>/），与 fetch.py 的 scp 通道并存。
+        路径由 staging_dir 现拼、不走登记表字段；限速保护实时预览。
+        """
+        if not validate_session_id(sid):
+            self._send_error_json(400, "bad_id", "session_id 非法")
+            return
+        if name not in ("meta.json", "points.bin"):
+            self._send_error_json(400, "bad_name", "只允许下载 meta.json / points.bin")
+            return
+        staging = os.path.realpath(self.server.cfg["staging_dir"])
+        path = os.path.realpath(os.path.join(staging, sid, name))
+        if not path.startswith(staging + os.sep) or not os.path.isfile(path):
+            self._send_error_json(404, "file_missing", "会话文件不存在: %s/%s" % (sid, name))
+            return
+        size = os.path.getsize(path)
+        self.send_response(200)
+        self.send_header("Content-Type",
+                         "application/json; charset=utf-8" if name == "meta.json"
+                         else "application/octet-stream")
+        self.send_header("Content-Length", str(size))
+        self.send_header("Content-Disposition", 'attachment; filename="%s"' % name)
+        self.send_header("Access-Control-Allow-Origin", "*")  # 板端 8090 页跨端口引用
+        self.end_headers()
+        if self.command == "HEAD":
+            return
+        limit = int(self.server.cfg.get("download_limit_kbit") or 0)
+        rate = limit * 1000.0 / 8.0  # Kbit/s → 字节/s；0 = 不限速
+        t0 = time.monotonic()
+        sent = 0
+        try:
+            with open(path, "rb") as fh:
+                while True:
+                    chunk = fh.read(256 * 1024)
+                    if not chunk:
+                        break
+                    if rate > 0:
+                        # 本块预算：按已发+本块字节对齐到限速时间表（先等后发）
+                        behind = (sent + len(chunk)) / rate - (time.monotonic() - t0)
+                        if behind > 0:
+                            time.sleep(behind)
+                    self.wfile.write(chunk)
+                    sent += len(chunk)
+        except OSError:
+            self.close_connection = True  # 客户端中断：本端无状态，可整份重下
+
     # ---------- 路由 ----------
 
     def _route(self):
@@ -181,7 +235,7 @@ class _Handler(BaseHTTPRequestHandler):
             return
 
         if parts[:2] == ["api", "v1"] and len(parts) >= 3 and parts[2] == "sessions":
-            sid = parts[3] if len(parts) == 4 else None
+            sid = parts[3] if len(parts) >= 4 else None
             if len(parts) == 3:
                 if self.command == "GET":
                     self._send_json(200, {"sessions": store.list_sessions()})
@@ -288,6 +342,13 @@ class _Handler(BaseHTTPRequestHandler):
                     store.delete(sid)
                     self._send_json(200, {"deleted": sid, "removed": removed})
                     return
+
+            # 网页直下文件本体（免 SSH 的普通 PC 回传路）：
+            # /api/v1/sessions/<sid>/files/<meta.json|points.bin>
+            if (sid is not None and len(parts) == 6 and parts[4] == "files"
+                    and self.command in ("GET", "HEAD")):
+                self._serve_session_file(sid, parts[5])
+                return
 
         self._send_error_json(404, "no_route", "未匹配路由: %s %s" % (self.command, self.path))
 

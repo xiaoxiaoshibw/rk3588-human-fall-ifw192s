@@ -41,7 +41,12 @@ _FETCH = os.path.join(_HERE, "fetch.py")
 # 不许补 prefix/目录通配——保持「单文件 explicit」的最小攻击面（同 _serve_file 白名单精神）。
 _EXTRA_STATIC = frozenset({"human_detect_lib.js", "human_pipe_lib.js"})
 _proc_lock = threading.Lock()
-_proc = None  # 当前同步子进程
+_sync_thread = None      # 当前同步线程（替代旧 subprocess _proc）
+_sync_last_error = None  # 最近一次同步失败原因，前端轮询 /api/sync_status 看
+_sync_running_sid = None # 当前正在拉的 sid（None = 没在拉）
+_sync_last_sid = None     # 最近一次的 sid（成功/失败/短路"已在本地"都会写）
+_sync_last_result = None  # 最近一次结果：None（还在跑/未启动）/ "ok" / "failed"
+_sync_recoverable_sid = None  # 最近失败若因板端卡 transferring：允许人工「退回重试」的 sid
 
 
 def _is_ready_for_load(meta_path):
@@ -62,16 +67,21 @@ def _local_sessions(dest):
         try:
             with open(meta_p, "r", encoding="utf-8") as fh:
                 m = json.load(fh)
+            frames = m.get("frames")
+            size = os.path.getsize(os.path.join(d, "points.bin"))
+            if not isinstance(frames, list) or not frames or not size or size % 28:
+                continue  # 两页消费固定 28B/点；空帧表/空文件/未完整写入不预选。
             out[name] = {
                 "duration_sec": m.get("duration_sec"),
                 "total_points": m.get("total_points"),
                 "frames": len(m.get("frames") or []),
                 "frame_rate": m.get("frame_rate_hz_measured"),
                 "created_iso": m.get("created_iso"),
-                "bytes": os.path.getsize(os.path.join(d, "points.bin")),
+                "bytes": size,
+                "name": m.get("name"),
             }
-        except BaseException:
-            out[name] = {"error": "meta 不可读"}
+        except (OSError, ValueError, TypeError, AttributeError):
+            continue  # 元数据不可读不能当作本地可载入会话。
     return out
 
 
@@ -105,6 +115,30 @@ def _board_delete(sid, timeout=8.0):
         return json.loads(resp.read())
 
 
+def _sync_failure_note(sid):
+    """同步失败后实查板端，给面板可读的失败说明与能否人工退回。
+
+    transferring = 卡死：下载客户端中断时没人跑 fetch._fail 的自动回退。
+    干净失败（下载中断/SHA 不符）fetch 会自己退回 ready+extra.error，应显示真实错误。
+    返回 (说明文本, 是否可「退回重试」)。
+    """
+    try:
+        sess = _board_get("/api/v1/sessions/" + sid)
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return "板端无此会话（可能已被删）", False
+        return "fetch 返回 False（板端状态查询失败 %d）" % exc.code, False
+    except BaseException as exc:
+        return "fetch 返回 False（板端状态查询失败: %s）" % exc, False
+    state = sess.get("state")
+    if state == "transferring":
+        return "板端卡在传输中（上次同步中断）：点「退回重试」退回就绪后重新拉取。", True
+    err = (sess.get("extra") or {}).get("error")
+    if err:
+        return "fetch 失败：%s" % err, False
+    return "fetch 返回 False（板端状态 %s，无错误详情）" % (state or "未知"), False
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         # PyInstaller's windowed console has no stderr stream.
@@ -133,6 +167,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._api_sessions()
         if path == "/api/board/status":
             return self._board_status()
+        if path == "/api/sync_status":
+            return self._api_sync_status()
         if path.startswith("/api/file"):
             return self._serve_file()
         return self._serve_static(path)
@@ -213,6 +249,7 @@ class Handler(BaseHTTPRequestHandler):
                 "download_requested": bool(s.get("download_requested")),
                 "transferred": bool(s.get("transferred")),
                 "local": bool(li),
+                "name": (li or {}).get("name"),
             })
         # 本地有但板端已删的（FIFO 清过）也列上
         listed = {o["sid"] for o in out}
@@ -222,7 +259,8 @@ class Handler(BaseHTTPRequestHandler):
                             "created_iso": li.get("created_iso"),
                             "duration_sec": li.get("duration_sec"),
                             "frames": li.get("frames"),
-                            "local": True})
+                            "local": True,
+                            "name": li.get("name")})
         out.sort(key=lambda o: o.get("created_iso") or "", reverse=True)
         self._json({"sessions": out, "board_error": board_error})
 
@@ -235,13 +273,16 @@ class Handler(BaseHTTPRequestHandler):
         try:
             cur = _board_get("/api/v1/record/current")
             st["current"] = cur.get("session_id")
+            st["current_created_iso"] = cur.get("created_iso")  # 面板已录时长用
         except urllib.error.HTTPError as exc:
             if exc.code == 204:
                 st["current"] = None
             else:
                 st["current"] = None
+            st["current_created_iso"] = None
         except BaseException:
             st["current"] = None
+            st["current_created_iso"] = None
         self._json(st)
 
     def do_POST(self):  # noqa: N802
@@ -262,10 +303,14 @@ class Handler(BaseHTTPRequestHandler):
             return self._proxy(lambda: _board_patch(sid, {"download_requested": True}))
         if path == "/api/sync":
             return self._api_sync()
+        if path == "/api/recover":
+            return self._api_recover()
         if path == "/api/load":
             return self._api_load()
         if path == "/api/delete":
             return self._api_delete()
+        if path == "/api/rename":
+            return self._api_rename()
         if path == "/api/save_annotations":
             return self._api_save_annotations()
         self.send_error(404)
@@ -330,6 +375,56 @@ class Handler(BaseHTTPRequestHandler):
                 out["local"] = "absent"
         self._json(out)
 
+    # ---------- 会话改名（本地别名，不动 sid/目录/板端） ----------
+    def _api_rename(self):
+        """写本机 <sid>/meta.json 的 name 字段；sid 是身份，改名只影响显示。
+
+        空 name = 删除该字段（恢复默认显示）。板端登记不改——要板端
+        webui 也显示名字得改 capture_server，属另一次授权。
+        """
+        body = self._body() or {}
+        sid = body.get("sid", "")
+        name = body.get("name", "")
+        if not self._SID_RE.match(sid):
+            return self._json({"ok": False, "error": "sid 非法"}, 400)
+        if not isinstance(name, str):
+            return self._json({"ok": False, "error": "name 必须是字符串"}, 400)
+        name = name.strip()
+        if len(name) > 60:
+            return self._json({"ok": False, "error": "名称最长 60 字符"}, 400)
+        if any(ord(c) < 32 for c in name):
+            return self._json({"ok": False, "error": "名称不能含控制字符"}, 400)
+
+        meta_path = os.path.join(C.DEST_ROOT, sid, "meta.json")
+        tmp_path = meta_path + ".tmp"
+        if not os.path.isfile(meta_path):
+            return self._json({"ok": False, "error": "本地无此会话（先下载再改名）"}, 404)
+        if os.path.exists(tmp_path):
+            return self._json({"ok": False, "error": "另一写者在途（.tmp 存在）"}, 409)
+        try:
+            with open(meta_path, "r", encoding="utf-8") as fh:
+                meta = json.load(fh)
+        except (OSError, ValueError) as exc:
+            return self._json({"ok": False, "error": "meta 读取失败: %s" % exc}, 500)
+        if name:
+            meta["name"] = name
+        else:
+            meta.pop("name", None)
+        try:
+            with open(tmp_path, "w", encoding="utf-8") as fh:
+                json.dump(meta, fh, ensure_ascii=False, indent=1)
+                fh.flush()
+                os.fsync(fh.fileno())
+            os.replace(tmp_path, meta_path)
+        except OSError as exc:
+            try:
+                if os.path.exists(tmp_path):
+                    os.remove(tmp_path)
+            except OSError:
+                pass
+            return self._json({"ok": False, "error": "写盘失败: %s" % exc}, 500)
+        return self._json({"ok": True, "sid": sid, "name": name})
+
     def _proxy(self, fn):
         try:
             out = fn()
@@ -354,14 +449,16 @@ class Handler(BaseHTTPRequestHandler):
 
     # ---------- 同步 ----------
     def _api_sync(self):
-        global _proc
+        global _sync_thread, _sync_last_error, _sync_running_sid, _sync_last_sid, _sync_last_result
+        global _sync_recoverable_sid
         body = self._body() or {}
         sid = body.get("sid")
         if not sid:
             return self.send_error(400, "sid 必填")
         with _proc_lock:
-            if _proc and _proc.poll() is None:
-                return self._json({"ok": False, "error": "已有同步在跑"}, 409)
+            if _sync_thread and _sync_thread.is_alive():
+                return self._json({"ok": False, "error": "已有同步在跑（%s）" % _sync_running_sid}, 409)
+            _sync_recoverable_sid = None  # 新一轮尝试开始：上一轮失败留下的「退回重试」入口作废
             # 如果板上还没 download_requested，先打标记（双保险）
             try:
                 _board_patch(sid, {"download_requested": True})
@@ -369,12 +466,77 @@ class Handler(BaseHTTPRequestHandler):
                 pass
             # 如果已转手持本地有件，不必重拉
             if _is_ready_for_load(os.path.join(C.DEST_ROOT, sid, "meta.json")):
+                _sync_last_sid = sid
+                _sync_last_result = "ok"      # 短路：已在本地——等同成功
+                _sync_last_error = None
+                _sync_running_sid = None
                 return self._json({"ok": True, "note": "已在本地"})
-            _proc = subprocess.Popen(
-                [sys.executable, "-u", _FETCH, "--sid", sid,
-                 "--dest", C.DEST_ROOT],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        return self._json({"ok": True, "note": "拉取中，轮询 /api/sessions 等 local=true"})
+            # 新起一轮：清空上次结果
+            _sync_last_error = None
+            _sync_last_result = None
+            _sync_running_sid = sid
+            _sync_last_sid = sid
+
+            def _worker(target_sid):
+                global _sync_last_error, _sync_last_result, _sync_recoverable_sid
+                try:
+                    import fetch as F
+                    ok = F.process_session(target_sid, C.DEST_ROOT, log=lambda m: None)
+                    if ok:
+                        _sync_last_result = "ok"
+                        _sync_recoverable_sid = None
+                    else:
+                        # 实查板端再给结论：卡 transferring ≠ 有 extra.error（旧文案会误导）
+                        _sync_last_result = "failed"
+                        _sync_last_error, recoverable = _sync_failure_note(target_sid)
+                        _sync_recoverable_sid = target_sid if recoverable else None
+                except BaseException as exc:
+                    _sync_last_result = "failed"
+                    _sync_last_error = "%s: %s" % (type(exc).__name__, exc)
+                    _sync_recoverable_sid = None
+                finally:
+                    # 不在这里清 _sync_running_sid——前端一轮 /api/sync_status 看到
+                    # 线程死了再清，留给它先看到最终结果
+                    pass
+
+            _sync_thread = threading.Thread(target=_worker, args=(sid,), daemon=True)
+            _sync_thread.start()
+        return self._json({"ok": True, "note": "拉取中，轮询 /api/sync_status 等 local=true"})
+
+    def _api_sync_status(self):
+        """轮询端点：返回当前同步状态 + 最近失败原因，前端用来提前失败提示。"""
+        alive = bool(_sync_thread and _sync_thread.is_alive())
+        return self._json({
+            "running": alive,
+            "sid": _sync_running_sid if alive else None,
+            "last_sid": _sync_last_sid,
+            "last_result": _sync_last_result,   # None=未启动/在跑; "ok"=success; "failed"=error
+            "last_error": _sync_last_error,
+            "recoverable": bool(_sync_recoverable_sid),  # True=板端卡 transferring，可「退回重试」
+            "recover_sid": _sync_recoverable_sid,
+        })
+
+    def _api_recover(self):
+        """人工退回：把板端卡在 transferring 的会话置回 ready（仅面板显式触发）。
+
+        与 fetch._fail 的自动回退同一条状态机转换；区别是用于客户端进程
+        在下载中被中断、没人跑 _fail 时留下的卡死会话。
+        """
+        global _sync_recoverable_sid
+        body = self._body() or {}
+        sid = body.get("sid", "")
+        if not self._SID_RE.match(sid):
+            return self._json({"ok": False, "error": "sid 非法"}, 400)
+        try:
+            import fetch as F
+        except ImportError as exc:
+            return self._json({"ok": False, "error": "退回需要 fetch 模块: " + str(exc)}, 503)
+        ok, reason = F.recover(sid)
+        if not ok:
+            return self._json({"ok": False, "error": reason}, 409)
+        if _sync_recoverable_sid == sid:
+            _sync_recoverable_sid = None
+        return self._json({"ok": True, "sid": sid})
 
     def _api_load(self):
         def _pick():
