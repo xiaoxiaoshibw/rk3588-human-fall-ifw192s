@@ -1,0 +1,70 @@
+{
+  "evidence_id": "2026-10-10_human_unify_r1",
+  "created_iso": "2026-10-10",
+  "branch": "master",
+  "head_commit": "347a5bf",
+  "worktree_state": "30 user-side dirty files preserved untouched; this round only adds new files",
+  "production_sha_file": "02_source_sha/prod_sha256.json",
+  "data_inventory": "01_data_audit/sessions_inventory.json",
+  "deliverables": [
+    "00_BASELINE.md",
+    "01_ARCHITECTURE_PLAN.md",
+    "02_DATA_AND_GT_AUDIT.md",
+    "03_PIPELINE_DIAGNOSTICS.md",
+    "04_AB_COMPARISON.md",
+    "05_REGRESSION_REPORT.md",
+    "06_PERFORMANCE_REPORT.md",
+    "07_review_prompt.md",
+    "07_review_findings.md",
+    "07_review_prompt_r2.md",
+    "07_review_findings_r2.md",
+    "08_INTEGRATION_READINESS.md",
+    "FINAL_REPORT.md",
+    "evidence_manifest.json"
+  ],
+  "code_deliverables": [
+    "pc_apps/human_core/schema.js",
+    "pc_apps/human_core/leveling.js",
+    "pc_apps/human_core/data_loader.js",
+    "pc_apps/human_core/engine.js",
+    "pc_apps/human_core/runner.js",
+    "pc_apps/human_core/run_all_tests.js",
+    "pc_apps/human_core/test_schema.js",
+    "pc_apps/human_core/test_data_loader.js",
+    "pc_apps/human_core/test_engine_smoke.js",
+    "pc_apps/human_core/test_replay_contract.js",
+    "pc_apps/human_core/test_edge_cases.js",
+    "pc_apps/human_core/test_model_compat.js",
+    "pc_apps/human_core/test_perf.js"
+  ],
+  "runs": "runs/cap_*/<sid>__<MODE>.json with manifest.json (sha256_16 each)",
+  "verdict": {
+    "A_SOFTWARE_ACCEPTED": "PASS_conditional",
+    "B_ALGORITHM_ACCEPTED": "NOT_MEASURABLE",
+    "C_PRODUCTION_READY": "BLOCKED"
+  },
+  "independent_review": {
+    "r1": {
+      "audit_by": "opencode-go/deepseek-v4.1-flash",
+      "verdict": "REWORK",
+      "fails": 4,
+      "notes": 2,
+      "file": "07_review_findings.md"
+    },
+    "r2": {
+      "audit_by": "opencode-go/deepseek-v4.1-flash",
+      "verdict": "REWORK_partial_close",
+      "file": "07_review_findings_r2.md",
+      "fix_resolved": ["FAIL-1", "FAIL-4", "note-5", "note-6"],
+      "remaining_residual": ["perf numbers ±20% (declared)", "U2 != A in 2 sessions (declared)"]
+    }
+  },
+  "gt_reality": {
+    "HUMAN_VERIFIED": 0,
+    "HUMAN_UNVERIFIED": 0,
+    "PSEUDO_LABEL": 11,
+    "UNKNOWN": 16,
+    "unit": "sessions (out of 27)",
+    "consequence": "P/R/F1 NOT_MEASURABLE; all fall detection BLOCKED; multi-person ID switch UNKNOWN"
+  }
+}
