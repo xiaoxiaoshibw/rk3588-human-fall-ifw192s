@@ -102,8 +102,8 @@ const APPS = [
   {name:"板端 WebUI", desc:"RK3588 · 192.168.31.58:8090", icon:svg('<rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>'), url:"http://192.168.31.58:8090/",
    fail:"当前不在内网，无法连接板端 WebUI"},
   {name:"算法验证", desc:"四区评估 · TLS / SVD / RANSAC", icon:svg('<path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>'), url:replayBase + "/validation.html"},
-  {name:"人体识别", desc:"路线 A · 聚类检测 · pin ROI 姿态判定", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html?sid=cap_20261002_223757"},
-  {name:"人检锁定", desc:"路线 B · 模型检测 · 实时 ROI 跟踪", icon:svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:replayBase + "/human_track.html"},
+  {name:"人体识别", desc:"纯几何 · pin ROI 辅助判别人/家具 · 不跑模型", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html"},
+  {name:"人检锁定", desc:"B2a RandomForest 51维人/非人 · rf_person_v1 · 实时跟踪", icon:svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:replayBase + "/human_track.html"},
 ];
 // ============================================================
 const $ = s => document.querySelector(s);

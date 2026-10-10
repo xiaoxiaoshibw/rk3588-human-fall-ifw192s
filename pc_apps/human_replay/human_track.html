@@ -46,6 +46,7 @@
   <button id="detectBtn" class="on">人检: 开</button>
   <button id="playBtnTop" title="空格">▶</button>
 </div>
+<div id="sessionNotice" role="status" aria-live="polite" style="flex:none; padding:0 14px; color:var(--warning); overflow-wrap:anywhere"></div>
 <main>
   <div id="view"></div>
   <canvas id="trackTopView"></canvas>
@@ -106,6 +107,7 @@
 <script src="rf_person.js"></script>
 <script src="detect_overlay.js"></script>
 
+<script src="session_selection.js"></script>
 <script src="replay.js"></script>
 
 <script>
@@ -135,37 +137,6 @@
     /* ---- 会话选择: 从 /api/sessions?scope=local 扫本机 captures\remote,
      * 点击行 -> replay.js 暴露的 window.__load_session_sid(sid) 载入 ---- */
     var sessSel = document.getElementById("sessSel");
-    function load_local_sessions() {
-        fetch("/api/sessions?scope=local")
-            .then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (d) {
-                if (!d) return;
-                /* 服务返回 {sessions: [...]} 或数组; 只要本地 local=true 的 */
-                var list = d.sessions || d;
-                if (!Array.isArray(list)) return;
-                list.sort(function (a, b) { return (b.sid || "").localeCompare(a.sid || ""); });
-                sessSel.innerHTML = '<option value="">— 选会话 —</option>';
-                list.forEach(function (s) {
-                    if (!s.local) return;
-                    var o = document.createElement("option");
-                    o.value = s.sid;
-                    var drt = s.duration_sec ? " (" + s.duration_sec.toFixed(1) + "s)" : "";
-                    o.textContent = (s.name || s.sid) + drt;
-                    sessSel.appendChild(o);
-                });
-            })
-            .catch(function () { /* fetch 失败或板端不在: 静默, 让用户重试 */ });
-    }
-    sessSel.addEventListener("change", function () {
-        var sid = sessSel.value;
-        if (!sid) return;
-        if (window.__load_session_sid) {
-            window.__load_session_sid(sid);
-            sessLabel.textContent = "载入中…";
-        }
-    });
-
-
     function show(v) {
         on = v;
         btn.classList.toggle("on", v);
@@ -197,13 +168,6 @@
                 if (S.meta && S.meta.session_id) sessLabel.textContent = "会话: " + S.meta.session_id;
             }, 200);
         }
-        /* URL 参数 ?sid= 处理: 支持从 console/其它页带 sid 跳入 */
-        var params = new URLSearchParams(location.search);
-        var qs = params.get("sid");
-        if (qs && !S.meta) {
-            /* 等 replay S 起来后载入一次 */
-            if (window.__load_session_sid) window.__load_session_sid(qs);
-        }
         show(true);
     }
 
@@ -228,7 +192,12 @@
 
     /* 会话列表与 overlay 初始化解耦: 即使 overlay 还没就绪也先把下拉填上,
      * 否则用户没载入会话时 load_local_sessions 永远不会跑 (死锁). */
-    load_local_sessions();
+    SESSION_SELECTION.start({
+        select: sessSel,
+        notice: document.getElementById("sessionNotice"),
+        url: "/api/sessions?scope=local",
+        load: function (sid) { return window.__load_session_sid(sid); }
+    });
 
     btn.addEventListener("click", function () { show(!on); });
 

@@ -60,6 +60,7 @@
     <section class="side-sec">
       <h2 class="sec-title">Session 会话</h2>
       <select id="session" style="width:100%"><option value="">请选择…</option></select>
+      <div id="sessionNotice" role="status" aria-live="polite"></div>
       <div id="metaInfo" class="muted" style="font-size:11.5px;margin-top:8px;line-height:1.6">载入 meta + points.bin，并自动应用 leveled 配平。</div>
       <div class="field" style="margin:10px 0 0"><label>进度</label></div>
       <input id="seekBar" type="range" min="0" max="0" step="1" value="0" title="拖动跳转帧" style="width:100%">
@@ -134,5 +135,6 @@
 <script src="human_replay_lib.js"></script>
 <script src="human_detect_lib.js"></script>
 <script src="human_pipe_lib.js"></script>
+<script src="session_selection.js"></script>
 <script src="human_detect.js"></script>
 </body></html>

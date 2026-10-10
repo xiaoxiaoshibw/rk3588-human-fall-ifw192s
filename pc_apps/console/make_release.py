@@ -25,6 +25,12 @@ FILES = {  # zip 内路径 -> 源文件（相对脚本目录）
     "LiDAR_Console/源码/make_release.py": "make_release.py",
     # B1 新增 (运行时 datas 已在 exe 内嵌 via spec, 源码副本在 ZIP 里参考用)
     "LiDAR_Console/源码/human_replay/human_track.html": "../human_replay/human_track.html",
+    "LiDAR_Console/源码/human_replay/human_detect.html": "../human_replay/human_detect.html",
+    "LiDAR_Console/源码/human_replay/human_detect.js": "../human_replay/human_detect.js",
+    "LiDAR_Console/源码/human_replay/human_replay_lib.py": "../human_replay/human_replay_lib.py",
+    "LiDAR_Console/源码/human_replay/session_selection.js": "../human_replay/session_selection.js",
+    "LiDAR_Console/源码/human_replay/session_selection.test.js": "../human_replay/session_selection.test.js",
+    "LiDAR_Console/源码/human_replay/session_selection_test.py": "../human_replay/session_selection_test.py",
     "LiDAR_Console/源码/human_replay/detect_overlay.js": "../human_replay/detect_overlay.js",
     "LiDAR_Console/源码/human_replay/detect_ui.js": "../human_replay/detect_ui.js",
     "LiDAR_Console/源码/human_replay/detect_overlay.test.js": "../human_replay/detect_overlay.test.js",

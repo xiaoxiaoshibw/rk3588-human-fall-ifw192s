@@ -52,21 +52,6 @@
         els.status.style.color = is_err ? "#d46a62" : "#a0a3ab";
     }
 
-    // ---- 会话列表 ------------------------------------------------------------------
-    function refresh_sessions() {
-        return fetch("/api/leveling/sessions").then(function (r) { return r.json(); })
-            .then(function (js) {
-                var sel = els.session;
-                sel.innerHTML = "<option value=''>请选择…</option>";
-                (js.sessions || []).forEach(function (s) {
-                    var o = document.createElement("option");
-                    o.value = s.sid;
-                    o.textContent = s.sid + "  " + (s.frames || "?") + "帧";
-                    sel.appendChild(o);
-                });
-            }).catch(function (e) { status("会话列表失败: " + e.message, true); });
-    }
-
     // ---- 载入（与 replay.js 同构；多一步 leveled_latest in-place transform） ----------
     function load_sid(sid) {
         status("载入 meta…");
@@ -542,9 +527,6 @@
     }
 
     // ---- 绑定 --------------------------------------------------------------------------
-    els.session.addEventListener("change", function () {
-        if (els.session.value) load_sid(els.session.value);
-    });
     els.pinModeBtn.addEventListener("click", function () {
         S.pinArmed = !S.pinArmed;
         els.pinModeBtn.textContent = S.pinArmed ? "点图面任意位置…（再点取消）" : "点选 ROI（或按 K 对准星）";
@@ -570,23 +552,10 @@
     });
 
     setup_scene();
-    refresh_sessions();
-
-    /* 深链 / 默认选目标会话：query sid= 或自动选第一个含 cap_；用户授权的
-     * 会话 cap_20261002_223757 若在列表中则预选之。 */
-    (function () {
-        var want = new URLSearchParams(location.search).get("sid") || "cap_20261002_223757";
-        var it = setInterval(function () {
-            var sel = els.session;
-            for (var i = 0; i < sel.options.length; i++) {
-                if (sel.options[i].value === want) {
-                    clearInterval(it);
-                    sel.value = want;
-                    load_sid(want);
-                    return;
-                }
-            }
-            if (sel.options.length > 1) { /* 列表已渲染但没找到 want：放弃预选，等用户选 */ clearInterval(it); }
-        }, 150);
-    })();
+    SESSION_SELECTION.start({
+        select: els.session,
+        notice: document.getElementById("sessionNotice"),
+        url: "/api/leveling/sessions",
+        load: load_sid
+    });
 })();

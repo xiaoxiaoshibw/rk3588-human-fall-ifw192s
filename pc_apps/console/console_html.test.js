@@ -83,61 +83,61 @@ t('内联脚本能 parse 并转移出 <script> 块', () => {
 t('板端 WebUI 带 fail 文案且本地应用不带', () => {
   const win = loadShell();
   const APPS = vm.runInContext('APPS', win);
-  if (!APPS[2].fail) throw new Error('板端 WebUI 缺 fail 文案');
-  if (APPS[0].fail || APPS[1].fail || APPS[3].fail) throw new Error('本地应用不应有 fail');
+  if (!APPS[1].fail) throw new Error('板端 WebUI 缺 fail 文案');
+  if (APPS[0].fail || APPS[2].fail || APPS[3].fail) throw new Error('本地应用不应有 fail');
 });
 
-t('APPS[2] fail 文案 = 当前不在内网', () => {
+t('APPS[1] fail 文案 = 当前不在内网', () => {
   const win = loadShell();
   const APPS = vm.runInContext('APPS', win);
-  eq(APPS[2].fail, '当前不在内网，无法连接板端 WebUI');
+  eq(APPS[1].fail, '当前不在内网，无法连接板端 WebUI');
   eq(APPS[0].fail, undefined);
-  eq(APPS[1].fail, undefined);
+  eq(APPS[2].fail, undefined);
   eq(APPS[3].fail, undefined);
 });
 
 t('探活成功 → 直接嵌 iframe，不弹提示', () => {
   const win = loadShell(null, okFetch);
-  vm.runInContext('open(2)', win);
+  vm.runInContext('open(1)', win);
   eq(registry.err.hidden, true, '应无提示');
   eq(registry.f.hidden, false, 'iframe 应可见');
-  eq(registry.f.src, 'http://192.168.3.125:8090/', '探活成功后才设 src');
+  eq(registry.f.src, 'http://192.168.31.58:8090/', '探活成功后才设 src');
 });
 
 t('探活失败（不在内网）→ 弹提示并隐藏 iframe', () => {
   const win = loadShell(null, failFetch);
-  vm.runInContext('open(2)', win);
+  vm.runInContext('open(1)', win);
   eq(registry.err.hidden, false, '应弹提示');
   eq(registry.f.hidden, true, 'iframe 应隐藏');
   eq(registry.errmsg.textContent, '当前不在内网，无法连接板端 WebUI');
-  eq(registry.errurl.textContent, 'http://192.168.3.125:8090');
+  eq(registry.errurl.textContent, 'http://192.168.31.58:8090');
 });
 
 t('无 fail 文案的本地应用不探活，直接嵌', () => {
   const win = loadShell(null, { then() { throw new Error('本地应用不应探活'); } });
-  vm.runInContext('open(0)', win);  // 数据标注（本地服务）
+  vm.runInContext('open(0)', win);  // 会话回放（本地服务）
   eq(registry.err.hidden, true, '本地应用永不弹提示');
-  eq(registry.f.src, 'http://127.0.0.1:8901/annotator.html');
+  eq(registry.f.src, 'http://127.0.0.1:8901/');
 });
 
 t('重进同应用不重载（保留页内状态）', () => {
   let probes = 0;
   const win = loadShell(null, { then(onOk) { probes++; onOk({}); } });
-  vm.runInContext('open(2)', win);
-  vm.runInContext('open(2)', win);
+  vm.runInContext('open(1)', win);
+  vm.runInContext('open(1)', win);
   eq(probes, 1, '同应用只探活一次');
 });
 
 t('「重试」重新探活：先失败后成功 → 收起提示并嵌板端', () => {
   let n = 0;
   const win = loadShell(null, { then(onOk, onErr) { (n++ ? onOk : onErr)({}); } });
-  vm.runInContext('open(2)', win);
+  vm.runInContext('open(1)', win);
   eq(registry.err.hidden, false, '首次应弹提示');
   if (typeof registry.retry.onclick !== 'function') throw new Error('retry.onclick 未挂');
   registry.retry.onclick.call({});
   eq(registry.err.hidden, true);
   eq(registry.f.hidden, false);
-  eq(registry.f.src, 'http://192.168.3.125:8090/', '重试成功后应嵌板端');
+  eq(registry.f.src, 'http://192.168.31.58:8090/', '重试成功后应嵌板端');
 });
 
 t('CSS 回归：#err 在 hidden 时必须 display:none（防 #err{display:flex} 盖掉 [hidden]）', () => {

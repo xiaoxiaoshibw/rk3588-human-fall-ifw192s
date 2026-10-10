@@ -11,9 +11,11 @@ pywebview 一行起窗口；UI 复用 console.html 单文件，零重复维护�
 依赖：pip install pywebview
 """
 import configparser
+import errno
 import http.server
 import os
 import runpy
+import socket
 import sys
 import threading
 
@@ -121,11 +123,21 @@ def _start_replay_server():
     if getattr(sys, "frozen", False):
         m["C"].DEST_ROOT = _frozen_capture_root()
     os.makedirs(m["C"].DEST_ROOT, exist_ok=True)
+    class ReplayServer(m["ThreadingHTTPServer"]):
+        # Windows SO_REUSEADDR permits two listeners on one port; keep each
+        # console's pages and data on its own server, including the fallback.
+        allow_reuse_address = False
+        def server_bind(self):
+            if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
+                self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+            super().server_bind()
     try:
-        srv = m["ThreadingHTTPServer"](("127.0.0.1", m["PORT"]), m["Handler"])
-    except OSError:
+        srv = ReplayServer(("127.0.0.1", m["PORT"]), m["Handler"])
+    except OSError as exc:
+        if exc.errno not in (errno.EADDRINUSE, errno.EACCES) and getattr(exc, "winerror", None) not in (10048, 10013):
+            raise
         # An existing console/replay instance may own 8901; keep each instance's code/data together.
-        srv = m["ThreadingHTTPServer"](("127.0.0.1", 0), m["Handler"])
+        srv = ReplayServer(("127.0.0.1", 0), m["Handler"])
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     print("human_replay 服务 http://127.0.0.1:%d/（随控制台退出）" % srv.server_address[1])
     return srv.server_address[1]
