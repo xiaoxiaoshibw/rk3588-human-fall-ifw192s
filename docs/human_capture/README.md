@@ -1,3 +1,7 @@
+## 2026-10-10 本地分组提交审计
+
+用户明确“分析一下哪些可以提交先提交了”。本轮仅收录已验证的 HTTP 下载/同步/改名与 Console 会话入口/独占端口软件修改；混合文件按功能拆分，其余算法、GT、研究与派生数据原样保留。[唯一验收表 v1](COMMIT_AUDIT_20261010_ACCEPTANCE.md)、[回传](returns/COMMIT-AUDIT-20261010.md)、[证据与暂留原因](evidence/2026-10-10_commit_audit_r1/README.md)。两组候选 Git 树的隔离回归均通过；不 push，不改变原工单资格；本轮设备/物理/部署/采集/候选 EXE 构建与启动 NOT_RUN。相关旧发布证据按原文归档，仅为历史记录。
+
 # human_capture — 人体数据采集 / 回放 / 标注支线
 
 > 新支线，独立于 HF/GL 工单体系。文档组织照搬 HF 的 milestone/ticket/证据习惯，

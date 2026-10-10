@@ -1,0 +1,380 @@
+Perform an independent read-only code review and OUTPUT YOUR FINAL REVIEW IN ONE RESPONSE. All tools are disabled; the complete in-scope evidence is pasted below. Do not call any tools, inspect the repo, execute, edit, deploy, or delegate. Review only correctness of session entry selection and backend eligibility, duplicate load handlers, query validation, asynchronous failure/empty behavior, stable sorting, B2-A-FIX-R1 lifecycle compatibility, and packaging. If finding a defect, cite file/function and severity with concrete reproduction; otherwise state no actionable finding. Treat tests as evidence, not a substitute for code review. No need for a plan.
+Context: requested behavior is latest complete local cap_YYYYMMDD_HHMMSS if no sid, honor valid available explicit sid, clear notice plus safe fallback on unavailable/illegal sid. meta-only, empty points, bad JSON and misaligned binary excluded. All detector/RF/threshold/point processing algorithm files unchanged vs current source baseline. B2 existing replay.load handles notify/reset/attach_color; do not modify it. Source Console cards already have no fixed sid. Old EXE retained fixed sid, this round explicitly rebuilds/publishes new EXE. Existing detector functions use 28B per point. Discoverability does not require finished TLS; a leveling-in-progress session still has complete raw data. One documented integrity limit: alignment-only index does not validate every frame offset/content; runtime loader errors are shown visibly. Existing source differs from old EXE for B2 lifecycle/panel; these inherited versions are frozen and will be packaged as such. Node selector 11 cases and 16 integrated regression suites all pass.
+
+--- session_selection.js ---
+/* 本地完整会话入口；不参与配平、检测或跟踪算法。 */
+"use strict";
+var SESSION_SELECTION = (function () {
+    function valid_sid(sid) { return typeof sid === "string" && /^cap_\d{8}_\d{6}$/.test(sid); }
+    function choose(list, query) {
+        var seen = new Set();
+        list = list.filter(function (s) {
+            if (!valid_sid(s.sid) || s.local === false || s.error || !(s.frames > 0) || seen.has(s.sid)) return false;
+            seen.add(s.sid); return true;
+        }).sort(function (a, b) { return a.sid < b.sid ? 1 : a.sid > b.sid ? -1 : 0; });
+        var explicit = query !== null;
+        var found = valid_sid(query) && list.some(function (s) { return s.sid === query; });
+        var sid = found ? query : (list[0] && list[0].sid) || "";
+        var message = explicit && !found ? "指定 sid 不合法或本地不可用：" + query + "。" : "";
+        message += sid ? (explicit && !found ? "已回退到本地最新会话：" + sid : "") : "没有本地完整可用会话（需 meta.json + points.bin）；请先同步。";
+        return { list: list, sid: sid, message: message };
+    }
+    function start(opts) {
+        var select = opts.select, notice = opts.notice;
+        select.disabled = true;
+        function load(sid) {
+            select.value = sid;
+            return Promise.resolve().then(function () { return opts.load(sid); }).catch(function (e) {
+                notice.textContent = "会话 " + sid + " 载入失败：" + e.message + "；请重试或选择其他本地会话。";
+            });
+        }
+        select.addEventListener("change", function () {
+            if (!select.value) return;
+            notice.textContent = "";
+            return load(select.value);
+        });
+        return fetch(opts.url).then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.json();
+        }).then(function (data) {
+            var list = Array.isArray(data) ? data : data.sessions;
+            if (!Array.isArray(list)) throw new Error("会话列表格式错误");
+            var picked = choose(list, new URLSearchParams(location.search).get("sid"));
+            select.innerHTML = '<option value="">— 选本地会话 —</option>';
+            picked.list.forEach(function (s) {
+                var option = document.createElement("option");
+                option.value = s.sid;
+                option.textContent = (s.name || s.sid) + " · " + s.frames + "帧";
+                select.appendChild(option);
+            });
+            notice.textContent = picked.message;
+            select.disabled = !picked.list.length;
+            if (picked.sid) return load(picked.sid);
+        }).catch(function (e) {
+            notice.textContent = "本地会话发现失败：" + e.message + "；请刷新重试。";
+        });
+    }
+    return { choose: choose, start: start };
+})();
+if (typeof module !== "undefined") module.exports = SESSION_SELECTION;
+
+--- local backend ---
+def _is_ready_for_load(meta_path):
+    return os.path.isfile(meta_path) and os.path.isfile(os.path.join(
+        os.path.dirname(meta_path), "points.bin"))
+
+
+def _local_sessions(dest):
+    """本地 captures/remote 下的 cap_* 目录 → 轻描述（从 meta.json 揭sel）。"""
+    out = {}
+    if not os.path.isdir(dest):
+        return out
+    for name in os.listdir(dest):
+        d = os.path.join(dest, name)
+        meta_p = os.path.join(d, "meta.json")
+        if not (os.path.isdir(d) and name.startswith("cap_") and _is_ready_for_load(meta_p)):
+            continue
+        try:
+            with open(meta_p, "r", encoding="utf-8") as fh:
+                m = json.load(fh)
+            frames = m.get("frames")
+            size = os.path.getsize(os.path.join(d, "points.bin"))
+            if not isinstance(frames, list) or not frames or not size or size % 28:
+                continue  # 两页消费固定 28B/点；空帧表/空文件/未完整写入不预选。
+            out[name] = {
+                "duration_sec": m.get("duration_sec"),
+                "total_points": m.get("total_points"),
+                "frames": len(m.get("frames") or []),
+                "frame_rate": m.get("frame_rate_hz_measured"),
+                "created_iso": m.get("created_iso"),
+                "bytes": size,
+                "name": m.get("name"),
+            }
+        except (OSError, ValueError, TypeError, AttributeError):
+            continue  # 元数据不可读不能当作本地可载入会话。
+    return out
+
+
+
+--- human_track integration ---
+    /* ---- 会话选择: 从 /api/sessions?scope=local 扫本机 captures\remote,
+     * 点击行 -> replay.js 暴露的 window.__load_session_sid(sid) 载入 ---- */
+    var sessSel = document.getElementById("sessSel");
+    function show(v) {
+        on = v;
+        btn.classList.toggle("on", v);
+        btn.textContent = v ? "人检: 开" : "人检: 关";
+        topview.style.display = v ? "block" : "none";
+        hud.style.display = v ? "block" : "none";
+    }
+
+    /* 页面载入时就调 lut=gray + 隐藏 lutSel, 这是页面自身的呈现选择, 不等几何就绪 */
+    (function early_lut_gray() {
+        var lutSel = document.getElementById("lutSel");
+        if (lutSel) { lutSel.value = "gray"; lutSel.disabled = true; lutSel.parentElement.style.display = "none"; }
+    })();
+
+    function try_init() {
+        if (typeof window.replay_internal === "undefined" || !window.replay_internal.S) { setTimeout(try_init, 100); return; }
+        var S = window.replay_internal.S;
+        if (!S.geo || !S.colour) { setTimeout(try_init, 100); return; }
+        /* human_track 简化场景: 轴/原点标记/大球全关 (检查点与 人主体) */
+        if (S.originBall) S.originBall.visible = false;
+        if (S.axes) S.axes.visible = false;
+        if (S.grid_fine) S.grid_fine.visible = false;
+        HUMAN_DETECT_OVERLAY.init({ scene: S.scene, bgEnvelopeJson: null, topCanvas: topview, rf: RF_PERSON });
+        HUMAN_DETECT_OVERLAY.attach_color(S.colour);
+        if (!stop_hud_timer) {
+            stop_hud_timer = setInterval(function () {
+                if (!on) return;
+                hud.textContent = S.hud_extra || "扫描中";
+                if (S.meta && S.meta.session_id) sessLabel.textContent = "会话: " + S.meta.session_id;
+            }, 200);
+        }
+        show(true);
+    }
+
+    /* 并行拉三个静态资源: 背景包络 + RF json; 任何一个失败用空值继续 */
+    var bg_fetch = fetch("/bg_envelope.json").then(function (r) { return r.ok ? r.text() : ""; }).catch(function () { return ""; });
+    var rf_fetch = fetch("/rf_person_v1.json").then(function (r) { return r.ok ? r.text() : ""; }).catch(function () { return ""; });
+
+    Promise.all([bg_fetch, rf_fetch]).then(function (arr) {
+        var bg_txt = arr[0], rf_txt = arr[1];
+        if (bg_txt) {
+            try { HUMAN_DETECT_OVERLAY.init({ bgEnvelopeJson: bg_txt }); bg_loaded = true; }
+            catch (e) { console.log("bg_envelope 加载失败: " + e); }
+        }
+        if (rf_txt) {
+            try {
+                var n_trees = RF_PERSON.init(rf_txt);
+                console.log("RF loaded " + n_trees + " trees (19KB)");
+            } catch (e) { console.log("RF 加载失败: " + e); }
+        }
+        try_init();
+    });
+
+    /* 会话列表与 overlay 初始化解耦: 即使 overlay 还没就绪也先把下拉填上,
+     * 否则用户没载入会话时 load_local_sessions 永远不会跑 (死锁). */
+    /* B2-A-FIX-R1 E#4: 冷启载入独立于 S.geo；load() 仍单点接管代际/reset。 */
+    SESSION_SELECTION.start({
+        select: sessSel,
+        notice: document.getElementById("sessionNotice"),
+        url: "/api/sessions?scope=local",
+        load: function (sid) { return window.__load_session_sid(sid); }
+    });
+
+
+--- existing-file patch ---
+--- a/pc_apps/human_replay/human_detect.js
++++ b/pc_apps/human_replay/human_detect.js
+@@ -50,21 +50,6 @@
+     function status(msg, is_err) {
+         els.status.textContent = msg;
+         els.status.style.color = is_err ? "#d46a62" : "#a0a3ab";
+-    }
+-
+-    // ---- 会话列表 ------------------------------------------------------------------
+-    function refresh_sessions() {
+-        return fetch("/api/leveling/sessions").then(function (r) { return r.json(); })
+-            .then(function (js) {
+-                var sel = els.session;
+-                sel.innerHTML = "<option value=''>请选择…</option>";
+-                (js.sessions || []).forEach(function (s) {
+-                    var o = document.createElement("option");
+-                    o.value = s.sid;
+-                    o.textContent = s.sid + "  " + (s.frames || "?") + "帧";
+-                    sel.appendChild(o);
+-                });
+-            }).catch(function (e) { status("会话列表失败: " + e.message, true); });
+     }
+ 
+     // ---- 载入（与 replay.js 同构；多一步 leveled_latest in-place transform） ----------
+@@ -542,9 +527,6 @@
+     }
+ 
+     // ---- 绑定 --------------------------------------------------------------------------
+-    els.session.addEventListener("change", function () {
+-        if (els.session.value) load_sid(els.session.value);
+-    });
+     els.pinModeBtn.addEventListener("click", function () {
+         S.pinArmed = !S.pinArmed;
+         els.pinModeBtn.textContent = S.pinArmed ? "点图面任意位置…（再点取消）" : "点选 ROI（或按 K 对准星）";
+@@ -570,34 +552,10 @@
+     });
+ 
+     setup_scene();
+-    refresh_sessions();
+-
+-    /* 深链 / 默认选目标会话：query sid= 优先（深链）；否则选【最新】会话（非写死老的）
+-     * —— refresh_sessions 按字典序 append options, cap_YYYYMMDD_HHMMSS 字典序≈时间序,
+-     * 取末尾 cap_* 即最新。老写死 cap_20261002_223757 的默认值会导致新会话落地后还选老的。 */
+-    (function () {
+-        var qs = new URLSearchParams(location.search).get("sid");
+-        var it = setInterval(function () {
+-            var sel = els.session;
+-            var o = sel.options;
+-            var want = qs;
+-            if (!want) {
+-                /* 无 query: 列表就绪后取最后一个 cap_* 作为默认 */
+-                if (o.length <= 1) return;
+-                for (var i = o.length - 1; i >= 0; i--) {
+-                    if (o[i].value && o[i].value.indexOf("cap_") === 0) { want = o[i].value; break; }
+-                }
+-                if (!want) { clearInterval(it); return; }
+-            }
+-            for (var j = 0; j < o.length; j++) {
+-                if (o[j].value === want) {
+-                    clearInterval(it);
+-                    sel.value = want;
+-                    load_sid(want);
+-                    return;
+-                }
+-            }
+-            if (qs && o.length > 1) { /* 深链 want 不在列表：放弃预选 */ clearInterval(it); }
+-        }, 150);
+-    })();
++    SESSION_SELECTION.start({
++        select: els.session,
++        notice: document.getElementById("sessionNotice"),
++        url: "/api/leveling/sessions",
++        load: load_sid
++    });
+ })();
+--- a/pc_apps/human_replay/human_detect.html
++++ b/pc_apps/human_replay/human_detect.html
+@@ -60,6 +60,7 @@
+     <section class="side-sec">
+       <h2 class="sec-title">Session 会话</h2>
+       <select id="session" style="width:100%"><option value="">请选择…</option></select>
++      <div id="sessionNotice" role="status" aria-live="polite"></div>
+       <div id="metaInfo" class="muted" style="font-size:11.5px;margin-top:8px;line-height:1.6">载入 meta + points.bin，并自动应用 leveled 配平。</div>
+       <div class="field" style="margin:10px 0 0"><label>进度</label></div>
+       <input id="seekBar" type="range" min="0" max="0" step="1" value="0" title="拖动跳转帧" style="width:100%">
+@@ -134,5 +135,6 @@
+ <script src="human_replay_lib.js"></script>
+ <script src="human_detect_lib.js"></script>
+ <script src="human_pipe_lib.js"></script>
++<script src="session_selection.js"></script>
+ <script src="human_detect.js"></script>
+ </body></html>
+--- a/pc_apps/human_replay/human_track.html
++++ b/pc_apps/human_replay/human_track.html
+@@ -46,6 +46,7 @@
+   <button id="detectBtn" class="on">人检: 开</button>
+   <button id="playBtnTop" title="空格">▶</button>
+ </div>
++<div id="sessionNotice" role="status" aria-live="polite" style="flex:none; padding:0 14px; color:var(--warning); overflow-wrap:anywhere"></div>
+ <main>
+   <div id="view"></div>
+   <canvas id="trackTopView"></canvas>
+@@ -106,6 +107,7 @@
+ <script src="rf_person.js"></script>
+ <script src="detect_overlay.js"></script>
+ 
++<script src="session_selection.js"></script>
+ <script src="replay.js"></script>
+ 
+ <script>
+@@ -135,39 +137,6 @@
+     /* ---- 会话选择: 从 /api/sessions?scope=local 扫本机 captures\remote,
+      * 点击行 -> replay.js 暴露的 window.__load_session_sid(sid) 载入 ---- */
+     var sessSel = document.getElementById("sessSel");
+-    function load_local_sessions() {
+-        fetch("/api/sessions?scope=local")
+-            .then(function (r) { return r.ok ? r.json() : null; })
+-            .then(function (d) {
+-                if (!d) return;
+-                /* 服务返回 {sessions: [...]} 或数组; 只要本地 local=true 的 */
+-                var list = d.sessions || d;
+-                if (!Array.isArray(list)) return;
+-                list.sort(function (a, b) { return (b.sid || "").localeCompare(a.sid || ""); });
+-                sessSel.innerHTML = '<option value="">— 选会话 —</option>';
+-                list.forEach(function (s) {
+-                    if (!s.local) return;
+-                    var o = document.createElement("option");
+-                    o.value = s.sid;
+-                    var drt = s.duration_sec ? " (" + s.duration_sec.toFixed(1) + "s)" : "";
+-                    o.textContent = (s.name || s.sid) + drt;
+-                    sessSel.appendChild(o);
+-                });
+-            })
+-            .catch(function () { /* fetch 失败或板端不在: 静默, 让用户重试 */ });
+-    }
+-    sessSel.addEventListener("change", function () {
+-        var sid = sessSel.value;
+-        if (!sid) return;
+-        /* B2-A-FIX-R1: 切会话不再手动 reset — replay.js load() 入口单点接管
+-         * (notify_session + reset + tracker_last_idx=-1), 消除路径遗漏. */
+-        if (window.__load_session_sid) {
+-            window.__load_session_sid(sid);
+-            sessLabel.textContent = "载入中…";
+-        }
+-    });
+-
+-
+     function show(v) {
+         on = v;
+         btn.classList.toggle("on", v);
+@@ -180,20 +149,6 @@
+     (function early_lut_gray() {
+         var lutSel = document.getElementById("lutSel");
+         if (lutSel) { lutSel.value = "gray"; lutSel.disabled = true; lutSel.parentElement.style.display = "none"; }
+-    })();
+-
+-    /* B2-A-FIX-R1 E#4: ?sid= 独立于 S.geo 前置守卫 — 冷启时 replay 尚未 load,
+-     * S.geo/S.colour 为空, 不能把 ?sid= 载入挡在 try_init 里. 先触发载入, 再等几何就绪. */
+-    (function handle_query_sid() {
+-        var qs = new URLSearchParams(location.search).get("sid");
+-        if (!qs) return;
+-        var t = setInterval(function () {
+-            if (window.__load_session_sid) {
+-                clearInterval(t);
+-                var S = window.replay_internal && window.replay_internal.S;
+-                if (!S || !S.meta) window.__load_session_sid(qs);
+-            }
+-        }, 100);
+     })();
+ 
+     function try_init() {
+@@ -237,7 +192,13 @@
+ 
+     /* 会话列表与 overlay 初始化解耦: 即使 overlay 还没就绪也先把下拉填上,
+      * 否则用户没载入会话时 load_local_sessions 永远不会跑 (死锁). */
+-    load_local_sessions();
++    /* B2-A-FIX-R1 E#4: 冷启载入独立于 S.geo；load() 仍单点接管代际/reset。 */
++    SESSION_SELECTION.start({
++        select: sessSel,
++        notice: document.getElementById("sessionNotice"),
++        url: "/api/sessions?scope=local",
++        load: function (sid) { return window.__load_session_sid(sid); }
++    });
+ 
+     btn.addEventListener("click", function () {
+         var next = !on;
+--- a/pc_apps/human_replay/human_replay_lib.py
++++ b/pc_apps/human_replay/human_replay_lib.py
+@@ -67,17 +67,21 @@
+         try:
+             with open(meta_p, "r", encoding="utf-8") as fh:
+                 m = json.load(fh)
++            frames = m.get("frames")
++            size = os.path.getsize(os.path.join(d, "points.bin"))
++            if not isinstance(frames, list) or not frames or not size or size % 28:
++                continue  # 两页消费固定 28B/点；空帧表/空文件/未完整写入不预选。
+             out[name] = {
+                 "duration_sec": m.get("duration_sec"),
+                 "total_points": m.get("total_points"),
+                 "frames": len(m.get("frames") or []),
+                 "frame_rate": m.get("frame_rate_hz_measured"),
+                 "created_iso": m.get("created_iso"),
+-                "bytes": os.path.getsize(os.path.join(d, "points.bin")),
++                "bytes": size,
+                 "name": m.get("name"),
+             }
+-        except BaseException:
+-            out[name] = {"error": "meta 不可读"}
++        except (OSError, ValueError, TypeError, AttributeError):
++            continue  # 元数据不可读不能当作本地可载入会话。
+     return out
+ 
+ 

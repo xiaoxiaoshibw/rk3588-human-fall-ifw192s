@@ -1,0 +1,560 @@
+--- a/pc_apps/human_replay/human_detect.js
++++ b/pc_apps/human_replay/human_detect.js
+@@ -50,21 +50,6 @@
+     function status(msg, is_err) {
+         els.status.textContent = msg;
+         els.status.style.color = is_err ? "#d46a62" : "#a0a3ab";
+-    }
+-
+-    // ---- 会话列表 ------------------------------------------------------------------
+-    function refresh_sessions() {
+-        return fetch("/api/leveling/sessions").then(function (r) { return r.json(); })
+-            .then(function (js) {
+-                var sel = els.session;
+-                sel.innerHTML = "<option value=''>请选择…</option>";
+-                (js.sessions || []).forEach(function (s) {
+-                    var o = document.createElement("option");
+-                    o.value = s.sid;
+-                    o.textContent = s.sid + "  " + (s.frames || "?") + "帧";
+-                    sel.appendChild(o);
+-                });
+-            }).catch(function (e) { status("会话列表失败: " + e.message, true); });
+     }
+ 
+     // ---- 载入（与 replay.js 同构；多一步 leveled_latest in-place transform） ----------
+@@ -542,9 +527,6 @@
+     }
+ 
+     // ---- 绑定 --------------------------------------------------------------------------
+-    els.session.addEventListener("change", function () {
+-        if (els.session.value) load_sid(els.session.value);
+-    });
+     els.pinModeBtn.addEventListener("click", function () {
+         S.pinArmed = !S.pinArmed;
+         els.pinModeBtn.textContent = S.pinArmed ? "点图面任意位置…（再点取消）" : "点选 ROI（或按 K 对准星）";
+@@ -570,34 +552,10 @@
+     });
+ 
+     setup_scene();
+-    refresh_sessions();
+-
+-    /* 深链 / 默认选目标会话：query sid= 优先（深链）；否则选【最新】会话（非写死老的）
+-     * —— refresh_sessions 按字典序 append options, cap_YYYYMMDD_HHMMSS 字典序≈时间序,
+-     * 取末尾 cap_* 即最新。老写死 cap_20261002_223757 的默认值会导致新会话落地后还选老的。 */
+-    (function () {
+-        var qs = new URLSearchParams(location.search).get("sid");
+-        var it = setInterval(function () {
+-            var sel = els.session;
+-            var o = sel.options;
+-            var want = qs;
+-            if (!want) {
+-                /* 无 query: 列表就绪后取最后一个 cap_* 作为默认 */
+-                if (o.length <= 1) return;
+-                for (var i = o.length - 1; i >= 0; i--) {
+-                    if (o[i].value && o[i].value.indexOf("cap_") === 0) { want = o[i].value; break; }
+-                }
+-                if (!want) { clearInterval(it); return; }
+-            }
+-            for (var j = 0; j < o.length; j++) {
+-                if (o[j].value === want) {
+-                    clearInterval(it);
+-                    sel.value = want;
+-                    load_sid(want);
+-                    return;
+-                }
+-            }
+-            if (qs && o.length > 1) { /* 深链 want 不在列表：放弃预选 */ clearInterval(it); }
+-        }, 150);
+-    })();
++    SESSION_SELECTION.start({
++        select: els.session,
++        notice: document.getElementById("sessionNotice"),
++        url: "/api/leveling/sessions",
++        load: load_sid
++    });
+ })();
+--- a/pc_apps/human_replay/human_detect.html
++++ b/pc_apps/human_replay/human_detect.html
+@@ -60,6 +60,7 @@
+     <section class="side-sec">
+       <h2 class="sec-title">Session 会话</h2>
+       <select id="session" style="width:100%"><option value="">请选择…</option></select>
++      <div id="sessionNotice" role="status" aria-live="polite"></div>
+       <div id="metaInfo" class="muted" style="font-size:11.5px;margin-top:8px;line-height:1.6">载入 meta + points.bin，并自动应用 leveled 配平。</div>
+       <div class="field" style="margin:10px 0 0"><label>进度</label></div>
+       <input id="seekBar" type="range" min="0" max="0" step="1" value="0" title="拖动跳转帧" style="width:100%">
+@@ -134,5 +135,6 @@
+ <script src="human_replay_lib.js"></script>
+ <script src="human_detect_lib.js"></script>
+ <script src="human_pipe_lib.js"></script>
++<script src="session_selection.js"></script>
+ <script src="human_detect.js"></script>
+ </body></html>
+--- a/pc_apps/human_replay/human_track.html
++++ b/pc_apps/human_replay/human_track.html
+@@ -46,6 +46,7 @@
+   <button id="detectBtn" class="on">人检: 开</button>
+   <button id="playBtnTop" title="空格">▶</button>
+ </div>
++<div id="sessionNotice" role="status" aria-live="polite" style="flex:none; padding:0 14px; color:var(--warning); overflow-wrap:anywhere"></div>
+ <main>
+   <div id="view"></div>
+   <canvas id="trackTopView"></canvas>
+@@ -106,6 +107,7 @@
+ <script src="rf_person.js"></script>
+ <script src="detect_overlay.js"></script>
+ 
++<script src="session_selection.js"></script>
+ <script src="replay.js"></script>
+ 
+ <script>
+@@ -135,39 +137,6 @@
+     /* ---- 会话选择: 从 /api/sessions?scope=local 扫本机 captures\remote,
+      * 点击行 -> replay.js 暴露的 window.__load_session_sid(sid) 载入 ---- */
+     var sessSel = document.getElementById("sessSel");
+-    function load_local_sessions() {
+-        fetch("/api/sessions?scope=local")
+-            .then(function (r) { return r.ok ? r.json() : null; })
+-            .then(function (d) {
+-                if (!d) return;
+-                /* 服务返回 {sessions: [...]} 或数组; 只要本地 local=true 的 */
+-                var list = d.sessions || d;
+-                if (!Array.isArray(list)) return;
+-                list.sort(function (a, b) { return (b.sid || "").localeCompare(a.sid || ""); });
+-                sessSel.innerHTML = '<option value="">— 选会话 —</option>';
+-                list.forEach(function (s) {
+-                    if (!s.local) return;
+-                    var o = document.createElement("option");
+-                    o.value = s.sid;
+-                    var drt = s.duration_sec ? " (" + s.duration_sec.toFixed(1) + "s)" : "";
+-                    o.textContent = (s.name || s.sid) + drt;
+-                    sessSel.appendChild(o);
+-                });
+-            })
+-            .catch(function () { /* fetch 失败或板端不在: 静默, 让用户重试 */ });
+-    }
+-    sessSel.addEventListener("change", function () {
+-        var sid = sessSel.value;
+-        if (!sid) return;
+-        /* B2-A-FIX-R1: 切会话不再手动 reset — replay.js load() 入口单点接管
+-         * (notify_session + reset + tracker_last_idx=-1), 消除路径遗漏. */
+-        if (window.__load_session_sid) {
+-            window.__load_session_sid(sid);
+-            sessLabel.textContent = "载入中…";
+-        }
+-    });
+-
+-
+     function show(v) {
+         on = v;
+         btn.classList.toggle("on", v);
+@@ -180,20 +149,6 @@
+     (function early_lut_gray() {
+         var lutSel = document.getElementById("lutSel");
+         if (lutSel) { lutSel.value = "gray"; lutSel.disabled = true; lutSel.parentElement.style.display = "none"; }
+-    })();
+-
+-    /* B2-A-FIX-R1 E#4: ?sid= 独立于 S.geo 前置守卫 — 冷启时 replay 尚未 load,
+-     * S.geo/S.colour 为空, 不能把 ?sid= 载入挡在 try_init 里. 先触发载入, 再等几何就绪. */
+-    (function handle_query_sid() {
+-        var qs = new URLSearchParams(location.search).get("sid");
+-        if (!qs) return;
+-        var t = setInterval(function () {
+-            if (window.__load_session_sid) {
+-                clearInterval(t);
+-                var S = window.replay_internal && window.replay_internal.S;
+-                if (!S || !S.meta) window.__load_session_sid(qs);
+-            }
+-        }, 100);
+     })();
+ 
+     function try_init() {
+@@ -237,7 +192,13 @@
+ 
+     /* 会话列表与 overlay 初始化解耦: 即使 overlay 还没就绪也先把下拉填上,
+      * 否则用户没载入会话时 load_local_sessions 永远不会跑 (死锁). */
+-    load_local_sessions();
++    /* B2-A-FIX-R1 E#4: 冷启载入独立于 S.geo；load() 仍单点接管代际/reset。 */
++    SESSION_SELECTION.start({
++        select: sessSel,
++        notice: document.getElementById("sessionNotice"),
++        url: "/api/sessions?scope=local",
++        load: function (sid) { return window.__load_session_sid(sid); }
++    });
+ 
+     btn.addEventListener("click", function () {
+         var next = !on;
+--- a/pc_apps/human_replay/human_replay_lib.py
++++ b/pc_apps/human_replay/human_replay_lib.py
+@@ -67,17 +67,21 @@
+         try:
+             with open(meta_p, "r", encoding="utf-8") as fh:
+                 m = json.load(fh)
++            frames = m.get("frames")
++            size = os.path.getsize(os.path.join(d, "points.bin"))
++            if not isinstance(frames, list) or not frames or not size or size % 28:
++                continue  # 两页消费固定 28B/点；空帧表/空文件/未完整写入不预选。
+             out[name] = {
+                 "duration_sec": m.get("duration_sec"),
+                 "total_points": m.get("total_points"),
+                 "frames": len(m.get("frames") or []),
+                 "frame_rate": m.get("frame_rate_hz_measured"),
+                 "created_iso": m.get("created_iso"),
+-                "bytes": os.path.getsize(os.path.join(d, "points.bin")),
++                "bytes": size,
+                 "name": m.get("name"),
+             }
+-        except BaseException:
+-            out[name] = {"error": "meta 不可读"}
++        except (OSError, ValueError, TypeError, AttributeError):
++            continue  # 元数据不可读不能当作本地可载入会话。
+     return out
+ 
+ 
+--- /dev/null
++++ b/pc_apps/human_replay/session_selection.js
+@@ -0,0 +1,55 @@
++/* 本地完整会话入口；不参与配平、检测或跟踪算法。 */
++"use strict";
++var SESSION_SELECTION = (function () {
++    function valid_sid(sid) { return typeof sid === "string" && sid.length <= 100 && /^cap_\d{8}_\d{6}(?:_[A-Za-z0-9_-]+)?$/.test(sid); }
++    function choose(list, query) {
++        var seen = new Set();
++        list = list.filter(function (s) {
++            if (!valid_sid(s.sid) || s.local === false || s.error || !(s.frames > 0) || seen.has(s.sid)) return false;
++            seen.add(s.sid); return true;
++        }).sort(function (a, b) { return a.sid < b.sid ? 1 : a.sid > b.sid ? -1 : 0; });
++        var explicit = query !== null;
++        var found = valid_sid(query) && list.some(function (s) { return s.sid === query; });
++        var sid = found ? query : (list[0] && list[0].sid) || "";
++        var message = explicit && !found ? "指定 sid 不合法或本地不可用：" + (query || "（空）") + "。" : "";
++        message += sid ? (explicit && !found ? "已回退到本地最新会话：" + sid : "") : "没有本地完整可用会话（需 meta.json + points.bin）；请先同步。";
++        return { list: list, sid: sid, message: message };
++    }
++    function start(opts) {
++        var select = opts.select, notice = opts.notice;
++        select.disabled = true;
++        function load(sid) {
++            select.value = sid;
++            return Promise.resolve().then(function () { return opts.load(sid); }).catch(function (e) {
++                notice.textContent = "会话 " + sid + " 载入失败：" + e.message + "；请重试或选择其他本地会话。";
++            });
++        }
++        select.addEventListener("change", function () {
++            if (!select.value) return;
++            notice.textContent = "";
++            return load(select.value);
++        });
++        return fetch(opts.url).then(function (r) {
++            if (!r.ok) throw new Error("HTTP " + r.status);
++            return r.json();
++        }).then(function (data) {
++            var list = Array.isArray(data) ? data : data.sessions;
++            if (!Array.isArray(list)) throw new Error("会话列表格式错误");
++            var picked = choose(list, new URLSearchParams(location.search).get("sid"));
++            select.innerHTML = '<option value="">— 选本地会话 —</option>';
++            picked.list.forEach(function (s) {
++                var option = document.createElement("option");
++                option.value = s.sid;
++                option.textContent = (s.name || s.sid) + " · " + s.frames + "帧";
++                select.appendChild(option);
++            });
++            notice.textContent = picked.message;
++            select.disabled = !picked.list.length;
++            if (picked.sid) return load(picked.sid);
++        }).catch(function (e) {
++            notice.textContent = "本地会话发现失败：" + e.message + "；请刷新重试。";
++        });
++    }
++    return { choose: choose, start: start };
++})();
++if (typeof module !== "undefined") module.exports = SESSION_SELECTION;
+--- /dev/null
++++ b/pc_apps/human_replay/session_selection.test.js
+@@ -0,0 +1,78 @@
++"use strict";
++const assert = require("node:assert/strict");
++const fs = require("node:fs");
++const vm = require("node:vm");
++const picker = require("./session_selection.js");
++const old = "cap_20261002_223757", latest = "cap_20261009_181716";
++const rows = [{sid:old,frames:2,local:true},{sid:latest,frames:3,local:true}];
++let tests=0;
++function test(name, fn) { fn(); console.log("PASS "+name); tests++; }
++test("S01 default latest with reversed/shuffled input", () => {
++    for (const list of [rows,rows.slice().reverse()]) assert.equal(picker.choose(list,null).sid,latest);
++});
++test("S02 valid explicit old sid respected", () => assert.equal(picker.choose(rows,old).sid,old));
++test("S03 unavailable/invalid/empty explicit sid visible safe fallback", () => {
++    for(const sid of ["cap_20261010_235959","../x","", "<img onerror=x>"]) {
++        const p=picker.choose(rows,sid); assert.equal(p.sid,latest); assert.match(p.message,/回退/);
++    }
++});
++test("S04 incomplete/remote/error/empty rows excluded", () => {
++    const list=rows.concat([{sid:"cap_20261010_000000",frames:0},
++        {sid:"cap_20261010_010000",frames:1,local:false},
++        {sid:"cap_20261010_020000",frames:1,error:"bad meta"}]);
++    assert.equal(picker.choose(list,null).sid,latest);
++});
++test("S05 empty list finishes with clear notice", () => {
++    const p=picker.choose([],null); assert.equal(p.sid,""); assert.match(p.message,/没有本地完整/);
++});
++test("S06 deterministic sorting and dedup independent of alias/created_iso", () => {
++    const list=rows.concat([{...rows[1],name:"aaa",created_iso:"1900"}]);
++    assert.deepEqual(picker.choose(list,null).list.map(s=>s.sid),[latest,old]);
++});
++test("S12 legal local clip suffix respected and unsafe suffix rejected", () => {
++    const sid="cap_20261002_165321_clip_1989287-1989294";
++    assert.equal(picker.choose(rows.concat([{sid,frames:2,local:true}]),sid).sid,sid);
++    for(const bad of [sid+"/file",sid+"..",sid+" ",sid+"_".repeat(100)]) {
++        assert.equal(picker.choose(rows,bad).sid,latest);
++        assert.match(picker.choose(rows,bad).message,/回退/);
++    }
++});
++
++async function integration(query, response, failLoad=false, failHTTP=false) {
++    let listener; const loads=[];
++    const select={disabled:false,innerHTML:"",value:"",options:[],addEventListener(t,fn){listener=fn;},appendChild(o){this.options.push(o);}};
++    const notice={textContent:""};
++    const ctx={URLSearchParams,Set,Promise,location:{search:query},document:{createElement(){return {}; }},
++        fetch:async()=>({ok:!failHTTP,status:503,json:async()=>response})};
++    vm.createContext(ctx); vm.runInContext(fs.readFileSync("session_selection.js","utf8"),ctx);
++    await ctx.SESSION_SELECTION.start({select,notice,url:"/api/sessions?scope=local",load:sid=>{loads.push(sid);if(failLoad)throw Error("bin HTTP 404");}});
++    return {select,notice,loads,listener};
++}
++(async()=>{
++    for (const [query,sid] of [["",latest],["?sid="+old,old],["?sid=../x",latest]]) {
++        const got=await integration(query,{sessions:rows});
++        assert.deepEqual(got.loads,[sid]); assert.equal(got.select.value,sid);
++        if(query.includes("../")) assert.match(got.notice.textContent,/回退/);
++    }
++    console.log("PASS S07 async startup default / explicit / fallback");tests++;
++    const empty=await integration("",{sessions:[]});assert.equal(empty.select.disabled,true);assert.deepEqual(empty.loads,[]);
++    const failed=await integration("",{sessions:rows},false,true);assert.match(failed.notice.textContent,/发现失败/);assert.deepEqual(failed.loads,[]);
++    const malformed=await integration("",{});assert.match(malformed.notice.textContent,/格式错误/);
++    console.log("PASS S08 empty / HTTP error / malformed terminate");tests++;
++    const race=await integration("",{sessions:rows},true);assert.match(race.notice.textContent,/载入失败/);
++    console.log("PASS S09 stale files at load fail visibly, no silent replacement");tests++;
++    for(const page of ["human_detect.html","human_track.html"]) {
++        const html=fs.readFileSync(page,"utf8");assert.match(html,/id="sessionNotice"/);assert.match(html,/session_selection.js/);
++        assert.doesNotMatch(html,/\?sid=cap_/);
++    }
++    assert.match(fs.readFileSync("human_track.html","utf8"),/url: "\/api\/sessions\?scope=local"/);
++    assert.match(fs.readFileSync("human_detect.js","utf8"),/url: "\/api\/leveling\/sessions"/);
++    assert.doesNotMatch(fs.readFileSync("human_detect.js","utf8"),/els\.session\.addEventListener\("change"/);
++    assert.doesNotMatch(fs.readFileSync("human_track.html","utf8"),/sessSel\.addEventListener\("change"/);
++    console.log("PASS S10 both page integrations and query-free entrypoints");tests++;
++    const manual=await integration("",{sessions:rows});
++    manual.select.value=old;await manual.listener();
++    assert.deepEqual(manual.loads,[latest,old]);
++    console.log("PASS S11 manual switch loads exactly once; no legacy duplicate listener");tests++;
++    console.log(tests+" tests passed");
++})().catch(e=>{console.error(e);process.exitCode=1;});
+--- /dev/null
++++ b/pc_apps/human_replay/session_selection_test.py
+@@ -0,0 +1,51 @@
++"""真实本地 HTTP 契约；所有数据写入临时目录，板端请求禁止。"""
++import json
++from pathlib import Path
++import tempfile
++import threading
++import unittest
++from unittest.mock import patch
++import urllib.request
++import human_replay_lib as H
++
++
++class SessionSelectionTest(unittest.TestCase):
++    def test_complete_missing_bin_empty_invalid_and_both_endpoints(self):
++        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C, "DEST_ROOT", tmp):
++            root = Path(tmp)
++            good = ["cap_20261002_223757", "cap_20261009_181716"]
++            cases = good + ["cap_20261010_010000", "cap_20261010_020000", "cap_20261010_030000", "cap_20261010_040000", "cap_20261010_050000"]
++            for sid in cases:
++                d = root / sid
++                d.mkdir()
++                (d / "meta.json").write_text(json.dumps({"session_id":sid,"frames":[{"seq":1,"offset_points":0,"count_points":1}]}),encoding="utf-8")
++                (d / "points.bin").write_bytes(bytes(28))
++            (root / cases[2] / "points.bin").unlink()  # meta-only
++            (root / cases[3] / "points.bin").write_bytes(b"")
++            (root / cases[4] / "meta.json").write_text("{}",encoding="utf-8")
++            (root / cases[5] / "meta.json").write_text("invalid",encoding="utf-8")
++            (root / cases[6] / "points.bin").write_bytes(bytes(27))
++            server = H.ThreadingHTTPServer(("127.0.0.1",0),H.Handler)
++            thread = threading.Thread(target=server.serve_forever,daemon=True)
++            thread.start()
++            opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
++            try:
++                with patch.object(H,"_board_get",side_effect=AssertionError("board forbidden")) as board:
++                    for endpoint in ("/api/sessions?scope=local","/api/leveling/sessions"):
++                        with opener.open("http://127.0.0.1:%d%s" % (server.server_address[1],endpoint),timeout=2) as response:
++                            data=json.load(response)
++                        self.assertEqual(sorted(s["sid"] for s in data["sessions"]),good)
++                    board.assert_not_called()
++                    self.assertEqual(set(H._local_sessions(tmp)),set(good))
++                    for sid in good:
++                        for name in ("meta.json","points.bin"):
++                            with opener.open("http://127.0.0.1:%d/api/file?sid=%s&name=%s" % (server.server_address[1],sid,name),timeout=2) as response:
++                                self.assertEqual(response.read(),(root/sid/name).read_bytes())
++            finally:
++                server.shutdown();server.server_close();thread.join()
++            for sid in good:
++                (root/sid/"points.bin").unlink()
++            self.assertEqual(H._local_sessions(tmp),{})
++
++
++if __name__ == "__main__": unittest.main()
+--- a/pc_apps/console/README.txt
++++ b/pc_apps/console/README.txt
+@@ -1,5 +1,5 @@
+ ====================================================
+- LiDAR 总控制台 (LiDAR Console)  20261009 B1
++ LiDAR 总控制台 (LiDAR Console)  20261010 会话入口收口测试版
+ ====================================================
+ 
+ 【运行】
+@@ -14,13 +14,14 @@
+     - 离线配平     四区评估 (TLS / SVD / RANSAC)
+     - 算法验证     四个会话配平结果与算法对照
+     - 人体识别     纯几何 · pin ROI 辅助判别人/家具 (不跑模型)
+-                   (默认载入 cap_20261002_223757,
+-                    需要先对同一会话跑过一次「离线配平」)
++                   无 sid 默认载入本地最新完整会话；合法 ?sid= 尊重指定，
++                   不可用时提示并回退。配平结果若有则应用，否则显示未配平提示。
+     - 人检锁定     B2a RandomForest 51维人/非人 · rf_person_v1 · 实时跟踪
+                    会话回放中聚类出候选后, rf_person.js 提 51 维几何特征
+                    并跑 rf_person_v1.json 推断 P(person), 实时画红框 + track_id
+ 
+-  回放/配平/人体识别/人检锁定服务 (127.0.0.1:8901) 随控制台一起启动，
++  回放/配平/人体识别/人检锁定服务随控制台一起启动（本机默认 8901，
++  被占用时自动选择独立空闲端口；页面链接随实例端口），
+   关闭控制台窗口即自动停止，无需另开命令行。
+ 
+ 【系统要求】
+--- a/pc_apps/console/make_release.py
++++ b/pc_apps/console/make_release.py
+@@ -25,6 +25,12 @@
+     "LiDAR_Console/源码/make_release.py": "make_release.py",
+     # B1 新增 (运行时 datas 已在 exe 内嵌 via spec, 源码副本在 ZIP 里参考用)
+     "LiDAR_Console/源码/human_replay/human_track.html": "../human_replay/human_track.html",
++    "LiDAR_Console/源码/human_replay/human_detect.html": "../human_replay/human_detect.html",
++    "LiDAR_Console/源码/human_replay/human_detect.js": "../human_replay/human_detect.js",
++    "LiDAR_Console/源码/human_replay/human_replay_lib.py": "../human_replay/human_replay_lib.py",
++    "LiDAR_Console/源码/human_replay/session_selection.js": "../human_replay/session_selection.js",
++    "LiDAR_Console/源码/human_replay/session_selection.test.js": "../human_replay/session_selection.test.js",
++    "LiDAR_Console/源码/human_replay/session_selection_test.py": "../human_replay/session_selection_test.py",
+     "LiDAR_Console/源码/human_replay/detect_overlay.js": "../human_replay/detect_overlay.js",
+     "LiDAR_Console/源码/human_replay/detect_ui.js": "../human_replay/detect_ui.js",
+     "LiDAR_Console/源码/human_replay/detect_overlay.test.js": "../human_replay/detect_overlay.test.js",
+--- a/pc_apps/console/console_gui.py
++++ b/pc_apps/console/console_gui.py
+@@ -11,9 +11,11 @@
+ 依赖：pip install pywebview
+ """
+ import configparser
++import errno
+ import http.server
+ import os
+ import runpy
++import socket
+ import sys
+ import threading
+ 
+@@ -121,11 +123,21 @@
+     if getattr(sys, "frozen", False):
+         m["C"].DEST_ROOT = _frozen_capture_root()
+     os.makedirs(m["C"].DEST_ROOT, exist_ok=True)
++    class ReplayServer(m["ThreadingHTTPServer"]):
++        # Windows SO_REUSEADDR permits two listeners on one port; keep each
++        # console's pages and data on its own server, including the fallback.
++        allow_reuse_address = False
++        def server_bind(self):
++            if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
++                self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
++            super().server_bind()
+     try:
+-        srv = m["ThreadingHTTPServer"](("127.0.0.1", m["PORT"]), m["Handler"])
+-    except OSError:
++        srv = ReplayServer(("127.0.0.1", m["PORT"]), m["Handler"])
++    except OSError as exc:
++        if exc.errno not in (errno.EADDRINUSE, errno.EACCES) and getattr(exc, "winerror", None) not in (10048, 10013):
++            raise
+         # An existing console/replay instance may own 8901; keep each instance's code/data together.
+-        srv = m["ThreadingHTTPServer"](("127.0.0.1", 0), m["Handler"])
++        srv = ReplayServer(("127.0.0.1", 0), m["Handler"])
+     threading.Thread(target=srv.serve_forever, daemon=True).start()
+     print("human_replay 服务 http://127.0.0.1:%d/（随控制台退出）" % srv.server_address[1])
+     return srv.server_address[1]
+--- a/pc_apps/console/console_test.py
++++ b/pc_apps/console/console_test.py
+@@ -1,8 +1,11 @@
+ """GL-W01 startup: existing replay server must not prevent a new console instance."""
+ import importlib.util
++import errno
++import json
+ import os
+ from pathlib import Path
+ import sys
++import socket
+ import tempfile
+ import unittest
+ from unittest.mock import patch
+@@ -49,20 +52,28 @@
+ 
+     def test_occupied_default_port_uses_new_instance_server(self):
+         servers = []
+-        def make(address, handler):
+-            if address[1] == 8901:
+-                raise OSError('occupied by existing replay instance')
+-            server = H.ThreadingHTTPServer(address, handler)
+-            servers.append(server)
+-            return server
++        class TrackedServer(H.ThreadingHTTPServer):
++            def __init__(self, address, handler):
++                super().__init__(address, handler)
++                servers.append(self)
++        # Real occupied socket with address reuse enabled, as on the existing
++        # Windows replay service. A mocked OSError misses duplicate listeners.
++        occupied = H.ThreadingHTTPServer(('127.0.0.1', 0), H.Handler)
++        self.assertTrue(occupied.allow_reuse_address)
++        self.addCleanup(occupied.server_close)
++        occupied_port = occupied.server_address[1]
+         with tempfile.TemporaryDirectory() as tmp, patch.object(H.C,'DEST_ROOT',tmp), patch.object(G,'HERE',str(REPLAY.parent)):
+-            namespace = {'C':H.C,'ThreadingHTTPServer':make,'PORT':8901,'Handler':H.Handler}
++            namespace = {'C':H.C,'ThreadingHTTPServer':TrackedServer,'PORT':occupied_port,'Handler':H.Handler}
+             with patch.object(G.runpy,'run_path',return_value=namespace):
+                 port = G._start_replay_server()
+                 try:
+-                    self.assertNotEqual(port,8901)
++                    self.assertNotEqual(port,occupied_port)
++                    self.assertFalse(servers[0].allow_reuse_address)
++                    self.assertEqual(servers[0].socket.getsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR), 0)
++                    if hasattr(socket, 'SO_EXCLUSIVEADDRUSE'):
++                        self.assertEqual(servers[0].socket.getsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE), 1)
+                     with urllib.request.urlopen('http://127.0.0.1:%d/api/leveling/sessions'%port) as response:
+-                        self.assertIn(b'"sessions": []',response.read())
++                        self.assertEqual(json.load(response)['sessions'], [])
+                     with patch.object(H.sys,'stderr',None):
+                         with urllib.request.urlopen('http://127.0.0.1:%d/leveling.html'%port) as response:
+                             self.assertEqual(response.status,200)
+@@ -70,6 +81,20 @@
+                     for server in servers:
+                         server.shutdown();server.server_close()
+ 
++    def test_unrelated_socket_error_is_not_hidden_by_fallback(self):
++        attempts = []
++        class InvalidServer:
++            def __init__(self, address, handler):
++                attempts.append(address)
++                raise OSError(errno.EINVAL, 'invalid socket configuration')
++        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C,'DEST_ROOT',tmp), patch.object(G,'HERE',str(REPLAY.parent)):
++            namespace = {'C':H.C,'ThreadingHTTPServer':InvalidServer,'PORT':8901,'Handler':H.Handler}
++            with patch.object(G.runpy,'run_path',return_value=namespace):
++                with self.assertRaises(OSError) as error:
++                    G._start_replay_server()
++                self.assertEqual(error.exception.errno,errno.EINVAL)
++                self.assertEqual(attempts,[('127.0.0.1',8901)])
++
+ 
+ if __name__=='__main__':
+     unittest.main()

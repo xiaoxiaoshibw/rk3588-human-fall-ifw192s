@@ -1,0 +1,77 @@
+Read-only independent FINAL review. All tools disabled, output final findings in one response under 500 words, no execution or plan. Windows E2E found duplicate listeners on 8901; existing user Python service must remain running. This final fix imports socket and errno at module level, disables reuse, pre-binds SO_EXCLUSIVEADDRUSE on Windows, limits fallback to address-in-use/access-denied (including Windows reserved-port denial), and rethrows other errors. Real occupied socket regression passes on Windows, asserts both reuse=False and exclusive socket attribute, and detects property regression even on POSIX; additional test checks EINVAL propagation. Console shell_url passes returned port in replay_port, Console HTML reads that parameter for all iframe links. Random port after TIME_WAIT is allowed and documented. Review final code below for remaining actionable defects, otherwise say none. No algorithm/data code changes. Do not claim to run tests.
+def _start_replay_server():
+    """同进程起 8901 服务：导入 human_replay_lib 后手动绑端口、serve_forever。
+
+    不用其 main()：main 会 webbrowser.open 弹浏览器，而服务由控制台 iframe 消费。
+    """
+    replay_dir, origin = _replay_dir()
+    sys.path.insert(0, replay_dir)
+    m = runpy.run_path(os.path.join(replay_dir, "human_replay_lib.py"))
+    # 仓内 exe 与源码共用捕获目录；移动版的数据放 exe 旁，不依赖快捷方式 cwd。
+    if getattr(sys, "frozen", False):
+        m["C"].DEST_ROOT = _frozen_capture_root()
+    os.makedirs(m["C"].DEST_ROOT, exist_ok=True)
+    class ReplayServer(m["ThreadingHTTPServer"]):
+        # Windows SO_REUSEADDR permits two listeners on one port; keep each
+        # console's pages and data on its own server, including the fallback.
+        allow_reuse_address = False
+        def server_bind(self):
+            if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
+                self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+            super().server_bind()
+    try:
+        srv = ReplayServer(("127.0.0.1", m["PORT"]), m["Handler"])
+    except OSError as exc:
+        if exc.errno not in (errno.EADDRINUSE, errno.EACCES) and getattr(exc, "winerror", None) not in (10048, 10013):
+            raise
+        # An existing console/replay instance may own 8901; keep each instance's code/data together.
+        srv = ReplayServer(("127.0.0.1", 0), m["Handler"])
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    print("human_replay 服务 http://127.0.0.1:%d/（随控制台退出）" % srv.server_address[1])
+    return srv.server_address[1]
+
+
+
+Test:
+    def test_occupied_default_port_uses_new_instance_server(self):
+        servers = []
+        class TrackedServer(H.ThreadingHTTPServer):
+            def __init__(self, address, handler):
+                super().__init__(address, handler)
+                servers.append(self)
+        # Real occupied socket with address reuse enabled, as on the existing
+        # Windows replay service. A mocked OSError misses duplicate listeners.
+        occupied = H.ThreadingHTTPServer(('127.0.0.1', 0), H.Handler)
+        self.assertTrue(occupied.allow_reuse_address)
+        self.addCleanup(occupied.server_close)
+        occupied_port = occupied.server_address[1]
+        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C,'DEST_ROOT',tmp), patch.object(G,'HERE',str(REPLAY.parent)):
+            namespace = {'C':H.C,'ThreadingHTTPServer':TrackedServer,'PORT':occupied_port,'Handler':H.Handler}
+            with patch.object(G.runpy,'run_path',return_value=namespace):
+                port = G._start_replay_server()
+                try:
+                    self.assertNotEqual(port,occupied_port)
+                    self.assertFalse(servers[0].allow_reuse_address)
+                    if hasattr(socket, 'SO_EXCLUSIVEADDRUSE'):
+                        self.assertEqual(servers[0].socket.getsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE), 1)
+                    with urllib.request.urlopen('http://127.0.0.1:%d/api/leveling/sessions'%port) as response:
+                        self.assertEqual(json.load(response)['sessions'], [])
+                    with patch.object(H.sys,'stderr',None):
+                        with urllib.request.urlopen('http://127.0.0.1:%d/leveling.html'%port) as response:
+                            self.assertEqual(response.status,200)
+                finally:
+                    for server in servers:
+                        server.shutdown();server.server_close()
+
+    def test_unrelated_socket_error_is_not_hidden_by_fallback(self):
+        class InvalidServer:
+            def __init__(self, address, handler):
+                raise OSError(errno.EINVAL, 'invalid socket configuration')
+        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C,'DEST_ROOT',tmp), patch.object(G,'HERE',str(REPLAY.parent)):
+            namespace = {'C':H.C,'ThreadingHTTPServer':InvalidServer,'PORT':8901,'Handler':H.Handler}
+            with patch.object(G.runpy,'run_path',return_value=namespace):
+                with self.assertRaises(OSError) as error:
+                    G._start_replay_server()
+                self.assertEqual(error.exception.errno,errno.EINVAL)
+
+

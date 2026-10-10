@@ -1,0 +1,16 @@
+Read-only independent review, no tools, final response under 250 words. Earlier review found a vacuous EINVAL fallback test (both attempts would raise). Final test now records every constructor attempt and asserts exactly one default-port attempt, so deleting the production errno filter would record a second port-0 attempt and fail. Existing occupied-port test also asserts actual getsockopt(SO_REUSEADDR)==0 and Windows SO_EXCLUSIVEADDRUSE==1. Five console tests pass. Inspect corrected test below for whether the previously identified vacuity is closed; report remaining actionable defect or none. Do not claim to execute anything.
+    def test_unrelated_socket_error_is_not_hidden_by_fallback(self):
+        attempts = []
+        class InvalidServer:
+            def __init__(self, address, handler):
+                attempts.append(address)
+                raise OSError(errno.EINVAL, 'invalid socket configuration')
+        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C,'DEST_ROOT',tmp), patch.object(G,'HERE',str(REPLAY.parent)):
+            namespace = {'C':H.C,'ThreadingHTTPServer':InvalidServer,'PORT':8901,'Handler':H.Handler}
+            with patch.object(G.runpy,'run_path',return_value=namespace):
+                with self.assertRaises(OSError) as error:
+                    G._start_replay_server()
+                self.assertEqual(error.exception.errno,errno.EINVAL)
+                self.assertEqual(attempts,[('127.0.0.1',8901)])
+
+
