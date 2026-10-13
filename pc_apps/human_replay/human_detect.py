@@ -13,11 +13,12 @@ human_replay_lib.Handler._human_detect 调，只 locally 扫 root（=captures/re
 """
 import json
 import os
-import re
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-_SID = re.compile(r"^cap_[0-9_]+$")
+import config as _hr_config  # 同目录；SID_RE 白名单单点收敛
+
+_SID = _hr_config.SID_RE
 
 
 def _session_row(root, name):
@@ -25,7 +26,7 @@ def _session_row(root, name):
     d = os.path.join(root, name)
     meta_p = os.path.join(d, "meta.json")
     bin_p = os.path.join(d, "points.bin")
-    if not (os.path.isdir(d) and name.startswith("cap_")
+    if not (os.path.isdir(d) and _SID.match(name)
             and os.path.isfile(meta_p) and os.path.isfile(bin_p)):
         return None
     row = {"sid": name}

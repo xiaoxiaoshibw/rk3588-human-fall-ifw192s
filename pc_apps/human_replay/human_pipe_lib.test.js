@@ -590,5 +590,49 @@ t("R3.1: 统计字段（形心/抖动/密度）+ 工作空间裁剪与在线一�
   ok(Math.abs(rec.confidence - rec.occ) < 1e-9, "v1 置信 = 占用率");
 });
 
+t("HR-RET-V2: extract_foreground_fused —— 参考删 / 在线-邻域支持删 / 在线-only 保留", () => {
+  const mkMap = pts => new Map(pts.map(p => [L.key_bg(p[0], p[1], p[2]), { x: p[0], y: p[1], z: p[2] }]));
+  const refkeys = mkMap([[1.0, 0, 0.5]]);
+  const online = mkMap([[2.0, 0, 0.5], [1.10, 0, 0.5]]);
+  const buf = new Float32Array([
+    1.02, 0, 0.5, 1,    // 参考命中 → 删
+    2.05, 0, 0.5, 1,    // 在线-only（体素离参考远）→ 保留（静立人语义）
+    1.20, 0, 0.5, 1,    // 在线命中且其体素邻接参考（0.10m）→ 删（参考支持）
+    0.50, 0, 0.05, 1,   // 地面 → 工作空间剔除
+  ]);
+  const r = L.extract_foreground_fused(buf, refkeys, online);
+  ok(r.n_ref_removed === 1, "参考删除应为 1, 实 " + r.n_ref_removed);
+  ok(r.n_online_supported_removed === 1, "在线+参考支持删除应为 1, 实 " + r.n_online_supported_removed);
+  ok(r.n_online_only_kept === 1, "在线-only 应保留 1, 实 " + r.n_online_only_kept);
+  ok(r.n_fg === 1 && Math.abs(r.fg_xyzi[0] - 2.05) < 1e-6, "前景应只剩 2.05 一点, 实 n_fg=" + r.n_fg + " x0=" + r.fg_xyzi[0]);
+});
+
+t("HR-RET-V2: 退化语义 —— refkeys=null 保守（在线-only 不删）；online=null 纯参考", () => {
+  const mkMap = pts => new Map(pts.map(p => [L.key_bg(p[0], p[1], p[2]), { x: p[0], y: p[1], z: p[2] }]));
+  const online = mkMap([[2.0, 0, 0.5]]);
+  const refkeys = mkMap([[1.0, 0, 0.5]]);
+  const buf = new Float32Array([2.05, 0, 0.5, 1, 1.02, 0, 0.5, 1, 3.00, 0, 0.5, 1]);
+  const a = L.extract_foreground_fused(buf, null, online);
+  ok(a.n_fg === 3 && a.n_online_only_kept === 1, "无参考 ⇒ 不得仅凭在线删（保守保留）, 实 n_fg=" + a.n_fg);
+  const b = L.extract_foreground_fused(buf, refkeys, null);
+  ok(b.n_fg === 2 && b.n_ref_removed === 1, "纯参考 ⇒ 删参考命中, 实 n_fg=" + b.n_fg);
+});
+
+t("HR-RET-V2 inc2: pipeline_frame 旗标缺省/refkeys=null = P 逐位；给 refkeys 才走 v2", () => {
+  const mkMap = pts => new Map(pts.map(p => [L.key_bg(p[0], p[1], p[2]), { x: p[0], y: p[1], z: p[2] }]));
+  const online = mkMap([[2.0, 0, 0.5]]);
+  const refkeys = mkMap([[1.0, 0, 0.5]]);
+  /* 1.0 = 参考命中；2.0/2.02 = 在线持久（静立人语义：不得仅凭在线删） */
+  const buf = new Float32Array([2.0, 0, 0.5, 9, 1.0, 0, 0.5, 9, 2.02, 0, 0.5, 9]);
+  const rA = L.pipeline_frame(buf, 0, { static_keys: online, tracker: new L.Tracker() });
+  const rB = L.pipeline_frame(buf, 0, { static_keys: online, tracker: new L.Tracker(), fusion: { refkeys: null } });
+  ok(JSON.stringify(rA) === JSON.stringify(rB), "旗标缺省与 refkeys=null 应同为 P 且逐位一致");
+  ok(rA.n_foreground === 1 && !("fusion" in rA), "P：在线删 2.0/2.02 仅剩 1.0, 实 n_fg=" + rA.n_foreground);
+  const rF = L.pipeline_frame(buf, 1, { static_keys: online, tracker: new L.Tracker(), fusion: { refkeys } });
+  ok(rF.n_foreground === 2, "v2：在线-only 两点保留, 实 n_fg=" + rF.n_foreground);
+  ok(rF.fusion && rF.fusion.n_ref_removed === 1 && rF.fusion.n_online_only_kept === 2,
+     "v2 诊断计数, 实 " + JSON.stringify(rF.fusion));
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

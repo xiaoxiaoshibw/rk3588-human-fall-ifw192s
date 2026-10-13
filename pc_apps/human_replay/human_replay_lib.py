@@ -20,7 +20,6 @@ motivation（用户 2026-10-02 反馈）：
 import hashlib
 import json
 import os
-import re
 import shutil
 import subprocess
 import sys
@@ -39,7 +38,7 @@ _FETCH = os.path.join(_HERE, "fetch.py")
 
 # HR-W02: 静态服务文件白名单扩展位。打包/改 flist 时只在此追加，
 # 不许补 prefix/目录通配——保持「单文件 explicit」的最小攻击面（同 _serve_file 白名单精神）。
-_EXTRA_STATIC = frozenset({"human_detect_lib.js", "human_pipe_lib.js"})
+_EXTRA_STATIC = frozenset({"human_detect_lib.js", "human_pipe_lib.js", "gt_workbench_ops.js", "gt_live.js"})
 _proc_lock = threading.Lock()
 _sync_thread = None      # 当前同步线程（替代旧 subprocess _proc）
 _sync_last_error = None  # 最近一次同步失败原因，前端轮询 /api/sync_status 看
@@ -48,6 +47,24 @@ _sync_last_sid = None     # 最近一次的 sid（成功/失败/短路"已在本
 _sync_last_result = None  # 最近一次结果：None（还在跑/未启动）/ "ok" / "failed"
 _sync_recoverable_sid = None  # 最近失败若因板端卡 transferring：允许人工「退回重试」的 sid
 
+# GT 产物同步：PC 从板端 8088 GT 服务拉 draft/manifest/GT_V*/aliases 回本地 gt_store。
+# 权威实现是 pull_gt_from_board.pull（同名+同 sha 短路、GT_V* 冲突不覆盖）；这里只做
+# worker 线程封装与状态查询，板端模式禁用（板上 GT 本就地，无须同步）。
+_gt_pull_lock = threading.Lock()
+_gt_pull_thread = None
+_gt_pull_last_error = None
+_gt_pull_last_result = None     # None / "ok" / "failed"
+_gt_pull_last_detail = None     # {"pulled":[...],"skipped":[...],"conflicts":[...]}
+_GT_PULL_BOARD_DEFAULT = "http://192.168.31.58:8088"  # GT 服务端口；≠ capture_server :8766
+
+
+def _deny_local_only(h, action):
+    """板端协作模式下禁用只对本机有意义的动作（音箱式：不删原始数据、不拖拽拉取、不弹 Tk）。
+    403-JSON（不是裸 send_error）以便前端可解析。"""
+    h._json({"ok": False,
+             "error": "板端模式下 %s 被禁用（保护原始数据/协同一致性）" % action,
+             "board_mode": True}, 403)
+
 
 def _is_ready_for_load(meta_path):
     return os.path.isfile(meta_path) and os.path.isfile(os.path.join(
@@ -55,14 +72,15 @@ def _is_ready_for_load(meta_path):
 
 
 def _local_sessions(dest):
-    """本地 captures/remote 下的 cap_* 目录 → 轻描述（从 meta.json 揭sel）。"""
+    """dest 下含 meta.json + points.bin 的会话目录 → 轻描述（从 meta.json 揭sel）。
+    目录名过 C.SID_RE（字母/数字/下划线/连字符），synth_* 等 PC 生成会话同列。"""
     out = {}
     if not os.path.isdir(dest):
         return out
     for name in os.listdir(dest):
         d = os.path.join(dest, name)
         meta_p = os.path.join(d, "meta.json")
-        if not (os.path.isdir(d) and name.startswith("cap_") and _is_ready_for_load(meta_p)):
+        if not (os.path.isdir(d) and C.SID_RE.match(name) and _is_ready_for_load(meta_p)):
             continue
         try:
             with open(meta_p, "r", encoding="utf-8") as fh:
@@ -156,6 +174,8 @@ class Handler(BaseHTTPRequestHandler):
 
     # ---------- 静态 ----------
     def do_GET(self):  # noqa: N802（http.server 约定）
+        # board_mode 或来自非环回：远程协作者身份。GET 全放行（静态/点云/会话/GT 导出皆为只读）。
+        self._multi = C.BOARD_MODE or self.client_address[0] not in ("127.0.0.1", "::1")
         path = self.path.split("?", 1)[0]
         if path.startswith("/api/validation/"):
             return self._validation("GET")
@@ -163,6 +183,14 @@ class Handler(BaseHTTPRequestHandler):
             return self._leveling("GET")
         if path.startswith("/api/human_detect/"):
             return self._human_detect("GET")
+        if path.startswith("/api/gt/exports/"):
+            return self._serve_gt_export()
+        if path == "/api/gt/exports":
+            return self._api_gt_exports()
+        if path == "/api/gt/pull_status":
+            return self._api_gt_pull_status()
+        if path.startswith("/api/gt/"):
+            return self._gt("GET")
         if path == "/api/sessions":
             return self._api_sessions()
         if path == "/api/board/status":
@@ -249,6 +277,7 @@ class Handler(BaseHTTPRequestHandler):
                 "download_requested": bool(s.get("download_requested")),
                 "transferred": bool(s.get("transferred")),
                 "local": bool(li),
+                "bytes": (li or {}).get("bytes"),          # FIX-PERF-R2: 供 GT 下拉显示大小
                 "name": (li or {}).get("name"),
             })
         # 本地有但板端已删的（FIFO 清过）也列上
@@ -260,6 +289,7 @@ class Handler(BaseHTTPRequestHandler):
                             "duration_sec": li.get("duration_sec"),
                             "frames": li.get("frames"),
                             "local": True,
+                            "bytes": li.get("bytes"),      # FIX-PERF-R2
                             "name": li.get("name")})
         out.sort(key=lambda o: o.get("created_iso") or "", reverse=True)
         self._json({"sessions": out, "board_error": board_error})
@@ -286,11 +316,32 @@ class Handler(BaseHTTPRequestHandler):
         self._json(st)
 
     def do_POST(self):  # noqa: N802
+        self._multi = C.BOARD_MODE or self.client_address[0] not in ("127.0.0.1", "::1")
         path = self.path.split("?", 1)[0]
+        if self._multi:
+            # 多人协作：只留 GT 标注写路径；一切动原始数据/拉取/删/改名/板控制都禁
+            _deny_post = {
+                "/api/delete": "删除会话",
+                "/api/sync": "手动拉取会话（板端数据就在原地，无需同步）",
+                "/api/recover": "板端 transferring 状态人工回退",
+                "/api/load": "Tk 目录选择（板无 GUI）",
+                "/api/rename": "本地会话改名",
+                "/api/save_annotations": "HR-05 旧标注（HR-05 在 PC 视图继续使用）",
+                "/api/board/record/start": "触发板端录制（请走 webui/human_capture）",
+                "/api/board/record/stop": "停止板端录制",
+                "/api/board/request_download": "标记 download_requested",
+                "/api/gt/pull": "从板端拉 GT 产物（板上 GT 就在原地，无须同步）",
+            }
+            if path in _deny_post:
+                return _deny_local_only(self, _deny_post[path])
         if path.startswith("/api/validation/"):
             return self._validation("POST")
         if path.startswith("/api/leveling/"):
             return self._leveling("POST")
+        if path == "/api/gt/pull":
+            return self._api_gt_pull()
+        if path.startswith("/api/gt/"):
+            return self._gt("POST")
         if path == "/api/board/record/start":
             return self._proxy(lambda: _board_post("/api/v1/record/start"))
         if path == "/api/board/record/stop":
@@ -314,6 +365,53 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/save_annotations":
             return self._api_save_annotations()
         self.send_error(404)
+
+    # ---------- GT 标注导出下载（板端可拉到 PC） ----------
+    def _serve_gt_export(self):
+        """GET /api/gt/exports/file?sid&name — 白名单流式下载（标注并发即由 gt_store 保证）。"""
+        from urllib.parse import urlparse, parse_qs
+        import gt_server as _GS
+        q = parse_qs(urlparse(self.path).query)
+        sid = (q.get("sid") or [""])[0]
+        name = (q.get("name") or [""])[0]
+        if name and ("/" in name or ".." in name):
+            return self._json({"ok": False, "error": "文件名含路径分隔"}, 400)
+        if sid and not _GS._sid_ok(sid):
+            return self._json({"ok": False, "error": "sid 非法"}, 400)
+        if not name or not _GS.export_whitelist_ok(sid or None, name, None)[0]:
+            return self._json({"ok": False, "error": "文件名不在导出白名单"}, 400)
+        base = os.path.join(_GS.get_store_dir(), sid) if sid else _GS.get_store_dir()
+        full = os.path.join(base, name) if name else base
+        if not name or not os.path.isfile(full):
+            return self.send_error(404)
+        self.send_response(200)
+        self.send_header("Content-Type", "application/octet-stream")
+        self.send_header(
+            "Content-Disposition",
+            'attachment; filename="%s_%s"' % ((sid or "global"), name.replace("/", "_")))
+        self.send_header("Content-Length", str(os.path.getsize(full)))
+        self.end_headers()
+        with open(full, "rb") as fh:
+            while True:
+                block = fh.read(1 << 20)
+                if not block:
+                    break
+                self.wfile.write(block)
+
+    def _api_gt_exports(self):
+        """GET /api/gt/exports — 列出可下载文件（全局 + 指定 sid）。
+
+        FIX-REVIEW-H1: sid 必须先过 _sid_ok（与 _serve_gt_export 一致），否则可拿
+        `?sid=../..` 这类路径穿越枚举 gt_store 之外目录。GET 板端模式也放行，
+        校验必须在路由层完成。
+        """
+        from urllib.parse import urlparse, parse_qs
+        import gt_server as _GS
+        q = parse_qs(urlparse(self.path).query)
+        sid = (q.get("sid") or [""])[0] or None
+        if sid is not None and not _GS._sid_ok(sid):
+            return self._json({"ok": False, "error": "sid 非法"}, 400)
+        self._json({"ok": True, "sid": sid, **_GS.list_exports(_GS.get_store_dir(), sid)})
 
     def _leveling(self, method):
         """以 in-proc 方式导入并 dispatch；ImportError → 503 降级，不使进程死亡。"""
@@ -339,12 +437,20 @@ class Handler(BaseHTTPRequestHandler):
             return self._json({"error": "人体识别工作台需要完整插件: " + str(exc)}, 503)
         return HD.handle(self, method, C.DEST_ROOT)
 
+    def _gt(self, method):
+        """HUMAN-GT-ANNOTATOR-R1 GT 工作台路由 (draft 保存 / 冻结 / 导出 / 建议)。"""
+        try:
+            import gt_server
+        except ImportError as exc:
+            return self._json({"error": "GT 工作台插件缺失: " + str(exc)}, 503)
+        return gt_server.handle(self, method, C.DEST_ROOT)
+
     def _api_delete(self):
         """删会话：scope=local|board|both。board 走 capture_server DELETE（连文件）。"""
         import shutil as _sh
         body = self._body() or {}
         sid, scope = body.get("sid", ""), body.get("scope", "both")
-        if not (sid.startswith("cap_") and sid.replace("_", "").isalnum()):
+        if not C.SID_RE.match(sid):
             return self.send_error(400, "sid 非法")
         out = {"sid": sid}
         if scope in ("board", "both"):
@@ -538,6 +644,47 @@ class Handler(BaseHTTPRequestHandler):
             _sync_recoverable_sid = None
         return self._json({"ok": True, "sid": sid})
 
+    # ---------- GT 产物从板端 8088 拉回 PC（权威实现 = pull_gt_from_board.pull） ----------
+    def _api_gt_pull(self):
+        """POST /api/gt/pull → 后台线程跑 pull_gt_from_board.pull；立刻回 202 风格应答，轮询 status。"""
+        global _gt_pull_thread, _gt_pull_last_error, _gt_pull_last_result, _gt_pull_last_detail
+        with _gt_pull_lock:
+            if _gt_pull_thread and _gt_pull_thread.is_alive():
+                return self._json({"ok": False, "error": "已有 GT 拉取在跑"}, 409)
+            _gt_pull_last_error = None
+            _gt_pull_last_result = None
+            _gt_pull_last_detail = None
+
+            def _worker():
+                global _gt_pull_last_error, _gt_pull_last_result, _gt_pull_last_detail
+                try:
+                    import pull_gt_from_board as P
+                    import gt_server as G
+                    res = P.pull(board=_GT_PULL_BOARD_DEFAULT,
+                                 dest_store=G.get_store_dir(),
+                                 log=lambda m: None)
+                    _gt_pull_last_detail = res
+                    _gt_pull_last_result = "ok" if not res.get("conflicts") else "failed"
+                    if res.get("conflicts"):
+                        _gt_pull_last_error = "GT_V* 冲突（板上与本地不一致，不覆盖）"
+                except BaseException as exc:
+                    _gt_pull_last_result = "failed"
+                    _gt_pull_last_error = "%s: %s" % (type(exc).__name__, exc)
+                    _gt_pull_last_detail = None
+
+            _gt_pull_thread = threading.Thread(target=_worker, daemon=True)
+            _gt_pull_thread.start()
+        return self._json({"ok": True, "note": "GT 拉取中；轮询 /api/gt/pull_status"})
+
+    def _api_gt_pull_status(self):
+        alive = bool(_gt_pull_thread and _gt_pull_thread.is_alive())
+        return self._json({
+            "running": alive,
+            "last_result": _gt_pull_last_result,
+            "last_error": _gt_pull_last_error,
+            "detail": _gt_pull_last_detail,
+        })
+
     def _api_load(self):
         def _pick():
             import tkinter as tk
@@ -575,7 +722,7 @@ class Handler(BaseHTTPRequestHandler):
         "point_layout", "point_stride_bytes", "point_file",
         "total_points", "frames", "extraction",
     )
-    _SID_RE = re.compile(r"^cap_[0-9_]+$")
+    _SID_RE = C.SID_RE  # 白名单单点收敛 config.SID_RE（synth_*/clip 后缀同可载）
 
     @staticmethod
     def _validate_annotation_box(box):
@@ -684,9 +831,13 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
-    srv = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
-    threading.Timer(0.3, lambda: webbrowser.open("http://127.0.0.1:%d/" % PORT)).start()
-    print("human_replay 服务 http://127.0.0.1:%d/  （Ctrl-C 退出）" % PORT)
+    host = "0.0.0.0" if C.BOARD_MODE else "127.0.0.1"
+    port = int(os.environ.get("HR_PORT", PORT))
+    srv = ThreadingHTTPServer((host, port), Handler)
+    url = "http://%s:%d/" % (("127.0.0.1" if host == "0.0.0.0" else host), port)
+    if not C.BOARD_MODE:
+        threading.Timer(0.3, lambda: webbrowser.open(url)).start()
+    print("human_replay 服务 %s  （board_mode=%s, Ctrl-C 退出）" % (url, C.BOARD_MODE))
     try:
         srv.serve_forever()
     except KeyboardInterrupt:

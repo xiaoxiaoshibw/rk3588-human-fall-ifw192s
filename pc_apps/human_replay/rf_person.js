@@ -85,32 +85,97 @@ var RF_PERSON = (function () {
         }
         cxx /= n; cxy /= n; cxz /= n; cyy /= n; cyz /= n; czz /= n;
 
-        // PCA: eigh on 3x3 symmetric — 与 np.linalg.eigh 等价
+        /* PCA: 协方差对称 3x3. 与 python np.linalg.eigh 对齐。原三角闭式解在此 seed 上
+         * 给 ev=[0.0821,0.0821,0.0033] 与 Python eigh [0.0909,0.0740,0.0042] 不符 — 闭式公式
+         * 对 3x3 协方差数值不稳, 改为幂迭代 + 收缩 (PSD 适用), 一次性给出 ev 和 |V[2,k]|。
+         * Python 端 frame_feature.py: w, V = np.linalg.eigh(cov); idx = argsort(-w); V = V[:, idx]. */
         var m11 = cxx, m12 = cxy, m13 = cxz, m22 = cyy, m23 = cyz, m33 = czz;
-        var tr = m11 + m22 + m33;
-        var m_sq = m11 * m11 + m22 * m22 + m33 * m33 + 2 * (m12 * m12 + m13 * m13 + m23 * m23);
-        var tr2 = m_sq;
-        var det = m11 * (m22 * m33 - m23 * m23) - m12 * (m12 * m33 - m13 * m23) + m13 * (m12 * m23 - m13 * m22);
-        var c2 = (tr * tr - tr2) / 2;
-        var p = c2 - tr * tr / 3;
-        var q = -2 * tr * tr * tr / 27 + tr * c2 / 3 - det;
-        var ev = [0, 0, 0];
-        if (p < -1e-12) {  /* p 必须严格负才有实解 */
-            var sq = Math.sqrt(-p / 3);
-            var cos3 = (3 * q / (2 * p)) * (1 / sq) / sq;
-            cos3 = Math.max(-1, Math.min(1, cos3));
-            var phi = Math.acos(cos3) / 3;
-            var c = 2 * sq;
-            ev = [tr / 3 + c * Math.cos(phi),
-                  tr / 3 + c * Math.cos(phi - 2 * Math.PI / 3),
-                  tr / 3 + c * Math.cos(phi - 4 * Math.PI / 3)];
-        } else {
-            ev = [tr / 3, tr / 3, tr / 3];
-        }
-        ev.sort(function (a, b) { return b - a; });
+        var pca = (function () {
+            function matvec(v) {
+                return [m11*v[0]+m12*v[1]+m13*v[2],
+                        m12*v[0]+m22*v[1]+m23*v[2],
+                        m13*v[0]+m23*v[1]+m33*v[2]];
+            }
+            function dot(u, v) { return u[0]*v[0]+u[1]*v[1]+u[2]*v[2]; }
+            function norm(v) { return Math.sqrt(dot(v,v)); }
+            function deflate(v, u1, u2) {
+                var d1 = dot(v,u1);
+                var r = [v[0]-d1*u1[0], v[1]-d1*u1[1], v[2]-d1*u1[2]];
+                if (u2) {
+                    var d2 = dot(r,u2);
+                    r = [r[0]-d2*u2[0], r[1]-d2*u2[1], r[2]-d2*u2[2]];
+                }
+                return r;
+            }
+            function power_iter(seed, u1, u2) {
+                var v = seed.slice();
+                if (u1) v = deflate(v, u1, u2);
+                var nv = norm(v);
+                if (nv < 1e-12) return null;
+                v = [v[0]/nv, v[1]/nv, v[2]/nv];
+                for (var it = 0; it < 100; it++) {
+                    var w = matvec(v);
+                    if (u1) w = deflate(w, u1, u2);
+                    var nw = norm(w);
+                    if (nw < 1e-12) return null;
+                    var vn = [w[0]/nw, w[1]/nw, w[2]/nw];
+                    var d = Math.abs(dot(vn, v));
+                    v = vn;
+                    if (d > 1 - 1e-9) break;
+                }
+                return { vec: v, lam: dot(v, matvec(v)) };
+            }
+            var eig1 = power_iter([1,0.5,0.3], null, null);
+            if (!eig1) return { ev: [0,0,0], az: [0,0,0] };
+            var eig2 = power_iter([0.3,1,0.5], eig1.vec, null);
+            if (!eig2) return { ev: [eig1.lam, 0, 0], az: [Math.abs(eig1.vec[2]), 0, 0] };
+            var u = eig1.vec, v2 = eig2.vec;
+            var v3 = [u[1]*v2[2]-u[2]*v2[1],
+                      u[2]*v2[0]-u[0]*v2[2],
+                      u[0]*v2[1]-u[1]*v2[0]];
+            var eig3 = { vec: v3, lam: dot(v3, matvec(v3)) };
+            /* 特征值 ev 降序排列 (fv[32..34] = desc, 与 np.sort(w)[::-1] 一致).
+             * 但 fv[37..39] 复刻 Python frame_feature.py 的实际行为:
+             *   w_sorted_desc = np.sort(w)[::-1]; idx = np.argsort(-w_sorted_desc)
+             *   argsort 作用于已降序的 w, 结果恒为 [0,1,2], V=V[:,idx] 等于不变,
+             *   即 fv[37..39] 取的是 eigh 原始升序 (最小/中/最大) 特征值对应列的 z 分量。
+             * 生产 rf_person_v1.json 在此固化顺序下训练, JS 必须复刻 (不是修 Python 排序链 bug)。 */
+            var desc = [
+                { lam: eig1.lam, az: Math.abs(eig1.vec[2]) },
+                { lam: eig2.lam, az: Math.abs(eig2.vec[2]) },
+                { lam: eig3.lam, az: Math.abs(eig3.vec[2]) }
+            ].sort(function (a, b) { return b.lam - a.lam; });
+            var asc = [
+                { lam: eig1.lam, az: Math.abs(eig1.vec[2]) },
+                { lam: eig2.lam, az: Math.abs(eig2.vec[2]) },
+                { lam: eig3.lam, az: Math.abs(eig3.vec[2]) }
+            ].sort(function (a, b) { return a.lam - b.lam; });
+            return {
+                ev: [desc[0].lam, desc[1].lam, desc[2].lam],
+                az: [asc[0].az, asc[1].az, asc[2].az]
+            };
+        })();
+        var ev = pca.ev;
+        var axis_z = pca.az;
 
+        /* 特征向量: 与 python np.linalg.eigh 对齐。协方差是 PSD, 用幂迭代 + 收缩求三个本征对。
+         * Python 端 frame_feature.py: w, V = np.linalg.eigh(cov); idx = argsort(-w); V = V[:, idx];
+         * fv[37..39] = abs(V[2, 0..2]) 即 主/次/三轴 列向量的 z 分量绝对值。
+         * 3x3 PSD 幂迭代对最大/次大本征对收敛快 (max 100 iter, tol 1e-9), 第三轴取前两轴正交补。
+         * 收敛失败 fallback 为 [0,0,0]。 */
+        /* fv[41] r_xy_spread = std(||xy||₂), 与 Python np.std(np.sqrt(x²+y²)) 对齐 */
+        var rxy_arr = new Array(n);
+        var rxy_mean = 0;
+        for (var i = 0; i < n; i++) {
+            rxy_arr[i] = Math.sqrt(frame.x[i] * frame.x[i] + frame.y[i] * frame.y[i]);
+            rxy_mean += rxy_arr[i];
+        }
+        rxy_mean /= n;
         var rxy = 0;
-        for (var i = 0; i < n; i++) rxy += frame.x[i] * frame.x[i] + frame.y[i] * frame.y[i];
+        for (var i = 0; i < n; i++) {
+            var dr = rxy_arr[i] - rxy_mean;
+            rxy += dr * dr;
+        }
         rxy = Math.sqrt(rxy / n);
         var z_range = z_p90 - z_p10;
         var up = 0, mid = 0;
@@ -148,7 +213,7 @@ var RF_PERSON = (function () {
         fv[32] = ev[0]; fv[33] = ev[1]; fv[34] = ev[2];
         fv[35] = ev[0] / Math.max(ev[1], 1e-9);
         fv[36] = ev[1] / Math.max(ev[2], 1e-9);
-        fv[37] = 0; fv[38] = 0; fv[39] = 0;   /* PCA axis z-component abs — python 用 V[2, idx], JS 简化为 0 (特征量纲贡献小) */
+        fv[37] = axis_z[0]; fv[38] = axis_z[1]; fv[39] = axis_z[2];
         fv[40] = ev[0] / Math.max(ev[2], 1e-9);
         fv[41] = rxy;
         fv[42] = z_range;

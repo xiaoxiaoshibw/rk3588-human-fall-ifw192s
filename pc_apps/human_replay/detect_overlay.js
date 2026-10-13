@@ -192,24 +192,32 @@ var HUMAN_DETECT_OVERLAY = (function () {
     var TRACK_TTL_FRAMES = 15;        // fps 10 的话 1.5s
     var TRACK_MIN_AGE = 3;            // 帧出现 ≥3 才出框
 
+    /* B2-A-FIX-R1 FIX-1: 单帧 cluster↔track 一对一. claimed 集记录本帧已被某簇认领的
+     * track_id; 同一 track 在一帧内最多被更新一次 (age 至多单帧 +1), cx/cy 不被第二簇覆写.
+     * 贪心按 cluster 输入序 (find_clusters 已按尺寸降序 → 确定性可复现); 输入同集合序变
+     * → 匹配同 (详见 test 的 CE: 顺序扰动用例). */
     function associate(clusters, fps) {
         fps = fps || 10;
         var alive = new Set();
+        var claimed = {};
         for (var c = 0; c < clusters.length; c++) {
             var cl = clusters[c];
             var best = null, best_d = TRACK_GATE_M;
             for (var t = 0; t < last.tracks.length; t++) {
                 var tr = last.tracks[t];
+                if (claimed[tr.id]) continue;          /* FIX-1: 本帧已被前面簇认领 */
                 var d = Math.hypot(cl.cx - tr.cx, cl.cy - tr.cy);
                 if (d < best_d) { best_d = d; best = tr; }
             }
             if (best) {
                 best.cx = cl.cx; best.cy = cl.cy; best.r90 = cl.r90;
                 best.zmax = cl.zmax; best.n = cl.n; best.miss = 0; best.age++;
+                claimed[best.id] = 1;
                 cl.track_id = best.id;
             } else {
                 var tr = { id: last.t_id_next++, cx: cl.cx, cy: cl.cy, r90: cl.r90,
                            zmax: cl.zmax, n: cl.n, miss: 0, age: 1, born: last.frame_no };
+                claimed[tr.id] = 1;
                 last.tracks.push(tr);
                 cl.track_id = tr.id;
             }
@@ -228,6 +236,9 @@ var HUMAN_DETECT_OVERLAY = (function () {
     // 主逻辑: 每帧调用
     function on_frame(S) {
         if (!S || !S.geo || !S.frames || !S.frames.length) return;
+        /* FIX-3: 代际守卫 — replay.js 载入会话时 notify_session() 自增 gen 并写入 S.session_gen;
+         * 旧会话残留的异步回调/rAF/滑块事件若带旧 gen 触发 on_frame, 直接忽略. */
+        if (typeof S.session_gen === "number" && S.session_gen !== session_gen) return;
         last.frame_no++;
         var f = S.frames[S.idx];
         /* level 状态: 要么 buf 已经 leveled (meta.leveling / 外部 set_leveled_in_s) 要么每帧一次 R/T */
@@ -258,20 +269,28 @@ var HUMAN_DETECT_OVERLAY = (function () {
         }
         associate(clusters, S.fps);
 
-        // 只显示 age ≥ MIN_AGE 的 track (稳)
+        // 只显示 age ≥ MIN_AGE 且 RF 已通过(≥0.55)的 track (稳).
+        /* FIX-1 后同帧一 track 至多一簇 → track_id 在 clusters 内天然唯一, 无需 HUD 再 dedup,
+         * 但保留 has() 防御未来有人加新关联路径. */
+        var _shown_ids = {};
         var shown = clusters.filter(function (cl) {
+            if (_shown_ids[cl.track_id]) return false;
             for (var t = 0; t < last.tracks.length; t++) {
-                if (last.tracks[t].id === cl.track_id && last.tracks[t].age >= TRACK_MIN_AGE) return true;
+                if (last.tracks[t].id === cl.track_id && last.tracks[t].age >= TRACK_MIN_AGE) {
+                    _shown_ids[cl.track_id] = true;
+                    return true;
+                }
             }
             return false;
         });
 
         // 顶视 canvas 画框
         if (tvCtx && topView) draw_topview(shown, f);
-        // 3D 场景: 已配平视图下人簇点着红 (写入 colorBuf, replay 的 paint_colours 不再覆盖, 由 lut=gray 状态保持)
+        /* 3D 场景: 只染 shown (confirmed) 的簇点 — r1 审计 Q8.2: 年龄不足(age<MIN_AGE)
+         * 的簇被一并染红, 与 HUD "无目标" 矛盾. 现只对 confirmed 簇染色. */
         if (colorBuf && S.points) {
-            for (var ci = 0; ci < clusters.length; ci++) {
-                var members = clusters[ci].members;
+            for (var ci = 0; ci < shown.length; ci++) {
+                var members = shown[ci].members;
                 for (var mi = 0; mi < members.length; mi++) {
                     var k = members[mi];
                     var base = (f.start_pts + k) * 3;
@@ -290,9 +309,24 @@ var HUMAN_DETECT_OVERLAY = (function () {
         for (var tid in labelSprites) {
             if (!shown_ids[tid]) remove_label(parseInt(tid));
         }
-        // HUD 信息挂到 S.hud_extra, replay.js hook 去读
-        S.hud_extra = "人 " + shown.length + " 个 (track " +
-            shown.map(function (cl) { return "#" + cl.track_id; }).join(" ") + ")";
+        /* FIX-2 HUD: 确认身份只来自 RF(person_prob≥0.55) + track 时序(age≥MIN_AGE).
+         * 删掉审计 r1 的 is_stable(miss===0) 死分支 — 它对 shown 恒 true, 零区分力.
+         * "低稳定候选"无独立可靠判据 → 按 FIX 原则删除, 不留不会触发的分支.
+         * 调试观察项: age<MIN_AGE 的 track (过 RF 但未达时序门) 只计"观察中 N",
+         * 不计入 "人" — 文字明确区分 confirmed 与观察项. */
+        var confirmed_ids = shown.map(function (cl) { return "#" + cl.track_id; });
+        var observing = 0;
+        for (var oi = 0; oi < clusters.length; oi++) {
+            if (!_shown_ids[clusters[oi].track_id]) observing++;
+        }
+        var hud_txt = confirmed_ids.length
+            ? "人 " + confirmed_ids.length + " 个 (track " + confirmed_ids.join(" ") + ")"
+            : "";
+        if (observing) {
+            var otxt = "观察中 " + observing + " (未确认)";
+            hud_txt = hud_txt ? hud_txt + "  " + otxt : otxt;
+        }
+        S.hud_extra = hud_txt;
     }
 
     function draw_topview(clusters, f) {
@@ -332,14 +366,45 @@ var HUMAN_DETECT_OVERLAY = (function () {
     // 外部开关: buf 已经在外层被 leveling 预处理过时调用, 避免每帧重复 R/T
     function set_leveled_in_s(v) { leveled_in_s = !!v; }
 
+    /* FIX-3 会话/代际管理.
+     * session_gen: 模块内自增; replay.js 每次真正载入新会话调用 notify_session()
+     * 拿一个 gen, 之后 on_frame 的 S.session_gen 与其不符 → 说明是旧会话的异步/导航
+     * 残留, 直接忽略 (防 rAF/滑块/?sid=/panel.load_by_sid 等路径污染新会话).
+     * reset() 仍保留: 清 track/sprite/frame_no; 但不自增 gen — gen 由 notify_session 管,
+     * 同会话内的跳帧修复在 replay.js set_idx 处显式 reset() (frame identity 守卫). */
+    var session_gen = 0;
+    function notify_session() { session_gen++; last.gen = session_gen; return session_gen; }
+    function reset() {
+        for (var tid in labelSprites) remove_label(parseInt(tid));
+        last.t_id_next = 1;
+        last.tracks.length = 0;
+        last.frame_no = 0;
+        /* B2-A-FIX-R1 E#3: 残余红点 colorBuf 在此 *真清* — 重置当前 S.colour 为灰度.
+         * set_idx 不会重刷 (只改 drawRange); paint_colours 只在 load/lut 变时跑.
+         * 这里需 colorBuf 是当前活的 (E#2 修复后 load() 入口每次重挂), 直接清为灰. */
+        if (colorBuf) {
+            for (var i = 0; i < colorBuf.length; i += 3) {
+                /* 全量重置太重 — 仅把曾被染红的点 "亮红(1.0,0.12,0.12)" 压回灰 */
+                if (colorBuf[i] > 0.9 && colorBuf[i+1] < 0.2 && colorBuf[i+2] < 0.2) {
+                    var g = 0.7;   /* 中性灰 — replay 下次分位窗重画时会被正确值覆盖 */
+                    colorBuf[i] = g; colorBuf[i+1] = g; colorBuf[i+2] = g;
+                }
+            }
+        }
+    }
+
     return {
         init: init,
         on_frame: on_frame,
         attach_color: attach_color,
         set_leveled_in_s: set_leveled_in_s,
+        reset: reset,
+        notify_session: notify_session,
         _dbg_state: last,
         _test: { level_frame: level_frame, grid_key: grid_key, find_clusters: find_clusters,
-                 associate: associate, last: last, TRACK_GATE_M: TRACK_GATE_M, TRACK_MIN_AGE: TRACK_MIN_AGE },
+                 associate: associate, last: last,
+                 notify_session: notify_session,
+                 TRACK_GATE_M: TRACK_GATE_M, TRACK_MIN_AGE: TRACK_MIN_AGE },
     };
 })();
 

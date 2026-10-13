@@ -288,8 +288,9 @@ function extract_foreground(xyzi, static_map) {
              fg_xyzi: fg_xyzi };
 }
 
-/* 有界背景匹配：只查 3×3×3 体素邻域（邻域跨度 ≥ 匹配半径，两格远不可能命中）。 */
-function _bg_match(static_map, x, y, z) {
+/* 有界背景匹配：只查 3×3×3 体素邻域（邻域跨度 ≥ 匹配半径，两格远不可能命中）。
+ * _bg_match_rec 返回命中体素记录（融合层需要其形心）；_bg_match 保持原布尔语义。 */
+function _bg_match_rec(static_map, x, y, z) {
     var r2 = PIPE.bg_match_radius * PIPE.bg_match_radius;
     var ix = Math.floor(x / PIPE.bg_voxel_xy), iy = Math.floor(y / PIPE.bg_voxel_xy),
         iz = Math.floor(z / PIPE.bg_voxel_z);
@@ -297,9 +298,38 @@ function _bg_match(static_map, x, y, z) {
         var rec = static_map.get(_bg_key_ijk(ix + a, iy + b, iz + c));
         if (!rec) continue;
         var dx = rec.x - x, dy = rec.y - y, dz = rec.z - z;
-        if (dx * dx + dy * dy + dz * dz < r2) return true;
+        if (dx * dx + dy * dy + dz * dz < r2) return rec;
     }
-    return false;
+    return null;
+}
+function _bg_match(static_map, x, y, z) { return _bg_match_rec(static_map, x, y, z) ? true : false; }
+
+/* ---- 4c· 融合删除 v2（HR-RET-V2 能力函数；默认不被任何现有路径调用）----
+ * 删除 p ⇔ ref_match(p) OR ( online_match(p) AND ref_supported(online_hit(p)) )
+ *   ref_supported(v) ⇔ v 的 3×3×3 邻域内存在参考静态体素且形心距 < bg_match_radius（复用，不新增参数）。
+ * 语义（FUSION_PRIORITY_RULE_DRAFT §3.1）：空场模板里没有的东西，不得仅凭"在线持久"被删（静立人保留）。
+ * refkeys=null ⇒ 保守：在线-only 不删（不得仅凭在线持久删）；本函数不作为 P 路径——P 路径保持原样。
+ * 返回 { fg_xyzi, n_fg, n_dropped, n_ref_removed, n_online_supported_removed, n_online_only_kept, vox_fg }。 */
+function extract_foreground_fused(xyzi, refkeys, online) {
+    var out = [], n_in = xyzi.length / 4;
+    var n_ref = 0, n_sup = 0, n_keep = 0;
+    for (var k = 0; k < xyzi.length; k += 4) {
+        var x = xyzi[k], y = xyzi[k + 1], z = xyzi[k + 2], i = xyzi[k + 3];
+        if (z < PIPE.ground_keep_below_m || z > PIPE.z_max_m) continue;
+        if (refkeys && _bg_match(refkeys, x, y, z)) { n_ref++; continue; }
+        if (online) {
+            var hit = _bg_match_rec(online, x, y, z);
+            if (hit) {
+                if (refkeys && _bg_match(refkeys, hit.x, hit.y, hit.z)) { n_sup++; continue; }
+                n_keep++;
+            }
+        }
+        out.push(x, y, z, i);
+    }
+    var fg_xyzi = new Float32Array(out);
+    return { fg_xyzi: fg_xyzi, n_fg: fg_xyzi.length / 4, n_dropped: n_in - fg_xyzi.length / 4,
+             n_ref_removed: n_ref, n_online_supported_removed: n_sup, n_online_only_kept: n_keep,
+             vox_fg: voxelize(fg_xyzi) };
 }
 
 /* ---- 4b· 拓扑保护型孤立前景清理（R2.6b）----
@@ -719,10 +749,14 @@ function _eig3(m) {
 }
 
 /* ---- 一帧全链（供节点测试 + 浏览器层调用） ----
- * ctx = {static_keys: Map, tracker: Tracker} ；frame_idx 用于 Tracking/Fall。 */
+ * ctx = {static_keys: Map, tracker: Tracker[, fusion: {refkeys: Map}]}；frame_idx 用于 Tracking/Fall。
+ * ctx.fusion（HR-RET-V2 inc2 消费侧旗标）：缺省 / refkeys=null ⇒ 原 P 路径逐位不变；
+ * 显式给 refkeys 才走 v2 融合删除（消费方仅应在 VALID artifact 下经 registration.fusionKeys 提供）。 */
 function pipeline_frame(xyzi, frame_idx, ctx) {
     var clean = denoise(xyzi);
-    var fg = extract_foreground(clean, ctx.static_keys);
+    var fused = (ctx.fusion && ctx.fusion.refkeys)
+        ? extract_foreground_fused(clean, ctx.fusion.refkeys, ctx.static_keys) : null;
+    var fg = fused || extract_foreground(clean, ctx.static_keys);
     /* R2.6b：前景 → 聚类之间，拓扑保护型孤立前景清理（单遍快照语义） */
     var iso = cleanup_isolated_fg(fg.fg_xyzi);
     var fg_pts = iso.xyzi;
@@ -735,7 +769,7 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
         clusters_before = clusters_after;
     }
     var clusters_raw = clusters_after;
-    var cleanup_split_delta = clusters_after - clusters_before;
+    var cleanup_split_delta = clusters_after.length - clusters_before.length;
     /* 5b 证据后处理：第二遍点级扫描 — 喂清理后的真簇点,
      * 否则地板/背景点又被计数进簇,污染逐带 spread_cv/aniso */
     var ev_pack = evidence_postpass(fg_pts, clusters_raw);
@@ -760,7 +794,7 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
         var ev = fall_assess(tr);
         if (ev) events.push(Object.assign({ track_id: tr.id }, ev));
     }
-    return { n_in: xyzi.length / 4, n_denoise: clean.length / 4,
+    var out = { n_in: xyzi.length / 4, n_denoise: clean.length / 4,
              n_foreground: fg.n_fg, n_dropped: fg.n_dropped,
              /* R2.6b 诊断：清理前/后、candidate/veto、簇前后与 split 标记 */
              fg_before_cleanup: iso.fg_before_cleanup,
@@ -770,8 +804,8 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
              xy_cells_preserved_by_other_z: iso.xy_cells_preserved_by_other_z,
              actually_removed_points: iso.actually_removed_points,
              actually_removed_voxels: iso.actually_removed_voxels,
-             clusters_before_cleanup: clusters_before,
-             clusters_after_cleanup: clusters_after,
+             clusters_before_cleanup: clusters_before.length,
+             clusters_after_cleanup: clusters_after.length,
              cleanup_split_delta: cleanup_split_delta,
              topology_regression: cleanup_split_delta > 0,
              fg_voxels: iso.fg_voxels,
@@ -782,6 +816,10 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
              clusters: clusters,
              tracks: ctx.tracker.tracks.filter(function (t) { return t.active; }),
              events: events };
+    if (fused) out.fusion = { n_ref_removed: fused.n_ref_removed,
+        n_online_supported_removed: fused.n_online_supported_removed,
+        n_online_only_kept: fused.n_online_only_kept };
+    return out;
 }
 
 var _api = {
@@ -794,6 +832,7 @@ var _api = {
     build_reference_map: build_reference_map,
     reference_static_keys: reference_static_keys,
     extract_foreground: extract_foreground,
+    extract_foreground_fused: extract_foreground_fused,
     cleanup_isolated_fg: cleanup_isolated_fg,
     cluster_voxels: cluster_voxels,
     cluster_features: cluster_features,

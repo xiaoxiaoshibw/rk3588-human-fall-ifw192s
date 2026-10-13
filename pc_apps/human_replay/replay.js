@@ -18,6 +18,8 @@
         colour: null,             // Float32Array(total*3) 灰度按分位窗
         renderer: null, scene: null, camera: null, controls: null,
         idx: 0, playing: false, speed: 1, fps: 10, acc: 0, last_ts: 0,
+        session_gen: 0,           /* FIX-3: 会话代际, load() 时 notify_session() 自增 */
+        tracker_last_idx: -1,     /* FIX-3: frame identity 守卫; -1=未初始化(刚 load) */
         range: { lo: 0, hi: 1 },
         // 飞行相机（我的世界旁观者式）：F/ESC 进出，WASD+空格/Shift+鼠标指针锁定。
         // speed_mult 由滚轮调（FLY_WHEEL_JUST：滚轮=调速，不缩放）。
@@ -184,7 +186,15 @@
     function load(metaFile, binFile) {
         status("载入 meta…");
         return metaFile.text().then(function (txt) {
+            /* B2-A-FIX-R1 FIX-3: 单点接管会话生命周期 — 任何 load 入口(下拉/目录/
+             * ?sid=/panel.load_by_sid) 都先 bump 会话代际并重置 overlay 状态.
+             * 旧会话的异步/rAF/滑块残留因 gen 不符在 on_frame 被忽略 (见 detect_overlay). */
             S.meta = JSON.parse(txt);
+            if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY) {
+                S.session_gen = HUMAN_DETECT_OVERLAY.notify_session();
+                HUMAN_DETECT_OVERLAY.reset();
+            }
+            S.tracker_last_idx = -1;   /* frame identity 守卫: 见 set_idx */
             trim_clear();
             return binFile.arrayBuffer();
         }).then(function (buf) {
@@ -217,6 +227,11 @@
                 build_geometry();
                 S.range = compute_range();
                 paint_colours();
+                /* B2-A-FIX-R1 E#2: build_geometry 重建了 S.colour, 必须重挂 overlay 的 colorBuf,
+                 * 否则 colorBuf 指向废弃数组, 跨会话红点静默失效. */
+                if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY && S.colour) {
+                    HUMAN_DETECT_OVERLAY.attach_color(S.colour);
+                }
                 els.metaBox.textContent = JSON.stringify({
                     sid: S.meta.session_id, frames: S.frames.length,
                     total_points: S.total_pts, fps: S.fps,
@@ -485,8 +500,21 @@
         hud_refresh_view_label();
         els.frameInfo.textContent = "stamp=" + f.stamp_sec + "." +
             String(f.stamp_nanosec).padStart(9, "0");
-        /* HR-09 B1 实时检测钩子: 每帧顺带跑一下人簇提取, 不动 drawRange 语义 */
+        /* B2-A-FIX-R1 FIX-3: frame identity 守卫.
+         * 同帧重复回调 (set_idx(同一 idx) / 暂停重渲染) → 跳过 on_frame, 不重复 associate.
+         * 顺序 +1 → 走增量 associate (历史连续).
+         * 跳帧 (|Δ|≠1: 滑块/循环/方向键大步/step 越界/逆序) → reset 后单帧重建:
+         *   诚实语义 — 跳帧后 HUD 显示的是 "本帧单帧分类结果", 不伪装 "从头播到 N 的历史".
+         *   判定历史连续性请顺序播放 (step +1), 这是唯一被认定 "history" 的路径. */
         if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY) {
+            if (S.tracker_last_idx === S.idx) {
+                /* 同帧重入: 只重画 drawRange (上面已做), 不再推进 track */
+                return;
+            }
+            if (S.tracker_last_idx >= 0 && S.idx !== S.tracker_last_idx + 1) {
+                HUMAN_DETECT_OVERLAY.reset();
+            }
+            S.tracker_last_idx = S.idx;
             HUMAN_DETECT_OVERLAY.on_frame(S);
         }
     }

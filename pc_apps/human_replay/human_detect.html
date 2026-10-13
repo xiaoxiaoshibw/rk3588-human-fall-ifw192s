@@ -41,6 +41,18 @@
   .side-sec p{font-size:11.5px;line-height:1.6}
   .side-sec b{color:var(--text-secondary)}
   @media (max-width:1280px){.workbench{grid-template-columns:270px minmax(0,1fr) 280px}}
+
+  /* 页内一键配平弹层 */
+  #levelOverlay{position:fixed;inset:0;background:rgba(10,11,14,.72);z-index:100;display:flex;align-items:center;justify-content:center}
+  #levelOverlay[hidden]{display:none}
+  #levelCard{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:6px;padding:18px 20px;width:340px;font-size:12.5px;color:var(--text-secondary)}
+  #levelCard h3{margin:0 0 6px;font-size:14px;color:var(--text-primary)}
+  #levelCard .row{display:flex;gap:8px;margin-top:8px}
+  #levelCard .field{display:flex;align-items:center;gap:8px;margin-top:6px}
+  #levelCard .field label{width:5.2em;color:var(--text-muted)}
+  #levelCard .field input[type=number]{width:90px;font:12px var(--font-mono)}
+  #levelNote{margin-top:8px;font-size:11.5px;color:var(--text-muted);min-height:1.4em}
+  #levelNote.err{color:var(--danger)}
 </style>
 </head>
 <body class="shell">
@@ -129,6 +141,21 @@
       </details>
     </section>
   </aside>
+</div>
+<!-- ===== 页内一键配平弹层 ===== -->
+<div id="levelOverlay" hidden>
+  <div id="levelCard">
+    <h3>该会话未配平</h3>
+    <div>配平后特征里的 z 才有「离地高度」语义，否则聚类会把墙、桌沿、门框当成候选簇。</div>
+    <div class="field"><label>pitch (°)</label><input type="number" id="lvPitch" step="0.5" value="26"></div>
+    <div class="field"><label>roll (°)</label><input type="number" id="lvRoll" step="0.5" value="0"></div>
+    <div class="field"><label>安装高度 (m)</label><input type="number" id="lvHeight" step="0.01" value="1.14"></div>
+    <div class="row">
+      <button id="lvRunBtn" class="btn primary grow">立刻跑自动配平</button>
+      <button id="lvSkipBtn" class="btn ghost grow">已知风险，先看原始系</button>
+    </div>
+    <div id="levelNote"></div>
+  </div>
 </div>
 <script src="vendor/three.min.js"></script>
 <script src="vendor/OrbitControls.js"></script>

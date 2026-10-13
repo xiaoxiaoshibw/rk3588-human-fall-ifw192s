@@ -1,7 +1,7 @@
 /* 本地完整会话入口；不参与配平、检测或跟踪算法。 */
 "use strict";
 var SESSION_SELECTION = (function () {
-    function valid_sid(sid) { return typeof sid === "string" && sid.length <= 100 && /^cap_\d{8}_\d{6}(?:_[A-Za-z0-9_-]+)?$/.test(sid); }
+    function valid_sid(sid) { return typeof sid === "string" && /^[A-Za-z0-9_-]{1,100}$/.test(sid); }
     function choose(list, query) {
         var seen = new Set();
         list = list.filter(function (s) {

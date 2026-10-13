@@ -1,4 +1,4 @@
-"""Three-session local validation UI; reuse leveling jobs and immutable disk outputs."""
+"""Local cohort validation UI; reuse leveling jobs and immutable disk outputs."""
 import copy
 import hashlib
 import json
@@ -7,7 +7,8 @@ from urllib.parse import parse_qs, urlparse
 
 import leveling as W
 
-SESSIONS = ("cap_20261004_203349", "cap_20261004_203135", "cap_20261004_202456", "cap_20261002_223757")
+SESSIONS = ("cap_20261004_203349", "cap_20261004_203135", "cap_20261004_202456", "cap_20261002_223757",
+            "cap_20261009_113611")
 REFERENCE_JOB = "27f870c6c7be43f4b9dc50121a5fc03f"
 
 

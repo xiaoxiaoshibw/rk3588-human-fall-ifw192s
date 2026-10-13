@@ -23,6 +23,7 @@
         idx: 0, playing: false, speed: 1, fps: 10, acc: 0, last_ts: 0,
         range: { lo: 0, hi: 1 },
         leveled: false, transform: null,
+        level_gen: 0,           // 配平弹层 generation，切会话即作废旧轮询
         // ---- human-detect 状态 ----
         roi: null,                 // {x,y,r} 圆柱 ROI
         tracker: new DL.EmaTracker(),
@@ -56,8 +57,11 @@
     function load_sid(sid) {
         status("载入 meta…");
         S.roi = null; S.tracker.reset(); S.lastFeat = null; S.lastSm = null;
+        S.level_gen++;            // 作废未完成的配平轮询
         _clear_overlays();
         _clear_pipe_overlays();   /* 换会话清旧 pipe bbox — 否则新会话场景里残留上个会话的家具框 */
+        var lv = document.getElementById("levelOverlay");
+        if (lv) lv.hidden = true;
         var metaF = { name: "meta.json", text: function () { return fetch("/api/file?sid=" + encodeURIComponent(sid) + "&name=meta.json").then(function (r) { if (!r.ok) throw new Error("meta HTTP " + r.status); return r.text(); }); } };
         var binF = { name: "points.bin", arrayBuffer: function () { return fetch("/api/file?sid=" + encodeURIComponent(sid) + "&name=points.bin").then(function (r) { if (!r.ok) throw new Error("bin HTTP " + r.status); return r.arrayBuffer(); }); } };
         return metaF.text().then(function (txt) {
@@ -94,11 +98,113 @@
                     S.frames.length + " 帧 · " + S.total_pts + " 点 · " +
                     (S.meta.duration_sec || 0).toFixed(1) + "s · " + S.fps + "Hz · " +
                     (S.leveled ? "<span style='color:#4bab7d'>已应用 TLS 配平 (z=0=地板)</span>"
-                               : "<span style='color:#d0a75a'>未配平：仅供参考 — 请先在「算法验证」页评估</span>");
+                               : "<span style='color:#d0a75a'>未配平：仅供参考</span>");
                 status("就绪 (" + Math.round(performance.now() - t0) + "ms)");
                 set_idx(0);
                 play(true);
             }
+
+            // ---- 页内一键配平弹层 ------------------------------------------------
+            // ponytail: 弹层 UI 在 html 里静态写死，这里只接事件;pitch/roll/height 存 localStorage 沿用上次值
+            var elsLv = {};
+            ["levelOverlay", "lvPitch", "lvRoll", "lvHeight", "lvRunBtn", "lvSkipBtn", "levelNote"]
+                .forEach(function (id) { elsLv[id] = document.getElementById(id); });
+            (function restore() {
+                try {
+                    var saved = JSON.parse(localStorage.getItem("hf_level_seed") || "null");
+                    if (saved) {
+                        if (typeof saved.pitch === "number") elsLv.lvPitch.value = saved.pitch;
+                        if (typeof saved.roll === "number") elsLv.lvRoll.value = saved.roll;
+                        if (typeof saved.height === "number") elsLv.lvHeight.value = saved.height;
+                    }
+                } catch (e) { /* ignore corrupt storage */ }
+            })();
+            function saveSeed() {
+                try {
+                    localStorage.setItem("hf_level_seed", JSON.stringify({
+                        pitch: parseFloat(elsLv.lvPitch.value),
+                        roll: parseFloat(elsLv.lvRoll.value),
+                        height: parseFloat(elsLv.lvHeight.value)
+                    }));
+                } catch (e) { /* storage full / forbidden → ignore */ }
+            }
+            function note(txt, is_err) {
+                elsLv.levelNote.textContent = txt;
+                elsLv.levelNote.className = is_err ? "err" : "";
+            }
+
+            function poll_leveled(job_id, generation) {
+                if (generation !== S.level_gen) return;
+                fetch("/api/leveling/job?id=" + encodeURIComponent(job_id))
+                    .then(function (r) { return r.json(); })
+                    .then(function (j) {
+                        if (generation !== S.level_gen) return;
+                        if (j.state === "running") {
+                            note("配平中… " + (j.message || ""));
+                            setTimeout(function () { poll_leveled(job_id, generation); }, 1200);
+                        } else if (j.state === "ready") {
+                            note("配平完成，应用 TLS …");
+                            return fetch("/api/leveling/leveled_latest?sid=" + encodeURIComponent(sid))
+                                .then(function (r) { return r.json(); })
+                                .then(function (lv) {
+                                    if (lv && lv.ok && lv.transform && lv.transform.R && lv.transform.t) {
+                                        apply_Rt(lv.transform.R, lv.transform.t);
+                                        S.leveled = true;
+                                        S.transform = lv.transform;
+                                        elsLv.levelOverlay.hidden = true;
+                                        finish();
+                                    } else {
+                                        note("配平完成但取回 transform 失败，请打开「算法验证」页查看", true);
+                                    }
+                                });
+                        } else {
+                            note("配平失败: " + (j.error || j.message || "未知错误") + " — 请打开「算法验证」页查看", true);
+                            elsLv.lvRunBtn.disabled = false;
+                        }
+                    })
+                    .catch(function (e) { note("轮询失败: " + e.message, true); elsLv.lvRunBtn.disabled = false; });
+            }
+
+            elsLv.lvRunBtn.addEventListener("click", function () {
+                elsLv.lvRunBtn.disabled = true; note("载入源绑定…");
+                saveSeed();
+                var generation = ++S.level_gen;
+                fetch("/api/leveling/source?sid=" + encodeURIComponent(sid))
+                    .then(function (r) { return r.json(); })
+                    .then(function (src) {
+                        if (generation !== S.level_gen) return;
+                        if (!src || !src.source) throw new Error("source endpoint 返回异常");
+                        return fetch("/api/leveling/run", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                schema: 1,
+                                sid: sid,
+                                source: src.source,
+                                config: {
+                                    pitch_deg: parseFloat(elsLv.lvPitch.value),
+                                    roll_deg: parseFloat(elsLv.lvRoll.value),
+                                    physical_height_m: parseFloat(elsLv.lvHeight.value),
+                                    mode: "auto"
+                                }
+                            })
+                        });
+                    })
+                    .then(function (r) { return r.json(); })
+                    .then(function (started) {
+                        if (generation !== S.level_gen) return;
+                        if (!started || !started.job_id) throw new Error(started && started.error || "run 启动失败");
+                        note("配平中… 校验原始数据与SHA");
+                        setTimeout(function () { poll_leveled(started.job_id, generation); }, 800);
+                    })
+                    .catch(function (e) { note("启动失败: " + e.message, true); elsLv.lvRunBtn.disabled = false; });
+            });
+            elsLv.lvSkipBtn.addEventListener("click", function () {
+                S.level_gen++;
+                elsLv.levelOverlay.hidden = true;
+                finish();
+            });
+
             fetch("/api/leveling/leveled_latest?sid=" + encodeURIComponent(sid))
                 .then(function (r) { return r.ok ? r.json() : null; })
                 .then(function (lv) {
@@ -106,10 +212,14 @@
                         apply_Rt(lv.transform.R, lv.transform.t);
                         S.leveled = true;
                         S.transform = lv.transform;
+                        finish();
+                    } else {
+                        // 未配平 → 阻塞 finish，弹层让用户决定：跑配平 / 跳过
+                        elsLv.levelOverlay.hidden = false;
+                        note("");
                     }
                 })
-                .catch(function () { /* 无配平结果不阻塞 */ })
-                .then(finish);
+                .catch(function () { elsLv.levelOverlay.hidden = false; note(""); });
         }).catch(function (e) {
             status("载入失败: " + e.message, true);
             console.error(e);

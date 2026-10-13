@@ -32,6 +32,13 @@
     btn.addEventListener("click", function () {
         on = !on;
         if (on) {
+            /* B2-A-FIX-R1: 重开人检 = 状态重开; tracker_last_idx 复位防同帧跳过 */
+            if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY) {
+                HUMAN_DETECT_OVERLAY.reset();
+                if (window.replay_internal && window.replay_internal.S) {
+                    window.replay_internal.S.tracker_last_idx = -1;
+                }
+            }
             /* 延迟初始化: 等 replay_internal + 背景 JSON 都到位 */
             var try_init = function () {
                 if (typeof window.replay_internal === "undefined" || !window.replay_internal.S) { setTimeout(try_init, 100); return; }
