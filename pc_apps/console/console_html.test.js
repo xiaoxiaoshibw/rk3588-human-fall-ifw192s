@@ -151,5 +151,31 @@ t('回归：不再靠读 iframe location 判断（跨域必抛 SecurityError，�
   if (/contentWindow\.location/.test(SRC)) throw new Error('又读回了跨域 location，板端在线时也会误报「不在内网」');
 });
 
+t('骨架倒地入口使用本实例端口，缺端口时显示说明而不误连临时服务', () => {
+  const win = loadShell('http://127.0.0.1/console.html?replay_port=49001&fall_port=49002');
+  const APPS = vm.runInContext('APPS', win);
+  const i = APPS.findIndex(a => a.name === '骨架与倒地检测');
+  if (i < 0) throw new Error('缺少骨架倒地入口');
+  vm.runInContext(`open(${i})`, win);
+  eq(registry.f.src, 'http://127.0.0.1:49002/');
+  const missing = loadShell();
+  vm.runInContext(`open(${i})`, missing);
+  eq(registry.f.hidden, true);
+  if (!registry.errmsg.textContent.includes('未就绪')) throw new Error('缺数据说明未显示');
+});
+
+t('联合录制入口使用本实例端口，缺端口时提示重新打开', () => {
+  const win = loadShell('http://127.0.0.1/console.html?replay_port=49001&capture_port=49003');
+  const apps = vm.runInContext('APPS', win);
+  const i = apps.findIndex(a => a.name === 'USB＋雷达联合录制');
+  if (i < 0) throw new Error('缺联合录制入口');
+  vm.runInContext(`open(${i})`, win);
+  eq(registry.f.src, 'http://127.0.0.1:49003/');
+  const missing = loadShell();
+  vm.runInContext(`open(${i})`, missing);
+  eq(registry.f.hidden, true);
+  if (!registry.errmsg.textContent.includes('重新打开')) throw new Error('缺启动提示');
+});
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

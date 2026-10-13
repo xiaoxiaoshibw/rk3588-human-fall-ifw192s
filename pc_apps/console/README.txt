@@ -8,6 +8,15 @@
   -> 点 "更多信息" -> "仍要运行"。
 
 【它能做什么】
+  新增 USB＋雷达联合录制：读取既有板端 MJPEG 与完整 /innolidar_points，
+  两路数据直接写入 Windows 本机 captures\remote\cap_*_joint_*。
+  可设置本机保存目录、自动停止时长，手动停止或关闭控制台时完成保存。
+  保留 camera.mjpeg、radar.ros1 原始消息、meta.json / points.bin、
+  camera_frames.jsonl / radar_frames.jsonl 和 joint.json。
+  两路用同一本机接收时钟记录，尚非硬件同步；不会调用板端录制接口。
+  断流自动停止并保留部分数据。最长 3600 秒、8 GiB、剩余空间 256 MiB 限制。
+  自定义目录的数据可在会话回放中通过“导入目录”打开。
+
   打开后是一个总控制台首页，五个入口：
     - 会话回放     本地点云会话回放器 (replay)
     - 板端 WebUI   连接 RK3588 板 (需板在线)

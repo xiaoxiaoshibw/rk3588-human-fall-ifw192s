@@ -20,18 +20,46 @@ import sys
 import threading
 
 import webview
+import joint_capture
 
 # PyInstaller onefile 解压目录优先（console.html / human_replay 被打进 exe）
 HERE = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
 
 
-def _shell_url(port):
+def _shell_url(port, fall_port=None, capture_port=None):
     """壳页 URL：相对路径由 pywebview 内置本地 http 服务供给 WebView2。
 
     不能用 file:// + 查询串：WebView2 会把 '?' 百分号编码进文件名去找，
     直接 ERR_FILE_NOT_FOUND（2026-10-05 实测）。
     """
-    return "console.html?replay_port=%d" % port
+    url = "console.html?replay_port=%d" % port
+    url += "&fall_port=%d" % fall_port if fall_port else ""
+    return url + ("&capture_port=%d" % capture_port if capture_port else "")
+
+
+def _start_joint_capture_server():
+    root = (_frozen_capture_root() if getattr(sys, "frozen", False)
+            else os.path.join(os.path.dirname(os.path.dirname(HERE)), "captures", "remote"))
+    root = os.environ.get("HR_DEST_ROOT") or root
+    return joint_capture.start_server(root, os.path.join(HERE, "joint_capture.html"))
+
+
+def _start_fall_server():
+    """仓内真人离线原型同进程独立端口；缺数据时保留其他控制台功能。"""
+    root = (os.path.dirname(os.path.dirname(_frozen_capture_root()))
+            if getattr(sys, "frozen", False) else os.path.dirname(os.path.dirname(HERE)))
+    source_dir = os.path.join(root, "sidequests", "human_fusion_lab_next", "real_fall", "r02")
+    if not os.path.isfile(os.path.join(source_dir, "server.py")):
+        return None
+    sys.path.insert(0, source_dir)
+    try:
+        module = runpy.run_path(os.path.join(source_dir, "server.py"))
+        server = module["ThreadingHTTPServer"](("127.0.0.1", 0), module["Handler"])
+    except (OSError, ValueError, ImportError, KeyError) as exc:
+        print("fall replay unavailable: %s" % exc)
+        return None
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    return server.server_address[1]
 
 
 def _is_valid_source_dir(d):
@@ -181,18 +209,71 @@ if __name__ == "__main__":
         import multiprocessing
         multiprocessing.freeze_support()
 
+    if "--check-joint-capture" in sys.argv:
+        import json
+        import urllib.request
+        server, recorder = _start_joint_capture_server()
+        try:
+            with urllib.request.urlopen("http://127.0.0.1:%d/api/status" % server.server_port) as response:
+                report = json.load(response)
+            with urllib.request.urlopen("http://127.0.0.1:%d/" % server.server_port) as response:
+                report['page_ok'] = 'USB 摄像头＋雷达联合录制' in response.read().decode('utf-8')
+            report['shell_url'] = _shell_url(8901, capture_port=server.server_port)
+            destination = sys.argv[sys.argv.index("--check-joint-capture") + 1]
+            with open(destination, 'x', encoding='utf-8') as stream:
+                json.dump(report, stream, ensure_ascii=False, indent=2)
+        finally:
+            recorder.close()
+            server.shutdown()
+            server.server_close()
+        sys.exit(0 if report['page_ok'] else 1)
+
+    # Headless release check exercises the frozen servers without opening a GUI.
+    if "--check-startup" in sys.argv:
+        import json
+        import urllib.request
+        report = {}
+        try:
+            report["replay_port"] = _start_replay_server()
+            report["fall_port"] = _start_fall_server()
+            if not report["fall_port"]:
+                raise ValueError("fall replay did not start")
+            with urllib.request.urlopen("http://127.0.0.1:%d/api/info" % report["fall_port"]) as response:
+                info = json.load(response)
+            report["sessions"] = info["sessions"]
+            with urllib.request.urlopen("http://127.0.0.1:%d/api/frame?sid=cap_20261013_094333&i=72" % report["fall_port"]) as response:
+                frame = json.load(response)
+            report["alarm_frame"] = frame["row"]["frame"]
+            report["alert_active"] = frame["row"]["alert_active"]
+            report["skeleton_nodes"] = len(frame["row"]["skeleton"]["nodes"])
+            report["shell_url"] = _shell_url(report["replay_port"], report["fall_port"])
+            report["ok"] = report["alert_active"] and report["skeleton_nodes"] == 13
+        except Exception as exc:
+            report.update(ok=False, error=str(exc))
+        destination = sys.argv[sys.argv.index("--check-startup") + 1]
+        with open(destination, "x", encoding="utf-8") as stream:
+            json.dump(report, stream, ensure_ascii=False, indent=2)
+        sys.exit(0 if report["ok"] else 1)
+
     replay_dir, origin = _replay_dir()
     mode = "SOURCE_BYPASS" if origin in ("ENV", "INI") else "PYINSTALLER"
     print("human_replay source=%s" % origin)
     print("resolved root=%s" % replay_dir)
     print("mode=%s" % mode)
     replay_port = _start_replay_server()
+    fall_port = _start_fall_server()
+    capture_server, recorder = _start_joint_capture_server()
     _suppress_edge_save_bubble()
     webview.create_window(
         "总控制台",
-        _shell_url(replay_port),
+        _shell_url(replay_port, fall_port, capture_server.server_port),
         width=1440, height=900,
         min_size=(900, 600),
     )
-    webview.start()  # Win11 自动选 WebView2；无运行时则退回 Edge/IE 并提示
+    try:
+        webview.start()  # Win11 自动选 WebView2；无运行时则退回 Edge/IE 并提示
+    finally:
+        recorder.close()
+        capture_server.shutdown()
+        capture_server.server_close()
     sys.exit(0)

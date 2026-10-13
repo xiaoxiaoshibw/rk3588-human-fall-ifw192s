@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><title>USB＋雷达联合录制（错峰）</title>
+<style>
+:root{color-scheme:dark}body{margin:0;background:#141518;color:#e7e8ea;font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif}main{max-width:1000px;margin:32px auto;padding:0 24px}h1{font-size:22px}p{color:#a0a3ab}label{display:block;margin:12px 0}input{box-sizing:border-box;background:#242630;color:#e7e8ea;border:1px solid #34373e;border-radius:4px;padding:9px;width:100%;font:inherit}#duration{width:110px}button{font:inherit;padding:9px 18px;margin:6px 8px 6px 0;border:1px solid #34373e;border-radius:4px;background:#242630;color:#e7e8ea;cursor:pointer}#start{background:#315d9e}button:disabled{opacity:.45;cursor:default}.panel{padding:18px;background:#1e1f24;border:1px solid #34373e;border-radius:6px;margin-top:18px}#preview{max-width:100%;max-height:440px;display:block;margin:auto}#error{color:#ffaaa0;white-space:pre-wrap}#path{overflow-wrap:anywhere;color:#9dbfff}.counts{display:flex;gap:28px;flex-wrap:wrap}details{margin:16px 0}#previewNote{font-size:12px}
+</style></head><body><main>
+<h1>USB 摄像头＋雷达联合录制（错峰模式）</h1>
+<p>相机只做<strong>实时预览</strong>；雷达由板端 HC 服务<b>先全量录制到板端存储</b>，停止后再一次性完整回拉到本机，板上网口不与相机抢带宽。两路时间基准：相机 = PC 主机接收时刻；雷达 = 板载 HC 时系。</p>
+<label>本机保存目录<input id="root" aria-label="本机保存目录" placeholder="读取默认目录…"></label>
+<label>自动停止时间（秒，板端上限 300） <input id="duration" type="number" min="1" max="300" value="60"></label>
+<details><summary>连接设置</summary>
+<label>USB 摄像头视频流<input id="camera" value="http://192.168.31.58:8081/stream"></label>
+<label>雷达板端服务（HC 控制面）<input id="radar" value="http://192.168.31.58:8766"></label>
+<p>录制时网口只走相机流；雷达落袋在板上 SD 卡，停止后按 HC 协议完整回拉（由 <code>fetch.py</code> 权威实现：SHA/布局校验、状态机推进、.part 断点）。</p></details>
+<button id="start" disabled title="板端空闲才可开始">开始录制</button><button id="stop" disabled>停止并保存</button><button id="folder">打开保存目录</button>
+<div class="panel" role="status" aria-live="polite"><b id="state">正在连接本机录制服务…</b><div class="counts"><span id="camCount">相机：预览中</span><span id="radarCount">雷达：板端录制</span><span id="elapsed">0 秒</span><span id="size">0 MB</span></div><div id="path"></div><div id="quality"></div><div id="error"></div></div>
+<div class="panel"><img id="preview" alt="联合录制的相机画面" hidden><p id="previewNote">开始录制后显示相机实时画面。</p></div>
+<p>保存内容：radar = meta.json + points.bin（HC 格式、可被 human_replay 直接回放），camera = 空 camera.mjpeg 占位；相机若预览中断不影响雷达（雷达在板上持续录制）。</p>
+</main><script>
+const $ = id => document.getElementById(id);
+const names = {idle:'等待录制',starting:'正在启动板端录制…',recording:'正在录制（雷达在板上）',stopping:'正在停止板端…',saving:'正在从板端拉回雷达数据…（需要几十秒）',completed:'已保存到本机（可回放）',completed_with_gaps:'已保存到本机（相机预览曾中断）',failed:'录制失败'};
+let busy = false, initialized = false;
+async function api(path, body) {
+  const response = await fetch(path, body === undefined ? {cache:'no-store'} : {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || '请求失败');
+  return data;
+}
+function render(s) {
+  busy = ['starting','recording','stopping','saving'].includes(s.state);
+  if (!initialized) { $('root').value=s.output_root; initialized=true; }
+  $('state').textContent=names[s.state] || s.state;
+  $('camCount').textContent = s.camera_recovering ? '相机：预览中断（雷达仍在板上录）' : (s.camera_frames ? '相机：预览中' : '相机：未就绪');
+  $('radarCount').textContent = s.radar_frames ? `雷达：${s.radar_frames} 帧` : (s.state==='recording' ? '雷达：板上持续录制…' : '雷达：—');
+  $('elapsed').textContent=`${s.elapsed_sec || s.duration_sec || 0} 秒`;
+  $('size').textContent=`${(s.bytes/1e6).toFixed(1)} MB`;
+  $('path').textContent=s.path || s.output_root;
+  $('quality').textContent = s.state==='completed_with_gaps' ? '说明：相机预览曾中断，但板上雷达未中断；两路各自独立，不视为文件级连续视频。' : '';
+  $('error').textContent=s.error ? `${s.error}` : '';
+  $('start').disabled=busy; $('stop').disabled=!busy || (s.state!=='recording' && s.state!=='starting');
+  for(const id of ['root','duration','camera','radar']) $(id).disabled=busy;
+  if(busy || s.camera_frames>0) { $('preview').hidden=false; $('preview').src='/api/preview?t='+Date.now(); }
+  $('previewNote').textContent=s.state==='recording'||s.state==='saving' ? '当前实时预览；停止后雷达数据从板端回拉，约需几十秒。' : '录制结束后保留最后一帧；本预览不写入磁盘。';
+}
+async function poll() { try { render(await api('/api/status')); } catch(e) { $('error').textContent=e.message; $('start').disabled=true; $('state').textContent='本机录制服务不可达'; } }
+$('start').onclick=async()=>{ $('start').disabled=true; $('error').textContent=''; try { render(await api('/api/start',{output_root:$('root').value,duration_sec:Number($('duration').value),camera_url:$('camera').value,radar_board_url:$('radar').value})); } catch(e) { $('error').textContent=e.message; $('start').disabled=false; } };
+$('stop').onclick=async()=>{ $('stop').disabled=true; try { render(await api('/api/stop',{})); } catch(e) { $('error').textContent=e.message; } };
+$('folder').onclick=async()=>{ try { await api('/api/open-folder',{}); } catch(e) { $('error').textContent=e.message; } };
+// ponytail: recursive timeout avoids concurrent status requests on a slow disk.
+async function tick(){ await poll(); setTimeout(tick,700); } tick();
+</script></body></html>

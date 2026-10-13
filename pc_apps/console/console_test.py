@@ -18,6 +18,15 @@ import console_gui as G
 
 
 class ConsoleStartupTest(unittest.TestCase):
+    def test_joint_capture_port_is_in_shell_url(self):
+        self.assertEqual(G._shell_url(41001, 41002, 41003),
+                         'console.html?replay_port=41001&fall_port=41002&capture_port=41003')
+
+    def test_fall_shell_port_and_missing_workspace(self):
+        self.assertEqual(G._shell_url(41001,41002),'console.html?replay_port=41001&fall_port=41002')
+        with tempfile.TemporaryDirectory() as tmp, patch.object(G,'HERE',tmp):
+            self.assertIsNone(G._start_fall_server())
+
     def test_shell_url_is_relative_not_file_scheme(self):
         # WebView2 对 file://+查询串报 ERR_FILE_NOT_FOUND（2026-10-05 定位）；
         # 壳页须走 pywebview 内置本地 http 服务，用相对路径交给它处理。
