@@ -1,0 +1,32 @@
+{
+  "params_version": "spike_cluster_r1.v2.k_from_p90_NN",
+  "frozen": true,
+  "form": "eps(r) = max(eps_min, k*r + b)",
+  "k": 0.0092,
+  "b": -0.0031,
+  "eps_min": 0.08,
+  "safety_factor": 1.0,
+  "safety_factor_provenance": "审计发现 v1 写了 1.8 但代码未实乘 (k=0.0092 = fit_k); 现改为 1.0 实乘, 如以后用 SF>1, 需在 calibrate_k.py 内其实加乘.",
+  "wall_bands": [
+    [0.0, 0.10],
+    [0.10, 0.85],
+    [0.85, 1.30],
+    [1.30, 1.75],
+    [1.75, 2.20],
+    [2.20, 99.0]
+  ],
+  "wall_bands_rationale": "Band 0 (0-0.10m) 地板占位; 0.10-0.85 m 小腿脚部; 0.85-1.30 m 大腿膝部; 1.30-1.75 m 腰部/胸部; 1.75-2.20 m 头颈; >=2.20 m 上方天花板/隔板.",
+  "z_lo_hot": 0.1,
+  "z_hi_hot": 2.3,
+  "grid_cell_m": 0.05,
+  "key_mod": 4096,
+  "min_points": 30,
+  "top_k": 4,
+  "k_provenance": "calibrate_k.py @ T0=6 段调参会话; p90 NN/accel_nn; LAD 加权拟合; 再加 safety_factor=1.8 (行业经验 1.5-2.5, 我们选保守侧)",
+  "important_notes": [
+    "由 IFW192S 192 线密度特性, p90 NN 极小 (<0.03m), 转化后的 k 远小于常见多线雷达.",
+    "eps(r=2m)=0.015m, ceil/0.05=1 cell — 等效 A (8 邻). 这意味着 B 在评估域 1-3m 与 A 几乎同构.",
+    "差异仅在 <0.9m 或 >4m (k*r>0.05) — 这是次要影响, 属诚实 UNKNOWN 区间.",
+    "若评估在 1-3m 内均 A≈B 说明原理成立但不带来增益 — 需要已知 break-case (或更大 r 的会话) 验证."
+  ]
+}
