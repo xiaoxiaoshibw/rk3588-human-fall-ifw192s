@@ -1,0 +1,68 @@
+{
+ "schema": "gt_workbench/1",
+ "session_id": "cap_20261010_180557",
+ "session_sha256": {
+  "points": "59ee17bf4af762a28785f8d8ceca7b06bc564fa5e42b17c22f9c9bf74fd1bcb9",
+  "meta": "4295ffc95e12ffe9ebf651a9866c21b16875c43725615045530a7c140b75db1e"
+ },
+ "annotator": null,
+ "annotated_at": null,
+ "review_status": "draft",
+ "review": {
+  "reviewer": null,
+  "reviewed_at": null,
+  "notes": null
+ },
+ "annotation_method": null,
+ "frames": {
+  "<frame_idx>": {
+   "rois": [
+    {
+     "cls": "PERSON|FURNITURE|BACKGROUND|UNKNOWN",
+     "x": 0.0,
+     "y": 0.0,
+     "r_xy": 0.0,
+     "track_id": "P1 (仅 PERSON 必填, 会话内持久)",
+     "visibility": "visible|partial|occluded|null"
+    }
+   ],
+   "note": null
+  }
+ },
+ "episodes": [
+  {
+   "track_id": "P1",
+   "born_frame": 0,
+   "exit_frame": null,
+   "still_frames": [
+    [
+     0,
+     0
+    ]
+   ],
+   "moving_frames": [
+    [
+     0,
+     0
+    ]
+   ],
+   "note": null
+  }
+ ],
+ "uncertain_intervals": [
+  {
+   "start": 0,
+   "end": 0,
+   "reason": "occlusion|blur|out_of_fov|…"
+  }
+ ],
+ "_rules": [
+  "全帧默认 UNKNOWN — 未标帧不参与任何指标",
+  "PERSON 必须 track_id 且同帧唯一; 双人独立 P1/P2",
+  "FURNITURE 逐件标注, 供硬负样本 ROI 裁剪",
+  "AUTO_CANDIDATES 只是加速建议, 逐帧确认/改正后才算 GT",
+  "本文件由人工编辑; review_status 变 reviewed 后才可冻结 SPLITS"
+ ],
+ "display_name": "S8-still-retention-long",
+ "n_frames": 523
+}

@@ -1,0 +1,92 @@
+{
+  "script_sha256": "10e69e4d03dc5ed03b001999d90c31e5082db33048034aec015a2ad9c445320f",
+  "plan_sha256": "ac73722b2313476ed4e2e7ea8b5235604ff66bdf57d31ae3cec5b36bbabd40aa",
+  "acceptance_sha256": "5181abbff2379d64ebe1536dc8d5784ef87bf6df22e00b6161eb2714107982fd",
+  "shared_sha256": {
+    "diagnose_low_scores.py": "df22717aba7c17d65c8ac5004f9d509f05259f574aa9fc32bb7aa492ba93e873",
+    "cpu_pointpillars.py": "a96295143653ee932af874e1ca0a90ccfde4ff7ea8171f553eebfa27214d7224",
+    "det04.py": "00fec42efaf9c468ed3eafbbadd06591d92c6d0051bb437d1c2e4a50c021f689",
+    "det05_annotate.py": "d8f109ee3bd4020a647c2c203ee5d6c59088397149e3f4b2f8ad0e145aa25bb8",
+    "det05_freeze.py": "412d1ae5a30b5f2d3504a52cb38f15f7ff9cc533cd30b2b4593210afc37605b2"
+  },
+  "checkpoint_sha256": "482dfcf63b932cc5ccf012b4bbdad52aa51aa33becf87d0a39d61c39b377b5b1",
+  "source_hashes": {
+    "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\artifacts\\det02_foreground_r1\\manifest.json": "54212a34c346ddaf3a8cb2ec26677b2fd494873cc541dc5e89c5763081c5e733",
+    "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\artifacts\\det02_prepared_r1\\manifest.json": "f79377f292e8c7c03618abc1ac46c11a9c8b22390952b3617eb9f883b438b973",
+    "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\docs\\sidequests\\evidence\\2026-10-07_det01_r2\\user_truth_seeds.json": "f5de8d760bc28922eaf5e1b9568688844b5189c974848a969e41c78196d5a00b",
+    "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\artifacts\\det05_r1\\frozen\\labels_v1.json": "c0b27d5e6b31fcbc60037dd163c1951f4efe7180254819b503abdcc609aa9604",
+    "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\artifacts\\det05_r1\\frozen\\gt_v1.json": "b1516d317cc010c770fe0600ee5a32a52197b57e8c79dfc6599be256cddc6d48",
+    "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\artifacts\\det05_r1\\frozen\\freeze_manifest.json": "dce8dcd6fb8014081a2a6bb81fe1345e8a788e15eaba537045c12e264ba7c8ea"
+  },
+  "items": [
+    {
+      "sid": "cap_20261007_215540",
+      "index": 32,
+      "variant": "B_workspace"
+    },
+    {
+      "sid": "cap_20261007_215607",
+      "index": 33,
+      "variant": "B_workspace"
+    },
+    {
+      "sid": "cap_20261007_215623",
+      "index": 33,
+      "variant": "B_workspace"
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "index": 28,
+      "variant": "B_workspace"
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "index": 3,
+      "variant": "B_workspace"
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "index": 7,
+      "variant": "E_cleanup"
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "index": 11,
+      "variant": "E_cleanup"
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "index": 12,
+      "variant": "E_cleanup"
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "index": 17,
+      "variant": "E_cleanup"
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "index": 37,
+      "variant": "E_cleanup"
+    }
+  ],
+  "competitor_separation_m": 0.8,
+  "sampling": "base=first32 everywhere; pure_switch=z_rank32 in pure pillars only, first32 elsewhere",
+  "pure_rule": "all valid points labeled human in frozen labels_v1",
+  "score": 0.1,
+  "nms": 0.01,
+  "top100": 100,
+  "max50": 50,
+  "voxel": [
+    0.16,
+    0.16,
+    4
+  ],
+  "max_points": 32,
+  "model_z": -1.73,
+  "intensity_divisor": 1023,
+  "new_forwards": 20,
+  "physical": false,
+  "gt_version": "v1",
+  "labels_version": "v1"
+}

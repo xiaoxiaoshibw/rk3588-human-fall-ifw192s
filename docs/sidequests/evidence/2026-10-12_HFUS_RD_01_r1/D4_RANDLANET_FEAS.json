@@ -1,0 +1,132 @@
+{
+ "gt_per_point_census": {
+  "cap_20261010_175227": {
+   "gt": true,
+   "n_frames": 304,
+   "frames_with_reviewed_gt": 0,
+   "total_points": 14931203,
+   "labeled_person_points": 0,
+   "label_coverage_points": 0.0,
+   "label_coverage_frames": 0.0,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  },
+  "cap_20261010_175429": {
+   "gt": true,
+   "n_frames": 258,
+   "frames_with_reviewed_gt": 258,
+   "total_points": 12673527,
+   "labeled_person_points": 286822,
+   "label_coverage_points": 0.02263,
+   "label_coverage_frames": 1.0,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  },
+  "cap_20261010_175553": {
+   "gt": true,
+   "n_frames": 464,
+   "frames_with_reviewed_gt": 99,
+   "total_points": 22796699,
+   "labeled_person_points": 561361,
+   "label_coverage_points": 0.02462,
+   "label_coverage_frames": 0.2134,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  },
+  "cap_20261010_175804": {
+   "gt": true,
+   "n_frames": 239,
+   "frames_with_reviewed_gt": 11,
+   "total_points": 11740802,
+   "labeled_person_points": 13327,
+   "label_coverage_points": 0.00114,
+   "label_coverage_frames": 0.046,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  },
+  "cap_20261010_175943": {
+   "gt": true,
+   "n_frames": 202,
+   "frames_with_reviewed_gt": 6,
+   "total_points": 9924142,
+   "labeled_person_points": 8841,
+   "label_coverage_points": 0.00089,
+   "label_coverage_frames": 0.0297,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  },
+  "cap_20261010_180235": {
+   "gt": true,
+   "n_frames": 238,
+   "frames_with_reviewed_gt": 71,
+   "total_points": 11693048,
+   "labeled_person_points": 27268,
+   "label_coverage_points": 0.00233,
+   "label_coverage_frames": 0.2983,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  },
+  "cap_20261010_180337": {
+   "gt": true,
+   "n_frames": 251,
+   "frames_with_reviewed_gt": 12,
+   "total_points": 12328975,
+   "labeled_person_points": 24361,
+   "label_coverage_points": 0.00198,
+   "label_coverage_frames": 0.0478,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  },
+  "cap_20261010_180557": {
+   "gt": true,
+   "n_frames": 523,
+   "frames_with_reviewed_gt": 53,
+   "total_points": 25689368,
+   "labeled_person_points": 57045,
+   "label_coverage_points": 0.00222,
+   "label_coverage_frames": 0.1013,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  },
+  "cap_20261010_180751": {
+   "gt": true,
+   "n_frames": 126,
+   "frames_with_reviewed_gt": 18,
+   "total_points": 6190058,
+   "labeled_person_points": 46922,
+   "label_coverage_points": 0.00758,
+   "label_coverage_frames": 0.1429,
+   "reviewed_nonperson_points": 0,
+   "per_point_supervision_gap": "无人逐点为正；其余 99%% 点没有 reviewed 标签（UNKNOWN），按规则不能自动当负例。"
+  }
+ },
+ "knn_cpu_probe": {
+  "175429_n16384": {
+   "n_pts": 16384,
+   "kd_build_ms": 4.9,
+   "knn_query_ms": 103.6
+  },
+  "175429_n40960": {
+   "n_pts": 40960,
+   "kd_build_ms": 10.6,
+   "knn_query_ms": 391.5
+  },
+  "175553_n16384": {
+   "n_pts": 16384,
+   "kd_build_ms": 4.3,
+   "knn_query_ms": 89.4
+  },
+  "175553_n40960": {
+   "n_pts": 40960,
+   "kd_build_ms": 17.0,
+   "knn_query_ms": 382.9
+  }
+ },
+ "conclusions": {
+  "per_point_gt_enough": false,
+  "reason": "九会话全部非人点无 reviewed 标签；逐点监督无可用负类，且人点覆盖率仅 ~1%%（总人数点 / 全帧点数）。若采用 SQN 式 0.1%% 稀疏监督路线，需要新增负点逐点标注；现 GT 不直接支持。",
+  "cpu_cost_class": "cKDTree K=16 对 16k/40k 点为数十毫秒级；网络本体矩阵乘加几层卷积在 NumPy 上是可接受量级；真正的工程瓶颈在 Windows CPU 训练全流程及板端移植，不在单帧推理。",
+  "deployment_boundary": "板端 Python 3.8/NumPy 1.17 环境需纯 NumPy 推理或 ONNX 另立支线；无 CUDA，Open3D-ML 官方管线不作承诺。",
+  "verdict": "DATA_BLOCKED——逐点 GT/标注任务缺失，无法诚实训/测 RandLA-Net。最小补数清单见结论：(1) S1 会话家具逐点负例 500-1000 帧级散标; (2) 每个有人会话的 5-10 帧全身逐点实例标注; (3) 负点需覆盖地板/家具/背景簇 三类来源。"
+ }
+}

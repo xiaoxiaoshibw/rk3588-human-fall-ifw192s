@@ -1,0 +1,29 @@
+{
+  "plan_sha256": "d845ccd651aa8484c82acd2e58ab7d0950782494e36ff2e3044ec769d9dc26fa",
+  "acceptance_sha256": "ac6edbe25ed50a75485809f0345c5d915bad78371446283166698d9993bd4a5c",
+  "input": "per-session TLS leveling; z-1.73; intensity/1023; voxel 0.16x0.16x4; 32 pts/pillar",
+  "arms": [
+    "first32 (main)",
+    "z_rank32 (aux, no selection)"
+  ],
+  "eval_region": "workspace crop consistent with B_workspace: z in [0.1,2.5]m, r in [0.35,25]m; out-of-region boxes listed separately",
+  "matching": {
+    "primary_center_m": 0.55,
+    "aux_bev_iou": 0.5
+  },
+  "fp_budget_frames": [
+    0.1,
+    0.5,
+    1.0
+  ],
+  "score": 0.1,
+  "nms": 0.01,
+  "top100": 100,
+  "max50": 50,
+  "model_z": -1.73,
+  "intensity_divisor": 1023,
+  "test_frames": "24 C1 frames (6 evenly spread per session)",
+  "empty_frames": "114819 six spread + 233658 [17,35,53]",
+  "dev_frames": "four 2026-10-07 representative frames 32/33/33/28 for pipeline reproduction only",
+  "note": "frozen before any model forward this round; no calibration claims"
+}

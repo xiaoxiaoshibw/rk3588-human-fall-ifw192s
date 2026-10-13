@@ -1,0 +1,1641 @@
+diff --git a/docs/human_capture/README.md b/docs/human_capture/README.md
+index 6df2f19..72a1c1c 100644
+--- a/docs/human_capture/README.md
++++ b/docs/human_capture/README.md
+@@ -5,6 +5,18 @@
+ >
+ > 创建：2026-10-02（Asia/Shanghai）。设计冻结：2026-10-02（用户两轮拍板后）。
+ 
++2026-10-07 当前主线（R39-CLOSEOUT）：用户明确授权 W03 阶段A–F收口审计/诊断与统计返工；[当前工单](tickets/HR-W03-R39-CLOSEOUT.md)已自验 **SUBMITTED / REWORK_REQUIRED，未 ACCEPTED**；[最终收口报告](evidence/2026-10-07_hrw03_r39_closeout/08_final_closeout.md)。31点=30 workspace crop+1 reference，语义UNKNOWN31；confirmation机械归因完成，非静态155行真人GT仍缺。gate保持49.652981%<50%，旧artifact历史DEGRADED；最小统计修复改变全文件SHA后当前loader STALE且SAFE=P。唯一验收表仍为 [R3.7 06_test_matrix.md v1](evidence/2026-10-07_hrw03_r37_productionization/06_test_matrix.md) 的T37/T38，T38-05/06、S4/S7 FAIL。W04–W09及registration R3.9 production未授权、未启动。下一步人工GT与gate支撑/契约审查，见[计划当前状态更新](HUMAN_RECOGNITION_NEXT_STAGE_PLAN.md)及[逐点审阅页](evidence/2026-10-07_hrw03_r39_closeout/09_point_review.html)。以下同日R3.8及更早条目保留为历史。
++
++2026-10-08 用户授权（采集 + 生产接入）：① 生产接入按 [HR-RET-V2 工单](tickets/HR-RET-V2.md) 启动，唯一验收表 v1 [HRRETV2_ACCEPTANCE.md](HRRETV2_ACCEPTANCE.md)；increment 1 已交付并自验 **PASS**——`human_pipe_lib.js` 新增融合删除能力函数 `extract_foreground_fused`（默认不被任何现有路径调用，P 路径逐位不变；37/37 + 45/45 + panel 全过）：[evidence/2026-10-08_hrretv2_r1](evidence/2026-10-08_hrretv2_r1/README.md)；increment 2（消费侧旗标/加载路径/浏览器节点验证）与独立复审待做。② 采集按 [CAPTURE_PROTOCOL_DRAFT.md](CAPTURE_PROTOCOL_DRAFT.md) 执行，但板端 2026-10-08 探测**不可达**（ping 100% 丢失、8766 超时）→ **BLOCKED**，待板端在线。③ 离线链路 P1（S-A+ 独立复核）/P2（融合 v2 A/B+端到端 11/11 PASS）/P3（采集协议）均完成，见 [HUMAN_RECOGNITION_REVIEW_AND_PLAN.md](HUMAN_RECOGNITION_REVIEW_AND_PLAN.md)。W03 自身状态不变（仍 REWORK_REQUIRED）；W04–W09 未启动。
++
++2026-10-07（晚）用户直派（补充记录，不改变上方 W03 状态）：四段新录制会话（cap_20261007_215540/215607/215623/215643，同一人于 ≈(2.1,−0.5)、距 2.2m 站立/举手）已完成离线配平（auto；3 段 recommended=tls，215607 TLS−RANSAC d 差 3.69cm>3cm 按规范不推荐）并完成现行管线 P 路径逐帧人体对照 probe：[evidence/2026-10-07_new_sessions_person_probe_r1](evidence/2026-10-07_new_sessions_person_probe_r1/README.md)。结论：静立人被离线全帧静态图自建模并删除 ~97–98%（前景仅 14–57 点/帧，成簇也基本 NON_HUMAN、无 confirmed、无人/物粘连），"静立吞人"已知边界定量复现，非新 bug。随后按「静止模板」直派：空场会话 cap_20261007_233658 配平（job 3c793d7bda0f4ced86b20ac8076e7b0e，recommended=tls）+ 四段配准（3/4 WARN/DEGRADED，215607 因配平 conflict 被 LEVELING_SHA_MISMATCH 拒绝）+ 参考层保留率阶梯：参考层保留静立人 **97.4–98.0%**，叠加在线层后仍仅 **1.2–2.1%**（并集语义），空场自身 P 复验 0 candidate/0 confirmed；开发计划 [STILL_PERSON_RETENTION_PLAN.md](STILL_PERSON_RETENTION_PLAN.md)（阶段 0 完成；阶段 1 融合优先级规则草案 v1：[FUSION_PRIORITY_RULE_DRAFT.md](FUSION_PRIORITY_RULE_DRAFT.md)，实施需另行授权；人体语义分类层草案 v1：[HUMAN_SEMANTIC_CLASSIFICATION_DRAFT.md](HUMAN_SEMANTIC_CLASSIFICATION_DRAFT.md)，S-A 离线原型已跑：[evidence/2026-10-08_human_semantic_sa_r1](evidence/2026-10-08_human_semantic_sa_r1/README.md)（7 样本全过、空场 0 HUMAN，未接管线）；审查/分析/计划：[HUMAN_RECOGNITION_REVIEW_AND_PLAN.md](HUMAN_RECOGNITION_REVIEW_AND_PLAN.md)；S-A+ 独立复核：[evidence/2026-10-08_human_semantic_sa_r2](evidence/2026-10-08_human_semantic_sa_r2/README.md)（数据驱动留出 0 假 HUMAN，修复稀疏竖条假阳性）；采集协议草案：[CAPTURE_PROTOCOL_DRAFT.md](CAPTURE_PROTOCOL_DRAFT.md)；P2 融合 v2 离线 A/B+端到端：[evidence/2026-10-08_fusion_v2_ab_r1](evidence/2026-10-08_fusion_v2_ab_r1/README.md)（11/11 PASS：v2 人保留 99.9–100%、每帧候选、确认 2/3 段；WD01 不回归、代价公开））。该轮为诊断轮；10-08 用户授权采集与生产接入，进展见上条。W03 状态/W04–W09 边界不变。
++
++2026-10-07 当前主线：[R3.8 离线 writer/shadow 工单](tickets/HR-W03-R38.md)已自验提交/停写，gate=DEGRADED、T38-05/06 与 S4/S7 FAIL，未 ACCEPTED；[最终结果与停止点](evidence/2026-10-07_hrw03_r38/10_final_submission.md)。唯一验收表为 R3.7 `06_test_matrix.md` v1 的 T37/T38；R3.9 production 仍未授权。用户另要求规划人体识别，已登记 [下一阶段计划与当前效果](HUMAN_RECOGNITION_NEXT_STAGE_PLAN.md)；W03 未冻结，W04–W09 为 PLAN_RECORDED。下方 R3.1/R3.2“下一步”为历史进度。
++
++2026-10-07（深夜）控制台回放直连板端（用户直派）：`human_replay` 会话面板点未下载的板端行 = 自动 `/api/sync` 下载、完成后自动载入回放（不再「同步选中 → 等 → 再点行」两步）；板端已 `transferred` 但本机没有的会话（本机删过再要/别的 PC 拉过）由 `fetch.transfer_one` 只读复制，不再被 `transferred→transferring` 非法迁移挡成 409 失败。新增会话改名 `POST /api/rename`：只写本地 `<sid>/meta.json` 的 `name` 字段（sid/目录/板端登记都不动，空名=恢复默认），列表优先显示 name、hover 见完整 sid。测试：human_replay python 46、human_capture 45、panel O1–O5、node 各套、console 10+4 全绿；Console.exe 与 `LiDAR_Console.zip` 已重建（内嵌副本 `/api/rename` 探针 400 通过）。证据：[2026-10-07_console_board_load_rename](evidence/2026-10-07_console_board_load_rename/README.md)。
++
++2026-10-07（晚）PC 回传数据面换轨（用户直派修复 exe）：`fetch.py`/`config.py` 去掉 `ssh/scp`——`ldiar-wel` 别名+私钥只在本机 `~/.ssh/config`，别人电脑解压 zip 后拉不了会话的根因；改走 capture_server 新增 `GET /api/v1/sessions/<sid>/files/<meta.json|points.bin>` HTTP 直下（板端 `download_limit_kbit` 默认 70000 Kbit/s 限速，`webui/human_capture` 同页加 ↓meta/↓points 下载链接，免 SSH 手工放进 Console 的 `captures/remote/<sid>/`）。`fetch.py` 任何失败必退回 `ready`，不再可能卡死 `transferring`。Console.exe 已重建（`pc_apps/console/dist/LiDAR_Console.zip`）；板端已部署并重启（旧 4 个卡 `transferring` 会话退回 `ready`，部署实录/回滚见 [evidence/2026-10-07_files_download_deploy](evidence/2026-10-07_files_download_deploy/README.md)）。测试：`fetch_lib_test.py` 11 项、human_capture 45 项、node 各套全绿；真机 HTTP 端到端拉取 digest 通过。
++
+ 2026-10-06（三轮）用户判定 **W03-R3.2 跨会话 match audit = PASS**（归因修正：alignment 已证明重要——ICP 消掉 WD01 原始漏匹配 ~94%（0.854→0.991）；全文残余 ≠ matcher error，须在 known-static correspondence set 上归因）。`09_r32_summary.md` 已按评审修订（修订记录在文内）。**R3.3 controlled AB（离线，生产零改动）完成**：AABB（点到占用格盒距离 <0.12）有独立于 ICP 的收益——known-static ICP Δ+0.032、WD02 ICP Δ+0.051、WD01 ICP 0.994→1.000；干净人体 retention ≥97.7%；纯 containment 弱于 center；HP02 NOT_RUN。生产接入仍 **NOT AUTHORIZED**。[r5 证据](evidence/2026-10-06_hrw03_r5/14_r33_summary.md)；[R3.2 修订](evidence/2026-10-06_hrw03_r4/09_r32_summary.md)。
+ 
+ 2026-10-06（二轮）用户判定 **W03-R3.0 Static Leakage Audit = PASS（根因定位）**、同意停止 R2.6b 调参；WD01/WD02 金标锁定、新增 HP01–HP03 正样本门，[W03-R3 验收规范](W03_R3_ACCEPTANCE.md) 生效（**从 R3 起生产行为验收以 console leveled 管线为唯一权威口径，raw 仅诊断**）。判定记录：[11_user_verdict](evidence/2026-10-06_hrw03_r3/11_user_verdict.md)。**R3.1 reference builder 已交付**（离线 additive，未接 production）：[r4 证据](evidence/2026-10-06_hrw03_r4/04_summary.md)（203349 leveled：参考体素 5286、阈值 0.5 回收稀疏面 1632、同会话自吸收 0.9987、digest 复现一致；35 单测过）。下一步：R3.2 跨会话 leveled match audit（223757 vs 203349 reference）；未过 audit 不接 production。
+@@ -220,3 +232,15 @@ PC 端 **stdlib + numpy + 浏览器 + Three.js r127**（与 human_fall_preview
+ PC fetch 只对 `ready` 动手；成功后置 `transferred` 回报板端。
+ 
+ 票/证据每个 milestone 一份，ticket 写明「不做什么」防范围漂移。
++
++
++## 2026-10-08 新工单登记（仅制定，待用户转发开工）
++
++用户本聊天要求制定可交给Codex执行的工单：[HR-SEM-SHADOW](tickets/HR-SEM-SHADOW.md)，唯一验收表 [HR_SEM_SHADOW_ACCEPTANCE.md v1](HR_SEM_SHADOW_ACCEPTANCE.md)。状态 DRAFT_READY_FOR_DISPATCH；本轮只交付文档。用户转发明确开工后仅执行冻结语义原型的真实整簇/全帧PC离线旁路、负例与按帧票审计、GT审阅材料及接入设计；生产语义切换、配准改动、artifact签发/重签/安装、旗标、部署采集均不在范围。W03与HR-RET-V2原授权/状态/唯一表不变。
++
++
++## 2026-10-08 下一阶段骨架离线计划登记（仅计划，未开工）
++
++用户本聊天要求“制定下一个阶段计划”，已制定 [下一阶段离线粗骨架计划 v1](HUMAN_SKELETON_OFFLINE_PLAN.md)、[HR-SKELETON-OFFLINE 工单](tickets/HR-SKELETON-OFFLINE.md)及其唯一验收表 [HR_SKELETON_OFFLINE_ACCEPTANCE.md v1](HR_SKELETON_OFFLINE_ACCEPTANCE.md)。状态DRAFT_READY_FOR_DISPATCH，SKO-01～18全部NOT_RUN。本轮仅规划；后续用户明确开工后才做人工确认人体簇→可逆标准化→5–7粗结构节点→独立时序→离线复审。
++
++最新SEM R2已修复SEM-12工具绑定，但SEM-05～08、10与WD02仍BLOCKED，[R2报告](evidence/2026-10-08_hrsemshadow_r2/REVIEW_R2.md)；真实身份GT缺失、05/08结构上界不足95%。本计划是受控离线可行性，不等于正式W04/W05放行，不改W03/SEM/RET-V2历史状态，不重开已关闭HR-07/08、不激活HR-09/ML，不部署采集或修改生产。
+diff --git a/docs/human_capture/tickets/INDEX.md b/docs/human_capture/tickets/INDEX.md
+index 5c7343e..be6553a 100644
+--- a/docs/human_capture/tickets/INDEX.md
++++ b/docs/human_capture/tickets/INDEX.md
+@@ -17,3 +17,21 @@
+ **2026-10-03 用户拍板**: limb+ml 支线永久关闭； 主线回归 GL-03/GL-04。
+ 
+ **2026-10-03 晚 用户再授权**: 仅写 HR-09 计划文档，**写完即封存**——不改代码、不录数、不开工。HR-08 全部代码/模型归档原样留仓，未来激活时零改动复用。
++
++
++## 2026-10-08 新工单（仅计划登记）
++
++| ID | 主题 | 状态 | 唯一验收表 |
++|---|---|---|---|
++| [HR-SEM-SHADOW](HR-SEM-SHADOW.md) | 静立/举臂，真实整簇全帧语义旁路及确认审计 | DRAFT_READY_FOR_DISPATCH；用户转发开工后执行离线范围 | [HR_SEM_SHADOW_ACCEPTANCE.md v1](../HR_SEM_SHADOW_ACCEPTANCE.md) |
++
++不改变W03/HR-RET-V2历史判定，不解封HR-07/08/09，不授权生产切换、配准治理或部署采集。
++
++
++## 2026-10-08 下一阶段骨架离线工单（仅制定）
++
++| ID | 主题 | 状态 | 唯一验收表 |
++|---|---|---|---|
++| [HR-SKELETON-OFFLINE](HR-SKELETON-OFFLINE.md) | 人工确认人体簇上的标准化、5–7粗结构节点与独立时序可行性 | DRAFT_READY_FOR_DISPATCH；未开工 | [HR_SKELETON_OFFLINE_ACCEPTANCE.md v1](../HR_SKELETON_OFFLINE_ACCEPTANCE.md) |
++
++正式W04/W05和旧HR-07是不同范围；不改变旧关闭决定、W03/SEM BLOCKED或生产边界。实施以新的明确用户开工授权为准。
+diff --git a/pc_apps/console/README.txt b/pc_apps/console/README.txt
+index efa4db2..50765e5 100644
+--- a/pc_apps/console/README.txt
++++ b/pc_apps/console/README.txt
+@@ -1,5 +1,5 @@
+ ====================================================
+- LiDAR 总控制台 (LiDAR Console)  20261005
++ LiDAR 总控制台 (LiDAR Console)  20261007
+ ====================================================
+ 
+ 【运行】
+diff --git a/pc_apps/console/console_test.py b/pc_apps/console/console_test.py
+index de9afa5..cbc761b 100644
+--- a/pc_apps/console/console_test.py
++++ b/pc_apps/console/console_test.py
+@@ -25,7 +25,8 @@ class ConsoleStartupTest(unittest.TestCase):
+     def test_replay_dir_found_in_source_layout(self):
+         # 源码运行时 human_replay 与 console/ 平级（pc_apps/human_replay），
+         # 不在 console/ 里（2026-10-05 修复，此前源码启动直接 FileNotFoundError）。
+-        d = G._replay_dir()
++        # _replay_dir 返回 (source_dir, origin)，见 console_gui ENV/INI/PACKAGED 分层。
++        d, _origin = G._replay_dir()
+         self.assertTrue(os.path.isfile(os.path.join(d, 'human_replay_lib.py')), d)
+ 
+     def test_frozen_capture_root_ignores_shortcut_cwd(self):
+diff --git a/pc_apps/human_replay/config.py b/pc_apps/human_replay/config.py
+index 8166998..1e84792 100644
+--- a/pc_apps/human_replay/config.py
++++ b/pc_apps/human_replay/config.py
+@@ -7,18 +7,18 @@ import shutil
+ _HERE = os.path.dirname(os.path.abspath(__file__))
+ 
+ BOARD_URL = "http://192.168.3.125:8766"       # 捕获控制面（无鉴权，CORS *）
+-SSH_TARGET = "ldiar-wel"                       # ~/.ssh/config alias（免密 key）
+ 
+ # 数据落盘根目录（D1）：D1 冻结为 D:\Code\ldiar\captures\remote\
+ DEST_ROOT = os.path.join(os.path.dirname(os.path.dirname(_HERE)), "captures", "remote")
+ 
+ POLL_INTERVAL_S = 15.0
+-HTTP_TIMEOUT_S = 8.0
+-SSH_TIMEOUT_S = 60.0   # du → tail → awk 在百兆板上偶有 10-30s 尖峰,容忍别判死
+-SCP_TIMEOUT_S = 3600.0
++HTTP_TIMEOUT_S = 8.0     # 控制面 JSON
+ 
+-# 预留 30% 链路给实时预览（README §6）：100M 链路 → scp -l 70000 ≈ 70Mbit/s
+-SCP_LIMIT_KBIT = 70000
++# 数据面流式下载的 socket 超时：单次读间隙上限。限速在板端（capture_server
++# download_limit_kbit，默认 70000 Kbit/s ≈ 70Mbit，给 100M 链路实时预览留 30%）；
++# 正常 256KB/30ms 一来，60s 没有字节才判死。scp 时代的 3600s 是总时长上限，
++# HTTP 流式不需要总时长上限，只防僵死。
++DOWNLOAD_TIMEOUT_S = 60.0
+ 
+ # 落盘前置门槛：剩余空间 < 会话大小 + 256MB slack 就本轮放弃
+ SPACE_SLACK_BYTES = 256 * 1024 * 1024
+diff --git a/pc_apps/human_replay/fetch.py b/pc_apps/human_replay/fetch.py
+index 5b3cf09..2ff519e 100644
+--- a/pc_apps/human_replay/fetch.py
++++ b/pc_apps/human_replay/fetch.py
+@@ -1,25 +1,28 @@
+ # -*- coding: utf-8 -*-
+-"""HR-01: PC 侧轮询拉取板端 ready 会话（控制面 HTTP + 数据面 scp）。
++"""HR-01: PC 侧轮询拉取板端 ready 会话（控制面 + 数据面全 HTTP，免 SSH）。
+ 
+ 流程（README §1/§8 状态机）：
+   GET /api/v1/sessions → 挑 state==ready 且 download_requested 且非 transferred
+   → PATCH state=transferring（server 状态机决定成败，防重叠）
+-  → scp -l 限速拉 meta.json/points.bin（.part 落盘，全绿后一步换名）
++  → HTTP 流式拉 meta.json/points.bin（.part 落盘，全绿后一步换名）
+   → meta.json 静态契约校验 + sha256 校验（按 frame offset/count 实际点区，
+     与 bag2session 的 write 动线同源）
+   → PATCH extra.transferred=true + state=transferred 回报板端。
+ 
+-传输前用 `ssh du` 预判盘余量，防止 100M 链路把时间浪费在注定失败的传输上。
++数据面走 capture_server 的 /api/v1/sessions/<sid>/files/<name>（8766）：
++同网段任何 PC 都无需 SSH key；限速在板端（download_limit_kbit，默认 ≈70Mbit，
++给 100M 链路的实时预览留 30%）。
+ 
+-只 stdlib + 系统 ssh/scp（Win11 自带 OpenSSH；`scp -l` 单位 Kbit/s，
+-以接近 70Mbit=70000 Kbit/s 限速，给 100M 链路的实时预览留 30%）。
++传输前用 HEAD Content-Length 预判盘余量，防止把时间浪费在注定失败的传输上。
++
++只 stdlib（urllib 流式）。
+ """
+ 
+ import argparse
+ import hashlib
+ import json
+ import os
+-import subprocess
++import shutil
+ import sys
+ import time
+ import urllib.error
+@@ -27,19 +30,6 @@ import urllib.request
+ 
+ import config as C
+ 
+-# sessions.json 用容器内视角记路径（/root/catkin_ws/captures_remote/），
+-# 板上已建 symlink 把它指到宿主机 SSD /mnt/captures/captures_remote/；
+-# scp 走宿主机必须走 /mnt/captures/ 前缀，这里做字面映射。
+-_CONTAINER_PREFIX = "/root/catkin_ws/captures_remote/"
+-_HOST_PREFIX = "/mnt/captures/captures_remote/"
+-
+-
+-def _host_path(paths):
+-    """把 sessions.json 里的容器内路径映射成宿主/sshd 可 scp 的路径。"""
+-    if paths.startswith(_CONTAINER_PREFIX):
+-        return _HOST_PREFIX + paths[len(_CONTAINER_PREFIX):]
+-    return paths
+-
+ # ---- HTTP（控制面，KB 级） -------------------------------------------------
+ 
+ 
+@@ -67,6 +57,36 @@ def _http_error_status(exc):
+     return status, detail
+ 
+ 
++def _file_url(sid, name):
++    return "%s/api/v1/sessions/%s/files/%s" % (C.BOARD_URL, sid, name)
++
++
++def _http_size(sid, name):
++    """HEAD 拿远端文件字节数；失败/无长度返回 0（调用方据此放弃本轮）。"""
++    req = urllib.request.Request(_file_url(sid, name), method="HEAD")
++    try:
++        with urllib.request.urlopen(req, timeout=C.HTTP_TIMEOUT_S) as resp:
++            return int(resp.headers.get("Content-Length") or 0)
++    except (urllib.error.URLError, OSError, ValueError):
++        return 0
++
++
++def _http_download(sid, name, local_path):
++    """流式下载单文件到 local_path（.part）；落盘字节数与 Content-Length 不符也算失败。"""
++    try:
++        with urllib.request.urlopen(_file_url(sid, name),
++                                    timeout=C.DOWNLOAD_TIMEOUT_S) as resp:
++            expect = int(resp.headers.get("Content-Length") or 0)
++            with open(local_path, "wb") as fh:
++                shutil.copyfileobj(resp, fh, 1 << 20)
++                fh.flush()
++                os.fsync(fh.fileno())
++                written = fh.tell()
++            return written > 0 and written == expect
++    except (urllib.error.URLError, OSError, ValueError):
++        return False
++
++
+ # ---- 预选（纯函数，单测量靶） ----------------------------------------------
+ 
+ 
+@@ -101,33 +121,13 @@ def select_job(sessions_json):
+     return jobs[0] if jobs else None
+ 
+ 
+-# ---- scp / ssh（数据面，容错部分下载） -------------------------------------
++# ---- 落盘小工具 -------------------------------------------------------------
+ 
+ 
+ def _dst_tmp_path(dest_dir, name):
+     return os.path.join(dest_dir, name + ".part")
+ 
+ 
+-def _scp_one(remote_path, local_path, bwlimit_kbit=None):
+-    cmd = ["scp", "-p"]
+-    if bwlimit_kbit:
+-        cmd += ["-l", str(bwlimit_kbit)]
+-    cmd += ["%s:%s" % (C.SSH_TARGET, remote_path), local_path]
+-    return subprocess.call(cmd, timeout=C.SCP_TIMEOUT_S)
+-
+-
+-def _ssh_du_bytes(remote_paths):
+-    """对远端 afford 文件估字节。任一失败/为 0 就拒绝，说服 du 返回 0。
+-
+-    防转移：size<=0 时本轮直接放回，避免把时间耗在注定崩的传输上。
+-    """
+-    quoted = " ".join("'%s'" % p.replace("'", "'\\''") for p in remote_paths)
+-    cmd = ["ssh", "-o", "BatchMode=yes", C.SSH_TARGET,
+-           "du -cb -- %s 2>/dev/null | tail -n1 | awk '{print $1}'" % quoted]
+-    out = subprocess.check_output(cmd, timeout=C.SSH_TIMEOUT_S).decode().strip()
+-    return int(out) if out.isdigit() else 0
+-
+-
+ # ---- 校验（meta 静态 + bin 实际点区 sha256） -------------------------------
+ 
+ 
+@@ -201,18 +201,16 @@ def _local_verify(meta_path, bin_path):
+ # ---- 单个会话一轮的工作 -----------------------------------------------------
+ 
+ 
+-def _remote_files(session):
+-    meta_remote = _host_path(session["meta_json_path"])
+-    bin_remote = _host_path(session["points_bin_path"])
+-    return [(meta_remote, "meta.json"), (bin_remote, "points.bin")]
++def transfer_one(session, http, http_size, download, dest_root, log):
++    """返回 True=文件已落地,False=留给下一轮重试；所有失败已就地清理 .part。
+ 
+-
+-def transfer_one(session, http, ssh_du, scp, dest_root, bwlimit_kbit, log):
+-    """返回 True=已置 transferred,False=留给下一轮重试；所有失败已就地清理 .part。
+-
+-    http/ssh_du/scp 用参数注入，单测混合你方便换，代码本体保持 1 层不抽象。
++    http/http_size/download 参数注入，单测好换，代码本体保持 1 层不抽象。
++    任何未预期异常也必走 _fail 退回 ready——绝不把会话卡在 transferring。
++    state=transferred 的会话走只读复制（别的 PC 拉过/本机删过再要）：文件直下，
++    不动状态机——transferred 只能转 purged，PATCH transferring 必被板端 409 拒绝。
+     """
+     sid = session["session_id"]
++    readonly = session.get("state") == "transferred"
+     dest_dir = os.path.join(dest_root, sid)
+     meta_tmp = _dst_tmp_path(dest_dir, "meta.json")
+     bin_tmp = _dst_tmp_path(dest_dir, "points.bin")
+@@ -227,47 +225,49 @@ def transfer_one(session, http, ssh_du, scp, dest_root, bwlimit_kbit, log):
+     def _fail(reason):
+         # 任何一步失败：清 .part、退回 ready、留下错误证据；下一轮会重新挑中本 session
+         _cleanup_parts()
+-        try:
+-            http("PATCH", "/api/v1/sessions/%s" % sid,
+-                 {"state": "ready", "extra": {"error": "hr01: %s" % reason}})
+-        except Exception:
+-            pass
++        if not readonly:
++            try:
++                http("PATCH", "/api/v1/sessions/%s" % sid,
++                     {"state": "ready", "extra": {"error": "hr01: %s" % reason}})
++            except Exception:
++                pass
+         log("FAIL %s: %s" % (sid, reason))
+         return False
+ 
+-    # 1) 抢占：状态机硬约束，只有 ready→transferring 会成功
+-    try:
+-        http("PATCH", "/api/v1/sessions/%s" % sid, {"state": "transferring"})
+-    except urllib.error.HTTPError as exc:
+-        status, _ = _http_error_status(exc)
+-        if status == 409:
+-            log("SKIP %s: 已被他人抢走（409）" % sid)
+-        elif status == 404:
+-            log("SKIP %s: 板上会话已被删" % sid)
+-        else:
+-            log("SKIP %s: PATCH transferring 失败: %s" % (sid, exc))
+-        return False
++    # 1) 抢占：状态机硬约束，只有 ready→transferring 会成功（只读复制不抢）
++    if not readonly:
++        try:
++            http("PATCH", "/api/v1/sessions/%s" % sid, {"state": "transferring"})
++        except urllib.error.HTTPError as exc:
++            status, _ = _http_error_status(exc)
++            if status == 409:
++                log("SKIP %s: 已被他人抢走（409）" % sid)
++            elif status == 404:
++                log("SKIP %s: 板上会话已被删" % sid)
++            else:
++                log("SKIP %s: PATCH transferring 失败: %s" % (sid, exc))
++            return False
+ 
+     try:
+-        # 2) 盘余量预估：先拒绝总比下到一半发现盘满好
+-        files = _remote_files(session)
+-        remote_paths = [r for r, _ in files]
+-        size = ssh_du(remote_paths)
+-        if size <= 0:
+-            return _fail("du 拿不到远端大小")
++        # 2) 盘余量预估：HEAD 拿两文件大小；先拒绝总比下到一半发现盘满好
++        files = ("meta.json", "points.bin")
++        sizes = [http_size(sid, name) for name in files]
++        if min(sizes) <= 0:
++            return _fail("HEAD 拿不到远端大小")
++        total = sum(sizes)
+         free = C.free_bytes(dest_root)
+-        if free < size + C.SPACE_SLACK_BYTES:
+-            return _fail("盘余量 %dB 装不下会话 %dB（含 slack）" % (free, size))
++        if free < total + C.SPACE_SLACK_BYTES:
++            return _fail("盘余量 %dB 装不下会话 %dB（含 slack）" % (free, total))
+ 
+         os.makedirs(dest_dir, exist_ok=True)
+ 
+-        # 3) 逐文件 scp；每个文件下来立刻落盘校验，失败立即清 .part 退回
++        # 3) 逐文件下载；每个文件下来立刻落盘校验，失败立即清 .part 退回
+         meta_path = None
+         bin_path = None
+-        for remote, name in files:
++        for name in files:
+             tmp = _dst_tmp_path(dest_dir, name)
+-            if scp(remote, tmp) != 0:
+-                return _fail("scp %s 失败" % name)
++            if not download(sid, name, tmp):
++                return _fail("下载 %s 失败" % name)
+             final = os.path.join(dest_dir, name)
+             # meta 下完先初步 parse；bin 下完再统一 sha256 校验
+             if name == "meta.json":
+@@ -293,16 +293,20 @@ def transfer_one(session, http, ssh_du, scp, dest_root, bwlimit_kbit, log):
+         log("OK   %s: meta_points=%s digest=%s" % (sid, meta.get("total_points"), digest[:16]))
+ 
+         # 5) 回报板端：extra.transferred=true + state=transferred（一次补丁）
+-        try:
+-            http("PATCH", "/api/v1/sessions/%s" % sid,
+-                 {"state": "transferred", "extra": {"transferred": True}})
+-        except urllib.error.HTTPError as exc:
+-            # 极端竞争：你方板端在 transferred 前会话被删/FIFO 被清了；本地已验收
+-            status, detail = _http_error_status(exc)
+-            log("WARN %s: 本地已验收但板回报失败(%s %s)" % (sid, status, detail))
+-            _cleanup_parts()
+-            return False
++        if not readonly:
++            try:
++                http("PATCH", "/api/v1/sessions/%s" % sid,
++                     {"state": "transferred", "extra": {"transferred": True}})
++            except urllib.error.HTTPError as exc:
++                # 极端竞争：你方板端在 transferred 前会话被删/FIFO 被清了；本地已验收
++                status, detail = _http_error_status(exc)
++                log("WARN %s: 本地已验收但板回报失败(%s %s)" % (sid, status, detail))
++                _cleanup_parts()
++                return False
+         return True
++    except BaseException as exc:
++        # 兜底：任何未预期异常都必须退回 ready（旧版 ssh 异常就让会话卡死在 transferring）
++        return _fail("异常 %s: %s" % (type(exc).__name__, exc))
+     finally:
+         # 非 success 路径统一再扫余下 .part；成功路径上方已逐文件清过
+         _cleanup_parts()
+@@ -312,21 +316,22 @@ def transfer_one(session, http, ssh_du, scp, dest_root, bwlimit_kbit, log):
+ 
+ 
+ def process_session(sid, dest_root=None, log=print):
+-    """拉单个 ready 会话（回放器「同步」按钮的子进程入口）。返回 True=已 transferred。"""
++    """拉单个会话（回放器「同步」按钮的入口）。返回 True=文件已落地。
++
++    ready 走状态机；transferred 只读复制（板端已回传但本机没有：删过再要/别的 PC 拉过）。
++    """
+     try:
+         sess = _http_json("GET", "/api/v1/sessions/%s" % sid)
+     except BaseException as exc:
+         log("FAIL %s: 取会话失败: %s" % (sid, exc))
+         return False
+-    return transfer_one(sess, _http_json, _ssh_du_bytes,
+-                        lambda r, l: _scp_one(r, l, C.SCP_LIMIT_KBIT),
+-                        dest_root or C.DEST_ROOT, C.SCP_LIMIT_KBIT, log)
++    return transfer_one(sess, _http_json, _http_size, _http_download,
++                        dest_root or C.DEST_ROOT, log)
+ 
+ 
+ def run(args):
+     dest_root = args.dest or C.DEST_ROOT
+     os.makedirs(dest_root, exist_ok=True)
+-    bwlimit_kbit = args.kbit
+ 
+     def log(msg):
+         print("[%s] %s" % (time.strftime("%H:%M:%S"), msg), flush=True)
+@@ -344,11 +349,8 @@ def run(args):
+                 break
+             time.sleep(args.interval)
+             continue
+-        ok = transfer_one(
+-            job, _http_json,
+-            lambda paths: _ssh_du_bytes(paths),
+-            lambda remote, local: _scp_one(remote, local, bwlimit_kbit),
+-            dest_root, bwlimit_kbit, log)
++        ok = transfer_one(job, _http_json, _http_size, _http_download,
++                          dest_root, log)
+         transferred += 1 if ok else 0
+         if args.once:
+             break
+@@ -360,12 +362,12 @@ def cli(argv=None):
+     p.add_argument("--once", action="store_true", help="只拉一轮后退出（默认常驻轮询）")
+     p.add_argument("--sid", metavar="SID", help="只拉指定会话（回放器内部调用）")
+     p.add_argument("--interval", type=float, default=C.POLL_INTERVAL_S, help="轮询间隔秒")
+-    p.add_argument("--kbit", type=int, default=C.SCP_LIMIT_KBIT, help="scp -l 限速 (Kbit/s)")
+     p.add_argument("--dest", default=C.DEST_ROOT, help="本地落盘根目录")
+     args = p.parse_args(argv)
+     if args.sid:
+         return 0 if process_session(args.sid, args.dest) else 1
+-    transferred = run(args)
++    run(args)
++    return 0
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/pc_apps/human_replay/fetch_lib_test.py b/pc_apps/human_replay/fetch_lib_test.py
+index 430cbed..89c2325 100644
+--- a/pc_apps/human_replay/fetch_lib_test.py
++++ b/pc_apps/human_replay/fetch_lib_test.py
+@@ -1,19 +1,24 @@
+ # -*- coding: utf-8 -*-
+-"""HR-01 fetch.py 纯逻辑单测（stdlib unittest；Windows 可跑，不触 ssh/板）。
++"""HR-01 fetch.py 单测（stdlib unittest；Windows 可跑，不依赖 SSH）。
+ 
+ 覆盖：
+   pick_sessions 的过滤契约（ready && download_requested && !transferred && 路径齐）
+   _validate_meta 接受板上真实 28B meta、拒绝旧 16B 契约（README 文档滞后，代码以板为准）
+   _sha256_of_points 按 frame 点区实际字节算（允许 bin 尾部额外填充）
+   select_job 稳定顺序（created_iso 升序）
++  transfer_one 失败必退回 ready（不留 transferring 卡死）
++  _http_size/_http_download 对真实 HTTP（本机环回）的流式与 Content-Length 校验
++  process_session 与真实 capture_server /files 端点端到端对拉
+ """
+ 
+ import hashlib
++import http.server
+ import json
+ import os
+ import struct
+ import sys
+ import tempfile
++import threading
+ import unittest
+ 
+ _HERE = os.path.dirname(os.path.abspath(__file__))
+@@ -22,6 +27,14 @@ if _HERE not in sys.path:
+ 
+ import fetch  # noqa: E402
+ 
++# 端到端测试要用板端 capture_server 本体（同仓 src/，不用部署到板）
++_CAPTURE_SCRIPTS = os.path.normpath(
++    os.path.join(_HERE, "..", "..", "src", "human_capture", "scripts"))
++if _CAPTURE_SCRIPTS not in sys.path:
++    sys.path.insert(0, _CAPTURE_SCRIPTS)
++
++import capture_server  # noqa: E402
++
+ 
+ def _meta(frames, stride=28, fields=None, total_bytes=None):
+     fields = fields or ["x", "y", "z", "intensity", "ring", "timestamp"]
+@@ -121,5 +134,171 @@ class TestSha256PointsRegion(unittest.TestCase):
+             self.assertEqual(got, want)
+ 
+ 
++class _FakeHTTP(object):
++    def __init__(self):
++        self.calls = []
++
++    def __call__(self, method, path, body=None, timeout=None):
++        self.calls.append((method, path, body))
++        return {}
++
++
++class TestTransferOneReverts(unittest.TestCase):
++    """失败路径必须 PATCH 回 ready+hr01（旧实现异常时把会话卡死在 transferring）。"""
++
++    def test_unexpected_exception_reverts(self):
++        def boom(*a, **kw):
++            raise RuntimeError("boom")
++
++        http = _FakeHTTP()
++        with tempfile.TemporaryDirectory() as d:
++            ok = fetch.transfer_one({"session_id": "cap_x", "state": "ready"},
++                                    http, boom, boom, d, log=lambda m: None)
++        self.assertFalse(ok)
++        self.assertEqual(http.calls[0],
++                         ("PATCH", "/api/v1/sessions/cap_x", {"state": "transferring"}))
++        method, path, body = http.calls[-1]
++        self.assertEqual((method, path), ("PATCH", "/api/v1/sessions/cap_x"))
++        self.assertEqual(body["state"], "ready")
++        self.assertIn("hr01", body["extra"]["error"])
++
++
++class _LoopbackHandler(http.server.BaseHTTPRequestHandler):
++    files = {}
++    lie_extra = 0
++
++    def _respond(self, head_only):
++        data = self.files.get(self.path.rsplit("/", 1)[-1])
++        if data is None:
++            self.send_response(404)
++            self.send_header("Content-Length", "0")
++            self.end_headers()
++            return
++        self.send_response(200)
++        self.send_header("Content-Length", str(len(data) + self.lie_extra))
++        self.end_headers()
++        if not head_only:
++            self.wfile.write(data)
++
++    def do_GET(self):
++        self._respond(False)
++
++    def do_HEAD(self):
++        self._respond(True)
++
++    def log_message(self, *a):
++        pass
++
++
++class TestHttpDataPlaneLoopback(unittest.TestCase):
++    """_http_size/_http_download 对真实 HTTP（本机环回）：流式 + 长度校验。"""
++
++    def _serve(self, files, lie_extra=0):
++        handler = type("H", (_LoopbackHandler,),
++                       {"files": files, "lie_extra": lie_extra})
++        srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
++        threading.Thread(target=srv.serve_forever, daemon=True).start()
++        self.addCleanup(srv.server_close)   # 注意 LIFO：先注册 close，后注册 shutdown
++        self.addCleanup(srv.shutdown)
++        old = fetch.C.BOARD_URL
++        fetch.C.BOARD_URL = "http://127.0.0.1:%d" % srv.server_address[1]
++        self.addCleanup(setattr, fetch.C, "BOARD_URL", old)
++
++    def test_download_ok_and_size(self):
++        self._serve({"points.bin": b"\x01\x02\x03"})
++        self.assertEqual(fetch._http_size("cap_x", "points.bin"), 3)
++        with tempfile.TemporaryDirectory() as d:
++            p = os.path.join(d, "points.bin.part")
++            self.assertTrue(fetch._http_download("cap_x", "points.bin", p))
++            with open(p, "rb") as fh:
++                self.assertEqual(fh.read(), b"\x01\x02\x03")
++
++    def test_truncated_body_rejected(self):
++        # Content-Length 谎报（比实际多）：连接关闭后字节数对不上 → 拒收
++        self._serve({"points.bin": b"\x01\x02"}, lie_extra=16)
++        with tempfile.TemporaryDirectory() as d:
++            p = os.path.join(d, "points.bin.part")
++            self.assertFalse(fetch._http_download("cap_x", "points.bin", p))
++
++
++class TestAgainstCaptureServer(unittest.TestCase):
++    """与真实 capture_server（本机环回）对拉：端到端 ready→transferred。"""
++
++    def _start_board(self, tmp):
++        cfg = dict(capture_server.DEFAULT_CONFIG)
++        cfg["staging_dir"] = os.path.join(tmp, "staging")
++        cfg["sessions_db"] = os.path.join(cfg["staging_dir"], "sessions.json")
++        cfg["staging_parent"] = tmp
++        cfg["download_limit_kbit"] = 0          # 测试不限速
++        srv = capture_server._Server(("127.0.0.1", 0), capture_server._Handler, cfg)
++        threading.Thread(target=srv.serve_forever, daemon=True).start()
++        self.addCleanup(srv.server_close)   # 注意 LIFO：先注册 close，后注册 shutdown
++        self.addCleanup(srv.shutdown)
++        old = fetch.C.BOARD_URL
++        fetch.C.BOARD_URL = "http://127.0.0.1:%d" % srv.server_address[1]
++        self.addCleanup(setattr, fetch.C, "BOARD_URL", old)
++        return srv, cfg
++
++    def test_process_session_end_to_end(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            srv, cfg = self._start_board(tmp)
++            sid = "cap_20261007_120000"
++            d = os.path.join(cfg["staging_dir"], sid)
++            os.makedirs(d)
++            with open(os.path.join(d, "meta.json"), "w", encoding="utf-8") as fh:
++                json.dump(_meta(_frames([(0, 3)])), fh)
++            _write_bin(os.path.join(d, "points.bin"), 3)
++            srv.store.upsert({"session_id": sid, "state": "ready",
++                              "created_iso": "2026-10-07T12:00:00+08:00"})
++            dest = os.path.join(tmp, "dest")
++            os.makedirs(dest)
++            ok = fetch.process_session(sid, dest_root=dest, log=lambda m: None)
++            self.assertTrue(ok)
++            self.assertTrue(os.path.isfile(os.path.join(dest, sid, "meta.json")))
++            self.assertTrue(os.path.isfile(os.path.join(dest, sid, "points.bin")))
++            st = srv.store.get(sid)
++            self.assertEqual(st["state"], "transferred")
++            self.assertTrue(st.get("transferred"))
++
++    def test_fail_reverts_to_ready_not_stuck(self):
++        # 已登记 ready 但文件不存在：HEAD 拿不到大小 → 退回 ready + hr01 错误
++        with tempfile.TemporaryDirectory() as tmp:
++            srv, cfg = self._start_board(tmp)
++            sid = "cap_20261007_120001"
++            srv.store.upsert({"session_id": sid, "state": "ready",
++                              "created_iso": "2026-10-07T12:00:01+08:00"})
++            dest = os.path.join(tmp, "dest")
++            os.makedirs(dest)
++            ok = fetch.process_session(sid, dest_root=dest, log=lambda m: None)
++            self.assertFalse(ok)
++            st = srv.store.get(sid)
++            self.assertEqual(st["state"], "ready")
++            self.assertIn("hr01", st.get("error", ""))
++
++    def test_process_session_copies_already_transferred(self):
++        # 板端已 transferred 但本机没有（别的 PC 拉过/本地删过再要）：只读复制。
++        # 旧行为 PATCH transferring 会被状态机 409 拒（transferred 只能转 purged）。
++        with tempfile.TemporaryDirectory() as tmp:
++            srv, cfg = self._start_board(tmp)
++            sid = "cap_20261007_120002"
++            d = os.path.join(cfg["staging_dir"], sid)
++            os.makedirs(d)
++            with open(os.path.join(d, "meta.json"), "w", encoding="utf-8") as fh:
++                json.dump(_meta(_frames([(0, 3)])), fh)
++            _write_bin(os.path.join(d, "points.bin"), 3)
++            srv.store.upsert({"session_id": sid, "state": "transferred",
++                              "created_iso": "2026-10-07T12:00:02+08:00",
++                              "transferred": True})
++            dest = os.path.join(tmp, "dest")
++            os.makedirs(dest)
++            ok = fetch.process_session(sid, dest_root=dest, log=lambda m: None)
++            self.assertTrue(ok)
++            self.assertTrue(os.path.isfile(os.path.join(dest, sid, "meta.json")))
++            self.assertTrue(os.path.isfile(os.path.join(dest, sid, "points.bin")))
++            st = srv.store.get(sid)
++            self.assertEqual(st["state"], "transferred")
++            self.assertNotIn("error", st)   # 只读复制没有 hr01 回退痕迹
++
++
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/pc_apps/human_replay/human_pipe_lib.js b/pc_apps/human_replay/human_pipe_lib.js
+index ce94390..47b1cfe 100644
+--- a/pc_apps/human_replay/human_pipe_lib.js
++++ b/pc_apps/human_replay/human_pipe_lib.js
+@@ -288,8 +288,9 @@ function extract_foreground(xyzi, static_map) {
+              fg_xyzi: fg_xyzi };
+ }
+ 
+-/* 有界背景匹配：只查 3×3×3 体素邻域（邻域跨度 ≥ 匹配半径，两格远不可能命中）。 */
+-function _bg_match(static_map, x, y, z) {
++/* 有界背景匹配：只查 3×3×3 体素邻域（邻域跨度 ≥ 匹配半径，两格远不可能命中）。
++ * _bg_match_rec 返回命中体素记录（融合层需要其形心）；_bg_match 保持原布尔语义。 */
++function _bg_match_rec(static_map, x, y, z) {
+     var r2 = PIPE.bg_match_radius * PIPE.bg_match_radius;
+     var ix = Math.floor(x / PIPE.bg_voxel_xy), iy = Math.floor(y / PIPE.bg_voxel_xy),
+         iz = Math.floor(z / PIPE.bg_voxel_z);
+@@ -297,9 +298,38 @@ function _bg_match(static_map, x, y, z) {
+         var rec = static_map.get(_bg_key_ijk(ix + a, iy + b, iz + c));
+         if (!rec) continue;
+         var dx = rec.x - x, dy = rec.y - y, dz = rec.z - z;
+-        if (dx * dx + dy * dy + dz * dz < r2) return true;
++        if (dx * dx + dy * dy + dz * dz < r2) return rec;
+     }
+-    return false;
++    return null;
++}
++function _bg_match(static_map, x, y, z) { return _bg_match_rec(static_map, x, y, z) ? true : false; }
++
++/* ---- 4c· 融合删除 v2（HR-RET-V2 能力函数；默认不被任何现有路径调用）----
++ * 删除 p ⇔ ref_match(p) OR ( online_match(p) AND ref_supported(online_hit(p)) )
++ *   ref_supported(v) ⇔ v 的 3×3×3 邻域内存在参考静态体素且形心距 < bg_match_radius（复用，不新增参数）。
++ * 语义（FUSION_PRIORITY_RULE_DRAFT §3.1）：空场模板里没有的东西，不得仅凭"在线持久"被删（静立人保留）。
++ * refkeys=null ⇒ 保守：在线-only 不删（不得仅凭在线持久删）；本函数不作为 P 路径——P 路径保持原样。
++ * 返回 { fg_xyzi, n_fg, n_dropped, n_ref_removed, n_online_supported_removed, n_online_only_kept, vox_fg }。 */
++function extract_foreground_fused(xyzi, refkeys, online) {
++    var out = [], n_in = xyzi.length / 4;
++    var n_ref = 0, n_sup = 0, n_keep = 0;
++    for (var k = 0; k < xyzi.length; k += 4) {
++        var x = xyzi[k], y = xyzi[k + 1], z = xyzi[k + 2], i = xyzi[k + 3];
++        if (z < PIPE.ground_keep_below_m || z > PIPE.z_max_m) continue;
++        if (refkeys && _bg_match(refkeys, x, y, z)) { n_ref++; continue; }
++        if (online) {
++            var hit = _bg_match_rec(online, x, y, z);
++            if (hit) {
++                if (refkeys && _bg_match(refkeys, hit.x, hit.y, hit.z)) { n_sup++; continue; }
++                n_keep++;
++            }
++        }
++        out.push(x, y, z, i);
++    }
++    var fg_xyzi = new Float32Array(out);
++    return { fg_xyzi: fg_xyzi, n_fg: fg_xyzi.length / 4, n_dropped: n_in - fg_xyzi.length / 4,
++             n_ref_removed: n_ref, n_online_supported_removed: n_sup, n_online_only_kept: n_keep,
++             vox_fg: voxelize(fg_xyzi) };
+ }
+ 
+ /* ---- 4b· 拓扑保护型孤立前景清理（R2.6b）----
+@@ -719,10 +749,14 @@ function _eig3(m) {
+ }
+ 
+ /* ---- 一帧全链（供节点测试 + 浏览器层调用） ----
+- * ctx = {static_keys: Map, tracker: Tracker} ；frame_idx 用于 Tracking/Fall。 */
++ * ctx = {static_keys: Map, tracker: Tracker[, fusion: {refkeys: Map}]}；frame_idx 用于 Tracking/Fall。
++ * ctx.fusion（HR-RET-V2 inc2 消费侧旗标）：缺省 / refkeys=null ⇒ 原 P 路径逐位不变；
++ * 显式给 refkeys 才走 v2 融合删除（消费方仅应在 VALID artifact 下经 registration.fusionKeys 提供）。 */
+ function pipeline_frame(xyzi, frame_idx, ctx) {
+     var clean = denoise(xyzi);
+-    var fg = extract_foreground(clean, ctx.static_keys);
++    var fused = (ctx.fusion && ctx.fusion.refkeys)
++        ? extract_foreground_fused(clean, ctx.fusion.refkeys, ctx.static_keys) : null;
++    var fg = fused || extract_foreground(clean, ctx.static_keys);
+     /* R2.6b：前景 → 聚类之间，拓扑保护型孤立前景清理（单遍快照语义） */
+     var iso = cleanup_isolated_fg(fg.fg_xyzi);
+     var fg_pts = iso.xyzi;
+@@ -735,7 +769,7 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
+         clusters_before = clusters_after;
+     }
+     var clusters_raw = clusters_after;
+-    var cleanup_split_delta = clusters_after - clusters_before;
++    var cleanup_split_delta = clusters_after.length - clusters_before.length;
+     /* 5b 证据后处理：第二遍点级扫描 — 喂清理后的真簇点,
+      * 否则地板/背景点又被计数进簇,污染逐带 spread_cv/aniso */
+     var ev_pack = evidence_postpass(fg_pts, clusters_raw);
+@@ -760,7 +794,7 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
+         var ev = fall_assess(tr);
+         if (ev) events.push(Object.assign({ track_id: tr.id }, ev));
+     }
+-    return { n_in: xyzi.length / 4, n_denoise: clean.length / 4,
++    var out = { n_in: xyzi.length / 4, n_denoise: clean.length / 4,
+              n_foreground: fg.n_fg, n_dropped: fg.n_dropped,
+              /* R2.6b 诊断：清理前/后、candidate/veto、簇前后与 split 标记 */
+              fg_before_cleanup: iso.fg_before_cleanup,
+@@ -770,8 +804,8 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
+              xy_cells_preserved_by_other_z: iso.xy_cells_preserved_by_other_z,
+              actually_removed_points: iso.actually_removed_points,
+              actually_removed_voxels: iso.actually_removed_voxels,
+-             clusters_before_cleanup: clusters_before,
+-             clusters_after_cleanup: clusters_after,
++             clusters_before_cleanup: clusters_before.length,
++             clusters_after_cleanup: clusters_after.length,
+              cleanup_split_delta: cleanup_split_delta,
+              topology_regression: cleanup_split_delta > 0,
+              fg_voxels: iso.fg_voxels,
+@@ -782,6 +816,10 @@ function pipeline_frame(xyzi, frame_idx, ctx) {
+              clusters: clusters,
+              tracks: ctx.tracker.tracks.filter(function (t) { return t.active; }),
+              events: events };
++    if (fused) out.fusion = { n_ref_removed: fused.n_ref_removed,
++        n_online_supported_removed: fused.n_online_supported_removed,
++        n_online_only_kept: fused.n_online_only_kept };
++    return out;
+ }
+ 
+ var _api = {
+@@ -794,6 +832,7 @@ var _api = {
+     build_reference_map: build_reference_map,
+     reference_static_keys: reference_static_keys,
+     extract_foreground: extract_foreground,
++    extract_foreground_fused: extract_foreground_fused,
+     cleanup_isolated_fg: cleanup_isolated_fg,
+     cluster_voxels: cluster_voxels,
+     cluster_features: cluster_features,
+diff --git a/pc_apps/human_replay/human_pipe_lib.test.js b/pc_apps/human_replay/human_pipe_lib.test.js
+index 2033c6d..4e3a728 100644
+--- a/pc_apps/human_replay/human_pipe_lib.test.js
++++ b/pc_apps/human_replay/human_pipe_lib.test.js
+@@ -590,5 +590,49 @@ t("R3.1: 统计字段（形心/抖动/密度）+ 工作空间裁剪与在线一
+   ok(Math.abs(rec.confidence - rec.occ) < 1e-9, "v1 置信 = 占用率");
+ });
+ 
++t("HR-RET-V2: extract_foreground_fused —— 参考删 / 在线-邻域支持删 / 在线-only 保留", () => {
++  const mkMap = pts => new Map(pts.map(p => [L.key_bg(p[0], p[1], p[2]), { x: p[0], y: p[1], z: p[2] }]));
++  const refkeys = mkMap([[1.0, 0, 0.5]]);
++  const online = mkMap([[2.0, 0, 0.5], [1.10, 0, 0.5]]);
++  const buf = new Float32Array([
++    1.02, 0, 0.5, 1,    // 参考命中 → 删
++    2.05, 0, 0.5, 1,    // 在线-only（体素离参考远）→ 保留（静立人语义）
++    1.20, 0, 0.5, 1,    // 在线命中且其体素邻接参考（0.10m）→ 删（参考支持）
++    0.50, 0, 0.05, 1,   // 地面 → 工作空间剔除
++  ]);
++  const r = L.extract_foreground_fused(buf, refkeys, online);
++  ok(r.n_ref_removed === 1, "参考删除应为 1, 实 " + r.n_ref_removed);
++  ok(r.n_online_supported_removed === 1, "在线+参考支持删除应为 1, 实 " + r.n_online_supported_removed);
++  ok(r.n_online_only_kept === 1, "在线-only 应保留 1, 实 " + r.n_online_only_kept);
++  ok(r.n_fg === 1 && Math.abs(r.fg_xyzi[0] - 2.05) < 1e-6, "前景应只剩 2.05 一点, 实 n_fg=" + r.n_fg + " x0=" + r.fg_xyzi[0]);
++});
++
++t("HR-RET-V2: 退化语义 —— refkeys=null 保守（在线-only 不删）；online=null 纯参考", () => {
++  const mkMap = pts => new Map(pts.map(p => [L.key_bg(p[0], p[1], p[2]), { x: p[0], y: p[1], z: p[2] }]));
++  const online = mkMap([[2.0, 0, 0.5]]);
++  const refkeys = mkMap([[1.0, 0, 0.5]]);
++  const buf = new Float32Array([2.05, 0, 0.5, 1, 1.02, 0, 0.5, 1, 3.00, 0, 0.5, 1]);
++  const a = L.extract_foreground_fused(buf, null, online);
++  ok(a.n_fg === 3 && a.n_online_only_kept === 1, "无参考 ⇒ 不得仅凭在线删（保守保留）, 实 n_fg=" + a.n_fg);
++  const b = L.extract_foreground_fused(buf, refkeys, null);
++  ok(b.n_fg === 2 && b.n_ref_removed === 1, "纯参考 ⇒ 删参考命中, 实 n_fg=" + b.n_fg);
++});
++
++t("HR-RET-V2 inc2: pipeline_frame 旗标缺省/refkeys=null = P 逐位；给 refkeys 才走 v2", () => {
++  const mkMap = pts => new Map(pts.map(p => [L.key_bg(p[0], p[1], p[2]), { x: p[0], y: p[1], z: p[2] }]));
++  const online = mkMap([[2.0, 0, 0.5]]);
++  const refkeys = mkMap([[1.0, 0, 0.5]]);
++  /* 1.0 = 参考命中；2.0/2.02 = 在线持久（静立人语义：不得仅凭在线删） */
++  const buf = new Float32Array([2.0, 0, 0.5, 9, 1.0, 0, 0.5, 9, 2.02, 0, 0.5, 9]);
++  const rA = L.pipeline_frame(buf, 0, { static_keys: online, tracker: new L.Tracker() });
++  const rB = L.pipeline_frame(buf, 0, { static_keys: online, tracker: new L.Tracker(), fusion: { refkeys: null } });
++  ok(JSON.stringify(rA) === JSON.stringify(rB), "旗标缺省与 refkeys=null 应同为 P 且逐位一致");
++  ok(rA.n_foreground === 1 && !("fusion" in rA), "P：在线删 2.0/2.02 仅剩 1.0, 实 n_fg=" + rA.n_foreground);
++  const rF = L.pipeline_frame(buf, 1, { static_keys: online, tracker: new L.Tracker(), fusion: { refkeys } });
++  ok(rF.n_foreground === 2, "v2：在线-only 两点保留, 实 n_fg=" + rF.n_foreground);
++  ok(rF.fusion && rF.fusion.n_ref_removed === 1 && rF.fusion.n_online_only_kept === 2,
++     "v2 诊断计数, 实 " + JSON.stringify(rF.fusion));
++});
++
+ console.log(`\n${passed} passed, ${failed} failed`);
+ process.exit(failed ? 1 : 0);
+diff --git a/pc_apps/human_replay/human_replay_lib.py b/pc_apps/human_replay/human_replay_lib.py
+index e0e07e2..ad9b3ee 100644
+--- a/pc_apps/human_replay/human_replay_lib.py
++++ b/pc_apps/human_replay/human_replay_lib.py
+@@ -41,7 +41,11 @@ _FETCH = os.path.join(_HERE, "fetch.py")
+ # 不许补 prefix/目录通配——保持「单文件 explicit」的最小攻击面（同 _serve_file 白名单精神）。
+ _EXTRA_STATIC = frozenset({"human_detect_lib.js", "human_pipe_lib.js"})
+ _proc_lock = threading.Lock()
+-_proc = None  # 当前同步子进程
++_sync_thread = None      # 当前同步线程（替代旧 subprocess _proc）
++_sync_last_error = None  # 最近一次同步失败原因，前端轮询 /api/sync_status 看
++_sync_running_sid = None # 当前正在拉的 sid（None = 没在拉）
++_sync_last_sid = None     # 最近一次的 sid（成功/失败/短路"已在本地"都会写）
++_sync_last_result = None  # 最近一次结果：None（还在跑/未启动）/ "ok" / "failed"
+ 
+ 
+ def _is_ready_for_load(meta_path):
+@@ -69,6 +73,7 @@ def _local_sessions(dest):
+                 "frame_rate": m.get("frame_rate_hz_measured"),
+                 "created_iso": m.get("created_iso"),
+                 "bytes": os.path.getsize(os.path.join(d, "points.bin")),
++                "name": m.get("name"),
+             }
+         except BaseException:
+             out[name] = {"error": "meta 不可读"}
+@@ -133,6 +138,8 @@ class Handler(BaseHTTPRequestHandler):
+             return self._api_sessions()
+         if path == "/api/board/status":
+             return self._board_status()
++        if path == "/api/sync_status":
++            return self._api_sync_status()
+         if path.startswith("/api/file"):
+             return self._serve_file()
+         return self._serve_static(path)
+@@ -213,6 +220,7 @@ class Handler(BaseHTTPRequestHandler):
+                 "download_requested": bool(s.get("download_requested")),
+                 "transferred": bool(s.get("transferred")),
+                 "local": bool(li),
++                "name": (li or {}).get("name"),
+             })
+         # 本地有但板端已删的（FIFO 清过）也列上
+         listed = {o["sid"] for o in out}
+@@ -222,7 +230,8 @@ class Handler(BaseHTTPRequestHandler):
+                             "created_iso": li.get("created_iso"),
+                             "duration_sec": li.get("duration_sec"),
+                             "frames": li.get("frames"),
+-                            "local": True})
++                            "local": True,
++                            "name": li.get("name")})
+         out.sort(key=lambda o: o.get("created_iso") or "", reverse=True)
+         self._json({"sessions": out, "board_error": board_error})
+ 
+@@ -266,6 +275,8 @@ class Handler(BaseHTTPRequestHandler):
+             return self._api_load()
+         if path == "/api/delete":
+             return self._api_delete()
++        if path == "/api/rename":
++            return self._api_rename()
+         if path == "/api/save_annotations":
+             return self._api_save_annotations()
+         self.send_error(404)
+@@ -330,6 +341,56 @@ class Handler(BaseHTTPRequestHandler):
+                 out["local"] = "absent"
+         self._json(out)
+ 
++    # ---------- 会话改名（本地别名，不动 sid/目录/板端） ----------
++    def _api_rename(self):
++        """写本机 <sid>/meta.json 的 name 字段；sid 是身份，改名只影响显示。
++
++        空 name = 删除该字段（恢复默认显示）。板端登记不改——要板端
++        webui 也显示名字得改 capture_server，属另一次授权。
++        """
++        body = self._body() or {}
++        sid = body.get("sid", "")
++        name = body.get("name", "")
++        if not self._SID_RE.match(sid):
++            return self._json({"ok": False, "error": "sid 非法"}, 400)
++        if not isinstance(name, str):
++            return self._json({"ok": False, "error": "name 必须是字符串"}, 400)
++        name = name.strip()
++        if len(name) > 60:
++            return self._json({"ok": False, "error": "名称最长 60 字符"}, 400)
++        if any(ord(c) < 32 for c in name):
++            return self._json({"ok": False, "error": "名称不能含控制字符"}, 400)
++
++        meta_path = os.path.join(C.DEST_ROOT, sid, "meta.json")
++        tmp_path = meta_path + ".tmp"
++        if not os.path.isfile(meta_path):
++            return self._json({"ok": False, "error": "本地无此会话（先下载再改名）"}, 404)
++        if os.path.exists(tmp_path):
++            return self._json({"ok": False, "error": "另一写者在途（.tmp 存在）"}, 409)
++        try:
++            with open(meta_path, "r", encoding="utf-8") as fh:
++                meta = json.load(fh)
++        except (OSError, ValueError) as exc:
++            return self._json({"ok": False, "error": "meta 读取失败: %s" % exc}, 500)
++        if name:
++            meta["name"] = name
++        else:
++            meta.pop("name", None)
++        try:
++            with open(tmp_path, "w", encoding="utf-8") as fh:
++                json.dump(meta, fh, ensure_ascii=False, indent=1)
++                fh.flush()
++                os.fsync(fh.fileno())
++            os.replace(tmp_path, meta_path)
++        except OSError as exc:
++            try:
++                if os.path.exists(tmp_path):
++                    os.remove(tmp_path)
++            except OSError:
++                pass
++            return self._json({"ok": False, "error": "写盘失败: %s" % exc}, 500)
++        return self._json({"ok": True, "sid": sid, "name": name})
++
+     def _proxy(self, fn):
+         try:
+             out = fn()
+@@ -354,14 +415,14 @@ class Handler(BaseHTTPRequestHandler):
+ 
+     # ---------- 同步 ----------
+     def _api_sync(self):
+-        global _proc
++        global _sync_thread, _sync_last_error, _sync_running_sid, _sync_last_sid, _sync_last_result
+         body = self._body() or {}
+         sid = body.get("sid")
+         if not sid:
+             return self.send_error(400, "sid 必填")
+         with _proc_lock:
+-            if _proc and _proc.poll() is None:
+-                return self._json({"ok": False, "error": "已有同步在跑"}, 409)
++            if _sync_thread and _sync_thread.is_alive():
++                return self._json({"ok": False, "error": "已有同步在跑（%s）" % _sync_running_sid}, 409)
+             # 如果板上还没 download_requested，先打标记（双保险）
+             try:
+                 _board_patch(sid, {"download_requested": True})
+@@ -369,12 +430,49 @@ class Handler(BaseHTTPRequestHandler):
+                 pass
+             # 如果已转手持本地有件，不必重拉
+             if _is_ready_for_load(os.path.join(C.DEST_ROOT, sid, "meta.json")):
++                _sync_last_sid = sid
++                _sync_last_result = "ok"      # 短路：已在本地——等同成功
++                _sync_last_error = None
++                _sync_running_sid = None
+                 return self._json({"ok": True, "note": "已在本地"})
+-            _proc = subprocess.Popen(
+-                [sys.executable, "-u", _FETCH, "--sid", sid,
+-                 "--dest", C.DEST_ROOT],
+-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+-        return self._json({"ok": True, "note": "拉取中，轮询 /api/sessions 等 local=true"})
++            # 新起一轮：清空上次结果
++            _sync_last_error = None
++            _sync_last_result = None
++            _sync_running_sid = sid
++            _sync_last_sid = sid
++
++            def _worker(target_sid):
++                global _sync_last_error, _sync_last_result, _sync_running_sid
++                try:
++                    import fetch as F
++                    ok = F.process_session(target_sid, C.DEST_ROOT, log=lambda m: None)
++                    if ok:
++                        _sync_last_result = "ok"
++                    else:
++                        _sync_last_result = "failed"
++                        _sync_last_error = "fetch 返回 False（板端 extra.error 有 hr01: xxx 详情）"
++                except BaseException as exc:
++                    _sync_last_result = "failed"
++                    _sync_last_error = "%s: %s" % (type(exc).__name__, exc)
++                finally:
++                    # 不在这里清 _sync_running_sid——前端一轮 /api/sync_status 看到
++                    # 线程死了再清，留给它先看到最终结果
++                    pass
++
++            _sync_thread = threading.Thread(target=_worker, args=(sid,), daemon=True)
++            _sync_thread.start()
++        return self._json({"ok": True, "note": "拉取中，轮询 /api/sync_status 等 local=true"})
++
++    def _api_sync_status(self):
++        """轮询端点：返回当前同步状态 + 最近失败原因，前端用来提前失败提示。"""
++        alive = bool(_sync_thread and _sync_thread.is_alive())
++        return self._json({
++            "running": alive,
++            "sid": _sync_running_sid if alive else None,
++            "last_sid": _sync_last_sid,
++            "last_result": _sync_last_result,   # None=未启动/在跑; "ok"=success; "failed"=error
++            "last_error": _sync_last_error,
++        })
+ 
+     def _api_load(self):
+         def _pick():
+diff --git a/pc_apps/human_replay/index.html b/pc_apps/human_replay/index.html
+index 707d394..08c7d7f 100644
+--- a/pc_apps/human_replay/index.html
++++ b/pc_apps/human_replay/index.html
+@@ -107,6 +107,10 @@
+   #sessTable .ok { color: var(--success); }
+   #sessEmpty { color: var(--text-muted); padding: 8px 0; display: none; }
+   #syncNote { color: var(--warning); font-size: 11px; margin-top: 6px; }
++  #renameRow { display: none; gap: 6px; margin-top: 8px; align-items: center; }
++  #renameRow.open { display: flex; }
++  #renameRow input { flex: 1; min-width: 0; height: 26px; padding: 0 8px; font-size: 12px; }
++  #renameRow button { height: 26px; padding: 0 10px; font-size: 11.5px; }
+   #panel .row button { height: 26px; padding: 0 10px; font-size: 11.5px; }
+   #panel .row button#delBtn { margin-left: auto; }
+ </style>
+@@ -207,8 +211,14 @@
+     <button id="refreshBtn">刷新</button>
+     <button id="syncBtn">同步选中</button>
+     <button id="browseBtn">手动选…</button>
++    <button id="renameBtn">改名</button>
+     <button id="delBtn" class="danger">删除</button>
+   </div>
++  <div id="renameRow">
++    <input id="renameInput" maxlength="60" placeholder="会话名称（留空=恢复默认）">
++    <button id="renameOk">保存</button>
++    <button id="renameCancel">取消</button>
++  </div>
+   <div id="syncNote"></div>
+ </div>
+ 
+diff --git a/pc_apps/human_replay/panel.js b/pc_apps/human_replay/panel.js
+index 59f06f5..6664d5f 100644
+--- a/pc_apps/human_replay/panel.js
++++ b/pc_apps/human_replay/panel.js
+@@ -8,6 +8,7 @@
+     var els = {};
+     ["sessionsBtn", "panelClose", "sessBody", "sessEmpty", "boardStatus",
+      "recBtn", "recSid", "boardMeta", "refreshBtn", "syncBtn", "browseBtn",
++     "renameBtn", "renameRow", "renameInput", "renameOk", "renameCancel",
+      "delBtn", "syncNote", "panelStatus"].forEach(function (id) {
+          els[id] = document.getElementById(id);
+     });
+@@ -17,6 +18,15 @@
+     // 当前选中 sid
+     var selected_sid = null;
+     var refresh_version = 0;
++    var pending_load_sid = null;   // 正在同步且完成后要自动载入的 sid
++    var sessions_by_sid = {};      // 最近一次渲染的行数据（改名预填 / local 判定）
++    var rename_sid = null;         // 改名行打开时锁定的会话（之后点别的行不改错人）
++
++    function esc(s) {
++        return String(s).replace(/[&<>"']/g, function (c) {
++            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
++        });
++    }
+ 
+     function setNote(msg, is_err) {
+         els.syncNote.textContent = msg || "";
+@@ -86,32 +96,62 @@
+         els.recBtn.disabled = true;
+         api(path, "POST").then(function (r) {
+             setNote(r.session_id ? ("会话 " + r.session_id + (going ? " 收尾中" : " 起录")) : okText(r));
+-            refresh_board();
+-            setTimeout(refresh_sessions, 1200);
++            if (going) {
++                // 停止：板端 SIGINT 收尾最长 15s（grace）+ 5s（kill）；
++                // 期间 refresh_board() 还会看到 current=该 sid，把按钮又切回「停止录制」。
++                // 轮询 /api/board/status 直到 current 真的消失，再切按钮文字。
++                poll_until_stopped(0);
++            } else {
++                refresh_board();
++                setTimeout(refresh_sessions, 1200);
++            }
+         }).catch(function (e) {
+             setNote("控制台失败: " + e.message, true);
+             refresh_board();
+         });
+     });
+ 
++    function poll_until_stopped(tries) {
++        // 20s 上限：sigint_grace_sec=15 + sigterm_kill_sec=5 的最坏和。
++        if (tries > 20) { refresh_board(); setTimeout(refresh_sessions, 1200); return; }
++        setTimeout(function () {
++            api("/api/board/status").then(function (st) {
++                if (st.current) {
++                    els.recBtn.textContent = "■ 收尾中…";
++                    els.recBtn.disabled = true;  // 收尾期间禁再点，防重复 SIGINT 把 _watch 弄乱
++                    poll_until_stopped(tries + 1);
++                } else {
++                    // 真的停了：一次性刷按钮 + 会话列表
++                    refresh_board();
++                    setTimeout(refresh_sessions, 1200);
++                }
++            }).catch(function () {
++                poll_until_stopped(tries + 1);
++            });
++        }, 1000);
++    }
++
+     function okText(r) { return r.ok ? "ok" : JSON.stringify(r); }
+ 
+     // ---------- 会话列表 ----------
+     function render_sessions(list) {
+         els.sessBody.innerHTML = "";
++        sessions_by_sid = {};
+         if (!list || !list.length) {
+             els.sessEmpty.style.display = "block";
+             return;
+         }
+         els.sessEmpty.style.display = "none";
+         list.forEach(function (s) {
++            sessions_by_sid[s.sid] = s;
+             var tr = document.createElement("tr");
+             if (s.sid === selected_sid) tr.classList.add("sel");
+             tr.dataset.sid = s.sid;
+             var dur = (s.duration_sec != null) ? s.duration_sec.toFixed(1) + "s" : "—";
+             var frames = (s.frames != null) ? s.frames : "—";
++            var label = s.name ? esc(s.name) : esc(s.sid.replace(/^cap_/, ""));
+             tr.innerHTML =
+-                "<td title=\"" + s.sid + "\">" + s.sid.replace(/^cap_/, "") + "</td>" +
++                "<td title=\"" + esc(s.sid) + "\">" + label + "</td>" +
+                 "<td>" + dur + "</td>" +
+                 "<td>" + frames + "</td>" +
+                 "<td class=\"" + (s.transferred || s.download_requested ? "ok" : "dim") + "\">" +
+@@ -121,10 +161,13 @@
+                 els.sessBody.querySelectorAll("tr").forEach(function (x) { x.classList.remove("sel"); });
+                 tr.classList.add("sel");
+                 selected_sid = s.sid;
++                els.renameRow.classList.remove("open");   // 换选中即收起改名行
+                 if (s.local) {
+                     load_by_sid(s.sid);
+                 } else {
+-                    setNote("本地未拉取 — 点「同步选中」");
++                    // 未下载 = 一键开工：点一下就同步，完成后自动载入（板端 transferred 也能拉）
++                    setNote("本地未拉取 — 自动同步…");
++                    start_sync(s.sid);
+                 }
+             });
+             els.sessBody.appendChild(tr);
+@@ -169,33 +212,106 @@
+         });
+     }
+ 
+-    // ---------- 同步 ----------
+-    els.syncBtn.addEventListener("click", function () {
+-        if (!selected_sid) { setNote("先在列表里点一行", true); return; }
++    // ---------- 同步（下载板端会话；完成自动载入） ----------
++    function start_sync(sid) {
+         setNote("同步中（大文件 ~分钟）…");
+-        api("/api/sync", "POST", { sid: selected_sid }).then(function (r) {
++        api("/api/sync", "POST", { sid: sid }).then(function (r) {
++            pending_load_sid = sid;
+             setNote(r.note || "已起同步，轮询 /api/sessions 等 local=✓");
+-            poll_until_local(selected_sid, 0);
++            poll_until_local(sid, 0);
+         }).catch(function (e) {
+             setNote("同步失败: " + e.message, true);
+         });
++    }
++
++    els.syncBtn.addEventListener("click", function () {
++        if (!selected_sid) { setNote("先在列表里点一行", true); return; }
++        start_sync(selected_sid);
+     });
+ 
++    function finish_sync(sid, err) {
++        var want_load = pending_load_sid === sid;
++        if (want_load) pending_load_sid = null;
++        if (err) {
++            setNote("同步失败: " + err, true);
++            return refresh_sessions();
++        }
++        if (want_load) {
++            setNote("✓ 同步完成，自动载入");
++            load_by_sid(sid);
++        } else {
++            setNote("✓ 同步完成，点列表载人");
++        }
++        refresh_sessions();
++    }
++
+     function poll_until_local(sid, tries) {
+-        if (tries > 60) { setNote("同步超时（5 分钟）— 看 fetch.py 输出", true); return; }
++        if (tries > 60) { pending_load_sid = null; setNote("同步超时（5 分钟）— 看 fetch.py 输出", true); return; }
+         setTimeout(function () {
+-            api("/api/sessions").then(function (r) {
+-                render_sessions(r.sessions || []);
+-                var s = (r.sessions || []).find(function (x) { return x.sid === sid; });
+-                if (s && s.local) {
+-                    setNote("✓ 同步完成，点列表载人");
+-                    return refresh_sessions();
++            // 同时查 sessions（拿 local 标记）+ sync_status（拿最终结局）。
++            // 后端 _worker 退出时会显式写 last_result="ok"/"failed"，前端只看这个，
++            // 不用靠 local=true 间接猜。
++            Promise.all([
++                api("/api/sessions").catch(function () { return null; }),
++                api("/api/sync_status").catch(function () { return null; }),
++            ]).then(function (rs) {
++                var sr = rs[0], ss = rs[1];
++                var done_for_us = ss && ss.last_sid === sid && ss.last_result !== null && !ss.running;
++                if (done_for_us) {
++                    return finish_sync(sid, ss.last_result === "ok" ? null : (ss.last_error || "未知"));
++                }
++                if (sr) {
++                    render_sessions(sr.sessions || []);
++                    var s = (sr.sessions || []).find(function (x) { return x.sid === sid; });
++                    if (s && s.local) {
++                        // 兜底：sync_status 短暂丢包但 sessions 已显示 local —— 信 sessions
++                        return finish_sync(sid, null);
++                    }
+                 }
+                 poll_until_local(sid, tries + 1);
+             });
+         }, 5000);
+     }
+ 
++    // ---------- 改名（本地别名：sid/目录/板端都不动，只写 meta.name） ----------
++    function rename_save() {
++        if (!rename_sid) { return; }
++        var name = els.renameInput.value.trim();
++        els.renameOk.disabled = true;
++        api("/api/rename", "POST", { sid: rename_sid, name: name }).then(function () {
++            els.renameOk.disabled = false;
++            els.renameRow.classList.remove("open");
++            rename_sid = null;
++            setNote(name ? ("已命名：" + name) : "已恢复默认名称");
++            refresh_sessions();
++        }).catch(function (e) {
++            els.renameOk.disabled = false;
++            setNote("改名失败: " + e.message, true);
++        });
++    }
++
++    els.renameBtn.addEventListener("click", function () {
++        if (!selected_sid) { setNote("先在列表里点一行", true); return; }
++        var s = sessions_by_sid[selected_sid];
++        if (!s || !s.local) {
++            setNote("该会话还没下载到本地 — 先点它自动同步，完成后再改名", true);
++            return;
++        }
++        rename_sid = selected_sid;
++        els.renameRow.classList.add("open");
++        els.renameInput.value = s.name || "";
++        if (els.renameInput.focus) els.renameInput.focus();
++    });
++    els.renameOk.addEventListener("click", rename_save);
++    els.renameCancel.addEventListener("click", function () {
++        els.renameRow.classList.remove("open");
++        rename_sid = null;
++    });
++    els.renameInput.addEventListener("keydown", function (ev) {
++        if (ev.key === "Enter") { ev.preventDefault(); rename_save(); }
++        else if (ev.key === "Escape") { els.renameRow.classList.remove("open"); }
++    });
++
+     // ---------- 删除（本地 + 板端） ----------
+     els.delBtn.addEventListener("click", function () {
+         if (!selected_sid) { setNote("先在列表里点一行", true); return; }
+diff --git a/pc_apps/human_replay/panel.test.js b/pc_apps/human_replay/panel.test.js
+index ccd89fe..b734a7e 100644
+--- a/pc_apps/human_replay/panel.test.js
++++ b/pc_apps/human_replay/panel.test.js
+@@ -66,5 +66,63 @@ const local = {sessions: [{sid: "cap_local", local: true, duration_sec: 1, frame
+     h.pending[8].resolve({sessions: [], board_error: "board failed"}); await flush();
+     assert.strictEqual(h.els.sessBody.children.length, 1, "board error cannot erase local rows");
+     assert.strictEqual(h.els.panelStatus.textContent, "离线 · 本地会话");
+-    console.log("PASS O1/O2/O3: local-first, offline click, timeout, recovery, selection, stale refresh");
++
++    // O4: 远端行点击 = 自动同步，完成后自动载入（板端 transferred 会话同一条路）
++    h.els.refreshBtn.listeners.click();
++    h.pending[9].resolve(local); await flush();
++    h.pending[10].resolve({sessions: [...local.sessions,
++        {sid: "cap_remote", local: false, transferred: true}], board_error: null});
++    await flush();
++    assert.strictEqual(h.els.sessBody.children.length, 2);
++    h.els.sessBody.children[1].listeners.click();
++    await flush();
++    const syncCall = h.pending[11];
++    assert.strictEqual(syncCall.path, "/api/sync");
++    assert.strictEqual(syncCall.options.method, "POST");
++    assert.strictEqual(JSON.parse(syncCall.options.body).sid, "cap_remote");
++    // 未下载本地前不许改名
++    h.els.renameBtn.listeners.click();
++    assert(h.els.syncNote.textContent.includes("先点它自动同步"), "rename blocked before download");
++    syncCall.resolve({ok: true, note: "拉取中"});
++    await flush();
++    const pollTimer = [...h.timers.values()].find(timer => timer.ms === 5000);
++    assert(pollTimer, "sync poll timer scheduled");
++    pollTimer.cb();
++    await flush();
++    assert.strictEqual(h.pending[12].path, "/api/sessions");
++    assert.strictEqual(h.pending[13].path, "/api/sync_status");
++    h.pending[12].resolve({sessions: [...local.sessions, {sid: "cap_remote", local: true}],
++        board_error: null});
++    h.pending[13].resolve({running: false, sid: null, last_sid: "cap_remote",
++        last_result: "ok", last_error: null});
++    await flush();
++    assert(h.loaded.includes("cap_remote"), "sync completion auto-loads the session");
++    h.pending[14].resolve({sessions: [...local.sessions, {sid: "cap_remote", local: true}]});
++    await flush();
++    h.pending[15].resolve({sessions: [...local.sessions, {sid: "cap_remote", local: true}],
++        board_error: null});
++    await flush();
++
++    // O5: 改名 → POST /api/rename（trim）→ 列表显示 name
++    h.els.renameBtn.listeners.click();
++    assert(h.els.renameRow.classList.contains("open"), "rename row opens for local selection");
++    h.els.renameInput.value = " 客厅-下蹲 ";
++    h.els.renameOk.listeners.click();
++    await flush();
++    const renameCall = h.pending[16];
++    assert.strictEqual(renameCall.path, "/api/rename");
++    assert.strictEqual(JSON.parse(renameCall.options.body).name, "客厅-下蹲");
++    renameCall.resolve({ok: true, sid: "cap_remote", name: "客厅-下蹲"});
++    await flush();
++    assert(!h.els.renameRow.classList.contains("open"), "rename row closes on success");
++    h.pending[17].resolve({sessions: [...local.sessions,
++        {sid: "cap_remote", local: true, name: "客厅-下蹲"}]});
++    await flush();
++    h.pending[18].resolve({sessions: [...local.sessions,
++        {sid: "cap_remote", local: true, name: "客厅-下蹲"}], board_error: null});
++    await flush();
++    assert(h.els.sessBody.children[1].html.includes("客厅-下蹲"), "list shows renamed label");
++
++    console.log("PASS O1/O5: local-first, offline click, timeout, recovery, selection, stale refresh, "
++        + "remote auto-sync+load, rename");
+ })().catch(e => { console.error(e); process.exitCode = 1; });
+diff --git a/pc_apps/human_replay/sessions_test.py b/pc_apps/human_replay/sessions_test.py
+index 96142c6..2515e5a 100644
+--- a/pc_apps/human_replay/sessions_test.py
++++ b/pc_apps/human_replay/sessions_test.py
+@@ -5,6 +5,7 @@ import tempfile
+ import threading
+ import unittest
+ from unittest.mock import patch
++import urllib.error
+ import urllib.request
+ 
+ import human_replay_lib as H
+@@ -50,5 +51,65 @@ class OfflineSessionsTest(unittest.TestCase):
+                 server.server_close()
+ 
+ 
++class RenameTest(unittest.TestCase):
++    """会话改名：只写本地 meta.json 的 name 字段（本地别名），不查板、其它字段原样。"""
++
++    def _request(self, base, path, body=None):
++        data = json.dumps(body).encode("utf-8") if body is not None else None
++        req = urllib.request.Request(base + path, data=data,
++                                     method="POST" if data is not None else "GET")
++        if data is not None:
++            req.add_header("Content-Type", "application/json")
++        with urllib.request.urlopen(req, timeout=2) as response:
++            return json.loads(response.read())
++
++    def test_rename_set_clear_and_guards(self):
++        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C, "DEST_ROOT", tmp):
++            sid = "cap_20261007_220000"
++            directory = Path(tmp) / sid
++            directory.mkdir()
++            meta_path = directory / "meta.json"
++            meta_path.write_text(json.dumps(
++                {"session_id": sid, "duration_sec": 5.0, "frames": [{"seq": 1}],
++                 "created_iso": "2026-10-07T22:00:00+08:00"}), encoding="utf-8")
++            (directory / "points.bin").write_bytes(bytes(28))
++            server = H.ThreadingHTTPServer(("127.0.0.1", 0), H.Handler)
++            threading.Thread(target=server.serve_forever, daemon=True).start()
++            base = "http://127.0.0.1:%d" % server.server_address[1]
++            try:
++                # 1) 设置：trim 落盘，列表和 meta 都能看到，其它字段不动
++                out = self._request(base, "/api/rename", {"sid": sid, "name": " 客厅-张三-下蹲 "})
++                self.assertTrue(out["ok"], out)
++                self.assertEqual(out["name"], "客厅-张三-下蹲")
++                written = json.loads(meta_path.read_text(encoding="utf-8"))
++                self.assertEqual(written["name"], "客厅-张三-下蹲")
++                self.assertEqual(written["duration_sec"], 5.0)
++                listed = self._request(base, "/api/sessions?scope=local")
++                self.assertEqual(listed["sessions"][0]["name"], "客厅-张三-下蹲")
++                # 2) 标注保存不能吞掉 name（写路径保留未知字段）
++                out = self._request(base, "/api/save_annotations", {"sid": sid, "annotations": []})
++                self.assertTrue(out["ok"], out)
++                self.assertEqual(json.loads(meta_path.read_text(encoding="utf-8"))["name"],
++                                 "客厅-张三-下蹲")
++                # 3) 空名（含全空格）= 恢复默认显示
++                out = self._request(base, "/api/rename", {"sid": sid, "name": "   "})
++                self.assertTrue(out["ok"])
++                self.assertNotIn("name", json.loads(meta_path.read_text(encoding="utf-8")))
++                # 4) 护栏：坏 sid / 超长 / 控制字符 → 400；未下载的 sid → 404
++                for body in ({"sid": "cap_x", "name": "a"},
++                             {"sid": sid, "name": "x" * 61},
++                             {"sid": sid, "name": "a\nb"},
++                             {"sid": sid, "name": 7}):
++                    with self.assertRaises(urllib.error.HTTPError) as caught:
++                        self._request(base, "/api/rename", body)
++                    self.assertEqual(caught.exception.code, 400)
++                with self.assertRaises(urllib.error.HTTPError) as caught:
++                    self._request(base, "/api/rename", {"sid": "cap_99999999_000000", "name": "a"})
++                self.assertEqual(caught.exception.code, 404)
++            finally:
++                server.shutdown()
++                server.server_close()
++
++
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/src/human_capture/config/capture.yaml b/src/human_capture/config/capture.yaml
+index b5ef301..5e79fe3 100644
+--- a/src/human_capture/config/capture.yaml
++++ b/src/human_capture/config/capture.yaml
+@@ -9,6 +9,10 @@ fifo_keep: 10
+ fifo_interval_sec: 30
+ disk_floor_mb: 5120
+ 
++# 网页直下（8766 /files/*）：限速 Kbit/s，同 scp -l 口径（100M 链路留 30%
++# 给实时预览）；0 = 不限速
++download_limit_kbit: 70000
++
+ # 录制（HC-02；调现成 record_session.py，D10）
+ record_script: /root/catkin_ws/src/human_fall_detection/scripts/record_session.py
+ record_config:                      # 可选；默认走 record_session 自带 DEFAULT_TOPICS
+diff --git a/src/human_capture/scripts/capture_server.py b/src/human_capture/scripts/capture_server.py
+index ee9dcd4..72a18f1 100644
+--- a/src/human_capture/scripts/capture_server.py
++++ b/src/human_capture/scripts/capture_server.py
+@@ -37,6 +37,9 @@ DEFAULT_CONFIG = {
+     "fifo_keep": 10,
+     "fifo_interval_sec": 30,
+     "disk_floor_mb": 5120,
++    # 网页直下文件的速度上限（Kbit/s），与 fetch.py 的 scp -l 同口径：
++    # 100M 链路留 30% 给实时预览；0 = 不限速
++    "download_limit_kbit": 70000,
+     "record_topics": ["/innolidar_points", "/inno_imu", "/device_status"],
+     # HC-02
+     "record_script": "/root/catkin_ws/src/human_fall_detection/scripts/record_session.py",
+@@ -117,6 +120,57 @@ class _Handler(BaseHTTPRequestHandler):
+     def log_message(self, fmt, *args):  # 降噪：交给外层日志
+         sys.stderr.write("[capture_server] %s %s\n" % (self.address_string(), fmt % args))
+ 
++    # ---------- 会话文件直下 ----------
++
++    def _serve_session_file(self, sid, name):
++        """GET/HEAD /api/v1/sessions/<sid>/files/<name>：meta.json / points.bin 本体。
++
++        给没配 SSH key 的普通 PC 一条免配置回传路（浏览器直接另存，再放进
++        Console 的 captures/remote/<sid>/），与 fetch.py 的 scp 通道并存。
++        路径由 staging_dir 现拼、不走登记表字段；限速保护实时预览。
++        """
++        if not validate_session_id(sid):
++            self._send_error_json(400, "bad_id", "session_id 非法")
++            return
++        if name not in ("meta.json", "points.bin"):
++            self._send_error_json(400, "bad_name", "只允许下载 meta.json / points.bin")
++            return
++        staging = os.path.realpath(self.server.cfg["staging_dir"])
++        path = os.path.realpath(os.path.join(staging, sid, name))
++        if not path.startswith(staging + os.sep) or not os.path.isfile(path):
++            self._send_error_json(404, "file_missing", "会话文件不存在: %s/%s" % (sid, name))
++            return
++        size = os.path.getsize(path)
++        self.send_response(200)
++        self.send_header("Content-Type",
++                         "application/json; charset=utf-8" if name == "meta.json"
++                         else "application/octet-stream")
++        self.send_header("Content-Length", str(size))
++        self.send_header("Content-Disposition", 'attachment; filename="%s"' % name)
++        self.send_header("Access-Control-Allow-Origin", "*")  # 板端 8090 页跨端口引用
++        self.end_headers()
++        if self.command == "HEAD":
++            return
++        limit = int(self.server.cfg.get("download_limit_kbit") or 0)
++        rate = limit * 1000.0 / 8.0  # Kbit/s → 字节/s；0 = 不限速
++        t0 = time.monotonic()
++        sent = 0
++        try:
++            with open(path, "rb") as fh:
++                while True:
++                    chunk = fh.read(256 * 1024)
++                    if not chunk:
++                        break
++                    if rate > 0:
++                        # 本块预算：按已发+本块字节对齐到限速时间表（先等后发）
++                        behind = (sent + len(chunk)) / rate - (time.monotonic() - t0)
++                        if behind > 0:
++                            time.sleep(behind)
++                    self.wfile.write(chunk)
++                    sent += len(chunk)
++        except OSError:
++            self.close_connection = True  # 客户端中断：本端无状态，可整份重下
++
+     # ---------- 路由 ----------
+ 
+     def _route(self):
+@@ -181,7 +235,7 @@ class _Handler(BaseHTTPRequestHandler):
+             return
+ 
+         if parts[:2] == ["api", "v1"] and len(parts) >= 3 and parts[2] == "sessions":
+-            sid = parts[3] if len(parts) == 4 else None
++            sid = parts[3] if len(parts) >= 4 else None
+             if len(parts) == 3:
+                 if self.command == "GET":
+                     self._send_json(200, {"sessions": store.list_sessions()})
+@@ -289,6 +343,13 @@ class _Handler(BaseHTTPRequestHandler):
+                     self._send_json(200, {"deleted": sid, "removed": removed})
+                     return
+ 
++            # 网页直下文件本体（免 SSH 的普通 PC 回传路）：
++            # /api/v1/sessions/<sid>/files/<meta.json|points.bin>
++            if (sid is not None and len(parts) == 6 and parts[4] == "files"
++                    and self.command in ("GET", "HEAD")):
++                self._serve_session_file(sid, parts[5])
++                return
++
+         self._send_error_json(404, "no_route", "未匹配路由: %s %s" % (self.command, self.path))
+ 
+     do_GET = _route
+diff --git a/webui/human_capture/capture.js b/webui/human_capture/capture.js
+index 7cfb500..ee230b1 100644
+--- a/webui/human_capture/capture.js
++++ b/webui/human_capture/capture.js
+@@ -55,9 +55,14 @@
+     }
+     body.innerHTML = sessions.map(function (s) {
+       var canDl = L.canRequestDownload(s);
+-      var dlCell = canDl
+-        ? '<button data-sid="' + s.session_id + '" class="js-dl">请求下载</button>'
+-        : (s.download_requested ? "已请求" : (s.transferred ? "—" : "—"));
++      // 操作列：文件直下链接优先（谁都能用）；「请求下载」仍是为 PC fetch.py 打标记
++      var cell = L.fileLinksHtml(s, API_BASE);
++      if (canDl) {
++        cell += (cell ? " " : "") + '<button data-sid="' + s.session_id + '" class="js-dl">请求下载</button>';
++      } else if (!cell && s.download_requested) {
++        cell = "已请求";
++      }
++      if (!cell) cell = "—";
+       return "<tr>" +
+         "<td>" + s.session_id + "</td>" +
+         "<td>" + L.stateBadgeHtml(s.state) + "</td>" +
+@@ -67,7 +72,7 @@
+         "<td>" + (s.transferred ? "✓" : "—") + "</td>" +
+         "<td>" + (s.download_requested ? "✓" : "—") + "</td>" +
+         "<td>" + (s.created_iso || "").replace("T", " ").slice(0, 19) + "</td>" +
+-        "<td>" + dlCell + "</td>" +
++        "<td>" + cell + "</td>" +
+         "</tr>";
+     }).join("");
+     body.querySelectorAll(".js-dl").forEach(function (btn) {
+diff --git a/webui/human_capture/capture_lib.js b/webui/human_capture/capture_lib.js
+index f272a72..3c0e73f 100644
+--- a/webui/human_capture/capture_lib.js
++++ b/webui/human_capture/capture_lib.js
+@@ -70,6 +70,16 @@
+     return !!(s && s.state === "ready" && !s.transferred && !s.download_requested);
+   }
+ 
++  /* 会话文件直下链接（免 SSH）：板端 8766 现供 meta.json/points.bin 本体，
++     浏览器另存后放进 Console 的 captures\remote\<sid>\ 即可回放。
++     已清理 / 还没抽取出文件的会话不渲染。*/
++  function fileLinksHtml(s, apiBase) {
++    if (!s || s.state === "purged" || !s.meta_json_path || !s.points_bin_path) return "";
++    var base = (apiBase || "") + "/api/v1/sessions/" + encodeURIComponent(s.session_id) + "/files/";
++    return '<a href="' + base + 'meta.json" title="下载 meta.json">↓meta</a> ' +
++           '<a href="' + base + 'points.bin" title="下载 points.bin">↓points</a>';
++  }
++
+   /* elapsed 计算：从 created_iso 到现在。返回秒（number）。*/
+   function elapsedSec(createdIso, nowMs) {
+     if (!createdIso) return 0;
+@@ -87,6 +97,7 @@
+     stateLabel: stateLabel,
+     sortSessionsDesc: sortSessionsDesc,
+     canRequestDownload: canRequestDownload,
++    fileLinksHtml: fileLinksHtml,
+     elapsedSec: elapsedSec,
+     STATE_BADGE_CLASS: STATE_BADGE_CLASS,
+     STATE_LABEL: STATE_LABEL
+diff --git a/webui/human_capture/capture_lib.test.js b/webui/human_capture/capture_lib.test.js
+index 0a3a70a..93a2758 100644
+--- a/webui/human_capture/capture_lib.test.js
++++ b/webui/human_capture/capture_lib.test.js
+@@ -61,6 +61,14 @@ eq(LIB.elapsedSec("2026-10-02T10:00:00Z", t0 + 30 * 1000), 30, "elapsed 30s");
+ eq(LIB.elapsedSec("garbage", t0), 0, "elapsed garbage");
+ eq(LIB.elapsedSec("2026-10-02T11:00:00Z", t0), 0, "elapsed future→0");
+ 
++// fileLinksHtml（文件直下，免 SSH）
++eq(LIB.fileLinksHtml({ session_id: "cap_1" }), "", "links gated: 缺文件字段");
++eq(LIB.fileLinksHtml({ session_id: "cap_1", state: "purged", meta_json_path: "m", points_bin_path: "p" }), "", "links gated: purged");
++const links = LIB.fileLinksHtml({ session_id: "cap_20261002_143012", meta_json_path: "/x/m", points_bin_path: "/x/p" }, "http://192.168.3.125:8766");
++ok(links.includes("http://192.168.3.125:8766/api/v1/sessions/cap_20261002_143012/files/meta.json"), "links meta url");
++ok(links.includes("http://192.168.3.125:8766/api/v1/sessions/cap_20261002_143012/files/points.bin"), "links points url");
++ok(LIB.fileLinksHtml({ session_id: "cap x", meta_json_path: "m", points_bin_path: "p" }, "").includes("cap%20x"), "links sid encode");
++
+ // 汇总
+ console.log(`capture_lib.test.js: ${passed} passed, ${failed} failed`);
+ if (failed > 0) {
+diff --git a/webui/human_capture/index.html b/webui/human_capture/index.html
+index 031421b..deb93a9 100644
+--- a/webui/human_capture/index.html
++++ b/webui/human_capture/index.html
+@@ -49,6 +49,7 @@ tr:hover td { background:rgba(255,255,255,.025); }
+ .current-rec .sid { color:var(--text-secondary); font-size:12px; }
+ .empty { color:var(--text-muted); padding:8px 0; }
+ .err { color:var(--danger); font-size:12px; margin-top:8px; }
++.hint { color:var(--text-muted); font-size:11px; margin-top:8px; line-height:1.6; }
+ a { color:var(--accent); }
+ .meta-actions { margin-top:8px; }
+ </style>
+@@ -88,6 +89,8 @@ a { color:var(--accent); }
+       </tbody>
+     </table>
+     <div class="err" id="sessErr"></div>
++    <div class="hint">没装 SSH 的电脑：点 ↓meta / ↓points 直接下载两个文件，放进本机 Console 目录
++      captures\remote\&lt;会话 id&gt;\（自建同名文件夹），回放/标注刷新即可见。</div>
+   </section>
+ </main>
+ 

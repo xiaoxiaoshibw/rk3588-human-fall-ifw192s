@@ -1,0 +1,770 @@
+--- /dev/null
++++ final/det05.py
+@@ -0,0 +1,364 @@
++"""DET-05: frozen labels_v1 -> pure-human pillar audit -> paired base/pure_switch forwards (20 total) with GT-relative metrics. No training, no device."""
++import argparse
++import json
++import time
++from pathlib import Path
++
++import numpy as np
++import torch
++from shapely.geometry import Polygon
++
++from cpu_pointpillars import Voxelization, limit_period, load_model
++from diagnose_low_scores import (ROOT, UP, PRE, FG, SEED_FILE, SamplingProbe, containing,
++                                 load_cloud, sha_bytes, trace_heads)
++from det04 import OLD as OLD03, adapted, read_json, verify_pillars, write_json
++from experiment import sha
++
++NEW = ROOT.parents[1] / 'docs/sidequests/evidence/2026-10-08_det05_r1'
++FROZEN = ROOT / 'artifacts/det05_r1/frozen'
++ITEMS = [('cap_20261007_215540', 32, 'B_workspace'),
++         ('cap_20261007_215607', 33, 'B_workspace'),
++         ('cap_20261007_215623', 33, 'B_workspace'),
++         ('cap_20261007_215643', 28, 'B_workspace'),
++         ('cap_20261007_215643', 3, 'B_workspace'),
++         ('cap_20261007_215643', 7, 'E_cleanup'),
++         ('cap_20261007_215643', 11, 'E_cleanup'),
++         ('cap_20261007_215643', 12, 'E_cleanup'),
++         ('cap_20261007_215643', 17, 'E_cleanup'),
++         ('cap_20261007_215643', 37, 'E_cleanup')]
++COMP_SEP = .8
++
++
++def my_groups(p, base):
++    valid = np.isfinite(p).all(1) & ((p[:, :3] >= base.bounds[:3]) & (p[:, :3] < base.bounds[3:])).all(1)
++    keys = np.floor((p[:, :3] - base.bounds[:3]) / base.size).astype('i4')
++    groups = {}
++    for i in np.flatnonzero(valid):
++        groups.setdefault(tuple(keys[i]), []).append(i)
++    return valid, groups
++
++
++def classify_pillars(groups, ids, label_map):
++    """Strict purity: every valid point in the pillar must be labeled human."""
++    out = {}
++    for key, members in groups.items():
++        labels = [label_map.get(int(ids[i])) for i in members]
++        has_none = any(l is None for l in labels)
++        has_f = 'furniture' in labels
++        has_m = 'mixed_uncertain' in labels
++        pure = not (has_none or has_f or has_m)
++        reason = 'pure' if pure else ('unlabeled' if has_none else ('furniture' if has_f else 'mixed_uncertain'))
++        out[key] = dict(n=len(members), pure=pure, reason=reason, human=labels.count('human'),
++                        furniture=labels.count('furniture'), mixed_uncertain=labels.count('mixed_uncertain'),
++                        unlabeled=sum(l is None for l in labels))
++    return out
++
++
++class PureSwitchProbe(SamplingProbe):
++    """z_rank32 sampling only in listed pure pillars; first32 elsewhere, nothing else changed."""
++
++    def __init__(self, base, switch_keys):
++        super().__init__(base)
++        self.switch_keys = {tuple(k) for k in switch_keys}
++
++    def forward(self, points):
++        v, c, n = self.base(points)
++        p = points.numpy()
++        valid = np.isfinite(p).all(1) & ((p[:, :3] >= self.base.bounds[:3]) & (p[:, :3] < self.base.bounds[3:])).all(1)
++        indices = np.flatnonzero(valid)
++        c3 = np.floor((p[valid, :3] - self.base.bounds[:3]) / self.base.size).astype('i4')
++        groups = {}
++        for i, key in zip(indices, map(tuple, c3)):
++            groups.setdefault(key, []).append(i)
++        chosen = []
++        full_counts = []
++        switched = []
++        for j, key in enumerate(map(tuple, c.numpy())):
++            ids = np.asarray(groups[key])
++            full_counts.append(len(ids))
++            if key in self.switch_keys and len(ids) > self.base.max_points:
++                ordered = ids[np.argsort(p[ids, 2], kind='stable')]
++                ids = ordered[np.rint(np.linspace(0, len(ids) - 1, self.base.max_points)).astype(int)]
++                v[j, :len(ids)] = torch.from_numpy(p[ids])
++                switched.append(j)
++            else:
++                ids = ids[:self.base.max_points]
++            chosen.extend(ids.tolist())
++        self.selected = np.asarray(chosen, dtype='i8')
++        self.last = (v.clone(), c.clone(), n.clone(), np.asarray(full_counts))
++        self.switched = switched
++        return v, c, n
++
++
++def full_stats(path, model, xy):
++    """Recompute trace_heads-style raw fields from stored full heads (independent path)."""
++    with np.load(path) as data:
++        cls = torch.from_numpy(data['cls_logits'])
++        reg = torch.from_numpy(data['reg'])
++        dlog = torch.from_numpy(data['dir_logits'])
++    scores = cls.permute(1, 2, 0).reshape(-1, 3).sigmoid()
++    deltas = reg.permute(1, 2, 0).reshape(-1, 7)
++    dirs = dlog.permute(1, 2, 0).reshape(-1, 2).argmax(1)
++    anchors = model.anchors_generator.get_multi_anchors(torch.tensor(list(cls.shape[-2:]))).reshape(-1, 7)
++    decode = model.get_predicted_bboxes_single.__globals__['anchors2bboxes']
++    boxes = decode(anchors, deltas)
++    boxes[:, 6] = limit_period(boxes[:, 6], 1, np.pi) + (1 - dirs) * np.pi
++    b = boxes.numpy()
++    s = scores.numpy()
++    local = ((anchors[:, :2] - torch.tensor(xy)) ** 2).sum(1).numpy() <= .55 ** 2
++    hits = containing(b, xy)
++    dist = np.hypot(anchors[:, 0].numpy() - xy[0], anchors[:, 1].numpy() - xy[1])
++    j = int(np.argmin(dist))
++    score_max = scores.max(1).values
++    order = score_max.argsort(descending=True)
++    rank = torch.empty_like(order)
++    rank[order] = torch.arange(len(order))
++    loc = np.flatnonzero(local)
++    order2 = loc[np.argsort(-s[loc, 0], kind='stable')]
++    pos = int(np.flatnonzero(order2 == j)[0]) + 1
++    return dict(local_max=float(s[local, 0].max()),
++                containing_max=float(s[hits, 0].max()) if hits.any() else 0.0,
++                global_max=float(s[:, 0].max()), nearest_anchor_id=j,
++                nearest_anchor_score=float(s[j, 0]), nearest_anchor_dist=float(dist[j]),
++                rank_global=int(rank[j]) + 1, rank_local=pos)
++
++
++def iou_rot_aabb(box, gt):
++    c, s = np.cos(box[6]), np.sin(box[6])
++    corners = np.array([[-box[3] / 2, -box[4] / 2], [box[3] / 2, -box[4] / 2],
++                        [box[3] / 2, box[4] / 2], [-box[3] / 2, box[4] / 2]]) @ np.array([[c, -s], [s, c]]) + box[:2]
++    rect = Polygon(corners)
++    ax = Polygon([(gt['aabb_min'][0], gt['aabb_min'][1]), (gt['aabb_max'][0], gt['aabb_min'][1]),
++                  (gt['aabb_max'][0], gt['aabb_max'][1]), (gt['aabb_min'][0], gt['aabb_max'][1])])
++    if not rect.is_valid or not ax.is_valid or rect.area <= 0 or ax.area <= 0:
++        return 0.0
++    inter = rect.intersection(ax).area
++    union = rect.union(ax).area
++    return float(inter / union) if union > 0 else 0.0
++
++
++def main(out, evidence):
++    out.mkdir(parents=True, exist_ok=False)
++    torch.set_num_threads(4)
++    labels_all = read_json(FROZEN / 'labels_v1.json')
++    gt_all = read_json(FROZEN / 'gt_v1.json')
++    freeze = read_json(FROZEN / 'freeze_manifest.json')
++    freeze_files = {Path(f['path']).name: f['sha256'] for f in freeze['files']}
++    assert len(labels_all['labels']) == 10 and len(gt_all['frames']) == 10
++    seeds = {s['session']: s['xy_m'] for s in read_json(SEED_FILE)['sessions']}
++    fg, pre = read_json(FG / 'manifest.json'), read_json(PRE / 'manifest.json')
++    assert fg['input_manifest_sha256'] == sha(PRE / 'manifest.json')
++    sessions = {s['sid']: s for s in fg['sessions']}
++    raw = {s['sid']: s for s in pre['sessions']}
++    base_spec = Voxelization([.16, .16, 4], [0, -39.68, -3, 69.12, 39.68, 1], 32, (16000, 40000))
++    config = dict(script_sha256=sha(Path(__file__)), plan_sha256=sha(NEW.parents[1] / 'DET05_PLAN.md'),
++                  acceptance_sha256=sha(NEW.parents[1] / 'DET05_ACCEPTANCE.md'),
++                  shared_sha256={p.name: sha(p) for p in [ROOT / 'diagnose_low_scores.py', ROOT / 'cpu_pointpillars.py',
++                                                          ROOT / 'det04.py', ROOT / 'det05_annotate.py', ROOT / 'det05_freeze.py']},
++                  checkpoint_sha256=sha(UP / 'epoch_160.pth'),
++                  source_hashes={str(p): sha(p) for p in [FG / 'manifest.json', PRE / 'manifest.json', SEED_FILE,
++                                                          FROZEN / 'labels_v1.json', FROZEN / 'gt_v1.json',
++                                                          FROZEN / 'freeze_manifest.json']},
++                  items=[dict(sid=s, index=i, variant=v) for s, i, v in ITEMS], competitor_separation_m=COMP_SEP,
++                  sampling='base=first32 everywhere; pure_switch=z_rank32 in pure pillars only, first32 elsewhere',
++                  pure_rule='all valid points labeled human in frozen labels_v1', score=.1, nms=.01, top100=100,
++                  max50=50, voxel=[.16, .16, 4], max_points=32, model_z=-1.73, intensity_divisor=1023,
++                  new_forwards=20, physical=False, gt_version='v1', labels_version='v1')
++    write_json(out / 'config.json', config)
++    write_json(evidence / '02_config.json', config)
++
++    # Phase 1: purity audit, no model loaded.
++    audit, pure_by_item = [], {}
++    for sid, index, variant in ITEMS:
++        frame_key = '%s|%d' % (sid, index)
++        cloud, ids = load_cloud(sessions[sid], sessions[sid]['frames'][index], variant, raw[sid])
++        p = adapted(cloud)
++        valid, groups = my_groups(p, base_spec)
++        label_map = dict(zip(labels_all['labels'][frame_key]['prepared_rows'], labels_all['labels'][frame_key]['cls']))
++        gt_xy = gt_all['frames'][frame_key]['centroid_xy']
++        pillars = classify_pillars(groups, ids, label_map)
++        pure_keys = [tuple(int(x) for x in key) for key, info in pillars.items() if info['pure']]
++        switchable = [key for key in pure_keys if pillars[key]['n'] > base_spec.max_points]
++        pure_by_item[(sid, index, variant)] = set(pure_keys)
++        reasons = dict(pure=0, furniture=0, mixed_uncertain=0, unlabeled=0)
++        for info in pillars.values():
++            reasons[info['reason']] += 1
++        local = []
++        for key, info in pillars.items():
++            center = (np.asarray(key[:2], dtype='f8') + .5) * base_spec.size[:2] + base_spec.bounds[:2]
++            if np.hypot(center[0] - gt_xy[0], center[1] - gt_xy[1]) <= .7:
++                local.append(dict(key=[int(v) for v in key], n=info['n'], pure=info['pure'], reason=info['reason'],
++                                  human=info['human'], furniture=info['furniture'],
++                                  mixed_uncertain=info['mixed_uncertain'], unlabeled=info['unlabeled']))
++        audit.append(dict(sid=sid, index=index, variant=variant, input_sha256=sha_bytes(cloud), ids_sha256=sha_bytes(ids),
++                          valid_points=int(valid.sum()), pillars=len(pillars), reasons=reasons,
++                          pure=len(pure_keys), switchable_pure_over32=len(switchable), local_pillars=local))
++        print('PURITY %s %d %s pillars=%d pure=%d switchable=%d' %
++              (sid[-6:], index, variant, len(pillars), len(pure_keys), len(switchable)), flush=True)
++    write_json(evidence / '04_purity_audit.json',
++               dict(rows=audit, note='pure = all valid points human in labels_v1; reasons priority unlabeled>furniture>mixed_uncertain; '
++                                     'switchable = pure with over 32 valid points; local table within 0.7m of frozen GT'))
++
++    # Phase 2: paired forwards.
++    model = load_model(UP / 'epoch_160.pth', UP)
++    assert (model.score_thr, model.nms_thr, model.nms_pre, model.max_num) == (.1, .01, 100, 50)
++    actual_base = model.pillar_layer.voxel_layer
++    assert np.allclose(actual_base.bounds, base_spec.bounds) and np.allclose(actual_base.size, base_spec.size)
++    assert actual_base.max_points == base_spec.max_points == 32
++    archived = {}
++    for line in (OLD03 / 'det03_all_r1_rows.jsonl').read_text(encoding='utf-8').splitlines():
++        row = json.loads(line)
++        if row['experiment'] == 'base':
++            archived[(row['sid'], row['index'], row['variant'])] = row
++    runs = []
++    with (out / 'rows.jsonl').open('x', encoding='utf-8') as log:
++        for sid, index, variant in ITEMS:
++            frame_key = '%s|%d' % (sid, index)
++            cloud, ids = load_cloud(sessions[sid], sessions[sid]['frames'][index], variant, raw[sid])
++            p = adapted(cloud)
++            t = torch.from_numpy(p)
++            gt = gt_all['frames'][frame_key]
++            gt_xy = gt['centroid_xy']
++            seed_xy = seeds[sid]
++            pure_keys = pure_by_item[(sid, index, variant)]
++            rec = raw[sid]['frames'][index]
++            rows_path = PRE / sid / (rec['file'] + '.rows')
++            assert sha(rows_path) == rec['rows_sha256']
++            prep_rows = np.fromfile(rows_path, dtype='<i8')
++            valid, groups = my_groups(p, actual_base)
++            probe32 = SamplingProbe(actual_base)
++            probe32.mode = 'first32'
++            probe_sw = PureSwitchProbe(actual_base, pure_keys)
++            v_base = None
++            for mode, probe in (('base', probe32), ('pure_switch', probe_sw)):
++                tag = '%s_%d_%s_%s' % (sid, index, variant, mode)
++                model.pillar_layer.voxel_layer = probe
++                captured = []
++                hook = model.head.register_forward_hook(lambda m, i, o: captured.extend(x.detach() for x in o))
++                start = time.perf_counter()
++                try:
++                    with torch.inference_mode():
++                        model([t], mode='test')
++                finally:
++                    hook.remove()
++                    model.pillar_layer.voxel_layer = actual_base
++                seconds = time.perf_counter() - start
++                with torch.inference_mode():
++                    row = trace_heads(model, captured, gt_xy, out / (tag + '_trace.npz'), True)
++                v, c, n, full_counts = probe.last
++                assert len(c) == len(groups)
++                if mode == 'base':
++                    changed = []
++                    v_base = v
++                    arch = archived[(sid, index, variant)]
++                    verify_pillars(arch, dict(c=c.numpy(), n=n.numpy(), total=full_counts, v=v.numpy()), actual_base, seed_xy)
++                    fs_seed = full_stats(out / (tag + '_trace.npz'), model, seed_xy)
++                    exact = (fs_seed['local_max'] == arch['local_anchor_max'] and
++                             fs_seed['containing_max'] == arch['raw_containing_max'] and
++                             fs_seed['global_max'] == arch['global_raw_ped_max'])
++                    ok = (np.isclose(fs_seed['local_max'], arch['local_anchor_max'], atol=1e-5) and
++                          np.isclose(fs_seed['containing_max'], arch['raw_containing_max'], atol=1e-5) and
++                          np.isclose(fs_seed['global_max'], arch['global_raw_ped_max'], atol=1e-5))
++                    assert ok, (fs_seed, arch['local_anchor_max'], arch['raw_containing_max'], arch['global_raw_ped_max'])
++                    seed_check = dict(exact=bool(exact), local=fs_seed['local_max'], containing=fs_seed['containing_max'],
++                                      global_=fs_seed['global_max'], archived_local=arch['local_anchor_max'],
++                                      archived_containing=arch['raw_containing_max'], archived_global=arch['global_raw_ped_max'])
++                else:
++                    changed = [j for j in range(len(v)) if not torch.equal(v[j], v_base[j])]
++                    changed_keys = {tuple(int(x) for x in c.numpy()[j]) for j in changed}
++                    assert changed_keys <= pure_keys, 'switch changed a non-pure pillar'
++                    assert set(changed) <= set(probe.switched)
++                    seed_check = None
++                fs = full_stats(out / (tag + '_trace.npz'), model, gt_xy)
++                assert np.isclose(fs['local_max'], row['local_anchor_max'], atol=1e-7)
++                assert np.isclose(fs['containing_max'], row['raw_containing_max'], atol=1e-7)
++                dets = [d for d in row['stages']['clockwise']['detections'] if d['label'] == 0]
++                boxes = np.array([d['box'] for d in dets], dtype='f8') if dets else np.zeros((0, 7))
++                contains = containing(boxes, gt_xy) if dets else np.zeros(0, dtype=bool)
++                gt_final = max([d['score'] for d, hit in zip(dets, contains) if hit], default=0.0)
++                dist = np.hypot(boxes[:, 0] - gt_xy[0], boxes[:, 1] - gt_xy[1]) if dets else np.zeros(0)
++                comp_idx = np.flatnonzero(dist >= COMP_SEP) if dets else np.zeros(0, dtype='i8')
++                competitor = None
++                if len(comp_idx):
++                    k = int(comp_idx[int(np.argmin(dist[comp_idx]))])
++                    competitor = dict(score=float(dets[k]['score']), distance=float(dist[k]), anchor_id=int(dets[k]['anchor_id']))
++                iou_max = 0.0
++                for d in dets:
++                    iou_max = max(iou_max, iou_rot_aabb(d['box'], gt))
++                pure_mask = np.array([tuple(int(x) for x in k) in pure_keys for k in c.numpy()], dtype=bool)
++                switched_mask = np.zeros(len(v), dtype=bool)
++                switched_mask[changed] = True
++                np.savez_compressed(out / (tag + '_pillars.npz'), coords=c.numpy(), counts=n.numpy(),
++                                    input_counts=full_counts, voxels=v.numpy(), selected=probe.selected,
++                                    prepared_ids=ids[probe.selected], raw_rows=prep_rows[ids[probe.selected]],
++                                    pure=pure_mask, switched=switched_mask)
++                row.update(sid=sid, index=index, variant=variant, experiment=mode, seconds=seconds,
++                           input_sha256=sha_bytes(cloud), adapted_sha256=sha_bytes(p), ids_sha256=sha_bytes(ids),
++                           cloud_points=len(cloud), valid_points=int(valid.sum()), pillars=len(c),
++                           pure_pillars=int(pure_mask.sum()),
++                           switchable_pillars=int(sum(1 for k in pure_keys if len(groups[k]) > actual_base.max_points)),
++                           changed_pillars=len(changed), switched_pillars=len(getattr(probe, 'switched', [])),
++                           gt_local_raw=fs['local_max'], gt_decoded_raw=fs['containing_max'], gt_final=float(gt_final),
++                           gt_anchor_id=fs['nearest_anchor_id'], gt_anchor_score=fs['nearest_anchor_score'],
++                           gt_anchor_dist=fs['nearest_anchor_dist'], gt_rank_global=fs['rank_global'],
++                           gt_rank_local=fs['rank_local'], n_ped_final=len(dets), box_contains_gt=bool(contains.any()),
++                           gt_iou_max=float(iou_max),
++                           competitor_score=None if competitor is None else competitor['score'],
++                           competitor_distance=None if competitor is None else competitor['distance'],
++                           competitor_anchor_id=None if competitor is None else competitor['anchor_id'],
++                           margin_final=None if competitor is None else float(gt_final - competitor['score']),
++                           seed_consistency=seed_check,
++                           pillars_sha256=sha(out / (tag + '_pillars.npz')),
++                           labels_sha256=freeze_files['labels_v1.json'], gt_sha256=freeze_files['gt_v1.json'])
++                runs.append(row)
++                log.write(json.dumps(row, ensure_ascii=False) + '\n')
++                log.flush()
++                print('RUN %s local=%.4f final=%.4f comp=%s changed=%d' %
++                      (tag, row['gt_local_raw'], row['gt_final'],
++                       'None' if competitor is None else '%.4f' % competitor['score'], len(changed)), flush=True)
++    assert len(runs) == 20
++    write_json(out / 'rows.json', runs)
++    write_json(evidence / '05_run_rows.json', runs)
++    with (evidence / '05_run_rows.jsonl').open('x', encoding='utf-8') as f:
++        for row in runs:
++            f.write(json.dumps(row, ensure_ascii=False) + '\n')
++
++    metric_names = ['gt_local_raw', 'gt_decoded_raw', 'gt_final', 'gt_rank_global', 'gt_rank_local',
++                    'competitor_score', 'competitor_distance', 'margin_final', 'box_contains_gt', 'gt_iou_max',
++                    'pure_pillars', 'switchable_pillars', 'changed_pillars']
++    comparisons = []
++    for sid, index, variant in ITEMS:
++        b = next(r for r in runs if (r['sid'], r['index'], r['variant'], r['experiment']) == (sid, index, variant, 'base'))
++        s = next(r for r in runs if (r['sid'], r['index'], r['variant'], r['experiment']) == (sid, index, variant, 'pure_switch'))
++        delta = {}
++        for k in metric_names:
++            if isinstance(b[k], bool) or b[k] is None or s[k] is None:
++                delta[k] = None
++            else:
++                delta[k] = float(s[k] - b[k])
++        comparisons.append(dict(sid=sid, index=index, variant=variant, base={k: b[k] for k in metric_names},
++                                switch={k: s[k] for k in metric_names}, delta=delta))
++    write_json(evidence / '06_metrics.json',
++               dict(items=comparisons, new_forwards=20, seed_consistency=[r['seed_consistency'] for r in runs if r['experiment'] == 'base'],
++                    note='GT-relative metrics from frozen gt_v1; competitor = nearest final pedestrian box with center at least 0.8m from GT; '
++                         'no global-max or cross-frame-median substitutes; descriptive only, no P/R'))
++    attribution = []
++    for row in comparisons:
++        attribution.append(dict(sid=row['sid'], index=row['index'], variant=row['variant'],
++                                changed_pillars=row['switch']['changed_pillars'], switchable=row['switch']['switchable_pillars'],
++                                delta_local=row['delta']['gt_local_raw'], delta_final=row['delta']['gt_final'],
++                                delta_margin=row['delta']['margin_final'], delta_rank_global=row['delta']['gt_rank_global'],
++                                scope='Single same-person frame; frozen periphery; descriptive only, no causal or accuracy claim'))
++    write_json(evidence / '07_attribution.json',
++               dict(rows=attribution, new_forwards=20,
++                    note='pure-pillar-only sampling switch vs base; all other pillars value-frozen; no threshold tuning; '
++                         'execution PASS is not recognition usability'))
++    print('DONE: 10 items x 2 runs = 20 forwards; purity audit and GT metrics written', flush=True)
++
++
++if __name__ == '__main__':
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--out', type=Path, required=True)
++    parser.add_argument('--evidence', type=Path, required=True)
++    args = parser.parse_args()
++    main(args.out.resolve(), args.evidence.resolve())
+--- /dev/null
++++ final/det05_annotate.py
+@@ -0,0 +1,247 @@
++"""DET-05 author annotation proposal: point labels (human/furniture/mixed_uncertain) with prepared/raw row binding, review renders, summary. No network."""
++import argparse
++import hashlib
++import json
++from pathlib import Path
++
++import numpy as np
++from scipy.spatial import cKDTree
++
++import matplotlib
++matplotlib.use('Agg')
++import matplotlib.pyplot as plt
++from matplotlib.lines import Line2D
++from matplotlib.patches import Circle
++
++ROOT = Path(__file__).resolve().parent
++WORK = ROOT.parents[1]
++PRE = ROOT / 'artifacts/det02_prepared_r1'
++FG = ROOT / 'artifacts/det02_foreground_r1'
++SEED_FILE = WORK / 'docs/sidequests/evidence/2026-10-07_det01_r2/user_truth_seeds.json'
++LABEL_FRAMES = [('cap_20261007_215540', 32), ('cap_20261007_215607', 33), ('cap_20261007_215623', 33),
++                ('cap_20261007_215643', 3), ('cap_20261007_215643', 7), ('cap_20261007_215643', 11),
++                ('cap_20261007_215643', 12), ('cap_20261007_215643', 17), ('cap_20261007_215643', 28),
++                ('cap_20261007_215643', 37)]
++SCOPE_R = 1.0
++Z_MIN, Z_MAX, Z_HUMAN = .05, 2.30, .15
++LINK = .08
++HUMAN_MIN_N, HUMAN_MIN_TOP, HUMAN_MAX_DIST = 50, 1.2, .45
++FURN_MIN_N = 10
++COLORS = {'human': '#D55E00', 'furniture': '#0072B2', 'mixed_uncertain': '#9A9A9A'}
++CLASSES = ['human', 'furniture', 'mixed_uncertain']
++
++
++def sha(path):
++    h = hashlib.sha256()
++    with path.open('rb') as f:
++        for block in iter(lambda: f.read(1 << 20), b''):
++            h.update(block)
++    return h.hexdigest()
++
++
++def components(xyz, radius):
++    """Single-linkage components via cKDTree at radius; ids canonicalized to smallest member index."""
++    tree = cKDTree(xyz)
++    parent = np.arange(len(xyz))
++    def find(x):
++        while parent[x] != x:
++            parent[x] = parent[parent[x]]
++            x = parent[x]
++        return x
++    for a, b in tree.query_pairs(radius):
++        ra, rb = find(a), find(b)
++        if ra != rb:
++            parent[ra] = rb
++    root = np.array([find(i) for i in range(len(xyz))])
++    first = {}
++    for i in range(len(xyz)):
++        first.setdefault(int(root[i]), i)
++    ids = np.array([first[int(r)] for r in root], dtype='i8')
++    members = {}
++    for i, cid in enumerate(ids.tolist()):
++        members.setdefault(cid, []).append(i)
++    return ids, members
++
++
++def classify(pre, seed_xy):
++    """Deterministic author proposal for one frame; returns scope rows, classes, clusters, human, gt."""
++    dist = np.hypot(pre[:, 0] - seed_xy[0], pre[:, 1] - seed_xy[1])
++    scope = (dist <= SCOPE_R) & (pre[:, 2] >= Z_MIN) & (pre[:, 2] <= Z_MAX)
++    idx = np.flatnonzero(scope)
++    high = pre[idx, 2] >= Z_HUMAN
++    ids, members = components(pre[idx[high]][:, :3], LINK)
++    high_idx = idx[high]
++    clusters = []
++    for cid, mem in members.items():
++        rows = high_idx[np.asarray(mem)]
++        clusters.append(dict(source_component=int(cid), n=len(mem),
++                             z_min=float(pre[rows, 2].min()), z_max=float(pre[rows, 2].max()),
++                             centroid=[float(pre[rows, 0].mean()), float(pre[rows, 1].mean())],
++                             xspan=float(pre[rows, 0].max() - pre[rows, 0].min()),
++                             dist_seed=float(np.hypot(pre[rows, 0].mean() - seed_xy[0],
++                                                      pre[rows, 1].mean() - seed_xy[1]))))
++    clusters.sort(key=lambda c: (-c['n'], c['source_component']))
++    for k, c in enumerate(clusters):
++        c['id'] = k
++    candidates = [c for c in clusters if c['n'] >= HUMAN_MIN_N and c['z_max'] >= HUMAN_MIN_TOP]
++    human = min(candidates, key=lambda c: (c['dist_seed'], c['id'])) if candidates else None
++    needs_manual = human is None
++    if not needs_manual and human['dist_seed'] > HUMAN_MAX_DIST:
++        needs_manual, human = True, None
++    cid_map = {c['source_component']: c['id'] for c in clusters}
++    size_map = {c['source_component']: c['n'] for c in clusters}
++    cls = np.full(len(idx), 'furniture', dtype='<U16')
++    cls[high] = 'mixed_uncertain'
++    human_cid = human['source_component'] if human is not None else None
++    hi_pos = np.flatnonzero(high)
++    for k, source in enumerate(ids.tolist()):
++        if human_cid is not None and source == human_cid:
++            cls[hi_pos[k]] = 'human'
++        elif size_map[source] >= FURN_MIN_N:
++            cls[hi_pos[k]] = 'furniture'
++    for c in clusters:
++        c['cls'] = ('human' if human_cid is not None and c['source_component'] == human_cid else
++                    'furniture' if c['n'] >= FURN_MIN_N else 'mixed_uncertain')
++    point_cluster = np.full(len(idx), -1, dtype='i8')
++    for k, source in enumerate(ids.tolist()):
++        point_cluster[hi_pos[k]] = cid_map[source]
++    human_mask = cls == 'human'
++    gt = None
++    if human_mask.any():
++        rows = idx[human_mask]
++        gt = dict(centroid_xy=[float(pre[rows, 0].mean()), float(pre[rows, 1].mean())],
++                  z_top=float(pre[rows, 2].max()), n_human=int(human_mask.sum()),
++                  aabb_min=[float(pre[rows, 0].min()), float(pre[rows, 1].min()), float(pre[rows, 2].min())],
++                  aabb_max=[float(pre[rows, 0].max()), float(pre[rows, 1].max()), float(pre[rows, 2].max())])
++    return idx, cls, clusters, human_cid, needs_manual, gt, point_cluster
++
++
++def render(path, pre, idx, cls, clusters, gt, seed_xy, sid, index, needs_manual):
++    fig, axes = plt.subplots(1, 2, figsize=(16, 7.6), layout='constrained')
++    p = pre[idx]
++    for name in CLASSES:
++        m = cls == name
++        if not m.any():
++            continue
++        axes[0].scatter(p[m, 0], p[m, 1], s=5, c=COLORS[name], alpha=.6, linewidths=0, rasterized=True,
++                        label='%s (%d)' % (name, int(m.sum())))
++        axes[1].scatter(p[m, 0], p[m, 2], s=5, c=COLORS[name], alpha=.6, linewidths=0, rasterized=True)
++    ax = axes[0]
++    for c in clusters:
++        if c['n'] >= FURN_MIN_N:
++            ax.text(c['centroid'][0], c['centroid'][1], '#%d n=%d' % (c['id'], c['n']),
++                    fontsize=7, color=COLORS[c['cls']] if c['cls'] in COLORS else '#333333')
++    if gt is not None:
++        ax.plot(gt['centroid_xy'][0], gt['centroid_xy'][1], marker='*', ms=14, c='#CC79A7')
++        axes[1].plot(gt['centroid_xy'][0], gt['z_top'], marker='*', ms=12, c='#CC79A7')
++    ax.plot(seed_xy[0], seed_xy[1], marker='x', ms=10, c='red')
++    for r, style in [(.55, '--'), (1.0, ':')]:
++        ax.add_patch(Circle(seed_xy, r, fill=False, edgecolor='#666666', linewidth=.8, linestyle=style))
++    x0, x1 = float(p[:, 0].min()) - .1, float(p[:, 0].max()) + .1
++    y0, y1 = float(p[:, 1].min()) - .1, float(p[:, 1].max()) + .1
++    gx = np.arange(np.floor(x0 / .16) * .16, x1, .16)
++    gy = np.arange(np.floor(y0 / .16) * .16, y1, .16)
++    for g in gx:
++        ax.axvline(g, lw=.35, color='#CCCCCC', zorder=0)
++    for g in gy:
++        ax.axhline(g, lw=.35, color='#CCCCCC', zorder=0)
++    ax.set(xlabel='x (m)', ylabel='y (m)', aspect='equal',
++           title='BEV (0.16m pillar grid, dashed r=0.55, dotted r=1.0)')
++    ax.grid(alpha=.15)
++    ax.legend(loc='upper right', fontsize=8, framealpha=.9)
++    side = axes[1]
++    side.axvline(seed_xy[0], color='red', lw=.8, ls=':')
++    side.axhline(.15, color='#666666', lw=.8, ls='--')
++    side.set(xlabel='x (m)', ylabel='z (m)', title='side x-z (dashed: z=0.15 human-class floor)')
++    side.grid(alpha=.2)
++    counts = {name: int((cls == name).sum()) for name in CLASSES}
++    fig.suptitle('DET-05 author proposal (pending user confirmation) | %s frame %d | n=%d human=%d furniture=%d mixed=%d%s'
++                 % (sid[-6:], index, len(idx), counts['human'], counts['furniture'], counts['mixed_uncertain'],
++                    ' | NEEDS MANUAL' if needs_manual else ''), fontsize=11)
++    fig.savefig(path, dpi=130)
++    plt.close(fig)
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--out', type=Path, required=True)
++    parser.add_argument('--evidence', type=Path, required=True)
++    parser.add_argument('--tag', default='03_annotation')
++    args = parser.parse_args()
++    out = args.out.resolve()
++    evidence = args.evidence.resolve()
++    out.mkdir(parents=True, exist_ok=False)
++    renders = out / 'renders'
++    renders.mkdir()
++    pre_manifest = json.loads((PRE / 'manifest.json').read_text(encoding='utf-8'))
++    fg_manifest = json.loads((FG / 'manifest.json').read_text(encoding='utf-8'))
++    seed_all = json.loads(SEED_FILE.read_text(encoding='utf-8'))
++    seeds = {s['session']: s['xy_m'] for s in seed_all['sessions']}
++    pres = {s['sid']: s for s in pre_manifest['sessions']}
++    fgs = {s['sid']: s for s in fg_manifest['sessions']}
++    params = dict(scope_r=SCOPE_R, z=[Z_MIN, Z_MAX], z_human=Z_HUMAN, r_link=LINK,
++                  human_min_n=HUMAN_MIN_N, human_min_top=HUMAN_MIN_TOP, human_max_dist=HUMAN_MAX_DIST,
++                  furn_min_n=FURN_MIN_N, classes=CLASSES)
++    frames = []
++    lines = ['DET-05 annotation author proposal; deterministic; no network; pending user confirmation']
++    for sid, index in LABEL_FRAMES:
++        pre_rec = next(f for f in pres[sid]['frames'] if f['index'] == index)
++        pre_path = PRE / sid / pre_rec['file']
++        rows_path = PRE / sid / (pre_rec['file'] + '.rows')
++        assert sha(pre_path) == pre_rec['sha256'] and sha(rows_path) == pre_rec['rows_sha256']
++        pre = np.fromfile(pre_path, dtype='<f4').reshape(-1, 4)
++        rows = np.fromfile(rows_path, dtype='<i8')
++        assert len(pre) == len(rows) == pre_rec['points']
++        fg_rec = next(f for f in fgs[sid]['frames'] if f['index'] == index)
++        variant_bind = {}
++        for variant in ('B_workspace', 'E_cleanup'):
++            rec = fg_rec['variants'][variant]
++            fpath, ipath = FG / sid / rec['file'], FG / sid / (rec['file'] + '.ids')
++            assert sha(fpath) == rec['sha256'] and sha(ipath) == rec['ids_sha256']
++            variant_bind[variant] = dict(file=rec['file'], sha256=rec['sha256'], ids_sha256=rec['ids_sha256'])
++        idx, cls, clusters, human_cid, needs_manual, gt, point_cluster = classify(pre, seeds[sid])
++        payload = dict(sid=sid, index=index, seed_xy=seeds[sid], params=params,
++                       provenance=dict(pre_file=pre_rec['file'], pre_sha256=pre_rec['sha256'],
++                                       pre_rows_sha256=pre_rec['rows_sha256'], fg_variants=variant_bind,
++                                       seed_sha256=sha(SEED_FILE), script_sha256=sha(Path(__file__))),
++                       scope_n=len(idx), human_component_id=human_cid, needs_manual=needs_manual,
++                       points=dict(prepared_rows=idx.tolist(), raw_rows=rows[idx].tolist(),
++                                   x=pre[idx, 0].tolist(), y=pre[idx, 1].tolist(), z=pre[idx, 2].tolist(),
++                                   intensity=pre[idx, 3].tolist(), cluster=point_cluster.tolist(),
++                                   cls=cls.tolist()),
++                       clusters=clusters, gt_proposal=gt)
++        json_path = out / ('ann_%s_%d.json' % (sid, index))
++        with json_path.open('x', encoding='utf-8') as f:
++            json.dump(payload, f, ensure_ascii=False, allow_nan=False)
++        png_path = renders / ('ann_%s_%d.png' % (sid, index))
++        render(png_path, pre, idx, cls, clusters, gt, seeds[sid], sid, index, needs_manual)
++        counts = {name: int((cls == name).sum()) for name in CLASSES}
++        frames.append(dict(sid=sid, index=index, needs_manual=needs_manual, counts=counts,
++                           gt_proposal=gt, human_component_id=human_cid,
++                           json=json_path.name, json_sha256=sha(json_path),
++                           png=str(png_path.relative_to(WORK)).replace('\\', '/'), png_sha256=sha(png_path)))
++        lines.append('%s/%d scope=%d human=%d furniture=%d mixed=%d top=%s manual=%s' %
++                     (sid[-6:], index, len(idx), counts['human'], counts['furniture'],
++                      counts['mixed_uncertain'], None if gt is None else '%.2f' % gt['z_top'], needs_manual))
++    manifest = dict(script_sha256=sha(Path(__file__)), params=params, seed_sha256=sha(SEED_FILE),
++                    pre_manifest_sha256=sha(PRE / 'manifest.json'), fg_manifest_sha256=sha(FG / 'manifest.json'),
++                    frames=frames,
++                    files=[dict(path=str(p.relative_to(WORK)).replace('\\', '/'), sha256=sha(p))
++                           for p in sorted(out.rglob('*')) if p.is_file()])
++    with (out / 'ann_manifest.json').open('x', encoding='utf-8') as f:
++        json.dump(manifest, f, ensure_ascii=False, allow_nan=False, indent=2)
++    summary = dict(tag=args.tag, script_sha256=manifest['script_sha256'], params=params,
++                   seed_sha256=manifest['seed_sha256'], pre_manifest_sha256=manifest['pre_manifest_sha256'],
++                   fg_manifest_sha256=manifest['fg_manifest_sha256'],
++                   artifacts_dir='sidequests/human_detectors/artifacts/det05_r1/annotate',
++                   frames=frames, note='author proposal v1; labels bind prepared frames and raw capture rows; pending user confirmation before any experiment')
++    with (evidence / (args.tag + '_author.json')).open('x', encoding='utf-8') as f:
++        json.dump(summary, f, ensure_ascii=False, allow_nan=False, indent=2)
++    with (evidence / (args.tag + '_run.log')).open('x', encoding='utf-8') as f:
++        f.write('\n'.join(lines) + '\n')
++    assert all(not f['needs_manual'] for f in frames), 'some frame needs manual human component assignment'
++    print('\n'.join(lines))
++
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ final/det05_freeze.py
+@@ -0,0 +1,97 @@
++"""DET-05 freeze: no overrides, write labels_v1/gt_v1/freeze manifest + 03b confirmation record. No network."""
++import argparse
++import hashlib
++import json
++from datetime import datetime, timezone
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parent
++WORK = ROOT.parents[1]
++ANN = ROOT / 'artifacts/det05_r1/annotate'
++PRE = ROOT / 'artifacts/det02_prepared_r1'
++LABEL_FRAMES = [('cap_20261007_215540', 32), ('cap_20261007_215607', 33), ('cap_20261007_215623', 33),
++                ('cap_20261007_215643', 3), ('cap_20261007_215643', 7), ('cap_20261007_215643', 11),
++                ('cap_20261007_215643', 12), ('cap_20261007_215643', 17), ('cap_20261007_215643', 28),
++                ('cap_20261007_215643', 37)]
++
++
++def sha(path):
++    h = hashlib.sha256()
++    with path.open('rb') as f:
++        for block in iter(lambda: f.read(1 << 20), b''):
++            h.update(block)
++    return h.hexdigest()
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--out', type=Path, required=True)
++    parser.add_argument('--evidence', type=Path, required=True)
++    parser.add_argument('--confirm-file', type=Path, required=True)
++    args = parser.parse_args()
++    args.confirm_text = args.confirm_file.read_text(encoding='utf-8').strip().splitlines()[0]
++    out = args.out.resolve()
++    evidence = args.evidence.resolve()
++    out.mkdir(parents=True, exist_ok=False)
++    author = json.loads((evidence / '03_annotation_author.json').read_text(encoding='utf-8'))
++    author_by = {(f['sid'], f['index']): f for f in author['frames']}
++    pre_manifest = json.loads((PRE / 'manifest.json').read_text(encoding='utf-8'))
++    transforms = {s['sid']: s['transform_sha256'] for s in pre_manifest['sessions']}
++    labels, gts, proposal_files = {}, {}, []
++    for sid, index in LABEL_FRAMES:
++        proposal = json.loads((ANN / ('ann_%s_%d.json' % (sid, index))).read_text(encoding='utf-8'))
++        assert sha(ANN / ('ann_%s_%d.json' % (sid, index))) == author_by[(sid, index)]['json_sha256']
++        assert proposal['needs_manual'] is False and proposal['human_component_id'] is not None
++        prepared, raw, cls = proposal['points']['prepared_rows'], proposal['points']['raw_rows'], proposal['points']['cls']
++        assert len(prepared) == len(raw) == len(cls) == proposal['scope_n']
++        counts = {name: cls.count(name) for name in ('human', 'furniture', 'mixed_uncertain')}
++        assert counts == author_by[(sid, index)]['counts'], (counts, author_by[(sid, index)]['counts'])
++        human = [i for i, c in enumerate(cls) if c == 'human']
++        hp = [prepared[i] for i in human]
++        hr = [raw[i] for i in human]
++        gt = proposal['gt_proposal']
++        assert gt['n_human'] == len(hp)
++        labels['%s|%d' % (sid, index)] = dict(sid=sid, index=index, prepared_rows=prepared, raw_rows=raw, cls=cls,
++                                              proposal_sha256=sha(ANN / ('ann_%s_%d.json' % (sid, index))))
++        gts['%s|%d' % (sid, index)] = dict(sid=sid, index=index, human_prepared_rows=hp, human_raw_rows=hr,
++                                           n_human=len(hp), centroid_xy=gt['centroid_xy'], z_top=gt['z_top'],
++                                           aabb_min=gt['aabb_min'], aabb_max=gt['aabb_max'],
++                                           proposal_sha256=labels['%s|%d' % (sid, index)]['proposal_sha256'])
++        proposal_files.append(dict(path=str((ANN / ('ann_%s_%d.json' % (sid, index))).relative_to(WORK)).replace('\\', '/'),
++                                   sha256=labels['%s|%d' % (sid, index)]['proposal_sha256']))
++    assert len(labels) == 10
++    frozen = dict(version='v1', frozen_utc=datetime.now(timezone.utc).isoformat(), overrides=[],
++                  confirm_text=args.confirm_text, channel='opencode session question tool, 2026-10-08',
++                  frame_set=[[sid, index] for sid, index in LABEL_FRAMES], labels=labels)
++    with (out / 'labels_v1.json').open('x', encoding='utf-8') as f:
++        json.dump(frozen, f, ensure_ascii=False, allow_nan=False)
++    gt = dict(version='v1', frozen_utc=frozen['frozen_utc'], confirm_text=args.confirm_text,
++              gt_rule='centroid=mean xy of human points; z_top=max z; aabb=min/max xyz of human points; rows bound to prepared frame and raw capture',
++              frames=gts)
++    with (out / 'gt_v1.json').open('x', encoding='utf-8') as f:
++        json.dump(gt, f, ensure_ascii=False, allow_nan=False)
++    manifest = dict(version='v1', frozen_utc=frozen['frozen_utc'], confirm_text=args.confirm_text,
++                    overrides=[], frames=len(gts), human_total=sum(g['n_human'] for g in gts.values()),
++                    proposal_files=proposal_files, transform_sha256_by_session=transforms,
++                    seed_sha256=author['seed_sha256'], pre_manifest_sha256=author['pre_manifest_sha256'],
++                    fg_manifest_sha256=author['fg_manifest_sha256'],
++                    files=[dict(path=str(p.relative_to(WORK)).replace('\\', '/'), sha256=sha(p))
++                           for p in [out / 'labels_v1.json', out / 'gt_v1.json']])
++    with (out / 'freeze_manifest.json').open('x', encoding='utf-8') as f:
++        json.dump(manifest, f, ensure_ascii=False, allow_nan=False, indent=2)
++    with (evidence / '03b_confirmation.log').open('x', encoding='utf-8') as f:
++        f.write('DET-05 user confirmation, %s\n' % frozen['frozen_utc'])
++        f.write('Channel: opencode session question tool, 2026-10-08\n')
++        f.write('Question: 10 帧人体点初标是否确认？\n')
++        f.write('Answer: %s\n' % args.confirm_text)
++        f.write('Overrides applied: none (proposal v1 = frozen labels v1)\n')
++    with (evidence / '03c_freeze.json').open('x', encoding='utf-8') as f:
++        json.dump(dict(manifest=manifest, labels_sha256=sha(out / 'labels_v1.json'),
++                       gt_sha256=sha(out / 'gt_v1.json'), freeze_manifest_sha256=sha(out / 'freeze_manifest.json')),
++                  f, ensure_ascii=False, allow_nan=False, indent=2)
++    print('FREEZE PASS: 10 frames, %d human points, no overrides, confirm=%r' %
++          (manifest['human_total'], args.confirm_text))
++
++
++if __name__ == '__main__':
++    main()
+--- baseline/README.md
++++ final/README.md
+@@ -1,4 +1,6 @@
+ # PointPillars / CenterPoint 人体检测实验分支
++
++最新（2026-10-08）：[DET-05 人体点 GT 标注与纯人体柱采样隔离](../../docs/sidequests/evidence/2026-10-08_det05_r1/README.md)，[预注册计划](../../docs/sidequests/DET05_PLAN.md)/[唯一验收v1](../../docs/sidequests/DET05_ACCEPTANCE.md)。10 帧 13466 人体点经用户确认冻结 gt_v1；严格纯柱规则下每条目 1–6 根纯柱；仅纯柱内 first32→z_rank32：215540/32 位置分 0.056→0.147、GT 锚排名 148→7、首出含 GT 终框，215623/33 +0.016，其余 ±0.011 内或不可切换；单帧同人同场景，识别可用性未定。SUBMITTED，未 ACCEPTED。
+ 
+ 最新（2026-10-08）：[DET-04同扫描背景删除与机制归因](../../docs/sidequests/evidence/2026-10-08_det04_r1/README.md)，[预注册计划](../../docs/sidequests/DET04_PLAN.md)/[唯一验收v1](../../docs/sidequests/DET04_ACCEPTANCE.md)。8次新前向：前三固定帧相交柱独留增分、加回预声明近地面柱降分，第四帧独留降分；背景存在性不能统一解释。审计旧context为B同扫描点按C/E源ID选取，无外来XYZI注入。506对描述相关、7负帧均覆盖改善却anchor负响应、三空场同anchor≥0.5全部保留；单一主因/识别可用性未定。SUBMITTED，未ACCEPTED，主线继续暂停。
+ 
+--- baseline/test_experiment.py
++++ final/test_experiment.py
+@@ -126,4 +126,41 @@
+         self.assertAlmostEqual(corr([1,1,2],[1,1,3],True),1)
+ 
+ 
++    def test_det05_purity_rule(self):
++        from det05 import classify_pillars
++        groups={(0,0,0):[0,1],(1,0,0):[2,3],(2,0,0):[4],(3,0,0):[5,6],(4,0,0):[7]}
++        ids=np.arange(8,dtype='i8')
++        label_map={0:'human',1:'human',2:'human',3:'furniture',4:None,5:'human',6:'mixed_uncertain',7:'human'}
++        out=classify_pillars(groups,ids,label_map)
++        self.assertTrue(out[(0,0,0)]['pure']);self.assertEqual(out[(0,0,0)]['reason'],'pure')
++        self.assertEqual(out[(1,0,0)]['reason'],'furniture')
++        self.assertEqual(out[(2,0,0)]['reason'],'unlabeled')
++        self.assertEqual(out[(3,0,0)]['reason'],'mixed_uncertain')
++        self.assertTrue(out[(4,0,0)]['pure'])
++        self.assertEqual(out[(3,0,0)]['human'],1)
++
++    def test_det05_pure_switch_only_pure_pillars(self):
++        from diagnose_low_scores import SamplingProbe
++        from det05 import PureSwitchProbe
++        base=Voxelization([1,1,4],[0,0,-3,4,4,1],32,(16,16))
++        zs=np.linspace(-2,.9,40)
++        pts=np.array([[.1,.1,z,1] for z in zs]+[[1.1,.1,-1,2],[2.1,.1,-1,3]],dtype='f4')
++        t=torch.from_numpy(pts)
++        s32=SamplingProbe(base);s32.mode='first32'
++        v1,c1,n1=s32(t)
++        key=tuple(int(x) for x in c1[0])
++        sw=PureSwitchProbe(base,[key])
++        v2,c2,n2=sw(t)
++        np.testing.assert_array_equal(c1.numpy(),c2.numpy())
++        np.testing.assert_array_equal(n1.numpy(),n2.numpy())
++        changed=[j for j in range(len(v1)) if not torch.equal(v1[j],v2[j])]
++        self.assertEqual(changed,[0])
++        self.assertEqual(sw.switched,[0])
++        self.assertEqual(int(n1[0]),32)
++        self.assertFalse(torch.equal(v2[0,:32,2],v1[0,:32,2]))
++        self.assertTrue(torch.equal(v2[1],v1[1]) and torch.equal(v2[2],v1[2]))
++        self.assertEqual(int(s32.last[3][0]),40)
++
++
+ if __name__=="__main__":unittest.main()
++

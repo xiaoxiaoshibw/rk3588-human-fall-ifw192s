@@ -1,0 +1,14 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>HR-W03 · 31 点与 confirmation 审阅</title>
+<style>
+body{margin:0;background:#111922;color:#e6edf4;font:14px system-ui}header{padding:16px;border-bottom:1px solid #354150}h1{font-size:21px;margin:0 0 9px}button,select,input{padding:7px;background:#243347;color:white;border:1px solid #586577;border-radius:4px}button{cursor:pointer}label{margin-right:14px}.panes{display:flex;height:52vh;min-height:300px}.pane{position:relative;flex:1;min-width:0;border:1px solid #354150}.caption{position:absolute;top:6px;left:10px;z-index:2;background:#111a22dd;padding:6px}canvas{width:100%;height:100%;display:block}main{padding:16px}table{border-collapse:collapse;width:100%}td,th{text-align:left;border-bottom:1px solid #354150;padding:7px}details{margin:12px 0}.green{color:#51e3a5}.red{color:#ff4d60}.grey{color:#9da9b5}.amber{color:#ffb950}#info{white-space:pre-wrap;background:#1c2834;padding:10px;max-height:260px;overflow:auto}.scroll{max-height:350px;overflow:auto}small{display:block;color:#b4c1ce;margin-top:5px}
+</style>
+<header><h1>W03 收口证据 · 人工判断近地点和 confirmation 身份</h1>
+<div>三窗同步旋转/缩放。<span class="green">绿色：cleanup 后候选簇点</span> · <span class="red">红色：本轮 31 个损失点</span> · <span class="amber">橙色：其他 P 前景在 S 消失</span> · <span class="grey">灰色：其他背景/未达候选门的点</span></div>
+<small>所有点初始为 UNKNOWN。高度低不自动判为地面。红点是损失位置参照标记，叠加显示在三窗，S 中不属于保留点云。P/S 共用 source leveled 系；可切换 S 注册坐标。网格仅为坐标参考，不是物理地面 GT。</small>
+<p><label>frame <select id="frame"></select></label><label><input id="nativeS" type="checkbox">S 原注册坐标</label><label><input id="ref" type="checkbox">参考 voxel 形心</label><button id="home">当前局部归位</button><button id="export">导出人工标签 JSON</button><label>标注人 <input id="reviewer" placeholder="姓名或稳定标识"></label></p>
+<div id="status">正在载入…</div></header>
+<div class="panes"><div class="pane"><div class="caption">P · online-only</div></div><div class="pane"><div class="caption">S · registration + reference OR online</div></div><div class="pane"><div class="caption">损失点 · 点击下表定位</div></div></div>
+<main><details open><summary>31 点逐点标签（点击 ID 定位；红点不可据高度自动归类）</summary><div class="scroll"><table><thead><tr><th>ID / frame / point index</th><th>source x,y,z</th><th>删除机制 / P track</th><th>人工语义</th></tr></thead><tbody id="points"></tbody></table></div></details>
+<details><summary>257 个 confirmation 变化行：人 / 静态 / 混合 / UNKNOWN 与身份连续性</summary><div class="scroll"><table><thead><tr><th>ID / P→S track</th><th>归因</th><th>目标语义</th><th>真人 track 连续性</th></tr></thead><tbody id="confirmations"></tbody></table></div></details>
+<div id="info">点或 confirmation 的详细证据会显示在这里。</div></main>
+<script src="../../../../pc_apps/human_replay/vendor/three.min.js"></script><script src="../../../../pc_apps/human_replay/vendor/OrbitControls.js"></script><script src="09_viewer_manifest.js"></script><script src="09_point_review.js"></script></html>

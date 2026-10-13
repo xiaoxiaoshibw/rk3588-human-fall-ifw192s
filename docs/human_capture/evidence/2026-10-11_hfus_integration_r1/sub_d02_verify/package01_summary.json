@@ -1,0 +1,197 @@
+{
+ "package_01": {
+  "n_records": 550,
+  "manifest_top_keys": [
+   "schema",
+   "interfaces",
+   "sources",
+   "inputs",
+   "models",
+   "record_count",
+   "files",
+   "ponytail"
+  ],
+  "manifest_n_records": null,
+  "rp_top_keys": [
+   "schema",
+   "records"
+  ],
+  "record_keys_union_sample50": [
+   "compact_to_raw",
+   "coordinate",
+   "exhaustive",
+   "fold",
+   "frame",
+   "index_version",
+   "inputs",
+   "known_negative",
+   "name",
+   "original_gt_binding",
+   "qualification",
+   "raw_count",
+   "raw_frame_sha256",
+   "raw_to_compact",
+   "review_status",
+   "schema_contract",
+   "schema_version",
+   "seq",
+   "session_id",
+   "suggestions",
+   "timestamp_s",
+   "valid_count",
+   "xyzi"
+  ],
+  "qualification_top": {
+   "negative_by_fold": {
+    "train": {
+     "status": "BLOCKED",
+     "new_independently_reviewed_negative_count": 0
+    },
+    "validation": {
+     "status": "BLOCKED",
+     "new_independently_reviewed_negative_count": 0
+    },
+    "test": {
+     "status": "BLOCKED",
+     "new_independently_reviewed_negative_count": 0
+    },
+    "stress": {
+     "status": "BLOCKED",
+     "new_independently_reviewed_negative_count": 0
+    },
+    "blocked": {
+     "status": "BLOCKED",
+     "new_independently_reviewed_negative_count": 0
+    }
+   },
+   "S9_identity": "BLOCKED",
+   "complete_annotation_windows": [],
+   "static_manual_windows": [],
+   "labels_used_for_detector_or_training": false,
+   "future_frames_used_for_detection": false,
+   "review_material_may_show_neighboring_frames": true,
+   "known_negative_note": "S1 original furniture suggestions retain source provenance; independent manual qualification remains absent; no synthetic/copied negatives"
+  },
+  "split_top_keys": [
+   "status",
+   "scope",
+   "session_fold",
+   "sessions"
+  ],
+  "dedup_report": {
+   "crossfold_exactduplicate": 0,
+   "crossfold_duplicates": [],
+   "checked_records": 2784,
+   "hash_domain": "actual raw28 frame bytes and nonempty candidate member raw28 bytes; excludes session/frame/class to catch relabeled copies",
+   "sample_independence": "UNKNOWN"
+  },
+  "qual_label_counts": {
+   "qualification=UNKNOWN": 550
+  },
+  "neg_grade_counts": {},
+  "per_session_counts": {
+   "cap_20261010_175227": 14,
+   "cap_20261010_175429": 5,
+   "cap_20261010_175553": 5,
+   "cap_20261010_175804": 194,
+   "cap_20261010_175943": 43,
+   "cap_20261010_180235": 12,
+   "cap_20261010_180337": 43,
+   "cap_20261010_180557": 194,
+   "cap_20261010_180751": 40
+  },
+  "per_session_label": {
+   "cap_20261010_175227": {
+    "UNKNOWN": 14
+   },
+   "cap_20261010_175429": {
+    "UNKNOWN": 5
+   },
+   "cap_20261010_175553": {
+    "UNKNOWN": 5
+   },
+   "cap_20261010_175804": {
+    "UNKNOWN": 194
+   },
+   "cap_20261010_175943": {
+    "UNKNOWN": 43
+   },
+   "cap_20261010_180235": {
+    "UNKNOWN": 12
+   },
+   "cap_20261010_180337": {
+    "UNKNOWN": 43
+   },
+   "cap_20261010_180557": {
+    "UNKNOWN": 194
+   },
+   "cap_20261010_180751": {
+    "UNKNOWN": 40
+   }
+  },
+  "S9_obj_count": 40,
+  "S9_labels": {
+   "UNKNOWN": 40
+  },
+  "S1_obj_count": 14,
+  "S1_labels": {
+   "UNKNOWN": 14
+  }
+ },
+ "coverage_package_01": {
+  "n_records": 41,
+  "manifest_top_keys": [
+   "schema",
+   "interfaces",
+   "sources",
+   "inputs",
+   "models",
+   "record_count",
+   "files",
+   "parent_package_sha256",
+   "ledgerBindings",
+   "ponytail"
+  ],
+  "cp_top_keys": [
+   "status",
+   "source",
+   "ranking",
+   "priorities",
+   "ledgerBindings",
+   "limits"
+  ],
+  "per_session_counts": {
+   "cap_20261010_175943": 16,
+   "cap_20261010_180337": 25
+  },
+  "qual_label_counts": {
+   "UNKNOWN": 41
+  },
+  "neg_grade_counts": {},
+  "record_keys_sample20": [
+   "compact_to_raw",
+   "coordinate",
+   "exhaustive",
+   "fold",
+   "frame",
+   "index_version",
+   "inputs",
+   "known_negative",
+   "name",
+   "original_gt_binding",
+   "qualification",
+   "raw_count",
+   "raw_frame_sha256",
+   "raw_to_compact",
+   "review_status",
+   "schema_contract",
+   "schema_version",
+   "seq",
+   "session_id",
+   "suggestions",
+   "timestamp_s",
+   "valid_count",
+   "xyzi"
+  ]
+ }
+}

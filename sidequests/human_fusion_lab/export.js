@@ -1,0 +1,31 @@
+'use strict';
+const fs=require('fs'),path=require('path'),E=require('./core/engine'),D=require('./core/data_loader'),S=require('./core/schema'),L=require('./core/leveling'),GT=require('./human_replay/gt_lib'),assert=require('assert');
+const ROOT=path.resolve(__dirname,'../..'), audit=JSON.parse(fs.readFileSync(path.join(__dirname,'results/AUDIT.json'),'utf8'));
+function rawMap(x){const m=[];for(let i=0;i<x.length/4;i++){let a=Array.from(x.subarray(i*4,i*4+3));if(a.every(Number.isFinite)&&a.some(v=>v!==0))m.push(i);}return m;}
+function objects(doc,fi,map){if(!doc||!Object.hasOwn(doc.frames_objects,String(fi))||(doc.uncertain_intervals||[]).some(v=>fi>=v.start&&fi<=v.end))return null;const objs=doc.frames_objects[fi].map(id=>doc.objects[id]);if(!objs.length||objs.some(o=>o.class_name==='UNKNOWN'))return null;let seen=new Set();return objs.filter(o=>{const key=o.class_name+':'+JSON.stringify(o.raw_point_indices);if(seen.has(key))return false;seen.add(key);return true;}).map(o=>{const ids=GT.decode_indices(o.raw_point_indices).map(i=>{assert(Number.isSafeInteger(i)&&i>=0&&i<map.length);return map[i];});return {id:o.object_id,track_id:o.track_id,class_name:o.class_name,source:o.source,x:o.x,y:o.y,radius:o.r90||0.4,indices:ids};});}
+function subset(lv,ids){const n=ids.length,sub={n,x:new Float32Array(n),y:new Float32Array(n),z:new Float32Array(n)},it=new Float32Array(n);ids.forEach((id,k)=>{sub.x[k]=lv[id*4];sub.y[k]=lv[id*4+1];sub.z[k]=lv[id*4+2];it[k]=lv[id*4+3];});return [sub,it];}
+function extra(sub){const n=sub.n,z=Array.from(sub.z),lo=Math.min(...z),hi=Math.max(...z),h=Math.max(hi-lo,1e-6),out=[];for(let b=0;b<6;b++){const ix=z.map((v,i)=>Math.min(5,Math.floor((v-lo)/h*6))===b?i:-1).filter(i=>i>=0);out.push(ix.length/n);for(const dim of ['x','y']){const vs=ix.map(i=>sub[dim][i]).sort((a,b)=>a-b);out.push(vs.length?vs[Math.floor((vs.length-1)*.9)]-vs[Math.floor((vs.length-1)*.1)]:0);}}return out;}
+function exportSession(rec,options={}){
+ const outdir=options.outdir||path.join(__dirname,"results");fs.mkdirSync(outdir,{recursive:true});
+ const sid=rec.sid,s=D.load_session(path.join(ROOT,'captures/remote',sid)),eng=options.model?require('./detector').createDetector(options.model).engine:new E.UnifiedEngine({mode:'FUSION'}),gen=eng.begin_session(sid),doc=audit.docs[sid];
+ const frames=[],dataset=[],stats=[];let fg=[];const a=eng._fusion_a_chain;eng._fusion_a_chain=function(...args){const out=a.apply(this,args);fg=out.final_ids.slice();return out;};
+ for(const f of s.frames){const fc=S.make_frame_context({session_id:sid,session_generation:gen,frame_index:f.index,timestamp:f.timestamp,xyzi:f.xyzi,meta:s.meta});const diag=eng.tick(fc),co=eng.report().coordinate_contract,lv=L.level_frame(f.xyzi,co.R,co.T,co.already_leveled),obs=objects(doc,f.index,rawMap(f.xyzi));
+ const candidates=diag._candidates.map(c=>{
+  const ids=Array.from(c.point_indices);assert(ids.length===c.point_count&&new Set(ids).size===ids.length);ids.forEach(i=>assert(i>=0&&i<f.n_points));
+  const [sub,it]=subset(lv,ids),feature=Array.from(eng.rf.extract(sub,it)),ext=extra(sub);assert(feature.concat(ext).every(Number.isFinite));
+  const hits=(obs||[]).map(o=>{const set=new Set(o.indices),intersection=ids.filter(i=>set.has(i)).length;return {id:o.id,class_name:o.class_name,source:o.source,intersection,purity:intersection/ids.length,coverage:intersection/o.indices.length};}).filter(o=>o.intersection);
+  const p=hits.filter(o=>o.class_name==='PERSON'),neg=hits.filter(o=>o.class_name==='FURNITURE');
+  let label=null;if(obs&&p.length===1&&p[0].purity>=.8&&!hits.some(o=>o.class_name!=='PERSON'&&o.purity>.2))label=1;
+  else if(obs&&!p.length&&neg.some(o=>o.purity>=.8))label=0;
+  const row={sid,frame_index:f.index,id:c.candidate_id,label,label_status:label===null?'UNKNOWN':'OVERLAP_DERIVED_REVIEWED_GT',gt_hits:hits,features:feature,extended:ext,point_count:ids.length,indices:ids,points:Array.from({length:256},(_,j)=>{const k=Math.floor(j*ids.length/256);return [sub.x[k],sub.y[k],sub.z[k]];}),baseline_prob:c.scores.rf51.prob};dataset.push(row);
+  return {id:c.candidate_id,indices:ids,n:ids.length,x:c.centroid.x,y:c.centroid.y,z:c.centroid.z,bbox:c.bbox,prob:c.scores.rf51.prob,decision:c.classifier_decision,source:c.fusion_source_SRC,track_id:c.track_id,track_confirmed:c.track_confirmed,gt_hits:hits,label,features:feature,extended:ext};});
+ const gtrows=(obs||[]).filter(o=>o.class_name==='PERSON').map(o=>{const fgSet=new Set(fg),ids=new Set(o.indices),raw=o.indices.length,bg=o.indices.filter(i=>fgSet.has(i)).length;const cs=candidates.map(c=>({...c,coverage:c.indices.filter(i=>ids.has(i)).length/raw}));let proposal=cs.filter(c=>c.coverage>=.1&&Math.hypot(c.x-o.x,c.y-o.y)<=.75);let accepted=proposal.filter(c=>['HUMAN_CANDIDATE','CONFIRMED_HUMAN'].includes(c.decision)),tracked=accepted.filter(c=>c.track_confirmed);return {id:o.id,track_id:o.track_id,raw_points:raw,fg_points:bg,fg_retention:bg/raw,proposal:proposal.length>0,classifier:accepted.length>0,tracker:tracked.length>0,loss:!raw?'RAW':!bg?'BG':!proposal.length?'PROPOSAL':!accepted.length?'CLASSIFIER':!tracked.length?'TRACKER':'NONE',best_coverage:Math.max(0,...cs.map(c=>c.coverage))};});
+ stats.push(...gtrows.map(r=>({frame_index:f.index,...r})));frames.push({index:f.index,timestamp:f.timestamp,n_points:f.n_points,ms:diag.total_ms,rss_mb:diag.rss_mb,heap_mb:diag.peak_heap_mb,gt_status:obs?'REVIEWED_BOUND_OBSERVATION':'UNKNOWN',gt:obs?obs.map(({indices,...o})=>o):[],candidates,tracks:diag._tracks,layer_observations:gtrows});
+ }
+ assert.strictEqual(E.hash_file(path.join(s.session_dir,'meta.json')),rec.input_sha256.meta);assert.strictEqual(E.hash_file(path.join(s.session_dir,'points.bin')),rec.input_sha256.points);
+ fs.writeFileSync(path.join(outdir,sid+'.json'),JSON.stringify({sid,activity:rec.activity,coordinate:eng.report().coordinate_contract,input_sha256:rec.input_sha256,gt_record:rec,frames,stats}));
+ fs.writeFileSync(path.join(outdir,sid+'.jsonl'),dataset.map(v=>JSON.stringify(v)).join('\n')+'\n');console.log(sid,frames.length,'frames',dataset.length,'candidates',JSON.stringify(dataset.reduce((a,r)=>(a[r.label===null?'UNKNOWN':r.label]++,a),{0:0,1:0,UNKNOWN:0})));
+}
+module.exports={rawMap,objects,subset,extra,exportSession};
+if(require.main===module)for(const rec of audit.sessions){if(rec.input_sha256)exportSession(rec);}
+

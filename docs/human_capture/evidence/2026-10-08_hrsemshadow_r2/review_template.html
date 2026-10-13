@@ -1,0 +1,87 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>HR-SEM-SHADOW R2 人工审阅</title>
+<style>body{margin:20px;font:15px system-ui;background:#f5f7fb;color:#17212d}button,input,select{font:inherit;margin:4px;padding:6px}canvas{background:white;border:1px solid #ccd4dd;width:48%;height:480px}pre{white-space:pre-wrap;background:white;padding:12px}.note{background:#fff3d4;padding:12px}label{display:inline-block}#status{padding:10px}section{margin:14px 0}table{border-collapse:collapse}td,th{padding:8px;border:1px solid #ccc}</style>
+<h1>冻结 S-A+：整簇、边缘点、按帧票审阅</h1>
+<p class="note">默认全部 UNKNOWN / PENDING，ROI 重叠只作 PROVISIONAL 索引。请根据真实点云判断 PERSON / STATIC_OBJECT / MIXED / UNKNOWN；无法看清时保留 UNKNOWN。原 track ID 是机器观测，不能当真人身份。图中不生成骨架或缺失头部。红点是删除线索，颜色不代表人工标签。</p>
+<section><select id="cases"></select><label>投影 <select id="projection"><option value="xz">正视 X/Z</option><option value="yz">侧视 Y/Z</option><option value="xy">俯视 X/Y</option></select></label><label><input id="invalid" type="checkbox">显示原始无效 XYZ 变换虚点（紫）</label></section>
+<canvas id="view" width="1000" height="650"></canvas><canvas id="detail" width="1000" height="650"></canvas>
+<div id="status"></div><pre id="description"></pre>
+<section><label>簇 <select id="cluster"></select></label><label>标签 <select id="label"><option>UNKNOWN</option><option>PERSON</option><option>STATIC_OBJECT</option><option>MIXED</option></select></label><label>人工 person_id <input id="person" placeholder="PERSON 必填"></label><button id="save">记录簇审阅</button></section>
+<section><label>点 row（点击图选点）<input id="row" type="number" min="0"></label><button id="savepoint">记录点审阅</button><label>审阅者 <input id="reviewer"></label><button id="export">导出人工 sidecar</button></section>
+<p>全帧任务：选择冻结 R1 目录的 <b>pass3/clusters.jsonl</b>，再选择目标会话原始 meta.json / points.bin。工具核对索引、源、成员内容和票据后按固定 TLS 与诊断矩阵重建该帧成员。大型文件校验需要数秒。人工 sidecar 请使用 R2 校验器；R1 页面与格式校验器仅保留为历史。</p>
+<section><label>全帧簇索引 <input id="indexfile" type="file" accept=".jsonl"></label><label>目标帧 <input id="ordinal" type="number" min="0" value="0"></label><select id="session"></select><label>分支 <select id="mode"><option>V2</option><option>REF_SHADOW</option><option>WORKSPACE</option><option>V2_IDENTITY</option></select></label><br><label>原始 meta.json <input id="metafile" type="file" accept=".json"></label><label>原始 points.bin <input id="binfile" type="file" accept=".bin"></label><button id="loadraw">校验并查看该帧</button></section>
+<pre id="labels"></pre><script id="payload" type="application/json">__PAYLOAD__</script>
+<script>
+'use strict';
+(async()=>{
+const $=id=>document.getElementById(id),payload=$('payload').textContent;
+const sha=async buf=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',typeof buf==='string'?new TextEncoder().encode(buf):buf)),b=>b.toString(16).padStart(2,'0')).join('');
+const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
+const ident=v=>sha(JSON.stringify(canonical(v)));
+if(await sha(payload)!=='__PAYLOAD_SHA__')throw Error('AUTHORITY_PAYLOAD_SHA_MISMATCH');
+const bundle=JSON.parse(payload);
+const records=[],pointLabels=[],index=new Map();let current=null,raw=null,projected=[];
+const key=r=>[r.sid,r.mode,r.ordinal].join('/');let generation=0;
+function invalidate(){current=null;projected=[];$('description').textContent='尚无通过绑定校验的成员';for(const id of ['view','detail'])$(id).getContext('2d').clearRect(0,0,$(id).width,$(id).height);}
+async function verifyCase(r){for(const c of r.clusters){const id=[r.sid,r.mode,r.ordinal,c.ci].join('/'),e=c.receipt;
+if(!e||e.id!==id||e.review_id!==id||e.vote_member_id!==id||e.seq!==r.seq||await ident(c.points.map(p=>p.row))!==e.member_sha256||await ident(c.points.flatMap(p=>p.xyz))!==e.xyz_sha256)throw Error('DISPLAY_MEMBER_BINDING_MISMATCH: '+id);}}
+for(const r of bundle.cases)await verifyCase(r);
+for(const r of bundle.cases){const o=document.createElement('option');o.value=key(r);o.textContent=r.sid.slice(-6)+' '+r.mode+' f'+r.ordinal+' '+r.reasons.join(',');$('cases').append(o);}
+for(const s of bundle.binding.sessions){const o=document.createElement('option');o.value=s.sid;o.textContent=s.sid;$('session').append(o);}
+function choose(r){current=r;$('row').value='';$('status').textContent='已验证 '+r.sid+' / '+r.mode+' / f'+r.ordinal+' / seq '+r.seq;$('cluster').textContent='';for(const c of r.clusters){const o=document.createElement('option');o.value=c.ci;o.textContent='c'+c.ci+' '+c.semantic+' '+c.points.length+'点';$('cluster').append(o);}draw();}
+function pointsOf(){return current?current.clusters.flatMap(c=>c.points.map(p=>({...p,ci:c.ci,semantic:c.semantic}))):[];}
+function drawOne(canvas,pts){const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);if(!pts.length)return [];
+const axes=$('projection').value==='xz'?[0,2]:$('projection').value==='yz'?[1,2]:[0,1];
+const coords=pts.map(p=>[p.xyz[axes[0]],p.xyz[axes[1]]]);const xmin=Math.min(...coords.map(p=>p[0])),xmax=Math.max(...coords.map(p=>p[0])),ymin=Math.min(...coords.map(p=>p[1])),ymax=Math.max(...coords.map(p=>p[1]));
+const sc=Math.min((canvas.width-60)/Math.max(.1,xmax-xmin),(canvas.height-60)/Math.max(.1,ymax-ymin));
+ctx.fillStyle='#333';ctx.font='18px system-ui';ctx.fillText($('projection').selectedOptions[0].textContent+'（m）',18,22);
+return pts.map((p,i)=>{const x=30+(coords[i][0]-xmin)*sc,y=canvas.height-30-(coords[i][1]-ymin)*sc;
+ctx.fillStyle=p.deleted?'#db382e':p.raw_invalid?'#be31d0':p.semantic==='HUMAN_EVIDENCE'?'#218568':p.semantic==='OBJECT_EVIDENCE'?'#788795':'#684fa7';ctx.fillRect(x,y,p.deleted?5:2,p.deleted?5:2);return {...p,px:x,py:y};});}
+function draw(){if(!current)return;const all=pointsOf().filter(p=>$('invalid').checked||!p.raw_invalid),deleted=current.deleted.map(p=>({...p,deleted:true}));
+projected=drawOne($('view'),[...all,...deleted]);const ci=Number($('cluster').value);drawOne($('detail'),[...all.filter(p=>p.ci===ci),...deleted]);
+$('description').textContent=JSON.stringify({session:current.sid,mode:current.mode,ordinal:current.ordinal,seq:current.seq,reasons:current.reasons,
+deleted_rows:deleted.map(p=>p.row),clusters:current.clusters.map(({points,receipt,...c})=>({...c,n:points.length,binding:receipt?{id:receipt.id,raw_member_sha256:receipt.raw_member_sha256,xyz_sha256:receipt.xyz_sha256,vote_member_id:receipt.vote_member_id}:null}))},null,2);}
+$('cases').onchange=()=>choose(bundle.cases.find(r=>key(r)===$('cases').value));$('cluster').onchange=draw;$('projection').onchange=draw;$('invalid').onchange=draw;
+$('view').onclick=e=>{const box=$('view').getBoundingClientRect(),x=(e.clientX-box.left)*$('view').width/box.width,y=(e.clientY-box.top)*$('view').height/box.height;
+const p=projected.reduce((best,p)=>!best||(p.px-x)**2+(p.py-y)**2<(best.px-x)**2+(best.py-y)**2?p:best,null);if(!p)return;
+$('row').value=p.row;$('status').textContent='row='+p.row+' xyz='+p.xyz.join(', ')+' deleted='+!!p.deleted+' raw_invalid='+!!p.raw_invalid;};
+function manual(){if($('label').value==='PERSON'&&!$('person').value.trim())throw Error('PERSON 需要人工 person_id');return {label:$('label').value,person_id:$('person').value.trim()||null};}
+function showLabels(){$('labels').textContent=JSON.stringify({clusters:records,points:pointLabels},null,2);}
+function safe(f){try{return f();}catch(e){$('status').textContent=e.message;}}
+$('save').onclick=()=>safe(()=>{if(!current)throw Error('DISPLAY_NOT_VERIFIED');const ci=Number($('cluster').value),c=current.clusters.find(c=>c.ci===ci);if(!c||!c.receipt)throw Error('无可审阅簇');
+const id=[current.sid,current.mode,current.ordinal,ci].join('/'),item={id,sid:current.sid,mode:current.mode,ordinal:current.ordinal,seq:current.seq,
+...c.receipt,...manual()};const old=records.findIndex(r=>r.id===id);if(old>=0)records[old]=item;else records.push(item);showLabels();});
+$('savepoint').onclick=()=>safe(()=>{if(!current)throw Error('DISPLAY_NOT_VERIFIED');const row=Number($('row').value),p=current.deleted.find(p=>p.row===row);if(!p||!p.receipt)throw Error('点级 GT 仅对已绑定删除线索开放；完整成员请用簇审阅');
+const id=[current.sid,current.mode,current.ordinal,'p'+row].join('/'),item={...p.receipt,...manual()};
+const old=pointLabels.findIndex(r=>r.id===id);if(old>=0)pointLabels[old]=item;else pointLabels.push(item);showLabels();});
+$('export').onclick=()=>safe(()=>{if(!$('reviewer').value.trim())throw Error('请填写实际人工审阅者');if(!records.length&&!pointLabels.length)throw Error('尚无人工审阅记录');
+const obj={schema:1,binding_version:2,kind:'hr_sem_shadow_gt',source:'human',reviewer:$('reviewer').value.trim(),created_iso:new Date().toISOString(),
+authority:bundle.authority,binding:bundle.binding,clusters:records,points:pointLabels};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.download='hr_sem_shadow_r2_manual_gt.json';a.click();URL.revokeObjectURL(a.href);});
+$('indexfile').onchange=async()=>{const epoch=++generation;index.clear();invalidate();try{const bytes=await $('indexfile').files[0].arrayBuffer();if(await sha(bytes)!=='__INDEX_SHA__')throw Error('INDEX_SHA_MISMATCH: pass3/clusters.jsonl');
+const ids=new Set(),next=new Map();for(const line of new TextDecoder().decode(bytes).split('\n'))if(line){const c=JSON.parse(line),k=key(c),id=[c.sid,c.mode,c.ordinal,c.ci].join('/');
+if(c.id!==id||ids.has(id))throw Error('MEMBER_ID_MISMATCH: '+id);ids.add(id);
+if(c.rows.length!==c.n||new Set(c.rows).size!==c.n||await ident(c.rows)!==c.member_sha256)throw Error('MEMBER_SHA_MISMATCH: '+id);
+if(!next.has(k))next.set(k,[]);next.get(k).push(c);}
+if(epoch!==generation)throw Error('STALE_INPUT');for(const [k,v] of next)index.set(k,v);$('status').textContent='权威索引 SHA 与 '+ids.size+' 个成员 ID 已核对';
+}catch(e){if(epoch===generation){index.clear();invalidate();$('status').textContent=e.message;}}};
+function rt(x,A,t){const q=[0,0,0];for(let j=0;j<3;j++)q[j]=Math.fround(A[j*3]*x[0]+A[j*3+1]*x[1]+A[j*3+2]*x[2]+t[j]);return q;}
+$('loadraw').onclick=async()=>{const epoch=++generation;invalidate();try{const sid=$('session').value,mode=$('mode').value,ordinal=Number($('ordinal').value),b=bundle.binding.sessions.find(s=>s.sid===sid);
+const mf=$('metafile').files[0],bf=$('binfile').files[0];if(!mf||!bf)throw Error('需要原始 meta.json 和 points.bin');$('status').textContent='正在核对源 SHA';
+const mbytes=await mf.arrayBuffer(),bytes=await bf.arrayBuffer();if(await sha(mbytes)!==b.source.meta_sha256||await sha(bytes)!==b.source.bin_sha256)throw Error('源 SHA 不匹配，拒绝查看');
+const meta=JSON.parse(new TextDecoder().decode(mbytes)),f=meta.frames[ordinal];if(!f)throw Error('帧越界');if(meta.point_layout.stride_bytes!==28)throw Error('跨步格式不匹配');
+const cs=index.get([sid,mode,ordinal].join('/'));if(!cs)throw Error('请载入全帧簇索引或核对分支');const view=new DataView(bytes),tf=bundle.transforms[sid];
+const point=row=>{if(!Number.isInteger(row)||row<0||row>=f.count_points)throw Error('ROW_RANGE: '+row);const at=(f.offset_points+row)*28,x=[0,1,2].map(j=>view.getFloat32(at+4*j,true)),invalid=!x.every(Number.isFinite)||x.every(v=>v===0);
+let xyz=rt(x,tf.R.flat(),tf.t);if(b.transform)xyz=rt(xyz,b.transform.rotation_row_major,b.transform.translation_m);return {row,xyz,raw_invalid:invalid};};
+const vote=bundle.votes[[sid,mode,ordinal].join('/')];if(!vote||vote.seq!==f.seq)throw Error('VOTE_FRAME_MISMATCH');const clusters=[];
+for(const c of cs){if(c.seq!==f.seq||c.sid!==sid||c.mode!==mode||c.ordinal!==ordinal)throw Error('FRAME_MISMATCH: '+c.id);
+if(vote.reference.assigned.filter(x=>x.ci===c.ci).length!==1)throw Error('VOTE_MEMBER_MISMATCH: '+c.id);
+const points=c.rows.map(point);if(await ident(points.map(p=>p.row))!==c.member_sha256||await ident(points.flatMap(p=>p.xyz))!==c.xyz_sha256)throw Error('CONTENT_SHA_MISMATCH: '+c.id);
+const memberBytes=new Uint8Array(c.rows.length*28);c.rows.forEach((row,i)=>memberBytes.set(new Uint8Array(bytes,(f.offset_points+row)*28,28),i*28));
+const receipt={id:c.id,sid,mode,ordinal,seq:f.seq,ci:c.ci,source_path:'captures/remote/'+sid,rows:c.rows,member_sha256:c.member_sha256,
+xyz_sha256:c.xyz_sha256,raw_member_sha256:await sha(memberBytes),review_id:c.id,vote_member_id:c.id,vote_frame_sha256:await ident(vote)};
+clusters.push({ci:c.ci,semantic:c.semantic.semantic,flags:c.semantic.flags,old_joint:c.old.joint,member_sha256:c.member_sha256,receipt,points});}
+if(epoch!==generation)throw Error('STALE_INPUT');choose({sid,mode,ordinal,seq:f.seq,reasons:['INDEX_SOURCE_ROWS_CONTENT_VOTES_VERIFIED'],deleted:[],clusters});$('status').textContent='索引、源、成员内容与票据已核对；全成员 '+cs.reduce((n,c)=>n+c.rows.length,0)+' 点';
+}catch(e){if(epoch===generation){invalidate();$('status').textContent=e.message;}}};
+choose(bundle.cases[0]);
+$('status').textContent='R2 权威 payload 与34个嵌入案例成员绑定已核对';
+})().catch(e=>{document.getElementById('status').textContent=e.message;});
+</script></html>

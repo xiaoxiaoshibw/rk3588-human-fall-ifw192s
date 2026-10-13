@@ -1,0 +1,11 @@
+{
+  "session_id": "cap_20261008_114254",
+  "sampled_frames": [
+    {"frame": 0, "present": true, "top_xy": [4.45, 3.15], "conf": "high"},
+    {"frame": 88, "present": true, "top_xy": [4.55, 3.05], "conf": "high"},
+    {"frame": 176, "present": true, "top_xy": [4.5, 3.1], "conf": "high"}
+  ],
+  "still_confidence": "high",
+  "needs_dense": false,
+  "rationale": "三帧均在 x~4.5, y~3.1 处见到紧凑圆簇+竖条贯穿到 >=1.5m 的典型真人签名； 跨 0/88/176 (约前/中/后段) 位置抖动 <0.2m 与先期判读 span 0.22m 一致, 静态站立高度可辨。271 帧均匀采样已覆盖首/中/尾且无漂移遮挡迹象, 无需 dense 渲染即可给 source:human GT。"
+}

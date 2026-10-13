@@ -1,0 +1,76 @@
+{
+  "splits": {
+    "train": {
+      "counts": {
+        "negative": 566,
+        "UNKNOWN": 1772,
+        "positive": 142
+      },
+      "positive_point_count": {
+        "min": 1030.0,
+        "p10": 1102.1,
+        "median": 1179.0,
+        "p90": 1459.7,
+        "max": 1785.0
+      },
+      "negative_point_count": {
+        "min": 30.0,
+        "p10": 39.0,
+        "median": 1063.0,
+        "p90": 5622.0,
+        "max": 5644.0
+      }
+    },
+    "validation": {
+      "counts": {
+        "positive": 28,
+        "UNKNOWN": 1635
+      },
+      "positive_point_count": {
+        "min": 997.0,
+        "p10": 1350.3000000000002,
+        "median": 6036.5,
+        "p90": 6824.2,
+        "max": 8307.0
+      },
+      "negative_point_count": null
+    },
+    "test": {
+      "counts": {
+        "positive": 65,
+        "UNKNOWN": 1680
+      },
+      "positive_point_count": {
+        "min": 176.0,
+        "p10": 880.4,
+        "median": 1117.0,
+        "p90": 1133.0,
+        "max": 6037.0
+      },
+      "negative_point_count": null
+    },
+    "stress": {
+      "counts": {
+        "positive": 58,
+        "UNKNOWN": 574
+      },
+      "positive_point_count": {
+        "min": 31.0,
+        "p10": 37.7,
+        "median": 299.5,
+        "p90": 523.8000000000001,
+        "max": 2430.0
+      },
+      "negative_point_count": null
+    },
+    "blocked": {
+      "counts": {
+        "UNKNOWN": 380
+      },
+      "positive_point_count": null,
+      "negative_point_count": null
+    }
+  },
+  "fixed_threshold": 0.55,
+  "holdout_status": "RETROSPECTIVE_SESSION_HOLDOUT; historical test sessions previously inspected; prospective unseen actor/scene performance UNKNOWN"
+}

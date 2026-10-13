@@ -1,0 +1,139 @@
+{
+  "workitem": "HUMAN-FUSION-UNIFY-R2 / Q01 独立审查（作者侧汇总）",
+  "when": "2026-10-11T16:55:00+08:00",
+  "reviewer_claude": "独立实测复核（非自验 PASS）",
+  "reviewer_opencode": "opencode-go/deepseek-v4.1-flash 独立审查（后台进行中，见 opencode_review_report.md）",
+  "findings": [
+    {
+      "id": "Q01-F01",
+      "severity": "P0",
+      "title": "geometry(post) 决策/track 状态错位（RF 决策污染 tracker 显示语义）",
+      "file": "sidequests/human_fusion_lab/detector.js",
+      "line": 13,
+      "verdict": "CONFIRMED → FIXED（候选级）；残留 P2 见 F-02",
+      "evidence": "作者实测：8 合格会话 5232 帧、6520 个带 track_id 候选中 6436（98.7%）的 track_confirmed 与最终 classifier_decision 不一致；合成最小复现 30 帧 28/30 错位。OpenCode 独立 hook FusionTracker.tick 复现：tracker 输入 in_dec=CONFIRMED_HUMAN（engine/RF）后又被 detector 覆盖为 HUMAN_CANDIDATE，证实 tracker 用被覆盖前的决策投票。",
+      "root_cause": "detector.js 在 tick 后覆盖 c.classifier_decision，但 tracker（engine/unique_tracker 在 tick 内部）在此之前已按原 RF 决策投票；_tracks.human_confirmed 与候选 track_confirmed 未被同步重写，UI 同时展示矛盾的两套真值。",
+      "fix": "detector.js geometry 分支：覆盖 decision 后同步重写 c.track_confirmed 与 _tracks 中对应 track 的 human_confirmed；保留 _rf_decision；detector 元数据 track_semantics='overridden_by_geometry_posthoc'。",
+      "regression": "test_geometry_consistency.js（红→绿）；run_unify_tests.js 8/8 PASS；作者全量复验 mismatch=0（6520/6520）",
+      "affected_acceptance": ["C05（geometry 决策覆盖语义）", "R602（session/seek/reset/候选/GT 显示一致性）"],
+      "production_note": "geometry(post) 标记为研究型后处理对照，不是纯几何生产基线；不进入默认生产模型。"
+    },
+    {
+      "id": "Q01-F02",
+      "severity": "P2",
+      "title": "geometry(post) 显示层自洽牺牲轨迹确认（OpenCode 独立发现）",
+      "file": "sidequests/human_fusion_lab/detector.js / core/engine.js / pc_apps/human_replay/human_pipe_lib.js",
+      "line": "detector.js:23-24 / human_pipe_lib.js:624",
+      "verdict": "CONFIRMED → ACCEPTED_RESIDUAL（won't-fix，需改冻结 engine，超出本轮授权）",
+      "evidence": "OpenCode 实测：修复后 S3 geometry 候选级 mismatch=0，但底层 FusionTracker 内部 confirmed=775 帧 vs 显示 confirmed=0，分歧 635/806 帧；geometry@S3 idx50 gt_diff.tracks.tp=0/fn=1，对照 rf51_baseline tp=1。根因：human_pipe_lib.js classify_human 只发 HUMAN_CANDIDATE/NON_HUMAN，从不产出 CONFIRMED_HUMAN → geometry 永不确认任何轨迹。",
+      "root_cause": "engine FusionTracker 在 tick 内吃被覆盖前的 classifier_decision 投票；detector 层事后覆盖无法回溯修改已发生的投票。在不改冻结 engine 的前提下，detector 无法让 tracker 用覆盖后的几何决策重建确认历史。",
+      "disposition": "接受为研究型后处理对照的固有语义：(a) geometry(post) 不确认任何轨迹，轨迹层结论仅限候选级分类分布对照；(b) demo UI 以 detector 名 'geometry(post)' 传达对照模式；(c) 不用于任何确认轨迹/召回结论。不升级为基线。",
+      "affected_acceptance": ["C05", "R802（轨迹召回结论仅限非 geometry 模型）"]
+    },
+    {
+      "id": "Q01-F04",
+      "severity": "P2",
+      "title": "陈旧 server 进程污染 API/E2E 证据（OpenCode 独立发现 F-04）",
+      "file": "sidequests/human_fusion_lab/start_demo.cmd",
+      "line": "端口 8791/8797",
+      "verdict": "CONFIRMED → FIXED",
+      "evidence": "OpenCode 实测 127.0.0.1:8797 存在陈旧未修复 server（PID 15076）仍监听，对其 geometry 请求返回 track_confirmed=true（修复前行为）；cdp_e2e.js 默认 demo 端口恰为 8797。",
+      "fix": "kill PID 15076；干净 8799 server + 修复代码重跑 E2E 10/10 PASS；Q01_BROWSER_E2E.json 更新为干净环境结论。",
+      "affected_acceptance": ["C08", "任务二 证据可信度"]
+    },
+    {
+      "id": "Q01-F02",
+      "severity": "P1",
+      "title": "真实浏览器交互 E2E 从未通过（DEMO_BROWSER_E2E.json 状态 FAIL）",
+      "file": "sidequests/human_fusion_lab/cdp_e2e.js / demo.html",
+      "line": "cdp_e2e.js:94 / demo.html:25",
+      "verdict": "CONFIRMED → FIXED",
+      "evidence": "results/DEMO_BROWSER_E2E.json status=FAIL、checks=0、fatal='waitFor timeout: first frame'。作者复现：E01 等待表达式 window.frame!==undefined 永假（demo.html 用 `let frame`，let 不产生 window 属性，Object.prototype.hasOwnProperty.call(window,'frame')=false 但 typeof frame==='object'）。",
+      "root_cause_a": "cdp_e2e.js 等待条件用 window.frame（永假），应读裸 binding（typeof frame!=='undefined' && frame）。",
+      "root_cause_b": "demo.html 非法 sid 的回退提示在 update() 第一行被 '正在回放…' 覆盖，用户看不到 '回退' 字样（E03 断言失败）。",
+      "fix": "cdp_e2e.js 全部 8 处 window.frame 改 typeof 裸绑定；demo.html 引入 pendingFallbackNote，回退提示追加到最终 status。",
+      "regression": "cdp_e2e.js 10/10 PASS（E01–E09，exit 0）；Q01_BROWSER_E2E.json status=PASS, checks_pass=10/10",
+      "affected_acceptance": ["C08（真实浏览器端到端）", "任务二 非法 sid 持续可见回退提示"],
+      "blocked_residual": ["循环播放 loop+tracker-reset 专用断言", "网络故障注入恢复"]
+    },
+    {
+      "id": "Q01-F03",
+      "severity": "P1",
+      "title": "SESSION 适配与 master 契约一致性",
+      "file": "sidequests/human_fusion_lab/session_adapter.js",
+      "verdict": "PASS",
+      "evidence": "master 会话同步能力为准；closeout 无缺失超集；session_adapter.choose() 与 master session_selection 语义镜像（S01–S12 归一 + fusion SHA 守卫特化 F01/F02）。master session_selection.test.js S01-S12 PASS；lab test_session_contract.js 9/9 PASS。",
+      "affected_acceptance": ["C01", "C02", "C03", "C04"]
+    },
+    {
+      "id": "Q01-F04",
+      "severity": "P1",
+      "title": "SHA 守卫是否阻止失效数据成为默认",
+      "verdict": "PASS",
+      "evidence": "session_adapter.js choose() 中 default_sid=defaultable[0]（sha_idem!==false 的最新）；S09 eligible=false 的 sha_mismatch_sids 暴露给前端且 /api/sessions 标 ⚠SHA；lab F01/F02 测试通过（sha-mismatch 不作默认，可显式浏览）。S09 的 points SHA 为占位 aaaa...（OpenCode 复现：cap_20261010_180751 declared_session_sha256.points 是 aaa...），被守卫降级。",
+      "affected_acceptance": ["C04"]
+    },
+    {
+      "id": "Q01-F05",
+      "severity": "P1",
+      "title": "六 detector 是否遵循同一 Proposal 输入/输出契约",
+      "verdict": "PASS",
+      "evidence": "6 detector（rf51_baseline/rf51_candidate/rf69_candidate/xgb69_candidate/xgb69_unique/geometry(post)）同走 UnifiedEngine + schema.make_frame_context；模型对拍 6 模型×200 样本 max_err=9.18e-8；缺模型显式回退 rf51_baseline。OpenCode 复现 rf51/xgb69/geometry 在同一会话下 proposal 数与字段语义一致（candidates 数不同属分类差异非契约差异）。",
+      "affected_acceptance": ["C05", "C06", "R601"]
+    },
+    {
+      "id": "Q01-F06",
+      "severity": "P1",
+      "title": "seek/rewind/session switch/model switch 是否彻底清除旧状态",
+      "verdict": "PASS",
+      "evidence": "server.js frame() 中 index<state.last 时 generation=state.det.begin(sid)、last=-1，时序前缀重建；demo.html change() 中 epoch++、history.clear()、index=0；E02/E05/E06 实测 rewind 后 generation 递增（1→2）、counter 归零（E05b）、模型切换生效（E06）。",
+      "affected_acceptance": ["C07", "R602"]
+    },
+    {
+      "id": "Q01-F07",
+      "severity": "P1",
+      "title": "API/DOM/GT/candidate/track 索引与帧号一致性",
+      "verdict": "PASS",
+      "evidence": "server.js /api/frame 用 state.session.frames[index] 且 recorded=state.recorded.frames[index] 同步对齐；E04 seek=100 渲染候选 indices 与 gt_status；E08 点检 detail 含 point_indices_preview。R5 2605 帧对拍 raw indices/count/bbox 一致（R5_TEST.json）。",
+      "affected_acceptance": ["C09", "R501", "R502"]
+    },
+    {
+      "id": "Q01-F08",
+      "severity": "P0",
+      "title": "R7 是否按独立会话分组、是否存在 train/val/test 泄漏",
+      "verdict": "PASS",
+      "evidence": "audit.py splits={train:4, validation:1, test:2, stress:1, blocked:1}；作者复核 9/9 会话唯一、split 无重叠；holdout_status=RETROSPECTIVE_SESSION_HOLDOUT（历史测试会话曾被查看，前瞻未知）；train.py 用 r['sid'] in splits['train'] 切样本、按 session/class 权重去相关。UNKNOWN 不作为负例。OpenCode 独立核对 splits 与 9 会话资格、S09 blocked。",
+      "affected_acceptance": ["R701"],
+      "residual_unknown": "前瞻全新场景/陌生人员泛化仍 UNKNOWN（RETROSPECTIVE_SESSION_HOLDOUT 语义）。"
+    },
+    {
+      "id": "Q01-F09",
+      "severity": "P0",
+      "title": "R8 各层损失是否由真实数据支持、UNKNOWN 是否被错误计入成功",
+      "verdict": "PASS",
+      "evidence": "attribution.js 中 DISPLAY 显式 'UNKNOWN: native browser observation checked separately; no object-level display GT'；loss_counts 按 RAW/BG/PROPOSAL/CLASSIFIER/TRACKER/NONE 分离计数（作者复核：BG=2/PROPOSAL=5/TRACKER=12/NONE=491，有真实观测）；UNKNOWN 帧单列 unknown_frames；NONE 不与 UNKNOWN 混淆。未把 UNKNOWN 计入任何 PASS 指标。",
+      "affected_acceptance": ["R801", "R802"],
+      "residual_unknown": "DISPLAY 层对真人显示损失仍 UNKNOWN（无物理 GT）。"
+    },
+    {
+      "id": "Q01-F10",
+      "severity": "P0",
+      "title": "生产接入是否继续 BLOCKED",
+      "verdict": "BLOCKED（持续）",
+      "evidence": "geometry(post) 为研究型后处理对照、R7 是 RETROSPECTIVE_SESSION_HOLDOUT、DISPLAY 真人损失 UNKNOWN、RKNN/NPU/RK3588 未实测、S09 有效 GT 缺失、生产识别链未授权改动。多项 BLOCKED/UNKNOWN 未清零，生产接入继续 BLOCKED。",
+      "affected_acceptance": ["R804", "生产部署/默认模型推广"]
+    }
+  ],
+  "summary": {
+    "total": 12,
+    "p0_confirmed_fixed": 1,
+    "p1_confirmed_fixed": 1,
+    "p2_fixed": 1,
+    "p2_accepted_residual": 1,
+    "pass": 7,
+    "blocked": 1,
+    "unknown": 0,
+    "critical_contract_verified": true,
+    "independent_review_opencode": "COMPLETED（opencode-go/deepseek-v4.1-flash；opencode_review_report.md + opencode_findings.json；结论：P0 真缺陷已关闭到候选级、R7 无会话级泄漏、R8 UNKNOWN 未计成功、生产接入继续 BLOCKED）"
+  }
+}

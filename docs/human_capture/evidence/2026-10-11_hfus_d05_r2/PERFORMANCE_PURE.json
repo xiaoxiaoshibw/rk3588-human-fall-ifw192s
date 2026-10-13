@@ -1,0 +1,416 @@
+{
+  "version": "R02-pure-algorithm-perf-v1",
+  "node": "v24.14.0",
+  "platform": "win32",
+  "sources": [
+    {
+      "path": "sidequests/human_fusion_lab/core/data_loader.js",
+      "sha256": "014feb8bbb6d6d208353155a591791ba2af1f0e544fbf8e436b567909e79b1fe"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/core/engine.js",
+      "sha256": "5345739ca95472410feaf4bafe7cd83ad35d6dafd40a42f584ca98b65e4afead"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/core/evaluate_fusion_gt.js",
+      "sha256": "bd3c65e3d6888431a998fb928ea9def35b0e84d07f6f6a4d292df5dacdac1991"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/core/fusion.js",
+      "sha256": "5a7f0e8378e57baa2ad1ceaa441de9b59bf435f67a6d18f40b1380f6b6c6becf"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/core/leveling.js",
+      "sha256": "4a3a854f62c0edd0c287ed0fc1dcd9bd3358d4e8b3c2825687d046e289317f45"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/core/schema.js",
+      "sha256": "c045138e33587949d0002ee819bd73c9f326b9c22cfe067fa1176d0aae3eaf0b"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/detector.js",
+      "sha256": "6e9c6604cf9f5d86555ee487930c9b5ca0bc1245a0a32822b19ea200f9630d1c"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/export.js",
+      "sha256": "6bfca31fa8b304c2ed054ad34977a990f9084e2544cd4de394427f684644600c"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/human_replay/bg_envelope.json",
+      "sha256": "28afdaa4838c5fd99221954ab1696bd82289aa1c24c6934afb5808838d6e3f2e"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/human_replay/detect_overlay.js",
+      "sha256": "585d2964e2927fd8dac97bc950190088ba315d89a0dea17564aed3917ad73963"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/human_replay/gt_lib.js",
+      "sha256": "4013471514915570c32bc0d09f1d100c4f9cbfa2d27a645f9ddd91807fcf8026"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/human_replay/human_pipe_lib.js",
+      "sha256": "8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/human_replay/rf_person.js",
+      "sha256": "99b02c725f303f07e574b310fdd459ad3e28dd2469ba1e882661c30f370529d6"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/human_replay/rf_person_v1.json",
+      "sha256": "4c83db116fe0742d5c1cca8360de6bafcc4ac9abae3910984beabea8d85bfe68"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/models/dual_rf51_candidate.json",
+      "sha256": "9f4f4b9fdb2b2f1cab42bfa14a55aff423acac48c40303c93bafd035cdfa62c1"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/models/dual_rf69_candidate.json",
+      "sha256": "c5d824e249b0a41a309579323fd2549af9409032775b0c0411db0e5d716a1683"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/models/dual_xgb69_candidate.json",
+      "sha256": "fc7250363301cd0a51bdfc587c1dfe0e0d83e29a96f2bc5209ccb618ffd58b9b"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/models/rf51_candidate.json",
+      "sha256": "56dce7cc06155d2befd3e33482537482eb55767a2289a0a8f32f84cf72201194"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/models/rf69_candidate.json",
+      "sha256": "23b847417e057868d5760dc3d55dcf21bfd02cbad3b028973f3920852cfb24f6"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/models/xgb69_candidate.json",
+      "sha256": "84edb5f02b9f480fdfd4f5609fe678008051914400c977033e1ef6f6aac890d8"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/unique_tracker.js",
+      "sha256": "762bbc83169a3fe54824b3e93a06d48dea75f75265b0d62c89d862d5111451d7"
+    },
+    {
+      "path": "sidequests/human_fusion_lab/v2_runtime.js",
+      "sha256": "fce2dce5350856cbe4b2a680e39a69047aec74755c006a2f224969be0145c12e"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/background/detector_b.js",
+      "sha256": "001cf074c9047e54545fa98906bd61a7ee55be8da39a1cb9d866110825ffa031"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/background/engine_b.js",
+      "sha256": "1f6d42df3e83caf380e21ba8cd234cc1935787df3d2f8ae9bc6dca8b42c29ffc"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/background/run_b.js",
+      "sha256": "646aae91c62371732084f505cb387029f0ef68eff52b372fdbbfc3673315f696"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/contracts/index_v1.js",
+      "sha256": "dc5dd89c649c0bb2e56c836582ce510f1b78fc1039712e00ca66c15d8bfb3317"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/contracts/strict_v2.js",
+      "sha256": "7916e859334968221bad8ff0e270edcc7e57b3c190413b3af79e5d95bc6a7362"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/d05/hook_unknown.js",
+      "sha256": "eccf0d915851694c1fbe8709bd3ff59c96a8bb7042143595929750029a43021d"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/d05/r02/hook_split.js",
+      "sha256": "2e08e3795305db074393eeabb8a1c1e31e4f28233dc084920e894b422366608d"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/d05/r02/perf_bank_v2.js",
+      "sha256": "4ad8511c1f99631967cdef1c73fb626e830b1cc1232ca23c6a2891cc7cdf45a6"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/d05/r02/run.js",
+      "sha256": "a61dd93ef169afcd435385eb5a9d9e6fe0af7e57379b05ea38d507703a08d75a"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/d05/r02/trace.js",
+      "sha256": "c175e41c0984c0620cf85bcccd59da61f3466fa2978850baf8d3d33ce193235e"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/eval/instrument.js",
+      "sha256": "cdc1ee71517bdeca78248cefb290e35094fd9141d2665e7a2b042b5717d7c18b"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_v3/core/bg_groups.js",
+      "sha256": "32287604f380769d0713d46faefdda82483d2b178803f2e9208b4a07e6934186"
+    }
+  ],
+  "scope": "engine tick only; no trace/shadow instrumentation, I/O, rendering, serialization; first5 each run excluded; single serial sweep; retention snapshots serialized outside tick timing; Windows offline only",
+  "results": [
+    {
+      "sid": "cap_20261010_175227",
+      "variant": "base",
+      "frames": 304,
+      "samples": 299,
+      "p50": 26.867200000000594,
+      "p95": 30.181700000001,
+      "p99": 33.54750000000013,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175227",
+      "variant": "a06",
+      "frames": 304,
+      "samples": 299,
+      "p50": 27.326500000001033,
+      "p95": 31.61369999999988,
+      "p99": 57.01020000000062,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175227",
+      "variant": "split",
+      "frames": 304,
+      "samples": 299,
+      "p50": 26.838299999999435,
+      "p95": 30.84349999999904,
+      "p99": 33.05500000000029,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "variant": "base",
+      "frames": 258,
+      "samples": 253,
+      "p50": 28.040399999998044,
+      "p95": 29.957699999999022,
+      "p99": 34.198199999998906,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "variant": "a06",
+      "frames": 258,
+      "samples": 253,
+      "p50": 32.18159999999625,
+      "p95": 36.53319999999803,
+      "p99": 38.32630000000063,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "variant": "split",
+      "frames": 258,
+      "samples": 253,
+      "p50": 32.27679999999964,
+      "p95": 36.72069999999803,
+      "p99": 38.45190000000002,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "variant": "base",
+      "frames": 464,
+      "samples": 459,
+      "p50": 32.89979999999923,
+      "p95": 43.93249999999534,
+      "p99": 46.04210000000603,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "variant": "a06",
+      "frames": 464,
+      "samples": 459,
+      "p50": 39.58060000000114,
+      "p95": 52.9259999999922,
+      "p99": 62.58289999999397,
+      "gate_50ms": "FAIL"
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "variant": "split",
+      "frames": 464,
+      "samples": 459,
+      "p50": 40.80960000000778,
+      "p95": 55.69250000000466,
+      "p99": 65.95200000000477,
+      "gate_50ms": "FAIL"
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "variant": "base",
+      "frames": 239,
+      "samples": 234,
+      "p50": 32.245799999989686,
+      "p95": 36.53879999999481,
+      "p99": 44.54340000000957,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "variant": "a06",
+      "frames": 239,
+      "samples": 234,
+      "p50": 36.73170000000391,
+      "p95": 41.00319999999192,
+      "p99": 42.90080000000307,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "variant": "split",
+      "frames": 239,
+      "samples": 234,
+      "p50": 37.16709999999148,
+      "p95": 41.55009999999311,
+      "p99": 44.97259999999369,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "variant": "base",
+      "frames": 202,
+      "samples": 197,
+      "p50": 30.025900000007823,
+      "p95": 32.236899999988964,
+      "p99": 42.154799999989336,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "variant": "a06",
+      "frames": 202,
+      "samples": 197,
+      "p50": 37.876399999979185,
+      "p95": 43.14470000000438,
+      "p99": 43.826499999995576,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "variant": "split",
+      "frames": 202,
+      "samples": 197,
+      "p50": 37.47840000002179,
+      "p95": 45.5455999999831,
+      "p99": 48.03649999998743,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "variant": "base",
+      "frames": 238,
+      "samples": 233,
+      "p50": 27.64329999999609,
+      "p95": 32.14859999998589,
+      "p99": 33.149399999994785,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "variant": "a06",
+      "frames": 238,
+      "samples": 233,
+      "p50": 31.42850000000908,
+      "p95": 41.796400000021094,
+      "p99": 43.81010000000242,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "variant": "split",
+      "frames": 238,
+      "samples": 233,
+      "p50": 29.19409999999334,
+      "p95": 45.28429999999935,
+      "p99": 49.60699999998906,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "variant": "base",
+      "frames": 251,
+      "samples": 246,
+      "p50": 28.878700000001118,
+      "p95": 45.99890000000596,
+      "p99": 46.62030000000959,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "variant": "a06",
+      "frames": 251,
+      "samples": 246,
+      "p50": 29.823200000013458,
+      "p95": 173.6773000000103,
+      "p99": 185.7209000000148,
+      "gate_50ms": "FAIL"
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "variant": "split",
+      "frames": 251,
+      "samples": 246,
+      "p50": 29.68090000000666,
+      "p95": 170.30180000001565,
+      "p99": 172.83110000001034,
+      "gate_50ms": "FAIL"
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "variant": "base",
+      "frames": 523,
+      "samples": 518,
+      "p50": 29.24930000002496,
+      "p95": 32.687099999981,
+      "p99": 35.17380000001867,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "variant": "a06",
+      "frames": 523,
+      "samples": 518,
+      "p50": 30.760600000008708,
+      "p95": 33.910900000017136,
+      "p99": 36.15549999999348,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "variant": "split",
+      "frames": 523,
+      "samples": 518,
+      "p50": 30.902200000011362,
+      "p95": 34.00170000002254,
+      "p99": 38.390299999999115,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "variant": "base",
+      "frames": 126,
+      "samples": 121,
+      "p50": 33.29670000000624,
+      "p95": 37.375,
+      "p99": 39.34429999999702,
+      "gate_50ms": "PASS"
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "variant": "a06",
+      "frames": 126,
+      "samples": 121,
+      "p50": 65.10609999997541,
+      "p95": 71.60040000005392,
+      "p99": 72.41969999996945,
+      "gate_50ms": "FAIL"
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "variant": "split",
+      "frames": 126,
+      "samples": 121,
+      "p50": 69.00329999998212,
+      "p95": 73.2265999999945,
+      "p99": 75.54820000001928,
+      "gate_50ms": "FAIL"
+    }
+  ]
+}

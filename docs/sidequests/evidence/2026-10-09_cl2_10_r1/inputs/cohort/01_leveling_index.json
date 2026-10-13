@@ -1,0 +1,2148 @@
+{
+  "schema": 1,
+  "command": "python -B -W error sidequests/traditional_clustering/balance_sessions.py",
+  "config": {
+    "pitch_deg": 26.0,
+    "roll_deg": 0.0,
+    "physical_height_m": 1.14,
+    "mode": "auto"
+  },
+  "template_job": "632eff1e189945d8915eb5af7a9ddcf9",
+  "template_report_sha256": "293e4fc3b72b29dff1ad9ad227a5b6956f0bb24633130b4a829f6a7d455a5ef9",
+  "data_root": "D:\\Code\\ldiar\\captures\\remote",
+  "output_root": "C:\\Users\\30680\\.codex\\worktrees\\traditional-clustering\\ldiar\\sidequests\\traditional_clustering\\artifacts\\leveling",
+  "required_free_bytes": 14410665256,
+  "free_bytes_before": 139219755008,
+  "completed_sessions": [
+    {
+      "sid": "cap_20261009_114641",
+      "name": "高大男人体站立中距离",
+      "frames": 177,
+      "source": {
+        "meta_sha256": "d38bc97252630ce9af235469993fc348c73f5f5d9c40e10324de56359a9cce64",
+        "bin_sha256": "eeb7cb0dc0bdcec042981198c325c02e807120d5790c7af45016cd1d2ff3abb7"
+      },
+      "job_id": "62af9382495a446d9161df0d5bfeac42",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.141483970714162,
+          "roll_deg": -1.8406610338429894,
+          "offset_source_m": 1.38769253029647,
+          "full": {
+            "count": 134089,
+            "rms_m": 0.019679635128710217,
+            "p95_m": 0.03849069837568965,
+            "support_ratio": 0.9913042829762322,
+            "median_signed_m": -0.0012827291601524848,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 58,
+              "full": {
+                "count": 778,
+                "rms_m": 0.019851419114429062,
+                "p95_m": 0.038059478035214644,
+                "support_ratio": 0.987146529562982,
+                "median_signed_m": -0.0011054773741905333,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 117,
+              "full": {
+                "count": 766,
+                "rms_m": 0.01993158580398147,
+                "p95_m": 0.0381572242364529,
+                "support_ratio": 0.9882506527415144,
+                "median_signed_m": -0.0005580230341093451,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 176,
+              "full": {
+                "count": 768,
+                "rms_m": 0.019947127126840627,
+                "p95_m": 0.037702224738168075,
+                "support_ratio": 0.98828125,
+                "median_signed_m": -0.0011124708073380063,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.14148397071425,
+          "roll_deg": -1.8406610338430007,
+          "offset_source_m": 1.3876925302964715,
+          "full": {
+            "count": 134089,
+            "rms_m": 0.01967963512871022,
+            "p95_m": 0.0384906983756897,
+            "support_ratio": 0.9913042829762322,
+            "median_signed_m": -0.0012827291601522628,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 58,
+              "full": {
+                "count": 778,
+                "rms_m": 0.019851419114429048,
+                "p95_m": 0.03805947803521446,
+                "support_ratio": 0.987146529562982,
+                "median_signed_m": -0.0011054773741913104,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 117,
+              "full": {
+                "count": 766,
+                "rms_m": 0.019931585803981487,
+                "p95_m": 0.038157224236452736,
+                "support_ratio": 0.9882506527415144,
+                "median_signed_m": -0.000558023034109234,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 176,
+              "full": {
+                "count": 768,
+                "rms_m": 0.019947127126840627,
+                "p95_m": 0.03770222473816785,
+                "support_ratio": 0.98828125,
+                "median_signed_m": -0.0011124708073382283,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.772918937898172,
+          "roll_deg": -1.4685326527384621,
+          "offset_source_m": 1.3935733851520697,
+          "full": {
+            "count": 134089,
+            "rms_m": 0.020268400003928613,
+            "p95_m": 0.03914885901074675,
+            "support_ratio": 0.9917964933738039,
+            "median_signed_m": -0.002303324629941983,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 58,
+              "full": {
+                "count": 778,
+                "rms_m": 0.020420432504062534,
+                "p95_m": 0.039805354491791074,
+                "support_ratio": 0.987146529562982,
+                "median_signed_m": -0.0022945750012940413,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 117,
+              "full": {
+                "count": 766,
+                "rms_m": 0.020671278235472136,
+                "p95_m": 0.0408094690441429,
+                "support_ratio": 0.9895561357702349,
+                "median_signed_m": -0.001685630998534804,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 176,
+              "full": {
+                "count": 768,
+                "rms_m": 0.02055798920282037,
+                "p95_m": 0.03811027816000716,
+                "support_ratio": 0.9869791666666666,
+                "median_signed_m": -0.0018547278524224664,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "fd383961415abd6861e8b114918d8a2101139d6589b8825789d1f4c27a89b3df",
+          "meta.json": "21394c4ade5776df3d3bff4c75bc7bbf03780f44c94dc910139fad9de007c2f4",
+          "points.bin": "8aab7ea93fe18c59a90ffd43bb748ea820901ee38956688ef9268bc1b013e97d",
+          "transform.json": "6537b2251bd22201764a6b49e2ff1e63df3a4177513bb0073dbc6af7c9467643"
+        },
+        "svd": {
+          "dataset.zip": "4a2d6c1734f7f12f9bbc8f4e46acfa1fc5df4b6ff83da76a8cbc5e44da5d3071",
+          "meta.json": "3455a4e152b191026ebbced16781e29e3bcb40c3c9db85529dcffaf850af5aec",
+          "points.bin": "f55ac07c4e6453d4f8e3551ccde640740737103c62ba10531c24685c4b55a2bf",
+          "transform.json": "b60d40bd068ffce7f3596e794692de82803484bf29bbc90c66857d04f49e3bc5"
+        },
+        "ransac": {
+          "dataset.zip": "39c15ba2110ab4825a70192cc04e516c01110c89e1210f511a0a76cb4e62c28e",
+          "meta.json": "25e426d26e6514cfc8437c13efa304da7c9863b3ee4d2756d5413d783219c217",
+          "points.bin": "b52b8adb2d044b764d8d4447f28bf48113b095fb1502ce9f6957a82f68383265",
+          "transform.json": "937e738fb6f2e5bd56bee72326f6347e9eac5a3222833601364bb5ecf60b628e"
+        }
+      },
+      "log": "01_balance_cap_20261009_114641.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_114709",
+      "name": "高大男人体站立中距离举左手",
+      "frames": 172,
+      "source": {
+        "meta_sha256": "3aab5cb5f6dd2d8f50c4937b43dc565f65ef82dc5076371bce093ca95e6e2e3e",
+        "bin_sha256": "8c7555b9ccc3123273837542ef3556f866ca05cf6f82b39bdbc9c77e41ac25b9"
+      },
+      "job_id": "49128b9dff514a8596497340d12bbff4",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.31835782985524,
+          "roll_deg": -2.1292883432099785,
+          "offset_source_m": 1.391972223757846,
+          "full": {
+            "count": 123860,
+            "rms_m": 0.018629991732355723,
+            "p95_m": 0.03745291662975226,
+            "support_ratio": 0.9918860003229453,
+            "median_signed_m": -0.0006447818511879921,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 57,
+              "full": {
+                "count": 740,
+                "rms_m": 0.0185233540861052,
+                "p95_m": 0.03585683923346129,
+                "support_ratio": 0.9918918918918919,
+                "median_signed_m": -0.0013532954761933391,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 114,
+              "full": {
+                "count": 740,
+                "rms_m": 0.018764131903260615,
+                "p95_m": 0.03534611636113724,
+                "support_ratio": 0.9945945945945946,
+                "median_signed_m": -0.0013224572820815794,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 171,
+              "full": {
+                "count": 731,
+                "rms_m": 0.01881178914513678,
+                "p95_m": 0.03869960046522425,
+                "support_ratio": 0.9917920656634747,
+                "median_signed_m": -0.0014054121670674657,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.31835782985514,
+          "roll_deg": -2.1292883432099527,
+          "offset_source_m": 1.391972223757844,
+          "full": {
+            "count": 123860,
+            "rms_m": 0.018629991732355727,
+            "p95_m": 0.03745291662975266,
+            "support_ratio": 0.9918860003229453,
+            "median_signed_m": -0.0006447818511884362,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 57,
+              "full": {
+                "count": 740,
+                "rms_m": 0.01852335408610518,
+                "p95_m": 0.035856839233461696,
+                "support_ratio": 0.9918918918918919,
+                "median_signed_m": -0.0013532954761934501,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 114,
+              "full": {
+                "count": 740,
+                "rms_m": 0.018764131903260615,
+                "p95_m": 0.03534611636113764,
+                "support_ratio": 0.9945945945945946,
+                "median_signed_m": -0.0013224572820821345,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 171,
+              "full": {
+                "count": 731,
+                "rms_m": 0.018811789145136763,
+                "p95_m": 0.03869960046522425,
+                "support_ratio": 0.9917920656634747,
+                "median_signed_m": -0.0014054121670672437,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.619436108557434,
+          "roll_deg": -2.355704708453843,
+          "offset_source_m": 1.3947374860596118,
+          "full": {
+            "count": 123860,
+            "rms_m": 0.01932816394174764,
+            "p95_m": 0.03780636201661936,
+            "support_ratio": 0.9927095107379299,
+            "median_signed_m": -0.006032512238311916,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 57,
+              "full": {
+                "count": 740,
+                "rms_m": 0.019313973277339042,
+                "p95_m": 0.03663044854464703,
+                "support_ratio": 0.9932432432432432,
+                "median_signed_m": -0.006764945108056586,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 114,
+              "full": {
+                "count": 740,
+                "rms_m": 0.019572705625382048,
+                "p95_m": 0.036783978976391254,
+                "support_ratio": 0.9932432432432432,
+                "median_signed_m": -0.006727068897659394,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 171,
+              "full": {
+                "count": 731,
+                "rms_m": 0.019507559389649435,
+                "p95_m": 0.038292012234180106,
+                "support_ratio": 0.9958960328317373,
+                "median_signed_m": -0.007094603843669001,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "40e1ab91f14a4ef4ae2540c6c5fa2478e067ca7af5253d2fd51bfccbabe09194",
+          "meta.json": "52c3353c7ef28e37aee895d6b61297725bd9a7c7366b913a985a542ed873287d",
+          "points.bin": "e62a1659b84db2baadc0d072094db5956ce0b8bb978d1c32984a3cd9f936dbcd",
+          "transform.json": "2cc44771a8a9b1d33eba352269a044baeab4401dbbd99179be8e55018de6023d"
+        },
+        "svd": {
+          "dataset.zip": "03a2eabb454a892779fb07d654ce5470d7c4c1ffb3ae69416b75cbe9378d6b2d",
+          "meta.json": "5da9fd3289fac2ab7caf238bf9726bc08e65d7a3538a58eea059637375097cc7",
+          "points.bin": "1111ba6a17b6f6e5526e2bc775eb6d50664be6dce57205556ee292fcf081b828",
+          "transform.json": "d96e01d2c291efa3fa804a8a8b25b9ed0d8339f8e963abf0561e877e3a68351d"
+        },
+        "ransac": {
+          "dataset.zip": "91ddcfbff4992e184af655d7be42af4c1127337e206ff0baeddaae177d041246",
+          "meta.json": "4a13a5a3c93c97a4cd1e71182e1672750086d0ea43ac0f2f27451028ceceb3a5",
+          "points.bin": "7db714517012aea1793c3e93eebf8ecf1d1cd669d22dfc0595f8aeeb92c9e709",
+          "transform.json": "b97b29e0c414b7977ef57714405b66fae3f69241db7912db1e8fc30e09cf76d1"
+        }
+      },
+      "log": "01_balance_cap_20261009_114709.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_114734",
+      "name": "高大男人体站立中距离侧身",
+      "frames": 99,
+      "source": {
+        "meta_sha256": "4599dc4ac3118302e728c6c3d51449ba8eb3e74cc0cf82d94f10c5b6a42b5008",
+        "bin_sha256": "13026e3b1191a90a21ba6f4029ea310fdcdd9b37deb569fed16b8e826d2d3e33"
+      },
+      "job_id": "812eef3a6f8f4bd2af3a6cfc2c97c45e",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.75465472845689,
+          "roll_deg": -2.308561824038347,
+          "offset_source_m": 1.3879954586702576,
+          "full": {
+            "count": 74877,
+            "rms_m": 0.018962613798204617,
+            "p95_m": 0.03836350633521848,
+            "support_ratio": 0.9879135114921805,
+            "median_signed_m": -0.0013590038316095843,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 32,
+              "full": {
+                "count": 774,
+                "rms_m": 0.018813539628715403,
+                "p95_m": 0.03730067189403798,
+                "support_ratio": 0.9883720930232558,
+                "median_signed_m": -0.0016150027049446347,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 65,
+              "full": {
+                "count": 773,
+                "rms_m": 0.019025643382308194,
+                "p95_m": 0.037977919497359694,
+                "support_ratio": 0.9909443725743855,
+                "median_signed_m": -0.0007489516012535447,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 98,
+              "full": {
+                "count": 789,
+                "rms_m": 0.018652152961169493,
+                "p95_m": 0.037764629946539716,
+                "support_ratio": 0.9873257287705957,
+                "median_signed_m": -0.0017667680544808384,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.75465472845689,
+          "roll_deg": -2.308561824038338,
+          "offset_source_m": 1.3879954586702576,
+          "full": {
+            "count": 74877,
+            "rms_m": 0.018962613798204617,
+            "p95_m": 0.038363506335218164,
+            "support_ratio": 0.9879135114921805,
+            "median_signed_m": -0.0013590038316095843,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 32,
+              "full": {
+                "count": 774,
+                "rms_m": 0.018813539628715414,
+                "p95_m": 0.037300671894038046,
+                "support_ratio": 0.9883720930232558,
+                "median_signed_m": -0.0016150027049448568,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 65,
+              "full": {
+                "count": 773,
+                "rms_m": 0.019025643382308197,
+                "p95_m": 0.037977919497359555,
+                "support_ratio": 0.9909443725743855,
+                "median_signed_m": -0.0007489516012537667,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 98,
+              "full": {
+                "count": 789,
+                "rms_m": 0.0186521529611695,
+                "p95_m": 0.0377646299465398,
+                "support_ratio": 0.9873257287705957,
+                "median_signed_m": -0.0017667680544806164,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.34493314026953,
+          "roll_deg": -2.2641499661933837,
+          "offset_source_m": 1.392523457353355,
+          "full": {
+            "count": 74877,
+            "rms_m": 0.019577436846760818,
+            "p95_m": 0.03824523434199727,
+            "support_ratio": 0.9915060699547258,
+            "median_signed_m": -0.0055384692577977734,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 32,
+              "full": {
+                "count": 774,
+                "rms_m": 0.019625242934705887,
+                "p95_m": 0.03780915065594863,
+                "support_ratio": 0.9922480620155039,
+                "median_signed_m": -0.0062439343050259,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 65,
+              "full": {
+                "count": 773,
+                "rms_m": 0.01959596701240488,
+                "p95_m": 0.037781021938770185,
+                "support_ratio": 0.9961190168175937,
+                "median_signed_m": -0.005207600023844794,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 98,
+              "full": {
+                "count": 789,
+                "rms_m": 0.019335919220061424,
+                "p95_m": 0.03701760070426857,
+                "support_ratio": 0.9961977186311787,
+                "median_signed_m": -0.006661885613330698,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "db27c1115ddea15143bdcd309db022041fbd686e5c87dd9a8e00ad72ff6ebff6",
+          "meta.json": "69dce8d1acbb36435e48b1e16faa4a92c7f6812ba291af61d1cc31677531af65",
+          "points.bin": "0828e398ff992724b255c4ee625d40524563377dd5c024b6462cc81be5f6d962",
+          "transform.json": "aa0330747121c49fa7c1c422001bc3e1eb466074c78172c0898b9b19679ef5cd"
+        },
+        "svd": {
+          "dataset.zip": "aa17feab548a3b8118c31199d3217f944126fc522e0e8f2f87c74c16a1a0571c",
+          "meta.json": "5b150a670c6438794e1809d6dc76cda52961566fdee57be7d8441bee37fc2ff6",
+          "points.bin": "0828e398ff992724b255c4ee625d40524563377dd5c024b6462cc81be5f6d962",
+          "transform.json": "8c67d6b80d0c1a3f98b2e8d06666d8beda071c50a350c0cfff3aa8029b94bdff"
+        },
+        "ransac": {
+          "dataset.zip": "4ccd3f8286edf4b04cc3205a0839a92eae1c904e2547e2b30dd3fc6d1d037e9c",
+          "meta.json": "d9aa5d954aeed76f490697edb29ae44028dd283c15ca55a8fa134cff83dbb231",
+          "points.bin": "652c553885a8031fe1924cb8604e1b32526d37134e610004fac95eab93979012",
+          "transform.json": "a1de600c2304458abc5b08c38f24585a924a112250a2e313929f0ae64aa8273c"
+        }
+      },
+      "log": "01_balance_cap_20261009_114734.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_114754",
+      "name": "高大男人体站立近距离",
+      "frames": 123,
+      "source": {
+        "meta_sha256": "04abbe8a1883c5d53d3a7f4fdd3deabccd655bbbd3360650670612e01b26384d",
+        "bin_sha256": "c9924f346e1062ffc31725347de95ff54717bee87e8a191ebf602bf470a1fe95"
+      },
+      "job_id": "c8a91d605f0341a09cb51a0ef5e88d44",
+      "status": "completed",
+      "recommended": null,
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.11140930608319,
+          "roll_deg": -1.9214681241378462,
+          "offset_source_m": 1.3711788575426296,
+          "full": {
+            "count": 60681,
+            "rms_m": 0.01281972813182353,
+            "p95_m": 0.02484489820784308,
+            "support_ratio": 0.9988793856396566,
+            "median_signed_m": -5.243217642081355e-05,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 40,
+              "full": {
+                "count": 505,
+                "rms_m": 0.012479766661884818,
+                "p95_m": 0.024311580211116943,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.0002201448040910492,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 81,
+              "full": {
+                "count": 507,
+                "rms_m": 0.012860375450527574,
+                "p95_m": 0.023861979961719192,
+                "support_ratio": 0.9960552268244576,
+                "median_signed_m": -0.0011509981668620384,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 122,
+              "full": {
+                "count": 508,
+                "rms_m": 0.013157964516879103,
+                "p95_m": 0.025048023768644345,
+                "support_ratio": 0.9980314960629921,
+                "median_signed_m": -0.00019886320009776526,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.111409306083146,
+          "roll_deg": -1.9214681241378337,
+          "offset_source_m": 1.371178857542629,
+          "full": {
+            "count": 60681,
+            "rms_m": 0.01281972813182353,
+            "p95_m": 0.024844898207843302,
+            "support_ratio": 0.9988793856396566,
+            "median_signed_m": -5.24321764205915e-05,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 40,
+              "full": {
+                "count": 505,
+                "rms_m": 0.01247976666188482,
+                "p95_m": 0.024311580211117075,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.00022014480409127124,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 81,
+              "full": {
+                "count": 507,
+                "rms_m": 0.012860375450527557,
+                "p95_m": 0.023861979961719036,
+                "support_ratio": 0.9960552268244576,
+                "median_signed_m": -0.0011509981668615943,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 122,
+              "full": {
+                "count": 508,
+                "rms_m": 0.013157964516879112,
+                "p95_m": 0.02504802376864449,
+                "support_ratio": 0.9980314960629921,
+                "median_signed_m": -0.00019886320009765424,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.54698663841403,
+          "roll_deg": -3.7000101944945656,
+          "offset_source_m": 1.4235883135864589,
+          "full": {
+            "count": 60681,
+            "rms_m": 0.014294423650781783,
+            "p95_m": 0.027344186110628277,
+            "support_ratio": 0.999851683393484,
+            "median_signed_m": 0.0026714703012233887,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 40,
+              "full": {
+                "count": 505,
+                "rms_m": 0.013772475709402794,
+                "p95_m": 0.025699214929701106,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.0029470934006239347,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 81,
+              "full": {
+                "count": 507,
+                "rms_m": 0.014407104426456686,
+                "p95_m": 0.027318852142895842,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.0020246635608005548,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 122,
+              "full": {
+                "count": 508,
+                "rms_m": 0.014669152058014862,
+                "p95_m": 0.027256988656257246,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.0028161945183549086,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "6e6399c743b5320c0cc6dfd80889cf8f9bf9fc8efbae860b9cba0fcded1593da",
+          "meta.json": "4526a5696c5eb4c9a2e535c33bb5327d13f12876af9962c2234c7df51a4c4f62",
+          "points.bin": "896bd9f300bd76ee4e6b714a899a9886090f5b4e82ae58a593578df6d05a225c",
+          "transform.json": "4722c8020bab1089eeb1574b323edf19b5fcec71fbec444b1360a5a9567c6ff8"
+        },
+        "svd": {
+          "dataset.zip": "ecaf327e7eafbf5c5d768be0bc08ab85add76905278433e1402afd41f31acb08",
+          "meta.json": "b8ff8975c2961ba8d72eee3436fd45cbd342f740356ace6833aaf826ad7df1b0",
+          "points.bin": "5efeb3a620ec49688ac9e302d7b7df3aa7c47b8ed4587f0a53e62977ed0a1a8a",
+          "transform.json": "6d10885d48cba5af77b9f35afc7ab87ba1d542a06b33e526661555e775eb6798"
+        },
+        "ransac": {
+          "dataset.zip": "e74f0ed37e40010adcaebd3d9d9e7bea599cff6feab592577e4895204a73fc94",
+          "meta.json": "cb8e2ec789a8568decb20365df4d74c59919425e7154d1416f65a3182c9c6bfc",
+          "points.bin": "1dcb1e26f9bd6399c2d6204d23cd643326e95a1a44d24bdda4bbab779cf021c2",
+          "transform.json": "0b0d19a5ebca5e5bfa14f6a1ede2bc90e013d0f1db801f7c1957e95ad91b4756"
+        }
+      },
+      "log": "01_balance_cap_20261009_114754.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_114817",
+      "name": "高大男人体站立远距离",
+      "frames": 131,
+      "source": {
+        "meta_sha256": "c828ca5a87ac1cc0be37576fa446265306b51cf518a204d48580f1999334854e",
+        "bin_sha256": "b781b04aaac230d70da0e89e6419b82798c0aa89472b351121fb33b287e2ca10"
+      },
+      "job_id": "f56d4e28e46c4059b0f0ac9ac0099519",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.779464022834745,
+          "roll_deg": -1.8264128004561957,
+          "offset_source_m": 1.3803709702584528,
+          "full": {
+            "count": 87458,
+            "rms_m": 0.01905224785042114,
+            "p95_m": 0.03846490326537931,
+            "support_ratio": 0.9908070159390794,
+            "median_signed_m": -0.0007551244689958381,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 43,
+              "full": {
+                "count": 673,
+                "rms_m": 0.01956918958600448,
+                "p95_m": 0.04072631584721046,
+                "support_ratio": 0.9881129271916791,
+                "median_signed_m": -0.0015560546462023428,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 86,
+              "full": {
+                "count": 687,
+                "rms_m": 0.01891503805175468,
+                "p95_m": 0.03699139055860969,
+                "support_ratio": 0.9912663755458515,
+                "median_signed_m": -0.0008721781066074463,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 130,
+              "full": {
+                "count": 696,
+                "rms_m": 0.01924986116531625,
+                "p95_m": 0.038063422703256855,
+                "support_ratio": 0.9841954022988506,
+                "median_signed_m": -0.00012091116920731615,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.779464022834745,
+          "roll_deg": -1.8264128004562177,
+          "offset_source_m": 1.3803709702584532,
+          "full": {
+            "count": 87458,
+            "rms_m": 0.01905224785042114,
+            "p95_m": 0.03846490326537953,
+            "support_ratio": 0.9908070159390794,
+            "median_signed_m": -0.0007551244689962822,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 43,
+              "full": {
+                "count": 673,
+                "rms_m": 0.019569189586004485,
+                "p95_m": 0.040726315847210155,
+                "support_ratio": 0.9881129271916791,
+                "median_signed_m": -0.0015560546462021208,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 86,
+              "full": {
+                "count": 687,
+                "rms_m": 0.018915038051754676,
+                "p95_m": 0.036991390558609914,
+                "support_ratio": 0.9912663755458515,
+                "median_signed_m": -0.0008721781066078904,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 130,
+              "full": {
+                "count": 696,
+                "rms_m": 0.01924986116531625,
+                "p95_m": 0.03806342270325658,
+                "support_ratio": 0.9841954022988506,
+                "median_signed_m": -0.00012091116920764922,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 28.579671165241542,
+          "roll_deg": -1.9908213569414432,
+          "offset_source_m": 1.4085821549468907,
+          "full": {
+            "count": 87458,
+            "rms_m": 0.02155580628328071,
+            "p95_m": 0.03939282979125723,
+            "support_ratio": 0.9917560429005923,
+            "median_signed_m": -0.004989006913870164,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 43,
+              "full": {
+                "count": 673,
+                "rms_m": 0.02191250439372735,
+                "p95_m": 0.03971083426112441,
+                "support_ratio": 0.9881129271916791,
+                "median_signed_m": -0.00597663815884264,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 86,
+              "full": {
+                "count": 687,
+                "rms_m": 0.021399686122612647,
+                "p95_m": 0.03914306204906718,
+                "support_ratio": 0.9912663755458515,
+                "median_signed_m": -0.005028336053753968,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 130,
+              "full": {
+                "count": 696,
+                "rms_m": 0.02200029220015306,
+                "p95_m": 0.03947607826291222,
+                "support_ratio": 0.9899425287356322,
+                "median_signed_m": -0.004898392302512544,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "cde8736c10d215c99e40cf69e488bd0d08f795df07b07a8079aa0ce955496853",
+          "meta.json": "997e162a75cafe1635cf0e822628db1415a26abf0598503d87b8f0e0ab37cfe3",
+          "points.bin": "9e4dbf495938a5f2605a85cdf5e0da2830c74030c0f47bf98498852b4380cdb3",
+          "transform.json": "fa59adafe76d477f146d568c41b7ae2c73d3b04a2a7e857e62bb6cd803202c4f"
+        },
+        "svd": {
+          "dataset.zip": "acf7245ea2c15e544904b5975f94277af30aab59effd42b67da1c687c7ab4888",
+          "meta.json": "0c62370c3380218b7f4d3049367f9ec8a119913eef6300dfc96520ded716baa2",
+          "points.bin": "6ffdf13b5803102c9a788c5bb51d6ca743def71823133e0012e9de74da72479e",
+          "transform.json": "86293518a64f97f5bb3d6b26920061705ab9159166c514db19b80e9507939931"
+        },
+        "ransac": {
+          "dataset.zip": "7b55dca615d216f09ae7ec93f44fa3e80ff3953a1d2db211cb18cfe5103120cc",
+          "meta.json": "e0b4662ea9936896c5153f3dfce94ec897238f93fd096bb934054ea612928ab6",
+          "points.bin": "143057684bdc5128645a06b1407c215e957beb86821ef8e2dd5fc9f8e6f1dddf",
+          "transform.json": "39302700d3adadeef162b2737ff9e200da0529b92086968fadd0bf46d3c88b26"
+        }
+      },
+      "log": "01_balance_cap_20261009_114817.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_121622",
+      "name": "女生站立中距离",
+      "frames": 107,
+      "source": {
+        "meta_sha256": "71ccca5242278ab8128834408c29874d67d320b28768f0f8bc076ac40569c1be",
+        "bin_sha256": "c5a9e148e8bac1d19c462d8bb9120add7271c2340d332dec4f3e68cabb5a5db1"
+      },
+      "job_id": "58d4939b868847bea9c2ab98bde2b925",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 29.035455487265207,
+          "roll_deg": 0.13968367564962933,
+          "offset_source_m": 1.405946760462077,
+          "full": {
+            "count": 87188,
+            "rms_m": 0.021134111477382627,
+            "p95_m": 0.041440494293595344,
+            "support_ratio": 0.9824402440702849,
+            "median_signed_m": -0.0016460087170934168,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 35,
+              "full": {
+                "count": 831,
+                "rms_m": 0.021919775382060695,
+                "p95_m": 0.04240527360443869,
+                "support_ratio": 0.9795427196149218,
+                "median_signed_m": -0.0017529102826716603,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 70,
+              "full": {
+                "count": 838,
+                "rms_m": 0.02101844277359494,
+                "p95_m": 0.040422314042042884,
+                "support_ratio": 0.986873508353222,
+                "median_signed_m": -0.00032259962966318945,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 106,
+              "full": {
+                "count": 837,
+                "rms_m": 0.02159574418389523,
+                "p95_m": 0.04308360316509211,
+                "support_ratio": 0.986857825567503,
+                "median_signed_m": -0.001474933112564747,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 29.035455487265224,
+          "roll_deg": 0.13968367564963383,
+          "offset_source_m": 1.4059467604620772,
+          "full": {
+            "count": 87188,
+            "rms_m": 0.021134111477382624,
+            "p95_m": 0.04144049429359527,
+            "support_ratio": 0.9824402440702849,
+            "median_signed_m": -0.0016460087170934168,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 35,
+              "full": {
+                "count": 831,
+                "rms_m": 0.021919775382060698,
+                "p95_m": 0.042405273604438465,
+                "support_ratio": 0.9795427196149218,
+                "median_signed_m": -0.0017529102826714382,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 70,
+              "full": {
+                "count": 838,
+                "rms_m": 0.02101844277359494,
+                "p95_m": 0.040422314042042856,
+                "support_ratio": 0.986873508353222,
+                "median_signed_m": -0.00032259962966330047,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 106,
+              "full": {
+                "count": 837,
+                "rms_m": 0.02159574418389522,
+                "p95_m": 0.04308360316509229,
+                "support_ratio": 0.986857825567503,
+                "median_signed_m": -0.0014749331125645249,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 29.964902016900837,
+          "roll_deg": 0.006570355698000958,
+          "offset_source_m": 1.4153984139118425,
+          "full": {
+            "count": 87188,
+            "rms_m": 0.022494968906495105,
+            "p95_m": 0.0418814239425166,
+            "support_ratio": 0.9835642519612791,
+            "median_signed_m": -0.008157983077680009,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 35,
+              "full": {
+                "count": 831,
+                "rms_m": 0.023179957008465816,
+                "p95_m": 0.04320211964830167,
+                "support_ratio": 0.9807460890493381,
+                "median_signed_m": -0.008521235778092162,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 70,
+              "full": {
+                "count": 838,
+                "rms_m": 0.022120830653332625,
+                "p95_m": 0.04090135397913473,
+                "support_ratio": 0.9880668257756563,
+                "median_signed_m": -0.007147614466137986,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 106,
+              "full": {
+                "count": 837,
+                "rms_m": 0.022884120796773634,
+                "p95_m": 0.0422375870057876,
+                "support_ratio": 0.984468339307049,
+                "median_signed_m": -0.007722604652770304,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "c4a33d100fbf34db03d36220a8b730803ee7b052c00b7025fe02301cc3f239b0",
+          "meta.json": "b41fb394bbea2ef9da12ef4de94c628702a093130b74eb2da2704c1f6b1c7e37",
+          "points.bin": "d8663d2f43d1d3ec48d51ec6ca64e035b7793fe934526aca9f55375e7a6a8192",
+          "transform.json": "d810af11e464edc6e589affa33bf8cdac6e353b08bcd09011db9042cf53eba5a"
+        },
+        "svd": {
+          "dataset.zip": "ea9d05a778d33e321dbfedbef7fc2d38dccae2ebfba5191af4dd8451bd3ea5fd",
+          "meta.json": "a10c2f6781fddd5eb5bc31bcca134121e2b74c543f05b2dc0a7504f26971ca6c",
+          "points.bin": "92d845ffeb6b888c2cfd9046ff9dfc2dd3a2f582fa2a3d99792f627ce92fa87a",
+          "transform.json": "73ea5a8a237a0df5bedc7429f00346a74572b4d796b2bba48e51337fe6f8c872"
+        },
+        "ransac": {
+          "dataset.zip": "6be4dba16020d4efb3428dc4468b8aeb36bc7cb06742f3e01fc0ee11c84a83ec",
+          "meta.json": "df9930095d5f27d04caa31c21bade51073e59e329a92d453407f724600178641",
+          "points.bin": "35217058f4ac1c5bca25564a53c5a7a50b759ea89cba2288f7855efbdf134b2d",
+          "transform.json": "d68193b917e62f5197858701c51075f254d8ecffbe59ece8bf0629a2cec3afbc"
+        }
+      },
+      "log": "01_balance_cap_20261009_121622.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_121647",
+      "name": "女生站立近距离",
+      "frames": 218,
+      "source": {
+        "meta_sha256": "af492de942cc6cc13c338a52c2f8e24e7bf322351ddddd26c64f16a21945303c",
+        "bin_sha256": "97def5d21c28d695c686bb79b255fddd4f666ea856c39593f5dff567506017fc"
+      },
+      "job_id": "389dc570b0cd4eb38dd405244effbe20",
+      "status": "completed",
+      "recommended": null,
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": false,
+          "reject_reasons": [
+            "GL_HOLDOUT_QUALITY"
+          ],
+          "pitch_deg": 25.581879352702376,
+          "roll_deg": -2.7456276418455157,
+          "offset_source_m": 1.3865498560184897,
+          "full": {
+            "count": 136942,
+            "rms_m": 0.022383331392782875,
+            "p95_m": 0.044416477689756644,
+            "support_ratio": 0.976084765813264,
+            "median_signed_m": -0.0005715747733344712,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 72,
+              "full": {
+                "count": 642,
+                "rms_m": 0.022814724000418115,
+                "p95_m": 0.044544459722646056,
+                "support_ratio": 0.9672897196261683,
+                "median_signed_m": -0.0003180138914495867,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 144,
+              "full": {
+                "count": 635,
+                "rms_m": 0.022844592935228843,
+                "p95_m": 0.04592318608327059,
+                "support_ratio": 0.9653543307086614,
+                "median_signed_m": -0.0027425210401441635,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 217,
+              "full": {
+                "count": 638,
+                "rms_m": 0.022919786677813577,
+                "p95_m": 0.044800985466554234,
+                "support_ratio": 0.9764890282131662,
+                "median_signed_m": -0.0011925576858198284,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": false,
+          "reject_reasons": [
+            "GL_HOLDOUT_QUALITY"
+          ],
+          "pitch_deg": 25.58187935270237,
+          "roll_deg": -2.7456276418455063,
+          "offset_source_m": 1.3865498560184897,
+          "full": {
+            "count": 136942,
+            "rms_m": 0.022383331392782875,
+            "p95_m": 0.04441647768975666,
+            "support_ratio": 0.976084765813264,
+            "median_signed_m": -0.0005715747733344712,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 72,
+              "full": {
+                "count": 642,
+                "rms_m": 0.022814724000418122,
+                "p95_m": 0.04454445972264607,
+                "support_ratio": 0.9672897196261683,
+                "median_signed_m": -0.00031801389144947567,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 144,
+              "full": {
+                "count": 635,
+                "rms_m": 0.022844592935228832,
+                "p95_m": 0.04592318608327059,
+                "support_ratio": 0.9653543307086614,
+                "median_signed_m": -0.0027425210401439415,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 217,
+              "full": {
+                "count": 638,
+                "rms_m": 0.022919786677813577,
+                "p95_m": 0.044800985466554234,
+                "support_ratio": 0.9764890282131662,
+                "median_signed_m": -0.0011925576858197173,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": false,
+          "reject_reasons": [
+            "GL_HOLDOUT_QUALITY"
+          ],
+          "pitch_deg": 25.435975489466188,
+          "roll_deg": -2.9406337923793875,
+          "offset_source_m": 1.3826684130662712,
+          "full": {
+            "count": 136942,
+            "rms_m": 0.022805633142522062,
+            "p95_m": 0.04406496809475372,
+            "support_ratio": 0.9786186852828205,
+            "median_signed_m": -0.004726638056816279,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 72,
+              "full": {
+                "count": 642,
+                "rms_m": 0.023246853370887163,
+                "p95_m": 0.04512937080355183,
+                "support_ratio": 0.9719626168224299,
+                "median_signed_m": -0.004593638050338966,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 144,
+              "full": {
+                "count": 635,
+                "rms_m": 0.023325665897626493,
+                "p95_m": 0.04542162749645717,
+                "support_ratio": 0.9669291338582677,
+                "median_signed_m": -0.006603180539197506,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 217,
+              "full": {
+                "count": 638,
+                "rms_m": 0.02333704707078925,
+                "p95_m": 0.04385471392295262,
+                "support_ratio": 0.9796238244514106,
+                "median_signed_m": -0.004967530424192401,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {},
+      "log": "01_balance_cap_20261009_121647.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_121723",
+      "name": "女生站立远距离",
+      "frames": 223,
+      "source": {
+        "meta_sha256": "98dc4e98b371c1d3d80f71716991347413ccecf65440b44ddc29b65be923fd4a",
+        "bin_sha256": "44e53d8428c0f246e7b87a64437d67e181b3fb45079c906787ee179666218a05"
+      },
+      "job_id": "cc4e79d325c04aa38181a82586ff0c77",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.20473513965878,
+          "roll_deg": -1.574012022081427,
+          "offset_source_m": 1.3849016859091718,
+          "full": {
+            "count": 140827,
+            "rms_m": 0.020034753859181915,
+            "p95_m": 0.039140628874285016,
+            "support_ratio": 0.9911593657466253,
+            "median_signed_m": -0.0003300617188757293,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 74,
+              "full": {
+                "count": 634,
+                "rms_m": 0.019265092988972825,
+                "p95_m": 0.03615481127411685,
+                "support_ratio": 0.9968454258675079,
+                "median_signed_m": -0.0006279410633908133,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 148,
+              "full": {
+                "count": 638,
+                "rms_m": 0.01994496778377937,
+                "p95_m": 0.039106485275369834,
+                "support_ratio": 0.9890282131661442,
+                "median_signed_m": 0.0005068571177183623,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 222,
+              "full": {
+                "count": 631,
+                "rms_m": 0.019789579527100705,
+                "p95_m": 0.03819669260735559,
+                "support_ratio": 0.9952456418383518,
+                "median_signed_m": 0.0012522684619302726,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.204735139658748,
+          "roll_deg": -1.5740120220814269,
+          "offset_source_m": 1.3849016859091714,
+          "full": {
+            "count": 140827,
+            "rms_m": 0.020034753859181915,
+            "p95_m": 0.03914062887428495,
+            "support_ratio": 0.9911593657466253,
+            "median_signed_m": -0.00033006171887595137,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 74,
+              "full": {
+                "count": 634,
+                "rms_m": 0.019265092988972818,
+                "p95_m": 0.03615481127411685,
+                "support_ratio": 0.9968454258675079,
+                "median_signed_m": -0.0006279410633905913,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 148,
+              "full": {
+                "count": 638,
+                "rms_m": 0.019944967783779372,
+                "p95_m": 0.039106485275369765,
+                "support_ratio": 0.9890282131661442,
+                "median_signed_m": 0.0005068571177184733,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 222,
+              "full": {
+                "count": 631,
+                "rms_m": 0.01978957952710071,
+                "p95_m": 0.038196692607355476,
+                "support_ratio": 0.9952456418383518,
+                "median_signed_m": 0.0012522684619302726,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.19962488871285,
+          "roll_deg": -1.514318970774867,
+          "offset_source_m": 1.3851173602338829,
+          "full": {
+            "count": 140827,
+            "rms_m": 0.02006186534484999,
+            "p95_m": 0.0392915668653248,
+            "support_ratio": 0.9909676411483593,
+            "median_signed_m": 0.0007316175436080652,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 74,
+              "full": {
+                "count": 634,
+                "rms_m": 0.019314725069327854,
+                "p95_m": 0.036940060844720214,
+                "support_ratio": 0.9968454258675079,
+                "median_signed_m": 0.0005186413595181794,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 148,
+              "full": {
+                "count": 638,
+                "rms_m": 0.019995096374928474,
+                "p95_m": 0.03873040265372041,
+                "support_ratio": 0.987460815047022,
+                "median_signed_m": 0.0012201392190428484,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 222,
+              "full": {
+                "count": 631,
+                "rms_m": 0.01983735356615147,
+                "p95_m": 0.03875509738284877,
+                "support_ratio": 0.9968304278922345,
+                "median_signed_m": 0.002032471397536373,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "e0fbd52b792f4b2bf9c34eb8b98d406e7ba292b02f767f82c339bd03a83a79de",
+          "meta.json": "0aee4294b9b5d1a955d954eb0793d619ae7f76daa847839e40e3f77d24b6262b",
+          "points.bin": "73bed4f8567e605dbcd17cfbe636e4e2e00d9853b1d0ff3ee4c33b4160196a8b",
+          "transform.json": "57e6e46655e89d0d7603d9ac5c3be457a0b063bcf58a094a761979fde13bdcd3"
+        },
+        "svd": {
+          "dataset.zip": "b77e06f1d839d0b277156e5b93649978b20d1c714f3432caac3498605561c67b",
+          "meta.json": "d84ce08071833f261a8ed1dd82f641317baa37e5eb696b40b439e495bfd528be",
+          "points.bin": "982262a9e25c377c0fa01b4bd1695b35bf3b0c07ee4110c6f41cfee5a084d4f7",
+          "transform.json": "6ecc26c3efbfd28e034341a2c26c86d15d47a23fecf57e983337f4f905658082"
+        },
+        "ransac": {
+          "dataset.zip": "0b25a731a1761dc61a6f90c8a850fc7390e4cc4b645e626392469c0a1d21fa52",
+          "meta.json": "218743dfbc2b7bbc254b902f4b267b62d660fe5ae4b2bde88d6e2693dc03253e",
+          "points.bin": "27766ab23adbdb827e6d4364aa5cba50ddebcd2f0362f9df9756e544886b0406",
+          "transform.json": "23e4c4d45db3e7fbabdae32e6f626e9193ba98872e41163d04a4b3eca013616a"
+        }
+      },
+      "log": "01_balance_cap_20261009_121723.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_122616",
+      "name": "男生中距离站立",
+      "frames": 139,
+      "source": {
+        "meta_sha256": "dafbf359c3351d2b74b2f038c4f11ec5f0c9412ba6b65a321b6f1f3a56efe697",
+        "bin_sha256": "1f4833a5c6b402d734b5b53a9985a6a21053e1088474c602b138a95418c56036"
+      },
+      "job_id": "2ac1d387ad5f42adb9058d24fd17f499",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.914373747796905,
+          "roll_deg": -2.2448543303972914,
+          "offset_source_m": 1.4092979646894006,
+          "full": {
+            "count": 84246,
+            "rms_m": 0.01627866346823492,
+            "p95_m": 0.0312966391952228,
+            "support_ratio": 0.9989198300216034,
+            "median_signed_m": -0.0006884565237560425,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 46,
+              "full": {
+                "count": 613,
+                "rms_m": 0.01622244634512886,
+                "p95_m": 0.029866714538021498,
+                "support_ratio": 0.9951060358890701,
+                "median_signed_m": -0.0003052948599251426,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 92,
+              "full": {
+                "count": 612,
+                "rms_m": 0.016288663458993605,
+                "p95_m": 0.031687782176282354,
+                "support_ratio": 0.9967320261437909,
+                "median_signed_m": -0.00023724643670797185,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 138,
+              "full": {
+                "count": 618,
+                "rms_m": 0.017285126882526335,
+                "p95_m": 0.033604009745937316,
+                "support_ratio": 0.9983818770226537,
+                "median_signed_m": -0.0005742919462613516,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.914373747796798,
+          "roll_deg": -2.244854330397306,
+          "offset_source_m": 1.4092979646893986,
+          "full": {
+            "count": 84246,
+            "rms_m": 0.01627866346823492,
+            "p95_m": 0.03129663919522324,
+            "support_ratio": 0.9989198300216034,
+            "median_signed_m": -0.0006884565237550433,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 46,
+              "full": {
+                "count": 613,
+                "rms_m": 0.016222446345128844,
+                "p95_m": 0.029866714538021543,
+                "support_ratio": 0.9951060358890701,
+                "median_signed_m": -0.0003052948599255867,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 92,
+              "full": {
+                "count": 612,
+                "rms_m": 0.016288663458993616,
+                "p95_m": 0.031687782176282514,
+                "support_ratio": 0.9967320261437909,
+                "median_signed_m": -0.00023724643670752776,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 138,
+              "full": {
+                "count": 618,
+                "rms_m": 0.017285126882526324,
+                "p95_m": 0.03360400974593722,
+                "support_ratio": 0.9983818770226537,
+                "median_signed_m": -0.0005742919462607965,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.575925066145686,
+          "roll_deg": -2.149666394796746,
+          "offset_source_m": 1.4044622233457233,
+          "full": {
+            "count": 84246,
+            "rms_m": 0.016635563734013672,
+            "p95_m": 0.032253027804261536,
+            "support_ratio": 0.9989791800204164,
+            "median_signed_m": 0.002554739014530405,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 46,
+              "full": {
+                "count": 613,
+                "rms_m": 0.01661287452738595,
+                "p95_m": 0.03153116350157962,
+                "support_ratio": 0.9967373572593801,
+                "median_signed_m": 0.0032209356866990113,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 92,
+              "full": {
+                "count": 612,
+                "rms_m": 0.016636855583994956,
+                "p95_m": 0.032340536807754755,
+                "support_ratio": 0.9967320261437909,
+                "median_signed_m": 0.002747419379913296,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 138,
+              "full": {
+                "count": 618,
+                "rms_m": 0.017490813181291264,
+                "p95_m": 0.03406623837596835,
+                "support_ratio": 0.9967637540453075,
+                "median_signed_m": 0.002663813817142313,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "5707098628bccaa88cf31848a7ff9f309a2f0d76990c9c07be4ac3636fa3b470",
+          "meta.json": "6d5e4e8f65dd5c7822340306912d9e1697c6636963258a018c13c2fb7f589b6b",
+          "points.bin": "383193c19e9a29fc0159994b1ed699742e93f007fe9996afd2d55c48ba9ddd9b",
+          "transform.json": "6d5a7cb4e87475e799a00eb1e011fd0704c853be71416ce4cb570175f538a340"
+        },
+        "svd": {
+          "dataset.zip": "20475002e165f68d3973aff0796de16f36a622b6bd824c06a97174135f6edb50",
+          "meta.json": "ebd28c6802825b14dac23427eaa3de8e76cb1d98d69cddd17333832e99a686b2",
+          "points.bin": "6fa3d943ec324707bc22f455a21a297e738f2f663297ca1d5944ee7b565da302",
+          "transform.json": "42bfdfe619bae4e5934b91db9da4cf770ca778da562df524c2d9593ef9f70594"
+        },
+        "ransac": {
+          "dataset.zip": "786c162c18f957640fe7ccad8f41154e994bb6a6710a6269afdcd7ed90cb8906",
+          "meta.json": "bb7716ade9b4db762cfeafe3f16d97c433d224ce455d56b93130cbe5b0dd8d6c",
+          "points.bin": "8589e8287e48966431f0e92a85647273eceb198a076a49165b8bd8bffce076eb",
+          "transform.json": "3a73ab33b34548f9c8f35ce8a05f43cdad50999d7f6249ab06c1d2ca9a4752c8"
+        }
+      },
+      "log": "01_balance_cap_20261009_122616.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_122637",
+      "name": "男生近距离站立",
+      "frames": 116,
+      "source": {
+        "meta_sha256": "5eede5c8b793890d8c23bd173d323617fcfa22c3489c59979ae10d30d36b1beb",
+        "bin_sha256": "33732bc81a880dbb1f6b9bb6032d130b994feb792d29e5d21e488967f4126046"
+      },
+      "job_id": "ba2e37e2c8bc490da208f33bcd0abf2b",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.43367525153209,
+          "roll_deg": -2.9489978722863683,
+          "offset_source_m": 1.3992788493771988,
+          "full": {
+            "count": 66587,
+            "rms_m": 0.014312005079825803,
+            "p95_m": 0.02837473806200645,
+            "support_ratio": 0.9994143000886059,
+            "median_signed_m": -0.00026110946870705476,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 38,
+              "full": {
+                "count": 592,
+                "rms_m": 0.01425649165734675,
+                "p95_m": 0.02745486438531165,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.00028686436784530756,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 76,
+              "full": {
+                "count": 590,
+                "rms_m": 0.014475192986605073,
+                "p95_m": 0.028547450021540858,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.0001551573784692728,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 115,
+              "full": {
+                "count": 592,
+                "rms_m": 0.013622567379924365,
+                "p95_m": 0.02702994458808406,
+                "support_ratio": 1.0,
+                "median_signed_m": -0.00020963860114764366,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.433675251532108,
+          "roll_deg": -2.948997872286359,
+          "offset_source_m": 1.3992788493771986,
+          "full": {
+            "count": 66587,
+            "rms_m": 0.0143120050798258,
+            "p95_m": 0.02837473806200645,
+            "support_ratio": 0.9994143000886059,
+            "median_signed_m": -0.00026110946870749885,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 38,
+              "full": {
+                "count": 592,
+                "rms_m": 0.014256491657346741,
+                "p95_m": 0.02745486438531165,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.0002868643678450855,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 76,
+              "full": {
+                "count": 590,
+                "rms_m": 0.014475192986605077,
+                "p95_m": 0.028547450021540757,
+                "support_ratio": 1.0,
+                "median_signed_m": 0.00015515737846905076,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 115,
+              "full": {
+                "count": 592,
+                "rms_m": 0.013622567379924365,
+                "p95_m": 0.027029944588084383,
+                "support_ratio": 1.0,
+                "median_signed_m": -0.0002096386011478657,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.948554097334906,
+          "roll_deg": -3.5556931353141272,
+          "offset_source_m": 1.4171938979746523,
+          "full": {
+            "count": 66587,
+            "rms_m": 0.014910255325424629,
+            "p95_m": 0.02886733893792148,
+            "support_ratio": 0.9995044077672819,
+            "median_signed_m": -0.003164388704681498,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 38,
+              "full": {
+                "count": 592,
+                "rms_m": 0.014802787181734991,
+                "p95_m": 0.02763158802980092,
+                "support_ratio": 1.0,
+                "median_signed_m": -0.0026729734203438937,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 76,
+              "full": {
+                "count": 590,
+                "rms_m": 0.015160854415079491,
+                "p95_m": 0.028888737946596,
+                "support_ratio": 1.0,
+                "median_signed_m": -0.003335720891385785,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 115,
+              "full": {
+                "count": 592,
+                "rms_m": 0.014180546756785513,
+                "p95_m": 0.027794479282770852,
+                "support_ratio": 1.0,
+                "median_signed_m": -0.0029835902988150087,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "dcde2ea28d7e12faba15340f390affdc07a8d5cdaf28e0af9873334f29daf3c4",
+          "meta.json": "a802a89297b2ff35b18ea92658efd674f230d445c1344b031d04176ccc6b3e60",
+          "points.bin": "e78e273dd6eda5566ffeeee9104dd35d294ba1dd4baedc1b41b2cf07ee280595",
+          "transform.json": "a7ac55b0dc6503812987455f43bcdd0812525e09eb2db4aaa7843a80da1e80b4"
+        },
+        "svd": {
+          "dataset.zip": "5ef62a800abfe6beefd68ffdd06003010c865b9b45330626ab44b8a6e9e8531c",
+          "meta.json": "df4b3fb86982ec3f866936438b75daf2058046fccd35bdbe19a66524fb27314b",
+          "points.bin": "b5295edb8765e113082dbd811fee033fc86aaf2f1b29ea2f96765a6148653f0a",
+          "transform.json": "047f4a56329c84635f5fc9c5e5c13f094a87985f59d56f08c2079e5347868292"
+        },
+        "ransac": {
+          "dataset.zip": "d23835135eed5a124eb7885d1f941b082bb9ba3562c5a237fe0f217e2367211a",
+          "meta.json": "bcbe1ee0ba5aa50aa1c5a513fe7cff047ab53752f8343c9eba6307d403287720",
+          "points.bin": "d4b1d1d2486825eaf2a0b56bdf5ceb5f169981ae33272f4e3b4549dbba6ae303",
+          "transform.json": "acf58b3949a3f71e87c4c6fbf9a00f2f643a75d592e697d4f7ebd58c91365f4c"
+        }
+      },
+      "log": "01_balance_cap_20261009_122637.log",
+      "error": null
+    },
+    {
+      "sid": "cap_20261009_122700",
+      "name": "男生远距离站立",
+      "frames": 111,
+      "source": {
+        "meta_sha256": "210c858f7ac0621828238fbb12e2eb52796ddfff32261e89cd68967849665f5a",
+        "bin_sha256": "5b69983aa8d7469724647a4f8c7e9bdf4b757510b6238eeb80c7b56da43aa895"
+      },
+      "job_id": "1705fddaa8794a3fa716e69ecf5ee8a4",
+      "status": "completed",
+      "recommended": "tls",
+      "physical_verified": false,
+      "extrinsics_verified": false,
+      "runtime_eligible": false,
+      "estimators": {
+        "tls": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.095158583124658,
+          "roll_deg": -1.7584505706410334,
+          "offset_source_m": 1.385691885916743,
+          "full": {
+            "count": 81151,
+            "rms_m": 0.019779647314349724,
+            "p95_m": 0.038450316913090976,
+            "support_ratio": 0.991793077103178,
+            "median_signed_m": -0.0012586602397790525,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 36,
+              "full": {
+                "count": 756,
+                "rms_m": 0.019597972795780187,
+                "p95_m": 0.03903638943756288,
+                "support_ratio": 0.9920634920634921,
+                "median_signed_m": -0.0007970518073057153,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 73,
+              "full": {
+                "count": 754,
+                "rms_m": 0.020411237832636993,
+                "p95_m": 0.03997008578159644,
+                "support_ratio": 0.993368700265252,
+                "median_signed_m": -0.001900639264431514,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 110,
+              "full": {
+                "count": 743,
+                "rms_m": 0.020187583890524764,
+                "p95_m": 0.04007537612039369,
+                "support_ratio": 0.9865410497981157,
+                "median_signed_m": -0.0012476388048052733,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "svd": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 27.095158583124597,
+          "roll_deg": -1.758450570641029,
+          "offset_source_m": 1.3856918859167422,
+          "full": {
+            "count": 81151,
+            "rms_m": 0.019779647314349728,
+            "p95_m": 0.038450316913090754,
+            "support_ratio": 0.991793077103178,
+            "median_signed_m": -0.0012586602397786084,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 36,
+              "full": {
+                "count": 756,
+                "rms_m": 0.019597972795780193,
+                "p95_m": 0.03903638943756288,
+                "support_ratio": 0.9920634920634921,
+                "median_signed_m": -0.0007970518073061594,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 73,
+              "full": {
+                "count": 754,
+                "rms_m": 0.02041123783263698,
+                "p95_m": 0.03997008578159651,
+                "support_ratio": 0.993368700265252,
+                "median_signed_m": -0.001900639264431514,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 110,
+              "full": {
+                "count": 743,
+                "rms_m": 0.020187583890524774,
+                "p95_m": 0.040075376120394086,
+                "support_ratio": 0.9865410497981157,
+                "median_signed_m": -0.0012476388048054954,
+                "status": "PASS"
+              }
+            }
+          ]
+        },
+        "ransac": {
+          "valid": true,
+          "reject_reasons": [],
+          "pitch_deg": 26.999616739107754,
+          "roll_deg": -1.6437934553704023,
+          "offset_source_m": 1.3822587629327565,
+          "full": {
+            "count": 81151,
+            "rms_m": 0.019802701331694216,
+            "p95_m": 0.03846698162206175,
+            "support_ratio": 0.9918300452243349,
+            "median_signed_m": -0.0014669808816401009,
+            "status": "PASS"
+          },
+          "holdouts": [
+            {
+              "ordinal": 36,
+              "full": {
+                "count": 756,
+                "rms_m": 0.01963624826087743,
+                "p95_m": 0.03853860391266822,
+                "support_ratio": 0.9920634920634921,
+                "median_signed_m": -0.0008508858950593279,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 73,
+              "full": {
+                "count": 754,
+                "rms_m": 0.020425310131928578,
+                "p95_m": 0.039798323124688,
+                "support_ratio": 0.9920424403183024,
+                "median_signed_m": -0.0022649454779108957,
+                "status": "PASS"
+              }
+            },
+            {
+              "ordinal": 110,
+              "full": {
+                "count": 743,
+                "rms_m": 0.02021112166090815,
+                "p95_m": 0.040137465289062806,
+                "support_ratio": 0.9892328398384926,
+                "median_signed_m": -0.0013738587938045832,
+                "status": "PASS"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": {
+        "tls": {
+          "dataset.zip": "8543e523f4558cbc5b25757a16bb2d9d8503e72ad9f0dd105f6c5bdb879f39c2",
+          "meta.json": "591cb04e1ed8a865172957a2fe87103ea715e69b29e3836267017b53037b75b6",
+          "points.bin": "3f6d366970051da65ce610ba40c32561f425fcda31c0ae366abccc42f0436f58",
+          "transform.json": "e81992eb644bf96ff0dc6e3d49b2816acbc4e16ac34fed672ae295b5ecc94282"
+        },
+        "svd": {
+          "dataset.zip": "d6d3e2991417bfd21079a121c8fe7830aafbe90d87de5e09aa8195372ee7f0f6",
+          "meta.json": "4edb1c3499fb46d2a6de395149f6b0357bccc8a31dcfa552b2e2f39614a49bdd",
+          "points.bin": "629318dbc01648de168459829f700de0c4b966f5f5503e042c2fd16d2b27d0d1",
+          "transform.json": "33c4e5afecdbd1c64d38651fafd5543e0216b1118060b6365dc17a17e050cc94"
+        },
+        "ransac": {
+          "dataset.zip": "feff1a5fa1683c19c89b0f6068e1bf8bac018f08750e1bc982ec9e8cec7be2fa",
+          "meta.json": "9db954a3030bb807fd69fb44be4dbfc5546cd12b98986d07e31ebb6136954a70",
+          "points.bin": "38067e424a55065406295ecc3297d2915fd68bbd3f68a8cfb9528d2a597d1b18",
+          "transform.json": "9aee3c46f278bc5666cc9489a390e7caaf251c0cf4b252d81f6a0f359e40effc"
+        }
+      },
+      "log": "01_balance_cap_20261009_122700.log",
+      "error": null
+    }
+  ],
+  "failures": [],
+  "integrity": [
+    {
+      "sid": "cap_20261009_113611",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_114641",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_114709",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_114734",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_114754",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_114817",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_121622",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_121647",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_121723",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_122616",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_122637",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    },
+    {
+      "sid": "cap_20261009_122700",
+      "meta_unchanged": true,
+      "points_unchanged": true
+    }
+  ],
+  "template_report_unchanged": true
+}

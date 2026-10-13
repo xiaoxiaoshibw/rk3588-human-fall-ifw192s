@@ -1,0 +1,15 @@
+{
+ "schema_version":"hfus-frame-v1",
+ "index_version":"hfus-index-v1",
+ "evaluation_version":"hfus-strict-v1",
+ "indices":"frame-local zero-based raw28B row IDs; valid compact is sensor finite XYZ and any XYZ nonzero before R/T; full leveled xyzi preserves raw row IDs, invalid XYZ is NaN; compact_leveled_xyzi uses compact_to_raw",
+ "pointset_sha":"SHA256 ordered uint32 little endian raw row IDs; duplicate coordinates retain separate row IDs",
+ "components":"raw_components includes all PA/PB pre-classifier components including rejected hard gates; hard_gate_pass false rows count only component diagnostics, eligible proposal must be supplied after quality gates",
+ "candidate":"id, raw_indices, accepted, decision, score, association_anchor, scoring_centroid, track_id, track_segment; exact current scoring union only",
+ "evaluation":"one-to-one coverage>=0.5 purity>=0.8; observed requires confirmed lost=0 plus accepted current members by same track/segment; partial unmatched_unknown; complete exhaustive=false unless reviewed window asserts all humans/negatives",
+ "features":"RF51 existing extract output Float32; XGB69 RF51 plus six height bands fraction and X/Y p10-p90 widths, Float32; model XGB split thresholds Float32",
+ "pointnet":"256 floor(j*n/256) samples ordered current union, Float32 XYZ only, subtract sample mean, transpose Nx3 -> 3xN, no intensity, no scale normalization, repeated fill deterministic; existing weights immutable",
+ "qualification":"BOUND_HUMAN_REVIEWED / PROPAGATED_CONDITIONAL / PARTIAL / UNKNOWN / INVALID_BINDING; source human alone not independent review",
+ "failures":"background_deleted / cleanup_deleted / proposal_hard_rejected / proposal_unclustered / classifier_rejected / association_failed / coasting distinct; stage memberships permit overlap across PA and PB and ordered scoring union dedup",
+ "scope":"offline real-data engineering and development regression; no independent blind test or device claim"
+}

@@ -1,0 +1,181 @@
+{
+  "client_date": "2026-10-08",
+  "workspace": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar",
+  "skill": "C:/Users/30680/.codex/skills/ponytail/SKILL.md",
+  "commands": [
+    {
+      "log": "01",
+      "command": "python -B -W error sidequests/human_detectors/upstream_kernel_check.py docs/sidequests/evidence/2026-10-08_det03_r1/01_upstream_host",
+      "exit_code": 0
+    },
+    {
+      "log": "02",
+      "command": "python -B -W error sidequests/human_detectors/diagnose_low_scores.py representative --out sidequests/human_detectors/artifacts/det03_representative_r1",
+      "exit_code": 0
+    },
+    {
+      "log": "03",
+      "command": "python -B -W error -m unittest discover -s sidequests/human_detectors -p test_experiment.py -v",
+      "exit_code": 0
+    },
+    {
+      "log": "04",
+      "command": "node sidequests/human_detectors/reference_foreground.js --self-check",
+      "exit_code": 0
+    },
+    {
+      "log": "05",
+      "command": "python -B -W error sidequests/human_detectors/voxel_kernel_check.py docs/sidequests/evidence/2026-10-08_det03_r1/05_voxel_kernel",
+      "exit_code": 1
+    },
+    {
+      "log": "05_r2",
+      "command": "python -B -W error sidequests/human_detectors/voxel_kernel_check.py docs/sidequests/evidence/2026-10-08_det03_r1/05_voxel_kernel_r2",
+      "exit_code": 0
+    },
+    {
+      "log": "06",
+      "command": "python -B -W error sidequests/human_detectors/diagnose_low_scores.py all --out sidequests/human_detectors/artifacts/det03_all_r1",
+      "exit_code": 0
+    },
+    {
+      "log": "07",
+      "command": "python -B -W error sidequests/human_detectors/audit_inputs_det03.py docs/sidequests/evidence/2026-10-08_det03_r1/07_input_audit.json",
+      "exit_code": 0
+    },
+    {
+      "log": "09",
+      "command": "python -B -W error - (inline ctypes host-IoU check on 74 representative candidate traces, 222 class sets)",
+      "exit_code": 0
+    },
+    {
+      "log": "10",
+      "command": "python -B -W error sidequests/human_detectors/sampling_attribution.py sidequests/human_detectors/artifacts/det03_attribution_r1",
+      "exit_code": 0
+    },
+    {
+      "log": "11",
+      "command": "python -B -W error -m unittest discover -s sidequests/human_detectors -p test_experiment.py -v",
+      "exit_code": 0
+    },
+    {
+      "log": "12",
+      "command": "python -B -W error sidequests/human_detectors/upstream_kernel_check.py docs/sidequests/evidence/2026-10-08_det03_r1/12_fixed_upstream_host",
+      "exit_code": 0
+    },
+    {
+      "log": "13",
+      "command": "python -B -W error sidequests/human_detectors/diagnose_low_scores.py representative --out sidequests/human_detectors/artifacts/det03_representative_r2",
+      "exit_code": 0
+    },
+    {
+      "log": "14",
+      "command": "python -B -W error - (inline negative controls: empty 17,35,53 first32/z_rank32; KITTI first32/z_rank32; all fixed original intensity/z)",
+      "exit_code": 0
+    },
+    {
+      "log": "15",
+      "command": "python -B -W error sidequests/human_detectors/summarize_det03.py (ran four document revisions only, all experiment results frozen)",
+      "exit_code": 0
+    },
+    {
+      "log": "18",
+      "command": "python -B -W error - (inline baseline SHA recheck, 5169 original files plus 3211 protected assets)",
+      "exit_code": 0
+    },
+    {
+      "log": "19",
+      "command": "python -B -W error - (inline raw cls/reg/dir array_equal before/after yaw repair, 74 traces)",
+      "exit_code": 0
+    },
+    {
+      "log": "20",
+      "command": "python -B -W error - (inline AST upstream process.py oblique BEV geometry check)",
+      "exit_code": 1
+    },
+    {
+      "log": "20b",
+      "command": "python -B -W error - (inline check scoped to bbox3d2bevcorners with legacy invalid-escape docstring removed; algorithm unchanged)",
+      "exit_code": 0
+    }
+  ],
+  "code": [
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\audit_inputs_det03.py",
+      "sha256": "af050e8e82e927742a8d484af1fa32088ad8bf65d3a9f50de00646c8e48bdefd"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\audit_truth.py",
+      "sha256": "f0980d22d7f7d5e0e231a7df8c60d04ce4b29def65bcd97089ac8bc2768299a8"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\batch_static.py",
+      "sha256": "aacddaaca4a0af05411e366fd22410ef1bc87f75d753d9bb3c06607521813f93"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\cpu_pointpillars.py",
+      "sha256": "a96295143653ee932af874e1ca0a90ccfde4ff7ea8171f553eebfa27214d7224"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\diagnose_low_scores.py",
+      "sha256": "df22717aba7c17d65c8ac5004f9d509f05259f574aa9fc32bb7aa492ba93e873"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\download_pointpillars.py",
+      "sha256": "89e08d7e1c42316ae9fa84100785a5fb420bfe3ac97792a35832ce63c19c4b0b"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\experiment.py",
+      "sha256": "996e1332e258a83d682291065186e009c2e3176e87ace44cb500eafae814ec5d"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\head_probe.py",
+      "sha256": "e8c3873f0a17ee2f1647284d2e2424c8ce1fca495ff5fae543ee15ff76f58b50"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\infer_background.py",
+      "sha256": "0be5aa1c63d66144ba7ae106a26991c88bd0826d398c79a8c7a112e1b53dae4f"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\plot_background.py",
+      "sha256": "9a72262585d47dfd4163fbbe34c0cfd21ca9c2b85a3bae8ec2abbe6bfbec1abc"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\plot_static.py",
+      "sha256": "0b1798860bdc7db4f8be0fe214ada5a8d803b7043be886c9906ad6b19dbea124"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\prepare_background.py",
+      "sha256": "28305a1078dfaf7afad47baa7adb536896eeadb26963a52463d2cbf1c6c09493"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\sampling_attribution.py",
+      "sha256": "ca18ff6e8e7ceaf1fee568788fa8f842358956dd25b4dc71f43de08b3615eee6"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\summarize_det03.py",
+      "sha256": "312dafb4d47ee9bf93c83dbac38312ab63f00b61acbe28ddbeeaecdca7a298d7"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\test_experiment.py",
+      "sha256": "effb30303c9f8ae68919a1c8ef89358957190f9937aabb2c76d2e9cc0e995f32"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\upstream_kernel_check.py",
+      "sha256": "03cb11d9fdc8d1957a27c924b258e37ad8ee98e8d92482cc6fdee434d96ff715"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\voxel_kernel_check.py",
+      "sha256": "b550660b9959b12ca5bbcfd41e967d97ebb8b3557d87d6e58554c2aa70c088c0"
+    },
+    {
+      "path": "C:\\Users\\30680\\.codex\\worktrees\\human-detector-models\\ldiar\\sidequests\\human_detectors\\voxel_probe.py",
+      "sha256": "a245f42287f52123d59d24033b8dbecb74566219aab1f62b52b1219fd7fa12c2"
+    }
+  ],
+  "acceptance_sha256": "1b8b9a7502d75fc1132074e7499c8c2d1136d71bd782d7e2ec404b65685d7b2a",
+  "plan_sha256": "3f1820ca4c226efdd8f03abeed05cff2f4bf9c0f41930ddccadbceabef8c6cf4",
+  "report_sha256": "87cdaba1e3c894b8b27279a50927d76347244baa111d81c7fb53763889da4067",
+  "input_model_sources": "00_baseline.json: assets includes all source sessions, upstream checkpoint, transforms, prepared/foreground and frozen JS; 18 verifies stable",
+  "run_versions": "Original source snapshots code_before_fix correspond 02/06/10; code_final corresponds corrected implementation; configs retain their actual script SHA"
+}

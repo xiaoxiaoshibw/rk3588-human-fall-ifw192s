@@ -1,0 +1,58 @@
+--- a/pc_apps/human_replay/floor_sheet.py
++++ b/pc_apps/human_replay/floor_sheet.py
+@@ -250,20 +250,42 @@
+     if np.all(delta[:, 0] * axis[1] == delta[:, 1] * axis[0]):
+         return previous  # 完全共线，不可能满足原条件数门。
+ 
+-    # ponytail: 仅旧失败走完整 O(n^4) 离线兜底；大规模时延未作为板端准入。
++    # ponytail: 精确剪枝仍有 O(n^4) 最坏路径；不设搜索上限、不近似条件数。
++    # 与原兜底相同的整数相减及 hypot；每对只算一次，保持浮点边界。
++    distances = [[0.] * n for _ in range(n)]
++    for a, b in itertools.combinations(range(n), 2):
++        distances[a][b] = distances[b][a] = float(np.hypot(*(keys[a] - keys[b])))
+     winner, winner_sep = previous, -1.
+-    for combo in itertools.combinations(range(n), 4):
+-        pts = keys[list(combo)]
+-        span = pts[1:] - pts[0]
+-        if np.all(span[:, 0] * span[0, 1] == span[:, 1] * span[0, 0]):
+-            continue
+-        separation = min(float(np.hypot(*(pts[a] - pts[b])))
+-                         for a, b in itertools.combinations(range(4), 2))
+-        if separation * PROFILE["cell_m"] < p["roi_min_separation_m"] or separation <= winner_sep:
+-            continue
+-        candidate = describe(combo, separation)
+-        if candidate["ok"]:
+-            winner, winner_sep = candidate, separation
++    for a in range(n - 3):
++        da = distances[a]
++        for b in range(a + 1, n - 2):
++            ab = da[b]
++            if ab * PROFILE["cell_m"] < p["roi_min_separation_m"] or ab <= winner_sep:
++                continue
++            db = distances[b]
++            # 固定首对时，原叉积检查等价于 c、d 都在其直线上。
++            span = keys - keys[a]
++            axis = span[b]
++            collinear = span[:, 0] * axis[1] == span[:, 1] * axis[0]
++            outside = np.flatnonzero(~collinear).tolist()
++            if not outside:
++                continue
++            for c in range(b + 1, n - 1):
++                abc = min(ab, da[c], db[c])
++                if abc * PROFILE["cell_m"] < p["roi_min_separation_m"] or abc <= winner_sep:
++                    continue
++                dc = distances[c]
++                remaining = outside if collinear[c] else range(c + 1, n)
++                for d in remaining:
++                    if d <= c:
++                        continue
++                    separation = min(abc, da[d], db[d], dc[d])
++                    if separation * PROFILE["cell_m"] < p["roi_min_separation_m"] or separation <= winner_sep:
++                        continue
++                    combo = (a, b, c, d)
++                    candidate = describe(combo, separation)
++                    if candidate["ok"]:
++                        winner, winner_sep = candidate, separation
+     return winner
+ 
+ 

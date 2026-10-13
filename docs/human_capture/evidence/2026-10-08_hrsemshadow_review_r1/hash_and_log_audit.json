@@ -1,0 +1,367 @@
+{
+  "old_baseline_files": 5908,
+  "old_mismatches": [],
+  "r1_output_hash_mismatches": [],
+  "source_hash_mismatches": [],
+  "verified_digest_pairs": {
+    "pass2/pass3": {
+      "frames": "1fd51da3a0d04223c85e26f27c726dd599c171e1e4431fc97d896717d566a4db",
+      "clusters": "adc603b5783bee4d71cd38b7341f30dcbe563d9a3464d5bffa6d26ce609d6eee",
+      "votes": "110c438ded301353d6464f07ac3cf3687139bb29d91bc298ff19b28151449353",
+      "review": "e317aec0c9102bcdc0d45e00160d34cceeeab1e28b82c2e006ae0fae6017aaff",
+      "points": "ed2bd0d9392cf9d2302224d76075c5d0e14973d26e20e8746dfdffb9e104a482",
+      "summary": "f286f22ad9cdbe65ed50ad61b248946aeae23a2de7b8a5b88df85abbfcdc5840",
+      "binding": "2f0f3aaaf6b6c62aedcf5b02de30539da13cc0afce324d7dc4fba44ccdb26416",
+      "reconciliation": "fbb629fbdb8de51c06135fe35aac63ae7b8cc63d086329095971ecabb3c2f28f"
+    },
+    "negative3/negative4": {
+      "negative_clusters.jsonl": "e92196b197493697192215745fe60ee1928b61372ce2f11bd84b04bf7b9363b6",
+      "negative_regions.jsonl": "9853b5b3f02be8822b4223a4b2201ac7647491d0d5283ce8c8c51337ab4be003",
+      "summary.json": "37a0db99856f40ee4b26135f7a1b76eca6d375c0d6b92a4585748fee29c75547",
+      "binding.json": "24e64b46deac1cb9ee4024eb2e656a8e9899892b1002033fa6c1a2de71b2ec51",
+      "coverage.json": "89e2c526d8531ad6021df12b89f3202d3eabb71d9ad028236a817fbfa0fb73cb"
+    }
+  },
+  "run_records": [
+    {
+      "file": "baseline.run.json",
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/record.py",
+        "baseline"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:04:28.860053+00:00",
+      "end_utc": "2026-10-08T05:05:39.759583+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\record.py": "b5b457ae2958edf576fe1a59eabec7ed5c13e2417deab90dc01e9205106cbd9e"
+      }
+    },
+    {
+      "file": "full_pass1.run.json",
+      "command": [
+        "node",
+        "--max-old-space-size=8192",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/shadow.js",
+        "pass1"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:10:12.583620+00:00",
+      "end_utc": "2026-10-08T05:13:42.058684+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\shadow.js": "db34f389fd5e0c88bfd0dc85781162030258f80e6c0781904c3d98844dfc2515"
+      }
+    },
+    {
+      "file": "full_pass2.run.json",
+      "command": [
+        "node",
+        "--max-old-space-size=8192",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/shadow.js",
+        "pass2"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:15:21.849875+00:00",
+      "end_utc": "2026-10-08T05:19:17.855620+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\shadow.js": "400aa4ac89f2d4dd0f0540056622bfa9f444142b92d81bcb1f2e42a9e0c42f44"
+      }
+    },
+    {
+      "file": "full_pass3.run.json",
+      "command": [
+        "node",
+        "--max-old-space-size=8192",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/shadow.js",
+        "pass3"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:16:44.884610+00:00",
+      "end_utc": "2026-10-08T05:20:40.560491+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\shadow.js": "400aa4ac89f2d4dd0f0540056622bfa9f444142b92d81bcb1f2e42a9e0c42f44"
+      }
+    },
+    {
+      "file": "integrity.run.json",
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/record.py",
+        "integrity"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:35:58.988218+00:00",
+      "end_utc": "2026-10-08T05:38:38.621536+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\record.py": "b5b457ae2958edf576fe1a59eabec7ed5c13e2417deab90dc01e9205106cbd9e"
+      }
+    },
+    {
+      "file": "old_negative1.run.json",
+      "command": [
+        "node",
+        "--max-old-space-size=8192",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/negatives.js",
+        "negative1"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:12:04.636494+00:00",
+      "end_utc": "2026-10-08T05:12:41.775077+00:00",
+      "exit_code": 1,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\negatives.js": "b384c6d41b462de2b0951ad7416a58b922d6e0b6804785a372eba72e4a673c6e"
+      }
+    },
+    {
+      "file": "old_negative2.run.json",
+      "command": [
+        "node",
+        "--max-old-space-size=8192",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/negatives.js",
+        "negative2"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:13:57.856330+00:00",
+      "end_utc": "2026-10-08T05:14:42.860100+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\negatives.js": "b1ff657b7f627c60b0817aad17b3229519b244386890d41d247c079ac41e4ee2"
+      }
+    },
+    {
+      "file": "old_negative3.run.json",
+      "command": [
+        "node",
+        "--max-old-space-size=8192",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/negatives.js",
+        "negative3"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:16:55.283256+00:00",
+      "end_utc": "2026-10-08T05:18:27.363731+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\negatives.js": "b1ff657b7f627c60b0817aad17b3229519b244386890d41d247c079ac41e4ee2"
+      }
+    },
+    {
+      "file": "old_negative4.run.json",
+      "command": [
+        "node",
+        "--max-old-space-size=8192",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/negatives.js",
+        "negative4"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:20:22.595075+00:00",
+      "end_utc": "2026-10-08T05:21:31.765041+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\negatives.js": "b1ff657b7f627c60b0817aad17b3229519b244386890d41d247c079ac41e4ee2"
+      }
+    },
+    {
+      "file": "plot.run.json",
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/plot_cases.py"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:24:38.851501+00:00",
+      "end_utc": "2026-10-08T05:24:42.923615+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\plot_cases.py": "22a4f40cfdb71fcc6a9336cb2c454dddff7f98f0116b5fbf93f19287ecc74e0d"
+      }
+    },
+    {
+      "file": "plot_zoom.run.json",
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/plot_cases.py",
+        "zoom"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:27:58.543080+00:00",
+      "end_utc": "2026-10-08T05:28:01.073468+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\plot_cases.py": "1bf4a79edebc1e23ff7cfc9d9b6997fc98685752e4ac443429d1b27cb984ae58"
+      }
+    },
+    {
+      "file": "prepare.run.json",
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/finish.py",
+        "prepare"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:22:44.628751+00:00",
+      "end_utc": "2026-10-08T05:23:57.747203+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\finish.py": "35f538ccf19aa0c940979ae585f3c34ba6469e1ed623f3bd7b2dc1f05ad8331f"
+      }
+    },
+    {
+      "file": "regression_human_pipe_lib.run.json",
+      "command": [
+        "node",
+        "pc_apps/human_replay/human_pipe_lib.test.js"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:13:22.181761+00:00",
+      "end_utc": "2026-10-08T05:13:22.407036+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "pc_apps\\human_replay\\human_pipe_lib.test.js": "917c956398b69637bf6f0ed41dc2c4f9632a522a27981eedbe1a0cf8e8e2e118"
+      }
+    },
+    {
+      "file": "regression_human_replay_lib.run.json",
+      "command": [
+        "node",
+        "pc_apps/human_replay/human_replay_lib.test.js"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:13:22.185281+00:00",
+      "end_utc": "2026-10-08T05:13:22.705870+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "pc_apps\\human_replay\\human_replay_lib.test.js": "36a67f80de8af67056b761232d3ad972cc26600c171299f21c93f410bd87bbfc"
+      }
+    },
+    {
+      "file": "regression_registration.run.json",
+      "command": [
+        "node",
+        "pc_apps/human_replay/registration.test.js"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:13:22.197481+00:00",
+      "end_utc": "2026-10-08T05:13:24.556976+00:00",
+      "exit_code": 1,
+      "tool_sha256": {
+        "pc_apps\\human_replay\\registration.test.js": "310b4b43e2d477add77c857b98f97dbbec51d8f40f90937e914403c712e2fa12"
+      }
+    },
+    {
+      "file": "regression_registration_r2.run.json",
+      "command": [
+        "node",
+        "-e",
+        "const fs=require('fs'),p=require('path').resolve('docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/test_tmp');fs.mkdirSync(p);require('os').tmpdir=()=>p;require('./pc_apps/human_replay/registration.test.js');"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:14:08.045669+00:00",
+      "end_utc": "2026-10-08T05:14:08.138168+00:00",
+      "exit_code": 0,
+      "tool_sha256": {}
+    },
+    {
+      "file": "regression_registration_r3.run.json",
+      "command": [
+        "node",
+        "-e",
+        "const fs=require('fs'),p=require('path').resolve('docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/test_tmp');require('os').tmpdir=()=>p;console.log(JSON.stringify(require('./pc_apps/human_replay/registration.test.js').run(),null,2));"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:15:32.246084+00:00",
+      "end_utc": "2026-10-08T05:15:34.272642+00:00",
+      "exit_code": 0,
+      "tool_sha256": {}
+    },
+    {
+      "file": "review_check.run.json",
+      "command": [
+        "node",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/review_check.js"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:27:12.029003+00:00",
+      "end_utc": "2026-10-08T05:27:12.444004+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\review_check.js": "d022094cf77032c0cafcc4bd91d50985f75acf8ab1d1cdc2bde76c1996579729"
+      }
+    },
+    {
+      "file": "semantic_selfcheck.run.json",
+      "command": [
+        "node",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/semantic.js"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:06:35.830267+00:00",
+      "end_utc": "2026-10-08T05:06:36.718262+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\semantic.js": "48969bef8a474dbf98207d7d6558d789163ad6f3f35b3e7d53c888bcbd117233"
+      }
+    },
+    {
+      "file": "submit.run.json",
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/submit.py"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:34:58.831249+00:00",
+      "end_utc": "2026-10-08T05:34:59.059911+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\submit.py": "0a49dc6ea796bfc26ca95ea507c733fd1c1df246e90557815de1b9130203e09f"
+      }
+    },
+    {
+      "file": "vote_repro.run.json",
+      "command": [
+        "node",
+        "docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/vote_repro.js"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "start_utc": "2026-10-08T05:29:22.794513+00:00",
+      "end_utc": "2026-10-08T05:29:22.936457+00:00",
+      "exit_code": 0,
+      "tool_sha256": {
+        "docs\\human_capture\\evidence\\2026-10-08_hrsemshadow_r1\\vote_repro.js": "75f28963d18b7fbfd2b2d17a74f6d9f0a4bb4799353ebb3c42bf9dc6044470c9"
+      }
+    }
+  ]
+}

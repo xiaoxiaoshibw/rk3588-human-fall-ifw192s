@@ -1,0 +1,24 @@
+
+session  mode    n     p50_ms  p95_ms  max_ms  peak_heap_mb
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+%-8s %-7s %4d %8.2f %8.2f %8.2f %13.1f 
+dynamic  BASE_A  83  P50=16.39  P95=19.41  max=43.61  heap=57.2MB
+dynamic  BASE_B  83  P50=12.25  P95=15.08  max=23.56  heap=106.4MB
+dynamic  U3  83  P50=25.92  P95=33.06  max=43.16  heap=85.9MB
+empty  BASE_A  203  P50=9.57  P95=12.46  max=15.18  heap=112.1MB
+empty  BASE_B  203  P50=2.69  P95=6.82  max=8.98  heap=121MB
+empty  U3  203  P50=11.13  P95=14.65  max=16.91  heap=106.1MB
+standing  BASE_A  177  P50=11.42  P95=15.84  max=21.41  heap=112.1MB
+standing  BASE_B  177  P50=4.58  P95=8.68  max=15.15  heap=122.7MB
+standing  U3  177  P50=9.55  P95=15.65  max=22.88  heap=112.4MB
+PASS: 全部 P95<50ms 且 heap<1500MB (9/9)
+PASS: dynamic A+B 都有数据
+
+== perf: 2 PASS, 0 FAIL ==

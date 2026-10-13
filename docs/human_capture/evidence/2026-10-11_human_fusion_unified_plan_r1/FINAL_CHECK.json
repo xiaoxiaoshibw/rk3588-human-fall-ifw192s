@@ -1,0 +1,189 @@
+{
+  "scope": "final planning/source protection check; no production algorithm execution",
+  "head_unchanged": true,
+  "full_tree_sha_all_equal": false,
+  "final_inventory_files": 12461,
+  "protected_paths": 11946,
+  "protected_assets_unchanged": true,
+  "outside_authorized_paths": [
+    "sidequests/human_fusion_lab/results/chrome_q01b.log"
+  ],
+  "external_runtime_log_classified": "EXTERNAL_DRIFT_01.json",
+  "current_plan_equals_reviewed_submission": true,
+  "acceptance_version": "v1",
+  "plan_version": "v2",
+  "local_links": 20,
+  "broken_links": 0,
+  "current_documents_sha256": {
+    "docs/human_capture/README.md": "85db09f4060fac529fa54e26b057ec9058653f68212a32e281e2ec41d0b9f413",
+    "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md": "a5d08183a75969afefed9460d28af114e2a9a53982f905e5bbf8b556d2113b60",
+    "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md": "7b62c582100918d4481738bb37adca47e6c856941eb7524460c8cebc850962b0",
+    "docs/human_capture/tickets/HUMAN-FUSION-UNIFIED-PLAN.md": "5d80eb8cd8ffa072653d840bb717db094555e83494c66d7f5777eea1241719a6",
+    "docs/human_capture/returns/HUMAN-FUSION-UNIFIED-PLAN.md": "d499f75aabb0a67101c045c60a57377d3f8e4e832d3b5d9c42cae0154562ef92"
+  },
+  "review_03": {
+    "command": [
+      "C:\\Users\\30680\\AppData\\Roaming\\npm\\node_modules\\opencode-ai\\bin\\opencode.exe",
+      "run",
+      "--agent",
+      "plan",
+      "-m",
+      "opencode-go/deepseek-v4.1-flash",
+      "--format",
+      "json"
+    ],
+    "model": "opencode-go/deepseek-v4.1-flash",
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_seconds": 277.7008581161499,
+    "session_ids": [
+      "ses_ed53a0571ffeRU8vv0BfTD1AEm"
+    ],
+    "dispatch_verification": {
+      "status": "PASS",
+      "expected_chars": 187,
+      "actual_user_chars": [
+        189
+      ],
+      "exact_raw_carrier_present": false,
+      "canonical_carrier_present": true,
+      "normalization": "at most one pair of surrounding transport quotes; no whitespace/content normalization",
+      "actual_models": [
+        "opencode-go/deepseek-v4.1-flash"
+      ],
+      "instruction_path": "D:\\Code\\ldiar\\docs\\human_capture\\evidence\\2026-10-11_human_fusion_unified_plan_r1\\OPENCODE_PROMPT_03.md",
+      "instruction_sha256": "4c58227ae37dc028174bc6851504d4f5b732e89a628cd8bd51d3351d58e96930",
+      "instruction_file_unchanged": true,
+      "instruction_read_observed": true
+    },
+    "actual_tools": [
+      "glob",
+      "grep",
+      "read"
+    ],
+    "tool_calls": 42,
+    "skill_read_observed": true,
+    "events": 89,
+    "text_chars": 5831,
+    "readonly_permissions": true,
+    "prompt_sha256": "4c58227ae37dc028174bc6851504d4f5b732e89a628cd8bd51d3351d58e96930"
+  },
+  "final_status": {
+    "P01": "PASS",
+    "P02": "PASS",
+    "P03": "PASS",
+    "P04": "PASS",
+    "P05": "PASS",
+    "P06": "PASS",
+    "P07": "PASS",
+    "P08": "PASS",
+    "P09": "PASS",
+    "DEV01": "NOT_RUN",
+    "DEV02": "BLOCKED",
+    "D01": "NOT_RUN",
+    "PHY01": "BLOCKED"
+  },
+  "status_ownership": "OpenCode P01/P03-P07; Codex end-of-run P02/P08/P09; reviewer pending states retained",
+  "links": [
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/REVIEW_RESPONSE_01.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "returns/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/BASELINE_BEFORE.json",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/ROUND_01_RECONCILIATION.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/ROUND_02_ARCHITECTURE.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/ROUND_03_ADVERSARIAL.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_cc_mainline_r1/03_SUMMARY.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_bg_v3_r1/REPORT_FINAL.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_diagnosis_r1/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_diagnosis_r1/late_review.json",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md",
+      "target": "tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md",
+      "target": "HUMAN_FUSION_UNIFIED_PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../HUMAN_FUSION_UNIFIED_PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../returns/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/returns/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../evidence/2026-10-11_human_fusion_unified_plan_r1/CLOSEOUT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/returns/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../evidence/2026-10-11_human_fusion_unified_plan_r1/OPENCODE_REVIEW_03.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/returns/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../HUMAN_FUSION_UNIFIED_PLAN.md",
+      "exists": true
+    }
+  ]
+}

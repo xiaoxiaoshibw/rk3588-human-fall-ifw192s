@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "kind": "hrretv2_inc2_browser_replica",
+  "created_utc": "2026-10-08T02:09:09.972Z",
+  "inputs": {
+    "sid": "cap_20261002_223757",
+    "points_bin": "fe818d84a5d784c97ae6efcaa68b6b37861441b1e7c58390420205dae7ced08d",
+    "meta_sha256": "71915d5181b8fc409d83a8e1650671801d2d50cf09ef4a3832d43b51ec3f4ca8",
+    "human_pipe_lib": "8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176",
+    "transform": {
+      "R": [
+        [
+          0.8951918220466016,
+          0,
+          0.4456810538276061
+        ],
+        [
+          -0.002847862550473725,
+          0.9999795843062608,
+          0.0057201966374881685
+        ],
+        [
+          -0.4456719549397058,
+          -0.006389911633029181,
+          0.8951735460845248
+        ]
+      ],
+      "t": [
+        0,
+        0,
+        1.3231915066972948
+      ]
+    }
+  },
+  "page": {
+    "0": {
+      "counts": "49126 → 49126 → 3913（削 45213）",
+      "cleanup": "候选 39 · veto 4 · 删 35 点 / 35 voxel · 其他z保活 6 cell · 簇 24→23",
+      "clusters": "5 簇 · 确认 ×2 · 候选 ×0 · 非人 ×3"
+    },
+    "29": {
+      "counts": "49134 → 49134 → 3930（削 45204）",
+      "cleanup": "候选 31 · veto 3 · 删 28 点 / 28 voxel · 其他z保活 4 cell · 簇 25→25",
+      "clusters": "5 簇 · 确认 ×1 · 候选 ×0 · 非人 ×4"
+    },
+    "staticVoxels": 1720
+  },
+  "node": {
+    "static_voxels": 1720,
+    "frames": {
+      "0": {
+        "counts": "49126 → 49126 → 3913（削 45213）",
+        "cleanup": "候选 39 · veto 4 · 删 35 点 / 35 voxel · 其他z保活 6 cell · 簇 24→23",
+        "clusters": "5 簇 · 确认 ×2 · 候选 ×0 · 非人 ×3"
+      },
+      "29": {
+        "counts": "49134 → 49134 → 3930（削 45204）",
+        "cleanup": "候选 31 · veto 3 · 删 28 点 / 28 voxel · 其他z保活 4 cell · 簇 25→25",
+        "clusters": "5 簇 · 确认 ×1 · 候选 ×0 · 非人 ×4"
+      }
+    }
+  },
+  "verdicts": [
+    {
+      "id": "B-static",
+      "target": "节点复刻静态体素数 == 页面 1720",
+      "pass": true,
+      "actual": "node=1720"
+    },
+    {
+      "id": "B-0-counts",
+      "target": "idx 0 counts == 页面",
+      "pass": true,
+      "actual": "49126 → 49126 → 3913（削 45213）"
+    },
+    {
+      "id": "B-0-cleanup",
+      "target": "idx 0 cleanup == 页面",
+      "pass": true,
+      "actual": "候选 39 · veto 4 · 删 35 点 / 35 voxel · 其他z保活 6 cell · 簇 24→23"
+    },
+    {
+      "id": "B-0-clusters",
+      "target": "idx 0 clusters == 页面",
+      "pass": true,
+      "actual": "5 簇 · 确认 ×2 · 候选 ×0 · 非人 ×3"
+    },
+    {
+      "id": "B-29-counts",
+      "target": "idx 29 counts == 页面",
+      "pass": true,
+      "actual": "49134 → 49134 → 3930（削 45204）"
+    },
+    {
+      "id": "B-29-cleanup",
+      "target": "idx 29 cleanup == 页面",
+      "pass": true,
+      "actual": "候选 31 · veto 3 · 删 28 点 / 28 voxel · 其他z保活 4 cell · 簇 25→25"
+    },
+    {
+      "id": "B-29-clusters",
+      "target": "idx 29 clusters == 页面",
+      "pass": true,
+      "actual": "5 簇 · 确认 ×1 · 候选 ×0 · 非人 ×4"
+    }
+  ]
+}

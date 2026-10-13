@@ -1,0 +1,59 @@
+--- a/pc_apps/human_replay/floor_sheet.py
++++ b/pc_apps/human_replay/floor_sheet.py
+@@ -226,17 +226,45 @@
+         best = tuple(chosen)
+         best_sep = min(float(np.hypot(*(keys[a] - keys[b])))
+                        for a, b in itertools.combinations(chosen, 2))
+-    sel = keys[list(best)].astype("f8")
+-    min_sep = best_sep * PROFILE["cell_m"]
+-    dist = np.hypot(sel[:, None, 0] - sel[None, :, 0], sel[:, None, 1] - sel[None, :, 1])
+-    np.fill_diagonal(dist, np.inf)
+-    independent = int(np.all(dist >= p["roi_min_separation_m"] / PROFILE["cell_m"], axis=1).sum())
+-    singular = np.linalg.svd(sel - sel.mean(axis=0), compute_uv=False)
+-    condition = float(max(0., singular[-1] / max(singular[0], 1e-30)))
+-    ok = bool(min_sep >= p["roi_min_separation_m"] and independent == 4
+-              and condition >= p["condition_min"])
+-    return {"ok": ok, "clean_cells": n, "selected": sel.tolist(), "min_sep_m": min_sep,
+-            "independent_count": independent, "condition": condition}
++    def describe(index, separation):
++        sel = keys[list(index)].astype("f8")
++        min_sep = separation * PROFILE["cell_m"]
++        dist = np.hypot(sel[:, None, 0] - sel[None, :, 0], sel[:, None, 1] - sel[None, :, 1])
++        np.fill_diagonal(dist, np.inf)
++        independent = int(np.all(dist >= p["roi_min_separation_m"] / PROFILE["cell_m"], axis=1).sum())
++        singular = np.linalg.svd(sel - sel.mean(axis=0), compute_uv=False)
++        condition = float(max(0., singular[-1] / max(singular[0], 1e-30)))
++        ok = bool(min_sep >= p["roi_min_separation_m"] and independent == 4
++                  and condition >= p["condition_min"])
++        return {"ok": ok, "clean_cells": n, "selected": sel.tolist(), "min_sep_m": min_sep,
++                "independent_count": independent, "condition": condition}
++
++    previous = describe(best, best_sep)
++    if previous["ok"]:
++        return previous  # 旧成功逐字保留，不为提高分数重新选 ROI。
++    delta = keys - keys[0]
++    nonzero = np.flatnonzero(np.any(delta != 0, axis=1))
++    if not len(nonzero):
++        return previous
++    axis = delta[nonzero[0]]
++    if np.all(delta[:, 0] * axis[1] == delta[:, 1] * axis[0]):
++        return previous  # 完全共线，不可能满足原条件数门。
++
++    # ponytail: 仅旧失败走完整 O(n^4) 离线兜底；大规模时延未作为板端准入。
++    winner, winner_sep = previous, -1.
++    for combo in itertools.combinations(range(n), 4):
++        pts = keys[list(combo)]
++        span = pts[1:] - pts[0]
++        if np.all(span[:, 0] * span[0, 1] == span[:, 1] * span[0, 0]):
++            continue
++        separation = min(float(np.hypot(*(pts[a] - pts[b])))
++                         for a, b in itertools.combinations(range(4), 2))
++        if separation * PROFILE["cell_m"] < p["roi_min_separation_m"] or separation <= winner_sep:
++            continue
++        candidate = describe(combo, separation)
++        if candidate["ok"]:
++            winner, winner_sep = candidate, separation
++    return winner
+ 
+ 
+ def detect_floor_regions_v2(points, frame_ids, pitch_deg, roll_deg):

@@ -192,6 +192,7 @@
 
     /* 会话列表与 overlay 初始化解耦: 即使 overlay 还没就绪也先把下拉填上,
      * 否则用户没载入会话时 load_local_sessions 永远不会跑 (死锁). */
+    /* B2-A-FIX-R1 E#4: 冷启载入独立于 S.geo；load() 仍单点接管代际/reset。 */
     SESSION_SELECTION.start({
         select: sessSel,
         notice: document.getElementById("sessionNotice"),
@@ -199,7 +200,17 @@
         load: function (sid) { return window.__load_session_sid(sid); }
     });
 
-    btn.addEventListener("click", function () { show(!on); });
+    btn.addEventListener("click", function () {
+        var next = !on;
+        /* B2-A-FIX-R1: 重开检测仍显式 reset (同会话内的状态清理, 不涉及 session gen). */
+        if (next && !on && typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY) {
+            HUMAN_DETECT_OVERLAY.reset();
+            if (window.replay_internal && window.replay_internal.S) {
+                window.replay_internal.S.tracker_last_idx = -1;   /* 下一次 on_frame 按新 track 处理 */
+            }
+        }
+        show(next);
+    });
 
     if (typeof HUMAN_DETECT_OVERLAY === "undefined") {
         console.error("detect_overlay.js 未加载");

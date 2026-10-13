@@ -1,0 +1,120 @@
+{
+  "sid": "cap_20261010_180751",
+  "label": "BG_A",
+  "inputMode": "sensor_valid",
+  "input_sha256": {
+    "meta": "60ddb3d5bc5b2cf078a66a84a7f69f8d71ce9df0a0ff5cf106d42ee87be5b323",
+    "points": "7d978a67336459f702c91a9eb77f69bee2fef6f444889ee1a0e15eb106726dbd"
+  },
+  "gt_sha256": null,
+  "gt_binding_valid": false,
+  "coordinate": {
+    "already_leveled": false,
+    "R": [
+      0.893544,
+      0,
+      0.448975,
+      -0.014337,
+      0.99949,
+      0.028533,
+      -0.448746,
+      -0.031932,
+      0.893089
+    ],
+    "T": [
+      0,
+      0,
+      1.380286
+    ]
+  },
+  "config": {
+    "mode": "FUSION",
+    "background": "ref_only",
+    "candidates": "fg_plus_retained",
+    "classifier": "rf51",
+    "rf51_threshold": 0.55,
+    "confirm_window": 5,
+    "confirm_votes": 3,
+    "min_age_frames": 3,
+    "track_gate_xy_m": 0.75,
+    "track_lost_max": 8,
+    "ema_alpha": 0.35,
+    "retention": {
+      "window_confirm": 3,
+      "timeout_s": 180,
+      "hot_cell_radius_m": 0.4,
+      "max_lost_for_retain": 30
+    },
+    "leveling_rt": null,
+    "hard_gate_n500": false,
+    "replay_policy": "strict",
+    "diagnostics": true,
+    "fusion_cfg": {
+      "assoc_gate_xy_m": 0.75,
+      "track_gate_xy_m": 0.75,
+      "track_lost_max": 30,
+      "track_still_confirm_window": 5,
+      "track_still_confirm_votes": 3,
+      "track_still_confirm_min_age": 3,
+      "rf51_threshold": 0.55,
+      "bg_envelope_path": null,
+      "online_background": false
+    }
+  },
+  "total_frames": 126,
+  "qualified_frames": 0,
+  "unknown_frames": 126,
+  "exposure_seconds": 0,
+  "strict": {
+    "proposal": {
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "unmatched_unknown": 0
+    },
+    "accepted": {
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "unmatched_unknown": 0
+    },
+    "observed_confirmed": {
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "unmatched_unknown": 0
+    }
+  },
+  "legacy": {
+    "accepted": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    "confirmed": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "component_count": 6913,
+  "hard_rejected_components": 6508,
+  "invalid_candidate_row_count": 0,
+  "coast_observations": 12,
+  "duplicate_track_ids": 0,
+  "performance": {
+    "warmup": 5,
+    "p50_ms": 87.95390000002226,
+    "p95_ms": 99.48560000001453,
+    "p99_ms": 103.43929999999818,
+    "peak_heap_mb": 304.30973052978516,
+    "includes_diagnostic_shadow": true
+  },
+  "failures_file": "cap_20261010_180751__BG_A__sensor_valid__FAILURES.json",
+  "limits": [
+    "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+    "propagated observations conditional, not independent human review",
+    "diagnostic shadow performance not pure detector performance",
+    "nine sessions development regression, not blind test"
+  ]
+}

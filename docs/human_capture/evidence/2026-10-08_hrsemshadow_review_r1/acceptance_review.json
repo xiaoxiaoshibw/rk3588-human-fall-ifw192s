@@ -1,0 +1,100 @@
+{
+  "ticket": "HR-SEM-SHADOW",
+  "acceptance_version": "v1",
+  "acceptance_sha256": "3b5b83da5a83c460bc7590011034647f77272be70d1f92f7c2ddb9c0bd8498dd",
+  "independent_review": true,
+  "delivery_decision": "REWORK_REQUIRED; offline delivery not accepted",
+  "production_eligible": false,
+  "rows": [
+    {
+      "id": "SEM-01",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-02",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-03",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-04",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-05",
+      "status": "BLOCKED",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-06",
+      "status": "BLOCKED",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-07",
+      "status": "BLOCKED",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-08",
+      "status": "BLOCKED",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-09",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-10",
+      "status": "BLOCKED",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-11",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-12",
+      "status": "FAIL",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-13",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-14",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-15",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    },
+    {
+      "id": "SEM-16",
+      "status": "PASS",
+      "evidence": "REVIEW.md"
+    }
+  ],
+  "changed_from_selfcheck": [
+    {
+      "id": "SEM-12",
+      "from": "PASS",
+      "to": "FAIL",
+      "reason": "unbound external cluster index can misrepresent reviewed member set"
+    }
+  ],
+  "WD02": "inputs and artifacts intact; extra harness generator-code equality diagnosed; no WD02 execution or release",
+  "browser_UI": "BLOCKED; prior tool restriction retained; no policy bypass"
+}

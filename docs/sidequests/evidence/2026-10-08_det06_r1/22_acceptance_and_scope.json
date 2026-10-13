@@ -1,0 +1,21 @@
+{
+  "tag": "22_acceptance_and_scope",
+  "date": "2026-10-08",
+  "acceptance": "docs/sidequests/DET06_ACCEPTANCE.md v1",
+  "plan": "docs/sidequests/DET06_PLAN.md v1",
+  "writer": "OpenCode only (opencode-go/deepseek-v4.1-flash)",
+  "scope": {
+    "done": [
+      "new sessions prepared + workspace foreground (equivalence 253/253 vs DET-02)",
+      "annotation proposal + user confirmation + gt_eval_v1 frozen",
+      "baseline evaluation 74 forwards (first32 / z_rank32) + metrics",
+      "regression tests (3 new; 15 total pass)",
+      "records 00-05, 17/18/22"
+    ],
+    "not_done": ["no training", "no capture", "no deployment", "no calibration", "no device/network actions", "DET-05 unchanged"],
+    "forward_budget": {"declared": 74, "used": 74},
+    "empty_reference_frames": "user-confirmed person-free (114819 all frames; 233658 confirmed earlier)",
+    "user_decisions": ["second person = C1, different individual", "same room, lidar unmoved", "actions stand/raise-hand", "person boxes OK", "hard negatives: desk + two person-like fixed objects"]
+  },
+  "status": "SUBMITTED (author self-check); not ACCEPTED; E03/G01 BLOCKED; L01/D01 NOT_RUN"
+}

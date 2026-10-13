@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-12",
+  "definition": "每 GT 对象取覆盖它最多的簇；n>=2000 → 生产 RF 必拒（ledger 实测 0/258 接受）；60-1999 → 可进生产打分；<60 → 被 n>=60 门拒。",
+  "variants": {
+    "C4_FROZEN": {
+      "gt_objects": 510,
+      "cov50_objects": 510,
+      "cov50_by_best_cluster_size": {
+        "big_blob_ge2000": 469,
+        "rescue_ready_60_1999": 41
+      },
+      "rescue_ready_frac_of_cov50": 0.08,
+      "per_session": {
+        "cap_20261010_175429": {
+          "cov50": 258,
+          "rescue_ready": 1,
+          "big_blob": 257
+        },
+        "cap_20261010_175553": {
+          "cov50": 99,
+          "rescue_ready": 0,
+          "big_blob": 99
+        },
+        "cap_20261010_175804": {
+          "cov50": 11,
+          "rescue_ready": 0,
+          "big_blob": 11
+        },
+        "cap_20261010_175943": {
+          "cov50": 6,
+          "rescue_ready": 1,
+          "big_blob": 5
+        },
+        "cap_20261010_180235": {
+          "cov50": 71,
+          "rescue_ready": 32,
+          "big_blob": 39
+        },
+        "cap_20261010_180337": {
+          "cov50": 12,
+          "rescue_ready": 4,
+          "big_blob": 8
+        },
+        "cap_20261010_180557": {
+          "cov50": 53,
+          "rescue_ready": 3,
+          "big_blob": 50
+        }
+      }
+    },
+    "C4A_ROI": {
+      "gt_objects": 510,
+      "cov50_objects": 510,
+      "cov50_by_best_cluster_size": {
+        "big_blob_ge2000": 485,
+        "rescue_ready_60_1999": 25
+      },
+      "rescue_ready_frac_of_cov50": 0.049,
+      "per_session": {
+        "cap_20261010_175429": {
+          "cov50": 258,
+          "rescue_ready": 13,
+          "big_blob": 245
+        },
+        "cap_20261010_175553": {
+          "cov50": 99,
+          "rescue_ready": 0,
+          "big_blob": 99
+        },
+        "cap_20261010_175804": {
+          "cov50": 11,
+          "rescue_ready": 0,
+          "big_blob": 11
+        },
+        "cap_20261010_175943": {
+          "cov50": 6,
+          "rescue_ready": 0,
+          "big_blob": 6
+        },
+        "cap_20261010_180235": {
+          "cov50": 71,
+          "rescue_ready": 11,
+          "big_blob": 60
+        },
+        "cap_20261010_180337": {
+          "cov50": 12,
+          "rescue_ready": 1,
+          "big_blob": 11
+        },
+        "cap_20261010_180557": {
+          "cov50": 53,
+          "rescue_ready": 0,
+          "big_blob": 53
+        }
+      }
+    }
+  }
+}

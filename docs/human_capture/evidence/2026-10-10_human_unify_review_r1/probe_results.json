@@ -1,0 +1,80 @@
+{
+  "b_gate": {
+    "production_track_ids": [
+      1
+    ],
+    "core_track_ids": [
+      1,
+      2
+    ]
+  },
+  "b_one_to_one": {
+    "production_ids": [
+      1,
+      2
+    ],
+    "core_ids": [
+      1,
+      1
+    ]
+  },
+  "intensity_mapping": {
+    "expected_first": 10,
+    "actual_first": 999,
+    "candidate_index_is_clean_not_raw": true
+  },
+  "session_reset": {
+    "session_id": "two",
+    "row_sessions": [
+      "one",
+      "two"
+    ]
+  },
+  "config_ignored": {
+    "configured_lost_max": 30,
+    "actual_pipe_lost_max": 8,
+    "track_active_after_9_misses": false
+  },
+  "leveling_mismatch": {
+    "frame_passed_through": true,
+    "background_coordinates": [
+      [
+        2.236063003540039,
+        -0.00014099999680183828,
+        1.3758829832077026
+      ]
+    ],
+    "frame_coordinates": [
+      2,
+      0,
+      1
+    ]
+  },
+  "lazy_truncation": {
+    "rejected": false,
+    "decoded_xyzi": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "empty_u3_summary": {
+    "n_frames": 203,
+    "mean_ms_per_frame": 16.25,
+    "max_ms_per_frame": 31.06,
+    "frames_with_person_cand": 203,
+    "frames_with_furniture_cand": 0,
+    "n_tracks_total": 24,
+    "n_tracks_confirmed": 12,
+    "n_track_ids_unique": 24
+  },
+  "production_sha": {
+    "checked": 19,
+    "mismatches": []
+  },
+  "manifests": {
+    "files": 45,
+    "mismatches": []
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "round": "CL2-13_r1",
+  "date": "2026-10-10 Asia/Shanghai",
+  "evidence_dir": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-10_cl2_13_r1",
+  "n_files": 17,
+  "files": {
+    "00_SCOPE_AND_ACCEPTANCE.md": "def4c7b0fddde798ff5ae58103a62ec0a93a94cc5830b91c2862d05c2227b637",
+    "02_RECOMPUTE_ANALYSIS.md": "ad4eba49556c6b156e2f2e234c17adf3e2db098ab5ca5274a26708281886a296",
+    "02_RECOMPUTE_RESULTS.json": "116e66859af054e6befaf91467cb5329779f181d559fd1e057b41ce376e286f1",
+    "02_independent_recompute.py": "8f519ada7d255496226a7c99d7b81b74a453f742166292964a81b75e23327b32",
+    "03_verify_minimal.py": "c7f99a8db16246143b739083e5475e45d1ab3034a5f80a000e2815352703b7d4",
+    "05_E3_PREREGISTRATION_DESIGN.md": "42c6b550610ede195c340ea26f8c8615bf03912344b2e692d173aa6dfeb40ca8",
+    "06_AUDIT_REPORT_FULL.md": "1dd595a128f53e23c630de2be0798db93f642fe21fcb9386946c99b486f27acd",
+    "06_INDEPENDENT_REVIEW.md": "1efcb06f583d1da62c7af869128758f5a781ac7fa8503d3e825f23995aef474b",
+    "FINAL_REPORT.md": "e7789d5edd1bf91051938b8af94dbca103d8360ba62c9804a87d6d9c51d47067",
+    "cl2_13_agent.json": "776660e875276b5b2250816dc4f2db0f632c799dba2f7d1c551a97fcc41b565d",
+    "cl2_13_agent_dbg.stdout": "c04f5a9884618cb93709a4b963f1733ebd1ae054702cae279c1125ad0e5a463e",
+    "cl2_13_completion.json": "9bcd3f22ee77eaaf5da443e09087fcb729b3de5d8377b3cbe3f9b5e2dcfc809c",
+    "cl2_13_effective_config.json": "e5cf3d53b3ab7d08d8fe324679e83fc89d42dcaf03e81b7a3e72522ac1b14edb",
+    "cl2_13_opencode_prompt.txt": "33a66c0e05623e92ea0cc4923ff0f78f69a3f45f2e9427512748307be7e2282d",
+    "cl2_13_raw.stdout": "b05667453bdaa2f67c1c81062e5216d81fb256ca66441decac1f1cc77f7f2ac2",
+    "cl2_13_seal.py": "d90af290adc8096c8240eba184ccdb0389d01780e193bc3d5c564b606e691e70",
+    "run_opencode_cl2_13.py": "b05a61165ef361390af0f02e896cbd2c1958446fc3ec671f2b50487c6330bf5f"
+  },
+  "external_readonly_inputs": {
+    "bin": "D:/Code/cl208audit/audit_inputs/cap_20261009_121647/points.bin",
+    "bin_sha256": "97def5d21c28d695c686bb79b255fddd4f666ea856c39593f5dff567506017fc",
+    "domain_npz_sha256": "1cf1ea9c4856f2ddc36f58e23d3747bb9ecb391ac582e8dd3ebc3febd03b5c26",
+    "report_json_sha256": "9101d28a50c30e0210eb7eaca2b697b486517da000c660a89b34e82177b96214"
+  },
+  "sealed_history_readonly": {
+    "cl2_10_dir": "docs/sidequests/evidence/2026-10-09_cl2_10_r1 (05_evidence_manifest.json 195 files, untouched)",
+    "cl2_11_dir": "docs/sidequests/evidence/2026-10-10_cl2_11_r1 (07_EVIDENCE_MANIFEST.json 22 files, untouched)",
+    "cl2_12_dir": "docs/sidequests/evidence/2026-10-10_cl2_12_r1 (07_EVIDENCE_MANIFEST.json 28 files, recomputed by 02_independent_recompute.py this round: 28/28 SHA match, 0 writes)"
+  },
+  "carried_findings": {
+    "F-AUTHOR-1": "CL2-12 corrected design_m3 has baseline-cell -> last-ring dummy collision. CL2-12 seal UNTOUCHED; corrected numbers live in 02_RECOMPUTE_RESULTS.json.",
+    "F-AUTHOR-2": "CL2-12 02 uses morton-ordered c_levels while 03 CV uses plain-sorted -> baseline cells differ; 02 and 03 M3 numbers are NOT the same parametrization and must not be cross-cited as one model."
+  }
+}

@@ -1,0 +1,383 @@
+{
+  "schema_version": "hfus-d04-demo-manifest-v1",
+  "created_iso": "2026-10-11T22:01:00Z",
+  "baseline_doc": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/BASELINE_D04.md",
+  "baseline_shas_file": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/BASELINE_SHAS.json",
+  "demo_html": "sidequests/human_fusion_lab_next/d04/demo_d04.html",
+  "demo_html_sha256": "0fa95342956f735c63602eb83239d7f5fbdae214fe28375aa0240d4451a6ef31",
+  "run_d04": {
+    "path": "sidequests/human_fusion_lab_next/d04/run_d04.js",
+    "sha256": "a8e4b2cf87d59120aca3236612096bfcfc2b12b0c05443a2a51c48eaafe4f9f3"
+  },
+  "make_s6_svgs": {
+    "path": "sidequests/human_fusion_lab_next/d04/make_s6_svgs.js",
+    "sha256": "eba3df51854db69526918e34e1917171e371f7c31ad22785fe7c5245287856cb"
+  },
+  "s9_rebind": {
+    "path": "sidequests/human_fusion_lab_next/d04/s9_rebind.js",
+    "sha256": "7312fd9f0968f142ff404a442184a4557e892ad3390c367645f3302f8d3624bc",
+    "out_rebind_patch": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/s9_rebind/rebind_patch.json"
+  },
+  "variants": [
+    {
+      "name": "D04_base",
+      "mode_ledgers": {
+        "B": {
+          "cap_20261010_175227": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_175227.jsonl",
+            "sha256": "309a1a1f82ea22bb0ba8f8b20d947e326a747e31d0681dbaf89226c4289b6116",
+            "frames": 304
+          },
+          "cap_20261010_175429": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_175429.jsonl",
+            "sha256": "4a4471817e82f723a2e6ce2009d430101e37a1ca27f83d88c82201be00c82c1f",
+            "frames": 258
+          },
+          "cap_20261010_175553": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_175553.jsonl",
+            "sha256": "c0e9201619da3578a6b5fc66bea4fb1fa93eaee0185e7db9756664c03ef569d9",
+            "frames": 464
+          },
+          "cap_20261010_175804": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_175804.jsonl",
+            "sha256": "c5d328556a19fef00bbabc38b1a71376c258ce6544b4bbce56b67e919ff4c861",
+            "frames": 239
+          },
+          "cap_20261010_175943": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_175943.jsonl",
+            "sha256": "e47ec3487d4ba5d7ebd23643e9a16348f6f357705f94feabb93e2946cd61a28e",
+            "frames": 202
+          },
+          "cap_20261010_180235": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_180235.jsonl",
+            "sha256": "e394e2e64045e5aff11fce47ee4db9d47c8982b8f7ee280fda2243b820c3d1a5",
+            "frames": 238
+          },
+          "cap_20261010_180337": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_180337.jsonl",
+            "sha256": "20aa477cffa9e66730295b07a042692bbfefd86c18412204c28b46bfd85169c8",
+            "frames": 251
+          },
+          "cap_20261010_180557": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_180557.jsonl",
+            "sha256": "086767734383c675cb46811d42c6ffbf78f9988ffd12c059f69c60312dda77f0",
+            "frames": 523
+          },
+          "cap_20261010_180751": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_cap_20261010_180751.jsonl",
+            "sha256": "a0bacd2c91237110c1e650a09fbc23dd77a0343fec84650e34832db9b11da816",
+            "frames": 126
+          }
+        }
+      },
+      "summary_path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/base/D04_base_SUMMARY.json",
+      "summary_sha256": "03f1d16c83cac653fd65b0cc351339f8e0d695364a851ec31f7cf22e1cff247f",
+      "config_sha256": "646aae91c62371732084f505cb387029f0ef68eff52b372fdbbfc3673315f696 (frozen; D04 uses same engine settings except variant hooks)"
+    },
+    {
+      "name": "D04_split_only",
+      "mode_ledgers": {
+        "B": {
+          "cap_20261010_175227": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_175227.jsonl",
+            "sha256": "198b5ffaba6e2b69ae1ac803a5f992e8c7a1f6877d98791ce199b046254ac3d5",
+            "frames": 304
+          },
+          "cap_20261010_175429": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_175429.jsonl",
+            "sha256": "b069b51262749920a68cb721a60ebb0c5399ce3814d35c6b46babad3260603ad",
+            "frames": 258
+          },
+          "cap_20261010_175553": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_175553.jsonl",
+            "sha256": "be38518d6546f78075ba30d800fb7d9527282a97d391cc35714954fda13d1fa6",
+            "frames": 464
+          },
+          "cap_20261010_175804": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_175804.jsonl",
+            "sha256": "47193a84ed8d5f0e5fd542ee85ec32fd1d719739d1c2e24bf26491bf4c48095f",
+            "frames": 239
+          },
+          "cap_20261010_175943": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_175943.jsonl",
+            "sha256": "a0d3ec834167c74703eb2d03a64785cd885be41ec6d8f9c7813ef0ec1acc5470",
+            "frames": 202
+          },
+          "cap_20261010_180235": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_180235.jsonl",
+            "sha256": "b2d2472854a9bc2bd412d066d454613b61daad52cd7883b43d2288f40db2de53",
+            "frames": 238
+          },
+          "cap_20261010_180337": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_180337.jsonl",
+            "sha256": "b72469c45f3cfd0be4b81b713fd4ec090467bb3e1e39214ebbc3d03bda493103",
+            "frames": 251
+          },
+          "cap_20261010_180557": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_180557.jsonl",
+            "sha256": "92d21b3ff395dc5ea723f1a5ecbcd2244f5eec1fe2f43b43899e1cb655e15678",
+            "frames": 523
+          },
+          "cap_20261010_180751": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_cap_20261010_180751.jsonl",
+            "sha256": "62de181bc47b842ab91a4b8dcd4ece100cfdedf616c3ef046861660968ebd361",
+            "frames": 126
+          }
+        }
+      },
+      "summary_path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/split_only/D04_split_only_SUMMARY.json",
+      "summary_sha256": "b34ab7044b4d103be0fed462bd645a8088b0ecb68bd06b257df5b2ec8b00591d",
+      "config_sha256": "646aae91c62371732084f505cb387029f0ef68eff52b372fdbbfc3673315f696 (frozen; D04 uses same engine settings except variant hooks)"
+    },
+    {
+      "name": "D04_point30_only",
+      "mode_ledgers": {
+        "B": {
+          "cap_20261010_175227": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_175227.jsonl",
+            "sha256": "cda0ea319b452b175bd8d2e04e2939ae4a8e2775191249aea73a9135ac9e56b2",
+            "frames": 304
+          },
+          "cap_20261010_175429": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_175429.jsonl",
+            "sha256": "54629f369284db501729d06a8999f8fa1161885b4a28013599346d1778842af1",
+            "frames": 258
+          },
+          "cap_20261010_175553": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_175553.jsonl",
+            "sha256": "5947da8f61e9c8c4038a0e55cea7349cc41df0e226105180491a9bb2ba832329",
+            "frames": 464
+          },
+          "cap_20261010_175804": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_175804.jsonl",
+            "sha256": "983fe6a791a57c8cc3ecee2d2cb91ddb21425ef33cdeed72a0a518e14734351d",
+            "frames": 239
+          },
+          "cap_20261010_175943": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_175943.jsonl",
+            "sha256": "710db63b845936a9744a3323c7c441cc87b9cd4295660e35da904cab4f488c1f",
+            "frames": 202
+          },
+          "cap_20261010_180235": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_180235.jsonl",
+            "sha256": "e41ddc535828a8db709a0b7caa3b2c4c7f9e8a62889523bdfcf7184451188c91",
+            "frames": 238
+          },
+          "cap_20261010_180337": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_180337.jsonl",
+            "sha256": "bbd1012127c750b1bc3bf4d65818cebd5554eeed8bcbe130c058945339fedde0",
+            "frames": 251
+          },
+          "cap_20261010_180557": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_180557.jsonl",
+            "sha256": "b1875228012042d1b2293471779835ee79d6afd18255f3f206181a350ec1f5f8",
+            "frames": 523
+          },
+          "cap_20261010_180751": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_cap_20261010_180751.jsonl",
+            "sha256": "d8cc6ac04f2f50ef852b6e4ebaddca50018c26d8e7e9af7985caa695ddb819b2",
+            "frames": 126
+          }
+        }
+      },
+      "summary_path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point30_only/D04_point30_only_SUMMARY.json",
+      "summary_sha256": "58a1dc74a7fdc485429aeb6adc679f15a2ca41eb13ae7d0ae0066f092ae639e5",
+      "config_sha256": "646aae91c62371732084f505cb387029f0ef68eff52b372fdbbfc3673315f696 (frozen; D04 uses same engine settings except variant hooks)"
+    },
+    {
+      "name": "D04_point15_only",
+      "mode_ledgers": {
+        "B": {
+          "cap_20261010_175227": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_175227.jsonl",
+            "sha256": "846c1e3b201e8d8038693a44598020f90f19d167548a44c5e2653a187f6749fa",
+            "frames": 304
+          },
+          "cap_20261010_175429": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_175429.jsonl",
+            "sha256": "46b7c64707b2081687b892a7b3e477231ef20557e3deffedfe64f755626ce6c0",
+            "frames": 258
+          },
+          "cap_20261010_175553": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_175553.jsonl",
+            "sha256": "1b885d06812fa7aedabd55ab7635671d75fafac7a593f56aca15bc5108fcefe6",
+            "frames": 464
+          },
+          "cap_20261010_175804": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_175804.jsonl",
+            "sha256": "b453160634cad76a6be886694891a1ce9822286952667368c33ca0a335a4988d",
+            "frames": 239
+          },
+          "cap_20261010_175943": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_175943.jsonl",
+            "sha256": "0114f00d4e2b2eeae27adf941385a0e6a4d20a6bf873b5a7bb83b4e258787afd",
+            "frames": 202
+          },
+          "cap_20261010_180235": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_180235.jsonl",
+            "sha256": "557aff0bf6f1345318f5281bfb6476f1838151a606ce81c3b8303d22391356f1",
+            "frames": 238
+          },
+          "cap_20261010_180337": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_180337.jsonl",
+            "sha256": "fa0e4246eafaaf4ac9494c8786df7ed1a1394e2d2f0be79626e8a7dcb214fd04",
+            "frames": 251
+          },
+          "cap_20261010_180557": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_180557.jsonl",
+            "sha256": "5348c741047a6cc7a1ed1d772f6f189902159a787165131076bd3b6d14be894f",
+            "frames": 523
+          },
+          "cap_20261010_180751": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_cap_20261010_180751.jsonl",
+            "sha256": "b6bcc12fc700a988e621141482b3c15c7e59979221bf01904dc41d43f385aef5",
+            "frames": 126
+          }
+        }
+      },
+      "summary_path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/point15_only/D04_point15_only_SUMMARY.json",
+      "summary_sha256": "b7a99e5b1859eb225448ea897f4b855eac26ca3d5c45d43c3836faebe65a7edc",
+      "config_sha256": "646aae91c62371732084f505cb387029f0ef68eff52b372fdbbfc3673315f696 (frozen; D04 uses same engine settings except variant hooks)"
+    },
+    {
+      "name": "D04_unknown04_only",
+      "mode_ledgers": {
+        "B": {
+          "cap_20261010_175227": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_175227.jsonl",
+            "sha256": "e0cdac0eced808f2c7db5579e3f944241d79fd93d0ff2698dd0044f83fbe9a89",
+            "frames": 304
+          },
+          "cap_20261010_175429": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_175429.jsonl",
+            "sha256": "2fc42a7b83a3e981165906d5df64bf4a3ae50a4ae14b5c50b5a700bd59b15d17",
+            "frames": 258
+          },
+          "cap_20261010_175553": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_175553.jsonl",
+            "sha256": "7551210aebc1e4f1fa77ab5c5548c2888886bfe30dce19e329e51c30669615e7",
+            "frames": 464
+          },
+          "cap_20261010_175804": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_175804.jsonl",
+            "sha256": "61c86e1d426a2806a52bd5257d62db6eb8732f601f78e1f1de7081d3b2e0253a",
+            "frames": 239
+          },
+          "cap_20261010_175943": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_175943.jsonl",
+            "sha256": "8fc6cb62ea46c74c039a5aae470b832f4fc078c033029b80df9b3e0813d6d7f2",
+            "frames": 202
+          },
+          "cap_20261010_180235": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_180235.jsonl",
+            "sha256": "8bc544c9b6849fe7f15d745aae679ae556dd89f462ce7c967e40cece517625f2",
+            "frames": 238
+          },
+          "cap_20261010_180337": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_180337.jsonl",
+            "sha256": "78a0416f8f032214b9d91025ecdb1729099b880dc242550f3ac8da89e8e24d6b",
+            "frames": 251
+          },
+          "cap_20261010_180557": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_180557.jsonl",
+            "sha256": "ee27fe70635cffde36fea6c80dee45f01641f4daca77286e219322945039bc81",
+            "frames": 523
+          },
+          "cap_20261010_180751": {
+            "path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_cap_20261010_180751.jsonl",
+            "sha256": "890fa0d9a2b786c67e7d45e8ade25dcc1e54bf7aee84157b2fc648c422a1e69f",
+            "frames": 126
+          }
+        }
+      },
+      "summary_path": "docs/human_capture/evidence/2026-10-11_hfus_d04_r1/runs/unknown04_only/D04_unknown04_only_SUMMARY.json",
+      "summary_sha256": "81db9e05686d9c25b20633d9d5faf774a58100d45e7f564fae2d15941f5a4ddd",
+      "config_sha256": "646aae91c62371732084f505cb387029f0ef68eff52b372fdbbfc3673315f696 (frozen; D04 uses same engine settings except variant hooks)"
+    }
+  ],
+  "d03_b_ledgers": {
+    "cap_20261010_175227": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_175227.jsonl",
+      "sha256": "ffb206e49551b35384cb9f27991bc13c2dad9028ec428cb661944beae2501cc2"
+    },
+    "cap_20261010_175429": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_175429.jsonl",
+      "sha256": "300b53b4712a3be53a805f61a8bffb357fa8874cc5093656729ae597340d37af"
+    },
+    "cap_20261010_175553": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_175553.jsonl",
+      "sha256": "0e585cf806ea50ba57c110ccc215b149455256585d94998aa597a9c37f815ac7"
+    },
+    "cap_20261010_175804": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_175804.jsonl",
+      "sha256": "e91ef041f098d4d19869b60e4cce8037a1ebf5f13053a0fae5716d55d3b3ee31"
+    },
+    "cap_20261010_175943": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_175943.jsonl",
+      "sha256": "155ce0df7546687b99a9a309db6cdb711c8579622e3cada428aefec24ef281c6"
+    },
+    "cap_20261010_180235": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_180235.jsonl",
+      "sha256": "77c8fa0735e96df02e26fc8d9a9744f2206596c11fde9154c2db8b7087ee4f3b"
+    },
+    "cap_20261010_180337": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_180337.jsonl",
+      "sha256": "f19292b76077ac755b1d579d306dd40d38b5382ee2d4e4561874a9c92a92ef4f"
+    },
+    "cap_20261010_180557": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_180557.jsonl",
+      "sha256": "cc4168a3a2149f89f34eefe7b93a29315e7e074e9cbd9f732766e1ebcf0d1f17"
+    },
+    "cap_20261010_180751": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_cap_20261010_180751.jsonl",
+      "sha256": "314ed2107ee024e5e960e5b9cce8fae5271a748d83ac0cb4bc3be9ae5b722896"
+    }
+  },
+  "d03_a_ledgers": {
+    "cap_20261010_175227": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_175227.jsonl",
+      "sha256": "7e5e339a231425a317177373a467e05e2bb286410035215fd2af6fc469e9a001"
+    },
+    "cap_20261010_175429": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_175429.jsonl",
+      "sha256": "060f75d5d973f373ca53f24f991e84c17f1ffc87b3eee3ed109190d10bf913ac"
+    },
+    "cap_20261010_175553": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_175553.jsonl",
+      "sha256": "a25164074374eaacea0cb5b7fa460e2fc86c0a431a71c8e0409c7f6147cafad1"
+    },
+    "cap_20261010_175804": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_175804.jsonl",
+      "sha256": "032dec0aba62f630b4797c37f222565e36f9ff07d2c23a94134ccf8d067c1e62"
+    },
+    "cap_20261010_175943": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_175943.jsonl",
+      "sha256": "6cf95bbd9a8452ff8f0f2e2f950d8d648c68dc8476741f901eccd3222a757583"
+    },
+    "cap_20261010_180235": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_180235.jsonl",
+      "sha256": "51deeceddee05d47a16fbd3ffd3fa709cb156b19d1a94f76b577b6cf5af76e5a"
+    },
+    "cap_20261010_180337": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_180337.jsonl",
+      "sha256": "7f5dc800a779df9fe0ced4ae29e5fb998343eccf7b49df35a9d858a21e411552"
+    },
+    "cap_20261010_180557": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_180557.jsonl",
+      "sha256": "9f2c40819d33473dbea549bea5130867bb11bf9b1417703526fc274a45f489d2"
+    },
+    "cap_20261010_180751": {
+      "path": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_cap_20261010_180751.jsonl",
+      "sha256": "d208e98fd9c21f678d78d3ca66c49d99d6274b62dde2219b6c71fd4a708c4b63"
+    }
+  },
+  "d03_b_summary": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/B_SUMMARY.json",
+  "d03_a_summary": "docs/human_capture/evidence/2026-10-11_hfus_d03_r1/A_SUMMARY.json",
+  "type_to_demo": "variants[i].mode_ledgers.B {}",
+  "note": "D04 ledgers are self-contained (mode=D04_<variant>_<sid>.jsonl under runs/<variant>/); D04 demo reads them directly against D03 A/B ledgers as baseline",
+  "cropped_variants_for_demo": "all 5",
+  "reprojection_grounding": "same as run_b.js svg() — same R/T, same color convention (red=GT-P, green=prob>=.35 accepted, purple=rejected cand, gray=bg/fg), same scaling",
+  "exhaustiveness": "9 sessions × 9 variants for demo; runs/ has all 9×5 ledgers",
+  "d03_b_summary_sha256": "abae0dfff363464cc156a111ca3ebf8039e195f650ed1e279472f5a7a5661e7b",
+  "d03_a_summary_sha256": "ea3f47d713342d51686fc1f03d10391523398e55c09374cd65795c5f72f5506a"
+}

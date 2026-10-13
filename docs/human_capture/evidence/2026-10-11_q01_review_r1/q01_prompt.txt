@@ -1,0 +1,10 @@
+请严格按 Q01_REVIEW_BRIEF.md 执行独立审查。你不信任作者（Claude）结论；必须亲自读源码与 evidence json 文件。输出两个文件，写到 ../../docs/human_capture/evidence/2026-10-11_q01_review_r1/：
+1) opencode_review_report.md —— 你的独立结论，逐条问题给 PASS/FAIL/BLOCKED/UNKNOWN + 理由 + minimal repro 路径。
+2) opencode_findings.json —— 机器可读问题清单（id、severity、file、line、verdict、repro、accepted_or_rejected）。
+裁决只允许 PASS / FAIL / BLOCKED / UNKNOWN，禁止凭空 PASS；任何 FAIL 必须给可复现路径。
+最后必须明确回答：
+(a) geometry(post) 的 track_confirmed 与最终 classifier_decision 错位（作者实测 98.7% 不一致）是否为真实生产/契约缺陷，影响哪些验收条目；
+(b) R7 是否存在 train/val/test/stress 会话泄漏（evaluate.js/train.py/audit.py 的 split 是否可信）；
+(c) R8 是否把 UNKNOWN 当成功（attribution.js 的 DISPLAY/RAW/BG/PROPOSAL 归类）；
+(d) 生产接入（rk3588/部署/默认模型）是否应当继续 BLOCKED。
+不要修改任何 pc_apps/ 或 src/ 或生产识别链文件。

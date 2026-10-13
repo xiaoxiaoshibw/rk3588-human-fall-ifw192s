@@ -1,0 +1,127 @@
+{
+  "reviewer": "opencode-go/deepseek-v4.1-flash",
+  "item": "Q01",
+  "workitem": "HUMAN-FUSION-UNIFY-R2 / R5-R8 独立审查",
+  "when": "2026-10-11",
+  "method": "static review + independent re-run (Node detector probe on real sessions, real headless Chrome CDP E2E, HTTP API boundary)",
+  "environment": {
+    "chrome": "154.0.8037.99",
+    "clean_demo_server": "node server.js 8799",
+    "e2e": "cdp_e2e.js 9223 8799 (copy in temp; lab evidence not overwritten)"
+  },
+  "findings": [
+    {
+      "id": "Q01R-01",
+      "severity": "P0",
+      "title": "geometry(post) 候选级 classifier_decision 与 track_confirmed 错位（作者候选 P0）",
+      "file": "sidequests/human_fusion_lab/detector.js",
+      "line": "18-25",
+      "verdict": "CONFIRMED_REAL -> FIXED (candidate-level)",
+      "repro": "node test_geometry_consistency.js -> PASS mismatch=0; independent probe on cap_20261010_175429 geometry: tracked=651, mismatch=0.",
+      "accepted_or_rejected": "accepted (real defect; now fixed at candidate level)",
+      "note": "Fix makes displayed fields self-consistent by construction."
+    },
+    {
+      "id": "Q01R-02",
+      "severity": "P2",
+      "title": "geometry(post) 覆盖只改显示，显示 _tracks 与底层 FusionTracker 内部状态分歧；几何永不产出 CONFIRMED_HUMAN 致所有匹配轨迹被强制 human_confirmed=false",
+      "file": "sidequests/human_fusion_lab/detector.js",
+      "line": "19-24",
+      "verdict": "CONFIRMED (residual, NOT fixed)",
+      "repro": "Independent probe cap_20261010_175429 geometry: displayed_tracks=806, internal_confirmed_tracks=775, internal_vs_display_divergence=635, confirmed_candidates=0/651. rf51_baseline divergence=0.",
+      "accepted_or_rejected": "accepted",
+      "impact": "geometry detector UI never draws purple confirmed tracks; gt_diff.tracks always 0. Must remain labeled research-only post-hoc overlay, not a pure geometry baseline.",
+      "affected_acceptance": ["C05", "R602"]
+    },
+    {
+      "id": "Q01R-03",
+      "severity": "P3",
+      "title": "test_geometry_consistency 的不变量 (track_confirmed == (decision==CONFIRMED_HUMAN)) 对普通 detector 不成立",
+      "file": "sidequests/human_fusion_lab/test_geometry_consistency.js",
+      "line": "36-37",
+      "verdict": "CONFIRMED (info)",
+      "repro": "Independent probe rf51_baseline cap_20261010_175429: tracked=651, mismatch=12 (all legitimate 3-vote warm-up cases; internal_vs_display_divergence=0).",
+      "accepted_or_rejected": "accepted",
+      "note": "Test only targets geometry, so it is fine, but the invariant must not be generalized to all detectors."
+    },
+    {
+      "id": "Q01R-04",
+      "severity": "P2",
+      "title": "陈旧未修复 demo server 仍在 127.0.0.1:8797 (PID 15076) 监听，API 返回修复前行为，污染证据",
+      "file": "sidequests/human_fusion_lab/server.js / cdp_e2e.js",
+      "line": "cdp_e2e.js:8",
+      "verdict": "CONFIRMED",
+      "repro": "curl 8797 geometry@S8 idx30 -> decision=HUMAN_CANDIDATE, track_confirmed=true (old unfixed); curl 8799 clean -> track_confirmed=false. cdp_e2e.js default demo port is 8797.",
+      "accepted_or_rejected": "accepted",
+      "note": "Any reviewer reusing port 8797 may observe pre-fix behavior. Kill stale process / verify port before trusting API evidence."
+    },
+    {
+      "id": "Q01R-05",
+      "severity": "P3",
+      "title": "geometry 审计标记 _rf_decision / track_semantics 未透出到 /api/frame；UI 仅靠 detector 名 geometry(post) 传达对照语义",
+      "file": "sidequests/human_fusion_lab/server.js",
+      "line": "14",
+      "verdict": "CONFIRMED (info)",
+      "repro": "GET /api/frame response candidate fields = {id,indices,n,x,y,z,prob,decision,source,track_id,track_confirmed}; no _rf_decision/track_semantics.",
+      "accepted_or_rejected": "accepted"
+    },
+    {
+      "id": "Q01R-06",
+      "severity": "P3",
+      "title": "session_adapter 与 master 语义等价，但措辞不同、undefined 处理不同",
+      "file": "sidequests/human_fusion_lab/session_adapter.js",
+      "line": "37",
+      "verdict": "PASS (info)",
+      "repro": "q01_choose_diff.js: sid selection 8/8 identical vs master; adapter treats undefined as non-explicit (master explicit unless null); message wording differs.",
+      "accepted_or_rejected": "accepted (no functional impact; URLSearchParams.get never returns undefined)"
+    },
+    {
+      "id": "Q01R-07",
+      "severity": "P0",
+      "title": "R7 分组/泄漏",
+      "file": "sidequests/human_fusion_lab/audit.py",
+      "line": "19",
+      "verdict": "PASS (residual UNKNOWN)",
+      "repro": "AUDIT.splits = {train:4, validation:1, test:2, stress:1, blocked:1}; 9 sessions disjoint (assert len(set)==9). train.py fits only splits.train; UNKNOWN labels excluded.",
+      "accepted_or_rejected": "accepted",
+      "residual": "RETROSPECTIVE_SESSION_HOLDOUT; cross-actor/scene prospective generalization UNKNOWN."
+    },
+    {
+      "id": "Q01R-08",
+      "severity": "P0",
+      "title": "R8 分层损失/UNKNOWN 是否计入成功",
+      "file": "sidequests/human_fusion_lab/attribution.js",
+      "line": "5",
+      "verdict": "PASS (residual UNKNOWN)",
+      "repro": "ATTRIBUTION.loss_counts.DISPLAY == string 'UNKNOWN' (not 0); loss_counts real per-layer; unknown_frames separate; train.py filters label===null; evaluate_fusion_gt skips UNKNOWN class/uncertain intervals.",
+      "accepted_or_rejected": "accepted",
+      "residual": "DISPLAY-layer human observation loss remains UNKNOWN (no physical GT)."
+    },
+    {
+      "id": "Q01R-09",
+      "severity": "P1",
+      "title": "真实浏览器 E2E（Q01_BROWSER_E2E.json 全绿）独立复跑",
+      "file": "sidequests/human_fusion_lab/cdp_e2e.js",
+      "line": "83-148",
+      "verdict": "PASS (verified independently)",
+      "repro": "node cdp_e2e.js 9223 8799 -> E01-E09 10/10 PASS, exit 0; same on 8797. Ran against clean server on 8799 to avoid stale process.",
+      "accepted_or_rejected": "accepted"
+    },
+    {
+      "id": "Q01R-10",
+      "severity": "P0",
+      "title": "生产接入是否继续 BLOCKED",
+      "file": "docs/human_capture/HUMAN_UNIFY_FUSION_R2_ACCEPTANCE.md",
+      "line": "20-21",
+      "verdict": "BLOCKED (continuous)",
+      "repro": "geometry research-only post-hoc overlay (Q01R-02); R7 retrospective holdout; R8 DISPLAY human loss UNKNOWN; RKNN/NPU/RK3588 NOT_RUN; S9 GT BLOCKED; no production-chain authorization.",
+      "accepted_or_rejected": "accepted"
+    }
+  ],
+  "final_answers": {
+    "a_geometry_mismatch_real_defect": "YES, the original candidate-level display mismatch was a real defect (C05/R602) and is now FIXED (mismatch=0). Residual P2: displayed _tracks diverge from internal FusionTracker (635/806 on S3) and geometry never emits CONFIRMED_HUMAN, so it must stay research-only, not a pure geometry baseline.",
+    "b_r7_leakage": "NONE at session level (disjoint 4/1/2/1/1 over 9 sessions, fit on train only, UNKNOWN excluded). Residual UNKNOWN for prospective cross-actor/scene generalization (retrospective holdout).",
+    "c_r8_unknown": "UNKNOWN is NOT counted as success: DISPLAY is explicit string 'UNKNOWN', unknown_frames separate, candidate label===null excluded from training, UNKNOWN-class/uncertain frames skipped in evaluation. DISPLAY-layer human loss remains UNKNOWN.",
+    "d_production_blocked": "YES, production integration must remain BLOCKED."
+  }
+}

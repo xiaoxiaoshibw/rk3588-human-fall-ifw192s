@@ -1,0 +1,64 @@
+{
+ "task": "V3 逐层归因 (B 组背景)",
+ "date": "2026-10-11",
+ "sid": "cap_20261010_180235",
+ "activity": "S6-occlusion",
+ "frames": [
+  91,
+  128
+ ],
+ "group": "B",
+ "rf_threshold": 0.55,
+ "human_n_min": 60,
+ "layers": [
+  "RAW",
+  "LEVELING",
+  "BG_B",
+  "CLEANUP",
+  "PROPOSAL(voxelize+cluster+n_min)",
+  "CLASSIFIER(rf51@0.55)",
+  "TRACKER(pipe.Tracker)"
+ ],
+ "per_person": [
+  {
+   "frame": 91,
+   "id": "obj_f91_n8",
+   "track_id": "P1",
+   "raw": 303,
+   "kept_after_bg": 295,
+   "kept_after_cleanup": 295,
+   "best_proposal_coverage_pts": 295,
+   "loss": "NONE",
+   "bg_top_reasons": [
+    [
+     "z_below_ground",
+     5
+    ],
+    [
+     "bg_voxel_match",
+     3
+    ]
+   ]
+  },
+  {
+   "frame": 128,
+   "id": "obj_f128_n37",
+   "track_id": "P1",
+   "raw": 33,
+   "kept_after_bg": 15,
+   "kept_after_cleanup": 15,
+   "best_proposal_coverage_pts": 15,
+   "loss": "NONE",
+   "bg_top_reasons": [
+    [
+     "bg_voxel_match",
+     17
+    ],
+    [
+     "z_below_ground",
+     1
+    ]
+   ]
+  }
+ ]
+}

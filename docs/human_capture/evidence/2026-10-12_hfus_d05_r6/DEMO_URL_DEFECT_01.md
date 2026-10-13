@@ -1,0 +1,1 @@
+R06 Demo v1沿用旧实现：只匹配完整cap SID，短sid175429未匹配静默fallback家具175227，却应用f220。实际两条near标签记录都显示家具f220，截图DEMO_NEAR220_GUARD_PASS.jpg误命名，不能进近距PASS。原源/JSON/截图保留；推理与评分结果未改。新demo_v2/8919标准化六位短SID为完整SID；不支持的SID明确失败不应用frame，完整SID保持。必须新浏览器验证，旧失败不覆盖。

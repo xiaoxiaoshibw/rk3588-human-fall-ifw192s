@@ -1,0 +1,22 @@
+{
+  "version": "SKO-PARAMS-v1",
+  "status": "FROZEN_TOOL_DEFAULTS_REAL_CALIBRATION_BLOCKED_GT",
+  "units": "m,s",
+  "node_min_points": 6,
+  "node_min_z_span_m": 0.025,
+  "node_max_xy_span_m": 0.8,
+  "bands_m": {
+    "UPPER_TORSO": [1.15, 1.4],
+    "CHEST": [0.95, 1.15],
+    "PELVIS_REGION": [0.55, 0.85],
+    "LOWER_REGION": [0.1, 0.55]
+  },
+  "lower_gap_m": 0.08,
+  "lower_min_separation_m": 0.1,
+  "axis_eigen_ratio_min": 1.2,
+  "inverse_tolerance_m": 0.00001,
+  "ema_tau_s": 0.2,
+  "reset_gap_s": 0.5,
+  "max_jump_m": 0.5,
+  "max_speed_m_s": 3.0
+}

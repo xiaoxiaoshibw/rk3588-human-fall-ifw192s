@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-12",
+  "c4h_equivalence_proof": {
+    "sid": "cap_20261010_175429",
+    "frames_checked": 15,
+    "set_differing_frames": 0,
+    "verdict": "IDENTICAL",
+    "method": "同帧 (py UF c4_core) vs (scipy csgraph c4_core) 候选集合 frozenset 逐帧比对"
+  },
+  "c4ah_roi_scipy": {
+    "frames": 229,
+    "ms_p50": 10.2,
+    "ms_p95": 13.2,
+    "ms_max": 46.7,
+    "gt_cov_mean": 0.783,
+    "purity_mean": 0.151,
+    "big_static_cand": 722,
+    "no_intersect_cand": 1109,
+    "per_session_recall": {
+      "S3-near": 1.0,
+      "S3-far": 1.0,
+      "S4-walkstop": 1.0,
+      "S5-turn": 1.0,
+      "S6-occl": 1.0,
+      "S7-far5m": 1.0,
+      "S8-still": 1.0
+    },
+    "note": "组合 C4A_ROI + C4H_SCIPY_UF，收益叠加；精度=ROI 单独水平，速度=更快"
+  }
+}

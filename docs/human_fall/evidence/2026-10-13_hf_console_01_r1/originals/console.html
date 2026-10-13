@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>LiDAR Workspace</title>
+<link rel="icon" href="console_icon.png" type="image/png">
+<style>
+  /* 设计 token 与 human_replay/ui.css 保持同值；本页因 PyInstaller 单文件打包必须内联 */
+  :root{
+    --bg-app:#141518; --bg-sidebar:#1a1b1f; --bg-panel:#1e1f24; --bg-elevated:#242630;
+    --bg-inset:#101114;
+    --border-subtle:#26282d; --border-strong:#34373e;
+    --text-primary:#e7e8ea; --text-secondary:#a0a3ab; --text-muted:#676b73;
+    --accent:#5c8ade; --accent-soft:rgba(92,138,222,.14);
+    --success:#4bab7d; --warning:#d0a75a; --danger:#d46a62; --danger-soft:rgba(212,106,98,.13);
+    --font-ui:"Segoe UI Variable Text","Segoe UI",Inter,system-ui,
+              "Microsoft YaHei UI","Microsoft YaHei","PingFang SC",sans-serif;
+    --r-panel:6px; --r-ctl:4px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg-app);color:var(--text-primary);
+    font:13px/1.5 var(--font-ui);-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px}
+  ::-webkit-scrollbar-track{background:transparent}
+  .view{height:100%;display:none}
+  .view.on{display:flex;flex-direction:column}
+
+  /* ===== 首页：Launchpad，内容上置，不绝对居中 ===== */
+  #home{align-items:center;overflow-y:auto}
+  #wrap{width:100%;max-width:1100px;padding:96px 40px 48px}
+  #wrap .brand{font-size:19px;font-weight:600;letter-spacing:.2px;margin:0}
+  #wrap .brand-sub{font-size:12px;color:var(--text-muted);margin:4px 0 36px}
+  #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px}
+  .card{display:flex;flex-direction:column;gap:2px;padding:16px 14px;border-radius:var(--r-panel);
+    cursor:pointer;transition:background .12s}
+  .card:hover{background:var(--bg-elevated)}
+  .card .icon{color:var(--text-secondary);height:22px;margin-bottom:8px}
+  .card .icon svg{display:block}
+  .card:hover .icon{color:var(--accent)}
+  .card .name{font-size:13px;font-weight:600;color:var(--text-primary)}
+  .card .desc{font-size:12px;color:var(--text-muted)}
+
+  /* ===== 应用视图 ===== */
+  #bar{display:flex;gap:8px;align-items:center;padding:0 12px;height:44px;flex:none;
+    background:var(--bg-sidebar);border-bottom:1px solid var(--border-subtle)}
+  #bar button{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:30px;
+    padding:0 10px;font:12.5px var(--font-ui);color:var(--text-secondary);background:transparent;
+    border:1px solid transparent;border-radius:var(--r-ctl);cursor:pointer;transition:background .12s,color .12s}
+  #bar button:hover{background:var(--bg-elevated);color:var(--text-primary)}
+  #appname{font-size:13px;font-weight:600;white-space:nowrap}
+  #bar .sp{flex:1}
+  iframe{flex:1;border:0;width:100%;background:var(--bg-inset)}
+  iframe[hidden]{display:none}
+
+  /* ===== 不可达提示（保持 #err flex + [hidden] 契约） ===== */
+  #err{display:flex;flex-direction:column;justify-content:center;align-items:center;
+    gap:14px;flex:1;background:var(--bg-app);margin:0}
+  #err[hidden]{display:none}   /* [hidden] 的 UA 默认会被上面 display:flex 盖掉，须显式拉回 */
+  #err .ic{color:var(--text-muted)}
+  #err .t1{font-size:14px;color:var(--text-primary)}
+  #err .t2{font-size:12px;color:var(--text-muted);font-family:"Cascadia Mono",Consolas,monospace}
+  #err button{display:inline-flex;align-items:center;height:30px;padding:0 16px;
+    font:12.5px var(--font-ui);color:var(--text-primary);background:var(--bg-elevated);
+    border:1px solid var(--border-strong);border-radius:var(--r-ctl);cursor:pointer}
+  #err button:hover{border-color:#3f434b;background:#2b2d34}
+</style>
+</head>
+<body>
+<section id="home" class="view on">
+  <div id="wrap">
+    <h1 class="brand">LiDAR Workspace</h1>
+    <div class="brand-sub">IFW192S · 点云回放 / 算法验证 / 人体识别</div>
+    <div id="grid"></div>
+  </div>
+</section>
+<section id="app" class="view">
+  <div id="bar">
+    <button id="back"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>总控</button>
+    <b id="appname"></b>
+    <span class="sp"></span>
+    <button id="pop" title="新窗口打开当前应用"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>新窗口</button>
+  </div>
+  <iframe id="f"></iframe>
+  <div id="err" hidden>
+    <div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+    <div class="t1" id="errmsg"></div>
+    <div class="t2" id="errurl"></div>
+    <button id="retry">重试</button>
+  </div>
+</section>
+<script>
+// ============ 扩展点：未来新入口在 APPS 数组追加即可 ============
+// mode: "iframe"(默认，嵌在控制台里)  / "tab"(应用视图点 ↗ 或条目直接开新标签，
+//         留给将来拒绝内嵌的站点，如服务端设了 X-Frame-Options)
+const requestedPort = Number(new URLSearchParams(location.search).get("replay_port") || 8901);
+const replayBase = "http://127.0.0.1:" + (Number.isInteger(requestedPort) && requestedPort > 0 && requestedPort <= 65535 ? requestedPort : 8901);
+// 线性 SVG 图标（Lucide 风格内嵌，不引外部资源）
+const svg = p => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+const APPS = [
+  {name:"会话回放",  desc:"replay · 本地服务",      icon:svg('<path d="m6 4 14 8-14 8Z"/>'), url:replayBase + "/"},
+  {name:"板端 WebUI", desc:"RK3588 · 192.168.31.58:8090", icon:svg('<rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>'), url:"http://192.168.31.58:8090/",
+   fail:"当前不在内网，无法连接板端 WebUI"},
+  {name:"USB 摄像头", desc:"RK3588 · 192.168.31.58:8081 MJPEG", icon:svg('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:"http://192.168.31.58:8081/stream", mode:"tab"},
+  {name:"算法验证", desc:"四区评估 · TLS / SVD / RANSAC", icon:svg('<path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>'), url:replayBase + "/validation.html"},
+  {name:"人体识别", desc:"纯几何 · pin ROI 辅助判别人/家具 · 不跑模型", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html"},
+  {name:"人检锁定", desc:"B2a RandomForest 51维人/非人 · rf_person_v1 · 实时跟踪", icon:svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:replayBase + "/human_track.html"},
+  {name:"GT 标注", desc:"2D 点云人工 GT 工作台 · 跨帧 track · 冻结版本", icon:svg('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>'), url:replayBase + "/gt_annotator.html"},
+];
+// ============================================================
+const $ = s => document.querySelector(s);
+const home = $("#home"), appv = $("#app"), f = $("#f");
+let cur = 0, loaded = -1;
+
+// 应用条目（未上线的功能不渲染占位卡片）
+APPS.forEach((a, i) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.innerHTML = `<div class="icon">${a.icon}</div><div class="name">${a.name}</div><div class="desc">${a.desc}</div>`;
+  d.onclick = () => a.mode === "tab" ? window.open(a.url, "_blank") : open(i);
+  $("#grid").appendChild(d);
+});
+
+const err = $("#err");
+
+function showErr(a) {
+  $("#errmsg").textContent = a.fail;
+  $("#errurl").textContent = new URL(a.url).origin;
+  f.hidden = true; err.hidden = false;
+}
+
+// 跨域 iframe 读不到 location（成功页和浏览器错误页都抛 SecurityError），
+// 只能自己探活：no-cors fetch 拿到响应=板可达，连接失败=不在内网。
+// 带 fail 文案的应用才探活；本地应用直接嵌。
+function load(i) {
+  const a = APPS[i];
+  err.hidden = true; f.hidden = false;
+  if (!a.fail) { f.src = a.url; return; }
+  fetch(a.url, {mode: "no-cors", cache: "no-store"})
+    .then(() => { f.src = a.url; }, () => showErr(a));
+}
+
+function open(i) {
+  cur = i;
+  $("#appname").textContent = APPS[i].name;
+  if (loaded !== i) {                                 // 重进同应用不重载，保留页内状态
+    loaded = i; load(i);
+  }
+  home.classList.remove("on"); appv.classList.add("on");
+  if (location.hash !== "#" + i) history.replaceState(null, "", "#" + i);
+}
+function back() {
+  appv.classList.remove("on"); home.classList.add("on");
+  history.replaceState(null, "", location.pathname + location.search); // 保留本实例服务端口
+}
+$("#back").onclick = back;
+$("#pop").onclick = () => window.open(APPS[cur].url, "_blank");
+$("#retry").onclick = () => load(cur);
+
+// ponytail: iframe 内导航不跟踪；子站被 X-Frame-Options 挡时用 mode:"tab" 或 ↗
+const h = parseInt(location.hash.slice(1), 10);
+if (Number.isInteger(h) && APPS[h]) open(h);
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+原BROWSER_OPERATIONS.json导出operations为空，验证脚本exit1；REPL重置数组后旧helper仍捕获旧数组引用。保留空文件/旧尝试，不报通过。新helper/新数组未再重赋，重新真实操作九会话，BROWSER_OPERATIONS_V2.json含10份真实完整DOM；独立解析帧/SID/timestamps/SHA一致且console空。操作controls将另追加V3导出。

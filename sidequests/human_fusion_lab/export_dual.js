@@ -1,0 +1,1 @@
+const fs=require('fs'),path=require('path'),{exportSession}=require('./export');const A=JSON.parse(fs.readFileSync(path.join(__dirname,'results/AUDIT.json')));for(const rec of A.sessions)exportSession(rec,{model:'xgb69_dualpath',outdir:path.join(__dirname,'results/dataset_dual')});

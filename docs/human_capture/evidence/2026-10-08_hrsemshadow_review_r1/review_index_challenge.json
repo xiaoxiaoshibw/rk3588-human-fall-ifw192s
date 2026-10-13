@@ -1,0 +1,29 @@
+{
+  "source": "synthetic adversarial integrity test; no real labels created",
+  "headless_embedded_cases": 34,
+  "source_meta_bin_sha_passed": true,
+  "original_member_count": 1029,
+  "tampered_display": {
+    "sid": "cap_20261008_114205",
+    "mode": "REF_SHADOW",
+    "ordinal": 0,
+    "ci": 0,
+    "rows": [
+      0
+    ],
+    "member_sha256": "6a7bca5f9bfc96ffaf20a204c825fea4f9154f96e0007e18c8d1963dac3c090a"
+  },
+  "status": "源 SHA 已核对；全成员 1 点",
+  "exported_record_in_memory": {
+    "id": "cap_20261008_114205/REF_SHADOW/0/0",
+    "sid": "cap_20261008_114205",
+    "mode": "REF_SHADOW",
+    "ordinal": 0,
+    "seq": 2372394,
+    "member_sha256": "6a7bca5f9bfc96ffaf20a204c825fea4f9154f96e0007e18c8d1963dac3c090a",
+    "label": "UNKNOWN",
+    "person_id": null
+  },
+  "expected_rejection": false,
+  "defect": "unbound index accepted; copied original member SHA while displaying row 0 instead of real cluster"
+}

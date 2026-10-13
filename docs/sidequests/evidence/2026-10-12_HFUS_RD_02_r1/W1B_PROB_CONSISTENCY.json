@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-12",
+  "probe": "single S1 candidate a_6_0 (n=5018): ledger prob=0.00292 vs rf_extract_node.js replica=0.89 (leveled) / 0.88 (raw)",
+  "conclusion_draft": "若普遍：RD-01 D3 的 f51/rf_prob 全部来自复刻, 与生产 ledger 打分不一致 → M0-M4 的机会均被复刻缺陷污染, 不能代表生产行为。",
+  "per_sid": {
+    "cap_20261010_175227": {
+      "n": 644,
+      "mean_abs_diff": 0.4278,
+      "median_abs_diff": 0.118,
+      "frac_diff_lt_0.05": 0.0264,
+      "frac_diff_gt_0.3": 0.4177,
+      "accept_agreement_at_0.55": 0.5823,
+      "ledger_accept_frac": 0.5823,
+      "replica_accept_frac": 1.0,
+      "by_bucket": {
+        "lt100": {
+          "n": 36,
+          "ledger_accept_frac": 0.722,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.256
+        },
+        "mid_100_999": {
+          "n": 350,
+          "ledger_accept_frac": 0.997,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.107
+        },
+        "ge2000": {
+          "n": 258,
+          "ledger_accept_frac": 0.0,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.887
+        }
+      }
+    },
+    "cap_20261010_175429": {
+      "n": 1056,
+      "mean_abs_diff": 0.2373,
+      "median_abs_diff": 0.0922,
+      "frac_diff_lt_0.05": 0.2803,
+      "frac_diff_gt_0.3": 0.2102,
+      "accept_agreement_at_0.55": 0.7898,
+      "ledger_accept_frac": 0.7898,
+      "replica_accept_frac": 1.0,
+      "by_bucket": {
+        "lt100": {
+          "n": 298,
+          "ledger_accept_frac": 0.983,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.107
+        },
+        "mid_100_999": {
+          "n": 318,
+          "ledger_accept_frac": 0.991,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.088
+        },
+        "ge1000": {
+          "n": 226,
+          "ledger_accept_frac": 1.0,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.004
+        },
+        "ge2000": {
+          "n": 214,
+          "ledger_accept_frac": 0.0,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.887
+        }
+      }
+    },
+    "cap_20261010_180557": {
+      "n": 2160,
+      "mean_abs_diff": 0.2271,
+      "median_abs_diff": 0.0602,
+      "frac_diff_lt_0.05": 0.4708,
+      "frac_diff_gt_0.3": 0.2046,
+      "accept_agreement_at_0.55": 0.7954,
+      "ledger_accept_frac": 0.7954,
+      "replica_accept_frac": 1.0,
+      "by_bucket": {
+        "lt100": {
+          "n": 641,
+          "ledger_accept_frac": 1.0,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.107
+        },
+        "mid_100_999": {
+          "n": 565,
+          "ledger_accept_frac": 0.984,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.042
+        },
+        "ge1000": {
+          "n": 521,
+          "ledger_accept_frac": 1.0,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.027
+        },
+        "ge2000": {
+          "n": 433,
+          "ledger_accept_frac": 0.0,
+          "replica_accept_frac": 1.0,
+          "mean_abs_diff": 0.887
+        }
+      }
+    }
+  },
+  "root_cause_found": {
+    "evidence": "ledger frame6 (S1) model_calls[0].features[0:2] == [5018, 10]",
+    "interpretation": "生产引擎传给 RF 的特征首维=候选点数 5018、第二维=10（采样点数）。即生产在抽特征前对候选点数做了上限采样（约 10 点），而 RD-01 rf_extract_node.js 用全量 5018 点抽 50 维特征 → 两者特征域不同 → 同一候选 ledger=0.0029 vs 复刻=0.89。",
+    "impact": "D3 数据集全部 f51/x18/rf_prob 由该复刻生成 → M0-M5 的输入特征与生产打分不一致；RD-01 中一切与生产 metric 的对比失去共同基准（含 classifier_ablation、layer_attribution §3）。",
+    "not_fixed_here": "本轮不复刻生产采样协议（属 HF/GL 生产侧改动，无授权）；只如实登记，并在 W4 报告内区分 'ledger 真分' 与 '复刻特征' 两条线。",
+    "open_for": "生产侧 RF 采样协议确认（points cap / seed 规则）"
+  }
+}

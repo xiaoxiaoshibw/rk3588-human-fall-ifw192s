@@ -1,0 +1,526 @@
+{
+ "schema": "fusion_perf/v1",
+ "node": "v24.14.0",
+ "cpu": "AMD Ryzen AI 9 H 365 w/ Radeon 880M",
+ "generated_iso": "2026-10-10T10:36:21.253Z",
+ "warmup": 5,
+ "gate": "P95<50ms && heapUsed<1500MB",
+ "source_sha256": {
+  "pc_apps/human_core/engine.js": "ff5f0c369fc191cb9fb40f9248769936cfb61a4f306a949762f2c79ce399f5db",
+  "pc_apps/human_core/schema.js": "c045138e33587949d0002ee819bd73c9f326b9c22cfe067fa1176d0aae3eaf0b",
+  "pc_apps/human_core/leveling.js": "4a3a854f62c0edd0c287ed0fc1dcd9bd3358d4e8b3c2825687d046e289317f45",
+  "pc_apps/human_core/data_loader.js": "014feb8bbb6d6d208353155a591791ba2af1f0e544fbf8e436b567909e79b1fe",
+  "pc_apps/human_core/runner.js": "c3d48e173b3567e4862026a9aa423af456efa37dbf49da437231771efcb0b786",
+  "pc_apps/human_replay/human_pipe_lib.js": "8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176",
+  "pc_apps/human_replay/detect_overlay.js": "585d2964e2927fd8dac97bc950190088ba315d89a0dea17564aed3917ad73963",
+  "pc_apps/human_replay/rf_person.js": "99b02c725f303f07e574b310fdd459ad3e28dd2469ba1e882661c30f370529d6",
+  "pc_apps/human_replay/rf_person_v1.json": "4c83db116fe0742d5c1cca8360de6bafcc4ac9abae3910984beabea8d85bfe68",
+  "pc_apps/human_replay/bg_envelope.json": "28afdaa4838c5fd99221954ab1696bd82289aa1c24c6934afb5808838d6e3f2e"
+ },
+ "runs": [
+  {
+   "session": "dynamic",
+   "mode": "BASE_A",
+   "n": 78,
+   "warmup": 5,
+   "total": {
+    "p50": 15.94,
+    "p95": 19.56,
+    "max": 20.5
+   },
+   "peak_heap_mb": 122.2,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.27,
+     "p95": 0.5,
+     "max": 2.64
+    },
+    {
+     "layer": "denoise",
+     "p50": 2.75,
+     "p95": 3.26,
+     "max": 6.02
+    },
+    {
+     "layer": "foreground",
+     "p50": 7.97,
+     "p95": 10.22,
+     "max": 11.83
+    },
+    {
+     "layer": "cleanup",
+     "p50": 1.55,
+     "p95": 2.25,
+     "max": 4.33
+    },
+    {
+     "layer": "retained",
+     "p50": 0.95,
+     "p95": 1.28,
+     "max": 3.95
+    },
+    {
+     "layer": "cluster",
+     "p50": 1.01,
+     "p95": 1.27,
+     "max": 2.33
+    },
+    {
+     "layer": "classifier",
+     "p50": 0.53,
+     "p95": 0.71,
+     "max": 1.36
+    },
+    {
+     "layer": "track",
+     "p50": 0.03,
+     "p95": 0.04,
+     "max": 0.11
+    }
+   ]
+  },
+  {
+   "session": "dynamic",
+   "mode": "BASE_B",
+   "n": 78,
+   "warmup": 5,
+   "total": {
+    "p50": 16.44,
+    "p95": 19.55,
+    "max": 22.4
+   },
+   "peak_heap_mb": 136.8,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.27,
+     "p95": 0.33,
+     "max": 1.49
+    },
+    {
+     "layer": "foreground",
+     "p50": 1.62,
+     "p95": 2.01,
+     "max": 5.78
+    },
+    {
+     "layer": "cluster",
+     "p50": 8.64,
+     "p95": 10.79,
+     "max": 14.7
+    },
+    {
+     "layer": "classifier",
+     "p50": 5.45,
+     "p95": 6.89,
+     "max": 9.45
+    },
+    {
+     "layer": "track",
+     "p50": 0.02,
+     "p95": 0.03,
+     "max": 0.06
+    }
+   ]
+  },
+  {
+   "session": "dynamic",
+   "mode": "U3",
+   "n": 78,
+   "warmup": 5,
+   "total": {
+    "p50": 22.58,
+    "p95": 26.13,
+    "max": 29.45
+   },
+   "peak_heap_mb": 110.7,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.2,
+     "p95": 0.28,
+     "max": 0.3
+    },
+    {
+     "layer": "denoise",
+     "p50": 2.69,
+     "p95": 2.91,
+     "max": 4.27
+    },
+    {
+     "layer": "foreground",
+     "p50": 7.78,
+     "p95": 9.94,
+     "max": 10.09
+    },
+    {
+     "layer": "cleanup",
+     "p50": 1.56,
+     "p95": 2.14,
+     "max": 3.89
+    },
+    {
+     "layer": "retained",
+     "p50": 2.17,
+     "p95": 2.47,
+     "max": 4.79
+    },
+    {
+     "layer": "cluster",
+     "p50": 1.06,
+     "p95": 1.35,
+     "max": 3.16
+    },
+    {
+     "layer": "classifier",
+     "p50": 6.25,
+     "p95": 8.71,
+     "max": 10.04
+    },
+    {
+     "layer": "track",
+     "p50": 0.03,
+     "p95": 0.06,
+     "max": 0.09
+    }
+   ]
+  },
+  {
+   "session": "empty",
+   "mode": "BASE_A",
+   "n": 198,
+   "warmup": 5,
+   "total": {
+    "p50": 9.77,
+    "p95": 12.77,
+    "max": 13.67
+   },
+   "peak_heap_mb": 109.1,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.2,
+     "p95": 0.27,
+     "max": 3.16
+    },
+    {
+     "layer": "denoise",
+     "p50": 2.73,
+     "p95": 3.08,
+     "max": 5.42
+    },
+    {
+     "layer": "foreground",
+     "p50": 6.16,
+     "p95": 8.96,
+     "max": 9.75
+    },
+    {
+     "layer": "cleanup",
+     "p50": 0.27,
+     "p95": 0.3,
+     "max": 2.82
+    },
+    {
+     "layer": "retained",
+     "p50": 0.06,
+     "p95": 0.07,
+     "max": 2.47
+    },
+    {
+     "layer": "cluster",
+     "p50": 0.2,
+     "p95": 0.23,
+     "max": 0.36
+    },
+    {
+     "layer": "classifier",
+     "p50": 0.06,
+     "p95": 0.08,
+     "max": 0.18
+    },
+    {
+     "layer": "track",
+     "p50": 0.02,
+     "p95": 0.02,
+     "max": 0.05
+    }
+   ]
+  },
+  {
+   "session": "empty",
+   "mode": "BASE_B",
+   "n": 198,
+   "warmup": 5,
+   "total": {
+    "p50": 1.59,
+    "p95": 2.72,
+    "max": 6.96
+   },
+   "peak_heap_mb": 68.9,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.24,
+     "p95": 0.4,
+     "max": 1.93
+    },
+    {
+     "layer": "foreground",
+     "p50": 1.33,
+     "p95": 2.22,
+     "max": 5.38
+    },
+    {
+     "layer": "cluster",
+     "p50": 0.01,
+     "p95": 0.02,
+     "max": 0.06
+    },
+    {
+     "layer": "classifier",
+     "p50": 0,
+     "p95": 0,
+     "max": 0
+    },
+    {
+     "layer": "track",
+     "p50": 0,
+     "p95": 0,
+     "max": 0.01
+    }
+   ]
+  },
+  {
+   "session": "empty",
+   "mode": "U3",
+   "n": 198,
+   "warmup": 5,
+   "total": {
+    "p50": 11.21,
+    "p95": 13.94,
+    "max": 15.74
+   },
+   "peak_heap_mb": 104.1,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.21,
+     "p95": 0.36,
+     "max": 2.52
+    },
+    {
+     "layer": "denoise",
+     "p50": 2.77,
+     "p95": 3.23,
+     "max": 5.42
+    },
+    {
+     "layer": "foreground",
+     "p50": 6.3,
+     "p95": 8.77,
+     "max": 10.13
+    },
+    {
+     "layer": "cleanup",
+     "p50": 0.27,
+     "p95": 0.35,
+     "max": 3.25
+    },
+    {
+     "layer": "retained",
+     "p50": 1.03,
+     "p95": 1.33,
+     "max": 3.77
+    },
+    {
+     "layer": "cluster",
+     "p50": 0.21,
+     "p95": 0.24,
+     "max": 0.91
+    },
+    {
+     "layer": "classifier",
+     "p50": 0.29,
+     "p95": 0.36,
+     "max": 0.58
+    },
+    {
+     "layer": "track",
+     "p50": 0.02,
+     "p95": 0.02,
+     "max": 0.03
+    }
+   ]
+  },
+  {
+   "session": "standing",
+   "mode": "BASE_A",
+   "n": 172,
+   "warmup": 5,
+   "total": {
+    "p50": 9.84,
+    "p95": 13.06,
+    "max": 14.46
+   },
+   "peak_heap_mb": 106.2,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.21,
+     "p95": 0.28,
+     "max": 2.6
+    },
+    {
+     "layer": "denoise",
+     "p50": 2.82,
+     "p95": 3.18,
+     "max": 5.71
+    },
+    {
+     "layer": "foreground",
+     "p50": 6.21,
+     "p95": 9.04,
+     "max": 10.22
+    },
+    {
+     "layer": "cleanup",
+     "p50": 0.22,
+     "p95": 0.26,
+     "max": 0.34
+    },
+    {
+     "layer": "retained",
+     "p50": 0.05,
+     "p95": 0.05,
+     "max": 3.32
+    },
+    {
+     "layer": "cluster",
+     "p50": 0.16,
+     "p95": 0.2,
+     "max": 3.07
+    },
+    {
+     "layer": "classifier",
+     "p50": 0.07,
+     "p95": 0.08,
+     "max": 0.25
+    },
+    {
+     "layer": "track",
+     "p50": 0.01,
+     "p95": 0.02,
+     "max": 0.03
+    }
+   ]
+  },
+  {
+   "session": "standing",
+   "mode": "BASE_B",
+   "n": 172,
+   "warmup": 5,
+   "total": {
+    "p50": 4.75,
+    "p95": 5.9,
+    "max": 7.94
+   },
+   "peak_heap_mb": 98.9,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.25,
+     "p95": 0.36,
+     "max": 2.02
+    },
+    {
+     "layer": "foreground",
+     "p50": 1.45,
+     "p95": 1.59,
+     "max": 2.72
+    },
+    {
+     "layer": "cluster",
+     "p50": 1.89,
+     "p95": 2.11,
+     "max": 2.59
+    },
+    {
+     "layer": "classifier",
+     "p50": 1.13,
+     "p95": 1.27,
+     "max": 4.04
+    },
+    {
+     "layer": "track",
+     "p50": 0,
+     "p95": 0.01,
+     "max": 0.04
+    }
+   ]
+  },
+  {
+   "session": "standing",
+   "mode": "U3",
+   "n": 172,
+   "warmup": 5,
+   "total": {
+    "p50": 11.22,
+    "p95": 14.27,
+    "max": 18.93
+   },
+   "peak_heap_mb": 109.7,
+   "layers": [
+    {
+     "layer": "leveled",
+     "p50": 0.2,
+     "p95": 0.33,
+     "max": 2.64
+    },
+    {
+     "layer": "denoise",
+     "p50": 2.88,
+     "p95": 3.18,
+     "max": 6.01
+    },
+    {
+     "layer": "foreground",
+     "p50": 6.28,
+     "p95": 8.92,
+     "max": 10.43
+    },
+    {
+     "layer": "cleanup",
+     "p50": 0.23,
+     "p95": 0.29,
+     "max": 3.54
+    },
+    {
+     "layer": "retained",
+     "p50": 1.14,
+     "p95": 1.33,
+     "max": 4.46
+    },
+    {
+     "layer": "cluster",
+     "p50": 0.18,
+     "p95": 0.23,
+     "max": 0.33
+    },
+    {
+     "layer": "classifier",
+     "p50": 0.23,
+     "p95": 0.28,
+     "max": 2.59
+    },
+    {
+     "layer": "track",
+     "p50": 0.01,
+     "p95": 0.02,
+     "max": 0.04
+    }
+   ]
+  }
+ ]
+}

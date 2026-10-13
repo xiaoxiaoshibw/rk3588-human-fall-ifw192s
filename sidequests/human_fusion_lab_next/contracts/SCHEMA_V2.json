@@ -1,0 +1,9 @@
+{
+ "schema_version":"hfus-frame-v2",
+ "extends":"SCHEMA_V1.json",
+ "index_version":"hfus-index-v1",
+ "evaluation_version":"hfus-strict-v2",
+ "revision":"v1 retained frozen. v2 supports numeric track id and engine FUS_t<segment>_<id>; explicit negative_reviewed=true required for qualified known-negative FP; source human alone insufficient. observed_ids and coast_ids exported on UNKNOWN as state diagnostics.",
+ "negative_reviewed":"true only from reviewed qualification manifest, never inferred from source human or auto labels. exhaustive false unless explicit reviewed complete window.",
+ "current_support":"accepted current members must refer to same segment and track; lost>0 or no accepted member is coast; absent qualification prevents scoring only"
+}

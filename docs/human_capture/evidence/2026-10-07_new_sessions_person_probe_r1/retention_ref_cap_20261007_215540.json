@@ -1,0 +1,2722 @@
+{
+  "schema": 1,
+  "kind": "still_person_reference_retention",
+  "sid": "cap_20261007_215540",
+  "reference": "cap_20261007_233658",
+  "reference_job": "3c793d7bda0f4ced86b20ac8076e7b0e",
+  "shadow": true,
+  "registration": {
+    "state": "DEGRADED",
+    "reasons": [
+      "SPARSE_CORRESPONDENCE"
+    ],
+    "artifact_id": "6fa2ef6b24f21a1aa7463d18212fdd4edebdc10db07fb4b4ea2deb2c7c05dcc6",
+    "gate": "WARN",
+    "fit_p50": 0.01001036647969614,
+    "holdout_p50": 0.0067386593641089445,
+    "n_correspondence": 5946,
+    "inlier_ratio": 0.45893794380981784
+  },
+  "person_region": {
+    "center_source": [
+      2.1,
+      -0.57
+    ],
+    "center_reference": [
+      2.101015739250843,
+      -0.6002029507502329,
+      -0.0057533821841433165
+    ],
+    "radius_m": 0.55
+  },
+  "refmap": {
+    "voxels": 5179,
+    "keys": 3743,
+    "occ_min": 0.5
+  },
+  "code_binding": {
+    "human_pipe_lib": "af4cdea6d35c73633b12b0d230f3e91f8ba606d9e42fb2ba69bd4083b4af14e5",
+    "registration": "19c1fced9dbeabdefbc20dc8666fec601e3da8a42de68dec2ccdf195865379f5",
+    "registration_method": "958f646ff41adbca7840a0a09ae6ba2ed87db7254b2d16f5365b64625caac141",
+    "audit_lib": "5b7b1fd95c602274e6891565482c81e5db0ff66973fb7437fa41a151ece7bb5e"
+  },
+  "summary": {
+    "frames": 64,
+    "person_raw": {
+      "min": 1825,
+      "p50": 1851,
+      "max": 1881
+    },
+    "reference_survived": {
+      "min": 1777,
+      "p50": 1803,
+      "max": 1836
+    },
+    "online_survived": {
+      "min": 29,
+      "p50": 39,
+      "max": 51
+    },
+    "cleanup": {
+      "min": 27,
+      "p50": 38,
+      "max": 49
+    },
+    "clustered": {
+      "min": 0,
+      "p50": 0,
+      "max": 49
+    },
+    "reference_retention_p50": 0.9740680713128039,
+    "online_retention_p50": 0.02106969205834684,
+    "label_counts": {
+      "NONE": 43,
+      "NON_HUMAN": 13,
+      "HUMAN_CANDIDATE": 8
+    },
+    "joint_counts": {
+      "NON_HUMAN": 13,
+      "HUMAN_CANDIDATE": 8
+    },
+    "mechanism_totals": {
+      "RANGE": 0,
+      "GROUND": 2858,
+      "REFERENCE": 154,
+      "ONLINE": 112889,
+      "CLEANUP": 88
+    },
+    "track_ids": {
+      "1": {
+        "first": 1,
+        "last": 10,
+        "frames": 6
+      },
+      "2": {
+        "first": 29,
+        "last": 62,
+        "frames": 15
+      }
+    },
+    "confirmed_frames": []
+  },
+  "frames": [
+    {
+      "i": 0,
+      "n_in": 163,
+      "n_foreground": 163,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1825,
+        "reference_survived": 1777,
+        "online_survived": 46,
+        "cleanup": 43,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 47,
+          "REFERENCE": 1,
+          "ONLINE": 1731,
+          "CLEANUP": 3
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 1,
+      "n_in": 153,
+      "n_foreground": 153,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1833,
+        "reference_survived": 1783,
+        "online_survived": 50,
+        "cleanup": 49,
+        "clustered": 49,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 4,
+          "ONLINE": 1733,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 49
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 49,
+          "foreign_points": 28,
+          "n": 77,
+          "cx": 2.6009913264931024,
+          "cy": -0.6711520986123518,
+          "cz": 0.9136815299461414,
+          "zmin": 0.11756418645381927,
+          "zmax": 1.7927190065383911,
+          "height_m": 1.6751548200845718,
+          "width_m": 0.554969696964263,
+          "depth_m": 0.5017266435772509,
+          "radius_m": 0.5290184256828394,
+          "upcos": 0.9777282853061309,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.53m"
+          ],
+          "track_id": 1,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 2,
+      "n_in": 158,
+      "n_foreground": 158,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1833,
+        "reference_survived": 1784,
+        "online_survived": 50,
+        "cleanup": 49,
+        "clustered": 49,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 47,
+          "REFERENCE": 2,
+          "ONLINE": 1734,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 49
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 49,
+          "foreign_points": 26,
+          "n": 75,
+          "cx": 2.5578694502512613,
+          "cy": -0.687338634133339,
+          "cz": 0.8685778407255809,
+          "zmin": 0.10661212354898453,
+          "zmax": 1.7944320440292358,
+          "height_m": 1.6878199204802513,
+          "width_m": 0.4777091790823442,
+          "depth_m": 0.4980228855225696,
+          "radius_m": 0.4879717483029902,
+          "upcos": 0.9973523233398406,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.49m"
+          ],
+          "track_id": 1,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 3,
+      "n_in": 160,
+      "n_foreground": 160,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1833,
+        "reference_survived": 1786,
+        "online_survived": 49,
+        "cleanup": 49,
+        "clustered": 49,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1737,
+          "CLEANUP": 0
+        },
+        "clusters": {
+          "0": 49
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 49,
+          "foreign_points": 24,
+          "n": 73,
+          "cx": 2.5405382620145196,
+          "cy": -0.7205362524071784,
+          "cz": 0.898761716505436,
+          "zmin": 0.10038407891988754,
+          "zmax": 1.858182668685913,
+          "height_m": 1.7577985897660255,
+          "width_m": 0.4187914643827135,
+          "depth_m": 0.5125625392505382,
+          "radius_m": 0.4680313276281712,
+          "upcos": 0.9925351137491158,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.47m"
+          ],
+          "track_id": 1,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 4,
+      "n_in": 168,
+      "n_foreground": 168,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1832,
+        "reference_survived": 1786,
+        "online_survived": 48,
+        "cleanup": 46,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "REFERENCE": 4,
+          "ONLINE": 1738,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 5,
+      "n_in": 163,
+      "n_foreground": 163,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1836,
+        "reference_survived": 1791,
+        "online_survived": 48,
+        "cleanup": 46,
+        "clustered": 45,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "REFERENCE": 2,
+          "ONLINE": 1743,
+          "CLEANUP": 2
+        },
+        "clusters": {
+          "0": 45
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 45,
+          "foreign_points": 20,
+          "n": 65,
+          "cx": 2.510799767420842,
+          "cy": -0.726367275072978,
+          "cz": 0.8860382892764531,
+          "zmin": 0.11052551865577698,
+          "zmax": 1.7498631477355957,
+          "height_m": 1.6393376290798187,
+          "width_m": 0.3168509863918984,
+          "depth_m": 0.49340430531621643,
+          "radius_m": 0.4146337878671353,
+          "upcos": 0.9973450302633547,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 1,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "0000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 6,
+      "n_in": 158,
+      "n_foreground": 158,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1842,
+        "reference_survived": 1794,
+        "online_survived": 49,
+        "cleanup": 48,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 47,
+          "REFERENCE": 1,
+          "ONLINE": 1745,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "0000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 7,
+      "n_in": 158,
+      "n_foreground": 158,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1845,
+        "reference_survived": 1796,
+        "online_survived": 46,
+        "cleanup": 44,
+        "clustered": 43,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 47,
+          "REFERENCE": 2,
+          "ONLINE": 1750,
+          "CLEANUP": 2
+        },
+        "clusters": {
+          "0": 43
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 43,
+          "foreign_points": 28,
+          "n": 71,
+          "cx": 2.6241698432976093,
+          "cy": -0.6828800492303472,
+          "cz": 0.8197775192453828,
+          "zmin": 0.10959364473819733,
+          "zmax": 1.7746585607528687,
+          "height_m": 1.6650649160146713,
+          "width_m": 0.5578377817008232,
+          "depth_m": 0.5210047388396326,
+          "radius_m": 0.5397355503328687,
+          "upcos": 0.9911271767390454,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.54m"
+          ],
+          "track_id": 1,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 8,
+      "n_in": 161,
+      "n_foreground": 161,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1849,
+        "reference_survived": 1796,
+        "online_survived": 45,
+        "cleanup": 42,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 50,
+          "REFERENCE": 3,
+          "ONLINE": 1751,
+          "CLEANUP": 3
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 9,
+      "n_in": 158,
+      "n_foreground": 158,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1852,
+        "reference_survived": 1798,
+        "online_survived": 48,
+        "cleanup": 46,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 51,
+          "REFERENCE": 3,
+          "ONLINE": 1750,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 10,
+      "n_in": 163,
+      "n_foreground": 163,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1853,
+        "reference_survived": 1801,
+        "online_survived": 51,
+        "cleanup": 49,
+        "clustered": 48,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 48,
+          "REFERENCE": 4,
+          "ONLINE": 1750,
+          "CLEANUP": 2
+        },
+        "clusters": {
+          "0": 48
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 48,
+          "foreign_points": 29,
+          "n": 77,
+          "cx": 2.614324040227122,
+          "cy": -0.6886977559173262,
+          "cz": 0.8546970667583602,
+          "zmin": 0.11459729820489883,
+          "zmax": 1.8237723112106323,
+          "height_m": 1.7091750130057335,
+          "width_m": 0.5952992860098874,
+          "depth_m": 0.4953996558536857,
+          "radius_m": 0.5476322027345689,
+          "upcos": 0.9932292299660606,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.55m"
+          ],
+          "track_id": 1,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 11,
+      "n_in": 161,
+      "n_foreground": 161,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1848,
+        "reference_survived": 1798,
+        "online_survived": 40,
+        "cleanup": 38,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 4,
+          "ONLINE": 1758,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 12,
+      "n_in": 148,
+      "n_foreground": 148,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1840,
+        "reference_survived": 1798,
+        "online_survived": 43,
+        "cleanup": 42,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "REFERENCE": 2,
+          "ONLINE": 1755,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 13,
+      "n_in": 154,
+      "n_foreground": 154,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1846,
+        "reference_survived": 1797,
+        "online_survived": 49,
+        "cleanup": 48,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 3,
+          "ONLINE": 1748,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 14,
+      "n_in": 141,
+      "n_foreground": 141,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1844,
+        "reference_survived": 1798,
+        "online_survived": 40,
+        "cleanup": 35,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "REFERENCE": 3,
+          "ONLINE": 1758,
+          "CLEANUP": 5
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 15,
+      "n_in": 141,
+      "n_foreground": 141,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1843,
+        "reference_survived": 1798,
+        "online_survived": 38,
+        "cleanup": 34,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 45,
+          "REFERENCE": 0,
+          "ONLINE": 1760,
+          "CLEANUP": 4
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 16,
+      "n_in": 148,
+      "n_foreground": 148,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1836,
+        "reference_survived": 1790,
+        "online_survived": 33,
+        "cleanup": 30,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 2,
+          "ONLINE": 1757,
+          "CLEANUP": 3
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 17,
+      "n_in": 147,
+      "n_foreground": 147,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1841,
+        "reference_survived": 1793,
+        "online_survived": 38,
+        "cleanup": 37,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 2,
+          "ONLINE": 1755,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 18,
+      "n_in": 134,
+      "n_foreground": 134,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1849,
+        "reference_survived": 1799,
+        "online_survived": 33,
+        "cleanup": 29,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 4,
+          "ONLINE": 1766,
+          "CLEANUP": 4
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 19,
+      "n_in": 150,
+      "n_foreground": 150,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1846,
+        "reference_survived": 1803,
+        "online_survived": 35,
+        "cleanup": 35,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "REFERENCE": 1,
+          "ONLINE": 1768,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 20,
+      "n_in": 153,
+      "n_foreground": 153,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1853,
+        "reference_survived": 1809,
+        "online_survived": 34,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 0,
+          "ONLINE": 1775,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 21,
+      "n_in": 149,
+      "n_foreground": 149,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": -3,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1859,
+        "reference_survived": 1812,
+        "online_survived": 29,
+        "cleanup": 27,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1783,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 22,
+      "n_in": 158,
+      "n_foreground": 158,
+      "clusters_after_cleanup": 2,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1864,
+        "reference_survived": 1817,
+        "online_survived": 33,
+        "cleanup": 31,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1784,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 23,
+      "n_in": 149,
+      "n_foreground": 149,
+      "clusters_after_cleanup": 6,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1859,
+        "reference_survived": 1820,
+        "online_survived": 34,
+        "cleanup": 34,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 38,
+          "REFERENCE": 1,
+          "ONLINE": 1786,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 24,
+      "n_in": 146,
+      "n_foreground": 146,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1861,
+        "reference_survived": 1813,
+        "online_survived": 36,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 2,
+          "ONLINE": 1777,
+          "CLEANUP": 3
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 25,
+      "n_in": 153,
+      "n_foreground": 153,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1857,
+        "reference_survived": 1813,
+        "online_survived": 39,
+        "cleanup": 36,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "REFERENCE": 1,
+          "ONLINE": 1774,
+          "CLEANUP": 3
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 26,
+      "n_in": 150,
+      "n_foreground": 150,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1860,
+        "reference_survived": 1813,
+        "online_survived": 36,
+        "cleanup": 35,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 1,
+          "ONLINE": 1777,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 27,
+      "n_in": 148,
+      "n_foreground": 148,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1853,
+        "reference_survived": 1803,
+        "online_survived": 34,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 4,
+          "ONLINE": 1769,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 28,
+      "n_in": 165,
+      "n_foreground": 165,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1844,
+        "reference_survived": 1802,
+        "online_survived": 33,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "REFERENCE": 1,
+          "ONLINE": 1769,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [],
+      "events": []
+    },
+    {
+      "i": 29,
+      "n_in": 165,
+      "n_foreground": 165,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1863,
+        "reference_survived": 1817,
+        "online_survived": 42,
+        "cleanup": 41,
+        "clustered": 41,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 45,
+          "REFERENCE": 1,
+          "ONLINE": 1775,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 41
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 41,
+          "foreign_points": 26,
+          "n": 67,
+          "cx": 2.545791867953628,
+          "cy": -0.7675920048756386,
+          "cz": 0.975229431666545,
+          "zmin": 0.10249205678701401,
+          "zmax": 1.8620374202728271,
+          "height_m": 1.7595453634858131,
+          "width_m": 0.41494885542678717,
+          "depth_m": 0.46331480910774375,
+          "radius_m": 0.4397972060839778,
+          "upcos": 0.9851654915488453,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 30,
+      "n_in": 160,
+      "n_foreground": 160,
+      "clusters_after_cleanup": 7,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1881,
+        "reference_survived": 1836,
+        "online_survived": 38,
+        "cleanup": 36,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 1,
+          "ONLINE": 1798,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 31,
+      "n_in": 154,
+      "n_foreground": 154,
+      "clusters_after_cleanup": 6,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1873,
+        "reference_survived": 1823,
+        "online_survived": 34,
+        "cleanup": 34,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 47,
+          "REFERENCE": 3,
+          "ONLINE": 1789,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 2,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 32,
+      "n_in": 153,
+      "n_foreground": 153,
+      "clusters_after_cleanup": 7,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1874,
+        "reference_survived": 1828,
+        "online_survived": 43,
+        "cleanup": 41,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 2,
+          "ONLINE": 1785,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 3,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 33,
+      "n_in": 156,
+      "n_foreground": 156,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1867,
+        "reference_survived": 1820,
+        "online_survived": 42,
+        "cleanup": 42,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1778,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 34,
+      "n_in": 156,
+      "n_foreground": 156,
+      "clusters_after_cleanup": 6,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1873,
+        "reference_survived": 1824,
+        "online_survived": 44,
+        "cleanup": 42,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 3,
+          "ONLINE": 1780,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 5,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 35,
+      "n_in": 158,
+      "n_foreground": 158,
+      "clusters_after_cleanup": 6,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1868,
+        "reference_survived": 1821,
+        "online_survived": 43,
+        "cleanup": 43,
+        "clustered": 43,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1778,
+          "CLEANUP": 0
+        },
+        "clusters": {
+          "0": 43
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 43,
+          "foreign_points": 17,
+          "n": 60,
+          "cx": 2.492264688014984,
+          "cy": -0.7108845060070356,
+          "cz": 1.0017183311283588,
+          "zmin": 0.11158886551856995,
+          "zmax": 1.7919753789901733,
+          "height_m": 1.6803865134716034,
+          "width_m": 0.33305544250957597,
+          "depth_m": 0.4980742229318517,
+          "radius_m": 0.42367668057990715,
+          "upcos": 0.9823925925175038,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 36,
+      "n_in": 157,
+      "n_foreground": 157,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1865,
+        "reference_survived": 1816,
+        "online_survived": 45,
+        "cleanup": 44,
+        "clustered": 44,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 45,
+          "REFERENCE": 4,
+          "ONLINE": 1771,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 44
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 44,
+          "foreign_points": 20,
+          "n": 64,
+          "cx": 2.4920369535684586,
+          "cy": -0.7213810165412724,
+          "cz": 0.966499762609601,
+          "zmin": 0.10832267999649048,
+          "zmax": 1.8017722368240356,
+          "height_m": 1.6934495568275452,
+          "width_m": 0.3386085438712524,
+          "depth_m": 0.4939194364326097,
+          "radius_m": 0.4234454838987639,
+          "upcos": 0.9864822358059989,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 37,
+      "n_in": 147,
+      "n_foreground": 147,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1860,
+        "reference_survived": 1813,
+        "online_survived": 37,
+        "cleanup": 36,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1776,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 38,
+      "n_in": 160,
+      "n_foreground": 160,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1856,
+        "reference_survived": 1805,
+        "online_survived": 39,
+        "cleanup": 39,
+        "clustered": 39,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 5,
+          "ONLINE": 1766,
+          "CLEANUP": 0
+        },
+        "clusters": {
+          "0": 39
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 39,
+          "foreign_points": 33,
+          "n": 72,
+          "cx": 2.5695595575703516,
+          "cy": -0.6911938000056479,
+          "cz": 0.9371949130048355,
+          "zmin": 0.10201122611761093,
+          "zmax": 1.7715388536453247,
+          "height_m": 1.6695276275277138,
+          "width_m": 0.43553588057162557,
+          "depth_m": 0.5229181662683074,
+          "radius_m": 0.4812145633076323,
+          "upcos": 0.979439671512143,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.48m"
+          ],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "0000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 39,
+      "n_in": 159,
+      "n_foreground": 159,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1854,
+        "reference_survived": 1806,
+        "online_survived": 34,
+        "cleanup": 34,
+        "clustered": 34,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 4,
+          "ONLINE": 1772,
+          "CLEANUP": 0
+        },
+        "clusters": {
+          "0": 34
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 34,
+          "foreign_points": 29,
+          "n": 63,
+          "cx": 2.550241265978132,
+          "cy": -0.7360798054271274,
+          "cz": 0.9930476827753915,
+          "zmin": 0.1058480441570282,
+          "zmax": 1.7971328496932983,
+          "height_m": 1.6912848055362701,
+          "width_m": 0.3510545773041094,
+          "depth_m": 0.5150664047645854,
+          "radius_m": 0.440756575426438,
+          "upcos": 0.9901438240615481,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 40,
+      "n_in": 158,
+      "n_foreground": 158,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1855,
+        "reference_survived": 1810,
+        "online_survived": 41,
+        "cleanup": 41,
+        "clustered": 41,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "REFERENCE": 3,
+          "ONLINE": 1769,
+          "CLEANUP": 0
+        },
+        "clusters": {
+          "0": 41
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 41,
+          "foreign_points": 25,
+          "n": 66,
+          "cx": 2.5332201972152246,
+          "cy": -0.746166901606502,
+          "cz": 1.0062365832202362,
+          "zmin": 0.10946625471115112,
+          "zmax": 1.7948484420776367,
+          "height_m": 1.6853821873664856,
+          "width_m": 0.3407254613787143,
+          "depth_m": 0.5230319627231327,
+          "radius_m": 0.4413934039276925,
+          "upcos": 0.9827149875393869,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 41,
+      "n_in": 156,
+      "n_foreground": 156,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1852,
+        "reference_survived": 1808,
+        "online_survived": 45,
+        "cleanup": 44,
+        "clustered": 44,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "REFERENCE": 3,
+          "ONLINE": 1763,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 44
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 44,
+          "foreign_points": 26,
+          "n": 70,
+          "cx": 2.5245810849325996,
+          "cy": -0.7516432943088668,
+          "cz": 0.959169454233987,
+          "zmin": 0.10469963401556015,
+          "zmax": 1.7924383878707886,
+          "height_m": 1.6877387538552284,
+          "width_m": 0.3355520529211472,
+          "depth_m": 0.5072699189947588,
+          "radius_m": 0.43006857065853205,
+          "upcos": 0.9888423350542725,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 42,
+      "n_in": 155,
+      "n_foreground": 155,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": -1,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1853,
+        "reference_survived": 1804,
+        "online_survived": 39,
+        "cleanup": 38,
+        "clustered": 38,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 3,
+          "ONLINE": 1765,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 38
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 38,
+          "foreign_points": 28,
+          "n": 66,
+          "cx": 2.535763458772139,
+          "cy": -0.738493935854146,
+          "cz": 1.0083929151296616,
+          "zmin": 0.11017543077468872,
+          "zmax": 1.7909830808639526,
+          "height_m": 1.680807650089264,
+          "width_m": 0.35366472880761574,
+          "depth_m": 0.5353369789718628,
+          "radius_m": 0.45368734909477315,
+          "upcos": 0.9844088704366483,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "SOLID_UNIFORM",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.45m"
+          ],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 43,
+      "n_in": 163,
+      "n_foreground": 163,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1851,
+        "reference_survived": 1807,
+        "online_survived": 42,
+        "cleanup": 41,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "REFERENCE": 2,
+          "ONLINE": 1765,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 44,
+      "n_in": 167,
+      "n_foreground": 167,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": -1,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1850,
+        "reference_survived": 1804,
+        "online_survived": 38,
+        "cleanup": 37,
+        "clustered": 37,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 2,
+          "ONLINE": 1766,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 37
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 37,
+          "foreign_points": 39,
+          "n": 76,
+          "cx": 2.619057448286759,
+          "cy": -0.691198220574542,
+          "cz": 0.8819152300099009,
+          "zmin": 0.10691791027784348,
+          "zmax": 1.7475380897521973,
+          "height_m": 1.6406201794743538,
+          "width_m": 0.5826248081189346,
+          "depth_m": 0.5287484699191891,
+          "radius_m": 0.5563392002535453,
+          "upcos": 0.9459065198305774,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.56m"
+          ],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 45,
+      "n_in": 157,
+      "n_foreground": 157,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1849,
+        "reference_survived": 1802,
+        "online_survived": 38,
+        "cleanup": 37,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1764,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 46,
+      "n_in": 165,
+      "n_foreground": 165,
+      "clusters_after_cleanup": 6,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1855,
+        "reference_survived": 1811,
+        "online_survived": 40,
+        "cleanup": 38,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "REFERENCE": 1,
+          "ONLINE": 1771,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 47,
+      "n_in": 157,
+      "n_foreground": 157,
+      "clusters_after_cleanup": 2,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1851,
+        "reference_survived": 1807,
+        "online_survived": 42,
+        "cleanup": 40,
+        "clustered": 40,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "REFERENCE": 1,
+          "ONLINE": 1765,
+          "CLEANUP": 2
+        },
+        "clusters": {
+          "0": 40
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 40,
+          "foreign_points": 32,
+          "n": 72,
+          "cx": 2.6382690933015613,
+          "cy": -0.6865484457876947,
+          "cz": 0.9459226695406768,
+          "zmin": 0.10006900131702423,
+          "zmax": 1.8042454719543457,
+          "height_m": 1.7041764706373215,
+          "width_m": 0.6321863035371087,
+          "depth_m": 0.5469543241855549,
+          "radius_m": 0.591108515894159,
+          "upcos": 0.9556662747053356,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.59m"
+          ],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 48,
+      "n_in": 147,
+      "n_foreground": 147,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1854,
+        "reference_survived": 1802,
+        "online_survived": 38,
+        "cleanup": 37,
+        "clustered": 37,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 49,
+          "REFERENCE": 3,
+          "ONLINE": 1764,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 37
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 37,
+          "foreign_points": 39,
+          "n": 76,
+          "cx": 2.6641389507996407,
+          "cy": -0.6926280305181679,
+          "cz": 0.8931414122252088,
+          "zmin": 0.11226844042539597,
+          "zmax": 1.7984182834625244,
+          "height_m": 1.6861498430371284,
+          "width_m": 0.6372234004740596,
+          "depth_m": 0.5292105928850748,
+          "radius_m": 0.5857121792030178,
+          "upcos": 0.9647040987135223,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.59m"
+          ],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 49,
+      "n_in": 164,
+      "n_foreground": 164,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1853,
+        "reference_survived": 1801,
+        "online_survived": 44,
+        "cleanup": 43,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 48,
+          "REFERENCE": 4,
+          "ONLINE": 1757,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 50,
+      "n_in": 157,
+      "n_foreground": 157,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1851,
+        "reference_survived": 1807,
+        "online_survived": 43,
+        "cleanup": 41,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 0,
+          "ONLINE": 1764,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 51,
+      "n_in": 157,
+      "n_foreground": 157,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1852,
+        "reference_survived": 1804,
+        "online_survived": 40,
+        "cleanup": 38,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 2,
+          "ONLINE": 1764,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 52,
+      "n_in": 153,
+      "n_foreground": 153,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1854,
+        "reference_survived": 1801,
+        "online_survived": 36,
+        "cleanup": 35,
+        "clustered": 35,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 50,
+          "REFERENCE": 3,
+          "ONLINE": 1765,
+          "CLEANUP": 1
+        },
+        "clusters": {
+          "0": 35
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 35,
+          "foreign_points": 25,
+          "n": 60,
+          "cx": 2.5462969581286115,
+          "cy": -0.7265560341378053,
+          "cz": 0.980421369895339,
+          "zmin": 0.11401626467704773,
+          "zmax": 1.798581600189209,
+          "height_m": 1.6845653355121613,
+          "width_m": 0.35512339276877797,
+          "depth_m": 0.5593313569585366,
+          "radius_m": 0.4684891626114128,
+          "upcos": 0.9606870351540174,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.47m"
+          ],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 53,
+      "n_in": 150,
+      "n_foreground": 150,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1846,
+        "reference_survived": 1803,
+        "online_survived": 39,
+        "cleanup": 39,
+        "clustered": 39,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "REFERENCE": 2,
+          "ONLINE": 1764,
+          "CLEANUP": 0
+        },
+        "clusters": {
+          "0": 39
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 39,
+          "foreign_points": 22,
+          "n": 61,
+          "cx": 2.5071419848770393,
+          "cy": -0.6958963641377746,
+          "cz": 0.9193856705163346,
+          "zmin": 0.1082393005490303,
+          "zmax": 1.6910207271575928,
+          "height_m": 1.5827814266085625,
+          "width_m": 0.3081948668523033,
+          "depth_m": 0.5320350994054356,
+          "radius_m": 0.4347674222808447,
+          "upcos": 0.9875204960557048,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 54,
+      "n_in": 152,
+      "n_foreground": 152,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1844,
+        "reference_survived": 1798,
+        "online_survived": 34,
+        "cleanup": 34,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "REFERENCE": 3,
+          "ONLINE": 1764,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 55,
+      "n_in": 158,
+      "n_foreground": 158,
+      "clusters_after_cleanup": 2,
+      "cleanup_split_delta": -2,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1852,
+        "reference_survived": 1807,
+        "online_survived": 44,
+        "cleanup": 44,
+        "clustered": 44,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "REFERENCE": 3,
+          "ONLINE": 1763,
+          "CLEANUP": 0
+        },
+        "clusters": {
+          "0": 44
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 44,
+          "foreign_points": 37,
+          "n": 81,
+          "cx": 2.636117105130796,
+          "cy": -0.6778146482912111,
+          "cz": 0.8964949951127723,
+          "zmin": 0.1074201688170433,
+          "zmax": 1.7645426988601685,
+          "height_m": 1.6571225300431252,
+          "width_m": 0.6038602983927608,
+          "depth_m": 0.5475646129142218,
+          "radius_m": 0.5764001497618194,
+          "upcos": 0.9673252865512489,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.58m"
+          ],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 56,
+      "n_in": 164,
+      "n_foreground": 164,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1840,
+        "reference_survived": 1797,
+        "online_survived": 38,
+        "cleanup": 38,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "REFERENCE": 1,
+          "ONLINE": 1759,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 57,
+      "n_in": 157,
+      "n_foreground": 157,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1850,
+        "reference_survived": 1803,
+        "online_survived": 39,
+        "cleanup": 39,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1764,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 58,
+      "n_in": 151,
+      "n_foreground": 151,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1848,
+        "reference_survived": 1797,
+        "online_survived": 34,
+        "cleanup": 34,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 49,
+          "REFERENCE": 2,
+          "ONLINE": 1763,
+          "CLEANUP": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 59,
+      "n_in": 145,
+      "n_foreground": 145,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1844,
+        "reference_survived": 1799,
+        "online_survived": 35,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 1,
+          "ONLINE": 1764,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 60,
+      "n_in": 147,
+      "n_foreground": 147,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": -1,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1843,
+        "reference_survived": 1794,
+        "online_survived": 33,
+        "cleanup": 31,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 3,
+          "ONLINE": 1761,
+          "CLEANUP": 2
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 61,
+      "n_in": 156,
+      "n_foreground": 156,
+      "clusters_after_cleanup": 4,
+      "cleanup_split_delta": -2,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1841,
+        "reference_survived": 1800,
+        "online_survived": 36,
+        "cleanup": 35,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "REFERENCE": 1,
+          "ONLINE": 1764,
+          "CLEANUP": 1
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 62,
+      "n_in": 150,
+      "n_foreground": 150,
+      "clusters_after_cleanup": 3,
+      "cleanup_split_delta": 0,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1846,
+        "reference_survived": 1799,
+        "online_survived": 35,
+        "cleanup": 33,
+        "clustered": 33,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "REFERENCE": 3,
+          "ONLINE": 1764,
+          "CLEANUP": 2
+        },
+        "clusters": {
+          "0": 33
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 33,
+          "foreign_points": 40,
+          "n": 73,
+          "cx": 2.680819410167328,
+          "cy": -0.6864658916649753,
+          "cz": 0.8557328281745519,
+          "zmin": 0.12525318562984467,
+          "zmax": 1.6304364204406738,
+          "height_m": 1.5051832348108292,
+          "width_m": 0.583407599396166,
+          "depth_m": 0.5286283140929773,
+          "radius_m": 0.5566921597678472,
+          "upcos": 0.9132458265251533,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.56m"
+          ],
+          "track_id": 2,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 63,
+      "n_in": 149,
+      "n_foreground": 149,
+      "clusters_after_cleanup": 5,
+      "cleanup_split_delta": 0,
+      "n_clusters": 0,
+      "person": {
+        "raw": 1849,
+        "reference_survived": 1799,
+        "online_survived": 31,
+        "cleanup": 28,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "REFERENCE": 4,
+          "ONLINE": 1768,
+          "CLEANUP": 3
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 2,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    }
+  ]
+}

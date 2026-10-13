@@ -1,0 +1,14 @@
+fatal: this operation must be run in a work tree
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\sidequests\evidence\2026-10-09_cl2_10_r1\prepare.py", line 116, in <module>
+    save('00_baseline.json',dict(main_git=git(R),branch_git=git(H),isolated_git=git(I),
+                                                            ^^^^^^
+  File "D:\Code\ldiar\docs\sidequests\evidence\2026-10-09_cl2_10_r1\prepare.py", line 35, in git
+    return {key:subprocess.check_output(['git']+args,cwd=root,text=True).strip()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', 'status', '--porcelain=v1', '--untracked-files=all']' returned non-zero exit status 128.

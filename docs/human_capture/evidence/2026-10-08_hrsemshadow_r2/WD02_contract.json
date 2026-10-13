@@ -1,0 +1,85 @@
+{
+  "status": "BLOCKED_CONTRACT_ADJUDICATION",
+  "sid": "cap_20261004_203349",
+  "job": "c9712acad48c4fb7a78cb119c08d4cdb",
+  "source": {
+    "meta_sha256": "c3b55d1e11ed8a043bd3645af7ed07e920024c05f3cb48b15d523405edd38392",
+    "bin_sha256": "2ed3fc60d99b3a2f42e0951835ad847fae2f490859e487b167fbccb1b5f10323"
+  },
+  "all_12_method_artifacts": [
+    {
+      "path": "tls/dataset.zip",
+      "sha256": "d70c9cb8ce7ea3faba0ee8799432b1bfd81ef0962901d9e6103897ffa58dad47"
+    },
+    {
+      "path": "tls/meta.json",
+      "sha256": "ce2c112fe20623b0ddbbb890f4ceb0a73f4cbd8927292f4ef2369fc97cd154ce"
+    },
+    {
+      "path": "tls/points.bin",
+      "sha256": "389e573a2152c95cfc7ca25bccfc57179b90b3c9c7ee6fe4f7f2eed895f70312"
+    },
+    {
+      "path": "tls/transform.json",
+      "sha256": "c845929272d350faa35deb0c1595e93cda46a9562e23aa9927476029cb46c194"
+    },
+    {
+      "path": "svd/dataset.zip",
+      "sha256": "a03399fab9664001c6b3921a0e15e99792e7f6fc7e618bf6ead6ccd875f8b78e"
+    },
+    {
+      "path": "svd/meta.json",
+      "sha256": "7a0caca10f49fdcc6b27981ca78fdc84e9118c1a8325112dcf7ba283fd23db49"
+    },
+    {
+      "path": "svd/points.bin",
+      "sha256": "4115fce1ca6dc79d0ef142eb292155954a15030f854269c09c97ebce9ea5a751"
+    },
+    {
+      "path": "svd/transform.json",
+      "sha256": "bd45db28996327721e5768a0728e0d5fdbd2dae62962362a20fb573ecfa21238"
+    },
+    {
+      "path": "ransac/dataset.zip",
+      "sha256": "a00e873dd8ee2b01ed5481775e271eebb98c2bd17af752797a1f56ce40e6241f"
+    },
+    {
+      "path": "ransac/meta.json",
+      "sha256": "8276126042c95d9b6f156c326ffcc85e9a67be3a5135d5b778f0a52fd9c80e48"
+    },
+    {
+      "path": "ransac/points.bin",
+      "sha256": "c271b35a15f67566af45ef32a4ac67b94fbfc6f09f57a67dc1ac3852cbfa6830"
+    },
+    {
+      "path": "ransac/transform.json",
+      "sha256": "88f0d884b91d2136d6bfa197961aaf30476ef86d4784dd839af83ec9e2a62c95"
+    }
+  ],
+  "report_sha256": "e7455741fc74a1fb24c9e5d5d21dab0eda4f927428088f76057799e001d55a15",
+  "domain_sha256": "88f0c4aa118c96144e60cd144c41fd3154505afeb536acecab514e35546a7396",
+  "current_levelingBinding_accepts": true,
+  "binding": {
+    "job_id": "c9712acad48c4fb7a78cb119c08d4cdb",
+    "method": "tls",
+    "transform_id": "5d8fd5c032f2b8131e5d5ef2027e0560605e9a7ba83376c55528b9c8edff6f03",
+    "transform_sha256": "c845929272d350faa35deb0c1595e93cda46a9562e23aa9927476029cb46c194",
+    "report_sha256": "e7455741fc74a1fb24c9e5d5d21dab0eda4f927428088f76057799e001d55a15",
+    "manifest_sha256": "4fb6ae20b7ee462807b4cf113e718bf3d5c89c2026a614a4fbc9230acd260e7b"
+  },
+  "historical_generator_differences": [
+    {
+      "file": "leveling.py",
+      "historical": "4b8d7ae12b958a55e0c62342ace29b12cdfb639039516ef7cc2078550b7514da",
+      "current": "3c3a88196cfd9851e2cadac76690a8343d6c949c4c7f467950495c32e6b54a6e"
+    }
+  ],
+  "unchanged_harness_rejection": {
+    "name": "AssertionError",
+    "message": "leveling code binding\n+ actual - expected\n\n+ '3c3a88196cfd9851e2cadac76690a8343d6c949c4c7f467950495c32e6b54a6e'\n- '4b8d7ae12b958a55e0c62342ace29b12cdfb639039516ef7cc2078550b7514da'\n",
+    "actual": "3c3a88196cfd9851e2cadac76690a8343d6c949c4c7f467950495c32e6b54a6e",
+    "expected": "4b8d7ae12b958a55e0c62342ace29b12cdfb639039516ef7cc2078550b7514da"
+  },
+  "WD02_processed_frames": 0,
+  "loader_or_publish_called": false
+}

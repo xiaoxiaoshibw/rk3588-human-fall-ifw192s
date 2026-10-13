@@ -1,0 +1,1 @@
+HFUS-D05-R06 H5：仅旧PIPE EMA在当前合法FG证明中心的原恢复圆外才更新xy，其他推理不变。原模型GT/captures/生产/旧证据只读，writer主控；ponytail C:/Users/30680/.codex/skills/ponytail/SKILL.md。控制与guard新9会话完整执行；perf外部竞争时BLOCKED不运行；验收docs/human_capture/evidence/2026-10-12_hfus_d05_r6/ACCEPTANCE_V1.md。

@@ -1,0 +1,132 @@
+[
+  {
+    "ProcessId": 4144,
+    "ParentProcessId": 24048,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\" C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+  },
+  {
+    "ProcessId": 7624,
+    "ParentProcessId": 24048,
+    "CommandLine": "\"C:\\Program Files\\nodejs\\node.exe\" ./mcp/server.mjs"
+  },
+  {
+    "ProcessId": 12080,
+    "ParentProcessId": 26444,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\"  ./server.mjs "
+  },
+  {
+    "ProcessId": 5696,
+    "ParentProcessId": 7524,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\"  ./server.mjs"
+  },
+  {
+    "ProcessId": 28172,
+    "ParentProcessId": 9760,
+    "CommandLine": "\"C:\\Program Files\\nodejs\\\\node.exe\"  \"C:\\Program Files\\nodejs\\\\node_modules\\npm\\bin\\npx-cli.js\" -y @upstash/context7-mcp"
+  },
+  {
+    "ProcessId": 12788,
+    "ParentProcessId": 26176,
+    "CommandLine": "\"node\"   \"C:\\Users\\30680\\AppData\\Local\\npm-cache\\_npx\\eea2bd7412d4593b\\node_modules\\.bin\\\\..\\@upstash\\context7-mcp\\dist\\index.js\" "
+  },
+  {
+    "ProcessId": 13436,
+    "ParentProcessId": 25564,
+    "CommandLine": "\"C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe\" -u D:\\Code\\ldiar\\sidequests\\human_fusion_lab_next\\d04\\demo_server.py --port 8907 "
+  },
+  {
+    "ProcessId": 13368,
+    "ParentProcessId": 25972,
+    "CommandLine": "C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe sidequests/human_fusion_lab_next/d05/demo_server.py --port 8908"
+  },
+  {
+    "ProcessId": 16828,
+    "ParentProcessId": 1164,
+    "CommandLine": "C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe sidequests/human_fusion_lab_next/d05/demo_server.py --port 8908"
+  },
+  {
+    "ProcessId": 28296,
+    "ParentProcessId": 24048,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\" C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+  },
+  {
+    "ProcessId": 22964,
+    "ParentProcessId": 24048,
+    "CommandLine": "\"C:\\Program Files\\nodejs\\node.exe\" ./mcp/server.mjs"
+  },
+  {
+    "ProcessId": 17968,
+    "ParentProcessId": 13124,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\"  ./server.mjs "
+  },
+  {
+    "ProcessId": 15952,
+    "ParentProcessId": 5472,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\"  ./server.mjs"
+  },
+  {
+    "ProcessId": 20760,
+    "ParentProcessId": 7740,
+    "CommandLine": "\"C:\\Program Files\\nodejs\\\\node.exe\"  \"C:\\Program Files\\nodejs\\\\node_modules\\npm\\bin\\npx-cli.js\" -y @upstash/context7-mcp"
+  },
+  {
+    "ProcessId": 22100,
+    "ParentProcessId": 27792,
+    "CommandLine": "\"node\"   \"C:\\Users\\30680\\AppData\\Local\\npm-cache\\_npx\\eea2bd7412d4593b\\node_modules\\.bin\\\\..\\@upstash\\context7-mcp\\dist\\index.js\" "
+  },
+  {
+    "ProcessId": 9432,
+    "ParentProcessId": 18436,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\" --eval \"// Windows may deny ancestor metadata even when the configured folder is readable.\nconst fs = require(\\\"node:fs\\\");\nconst pathApi = require(\\\"node:path\\\");\nconst { fileURLToPath } = require(\\\"node:url\\\");\n\nconst originalRealpathSync = fs.realpathSync;\nconst key = (path) =>\n  pathApi.toNamespacedPath(pathApi.resolve(path)).toLowerCase();\nconst roots = new Set(\n  [\n    pathApi.dirname(process.argv[1]),\n    ...(process.env.NODE_REPL_NODE_MODULE_DIRS ?? \\\"\\\")\n      .split(pathApi.delimiter)\n      .map((entry) => entry.trim()),\n    ...(process.env.NODE_REPL_TRUSTED_CODE_PATHS ?? \\\"\\\")\n      .split(pathApi.delimiter)\n      .filter(pathApi.isAbsolute),\n  ]\n    .filter(Boolean)\n    .map(key),\n);\n\nfs.realpathSync = function realpathSync(path, options) {\n  try {\n    // Preserve Node's canonical paths (including short names and links) when possible.\n    return originalRealpathSync.native(path, options);\n  } catch (error) {\n    if (error.code !== \\\"EPERM\\\" && error.code !== \\\"EACCES\\\") {\n      throw error;\n    }\n    if (path instanceof URL) {\n      path = fileURLToPath(path);\n    }\n    if (Buffer.isBuffer(path)) {\n      path = path.toString();\n    }\n\n    const filename = pathApi.resolve(path);\n    // Only accept paths below a configured root. A junction or symlink could\n    // point outside that root, so it must not receive the lexical fallback.\n    for (let current = filename; ; current = pathApi.dirname(current)) {\n      if (fs.lstatSync(current).isSymbolicLink()) {\n        throw error;\n      }\n      if (roots.has(key(current))) {\n        const encoding =\n          typeof options === \\\"string\\\" ? options : options?.encoding;\n        const buffer = Buffer.from(filename);\n        return encoding === \\\"buffer\\\"\n          ? buffer\n          : buffer.toString(encoding ?? \\\"utf8\\\");\n      }\n      if (pathApi.dirname(current) === current) {\n        throw error;\n      }\n    }\n  }\n};\nfs.realpathSync.native = fs.realpathSync;\n\n// --eval leaves the script at argv[1]. Use Node's ordinary main-module loader\n// so argv, require.main, and relative imports keep their normal meaning.\nrequire(\\\"node:module\\\").runMain();\n\" --experimental-vm-modules C:\\Users\\30680\\AppData\\Local\\Temp\\.tmp4jA5x0\\kernel.js --session-id 17d3ff0fa6434d6494612937f2957fad --working-dir D:\\Code\\ldiar"
+  },
+  {
+    "ProcessId": 26804,
+    "ParentProcessId": 18436,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\" --eval \"// Windows may deny ancestor metadata even when the configured folder is readable.\nconst fs = require(\\\"node:fs\\\");\nconst pathApi = require(\\\"node:path\\\");\nconst { fileURLToPath } = require(\\\"node:url\\\");\n\nconst originalRealpathSync = fs.realpathSync;\nconst key = (path) =>\n  pathApi.toNamespacedPath(pathApi.resolve(path)).toLowerCase();\nconst roots = new Set(\n  [\n    pathApi.dirname(process.argv[1]),\n    ...(process.env.NODE_REPL_NODE_MODULE_DIRS ?? \\\"\\\")\n      .split(pathApi.delimiter)\n      .map((entry) => entry.trim()),\n    ...(process.env.NODE_REPL_TRUSTED_CODE_PATHS ?? \\\"\\\")\n      .split(pathApi.delimiter)\n      .filter(pathApi.isAbsolute),\n  ]\n    .filter(Boolean)\n    .map(key),\n);\n\nfs.realpathSync = function realpathSync(path, options) {\n  try {\n    // Preserve Node's canonical paths (including short names and links) when possible.\n    return originalRealpathSync.native(path, options);\n  } catch (error) {\n    if (error.code !== \\\"EPERM\\\" && error.code !== \\\"EACCES\\\") {\n      throw error;\n    }\n    if (path instanceof URL) {\n      path = fileURLToPath(path);\n    }\n    if (Buffer.isBuffer(path)) {\n      path = path.toString();\n    }\n\n    const filename = pathApi.resolve(path);\n    // Only accept paths below a configured root. A junction or symlink could\n    // point outside that root, so it must not receive the lexical fallback.\n    for (let current = filename; ; current = pathApi.dirname(current)) {\n      if (fs.lstatSync(current).isSymbolicLink()) {\n        throw error;\n      }\n      if (roots.has(key(current))) {\n        const encoding =\n          typeof options === \\\"string\\\" ? options : options?.encoding;\n        const buffer = Buffer.from(filename);\n        return encoding === \\\"buffer\\\"\n          ? buffer\n          : buffer.toString(encoding ?? \\\"utf8\\\");\n      }\n      if (pathApi.dirname(current) === current) {\n        throw error;\n      }\n    }\n  }\n};\nfs.realpathSync.native = fs.realpathSync;\n\n// --eval leaves the script at argv[1]. Use Node's ordinary main-module loader\n// so argv, require.main, and relative imports keep their normal meaning.\nrequire(\\\"node:module\\\").runMain();\n\" C:\\Users\\30680\\AppData\\Local\\Temp\\.tmp4jA5x0\\trusted-worker.js D:\\Code\\ldiar"
+  },
+  {
+    "ProcessId": 27916,
+    "ParentProcessId": 5928,
+    "CommandLine": "\"C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe\" -B -W error -u sidequests/human_fusion_lab_next/d05/r02/demo_server.py --port 8912"
+  },
+  {
+    "ProcessId": 28608,
+    "ParentProcessId": 24048,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\" C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node_modules\\@oai\\cua-repl\\bin\\cua-repl.mjs"
+  },
+  {
+    "ProcessId": 8428,
+    "ParentProcessId": 24048,
+    "CommandLine": "\"C:\\Program Files\\nodejs\\node.exe\" ./mcp/server.mjs"
+  },
+  {
+    "ProcessId": 18312,
+    "ParentProcessId": 4604,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\"  ./server.mjs "
+  },
+  {
+    "ProcessId": 18480,
+    "ParentProcessId": 2900,
+    "CommandLine": "\"C:\\Users\\30680\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\cfb32733c877621e\\bin\\node.exe\"  ./server.mjs"
+  },
+  {
+    "ProcessId": 10540,
+    "ParentProcessId": 22416,
+    "CommandLine": "\"C:\\Program Files\\nodejs\\\\node.exe\"  \"C:\\Program Files\\nodejs\\\\node_modules\\npm\\bin\\npx-cli.js\" -y @upstash/context7-mcp"
+  },
+  {
+    "ProcessId": 4884,
+    "ParentProcessId": 25700,
+    "CommandLine": "\"node\"   \"C:\\Users\\30680\\AppData\\Local\\npm-cache\\_npx\\eea2bd7412d4593b\\node_modules\\.bin\\\\..\\@upstash\\context7-mcp\\dist\\index.js\" "
+  },
+  {
+    "ProcessId": 24492,
+    "ParentProcessId": 15504,
+    "CommandLine": "\"C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe\" -B -W error -"
+  },
+  {
+    "ProcessId": 22432,
+    "ParentProcessId": 24492,
+    "CommandLine": "python -B -W error sidequests/human_fusion_lab_next/d05/r04/verify_parity.py"
+  }
+]

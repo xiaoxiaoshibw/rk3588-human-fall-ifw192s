@@ -1,0 +1,120 @@
+{
+  "sid": "cap_20261010_180235",
+  "label": "BG_A",
+  "inputMode": "sensor_valid",
+  "input_sha256": {
+    "meta": "d3127d67cdc1c3ab4e2eadddd11d8a100fb8cb9ab489d588ea9f48684f5f7b48",
+    "points": "0eb22d564361a730a38adbcf72d31b4b907d1f38b32c5908da55d58d341b0173"
+  },
+  "gt_sha256": "f83aa6a75931fc97266c1a2e707ed36f866d6b2d6eafe8f06bc3b2bfd6f6b3d0",
+  "gt_binding_valid": true,
+  "coordinate": {
+    "already_leveled": false,
+    "R": [
+      0.893544,
+      0,
+      0.448975,
+      -0.014337,
+      0.99949,
+      0.028533,
+      -0.448746,
+      -0.031932,
+      0.893089
+    ],
+    "T": [
+      0,
+      0,
+      1.380286
+    ]
+  },
+  "config": {
+    "mode": "FUSION",
+    "background": "ref_only",
+    "candidates": "fg_plus_retained",
+    "classifier": "rf51",
+    "rf51_threshold": 0.55,
+    "confirm_window": 5,
+    "confirm_votes": 3,
+    "min_age_frames": 3,
+    "track_gate_xy_m": 0.75,
+    "track_lost_max": 8,
+    "ema_alpha": 0.35,
+    "retention": {
+      "window_confirm": 3,
+      "timeout_s": 180,
+      "hot_cell_radius_m": 0.4,
+      "max_lost_for_retain": 30
+    },
+    "leveling_rt": null,
+    "hard_gate_n500": false,
+    "replay_policy": "strict",
+    "diagnostics": true,
+    "fusion_cfg": {
+      "assoc_gate_xy_m": 0.75,
+      "track_gate_xy_m": 0.75,
+      "track_lost_max": 30,
+      "track_still_confirm_window": 5,
+      "track_still_confirm_votes": 3,
+      "track_still_confirm_min_age": 3,
+      "rf51_threshold": 0.55,
+      "bg_envelope_path": null,
+      "online_background": false
+    }
+  },
+  "total_frames": 238,
+  "qualified_frames": 71,
+  "unknown_frames": 167,
+  "exposure_seconds": 7.340733528137207,
+  "strict": {
+    "proposal": {
+      "tp": 47,
+      "fn": 24,
+      "fp": 0,
+      "unmatched_unknown": 159
+    },
+    "accepted": {
+      "tp": 47,
+      "fn": 24,
+      "fp": 0,
+      "unmatched_unknown": 19
+    },
+    "observed_confirmed": {
+      "tp": 45,
+      "fn": 26,
+      "fp": 0,
+      "unmatched_unknown": 17
+    }
+  },
+  "legacy": {
+    "accepted": {
+      "tp": 65,
+      "fp": 1,
+      "fn": 6
+    },
+    "confirmed": {
+      "tp": 61,
+      "fp": 1,
+      "fn": 10
+    }
+  },
+  "component_count": 16938,
+  "hard_rejected_components": 16286,
+  "invalid_candidate_row_count": 0,
+  "coast_observations": 8,
+  "duplicate_track_ids": 0,
+  "performance": {
+    "warmup": 5,
+    "p50_ms": 87.67810000000463,
+    "p95_ms": 114.89310000000114,
+    "p99_ms": 138.6432000000059,
+    "peak_heap_mb": 263.6651153564453,
+    "includes_diagnostic_shadow": true
+  },
+  "failures_file": "cap_20261010_180235__BG_A__sensor_valid__FAILURES.json",
+  "limits": [
+    "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+    "propagated observations conditional, not independent human review",
+    "diagnostic shadow performance not pure detector performance",
+    "nine sessions development regression, not blind test"
+  ]
+}

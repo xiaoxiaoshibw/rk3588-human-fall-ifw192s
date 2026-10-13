@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "check": "frozen file hashes",
+      "ok": true,
+      "detail": "labels/gt/freeze chain, no overrides"
+    },
+    {
+      "check": "author proposals no-manual",
+      "ok": true,
+      "detail": "all 10 frames auto-assigned, user-confirmed"
+    },
+    {
+      "check": "human row lists consistent",
+      "ok": true,
+      "detail": "labels_v1 vs gt_v1 prepared/raw lists and counts"
+    },
+    {
+      "check": "prepared/raw row chain",
+      "ok": true,
+      "detail": "raw rows re-derived from .rows files for all 10 frames"
+    },
+    {
+      "check": "gt geometry recompute",
+      "ok": true,
+      "detail": "centroid/z-top/AABB recomputed from proposal point arrays"
+    },
+    {
+      "check": "purity re-derivation",
+      "ok": true,
+      "detail": "independent recomputation matches 04 audit for all 10 items"
+    },
+    {
+      "check": "switch isolation",
+      "ok": true,
+      "detail": "only pure pillars changed; every other row byte-equal; base switched mask empty"
+    },
+    {
+      "check": "run inventory",
+      "ok": true,
+      "detail": "10 items x (base, pure_switch); no other forwards"
+    },
+    {
+      "check": "seed consistency exact",
+      "ok": true,
+      "detail": "base runs reproduce DET-03 seed-relative values bit-exact"
+    },
+    {
+      "check": "metric sanity",
+      "ok": true,
+      "detail": "scores in [0,1]; ranks 1-based"
+    }
+  ],
+  "all_ok": true
+}

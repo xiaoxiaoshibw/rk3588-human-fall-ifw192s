@@ -1,0 +1,45 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>静立人保留效果 · 空场模板 vs 在线自建模</title>
+<style>
+body{margin:0;background:#111922;color:#e6edf4;font:14px system-ui}header{padding:14px 16px;border-bottom:1px solid #354150}
+h1{font-size:20px;margin:0 0 8px}button,select,input{padding:6px;background:#243347;color:white;border:1px solid #586577;border-radius:4px}
+label{margin-right:12px}.dim{color:#9da9b5}.wrap{display:flex;height:calc(100vh - 128px);min-height:420px}
+#view{flex:1;min-width:0;position:relative}canvas{display:block}
+aside{width:330px;border-left:1px solid #354150;padding:12px;overflow:auto;font-size:13px}
+aside h3{margin:10px 0 6px;font-size:14px}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+#stats{background:#1c2834;padding:10px;border-radius:6px;line-height:1.7}#modeDesc{color:#c8d3de;line-height:1.6;margin-top:6px}
+.note{color:#9da9b5;font-size:12px;line-height:1.6;margin-top:10px}
+</style>
+<header><h1>静立人保留效果 · 空场模板（233658） vs 在线自建模（2026-10-07 新四段）</h1>
+<div><label>会话 <select id="session"></select></label><label>帧 <input id="frame" type="range" min="0" max="7" value="0" style="width:220px;vertical-align:middle"></label><span id="frameLabel" class="dim"></span></div>
+<div style="margin-top:8px">
+<label><input type="radio" name="mode" value="input"> 原始</label>
+<label><input type="radio" name="mode" value="ref"> ① 空场模板层</label>
+<label><input type="radio" name="mode" value="final" checked> ② 参考+在线（现状）</label>
+<label><input type="radio" name="mode" value="diff"> ③ 在线误删高亮</label>
+<label><input type="checkbox" id="refvox"> 显示空场模板体素</label>
+<button id="home">归位</button>
+</div>
+<div class="dim" style="margin-top:6px;font-size:12px">鼠标左键旋转 / 滚轮缩放 / 右键平移。坐标=对齐到空场会话的配平系；裁剪区 = 人位 ±1.9m、z∈[−0.15,2.4]m。数据与计数为显示抽稀后（比例与全量一致）。</div>
+</header>
+<div class="wrap"><div id="view"></div><aside>
+<h3>当前视图</h3><div id="modeDesc"></div>
+<h3>本帧统计</h3><div id="stats"></div>
+<h3>图例</h3>
+<div><span class="sw" style="background:#8fd0ff"></span>保留（模板与在线都没删）</div>
+<div><span class="sw" style="background:#ff4d5e"></span>被在线层删除（静立人误删主体）</div>
+<div><span class="sw" style="background:#ffb950"></span>cleanup 删除</div>
+<div><span class="sw" style="background:#2b2f36"></span>被空场模板删除（静态背景）</div>
+<div><span class="sw" style="background:#4a4f58"></span>预剔除（地面/范围/工作空间）</div>
+<div class="note">依据：evidence/2026-10-07_new_sessions_person_probe_r1/（probe r1 + Arm C 保留率阶梯）。<br>
+参考层保留静立人 97–98%；并集语义下在线层再次删除，最终仅 1–2%。<br>
+绿点=空场模板体素（occ≥0.5，共 <span id="refvoxCount"></span> 个）。</div>
+</aside></div>
+<script src="../../../../pc_apps/human_replay/vendor/three.min.js"></script>
+<script src="../../../../pc_apps/human_replay/vendor/OrbitControls.js"></script>
+<script src="view_refvox.js"></script>
+<script src="view_data_cap_20261007_215540.js"></script>
+<script src="view_data_cap_20261007_215623.js"></script>
+<script src="view_data_cap_20261007_215643.js"></script>
+<script src="retention_view.js"></script>
+<script>document.getElementById("refvoxCount").textContent=(window.RETENTION_REFVOX||[]).length;</script>
+</html>

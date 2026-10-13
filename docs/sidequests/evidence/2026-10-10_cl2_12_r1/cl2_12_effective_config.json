@@ -1,0 +1,25 @@
+{
+  "permission": {
+    "*": "deny",
+    "read": {
+      "*": "allow"
+    },
+    "external_directory": "deny"
+  },
+  "agent": {
+    "cl212audit": {
+      "description": "CL2-12 identifiability readonly audit",
+      "mode": "primary",
+      "permission": {
+        "*": "deny",
+        "read": {
+          "*": "allow"
+        },
+        "external_directory": "deny"
+      },
+      "prompt": "Read-only audit. No shell, writing, edit, task, network or other tool actions. Only read."
+    }
+  },
+  "mcp": {},
+  "plugin": []
+}

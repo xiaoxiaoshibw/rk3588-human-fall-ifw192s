@@ -1,0 +1,156 @@
+{
+  "client_date": "2026-10-08",
+  "writer": "Codex only",
+  "skill": "C:/Users/30680/.codex/skills/ponytail/SKILL.md",
+  "intensity": "full",
+  "commands": [
+    {
+      "log": "08_regression.log",
+      "command": "python -B -W error -m unittest discover -s sidequests/human_detectors -p test_experiment.py -v",
+      "exit_code": 0
+    },
+    {
+      "log": "09_experiment.log",
+      "command": "python -B -W error sidequests/human_detectors/det04.py --out sidequests/human_detectors/artifacts/det04_r1",
+      "exit_code": 0
+    },
+    {
+      "log": "10_independent_checks.log",
+      "command": "python -B -W error - (canonical voxels/counts/prepared IDs/raw rows/finite stored heads)",
+      "exit_code": 0
+    },
+    {
+      "log": "11_report.log",
+      "command": "python -B -W error docs/sidequests/evidence/2026-10-08_det04_r1/11_report.py",
+      "exit_code": 0
+    },
+    {
+      "log": "18_integrity.log",
+      "command": "python -B -W error - (current-baseline tracked/untracked/ignored SHA; same3211 asset list)",
+      "exit_code": 0
+    },
+    {
+      "log": "00b_schema_probe_failed.log",
+      "command": "python -B -W error - (read schema, erroneous dict[0])",
+      "exit_code": 1
+    },
+    {
+      "log": "17_packaging.log",
+      "command": "python -B -W error - (initial packaging, default gbk failed)",
+      "exit_code": 1
+    },
+    {
+      "log": "17b_packaging.log",
+      "command": "python -B -W error docs/sidequests/evidence/2026-10-08_det04_r1/17_package.py",
+      "exit_code": 0
+    }
+  ],
+  "new_network_forwards": 8,
+  "HB_HC_HD_network_forwards": 0,
+  "regression_tests": 10,
+  "code": [
+    {
+      "path": "sidequests\\human_detectors\\audit_inputs_det03.py",
+      "sha256": "af050e8e82e927742a8d484af1fa32088ad8bf65d3a9f50de00646c8e48bdefd"
+    },
+    {
+      "path": "sidequests\\human_detectors\\audit_truth.py",
+      "sha256": "f0980d22d7f7d5e0e231a7df8c60d04ce4b29def65bcd97089ac8bc2768299a8"
+    },
+    {
+      "path": "sidequests\\human_detectors\\batch_static.py",
+      "sha256": "aacddaaca4a0af05411e366fd22410ef1bc87f75d753d9bb3c06607521813f93"
+    },
+    {
+      "path": "sidequests\\human_detectors\\cpu_pointpillars.py",
+      "sha256": "a96295143653ee932af874e1ca0a90ccfde4ff7ea8171f553eebfa27214d7224"
+    },
+    {
+      "path": "sidequests\\human_detectors\\det04.py",
+      "sha256": "00fec42efaf9c468ed3eafbbadd06591d92c6d0051bb437d1c2e4a50c021f689"
+    },
+    {
+      "path": "sidequests\\human_detectors\\diagnose_low_scores.py",
+      "sha256": "df22717aba7c17d65c8ac5004f9d509f05259f574aa9fc32bb7aa492ba93e873"
+    },
+    {
+      "path": "sidequests\\human_detectors\\download_pointpillars.py",
+      "sha256": "89e08d7e1c42316ae9fa84100785a5fb420bfe3ac97792a35832ce63c19c4b0b"
+    },
+    {
+      "path": "sidequests\\human_detectors\\experiment.py",
+      "sha256": "996e1332e258a83d682291065186e009c2e3176e87ace44cb500eafae814ec5d"
+    },
+    {
+      "path": "sidequests\\human_detectors\\head_probe.py",
+      "sha256": "e8c3873f0a17ee2f1647284d2e2424c8ce1fca495ff5fae543ee15ff76f58b50"
+    },
+    {
+      "path": "sidequests\\human_detectors\\infer_background.py",
+      "sha256": "0be5aa1c63d66144ba7ae106a26991c88bd0826d398c79a8c7a112e1b53dae4f"
+    },
+    {
+      "path": "sidequests\\human_detectors\\plot_background.py",
+      "sha256": "9a72262585d47dfd4163fbbe34c0cfd21ca9c2b85a3bae8ec2abbe6bfbec1abc"
+    },
+    {
+      "path": "sidequests\\human_detectors\\plot_static.py",
+      "sha256": "0b1798860bdc7db4f8be0fe214ada5a8d803b7043be886c9906ad6b19dbea124"
+    },
+    {
+      "path": "sidequests\\human_detectors\\prepare_background.py",
+      "sha256": "28305a1078dfaf7afad47baa7adb536896eeadb26963a52463d2cbf1c6c09493"
+    },
+    {
+      "path": "sidequests\\human_detectors\\sampling_attribution.py",
+      "sha256": "ca18ff6e8e7ceaf1fee568788fa8f842358956dd25b4dc71f43de08b3615eee6"
+    },
+    {
+      "path": "sidequests\\human_detectors\\summarize_det03.py",
+      "sha256": "312dafb4d47ee9bf93c83dbac38312ab63f00b61acbe28ddbeeaecdca7a298d7"
+    },
+    {
+      "path": "sidequests\\human_detectors\\test_experiment.py",
+      "sha256": "5f68012d3b95041a2089fb1a0c54a20f9fab768b3f3ecbdbb694802ac4212a4a"
+    },
+    {
+      "path": "sidequests\\human_detectors\\upstream_kernel_check.py",
+      "sha256": "03cb11d9fdc8d1957a27c924b258e37ad8ee98e8d92482cc6fdee434d96ff715"
+    },
+    {
+      "path": "sidequests\\human_detectors\\voxel_kernel_check.py",
+      "sha256": "b550660b9959b12ca5bbcfd41e967d97ebb8b3557d87d6e58554c2aa70c088c0"
+    },
+    {
+      "path": "sidequests\\human_detectors\\voxel_probe.py",
+      "sha256": "a245f42287f52123d59d24033b8dbecb74566219aab1f62b52b1219fd7fa12c2"
+    }
+  ],
+  "script_execution_sha256": "00fec42efaf9c468ed3eafbbadd06591d92c6d0051bb437d1c2e4a50c021f689",
+  "script_final_sha256": "00fec42efaf9c468ed3eafbbadd06591d92c6d0051bb437d1c2e4a50c021f689",
+  "checkpoint_sha256": "482dfcf63b932cc5ccf012b4bbdad52aa51aa33becf87d0a39d61c39b377b5b1",
+  "plan_sha256": "da36f9cb15f9acba9dff4ec254da8b2e2115ce96a1791d98c9a6a1f668415bb2",
+  "acceptance_prerun_sha256": "784bfdc4bcd58c9227b1a66320a57f68047b9ef81ad63b80725ed9da370c2195",
+  "acceptance_submission_sha256": "7bb4d920ce041031875126659cf47f71e8d079866f1a131064873cfc20db75b5",
+  "report_sha256": "f2347cdde6ca5f90e650000caf4a986e332d666b4974aac22d9aabc8f62fac1d",
+  "return_sha256": "ac1faeed62bc8444ca7ae4be66c97f7fdcc588762486aece7bea2455e2009690",
+  "consumed_assets_checked": 3211,
+  "consumed_assets_changes": [],
+  "ignored_existing_checked": 5776,
+  "ignored_existing_changes": [],
+  "additional_consumption": "DET03 archived rows/config/trace/pillars and shared .py: current baseline SHA protected; new code/config/plan also bound here",
+  "original_external_changes": [
+    {
+      "path": "docs/human_capture/FUSION_PRIORITY_RULE_DRAFT.md",
+      "before": "fc73074c8d0fb897a8f89f1449944c2cb40afa2239ef3fe57bdff12598497aaf",
+      "after": "0bc5c1523bb7e9e8fc85b787b43212326ccd112b5019b48c6012ab1bb5afd18b"
+    },
+    {
+      "path": "docs/human_capture/HUMAN_RECOGNITION_REVIEW_AND_PLAN.md",
+      "before": "6c4f8594ca4aa6d3e0b3ee8eef94ab939d656f5ad9d400394b17d862a512e617",
+      "after": "4e5d02bb76aa1824a9ee8ad4877063940211727400d17fa3c4b1592d1d357a68"
+    }
+  ],
+  "integrity_sha256": "c5c5985c651d32ddacd7a79c59fa81203ec6235a18d59cbe5934df0976d1748f",
+  "index_policy": "17 index excludes itself/22 scope/23 seal/final-check and active packaging log to avoid cyclic or incomplete hashes"
+}

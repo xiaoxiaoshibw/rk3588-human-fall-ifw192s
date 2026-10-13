@@ -1,6 +1,88 @@
+## 2026-10-13 HC-JOINT-LOCAL-01 R2 相机超时返工（当前独立入口）
+
+用户两次真实录制在4.312/5.219秒报timed out。本轮定位相机最后接收后约3秒触发读超时，新增本机相机有界重连和camera_events.jsonl，短暂断流雷达继续、持续12秒无帧仍报明确相机失败。断段完成状态completed_with_gaps，不当连续录制；初连失败/本机写失败不走网络重试。元数据完成写盘后才发布终态。9项联合测试、7项控制台、12项JS自验PASS；真实30秒899相机帧/139雷达帧未超时，但雷达已收区间缺号126，完整性仍未通过。见[R2验收v1](evidence/2026-10-13_hc_joint_local_r2/ACCEPTANCE_V1.md)、[报告](evidence/2026-10-13_hc_joint_local_r2/REPORT.md)、[回传](returns/HC-JOINT-LOCAL-01.md)。用户已关闭总控制台以替换EXE。板端相机源码/systemd只读检查，无服务配置/部署/驱动变更，旧会话和R1证据不改。SUBMITTED未ACCEPTED，独审NOT_RUN，不提交推送。
+
+## 2026-10-13 HC-JOINT-LOCAL-01 总控制台本机双流录制（当前独立入口）
+
+用户明确要求“在总控制台加一个usb和雷达同时录制的功能并且数据直接在本机不要放在3588”。Codex唯一writer，在pc_apps/console新增联合录制页和本机服务，复用既有8081 MJPEG与8765 Foxglove完整/innolidar_points；不调用板端录制接口、不创建板端数据文件。默认Windows本机captures/remote/cap_*_joint_*，可选择本机绝对路径；两路就绪再统一开始，手动/自动/关闭窗口停止并保存。保留MJPEG、完整原始雷达消息、28B兼容点云及逐帧接收时间索引。接收时间不是硬件同步；真实短录制发现雷达接收跨度与设备跨度不一致，时空标定及长期完整性未验收。见[唯一验收v1](evidence/2026-10-13_hc_joint_local_r1/ACCEPTANCE_V1.md)、[报告](evidence/2026-10-13_hc_joint_local_r1/REPORT.md)、[回传](returns/HC-JOINT-LOCAL-01.md)。SUBMITTED未ACCEPTED，独审NOT_RUN；不改板端服务/驱动/算法/模型/GT/旧会话，不commit/push。
+
+## 2026-10-13 CAM-HOT R1 相机助手视觉场景建模与 f10 独立模态验证（当前独立入口）
+
+用户明确"你可以让usb摄像头拍个照片借助你的视觉能力辅助判断并且进行场景建模"。利用板上既有 `systemd cam-mjpeg` 服务（2026-10-12 上线）的 `/stream` 路由抓 201 帧 (13.9 MB)。三帧 (CAM_F0000/0100/0200.jpg) 实时相机显示：中景人物左手提裙摆/袋，对应 r02 lidar f10 target 819 点（PERSON_LEFT_ARM_OBJECT）—— f10 大 bbox 的左下细长簇首次得到另一模态确认不是家具。scene_model.py 生成 9 个 camera/lidar anchors 与走廊几何（估计宽 1.7 m、左墙 y=1.0 / 右墙 y=2.7、尽头小桌凳 x=16-20 m 超出 IFW192S 15 m 量程），见 [场景模型](evidence/2026-10-13_cam_hot_r1/SCENE_MODEL.png)。相机与 lidar 093958 等历史 session 不同步，本单不 forge 相机证据；HF-REAL-02 RS04 FAIL 的关闭由指定独审在证据里决定，本单不代为收口。[证据目录](evidence/2026-10-13_cam_hot_r1/README.md)，[回传](returns/CAM-HOT.md)。 服务端口 8081 状态保持不变；未动 r01-r03 源码生产模型 GT captures；独审 / GT / 设备 / 部署 / 生产 NOT_RUN； 不 commit/push。
+
+## 2026-10-12 HR-SKELETON-DEMO-01 真实点云粗骨架预览（当前独立入口）
+
+当前交付：[可操作预览](http://127.0.0.1:8927/)，[报告](evidence/2026-10-12_hr_skeleton_demo_01_r1/FINAL_REPORT.md)，SD01–SD06工具自验PASS，SD07精度BLOCKED/设备NOT_RUN，SUBMITTED未ACCEPTED。
+
+用户明确要求现在实现骨架标定给其查看。当前唯一验收 [SD v2](evidence/2026-10-12_hr_skeleton_demo_01_r1/ACCEPTANCE_V2.md)（v1失败保留）；隔离新源 sidequests/human_fusion_lab_next/skeleton_demo/r02/（r01保留），新证据同名r1，回传 returns/HR-SKELETON-DEMO-01.md。Codex唯一writer，实际读取 C:/Users/30680/.codex/skills/ponytail/SKILL.md。复用只读检测账与normalize/observe，对真实候选/已有人工人体点集分别作明确未标定的预览；参照模式不作为自动效果；不伪造人工可见性、不放行旧SKO/正式W04-W05，不启D06/D07/ML，不改生产/模型/GT/captures/旧证据，不部署采集或Git写。真人关节精度BLOCKED，设备NOT_RUN。下方历史入口不能扩大本次范围。
+
+## 2026-10-12 HFUS-D05-R06 持续离线返工（当前唯一入口）
+
+用户持续离线授权；唯一验收[R06 v1](evidence/2026-10-12_hfus_d05_r6/ACCEPTANCE_V1.md)，新源sidequests/human_fusion_lab_next/d05/r06/、新证据[R06](evidence/2026-10-12_hfus_d05_r6/)。主控唯一writer，原两代理/指定OpenCode只读。R05已完整[交付](evidence/2026-10-12_hfus_d05_r5/CURRENT_DELIVERY_INDEX.md)/[报告](evidence/2026-10-12_hfus_d05_r5/FINAL_REPORT.md)/[状态](evidence/2026-10-12_hfus_d05_r5/ACCEPTANCE_FINAL.json)，H4 FAIL不晋级，实际补审02 exit0/export0；[Demo8917](http://127.0.0.1:8917/)保留。R06只检验原半径外合法bank锚点修正，GT-free，无split/classifier/tracker联动改动；R06是D05返工编号，不启HFUS-D06/D07/ML/生产/GT模型变更，不部署采集或Git写。新轮未实跑；外部评测竞争时性能BLOCKED。实际九会话当前points.bin均由原loader按28B点记录读取，历史格式说明不可用来改冻输入；以下都是历史入口。
+
+## 2026-10-12 HFUS-D05-R05 持续离线返工（当前入口）
+
+用户持续离线授权及“继续”，主控唯一writer，两代理/OpenCode只读。唯一验收 [R05 v1](evidence/2026-10-12_hfus_d05_r5/ACCEPTANCE_V1.md)，新源码 `sidequests/human_fusion_lab_next/d05/r05/`，新证据 [R05](evidence/2026-10-12_hfus_d05_r5/)，D05 return追加。当前原bank已排除retained直接刷新，先纠正归因，再只比较合法bank锚点来自当前FG证明候选的单因素；不同时改tracker/分类/分离。R04审查包保留为control与当前可操作Demo，旧记录不覆盖。不启D06/D07/ML，不改生产/GT/模型/captures，不部署采集、驱动网络或Git写。算法/GT/生产未ACCEPTED，以下入口为历史。
+
+## 2026-10-12 HFUS-D05 离线返工最终交付 V2（历史交付入口）
+
+仅HUMAN-FUSION隔离离线范围，原D05及R02/R03/R04唯一ACCEPTANCE_V1不变。当前：[交付入口V2](evidence/2026-10-12_hfus_d05_r4/CURRENT_DELIVERY_INDEX_V2.md)、[完整结果V2](evidence/2026-10-12_hfus_d05_r4/FINAL_REPORT_V2.md)、[逐ID状态](evidence/2026-10-12_hfus_d05_r4/ACCEPTANCE_FINAL_V2.json)、[追加回传](returns/HFUS-D05.md)、[当前三窗Demo](http://127.0.0.1:8915/)。九会话合计2605帧，独审02真实exit0/export0完成；算法FAIL、GT/生产BLOCKED、未ACCEPTED。人工最小包仍V2，S9 INVALID_BINDING。旧报告/8914/失败记录均保留，以下入口为历史。
+
+## 2026-10-12 HFUS-D05-R04 当前离线交付与持续返工授权
+
+用户当前离线授权；唯一验收 [R04 v1](evidence/2026-10-12_hfus_d05_r4/ACCEPTANCE_V1.md)。当前操作入口 [CURRENT_DELIVERY_INDEX](evidence/2026-10-12_hfus_d05_r4/CURRENT_DELIVERY_INDEX.md)，Demo v2 http://127.0.0.1:8915/ ，[最终报告](evidence/2026-10-12_hfus_d05_r4/FINAL_REPORT.md)、[追加回传](returns/HFUS-D05.md)、[人工最小包V2](evidence/2026-10-12_hfus_d05_r4/MINIMAL_HUMAN_REVIEW_PACKAGE_V2.json)。R02/R03各按原冻结表保留FAIL/BLOCKED，R04等价性能优化全9场纯p95 PASS；算法目标仍FAIL，GT/生产BLOCKED，板端NOT_RUN，未ACCEPTED。主控唯一writer，独审只读，不动生产/模型/GT/旧证据，不部署采集/Git写/驱动网络/ML，不启D06/D07。下方旧入口仅历史。
+
+## 2026-10-12 HFUS-D05-R04 当前持续离线返工授权
+
+用户持续离线授权，Codex唯一writer。当前唯一验收 [R04 v1](evidence/2026-10-12_hfus_d05_r4/ACCEPTANCE_V1.md)，新代码 `sidequests/human_fusion_lab_next/d05/r04/`，证据 [R04](evidence/2026-10-12_hfus_d05_r4/)，D05 return追加。R03分类出现近距回退，不晋级；R04只做A06等价计算短路，R02/R03各按原表完整收口。冻结资产只读，不启D06/D07/ML，不改生产，不部署采集或Git写。以下入口为历史。
+
+## 2026-10-12 HFUS-D05-R03 当前持续离线返工授权
+
+用户当前直接授权的下一轮分类单因素返工，Codex唯一writer。唯一验收 [R03 v1](evidence/2026-10-12_hfus_d05_r3/ACCEPTANCE_V1.md)，新代码 `sidequests/human_fusion_lab_next/d05/r03/`，证据 [R03](evidence/2026-10-12_hfus_d05_r3/)，D05 return追加。R02按其冻结表收口，以下授权为历史。保留模型/GT/captures/原证据，不动生产，不部署采集，不启D06/D07/ML，不做Git写操作。算法和GT仍未ACCEPTED。
+
+## 2026-10-11 HFUS-D05-R02 当前持续离线返工授权
+
+用户明确授权先核查D05再逐轮离线返工；Codex唯一writer，两代理及OpenCode只读。当前唯一验收 [R02 v1](evidence/2026-10-11_hfus_d05_r2/ACCEPTANCE_V1.md)，新代码 `sidequests/human_fusion_lab_next/d05/r02/`，新证据 [R02](evidence/2026-10-11_hfus_d05_r2/)，回传追加 [HFUS-D05](returns/HFUS-D05.md)。保留D04 frozen与D05旧失败；不启动D06/D07，不动生产/模型/GT/captures/历史证据，不部署采集/ML激活/Git写操作。工程、算法、GT、生产分别裁定，未ACCEPTED。下面旧入口只作历史。
+
+## 2026-10-11 HFUS-D01～D03 当前离线研发授权
+
+用户明确启动三个子代理并行开发并持续集成/验证/OpenCode独审。本轮按[统一计划v2](HUMAN_FUSION_UNIFIED_PLAN.md)实施，主控已冻结独立开发验收：[D01 v1](HFUS_D01_ACCEPTANCE_V1.md)、[D02 v1](HFUS_D02_ACCEPTANCE_V1.md)、[D03 v1](HFUS_D03_ACCEPTANCE_V1.md)、[集成 v1](HFUS_INTEGRATION_ACCEPTANCE_V1.md)。唯一writer所有权：A=`sidequests/human_fusion_lab_next/contracts/`和`eval/`；B=`review/`；C=`background/`及其隔离引擎副本；主控=`integration/`、统一入口及共享索引。各自证据/return独占；冻结接口变更必须升版通知。
+
+仅真实数据纯离线新代码/文档/证据。captures、原GT、历史证据、旧源码/模型只读；已有`human_fusion_lab_next/next/review/`纳入旧资产保护。本轮零部署/采集/生产/驱动/网络/模型替换/ML激活/提交推送，不使用历史授权。D04/D05依第一轮门判定、启动前另建版本验收与独立目录；D06主控一个实际组合，D07无人工区域证据只准备待审并BLOCKED。人工缺失不阻工程，语义保持BLOCKED/UNKNOWN。基线[BASELINE_BEFORE](evidence/2026-10-11_hfus_integration_r1/BASELINE_BEFORE.json)含12474文件、ignored/untracked、无读取错误或漂移。下方为历史入口，不授权新实施。
+
+## 2026-10-11 HUMAN-FUSION-UNIFIED-PLAN 当前规划与审核授权
+
+用户本轮明确“归一开发进度，根据总结制定修改优化开发的计划算法架构，多轮仔细制定完善，然后 opencode 审核”。Codex唯一文档writer，三轮事实/架构/反例归并；[统一计划](HUMAN_FUSION_UNIFIED_PLAN.md)、[唯一规划验收v1](HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md)、[工单](tickets/HUMAN-FUSION-UNIFIED-PLAN.md)、[回传](returns/HUMAN-FUSION-UNIFIED-PLAN.md)、[证据](evidence/2026-10-11_human_fusion_unified_plan_r1/ROUND_01_RECONCILIATION.md)。OpenCode指定Go Flash只读审核，当前无生产writer。仅规划，不启动HFUS-D01～D07实施；保持旧生产/研究源、模型、GT、captures、旧证据只读，无部署/采集/提交推送/网络驱动变更/ML激活。三轮总结的B背景点率不作检测全链通过，S9草稿/预测/几何proxy不当真值。下方为历史入口，不授权新执行。
+
+当前收口：**PLAN_READY / SUBMITTED，统一计划v2**。完整指定OpenCode只读审查真实exit0/READY，无阻断缺陷；多行CLI派审截断已实证纠正，旧不完整日志保留。见[最终收口](evidence/2026-10-11_human_fusion_unified_plan_r1/CLOSEOUT.md)/[完整独审](evidence/2026-10-11_human_fusion_unified_plan_r1/OPENCODE_REVIEW_03.md)。规划P01～P09已按职责闭合，DEV01与设备D01 NOT_RUN，DEV02/PHY01 BLOCKED；非算法或系统ACCEPTED。源码/模型/GT/captures未变，既有Chrome运行日志增长另列，未宣称整树SHA全冻结。
+
+## 2026-10-11 HUMAN-FUSION-DEMO-V2 历史离线授权
+
+用户直接纠偏：首交真实 Demo V2，再离线识别修复，再骨架可观测性。Codex 唯一 writer，基于 sidequests/human_fusion_lab Demo V1 新增 V2；[唯一验收表 v1](HUMAN_FUSION_DEMO_V2_ACCEPTANCE.md)、[回传](returns/HUMAN-FUSION-DEMO-V2.md)、[证据](evidence/2026-10-11_human_fusion_demo_v2_r1/)。主线/V1/R9及旧证据只读。用户尚未确认离线检测、骨架及姿态效果前，禁止板端部署、生产替换、现场发布。历史授权不能覆盖本轮禁止；不提交推送，不采集，不激活ML。
+
+## 2026-10-11 HUMAN-R4-CANDIDATE-AUDIT 当前阶段
+
+用户明确“继续啊下一个阶段的开发计划制定并且执行”。Codex唯一writer，按最近人体融合线完成本地离线候选归因开发：[当前计划](HUMAN_FUSION_NEXT_STAGE_PLAN.md)、[唯一验收v1](HUMAN_R4_CANDIDATE_AUDIT_ACCEPTANCE.md)、[回传](returns/HUMAN-R4-CANDIDATE-AUDIT.md)、[观察](evidence/2026-10-11_human_r4_candidate_audit_r1/REPORT.md)、[发现与后续](evidence/2026-10-11_human_r4_candidate_audit_r1/FINDINGS.md)。三会话v1/v2/v3九次全帧2400tick，core7套/FUSION16/GT契约/新映射检查通过，指定Go Flash只读独审无可复现功能缺陷；SUBMITTED/停写，未ACCEPTED。S6未标167帧UNKNOWN，传播观测不当独立样本，非空uncertain_intervals行为NOT_RUN。继承外部R3 Map实现，另[当前性能复验](evidence/2026-10-11_human_fusion_perf_r1/REPORT.md)/[唯一表](HUMAN_FUSION_PERF_R1_ACCEPTANCE.md)六会话两模型12/12通过，本轮未改engine或模型。R3文档仅作事实线索，本轮GT资格只再审S1/S3-near/S6；历史R2失败不回填。新增归因工具已处理GT compact→raw及A+B评分联合点集，已有engine公开索引缺口仍待后续工单。无训练/采集/部署/生产切换/commit/push/ML激活；模型与生产推广BLOCKED。
+
+## 2026-10-10 HUMAN-UNIFY-FUSION-R1 / R2 离线收口
+
+用户交接及后续确认授权F3/F4；Codex唯一writer，仅离线训练/评估。已SUBMITTED/停写，未ACCEPTED：[唯一验收表v1](HUMAN_UNIFY_FUSION_R2_ACCEPTANCE.md)、[最终报告](evidence/2026-10-10_human_unify_fusion_r2/FINAL_REPORT.md)、[回传](returns/HUMAN-UNIFY-FUSION-R1.md)。72完整运行及18组全帧同源对拍完成，指定Go Flash只读独审exit0。五判定：FUNCTIONAL PASS；GT_EVALUATION BLOCKED（当前7/9稳定GT，S1移走/S9测试污染与错误绑定）；PERFORMANCE FAIL（S3-far FUSION两版P95=53.46/53.40ms）；MODEL_PROMOTION BLOCKED（候选运动track召回回退，保留v1）；PRODUCTION_RELEASE BLOCKED。原模型/51维特征/生产算法SHA保持；外部human_replay_lib.py及GT改动保留，全树冻结S02 BLOCKED。无commit/push/deploy/采集/驱动/网络/ML激活。下方条目保持历史事实，不扩大本轮资格。
+
 ## 2026-10-10 本地分组提交审计
 
 用户明确“分析一下哪些可以提交先提交了”。本轮仅收录已验证的 HTTP 下载/同步/改名与 Console 会话入口/独占端口软件修改；混合文件按功能拆分，其余算法、GT、研究与派生数据原样保留。[唯一验收表 v1](COMMIT_AUDIT_20261010_ACCEPTANCE.md)、[回传](returns/COMMIT-AUDIT-20261010.md)、[证据与暂留原因](evidence/2026-10-10_commit_audit_r1/README.md)。两组候选 Git 树的隔离回归均通过；不 push，不改变原工单资格；本轮设备/物理/部署/采集/候选 EXE 构建与启动 NOT_RUN。相关旧发布证据按原文归档，仅为历史记录。
+
+## 2026-10-10 HUMAN-UNIFY-R1 返工当前授权
+
+用户明确“帮我返工”：Codex唯一writer，修复[独立审核R01–R07](evidence/2026-10-10_human_unify_review_r1/CODEX_REVIEW.md)及直接相关的软件契约；[唯一验收表v1](HUMAN_UNIFY_R1_ACCEPTANCE.md)，[回传](returns/HUMAN-UNIFY-R1.md)，[当前收口](evidence/2026-10-10_human_unify_rework_r2/CLOSEOUT.md)。R01–R08功能修复两次指定Go Flash只读独审PASS；96测试、9会话1196帧对拍和最终45次来源矩阵完成，状态SUBMITTED/停写，未ACCEPTED。当前RF版本两次性能8/9 FAIL；范围外生产rf_person.js并发改写导致S02原全树冻结BLOCKED，变更保留且最终证据另按当前SHA重验。仅human_core离线实现及本工单文档，无本轮human_replay写入/commit/push/部署/采集/驱动/网络/模型切换；算法GT/生产资格BLOCKED。用户将自行重录九类会话，未当作已采集/GT。下方其他工单状态保留。
+
+## 2026-10-10 RF 离线优化当前授权
+
+2026-10-10 用户直派（会话入口集成与 EXE 更新，R2）：已备份并集成入口补丁，dist/Console.exe 与 ZIP 已真实重建更新；修复 Windows 共享端口混用旧服务问题，保留原服务。唯一当前验收表 [SESSION_SYNC_RELEASE_ACCEPTANCE.md](SESSION_SYNC_RELEASE_ACCEPTANCE.md)，回传 [returns/SESSION-SYNC-RELEASE.md](returns/SESSION-SYNC-RELEASE.md)，证据 [evidence/2026-10-10_session_sync_release_r2](evidence/2026-10-10_session_sync_release_r2)。状态 SUBMITTED；本机入口/发布自验通过，测试配平质量 failed: floor_not_found，不等于现场精度验收。
+
+用户本轮明确暂停 HUMAN-FUSION-OFFLINE-R1，先执行 [RF-OPTIMIZATION-R1](tickets/RF-OPTIMIZATION-R1.md) 的 R1/R2；[唯一验收表 v1](RF_OPTIMIZATION_R1_ACCEPTANCE.md)。Codex 唯一 writer，仅新 evidence/workspace 离线研究，OpenCode Go Flash 只读独审。现有弱标签不构成新人/新家具泛化证据；R3/R4、生产、设备/物理/采集/部署均未启动，不激活 ML/HR-09。
+
+当前[收口](evidence/2026-10-10_rf_optimization_r1/21_CLOSEOUT.md)：三路对照及两次实际独审完成，加固后4检查PASS/当前软件无FAIL；可用性与可靠困难样本/跨人跨景资格BLOCKED，未ACCEPTED。R3/R4保持NOT_RUN。[回传](returns/RF-OPTIMIZATION-R1.md)已追加复审结果，不覆盖旧证据。
 
 # human_capture — 人体数据采集 / 回放 / 标注支线
 
@@ -8,6 +90,20 @@
 > 但本文是本方唯一计划入口。
 >
 > 创建：2026-10-02（Asia/Shanghai）。设计冻结：2026-10-02（用户两轮拍板后）。
+
+2026-10-07 当前主线（R39-CLOSEOUT）：用户明确授权 W03 阶段A–F收口审计/诊断与统计返工；[当前工单](tickets/HR-W03-R39-CLOSEOUT.md)已自验 **SUBMITTED / REWORK_REQUIRED，未 ACCEPTED**；[最终收口报告](evidence/2026-10-07_hrw03_r39_closeout/08_final_closeout.md)。31点=30 workspace crop+1 reference，语义UNKNOWN31；confirmation机械归因完成，非静态155行真人GT仍缺。gate保持49.652981%<50%，旧artifact历史DEGRADED；最小统计修复改变全文件SHA后当前loader STALE且SAFE=P。唯一验收表仍为 [R3.7 06_test_matrix.md v1](evidence/2026-10-07_hrw03_r37_productionization/06_test_matrix.md) 的T37/T38，T38-05/06、S4/S7 FAIL。W04–W09及registration R3.9 production未授权、未启动。下一步人工GT与gate支撑/契约审查，见[计划当前状态更新](HUMAN_RECOGNITION_NEXT_STAGE_PLAN.md)及[逐点审阅页](evidence/2026-10-07_hrw03_r39_closeout/09_point_review.html)。以下同日R3.8及更早条目保留为历史。
+
+2026-10-09 用户直派（exe 板端地址随新网络更新）：板子迁至新网络固定 `192.168.31.58` 后，`Console.exe` 两处板端地址由 `192.168.3.125` 更新为 `192.168.31.58`：`console.html`「板端 WebUI」卡片（:8090）与内嵌 `human_replay/config.py` 的 `BOARD_URL`（:8766）；`console_html.test.js` 断言同步。console node 10/python 4、node 回放各套全绿；human_replay python 46 项 45 OK、1 ERROR 为 `leveling_auto_test` 缺本机数据（环境缺失，与本改动无关）。`Console.exe` 与 `LiDAR_Console.zip` 已重建，内嵌副本离线抽取核验通过。证据：[2026-10-09_console_board_ip_update](evidence/2026-10-09_console_board_ip_update/README.md)。
+
+2026-10-08 用户授权（采集 + 生产接入）：① 生产接入按 [HR-RET-V2 工单](tickets/HR-RET-V2.md) 启动，唯一验收表 v1 [HRRETV2_ACCEPTANCE.md](HRRETV2_ACCEPTANCE.md)；increment 1 已交付并自验 **PASS**——`human_pipe_lib.js` 新增融合删除能力函数 `extract_foreground_fused`（默认不被任何现有路径调用，P 路径逐位不变；37/37 + 45/45 + panel 全过）：[evidence/2026-10-08_hrretv2_r1](evidence/2026-10-08_hrretv2_r1/README.md)；increment 2（消费侧旗标/加载路径/浏览器节点验证）与独立复审待做。② 采集按 [CAPTURE_PROTOCOL_DRAFT.md](CAPTURE_PROTOCOL_DRAFT.md) 执行，但板端 2026-10-08 探测**不可达**（ping 100% 丢失、8766 超时）→ **BLOCKED**，待板端在线。③ 离线链路 P1（S-A+ 独立复核）/P2（融合 v2 A/B+端到端 11/11 PASS）/P3（采集协议）均完成，见 [HUMAN_RECOGNITION_REVIEW_AND_PLAN.md](HUMAN_RECOGNITION_REVIEW_AND_PLAN.md)。W03 自身状态不变（仍 REWORK_REQUIRED）；W04–W09 未启动。
+
+2026-10-07（晚）用户直派（补充记录，不改变上方 W03 状态）：四段新录制会话（cap_20261007_215540/215607/215623/215643，同一人于 ≈(2.1,−0.5)、距 2.2m 站立/举手）已完成离线配平（auto；3 段 recommended=tls，215607 TLS−RANSAC d 差 3.69cm>3cm 按规范不推荐）并完成现行管线 P 路径逐帧人体对照 probe：[evidence/2026-10-07_new_sessions_person_probe_r1](evidence/2026-10-07_new_sessions_person_probe_r1/README.md)。结论：静立人被离线全帧静态图自建模并删除 ~97–98%（前景仅 14–57 点/帧，成簇也基本 NON_HUMAN、无 confirmed、无人/物粘连），"静立吞人"已知边界定量复现，非新 bug。随后按「静止模板」直派：空场会话 cap_20261007_233658 配平（job 3c793d7bda0f4ced86b20ac8076e7b0e，recommended=tls）+ 四段配准（3/4 WARN/DEGRADED，215607 因配平 conflict 被 LEVELING_SHA_MISMATCH 拒绝）+ 参考层保留率阶梯：参考层保留静立人 **97.4–98.0%**，叠加在线层后仍仅 **1.2–2.1%**（并集语义），空场自身 P 复验 0 candidate/0 confirmed；开发计划 [STILL_PERSON_RETENTION_PLAN.md](STILL_PERSON_RETENTION_PLAN.md)（阶段 0 完成；阶段 1 融合优先级规则草案 v1：[FUSION_PRIORITY_RULE_DRAFT.md](FUSION_PRIORITY_RULE_DRAFT.md)，实施需另行授权；人体语义分类层草案 v1：[HUMAN_SEMANTIC_CLASSIFICATION_DRAFT.md](HUMAN_SEMANTIC_CLASSIFICATION_DRAFT.md)，S-A 离线原型已跑：[evidence/2026-10-08_human_semantic_sa_r1](evidence/2026-10-08_human_semantic_sa_r1/README.md)（7 样本全过、空场 0 HUMAN，未接管线）；审查/分析/计划：[HUMAN_RECOGNITION_REVIEW_AND_PLAN.md](HUMAN_RECOGNITION_REVIEW_AND_PLAN.md)；S-A+ 独立复核：[evidence/2026-10-08_human_semantic_sa_r2](evidence/2026-10-08_human_semantic_sa_r2/README.md)（数据驱动留出 0 假 HUMAN，修复稀疏竖条假阳性）；采集协议草案：[CAPTURE_PROTOCOL_DRAFT.md](CAPTURE_PROTOCOL_DRAFT.md)；P2 融合 v2 离线 A/B+端到端：[evidence/2026-10-08_fusion_v2_ab_r1](evidence/2026-10-08_fusion_v2_ab_r1/README.md)（11/11 PASS：v2 人保留 99.9–100%、每帧候选、确认 2/3 段；WD01 不回归、代价公开））。该轮为诊断轮；10-08 用户授权采集与生产接入，进展见上条。W03 状态/W04–W09 边界不变。
+
+2026-10-07 当前主线：[R3.8 离线 writer/shadow 工单](tickets/HR-W03-R38.md)已自验提交/停写，gate=DEGRADED、T38-05/06 与 S4/S7 FAIL，未 ACCEPTED；[最终结果与停止点](evidence/2026-10-07_hrw03_r38/10_final_submission.md)。唯一验收表为 R3.7 `06_test_matrix.md` v1 的 T37/T38；R3.9 production 仍未授权。用户另要求规划人体识别，已登记 [下一阶段计划与当前效果](HUMAN_RECOGNITION_NEXT_STAGE_PLAN.md)；W03 未冻结，W04–W09 为 PLAN_RECORDED。下方 R3.1/R3.2“下一步”为历史进度。
+
+2026-10-07（深夜）控制台回放直连板端（用户直派）：`human_replay` 会话面板点未下载的板端行 = 自动 `/api/sync` 下载、完成后自动载入回放（不再「同步选中 → 等 → 再点行」两步）；板端已 `transferred` 但本机没有的会话（本机删过再要/别的 PC 拉过）由 `fetch.transfer_one` 只读复制，不再被 `transferred→transferring` 非法迁移挡成 409 失败。新增会话改名 `POST /api/rename`：只写本地 `<sid>/meta.json` 的 `name` 字段（sid/目录/板端登记都不动，空名=恢复默认），列表优先显示 name、hover 见完整 sid。测试：human_replay python 46、human_capture 45、panel O1–O5、node 各套、console 10+4 全绿；Console.exe 与 `LiDAR_Console.zip` 已重建（内嵌副本 `/api/rename` 探针 400 通过）。证据：[2026-10-07_console_board_load_rename](evidence/2026-10-07_console_board_load_rename/README.md)。
+
+2026-10-07（晚）PC 回传数据面换轨（用户直派修复 exe）：`fetch.py`/`config.py` 去掉 `ssh/scp`——`ldiar-wel` 别名+私钥只在本机 `~/.ssh/config`，别人电脑解压 zip 后拉不了会话的根因；改走 capture_server 新增 `GET /api/v1/sessions/<sid>/files/<meta.json|points.bin>` HTTP 直下（板端 `download_limit_kbit` 默认 70000 Kbit/s 限速，`webui/human_capture` 同页加 ↓meta/↓points 下载链接，免 SSH 手工放进 Console 的 `captures/remote/<sid>/`）。`fetch.py` 任何失败必退回 `ready`，不再可能卡死 `transferring`。Console.exe 已重建（`pc_apps/console/dist/LiDAR_Console.zip`）；板端已部署并重启（旧 4 个卡 `transferring` 会话退回 `ready`，部署实录/回滚见 [evidence/2026-10-07_files_download_deploy](evidence/2026-10-07_files_download_deploy/README.md)）。测试：`fetch_lib_test.py` 11 项、human_capture 45 项、node 各套全绿；真机 HTTP 端到端拉取 digest 通过。
 
 2026-10-06（三轮）用户判定 **W03-R3.2 跨会话 match audit = PASS**（归因修正：alignment 已证明重要——ICP 消掉 WD01 原始漏匹配 ~94%（0.854→0.991）；全文残余 ≠ matcher error，须在 known-static correspondence set 上归因）。`09_r32_summary.md` 已按评审修订（修订记录在文内）。**R3.3 controlled AB（离线，生产零改动）完成**：AABB（点到占用格盒距离 <0.12）有独立于 ICP 的收益——known-static ICP Δ+0.032、WD02 ICP Δ+0.051、WD01 ICP 0.994→1.000；干净人体 retention ≥97.7%；纯 containment 弱于 center；HP02 NOT_RUN。生产接入仍 **NOT AUTHORIZED**。[r5 证据](evidence/2026-10-06_hrw03_r5/14_r33_summary.md)；[R3.2 修订](evidence/2026-10-06_hrw03_r4/09_r32_summary.md)。
 
@@ -224,3 +320,15 @@ PC 端 **stdlib + numpy + 浏览器 + Three.js r127**（与 human_fall_preview
 PC fetch 只对 `ready` 动手；成功后置 `transferred` 回报板端。
 
 票/证据每个 milestone 一份，ticket 写明「不做什么」防范围漂移。
+
+
+## 2026-10-08 新工单登记（仅制定，待用户转发开工）
+
+用户本聊天要求制定可交给Codex执行的工单：[HR-SEM-SHADOW](tickets/HR-SEM-SHADOW.md)，唯一验收表 [HR_SEM_SHADOW_ACCEPTANCE.md v1](HR_SEM_SHADOW_ACCEPTANCE.md)。状态 DRAFT_READY_FOR_DISPATCH；本轮只交付文档。用户转发明确开工后仅执行冻结语义原型的真实整簇/全帧PC离线旁路、负例与按帧票审计、GT审阅材料及接入设计；生产语义切换、配准改动、artifact签发/重签/安装、旗标、部署采集均不在范围。W03与HR-RET-V2原授权/状态/唯一表不变。
+
+
+## 2026-10-08 下一阶段骨架离线计划登记（仅计划，未开工）
+
+用户本聊天要求“制定下一个阶段计划”，已制定 [下一阶段离线粗骨架计划 v1](HUMAN_SKELETON_OFFLINE_PLAN.md)、[HR-SKELETON-OFFLINE 工单](tickets/HR-SKELETON-OFFLINE.md)及其唯一验收表 [HR_SKELETON_OFFLINE_ACCEPTANCE.md v1](HR_SKELETON_OFFLINE_ACCEPTANCE.md)。状态DRAFT_READY_FOR_DISPATCH，SKO-01～18全部NOT_RUN。本轮仅规划；后续用户明确开工后才做人工确认人体簇→可逆标准化→5–7粗结构节点→独立时序→离线复审。
+
+最新SEM R2已修复SEM-12工具绑定，但SEM-05～08、10与WD02仍BLOCKED，[R2报告](evidence/2026-10-08_hrsemshadow_r2/REVIEW_R2.md)；真实身份GT缺失、05/08结构上界不足95%。本计划是受控离线可行性，不等于正式W04/W05放行，不改W03/SEM/RET-V2历史状态，不重开已关闭HR-07/08、不激活HR-09/ML，不部署采集或修改生产。

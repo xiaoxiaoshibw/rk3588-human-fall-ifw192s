@@ -1,0 +1,1170 @@
+{
+  "source": "synthetic",
+  "scope": "mechanical only",
+  "checks": "PASS",
+  "rows": [
+    {
+      "case": "same_actual_frame_three_candidates",
+      "ordinal": 0,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 0,
+          "last_seen": 0,
+          "votes": [
+            0
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [
+          {
+            "ci": 0,
+            "identity": 1,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "gate_candidates": [],
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 1,
+            "lost": 0,
+            "active": true,
+            "window": [
+              {
+                "f": 0,
+                "semantic": 0,
+                "old": 0,
+                "ci": 0
+              }
+            ],
+            "semantic_votes": 0,
+            "old_votes": 0,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "same_actual_frame_three_candidates",
+      "ordinal": 1,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 0,
+          "last_seen": 1,
+          "votes": [
+            0,
+            0
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [
+          {
+            "ci": 0,
+            "identity": 1,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "gate_candidates": [
+              1
+            ],
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 2,
+            "lost": 0,
+            "active": true,
+            "window": [
+              {
+                "f": 0,
+                "semantic": 0,
+                "old": 0,
+                "ci": 0
+              },
+              {
+                "f": 1,
+                "semantic": 0,
+                "old": 0,
+                "ci": 0
+              }
+            ],
+            "semantic_votes": 0,
+            "old_votes": 0,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "same_actual_frame_three_candidates",
+      "ordinal": 2,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1.0202125,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 0,
+          "last_seen": 2,
+          "votes": [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "human_confirmed": true,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 2,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 2,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 2,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [
+          {
+            "ci": 0,
+            "identity": null,
+            "status": "UNKNOWN_ASSOCIATION",
+            "gate_candidates": [
+              1
+            ],
+            "human_identity_status": "BLOCKED_GT"
+          },
+          {
+            "ci": 1,
+            "identity": null,
+            "status": "UNKNOWN_ASSOCIATION",
+            "gate_candidates": [
+              1
+            ],
+            "human_identity_status": "BLOCKED_GT"
+          },
+          {
+            "ci": 2,
+            "identity": null,
+            "status": "UNKNOWN_ASSOCIATION",
+            "gate_candidates": [
+              1
+            ],
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 3,
+            "lost": 1,
+            "active": true,
+            "window": [
+              {
+                "f": 0,
+                "semantic": 0,
+                "old": 0,
+                "ci": 0
+              },
+              {
+                "f": 1,
+                "semantic": 0,
+                "old": 0,
+                "ci": 0
+              },
+              {
+                "f": 2,
+                "semantic": null,
+                "old": null,
+                "ci": null,
+                "missing": false,
+                "association_unknown": true
+              }
+            ],
+            "semantic_votes": 0,
+            "old_votes": 0,
+            "semantic_confirmed": null,
+            "old_confirmed": null,
+            "status": "UNKNOWN_ASSOCIATION",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 0,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 0,
+          "last_seen": 0,
+          "votes": [
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [
+          {
+            "ci": 0,
+            "identity": 1,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "gate_candidates": [],
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 1,
+            "lost": 0,
+            "active": true,
+            "window": [
+              {
+                "f": 0,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              }
+            ],
+            "semantic_votes": 1,
+            "old_votes": 1,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 1,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 0,
+          "last_seen": 1,
+          "votes": [
+            1,
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [
+          {
+            "ci": 0,
+            "identity": 1,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "gate_candidates": [
+              1
+            ],
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 2,
+            "lost": 0,
+            "active": true,
+            "window": [
+              {
+                "f": 0,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              },
+              {
+                "f": 1,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              }
+            ],
+            "semantic_votes": 2,
+            "old_votes": 2,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 2,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 1,
+          "last_seen": 1,
+          "votes": [
+            1,
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 3,
+            "lost": 1,
+            "active": true,
+            "window": [
+              {
+                "f": 0,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              },
+              {
+                "f": 1,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              },
+              {
+                "f": 2,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              }
+            ],
+            "semantic_votes": 2,
+            "old_votes": 2,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 3,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 2,
+          "last_seen": 1,
+          "votes": [
+            1,
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 4,
+            "lost": 2,
+            "active": true,
+            "window": [
+              {
+                "f": 0,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              },
+              {
+                "f": 1,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              },
+              {
+                "f": 2,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 3,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              }
+            ],
+            "semantic_votes": 2,
+            "old_votes": 2,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 4,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 3,
+          "last_seen": 1,
+          "votes": [
+            1,
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 5,
+            "lost": 3,
+            "active": true,
+            "window": [
+              {
+                "f": 0,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              },
+              {
+                "f": 1,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              },
+              {
+                "f": 2,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 3,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 4,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              }
+            ],
+            "semantic_votes": 2,
+            "old_votes": 2,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 5,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 4,
+          "last_seen": 1,
+          "votes": [
+            1,
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 6,
+            "lost": 4,
+            "active": true,
+            "window": [
+              {
+                "f": 1,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              },
+              {
+                "f": 2,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 3,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 4,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 5,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              }
+            ],
+            "semantic_votes": 1,
+            "old_votes": 1,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 6,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 5,
+          "last_seen": 1,
+          "votes": [
+            1,
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 7,
+            "lost": 5,
+            "active": true,
+            "window": [
+              {
+                "f": 2,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 3,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 4,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 5,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 6,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              }
+            ],
+            "semantic_votes": 0,
+            "old_votes": 0,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 7,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 6,
+          "last_seen": 1,
+          "votes": [
+            1,
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 8,
+            "lost": 6,
+            "active": true,
+            "window": [
+              {
+                "f": 3,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 4,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 5,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 6,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 7,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              }
+            ],
+            "semantic_votes": 0,
+            "old_votes": 0,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 8,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 7,
+          "last_seen": 1,
+          "votes": [
+            1,
+            1
+          ],
+          "human_confirmed": false,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 9,
+            "lost": 7,
+            "active": true,
+            "window": [
+              {
+                "f": 4,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 5,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 6,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 7,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 8,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              }
+            ],
+            "semantic_votes": 0,
+            "old_votes": 0,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    },
+    {
+      "case": "f0_f1_gap_f9",
+      "ordinal": 9,
+      "original": [
+        {
+          "id": 1,
+          "active": true,
+          "born_idx": 0,
+          "x": 1,
+          "y": 0,
+          "z": 1,
+          "height": 1.8,
+          "upcos": 1,
+          "label": "HUMAN_CANDIDATE",
+          "n": 1000,
+          "lost": 0,
+          "last_seen": 9,
+          "votes": [
+            1,
+            1,
+            1
+          ],
+          "human_confirmed": true,
+          "pose_history": [
+            {
+              "f": 0,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 1,
+              "upcos": 1,
+              "height": 1.8
+            },
+            {
+              "f": 9,
+              "upcos": 1,
+              "height": 1.8
+            }
+          ]
+        }
+      ],
+      "reference": {
+        "assigned": [
+          {
+            "ci": 0,
+            "identity": 1,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "gate_candidates": [
+              1
+            ],
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ],
+        "windows": [
+          {
+            "id": 1,
+            "born": 0,
+            "age": 10,
+            "lost": 0,
+            "active": true,
+            "window": [
+              {
+                "f": 5,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 6,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 7,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 8,
+                "semantic": 0,
+                "old": 0,
+                "ci": null,
+                "missing": true,
+                "association_unknown": false
+              },
+              {
+                "f": 9,
+                "semantic": 1,
+                "old": 1,
+                "ci": 0
+              }
+            ],
+            "semantic_votes": 1,
+            "old_votes": 1,
+            "semantic_confirmed": false,
+            "old_confirmed": false,
+            "status": "PROVISIONAL_MACHINE_ID",
+            "human_identity_status": "BLOCKED_GT"
+          }
+        ]
+      }
+    }
+  ]
+}

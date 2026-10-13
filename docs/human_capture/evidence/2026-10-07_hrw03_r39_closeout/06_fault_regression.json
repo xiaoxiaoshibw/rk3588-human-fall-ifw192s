@@ -1,0 +1,75 @@
+[
+  {
+    "id": "T38-07",
+    "result": "PASS",
+    "details": [
+      {
+        "state": "STALE",
+        "reasons": [
+          "SESSION_SHA_MISMATCH"
+        ],
+        "digest": "aefd5a7f7f06f6a16054f109f8dd1ced7dc1a4fa473dff67d0b2a504f775d1f1"
+      },
+      {
+        "state": "STALE",
+        "reasons": [
+          "SESSION_SHA_MISMATCH",
+          "LEVELING_SHA_MISMATCH"
+        ],
+        "digest": "aefd5a7f7f06f6a16054f109f8dd1ced7dc1a4fa473dff67d0b2a504f775d1f1"
+      }
+    ]
+  },
+  {
+    "id": "T38-08",
+    "result": "PASS",
+    "details": [
+      {
+        "state": "REJECTED",
+        "reasons": [
+          "ARTIFACT_TAMPERED",
+          "ARTIFACT_TAMPERED"
+        ],
+        "digest": "aefd5a7f7f06f6a16054f109f8dd1ced7dc1a4fa473dff67d0b2a504f775d1f1"
+      },
+      {
+        "state": "STALE",
+        "reasons": [
+          "LEVELING_SHA_MISMATCH"
+        ],
+        "digest": "aefd5a7f7f06f6a16054f109f8dd1ced7dc1a4fa473dff67d0b2a504f775d1f1"
+      }
+    ]
+  },
+  {
+    "id": "T38-09",
+    "result": "PASS",
+    "details": {
+      "state": "UNAVAILABLE",
+      "reasons": [
+        "NO_ARTIFACT"
+      ],
+      "digest": "aefd5a7f7f06f6a16054f109f8dd1ced7dc1a4fa473dff67d0b2a504f775d1f1"
+    }
+  },
+  {
+    "id": "T38-10",
+    "result": "PASS",
+    "details": {
+      "duplicate": "ERR_DUPLICATE_REGISTRATION",
+      "frame": "ERR_FRAME_MISMATCH"
+    }
+  },
+  {
+    "id": "CURRENT_ARTIFACT_STALE_SAFE",
+    "result": "PASS",
+    "details": {
+      "state": "STALE",
+      "reasons": [
+        "REFMAP_DRIFT",
+        "METHOD_STALE"
+      ],
+      "digest": "aefd5a7f7f06f6a16054f109f8dd1ced7dc1a4fa473dff67d0b2a504f775d1f1"
+    }
+  }
+]

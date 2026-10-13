@@ -95,8 +95,8 @@ class RenameTest(unittest.TestCase):
                 out = self._request(base, "/api/rename", {"sid": sid, "name": "   "})
                 self.assertTrue(out["ok"])
                 self.assertNotIn("name", json.loads(meta_path.read_text(encoding="utf-8")))
-                # 4) 护栏：坏 sid / 超长 / 控制字符 → 400；未下载的 sid → 404
-                for body in ({"sid": "cap_x", "name": "a"},
+                # 4) 护栏：坏 sid（点/斜杠/空格） / 超长 / 控制字符 → 400；未下载的 sid → 404
+                for body in ({"sid": "cap_x/y", "name": "a"},
                              {"sid": sid, "name": "x" * 61},
                              {"sid": sid, "name": "a\nb"},
                              {"sid": sid, "name": 7}):
@@ -151,7 +151,7 @@ class RecoverTest(unittest.TestCase):
             # 非法 sid：400，不触碰 fetch
             with patch("fetch.recover") as rec:
                 with self.assertRaises(urllib.error.HTTPError) as caught:
-                    self._request(base, "/api/recover", {"sid": "cap_x"})
+                    self._request(base, "/api/recover", {"sid": "cap_x/y"})
                 self.assertEqual(caught.exception.code, 400)
                 rec.assert_not_called()
         finally:

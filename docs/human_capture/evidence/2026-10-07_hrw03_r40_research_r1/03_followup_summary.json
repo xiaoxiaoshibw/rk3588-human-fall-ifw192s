@@ -1,0 +1,303 @@
+{
+  "source": "diagnostic",
+  "assertions": "PASS",
+  "tracker_collisions": {
+    "P": 0,
+    "S": 1
+  },
+  "S46": {
+    "frame": 46,
+    "track": 3,
+    "assignments": [
+      {
+        "cluster": 0,
+        "track": 3,
+        "joint": "NON_HUMAN",
+        "candidate_centroid": [
+          1.5986964151201235,
+          0.9153998824825895,
+          0.6519120202171158
+        ],
+        "distance": 0.07035781685548355,
+        "candidates": [
+          {
+            "id": 3,
+            "distance": 0.07035781685548355
+          }
+        ],
+        "prior_votes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "votes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "same_frame_reuse": false,
+        "confirmed": false
+      },
+      {
+        "cluster": 1,
+        "track": 3,
+        "joint": "HUMAN_CANDIDATE",
+        "candidate_centroid": [
+          1.5989956931222844,
+          1.6257732955715325,
+          0.4163271484872963
+        ],
+        "distance": 0.6666504487885518,
+        "candidates": [
+          {
+            "id": 3,
+            "distance": 0.6666504487885518
+          }
+        ],
+        "prior_votes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "votes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "same_frame_reuse": true,
+        "confirmed": false
+      }
+    ],
+    "final_votes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "S53_reverse": [
+    {
+      "frame": 53,
+      "changes": [
+        {
+          "cluster": 1,
+          "baseline_track": 4,
+          "reverse_track": 3,
+          "baseline_confirmed": false,
+          "reverse_confirmed": false
+        }
+      ]
+    }
+  ],
+  "vote_window_anomalies": 269,
+  "zero_xyz_matches_existing_invalid_count": true,
+  "topology": [
+    {
+      "frame": 46,
+      "grid_split": 0,
+      "grid_merge": 0,
+      "membership_split": 1,
+      "membership_merge": 0,
+      "removed": 3034,
+      "mechanisms": {
+        "WORKSPACE_CROP": 61,
+        "REFERENCE": 2869,
+        "CLEANUP": 18,
+        "ONLINE": 41,
+        "BELOW_CANDIDATE_SIZE": 45
+      },
+      "bands": {
+        "below_0.3": 198,
+        "0.3_0.6": 486,
+        "0.6_1.2": 1087,
+        "above_1.2": 1098
+      },
+      "added": 118
+    },
+    {
+      "frame": 53,
+      "grid_split": 0,
+      "grid_merge": 0,
+      "membership_split": 1,
+      "membership_merge": 0,
+      "removed": 2807,
+      "mechanisms": {
+        "WORKSPACE_CROP": 45,
+        "CLEANUP": 15,
+        "ONLINE": 8,
+        "REFERENCE": 2685,
+        "BELOW_CANDIDATE_SIZE": 54
+      },
+      "bands": {
+        "below_0.3": 224,
+        "0.3_0.6": 454,
+        "0.6_1.2": 1166,
+        "above_1.2": 841
+      },
+      "added": 115
+    },
+    {
+      "frame": 55,
+      "grid_split": 0,
+      "grid_merge": 0,
+      "membership_split": 1,
+      "membership_merge": 0,
+      "removed": 2622,
+      "mechanisms": {
+        "WORKSPACE_CROP": 31,
+        "REFERENCE": 2504,
+        "CLEANUP": 13,
+        "BELOW_CANDIDATE_SIZE": 61,
+        "ONLINE": 13
+      },
+      "bands": {
+        "below_0.3": 199,
+        "0.3_0.6": 514,
+        "0.6_1.2": 1006,
+        "above_1.2": 785
+      },
+      "added": 110
+    },
+    {
+      "frame": 61,
+      "grid_split": 0,
+      "grid_merge": 0,
+      "membership_split": 1,
+      "membership_merge": 0,
+      "removed": 1951,
+      "mechanisms": {
+        "WORKSPACE_CROP": 69,
+        "BELOW_CANDIDATE_SIZE": 58,
+        "REFERENCE": 1784,
+        "ONLINE": 31,
+        "CLEANUP": 9
+      },
+      "bands": {
+        "below_0.3": 175,
+        "0.3_0.6": 287,
+        "0.6_1.2": 478,
+        "above_1.2": 844
+      },
+      "added": 173
+    },
+    {
+      "frame": 102,
+      "grid_split": 1,
+      "grid_merge": 0,
+      "membership_split": 0,
+      "membership_merge": 1,
+      "removed": 1111,
+      "mechanisms": {
+        "WORKSPACE_CROP": 36,
+        "BELOW_CANDIDATE_SIZE": 50,
+        "REFERENCE": 966,
+        "ONLINE": 42,
+        "CLEANUP": 17
+      },
+      "bands": {
+        "0.3_0.6": 4,
+        "below_0.3": 21,
+        "0.6_1.2": 60,
+        "above_1.2": 881
+      },
+      "added": 186
+    },
+    {
+      "frame": 151,
+      "grid_split": 0,
+      "grid_merge": 1,
+      "membership_split": 0,
+      "membership_merge": 0,
+      "removed": 1829,
+      "mechanisms": {
+        "WORKSPACE_CROP": 58,
+        "CLEANUP": 13,
+        "REFERENCE": 1667,
+        "ONLINE": 40,
+        "BELOW_CANDIDATE_SIZE": 51
+      },
+      "bands": {
+        "below_0.3": 164,
+        "0.3_0.6": 242,
+        "0.6_1.2": 467,
+        "above_1.2": 794
+      },
+      "added": 204
+    },
+    {
+      "frame": 152,
+      "grid_split": 1,
+      "grid_merge": 0,
+      "membership_split": 1,
+      "membership_merge": 0,
+      "removed": 1861,
+      "mechanisms": {
+        "WORKSPACE_CROP": 52,
+        "CLEANUP": 11,
+        "REFERENCE": 1700,
+        "BELOW_CANDIDATE_SIZE": 62,
+        "ONLINE": 36
+      },
+      "bands": {
+        "below_0.3": 164,
+        "0.3_0.6": 271,
+        "0.6_1.2": 517,
+        "above_1.2": 748
+      },
+      "added": 182
+    },
+    {
+      "frame": 159,
+      "grid_split": 1,
+      "grid_merge": 1,
+      "membership_split": 1,
+      "membership_merge": 0,
+      "removed": 3030,
+      "mechanisms": {
+        "WORKSPACE_CROP": 41,
+        "REFERENCE": 2894,
+        "ONLINE": 29,
+        "BELOW_CANDIDATE_SIZE": 52,
+        "CLEANUP": 14
+      },
+      "bands": {
+        "below_0.3": 278,
+        "0.3_0.6": 449,
+        "0.6_1.2": 1281,
+        "above_1.2": 886
+      },
+      "added": 70
+    },
+    {
+      "frame": 160,
+      "grid_split": 1,
+      "grid_merge": 1,
+      "membership_split": 1,
+      "membership_merge": 0,
+      "removed": 3135,
+      "mechanisms": {
+        "WORKSPACE_CROP": 39,
+        "REFERENCE": 2975,
+        "CLEANUP": 22,
+        "ONLINE": 38,
+        "BELOW_CANDIDATE_SIZE": 61
+      },
+      "bands": {
+        "below_0.3": 276,
+        "0.3_0.6": 450,
+        "0.6_1.2": 1311,
+        "above_1.2": 938
+      },
+      "added": 60
+    }
+  ]
+}

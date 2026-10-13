@@ -1,0 +1,210 @@
+{
+  "failed_with_feasible": {
+    "baseline": {
+      "total_instrumented_sec": 4.858302000007825,
+      "components": {
+        "enumeration_next": {
+          "calls": 682695,
+          "seconds": 0.11129910164163448
+        },
+        "pair_hypot": {
+          "calls": 218490,
+          "seconds": 0.2815053983213147
+        },
+        "spacing_all": {
+          "calls": 511066,
+          "seconds": 0.9065601003094343
+        },
+        "svd": {
+          "calls": 23430,
+          "seconds": 0.08759910156368278
+        },
+        "sorting": {
+          "calls": 1,
+          "seconds": 3.200009814463556e-06
+        }
+      },
+      "result": {
+        "ok": true,
+        "clean_cells": 60,
+        "selected": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            12.0
+          ],
+          [
+            0.0,
+            20.0
+          ],
+          [
+            2.0,
+            6.0
+          ]
+        ],
+        "min_sep_m": 1.5811388300841898,
+        "independent_count": 4,
+        "condition": 0.11247565042625104
+      },
+      "caveat": "Elapsed includes wrappers/counters. np.all combines collinearity and independence; spacing min and nested-loop body remain in residual, not cleanly separated; do not add nested call durations or compare these totals as runtime benchmarks."
+    },
+    "candidate": {
+      "total_instrumented_sec": 0.48842759999388363,
+      "components": {
+        "enumeration_next": {
+          "calls": 1776,
+          "seconds": 0.0002399998775217682
+        },
+        "pair_hypot": {
+          "calls": 25206,
+          "seconds": 0.015580100152874365
+        },
+        "spacing_all": {
+          "calls": 23431,
+          "seconds": 0.04783560073701665
+        },
+        "svd": {
+          "calls": 23430,
+          "seconds": 0.07491379918064922
+        },
+        "sorting": {
+          "calls": 1,
+          "seconds": 4.2000028770416975e-06
+        }
+      },
+      "result": {
+        "ok": true,
+        "clean_cells": 60,
+        "selected": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            12.0
+          ],
+          [
+            0.0,
+            20.0
+          ],
+          [
+            2.0,
+            6.0
+          ]
+        ],
+        "min_sep_m": 1.5811388300841898,
+        "independent_count": 4,
+        "condition": 0.11247565042625104
+      },
+      "caveat": "Elapsed includes wrappers/counters. np.all combines collinearity and independence; spacing min and nested-loop body remain in residual, not cleanly separated; do not add nested call durations or compare these totals as runtime benchmarks."
+    }
+  },
+  "noncollinear_no_solution": {
+    "baseline": {
+      "total_instrumented_sec": 5.046568400008255,
+      "components": {
+        "enumeration_next": {
+          "calls": 682695,
+          "seconds": 0.11098219937412068
+        },
+        "pair_hypot": {
+          "calls": 225917,
+          "seconds": 0.28975799948966596
+        },
+        "spacing_all": {
+          "calls": 518493,
+          "seconds": 0.9274057003494818
+        },
+        "svd": {
+          "calls": 30857,
+          "seconds": 0.11661940210615285
+        },
+        "sorting": {
+          "calls": 1,
+          "seconds": 4.099987563677132e-06
+        }
+      },
+      "result": {
+        "ok": false,
+        "clean_cells": 60,
+        "selected": [
+          [
+            -240.0,
+            0.0
+          ],
+          [
+            224.0,
+            0.0
+          ],
+          [
+            -8.0,
+            0.0
+          ],
+          [
+            -128.0,
+            0.0
+          ]
+        ],
+        "min_sep_m": 28.0,
+        "independent_count": 4,
+        "condition": 0.0
+      },
+      "caveat": "Elapsed includes wrappers/counters. np.all combines collinearity and independence; spacing min and nested-loop body remain in residual, not cleanly separated; do not add nested call durations or compare these totals as runtime benchmarks."
+    },
+    "candidate": {
+      "total_instrumented_sec": 0.6317517999996198,
+      "components": {
+        "enumeration_next": {
+          "calls": 1776,
+          "seconds": 0.0002476999507052824
+        },
+        "pair_hypot": {
+          "calls": 32633,
+          "seconds": 0.019835999875795096
+        },
+        "spacing_all": {
+          "calls": 30858,
+          "seconds": 0.062235700359451585
+        },
+        "svd": {
+          "calls": 30857,
+          "seconds": 0.09783330037316773
+        },
+        "sorting": {
+          "calls": 1,
+          "seconds": 4.49999060947448e-06
+        }
+      },
+      "result": {
+        "ok": false,
+        "clean_cells": 60,
+        "selected": [
+          [
+            -240.0,
+            0.0
+          ],
+          [
+            224.0,
+            0.0
+          ],
+          [
+            -8.0,
+            0.0
+          ],
+          [
+            -128.0,
+            0.0
+          ]
+        ],
+        "min_sep_m": 28.0,
+        "independent_count": 4,
+        "condition": 0.0
+      },
+      "caveat": "Elapsed includes wrappers/counters. np.all combines collinearity and independence; spacing min and nested-loop body remain in residual, not cleanly separated; do not add nested call durations or compare these totals as runtime benchmarks."
+    }
+  }
+}

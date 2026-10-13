@@ -1,0 +1,712 @@
+{
+  "sid": "cap_20261008_114205",
+  "name": "配准复测_C1_中央空处静立",
+  "reference": "cap_20261008_114819",
+  "leveling_job": "80a4bd6fe3a4476fa099b053d74de8be",
+  "gate": "WARN",
+  "reasons": [
+    "SPARSE_CORRESPONDENCE"
+  ],
+  "support": {
+    "n_static_source": 13637,
+    "n_static_target": 17707,
+    "n_correspondence": 6734,
+    "inlier_ratio": 0.4938036224976168,
+    "coverage_xy": 0.7790055248618785,
+    "azimuth_sectors": [
+      0,
+      0,
+      1467,
+      2908,
+      1489,
+      870,
+      0,
+      0
+    ],
+    "max_sector_share": 0.43183843183843185
+  },
+  "residual": {
+    "fit": {
+      "n": 12121,
+      "p50": 0.007915990321400545,
+      "p90": 0.03855627806332505
+    },
+    "holdout": {
+      "n": 12126,
+      "p50": 0.003799896844562606,
+      "p90": 0.03930508181612116
+    },
+    "holdout_fit_ratio_p50": 0.4800279801113129,
+    "half_split": [
+      {
+        "R": [
+          0.9999012878061696,
+          -0.0009101132510145776,
+          -0.014020924984986298,
+          0.0008799081483171735,
+          0.9999972794167417,
+          -0.002160305711251696,
+          0.014022852962746558,
+          0.002147755336594462,
+          0.9998993683075313
+        ],
+        "t": [
+          0.018968701668466096,
+          0.0022151662615186537,
+          -0.016243252052683413
+        ],
+        "eu": {
+          "roll": 0.12306951165414448,
+          "pitch": -0.8034766256267075,
+          "yaw": 0.05041998731166124
+        },
+        "iters": 33
+      },
+      {
+        "R": [
+          0.9999010855779875,
+          -0.0009850200755122387,
+          -0.014030281373147548,
+          0.000954572515813809,
+          0.9999971754601207,
+          -0.0021766632932746885,
+          0.01403238580110007,
+          0.002163055068895145,
+          0.999899201590589
+        ],
+        "t": [
+          0.01924058450538335,
+          0.0016353843467310702,
+          -0.01638368939483238
+        ],
+        "eu": {
+          "roll": 0.12394622655848148,
+          "pitch": -0.8040228707772407,
+          "yaw": 0.05469837023747715
+        },
+        "iters": 51
+      }
+    ]
+  },
+  "sanity": {
+    "roll_deg": {
+      "observed": 0.10405151551010076,
+      "limit": 6,
+      "band": "pass"
+    },
+    "pitch_deg": {
+      "observed": -0.80319643483416,
+      "limit": 3,
+      "band": "pass"
+    },
+    "yaw_deg": {
+      "observed": -0.05397224485707355,
+      "limit": 5,
+      "band": "pass"
+    },
+    "theta_deg": {
+      "observed": 0.8116558890599479,
+      "limit": 7,
+      "band": "pass"
+    },
+    "translation": {
+      "observed": 0.03301599921521132,
+      "limit": 0.2,
+      "band": "pass"
+    },
+    "t_z": {
+      "observed": 0.024730060961833816,
+      "limit": 0.15,
+      "band": "pass"
+    }
+  },
+  "transform": {
+    "rotation_row_major": [
+      0.9999012998946776,
+      0.000916534506648597,
+      -0.014019644554374558,
+      -0.0009419006812019605,
+      0.9999979313025237,
+      -0.001802834928624594,
+      0.014017963191549371,
+      0.0018158621013832556,
+      0.999900094685859
+    ],
+    "translation_m": [
+      0.021854657754116488,
+      0.000924242096668182,
+      -0.024730060961833816
+    ]
+  },
+  "diagnostics": {
+    "kind": "registration_diagnostics",
+    "schema": 1,
+    "protocol": {
+      "id": "r3.6_fine_static_v1",
+      "fit_set": "curFinestrong(0.06m rebin) -> refFine(occ>=0.9, 0.06m rebin)",
+      "normals": "refFine PCA 0.10m, min-eigvec",
+      "residual": "point-to-plane |n·(Rs+t-q)|",
+      "holdout": "even/odd half-split refit (fit-half -> eval-other)"
+    },
+    "support": {
+      "n_static_source": 13637,
+      "n_static_target": 17707,
+      "n_correspondence": 6734,
+      "inlier_ratio": 0.4938036224976168,
+      "coverage_xy": 0.7790055248618785,
+      "azimuth_sectors": [
+        0,
+        0,
+        1467,
+        2908,
+        1489,
+        870,
+        0,
+        0
+      ],
+      "max_sector_share": 0.43183843183843185
+    },
+    "geometry": {
+      "jtj_eigvals": [
+        37083.049116917995,
+        22291.240341364643,
+        7746.151217838036,
+        2203.76260138108,
+        927.238230289476,
+        475.5887556993948
+      ],
+      "eig_ratio": 0.012824963616123524,
+      "condition_number": 77.97293075691861
+    },
+    "residual": {
+      "fit": {
+        "n": 12121,
+        "p50": 0.007915990321400545,
+        "p90": 0.03855627806332505
+      },
+      "holdout": {
+        "n": 12126,
+        "p50": 0.003799896844562606,
+        "p90": 0.03930508181612116
+      },
+      "holdout_fit_ratio_p50": 0.4800279801113129,
+      "half_split": [
+        {
+          "R": [
+            0.9999012878061696,
+            -0.0009101132510145776,
+            -0.014020924984986298,
+            0.0008799081483171735,
+            0.9999972794167417,
+            -0.002160305711251696,
+            0.014022852962746558,
+            0.002147755336594462,
+            0.9998993683075313
+          ],
+          "t": [
+            0.018968701668466096,
+            0.0022151662615186537,
+            -0.016243252052683413
+          ],
+          "eu": {
+            "roll": 0.12306951165414448,
+            "pitch": -0.8034766256267075,
+            "yaw": 0.05041998731166124
+          },
+          "iters": 33
+        },
+        {
+          "R": [
+            0.9999010855779875,
+            -0.0009850200755122387,
+            -0.014030281373147548,
+            0.000954572515813809,
+            0.9999971754601207,
+            -0.0021766632932746885,
+            0.01403238580110007,
+            0.002163055068895145,
+            0.999899201590589
+          ],
+          "t": [
+            0.01924058450538335,
+            0.0016353843467310702,
+            -0.01638368939483238
+          ],
+          "eu": {
+            "roll": 0.12394622655848148,
+            "pitch": -0.8040228707772407,
+            "yaw": 0.05469837023747715
+          },
+          "iters": 51
+        }
+      ]
+    },
+    "basins": {
+      "solutions": [
+        {
+          "init": "identity",
+          "R": [
+            0.9999903109117346,
+            -0.0006882453326345295,
+            -0.004347919159086973,
+            0.0006825720708100321,
+            0.9999989140051588,
+            -0.0013061714551237075,
+            0.004348813403676893,
+            0.0013031910313290706,
+            0.999989694704459
+          ],
+          "t": [
+            0.006394716013688436,
+            0.0016204593500352426,
+            -0.003224186357972364
+          ],
+          "iters": 70,
+          "half_split": [
+            {
+              "R": [
+                0.9999901056152101,
+                -0.0008733016387359906,
+                -0.004361882154501915,
+                0.0008683039160828036,
+                0.9999989646060318,
+                -0.0011475343893745306,
+                0.004362879781898164,
+                0.0011437355958714523,
+                0.999989828522718
+              ],
+              "t": [
+                0.006234500160885062,
+                0.0011227383204637186,
+                -0.0031420825486238135
+              ],
+              "eu": {
+                "roll": 0.06553186050310902,
+                "pitch": -0.24997539106526123,
+                "yaw": 0.049750629474786215
+              },
+              "iters": 85
+            },
+            {
+              "R": [
+                0.9999903317825961,
+                -0.0006208674185808035,
+                -0.0043532591220198326,
+                0.0006150772109095726,
+                0.9999989246617724,
+                -0.001331298359799193,
+                0.004354081000569689,
+                0.0013286078980379006,
+                0.9999896383361639
+              ],
+              "t": [
+                0.006480667535285324,
+                0.00177328317829888,
+                -0.0033984230256865577
+              ],
+              "eu": {
+                "roll": 0.07612436916844724,
+                "pitch": -0.2494712532418671,
+                "yaw": 0.035241664539619875
+              },
+              "iters": 41
+            }
+          ],
+          "self_rot": 0.017933928127981214,
+          "self_t": 0.0007412944276437295,
+          "holdout_p50": 0.005299031356278379
+        },
+        {
+          "init": "tls",
+          "R": [
+            0.9999012831007215,
+            -0.0009368752618634202,
+            -0.014019497789612688,
+            0.0009066439744009788,
+            0.9999972506296737,
+            -0.0021625748070471704,
+            0.014021485307660165,
+            0.0021496506311727438,
+            0.9998993834141164
+          ],
+          "t": [
+            0.018981825393084198,
+            0.001984668066776306,
+            -0.01622648273032683
+          ],
+          "iters": 44,
+          "half_split": [
+            {
+              "R": [
+                0.9999012878061695,
+                -0.0009101132510145638,
+                -0.014020924984986433,
+                0.0008799081483173974,
+                0.9999972794167414,
+                -0.0021603057112516704,
+                0.014022852962746645,
+                0.002147755336594469,
+                0.9998993683075306
+              ],
+              "t": [
+                0.018968701668466533,
+                0.0022151662615182478,
+                -0.016243252052683035
+              ],
+              "eu": {
+                "roll": 0.12306951165414502,
+                "pitch": -0.8034766256267125,
+                "yaw": 0.050419987311674075
+              },
+              "iters": 36
+            },
+            {
+              "R": [
+                0.9999010855779881,
+                -0.000985020075512458,
+                -0.014030281373147577,
+                0.0009545725158139379,
+                0.9999971754601207,
+                -0.0021766632932745627,
+                0.014032385801100139,
+                0.0021630550688951145,
+                0.9998992015905885
+              ],
+              "t": [
+                0.01924058450538171,
+                0.0016353843467306983,
+                -0.016383689394832115
+              ],
+              "eu": {
+                "roll": 0.12394622655847978,
+                "pitch": -0.8040228707772447,
+                "yaw": 0.0546983702374845
+              },
+              "iters": 51
+            }
+          ],
+          "self_rot": 0.004413254337346797,
+          "self_t": 0.0006555837038804883,
+          "holdout_p50": 0.003799896844562593
+        }
+      ],
+      "cross_method_notes": "identity/tls ppICP diagnostic family only; fixed B is never selected/replaced by C; see R3.6",
+      "resolution": {
+        "resolved": true,
+        "by": "split_half+holdout",
+        "winner": "tls",
+        "winner_holdout": 0.003799896844562593,
+        "loser_holdout": 0.005299031356278379,
+        "ratio": 0.7170927267792845
+      }
+    },
+    "sanity": {
+      "roll_deg": {
+        "observed": 0.10405151551010076,
+        "limit": 6,
+        "band": "pass"
+      },
+      "pitch_deg": {
+        "observed": -0.80319643483416,
+        "limit": 3,
+        "band": "pass"
+      },
+      "yaw_deg": {
+        "observed": -0.05397224485707355,
+        "limit": 5,
+        "band": "pass"
+      },
+      "theta_deg": {
+        "observed": 0.8116558890599479,
+        "limit": 7,
+        "band": "pass"
+      },
+      "translation": {
+        "observed": 0.03301599921521132,
+        "limit": 0.2,
+        "band": "pass"
+      },
+      "t_z": {
+        "observed": 0.024730060961833816,
+        "limit": 0.15,
+        "band": "pass"
+      }
+    },
+    "direction_check": {
+      "forward_p50": 0.007915990321400545,
+      "inverse_p50": 0.015093880810625581,
+      "n": 12121,
+      "protocol": "same forward-correspondence set; inverse R and -R^T t"
+    },
+    "gate": {
+      "profile_id": "reg_gate_v1",
+      "thresholds": {
+        "profile_id": "reg_gate_v1",
+        "bands": {
+          "fit_p50": [
+            "max",
+            0.02,
+            0.03,
+            "RESIDUAL_HIGH"
+          ],
+          "fit_p90": [
+            "max",
+            0.08,
+            0.1,
+            "RESIDUAL_HIGH"
+          ],
+          "holdout_p50": [
+            "max",
+            0.02,
+            0.03,
+            "HOLDOUT_MISMATCH"
+          ],
+          "holdout_fit_ratio_p50": [
+            "max",
+            1.5,
+            2,
+            "HOLDOUT_MISMATCH"
+          ],
+          "n_static_source": [
+            "min",
+            5000,
+            2000,
+            "WEAK_SUPPORT"
+          ],
+          "n_static_target": [
+            "min",
+            5000,
+            2000,
+            "WEAK_SUPPORT"
+          ],
+          "n_correspondence": [
+            "min",
+            500,
+            200,
+            "SPARSE_CORRESPONDENCE"
+          ],
+          "inlier_ratio": [
+            "min",
+            0.5,
+            0.3,
+            "SPARSE_CORRESPONDENCE"
+          ],
+          "coverage_xy": [
+            "min",
+            0.5,
+            0.3,
+            "LOW_COVERAGE"
+          ],
+          "max_sector_share": [
+            "max",
+            0.6,
+            0.75,
+            "WALL_CONCENTRATION"
+          ],
+          "condition_number": [
+            "max",
+            10000,
+            100000,
+            "ILL_CONDITIONED"
+          ],
+          "eig_ratio": [
+            "min",
+            0.0001,
+            0.00001,
+            "ILL_CONDITIONED"
+          ]
+        },
+        "sanity": {
+          "roll_deg": 6,
+          "pitch_deg": 3,
+          "yaw_deg": 5,
+          "theta_deg": 7,
+          "translation": 0.2,
+          "t_z": 0.15
+        },
+        "self_rot": 0.25,
+        "self_t": 0.01,
+        "compete_rot": 0.02,
+        "compete_t": 0.01,
+        "advantage": 0.95,
+        "provisional": [
+          "n_correspondence",
+          "inlier_ratio",
+          "coverage_xy",
+          "max_sector_share",
+          "condition_number",
+          "eig_ratio"
+        ]
+      },
+      "checks": [
+        {
+          "id": "fit_p50",
+          "metric": 0.007915990321400545,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "fit_p90",
+          "metric": 0.03855627806332505,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "holdout_p50",
+          "metric": 0.003799896844562606,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "holdout_fit_ratio_p50",
+          "metric": 0.4800279801113129,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "n_static_source",
+          "metric": 13637,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "n_static_target",
+          "metric": 17707,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "n_correspondence",
+          "metric": 6734,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "inlier_ratio",
+          "metric": 0.4938036224976168,
+          "band": "warn",
+          "verdict": false,
+          "reason": "SPARSE_CORRESPONDENCE"
+        },
+        {
+          "id": "coverage_xy",
+          "metric": 0.7790055248618785,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "max_sector_share",
+          "metric": 0.43183843183843185,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "condition_number",
+          "metric": 77.97293075691861,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "eig_ratio",
+          "metric": 0.012824963616123524,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "roll_deg",
+          "metric": 0.10405151551010076,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "pitch_deg",
+          "metric": -0.80319643483416,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "yaw_deg",
+          "metric": -0.05397224485707355,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "theta_deg",
+          "metric": 0.8116558890599479,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "translation",
+          "metric": 0.03301599921521132,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "t_z",
+          "metric": 0.024730060961833816,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "basins",
+          "metric": null,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        },
+        {
+          "id": "direction",
+          "metric": 0.007915990321400545,
+          "band": "pass",
+          "verdict": true,
+          "reason": null
+        }
+      ],
+      "status": "WARN",
+      "reasons": [
+        "SPARSE_CORRESPONDENCE"
+      ],
+      "basin_resolution": {
+        "resolved": true,
+        "by": "split_half+holdout",
+        "winner": "tls",
+        "winner_holdout": 0.003799896844562593,
+        "loser_holdout": 0.005299031356278379,
+        "ratio": 0.7170927267792845
+      }
+    }
+  },
+  "source": {
+    "meta_sha256": "29338217821b94e4e1a859d7504c355c4d1bf07c88864d039c24fa5b934851f5",
+    "bin_sha256": "87dbe458b3b5e572e5f966c06c355105b177cc3083284ab2a5211c5e4ebe37db"
+  },
+  "code": {
+    "files": {
+      "pc_apps/human_replay/human_pipe_lib.js": "8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176",
+      "pc_apps/human_replay/human_replay_lib.js": "bbcbc547f79da60d0e6f915eeccb403997b1c192a3a37ba00e6d3c4d367cf1cc",
+      "pc_apps/human_replay/registration_method.js": "958f646ff41adbca7840a0a09ae6ba2ed87db7254b2d16f5365b64625caac141",
+      "pc_apps/human_replay/registration.js": "965c6c49e164969d07c399a0a14e4621a1aa3f797b20f8bb220fb6a5dffc85c0"
+    },
+    "code_id": "7acb9f226b8fed896abec08200f4e6e23b98d51781a3d09ab711e57f1c937c1c"
+  },
+  "artifact_created": false,
+  "runtime_enabled": false
+}

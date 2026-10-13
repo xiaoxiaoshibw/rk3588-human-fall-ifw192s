@@ -1,0 +1,260 @@
+{
+  "historical": {
+    "exit_code": 0,
+    "digest": "23830edefcb28f04774e328af64abce014dfeff35df75462f8a6f68d68eb3357",
+    "expected": "23830edefcb28f04774e328af64abce014dfeff35df75462f8a6f68d68eb3357",
+    "exact_digest_equal": true
+  },
+  "after_metric_fix": {
+    "exit_code": 0,
+    "digest": "5da7a60d3e23b1b718194d21049246a7820ded62468018604e5171ca1000cb8c",
+    "exact_digest_equal": false,
+    "evidence_identity_change": "full digest includes PL source SHA; expected change, no rebind of old artifact",
+    "algorithm_result_projection_equal": true,
+    "checks": [
+      {
+        "name": "G0_baseline_point_identity",
+        "pass": true,
+        "detail": {
+          "frames": 165,
+          "point_mismatch": 0,
+          "count_mismatch_frames": 0
+        }
+      },
+      {
+        "name": "G0_micro_cases",
+        "pass": true,
+        "detail": {
+          "cases": [
+            {
+              "name": "C1_handcrafted_single_voxel_radius_and_cells",
+              "n": 13,
+              "prod_residual": 7,
+              "shadow_residual": 7,
+              "mismatch": 0,
+              "expected_ok": true,
+              "skipped": false
+            },
+            {
+              "name": "C2_workspace_z_boundary",
+              "n": 5,
+              "prod_residual": 5,
+              "shadow_residual": 5,
+              "mismatch": 0,
+              "expected_ok": true,
+              "skipped": false
+            },
+            {
+              "name": "C3_realmap_isolated_voxel_axis_pm",
+              "n": 8,
+              "prod_residual": 4,
+              "shadow_residual": 4,
+              "mismatch": 0,
+              "expected_ok": true,
+              "skipped": false
+            }
+          ],
+          "pass": true
+        }
+      },
+      {
+        "name": "conservation",
+        "pass": true,
+        "detail": {
+          "frames": 165,
+          "all_conservation_ok": true,
+          "totals": {
+            "n_raw": 8105838,
+            "n_denoise": 8105838,
+            "n_range_reject": 0,
+            "n_z_reject": 3086548,
+            "n_bg_match": 4259941,
+            "n_residual": 759349
+          },
+          "totals_ok": true
+        }
+      },
+      {
+        "name": "label_partition_equals_residual",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "self_check_violations_zero",
+        "pass": true,
+        "detail": {
+          "n": 0
+        }
+      },
+      {
+        "name": "online_map_replica_equivalence",
+        "pass": true,
+        "detail": {
+          "size_prod": 1720,
+          "size_replica": 1720,
+          "mismatch": 0,
+          "first_bad": null,
+          "pass": true
+        }
+      },
+      {
+        "name": "icp_rerun_repro",
+        "pass": true,
+        "detail": {
+          "euler": {
+            "roll": 1.7476,
+            "pitch": -0.2818,
+            "yaw": -2.3924
+          },
+          "t": [
+            0.01815,
+            0.03104,
+            0.00118
+          ],
+          "iters": 48
+        }
+      },
+      {
+        "name": "ref_map_counts_5286_3707",
+        "pass": true,
+        "detail": {
+          "total": 5286,
+          "occ_ge_05": 3707
+        }
+      },
+      {
+        "name": "ref_session_online_map_2063",
+        "pass": true,
+        "detail": {
+          "size": 2063
+        }
+      },
+      {
+        "name": "r33_A_level_07796",
+        "pass": true,
+        "detail": {
+          "n": 520210,
+          "none_center": 0.779556,
+          "expected": 0.7796,
+          "pass": true
+        }
+      },
+      {
+        "name": "probe_f10_n1564_center1365",
+        "pass": true,
+        "detail": {
+          "frame": 10,
+          "n": 1564,
+          "center_hits": 1365,
+          "expected_hits": 1365,
+          "expected_n": 1564,
+          "pass": true
+        }
+      },
+      {
+        "name": "probe_f55_n3190_center621",
+        "pass": true,
+        "detail": {
+          "frame": 55,
+          "n": 3190,
+          "center_hits": 621,
+          "expected_hits": 621,
+          "expected_n": 3190,
+          "pass": true
+        }
+      },
+      {
+        "name": "probe_f160_n2429_center1024",
+        "pass": true,
+        "detail": {
+          "frame": 160,
+          "n": 2429,
+          "center_hits": 1024,
+          "expected_hits": 1024,
+          "expected_n": 2429,
+          "pass": true
+        }
+      },
+      {
+        "name": "r35_baseline_reproduction",
+        "pass": true,
+        "detail": []
+      },
+      {
+        "name": "C_primary_repro_expected",
+        "pass": true,
+        "detail": {
+          "euler": {
+            "roll": -2.3102,
+            "pitch": 0.0813,
+            "yaw": 2.2269
+          },
+          "t": [
+            -0.00643,
+            -0.02882,
+            -0.00987
+          ],
+          "expect": {
+            "euler": {
+              "roll": -2.3102,
+              "pitch": 0.0813,
+              "yaw": 2.2269
+            },
+            "t": [
+              -0.0064,
+              -0.0288,
+              -0.0099
+            ]
+          }
+        }
+      },
+      {
+        "name": "C_init_robustness",
+        "pass": true,
+        "detail": {
+          "fromIdentity": {
+            "roll": -2.3102,
+            "pitch": 0.0813
+          },
+          "fromB": {
+            "roll": -2.3102,
+            "pitch": 0.0813
+          }
+        }
+      },
+      {
+        "name": "C_holdout_consistency",
+        "pass": true,
+        "detail": {
+          "fit_even_eval_odd": {
+            "n": 5496,
+            "p50": 0.0111,
+            "p90": 0.0559
+          },
+          "fit_odd_eval_even": {
+            "n": 5531,
+            "p50": 0.011,
+            "p90": 0.0573
+          },
+          "fit_all_eval_all": {
+            "n": 11028,
+            "p50": 0.011,
+            "p90": 0.0566
+          }
+        }
+      },
+      {
+        "name": "inputs_unchanged",
+        "pass": true,
+        "detail": null
+      },
+      {
+        "name": "production_mtime_unchanged",
+        "pass": true,
+        "detail": null
+      }
+    ]
+  },
+  "input_shas_before_after_equal": true,
+  "raw_original_script_sha": "201aaf07584e8d9e3ae013524b93d68d2b9d27d8681347bdd54a8d6d0088d289"
+}

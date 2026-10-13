@@ -1,0 +1,1 @@
+R06结束全扫描对before有16范围外已存文件变化、33新增、1缺失；R05收口授权阶段与R06 v1 PRECHECK误落R05scope文件单列（已披露不当R05实验）；其他真实pc_apps/console包、human_replay Python与session_selection.js及HFUS-RD-01变化未知作者，不干预/归本控/删除或回退。没有全树冻结宣称。当前实际推理加载源始终以两套SUMMARY与before/after sourceManifest为准，全程真实exit0意味着各运行自己登记的加载源未漂移；结束再独立复核实际加载源/Tooling/模型输入GT，不以范围外变化隐藏或解释算法失败。完整路径/SHA见FINAL_TREE_SHA、BOUNDARY_COMPARISON和分类JSON。

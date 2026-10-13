@@ -1,0 +1,3869 @@
+[
+  {
+    "sid": "cap_20261010_175227",
+    "activity": "S1-empty-with-furniture",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "FURNITURE_FALSE_POSITIVE",
+    "events": [
+      "FURNITURE_FALSE_POSITIVE",
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 0,
+        "fn": 0,
+        "fp": 2,
+        "pairs": []
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 0,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175227&model=rf51_baseline&index=0",
+    "layer_observations": [],
+    "candidates": [
+      {
+        "id": "b_0_0",
+        "n": 367,
+        "x": 0.7960719466209412,
+        "y": -0.9248197078704834,
+        "z": 1.483126675400487,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n3",
+            "class_name": "FURNITURE",
+            "purity": 1
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 367,
+          "height_p90_m": 0.4606841802597046,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 56,
+              "position": [
+                0.8165876641869545,
+                -0.9364070338862283,
+                1.6610339390380042
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 96,
+              "position": [
+                0.8114468070367972,
+                -0.9193266090005636,
+                1.4851764291524887
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 60,
+              "position": [
+                0.7992068648338317,
+                -0.9216962496439616,
+                1.3604488094647726
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_1",
+        "n": 38,
+        "x": 2.9947478771209717,
+        "y": 1.5455373525619507,
+        "z": 1.2159457489063865,
+        "prob": 0.93,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.93,
+          "rf51_candidate": 0.005208333333333333,
+          "rf69_candidate": 0.005208333333333333,
+          "xgb69_candidate": 0.0028753476704896624
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n3",
+            "class_name": "FURNITURE",
+            "purity": 1
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 38,
+          "height_p90_m": 1.194765567779541,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 5,
+              "position": [
+                3.0387082576751707,
+                1.5792834997177123,
+                1.7640374898910522
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 13,
+              "position": [
+                2.9879468954526462,
+                1.5338107164089496,
+                1.237140811406649
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 6,
+              "position": [
+                2.9979816675186157,
+                1.5556522409121196,
+                0.9183695415655772
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175227",
+    "activity": "S1-empty-with-furniture",
+    "model": "xgb69_candidate",
+    "index": 1,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 0,
+        "fn": 0,
+        "fp": 0,
+        "pairs": []
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 0,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175227&model=xgb69_candidate&index=1",
+    "layer_observations": [],
+    "candidates": [
+      {
+        "id": "a_1_1",
+        "n": 67,
+        "x": 2.973961008128835,
+        "y": 1.537033242965812,
+        "z": 1.1088285893201828,
+        "prob": 0.15461024013076133,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.91,
+          "rf51_candidate": 0.21362847222222223,
+          "rf69_candidate": 0.2263888888888889,
+          "xgb69_candidate": 0.15461024013076133
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f1_n9",
+            "class_name": "FURNITURE",
+            "purity": 0.7910447761194029
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 67,
+          "height_p90_m": 1.2558559775352478,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 5,
+              "position": [
+                3.079528331756592,
+                1.4140176057815552,
+                1.6534827709198
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 19,
+              "position": [
+                3.0150622945082817,
+                1.42916496803886,
+                1.2010221920515363
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 15,
+              "position": [
+                2.919650936126709,
+                1.699874504407247,
+                0.8323779344558716
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175429",
+    "activity": "S3-walk-x-near",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 2,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175429&model=rf51_baseline&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n6",
+        "raw_points": 1356,
+        "foreground_points": 1177,
+        "retention": 0.8679941002949852,
+        "best_candidate_coverage": 0.8679941002949852,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 1257,
+        "x": 1.5508321546427106,
+        "y": 1.3607254214199556,
+        "z": 0.9439910433552241,
+        "prob": 1,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 1,
+          "rf51_candidate": 1,
+          "rf69_candidate": 0.9868055555555556,
+          "xgb69_candidate": 0.9985302775856104
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n6",
+            "class_name": "PERSON",
+            "purity": 0.9363564041368337
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1257,
+          "height_p90_m": 1.1603561639785767,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 243,
+              "position": [
+                1.6095987259115212,
+                1.2754845457312503,
+                1.3687822382145949
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 315,
+              "position": [
+                1.5173698731831142,
+                1.3962979702722458,
+                0.9409795889778743
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 184,
+              "position": [
+                1.5303952292255734,
+                1.3873977576908858,
+                0.6221964061260223
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_3",
+        "n": 365,
+        "x": 0.8037433108238324,
+        "y": -0.9229924904157037,
+        "z": 1.478376317024231,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 365,
+          "height_p90_m": 0.45534396171569824,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 57,
+              "position": [
+                0.8151807293557284,
+                -0.9385026003185072,
+                1.657410784771568
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 88,
+              "position": [
+                0.8053960732438348,
+                -0.9179674955931577,
+                1.4853160598061301
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 56,
+              "position": [
+                0.8019763752818108,
+                -0.9214818796941212,
+                1.3614157438278198
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_5",
+        "n": 62,
+        "x": 3.0174041255827873,
+        "y": 1.4894602721737278,
+        "z": 1.224910589956468,
+        "prob": 0.94,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.94,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.035416666666666666,
+          "xgb69_candidate": 0.0028753476704896624
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 62,
+          "height_p90_m": 1.010523498058319,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 8,
+              "position": [
+                3.0739496052265167,
+                1.4965245127677917,
+                1.6997680217027664
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 17,
+              "position": [
+                3.0255345316494213,
+                1.4296530765645645,
+                1.296784660395454
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 12,
+              "position": [
+                2.998313824335734,
+                1.4500502943992615,
+                1.0232444653908412
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175429",
+    "activity": "S3-walk-x-near",
+    "model": "xgb69_candidate",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 0,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175429&model=xgb69_candidate&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n6",
+        "raw_points": 1356,
+        "foreground_points": 1177,
+        "retention": 0.8679941002949852,
+        "best_candidate_coverage": 0.8679941002949852,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 1257,
+        "x": 1.5508321546427106,
+        "y": 1.3607254214199556,
+        "z": 0.9439910433552241,
+        "prob": 0.9985302775856104,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 1,
+          "rf51_candidate": 1,
+          "rf69_candidate": 0.9868055555555556,
+          "xgb69_candidate": 0.9985302775856104
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n6",
+            "class_name": "PERSON",
+            "purity": 0.9363564041368337
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1257,
+          "height_p90_m": 1.1603561639785767,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 243,
+              "position": [
+                1.6095987259115212,
+                1.2754845457312503,
+                1.3687822382145949
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 315,
+              "position": [
+                1.5173698731831142,
+                1.3962979702722458,
+                0.9409795889778743
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 184,
+              "position": [
+                1.5303952292255734,
+                1.3873977576908858,
+                0.6221964061260223
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_3",
+        "n": 365,
+        "x": 0.8037433108238324,
+        "y": -0.9229924904157037,
+        "z": 1.478376317024231,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 365,
+          "height_p90_m": 0.45534396171569824,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 57,
+              "position": [
+                0.8151807293557284,
+                -0.9385026003185072,
+                1.657410784771568
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 88,
+              "position": [
+                0.8053960732438348,
+                -0.9179674955931577,
+                1.4853160598061301
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 56,
+              "position": [
+                0.8019763752818108,
+                -0.9214818796941212,
+                1.3614157438278198
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_5",
+        "n": 62,
+        "x": 3.0174041255827873,
+        "y": 1.4894602721737278,
+        "z": 1.224910589956468,
+        "prob": 0.0028753476704896624,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.94,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.035416666666666666,
+          "xgb69_candidate": 0.0028753476704896624
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 62,
+          "height_p90_m": 1.010523498058319,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 8,
+              "position": [
+                3.0739496052265167,
+                1.4965245127677917,
+                1.6997680217027664
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 17,
+              "position": [
+                3.0255345316494213,
+                1.4296530765645645,
+                1.296784660395454
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 12,
+              "position": [
+                2.998313824335734,
+                1.4500502943992615,
+                1.0232444653908412
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175553",
+    "activity": "S3-walk-y-far",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 3,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175553&model=rf51_baseline&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 6421,
+        "foreground_points": 6055,
+        "retention": 0.9429995327830556,
+        "best_candidate_coverage": 0.9429995327830556,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 6319,
+        "x": 0.7581259248320448,
+        "y": -0.27996186276419965,
+        "z": 1.1437835159261576,
+        "prob": 0.9,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.9,
+          "rf51_candidate": 0.2998263888888889,
+          "rf69_candidate": 0.43039279513888884,
+          "xgb69_candidate": 0.9970497398549533
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.958221237537585
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 6319,
+          "height_p90_m": 1.2278985381126404,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 1304,
+              "position": [
+                0.8085087085702668,
+                -0.2730693347363567,
+                1.534197709860246
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 1810,
+              "position": [
+                0.7089821941615468,
+                -0.2675655432251277,
+                1.0769407691217918
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 720,
+              "position": [
+                0.7329732510778639,
+                -0.2628235327804254,
+                0.7326562928656737
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_2",
+        "n": 375,
+        "x": 0.804010381380717,
+        "y": -0.922977162361145,
+        "z": 1.4846095151901244,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.024305555555555552,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 375,
+          "height_p90_m": 0.45732176303863525,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 62,
+              "position": [
+                0.8166730153945184,
+                -0.9356014834296319,
+                1.6578886355123212
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 93,
+              "position": [
+                0.8074545648790175,
+                -0.9202668782203428,
+                1.4787635534040389
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 53,
+              "position": [
+                0.8047359270869561,
+                -0.9247741553018678,
+                1.3589925541068024
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_0",
+        "n": 37,
+        "x": 0.7549606561660767,
+        "y": 1.8209362030029297,
+        "z": 0.36970058244627874,
+        "prob": 0.94,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.94,
+          "rf51_candidate": 0.6375000000000001,
+          "rf69_candidate": 0.5338541666666667,
+          "xgb69_candidate": 0.7694092110909748
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 37,
+          "height_p90_m": 0.21425721049308777,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 6,
+              "position": [
+                0.7895848055680593,
+                1.8336150844891865,
+                0.4646670271952947
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 10,
+              "position": [
+                0.7392205119132995,
+                1.8048896670341492,
+                0.38872083425521853
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 10,
+              "position": [
+                0.7494096875190734,
+                1.8236183047294616,
+                0.32625575363636017
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_1",
+        "n": 36,
+        "x": 2.99898624420166,
+        "y": 1.5492292642593384,
+        "z": 1.2810897181431453,
+        "prob": 0.93,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_4",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.93,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.0028753476704896624
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 36,
+          "height_p90_m": 1.2589519619941711,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 7,
+              "position": [
+                3.0369397572108676,
+                1.5673964364188058,
+                1.732987744467599
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 12,
+              "position": [
+                2.987306078275045,
+                1.519901563723882,
+                1.2588781317075093
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 4,
+              "position": null
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175553",
+    "activity": "S3-walk-y-far",
+    "model": "xgb69_candidate",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 1,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175553&model=xgb69_candidate&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 6421,
+        "foreground_points": 6055,
+        "retention": 0.9429995327830556,
+        "best_candidate_coverage": 0.9429995327830556,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 6319,
+        "x": 0.7581259248320448,
+        "y": -0.27996186276419965,
+        "z": 1.1437835159261576,
+        "prob": 0.9970497398549533,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.9,
+          "rf51_candidate": 0.2998263888888889,
+          "rf69_candidate": 0.43039279513888884,
+          "xgb69_candidate": 0.9970497398549533
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.958221237537585
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 6319,
+          "height_p90_m": 1.2278985381126404,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 1304,
+              "position": [
+                0.8085087085702668,
+                -0.2730693347363567,
+                1.534197709860246
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 1810,
+              "position": [
+                0.7089821941615468,
+                -0.2675655432251277,
+                1.0769407691217918
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 720,
+              "position": [
+                0.7329732510778639,
+                -0.2628235327804254,
+                0.7326562928656737
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_2",
+        "n": 375,
+        "x": 0.804010381380717,
+        "y": -0.922977162361145,
+        "z": 1.4846095151901244,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.024305555555555552,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 375,
+          "height_p90_m": 0.45732176303863525,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 62,
+              "position": [
+                0.8166730153945184,
+                -0.9356014834296319,
+                1.6578886355123212
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 93,
+              "position": [
+                0.8074545648790175,
+                -0.9202668782203428,
+                1.4787635534040389
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 53,
+              "position": [
+                0.8047359270869561,
+                -0.9247741553018678,
+                1.3589925541068024
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_0",
+        "n": 37,
+        "x": 0.7549606561660767,
+        "y": 1.8209362030029297,
+        "z": 0.36970058244627874,
+        "prob": 0.7694092110909748,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.94,
+          "rf51_candidate": 0.6375000000000001,
+          "rf69_candidate": 0.5338541666666667,
+          "xgb69_candidate": 0.7694092110909748
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 37,
+          "height_p90_m": 0.21425721049308777,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 6,
+              "position": [
+                0.7895848055680593,
+                1.8336150844891865,
+                0.4646670271952947
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 10,
+              "position": [
+                0.7392205119132995,
+                1.8048896670341492,
+                0.38872083425521853
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 10,
+              "position": [
+                0.7494096875190734,
+                1.8236183047294616,
+                0.32625575363636017
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175804",
+    "activity": "S4-walk-stop-walk",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 3,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175804&model=rf51_baseline&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 1369,
+        "foreground_points": 1251,
+        "retention": 0.9138056975894814,
+        "best_candidate_coverage": 0.9138056975894814,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_1",
+        "n": 1315,
+        "x": 1.420062938207909,
+        "y": 1.3344088469168078,
+        "z": 0.9963983213266946,
+        "prob": 1,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 1,
+          "rf51_candidate": 1,
+          "rf69_candidate": 1,
+          "xgb69_candidate": 0.9986421804785554
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.9513307984790874
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1315,
+          "height_p90_m": 1.192903608083725,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 237,
+              "position": [
+                1.455001605210928,
+                1.3345142175376667,
+                1.4359756391259688
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 353,
+              "position": [
+                1.4124947320300527,
+                1.3268002308799591,
+                0.9826200616258399
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 199,
+              "position": [
+                1.3964611225990793,
+                1.32847309172453,
+                0.6742959948041332
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_5",
+        "n": 391,
+        "x": 0.8054248111327286,
+        "y": -0.9217446075985803,
+        "z": 1.4825743308762456,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.020833333333333332,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 391,
+          "height_p90_m": 0.4609386920928955,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 65,
+              "position": [
+                0.8132725752316988,
+                -0.9348452824812669,
+                1.6628642779130203
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 100,
+              "position": [
+                0.8123757129907608,
+                -0.9179892641305923,
+                1.487495824098587
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 62,
+              "position": [
+                0.8036776656104673,
+                -0.9205646072664568,
+                1.361636181031504
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_6",
+        "n": 75,
+        "x": 2.986823886235555,
+        "y": 1.5016801865895588,
+        "z": 1.1608129000663758,
+        "prob": 0.9,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.9,
+          "rf51_candidate": 0.18220486111111112,
+          "rf69_candidate": 0.22515775240384617,
+          "xgb69_candidate": 0.19066314632476533
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 75,
+          "height_p90_m": 1.2497515082359314,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 6,
+              "position": [
+                3.081995407740275,
+                1.4686581095059712,
+                1.6929491758346558
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 27,
+              "position": [
+                3.035841429675067,
+                1.370583966926292,
+                1.2130950733467385
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 13,
+              "position": [
+                2.906238867686345,
+                1.722403388756972,
+                0.8458643372242267
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_0",
+        "n": 31,
+        "x": 0.6931411027908325,
+        "y": 1.6679561138153076,
+        "z": 0.42031710378585324,
+        "prob": 0.8,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_4",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.8,
+          "rf51_candidate": 0.7000000000000001,
+          "rf69_candidate": 0.6102430555555555,
+          "xgb69_candidate": 0.762429373785195
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 31,
+          "height_p90_m": 0.31004369258880615,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 4,
+              "position": null
+            },
+            {
+              "name": "middle_surface",
+              "support": 9,
+              "position": [
+                0.675238291422526,
+                1.669158207045661,
+                0.4411289195219676
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 4,
+              "position": null
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175804",
+    "activity": "S4-walk-stop-walk",
+    "model": "xgb69_candidate",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 1,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175804&model=xgb69_candidate&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 1369,
+        "foreground_points": 1251,
+        "retention": 0.9138056975894814,
+        "best_candidate_coverage": 0.9138056975894814,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_1",
+        "n": 1315,
+        "x": 1.420062938207909,
+        "y": 1.3344088469168078,
+        "z": 0.9963983213266946,
+        "prob": 0.9986421804785554,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 1,
+          "rf51_candidate": 1,
+          "rf69_candidate": 1,
+          "xgb69_candidate": 0.9986421804785554
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.9513307984790874
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1315,
+          "height_p90_m": 1.192903608083725,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 237,
+              "position": [
+                1.455001605210928,
+                1.3345142175376667,
+                1.4359756391259688
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 353,
+              "position": [
+                1.4124947320300527,
+                1.3268002308799591,
+                0.9826200616258399
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 199,
+              "position": [
+                1.3964611225990793,
+                1.32847309172453,
+                0.6742959948041332
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_5",
+        "n": 391,
+        "x": 0.8054248111327286,
+        "y": -0.9217446075985803,
+        "z": 1.4825743308762456,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.020833333333333332,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 391,
+          "height_p90_m": 0.4609386920928955,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 65,
+              "position": [
+                0.8132725752316988,
+                -0.9348452824812669,
+                1.6628642779130203
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 100,
+              "position": [
+                0.8123757129907608,
+                -0.9179892641305923,
+                1.487495824098587
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 62,
+              "position": [
+                0.8036776656104673,
+                -0.9205646072664568,
+                1.361636181031504
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_6",
+        "n": 75,
+        "x": 2.986823886235555,
+        "y": 1.5016801865895588,
+        "z": 1.1608129000663758,
+        "prob": 0.19066314632476533,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.9,
+          "rf51_candidate": 0.18220486111111112,
+          "rf69_candidate": 0.22515775240384617,
+          "xgb69_candidate": 0.19066314632476533
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 75,
+          "height_p90_m": 1.2497515082359314,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 6,
+              "position": [
+                3.081995407740275,
+                1.4686581095059712,
+                1.6929491758346558
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 27,
+              "position": [
+                3.035841429675067,
+                1.370583966926292,
+                1.2130950733467385
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 13,
+              "position": [
+                2.906238867686345,
+                1.722403388756972,
+                0.8458643372242267
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_0",
+        "n": 31,
+        "x": 0.6931411027908325,
+        "y": 1.6679561138153076,
+        "z": 0.42031710378585324,
+        "prob": 0.762429373785195,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_4",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.8,
+          "rf51_candidate": 0.7000000000000001,
+          "rf69_candidate": 0.6102430555555555,
+          "xgb69_candidate": 0.762429373785195
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 31,
+          "height_p90_m": 0.31004369258880615,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 4,
+              "position": null
+            },
+            {
+              "name": "middle_surface",
+              "support": 9,
+              "position": [
+                0.675238291422526,
+                1.669158207045661,
+                0.4411289195219676
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 4,
+              "position": null
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175943",
+    "activity": "S5-turn-in-place",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 1,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175943&model=rf51_baseline&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 1080,
+        "foreground_points": 1009,
+        "retention": 0.9342592592592592,
+        "best_candidate_coverage": 0.9342592592592592,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_1",
+        "n": 1130,
+        "x": 2.037935386927782,
+        "y": 1.1367551572554935,
+        "z": 1.0530008456743924,
+        "prob": 0.95,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.95,
+          "rf51_candidate": 0.9998774509803922,
+          "rf69_candidate": 1,
+          "xgb69_candidate": 0.995846755405939
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.8929203539823009
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1130,
+          "height_p90_m": 1.3617645800113678,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 178,
+              "position": [
+                2.0602629707100686,
+                1.1467843869428955,
+                1.586157567715377
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 324,
+              "position": [
+                2.0148172463163916,
+                1.121998143416864,
+                1.066546121865143
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 164,
+              "position": [
+                2.0030646382308586,
+                1.1503244224118023,
+                0.692622902553256
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_2",
+        "n": 401,
+        "x": 0.8058878360246482,
+        "y": -0.9212181001827306,
+        "z": 1.4832788869329818,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.024305555555555552,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 401,
+          "height_p90_m": 0.4721873998641968,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 62,
+              "position": [
+                0.8196752359790187,
+                -0.9328134031065048,
+                1.66748700411089
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 101,
+              "position": [
+                0.807187022549091,
+                -0.9184186700547096,
+                1.4881394322555843
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 66,
+              "position": [
+                0.8023245596524441,
+                -0.9210338420940168,
+                1.3589169238552903
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_175943",
+    "activity": "S5-turn-in-place",
+    "model": "xgb69_candidate",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 0,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_175943&model=xgb69_candidate&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 1080,
+        "foreground_points": 1009,
+        "retention": 0.9342592592592592,
+        "best_candidate_coverage": 0.9342592592592592,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_1",
+        "n": 1130,
+        "x": 2.037935386927782,
+        "y": 1.1367551572554935,
+        "z": 1.0530008456743924,
+        "prob": 0.995846755405939,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.95,
+          "rf51_candidate": 0.9998774509803922,
+          "rf69_candidate": 1,
+          "xgb69_candidate": 0.995846755405939
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.8929203539823009
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1130,
+          "height_p90_m": 1.3617645800113678,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 178,
+              "position": [
+                2.0602629707100686,
+                1.1467843869428955,
+                1.586157567715377
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 324,
+              "position": [
+                2.0148172463163916,
+                1.121998143416864,
+                1.066546121865143
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 164,
+              "position": [
+                2.0030646382308586,
+                1.1503244224118023,
+                0.692622902553256
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_2",
+        "n": 401,
+        "x": 0.8058878360246482,
+        "y": -0.9212181001827306,
+        "z": 1.4832788869329818,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.024305555555555552,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 401,
+          "height_p90_m": 0.4721873998641968,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 62,
+              "position": [
+                0.8196752359790187,
+                -0.9328134031065048,
+                1.66748700411089
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 101,
+              "position": [
+                0.807187022549091,
+                -0.9184186700547096,
+                1.4881394322555843
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 66,
+              "position": [
+                0.8023245596524441,
+                -0.9210338420940168,
+                1.3589169238552903
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180235",
+    "activity": "S6-occlusion",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 2,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180235&model=rf51_baseline&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 2123,
+        "foreground_points": 1981,
+        "retention": 0.9331135186057465,
+        "best_candidate_coverage": 0.9331135186057465,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 2037,
+        "x": 1.5655284630766557,
+        "y": 1.3643510841422064,
+        "z": 1.086290572795086,
+        "prob": 0.95,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.95,
+          "rf51_candidate": 0.8676215277777777,
+          "rf69_candidate": 0.9105902777777778,
+          "xgb69_candidate": 0.9982170239765025
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.9725085910652921
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 2037,
+          "height_p90_m": 1.2771699726581573,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 329,
+              "position": [
+                1.5836617269052198,
+                1.3619308497043365,
+                1.5446284099915106
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 534,
+              "position": [
+                1.5594479792127003,
+                1.354579886693633,
+                1.0880330525310744
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 321,
+              "position": [
+                1.578641263495353,
+                1.3999757959835255,
+                0.7309575715911723
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_1",
+        "n": 86,
+        "x": 2.9085007905960083,
+        "y": 1.528023388496665,
+        "z": 1.1130116921524669,
+        "prob": 0.86,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.86,
+          "rf51_candidate": 0.27960069444444446,
+          "rf69_candidate": 0.38715277777777773,
+          "xgb69_candidate": 0.1585095349373192
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 86,
+          "height_p90_m": 1.3486255407333374,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 9,
+              "position": [
+                3.066285186343723,
+                1.5025333166122437,
+                1.6583096583684285
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 24,
+              "position": [
+                3.0092399219671884,
+                1.4463027318318684,
+                1.1414446085691452
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 15,
+              "position": [
+                2.7634920438130695,
+                1.6735003312428793,
+                0.7917831818262736
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_5",
+        "n": 388,
+        "x": 0.8047841606066399,
+        "y": -0.9216121673276744,
+        "z": 1.4798901649480014,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 388,
+          "height_p90_m": 0.466145396232605,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 63,
+              "position": [
+                0.8131286009909615,
+                -0.9349940409736027,
+                1.6631428362831238
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 93,
+              "position": [
+                0.8084266621579406,
+                -0.9173785351937817,
+                1.480557373774949
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 60,
+              "position": [
+                0.7991435080766678,
+                -0.9206992904345195,
+                1.3547613839308421
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180235",
+    "activity": "S6-occlusion",
+    "model": "rf51_baseline",
+    "index": 91,
+    "kind": "PERSON_MISS",
+    "events": [
+      "PERSON_MISS",
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 2,
+        "pairs": []
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 2,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180235&model=rf51_baseline&index=91",
+    "layer_observations": [
+      {
+        "id": "obj_f91_n8",
+        "raw_points": 303,
+        "foreground_points": 55,
+        "retention": 0.18151815181518152,
+        "best_candidate_coverage": 0,
+        "loss": "PROPOSAL",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_91_1",
+        "n": 5732,
+        "x": 0.9111553828666781,
+        "y": -0.9277825793101916,
+        "z": 1.1431703216435918,
+        "prob": 0.89,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": true,
+        "scores": {
+          "rf51_baseline": 0.89,
+          "rf51_candidate": 0.07291666666666667,
+          "rf69_candidate": 0.0703125,
+          "xgb69_candidate": 0.002918443219928955
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 5732,
+          "height_p90_m": 1.6791295409202576,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 857,
+              "position": [
+                0.98537782672684,
+                -0.948860524902544,
+                1.7039777349285095
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 2122,
+              "position": [
+                0.8272580862550888,
+                -0.9715627477373524,
+                1.0729084058149483
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 457,
+              "position": [
+                1.0726990960619904,
+                -0.8609630496809728,
+                0.6560582071216675
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_91_5",
+        "n": 68,
+        "x": 3.010053915136001,
+        "y": 1.4900928279932808,
+        "z": 1.1931171706494164,
+        "prob": 0.9,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": true,
+        "scores": {
+          "rf51_baseline": 0.9,
+          "rf51_candidate": 0.1642361111111111,
+          "rf69_candidate": 0.1854275173611111,
+          "xgb69_candidate": 0.14224614574893277
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 68,
+          "height_p90_m": 0.9858546257019043,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 9,
+              "position": [
+                3.1009702152676053,
+                1.3613456620110407,
+                1.6384396685494318
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 20,
+              "position": [
+                3.026606786251068,
+                1.413833498954773,
+                1.2652488589286803
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 13,
+              "position": [
+                2.9778394882495585,
+                1.4952465020693266,
+                0.9901213829333966
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180235",
+    "activity": "S6-occlusion",
+    "model": "xgb69_candidate",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 0,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180235&model=xgb69_candidate&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 2123,
+        "foreground_points": 1981,
+        "retention": 0.9331135186057465,
+        "best_candidate_coverage": 0.9331135186057465,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 2037,
+        "x": 1.5655284630766557,
+        "y": 1.3643510841422064,
+        "z": 1.086290572795086,
+        "prob": 0.9982170239765025,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.95,
+          "rf51_candidate": 0.8676215277777777,
+          "rf69_candidate": 0.9105902777777778,
+          "xgb69_candidate": 0.9982170239765025
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.9725085910652921
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 2037,
+          "height_p90_m": 1.2771699726581573,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 329,
+              "position": [
+                1.5836617269052198,
+                1.3619308497043365,
+                1.5446284099915106
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 534,
+              "position": [
+                1.5594479792127003,
+                1.354579886693633,
+                1.0880330525310744
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 321,
+              "position": [
+                1.578641263495353,
+                1.3999757959835255,
+                0.7309575715911723
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_1",
+        "n": 86,
+        "x": 2.9085007905960083,
+        "y": 1.528023388496665,
+        "z": 1.1130116921524669,
+        "prob": 0.1585095349373192,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.86,
+          "rf51_candidate": 0.27960069444444446,
+          "rf69_candidate": 0.38715277777777773,
+          "xgb69_candidate": 0.1585095349373192
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 86,
+          "height_p90_m": 1.3486255407333374,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 9,
+              "position": [
+                3.066285186343723,
+                1.5025333166122437,
+                1.6583096583684285
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 24,
+              "position": [
+                3.0092399219671884,
+                1.4463027318318684,
+                1.1414446085691452
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 15,
+              "position": [
+                2.7634920438130695,
+                1.6735003312428793,
+                0.7917831818262736
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_5",
+        "n": 388,
+        "x": 0.8047841606066399,
+        "y": -0.9216121673276744,
+        "z": 1.4798901649480014,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 388,
+          "height_p90_m": 0.466145396232605,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 63,
+              "position": [
+                0.8131286009909615,
+                -0.9349940409736027,
+                1.6631428362831238
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 93,
+              "position": [
+                0.8084266621579406,
+                -0.9173785351937817,
+                1.480557373774949
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 60,
+              "position": [
+                0.7991435080766678,
+                -0.9206992904345195,
+                1.3547613839308421
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180235",
+    "activity": "S6-occlusion",
+    "model": "xgb69_candidate",
+    "index": 128,
+    "kind": "PERSON_MISS",
+    "events": [
+      "PERSON_MISS",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180235&model=xgb69_candidate&index=128",
+    "layer_observations": [
+      {
+        "id": "obj_f128_n37",
+        "raw_points": 33,
+        "foreground_points": 18,
+        "retention": 0.5454545454545454,
+        "best_candidate_coverage": 0,
+        "loss": "PROPOSAL",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_128_4",
+        "n": 380,
+        "x": 0.8066429108381271,
+        "y": -0.9216133528634122,
+        "z": 1.4898392790242245,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0.003472222222222222,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 380,
+          "height_p90_m": 0.46193039417266846,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 62,
+              "position": [
+                0.8202880024909973,
+                -0.9347229071201817,
+                1.6674200892448425
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 92,
+              "position": [
+                0.8076415884753932,
+                -0.9143971042788547,
+                1.4942801996417667
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 62,
+              "position": [
+                0.8019445942294213,
+                -0.9202118669786761,
+                1.3680617636249912
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180337",
+    "activity": "S7-far-5m",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 2,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180337&model=rf51_baseline&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n1",
+        "raw_points": 405,
+        "foreground_points": 158,
+        "retention": 0.39012345679012345,
+        "best_candidate_coverage": 0.39012345679012345,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_3",
+        "n": 176,
+        "x": 3.4622805375944483,
+        "y": 3.0170780907977712,
+        "z": 0.9552743826061487,
+        "prob": 0.89,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.89,
+          "rf51_candidate": 0.42395833333333327,
+          "rf69_candidate": 0.4696180555555555,
+          "xgb69_candidate": 0.7495456026448074
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n1",
+            "class_name": "PERSON",
+            "purity": 0.8977272727272727
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 176,
+          "height_p90_m": 1.1472147405147552,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 21,
+              "position": [
+                3.5160592851184664,
+                2.9821003391629173,
+                1.4122701372419084
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 59,
+              "position": [
+                3.4441731905533097,
+                3.006382101673191,
+                0.9728128879757251
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 28,
+              "position": [
+                3.447515572820391,
+                3.0595632706369673,
+                0.63773256114551
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_0",
+        "n": 381,
+        "x": 0.7963087558746338,
+        "y": -0.9252912998199463,
+        "z": 1.4806419510853885,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.020833333333333332,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 381,
+          "height_p90_m": 0.46419787406921387,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 57,
+              "position": [
+                0.8156606931435434,
+                -0.9334481138932077,
+                1.6613246620747082
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 95,
+              "position": [
+                0.8093862477101778,
+                -0.9182225685370596,
+                1.4849488722650628
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 61,
+              "position": [
+                0.8012551342854735,
+                -0.921304072512955,
+                1.3609261512756348
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_1",
+        "n": 46,
+        "x": 2.9953536987304688,
+        "y": 1.5641683340072632,
+        "z": 1.2014563329841779,
+        "prob": 0.94,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.94,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.013888888888888888,
+          "xgb69_candidate": 0.0028753476704896624
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 46,
+          "height_p90_m": 1.2580888271331787,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 8,
+              "position": [
+                3.0419054329395294,
+                1.584265798330307,
+                1.7545790076255798
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 11,
+              "position": [
+                2.9841897270896216,
+                1.534250714562156,
+                1.206588008187034
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 10,
+              "position": [
+                2.9895274162292482,
+                1.573389458656311,
+                0.8809584319591522
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180337",
+    "activity": "S7-far-5m",
+    "model": "xgb69_candidate",
+    "index": 1,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "GT_UNKNOWN",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": null,
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180337&model=xgb69_candidate&index=1",
+    "layer_observations": [],
+    "candidates": [
+      {
+        "id": "a_1_3",
+        "n": 390,
+        "x": 0.8064531719073271,
+        "y": -0.9226496966985556,
+        "z": 1.4785587384150578,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.003472222222222222,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 390,
+          "height_p90_m": 0.46665167808532715,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 62,
+              "position": [
+                0.8211415573473899,
+                -0.9343638352809414,
+                1.6589546703523206
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 98,
+              "position": [
+                0.8088680645641015,
+                -0.9188654982313817,
+                1.4836646902317903
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 62,
+              "position": [
+                0.8020183270977389,
+                -0.923687913725453,
+                1.3559493326371717
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_1_4",
+        "n": 200,
+        "x": 3.4969202947616576,
+        "y": 3.0656893956661224,
+        "z": 0.916062144562602,
+        "prob": 0.7595430874632382,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.86,
+          "rf51_candidate": 0.5074652777777777,
+          "rf69_candidate": 0.5493055555555555,
+          "xgb69_candidate": 0.7595430874632382
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 200,
+          "height_p90_m": 1.2181906402111053,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 24,
+              "position": [
+                3.5185574889183044,
+                2.978463759024938,
+                1.397479807337125
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 62,
+              "position": [
+                3.479396104812622,
+                3.0391935225455993,
+                0.9422085727414777
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 38,
+              "position": [
+                3.455974898840252,
+                3.0820541570061133,
+                0.6143303889977304
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_1_5",
+        "n": 67,
+        "x": 3.022109504955918,
+        "y": 1.451725249859824,
+        "z": 1.214596751910537,
+        "prob": 0.0030742332761836883,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.94,
+          "rf51_candidate": 0.03125,
+          "rf69_candidate": 0.040625,
+          "xgb69_candidate": 0.0030742332761836883
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 67,
+          "height_p90_m": 1.1883314847946167,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 7,
+              "position": [
+                3.065286329814366,
+                1.4704185213361467,
+                1.7302198580333166
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 17,
+              "position": [
+                3.0310580730438232,
+                1.386098910780514,
+                1.2348540530485266
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 14,
+              "position": [
+                3.004976374762399,
+                1.4603559119360787,
+                0.931485401732581
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180557",
+    "activity": "S8-still-retention-long",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "UNMATCHED_PREDICTION",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 1,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180557&model=rf51_baseline&index=0",
+    "layer_observations": [
+      {
+        "id": "obj_f0_n17",
+        "raw_points": 1097,
+        "foreground_points": 926,
+        "retention": 0.8441203281677302,
+        "best_candidate_coverage": 0.8441203281677302,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 977,
+        "x": 2.4062306453896154,
+        "y": 1.7457251979482333,
+        "z": 1.0221883342844438,
+        "prob": 0.93,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.93,
+          "rf51_candidate": 0.8526041666666666,
+          "rf69_candidate": 0.9366319444444445,
+          "xgb69_candidate": 0.8821637388703102
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f0_n17",
+            "class_name": "PERSON",
+            "purity": 0.9477993858751279
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 977,
+          "height_p90_m": 1.3071080148220062,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 130,
+              "position": [
+                2.4302870200230524,
+                1.7690962928992051,
+                1.5136072067114024
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 268,
+              "position": [
+                2.393825716047145,
+                1.7306092955283265,
+                1.0370085906626574
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 171,
+              "position": [
+                2.3858034819887397,
+                1.7471166570284213,
+                0.6965163527873525
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "b_0_0",
+        "n": 376,
+        "x": 0.7963259816169739,
+        "y": -0.9234119653701782,
+        "z": 1.485241636633873,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "B",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 376,
+          "height_p90_m": 0.4655587673187256,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 63,
+              "position": [
+                0.8162470147723243,
+                -0.9345887066825987,
+                1.6636770869058275
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 96,
+              "position": [
+                0.8107661797354618,
+                -0.9179961873839299,
+                1.4860335489114125
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 58,
+              "position": [
+                0.8008028248260761,
+                -0.9179957385720878,
+                1.362114024573359
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180557",
+    "activity": "S8-still-retention-long",
+    "model": "xgb69_candidate",
+    "index": 1,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": {
+      "candidates": {
+        "tp": 1,
+        "fn": 0,
+        "fp": 0,
+        "pairs": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "tracks": {
+        "tp": 0,
+        "fn": 1,
+        "fp": 0,
+        "pairs": []
+      },
+      "gate_m": 0.75
+    },
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180557&model=xgb69_candidate&index=1",
+    "layer_observations": [
+      {
+        "id": "obj_f1_n18",
+        "raw_points": 1094,
+        "foreground_points": 932,
+        "retention": 0.8519195612431444,
+        "best_candidate_coverage": 0.8519195612431444,
+        "loss": "TRACKER",
+        "limits": "A-chain final foreground includes cleanup/retained; no claim to isolate background from cleanup"
+      }
+    ],
+    "candidates": [
+      {
+        "id": "a_1_1",
+        "n": 992,
+        "x": 2.412724557663164,
+        "y": 1.7413331551417228,
+        "z": 1.0318635193210455,
+        "prob": 0.8821637388703102,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.93,
+          "rf51_candidate": 0.8390625000000002,
+          "rf69_candidate": 0.943576388888889,
+          "xgb69_candidate": 0.8821637388703102
+        },
+        "gt_hits": [
+          {
+            "id": "obj_f1_n18",
+            "class_name": "PERSON",
+            "purity": 0.9395161290322581
+          }
+        ],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 992,
+          "height_p90_m": 1.3084734976291656,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 133,
+              "position": [
+                2.45577697646349,
+                1.7479599974209206,
+                1.5209191266755413
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 275,
+              "position": [
+                2.397092740318992,
+                1.7344937645305287,
+                1.042492690519853
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 168,
+              "position": [
+                2.3713290833291554,
+                1.75154076729502,
+                0.6966136725885528
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_1_5",
+        "n": 385,
+        "x": 0.805357542595306,
+        "y": -0.9214558410954166,
+        "z": 1.4802339086284886,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0,
+          "rf69_candidate": 0.003472222222222222,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 385,
+          "height_p90_m": 0.4701484441757202,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 61,
+              "position": [
+                0.8181804115654993,
+                -0.9344318372304322,
+                1.665767544605693
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 92,
+              "position": [
+                0.8069191568571589,
+                -0.9155876565238704,
+                1.4882839309132618
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 63,
+              "position": [
+                0.8000065901922802,
+                -0.9218266890162513,
+                1.3578130631219774
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180751",
+    "activity": "S9-two-person-cross",
+    "model": "rf51_baseline",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "GT_UNKNOWN",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": null,
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180751&model=rf51_baseline&index=0",
+    "layer_observations": [],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 1544,
+        "x": 1.3125404359608734,
+        "y": 1.31743786951112,
+        "z": 1.08447697561794,
+        "prob": 1,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 1,
+          "rf51_candidate": 0.5623774509803922,
+          "rf69_candidate": 0.65625,
+          "xgb69_candidate": 0.04775856712371186
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1544,
+          "height_p90_m": 1.3717603981494904,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 241,
+              "position": [
+                1.3866180997666482,
+                1.340029064055795,
+                1.6139630672842635
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 419,
+              "position": [
+                1.306515862947432,
+                1.3096779334516684,
+                1.0927310016957559
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 265,
+              "position": [
+                1.292675068693341,
+                1.3103634339458539,
+                0.7156335772208448
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_1",
+        "n": 1321,
+        "x": 2.089207781705777,
+        "y": 0.5513355790170009,
+        "z": 1.1250307858441473,
+        "prob": 0.95,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.95,
+          "rf51_candidate": 0.22916666666666666,
+          "rf69_candidate": 0.33313301282051283,
+          "xgb69_candidate": 0.0033056216724922194
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1321,
+          "height_p90_m": 1.2828162014484406,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 211,
+              "position": [
+                2.1328013203155374,
+                0.5382524491486391,
+                1.6146784670545027
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 350,
+              "position": [
+                2.0615286258288794,
+                0.5568570416314261,
+                1.1403534945419858
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 197,
+              "position": [
+                2.054654301725668,
+                0.5669371490248569,
+                0.7847059656520785
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_4",
+        "n": 364,
+        "x": 0.8068007528781891,
+        "y": -0.9214221581325426,
+        "z": 1.4752743237621182,
+        "prob": 0.88,
+        "decision": "CONFIRMED_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0.003472222222222222,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 364,
+          "height_p90_m": 0.4569891691207886,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 49,
+              "position": [
+                0.8242477166409395,
+                -0.9336516589534526,
+                1.6611018351146154
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 90,
+              "position": [
+                0.8084520227379269,
+                -0.9167327364285787,
+                1.4858084426985847
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 59,
+              "position": [
+                0.8032082359669572,
+                -0.922192987749132,
+                1.3648176839796162
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  },
+  {
+    "sid": "cap_20261010_180751",
+    "activity": "S9-two-person-cross",
+    "model": "xgb69_candidate",
+    "index": 0,
+    "kind": "MODEL_DISAGREEMENT",
+    "events": [
+      "GT_UNKNOWN",
+      "MODEL_DISAGREEMENT"
+    ],
+    "gt_diff": null,
+    "url": "http://127.0.0.1:8798/?sid=cap_20261010_180751&model=xgb69_candidate&index=0",
+    "layer_observations": [],
+    "candidates": [
+      {
+        "id": "a_0_0",
+        "n": 1544,
+        "x": 1.3125404359608734,
+        "y": 1.31743786951112,
+        "z": 1.08447697561794,
+        "prob": 0.04775856712371186,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_1",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 1,
+          "rf51_candidate": 0.5623774509803922,
+          "rf69_candidate": 0.65625,
+          "xgb69_candidate": 0.04775856712371186
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1544,
+          "height_p90_m": 1.3717603981494904,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 241,
+              "position": [
+                1.3866180997666482,
+                1.340029064055795,
+                1.6139630672842635
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 419,
+              "position": [
+                1.306515862947432,
+                1.3096779334516684,
+                1.0927310016957559
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 265,
+              "position": [
+                1.292675068693341,
+                1.3103634339458539,
+                0.7156335772208448
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_1",
+        "n": 1321,
+        "x": 2.089207781705777,
+        "y": 0.5513355790170009,
+        "z": 1.1250307858441473,
+        "prob": 0.0033056216724922194,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_2",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.95,
+          "rf51_candidate": 0.22916666666666666,
+          "rf69_candidate": 0.33313301282051283,
+          "xgb69_candidate": 0.0033056216724922194
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 1321,
+          "height_p90_m": 1.2828162014484406,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 211,
+              "position": [
+                2.1328013203155374,
+                0.5382524491486391,
+                1.6146784670545027
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 350,
+              "position": [
+                2.0615286258288794,
+                0.5568570416314261,
+                1.1403534945419858
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 197,
+              "position": [
+                2.054654301725668,
+                0.5669371490248569,
+                0.7847059656520785
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      },
+      {
+        "id": "a_0_4",
+        "n": 364,
+        "x": 0.8068007528781891,
+        "y": -0.9214221581325426,
+        "z": 1.4752743237621182,
+        "prob": 0.011653246840342999,
+        "decision": "NON_HUMAN",
+        "source": "A",
+        "track_id": "FUS_t0_3",
+        "track_confirmed": false,
+        "scores": {
+          "rf51_baseline": 0.88,
+          "rf51_candidate": 0.003472222222222222,
+          "rf69_candidate": 0,
+          "xgb69_candidate": 0.011653246840342999
+        },
+        "gt_hits": [],
+        "shape": {
+          "status": "GEOMETRIC_PROXY_ONLY",
+          "support": 364,
+          "height_p90_m": 0.4569891691207886,
+          "nodes": [
+            {
+              "name": "upper_surface",
+              "support": 49,
+              "position": [
+                0.8242477166409395,
+                -0.9336516589534526,
+                1.6611018351146154
+              ]
+            },
+            {
+              "name": "middle_surface",
+              "support": 90,
+              "position": [
+                0.8084520227379269,
+                -0.9167327364285787,
+                1.4858084426985847
+              ]
+            },
+            {
+              "name": "lower_surface",
+              "support": 59,
+              "position": [
+                0.8032082359669572,
+                -0.922192987749132,
+                1.3648176839796162
+              ]
+            }
+          ],
+          "limbs": "UNKNOWN",
+          "anatomical_keypoints": "NOT_ESTIMATED",
+          "pose": "UNKNOWN",
+          "calibration": "UNCALIBRATED"
+        }
+      }
+    ]
+  }
+]

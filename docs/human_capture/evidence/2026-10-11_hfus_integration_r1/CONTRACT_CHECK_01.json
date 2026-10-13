@@ -1,0 +1,23 @@
+{
+  "command": "node sidequests/human_fusion_lab_next/integration/check_contract.js",
+  "exit_code": 0,
+  "stdout": "INTEGRATION_CONTRACT_PASS",
+  "sha256": {
+    "integration/check_contract.js": "e2af6916e9c50d41a593604238a91050dd492b39a4fccc688b7ac444f4a94864",
+    "contracts/index_v1.js": "dc5dd89c649c0bb2e56c836582ce510f1b78fc1039712e00ca66c15d8bfb3317",
+    "contracts/strict_v2.js": "7916e859334968221bad8ff0e270edcc7e57b3c190413b3af79e5d95bc6a7362",
+    "contracts/SCHEMA_V2.json": "da026e57512c7e182ddb0460ded20f578bd40a974a6e84609945c32c91a8d793"
+  },
+  "coverage": [
+    "sensor invalid translated XYZ",
+    "duplicate coordinates distinct raw IDs",
+    "engine canonical track ID",
+    "lost/coast/no accepted support",
+    "segment mismatch",
+    "unknown state separate from scoring",
+    "human source not qualified negative",
+    "one-to-one duplicate prediction",
+    "hard gate rejection",
+    "duplicate index rejected"
+  ]
+}

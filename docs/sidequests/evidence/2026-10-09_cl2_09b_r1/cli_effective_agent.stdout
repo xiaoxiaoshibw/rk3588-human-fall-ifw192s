@@ -1,0 +1,1990 @@
+{
+  "name": "cl209baudit",
+  "mode": "primary",
+  "permission": [
+    {
+      "permission": "*",
+      "action": "allow",
+      "pattern": "*"
+    },
+    {
+      "permission": "doom_loop",
+      "action": "ask",
+      "pattern": "*"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "*",
+      "action": "ask"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.local\\share\\opencode\\tool-output\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\AppData\\Local\\Temp\\opencode\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.claude\\skills\\ponytail\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.config\\opencode\\skills\\ponytail\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "question",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "plan_enter",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "plan_exit",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env",
+      "action": "ask"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env.*",
+      "action": "ask"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env.example",
+      "action": "allow"
+    },
+    {
+      "permission": "*",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "deny"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\02_fix.patch",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/02_fix.patch",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "02_fix.patch",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\03_session121647.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/03_session121647.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_session121647.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\04_benchmark.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/04_benchmark.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "04_benchmark.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_version.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_version.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_version.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression_03.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression_03.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression_03.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression_04.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression_04.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression_04.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression_05.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression_05.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression_05.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\session_probe.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/session_probe.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "session_probe.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\benchmark.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/benchmark.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "benchmark.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "*",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "deny"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\02_fix.patch",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/02_fix.patch",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "02_fix.patch",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\03_session121647.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/03_session121647.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_session121647.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\04_benchmark.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/04_benchmark.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "04_benchmark.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_version.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_version.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_version.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression_03.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression_03.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression_03.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression_04.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression_04.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression_04.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate_regression_05.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate_regression_05.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate_regression_05.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\session_probe.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/session_probe.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "session_probe.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\benchmark.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/benchmark.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "benchmark.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_09b_r1\\candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.local\\share\\opencode\\tool-output\\*",
+      "action": "allow"
+    }
+  ],
+  "options": {},
+  "native": false,
+  "prompt": "Use read only. Do not edit, execute, dispatch, access network or external paths. Inspect source and evidence; actively seek counterexamples. No physical or SHA execution claims.",
+  "description": "Strict read-only CL2-09B candidate review",
+  "tools": {
+    "invalid": false,
+    "question": false,
+    "bash": false,
+    "read": true,
+    "glob": false,
+    "grep": false,
+    "edit": false,
+    "write": false,
+    "task": false,
+    "webfetch": false,
+    "todowrite": false,
+    "websearch": false,
+    "skill": false
+  }
+}

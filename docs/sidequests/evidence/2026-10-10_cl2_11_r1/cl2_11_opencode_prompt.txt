@@ -1,0 +1,38 @@
+你是 CL2-11 独立只读审计员，实际指定模型 opencode-go/deepseek-v4.1-flash。
+只允许 read 工具；无 shell/write/task/network；不要把未亲自执行的数值/SHA 说成已执行（UNKNOWN 保留）。
+
+背景：121647 (cap_20261009_121647) 固定 TLS 因 GL_HOLDOUT_QUALITY 拒绝，frame72 ROI2 300 点
+P95=50.291869360mm>50mm。CL2-10 结论 BLOCKED，物理根因 UNKNOWN，无算法修复。本轮（CL2-11）任务：
+确定现有资料能否区分 A(真地面非平面)/B(传感器测距偏差)/C(混表面)/D(提取链错误)/E(组合不可辨识)。
+先读以下本轮产物，然后按需读相关历史证据：
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/00_SCOPE_AND_ACCEPTANCE.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/01_SOURCE_INVENTORY.json
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/02_EVIDENCE_IDENTIFIABILITY.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/03_HYPOTHESIS_MATRIX.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/04_OFFLINE_VALIDATION.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/05_MINIMUM_PHYSICAL_EVIDENCE_PLAN.md
+
+历史关键证据可读：
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/FINAL_REPORT.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_root_cause.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/cl2_11_ring_xy_probe.json
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_channel_diagnostics.json
+
+主动检查并反驳：
+1) 证据来源是否可靠？01_SOURCE_INVENTORY.json 是否如实区分了 bag 板端独占、bin 为提取产物、
+   09A 五点只是设计不是实测？是否有把同源数据冒充独立 GT？
+2) 是否存在循环论证？（例如用 TLS 输出证明 TLS 解释、用 f(x) 归因 g 或 b）
+3) 物理假设是否真正可辨识？02 §6 的欠定论证 f(x)=g(x)+b(x,c) 是否成立，有没有隐藏的可分离
+   锚点被忽略？
+4) ring↔display-x 混淆量化（0.013m/ring 平均步进、相邻重叠 30-50%、重叠区残差平滑过渡）
+   是否足以把"逐环测距偏差不成立"或"地面非平面不成立"这种强论断挡回去？
+5) 训练/验证泄漏：FIT 与 frame72 留出是否互斥？CL2-11 是否偷偷改用了 FIT 点去证留出结论？
+6) 是否违反 CL2-10 停止边界？本轮是否新增 TLS 候选、改门控、改算法、设备操作？
+7) 数值一致性：frame72 复算 signed mean −0.00079674 m / RMS 0.02741799 m / P95 0.05029187 m
+   与 CL2-10 原文是否一致？FIT ROI2 count 63959 是否一致？
+8) 五项最终裁定（DATA_AVAILABLE / DATA_BOUND / INDEPENDENT_GT / IDENTIFIABLE /
+   READY_FOR_REPAIR）是否有越级（例如把 INVENTORY PASS 当作 TLS PASS）？
+
+请逐 ID（I100-I106、TLS01、E01、D01）给中文裁定（PASS/FAIL/BLOCKED/UNKNOWN），列出具体逻辑
+FAIL、证据不足项和非阻塞建议。未亲自执行的一律 UNKNOWN，不把 UNKNOWN 当逻辑 FAIL，也不虚构执行。
+评价作者是否该给 CL2-11 PASS。结束写 AUDIT_COMPLETE。

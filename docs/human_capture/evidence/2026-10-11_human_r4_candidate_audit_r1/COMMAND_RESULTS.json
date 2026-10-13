@@ -1,0 +1,52 @@
+[
+ {
+  "command": "check_perf.js before",
+  "exit": 0,
+  "log": "../2026-10-11_human_fusion_perf_r1/01_before.log"
+ },
+ {
+  "command": "snapshot_gt.py",
+  "exit": 0,
+  "log": "GT_SNAPSHOT_02.json"
+ },
+ {
+  "command": "audit_fusion_candidates.js runs_01",
+  "exit": 0,
+  "log": "01_runs.log"
+ },
+ {
+  "command": "audit_fusion_candidates.js runs_02",
+  "exit": 0,
+  "log": "06_runs.log"
+ },
+ {
+  "command": "audit_fusion_candidates.js runs_03",
+  "exit": 0,
+  "log": "08_runs.log"
+ },
+ {
+  "command": "run_all_tests.js",
+  "exit": 0,
+  "log": "02_core_tests.log"
+ },
+ {
+  "command": "test_fusion_specific.js",
+  "exit": 0,
+  "log": "03_fusion_tests.log"
+ },
+ {
+  "command": "test_fusion_gt.js",
+  "exit": 0,
+  "log": "04_gt_contract_tests.log"
+ },
+ {
+  "command": "test_candidate_audit.js final",
+  "exit": 0,
+  "log": "07_candidate_tests.log"
+ },
+ {
+  "command": "summarize.py",
+  "exit": 0,
+  "log": "REPORT.md"
+ }
+]

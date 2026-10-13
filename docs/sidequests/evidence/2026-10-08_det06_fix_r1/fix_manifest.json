@@ -1,0 +1,901 @@
+{
+  "round": "DET-06 fix round r1 (input-only arms + metrics v2 + GT proposal)",
+  "scripts": {
+    "det06_fix_probe.py": "92bbd091d00b46082caa3e8749d12f13a662f26a81816b3da65e0c3d5cd4ef4b",
+    "det06_fix_metrics.py": "cf01aff6405cc0dd77c03372c409c3173dc68691cb304052b6453d3ba3213961",
+    "det06_fix_gtprop.py": "93e6b4477f74acd7331f7d32a6d93709df3bc455fef930e374204c1c05aecbff",
+    "det06_fix_freeze.py": "3425a19b0fd11a0f2eb7d28bc919334afccaf6e60bd90af08ac3347c5b746707",
+    "test_det06_fix.py": "5d08f63a27e879c360f92a0b5d7d72033291cc2ad9ab703a684b705c6b769bfd"
+  },
+  "evidence": [
+    {
+      "path": "docs/sidequests/evidence/2026-10-08_det06_fix_r1/fix_manifest.json",
+      "sha256": "4576d0f6a689a921857bfc5e15c1420f54a080ed44177a340c7d05b064854a59",
+      "bytes": 41700
+    },
+    {
+      "path": "docs/sidequests/evidence/2026-10-08_det06_fix_r1/frozen_v2_summary.json",
+      "sha256": "d2fc668d92ab8cd39d75a3ff762ef7f4feae5c35c727b83ae6ad909039f970d4",
+      "bytes": 405
+    },
+    {
+      "path": "docs/sidequests/evidence/2026-10-08_det06_fix_r1/README.md",
+      "sha256": "c985a9fd999215ef3c58eb72e6012e2009a8ae546130bc5f5d07b29b0e74d336",
+      "bytes": 9115
+    },
+    {
+      "path": "docs/sidequests/evidence/2026-10-08_det06_fix_r1/run_freeze_v2.log",
+      "sha256": "53ce72204658d6e50b15bfa1710fb290cebfe76f04af354664790580ec2209e3",
+      "bytes": 124
+    },
+    {
+      "path": "docs/sidequests/evidence/2026-10-08_det06_fix_r1/run_gtprop.log",
+      "sha256": "1bae059b90e0d4376b10e9ad0f6b657208a7e1bc396f129a277769ab31b9bee8",
+      "bytes": 162
+    },
+    {
+      "path": "docs/sidequests/evidence/2026-10-08_det06_fix_r1/run_metrics.log",
+      "sha256": "8561eff60d3bec3e133daef8645670bf6d46093fe464ddc0bfdf387e65d00b3e",
+      "bytes": 974
+    },
+    {
+      "path": "docs/sidequests/evidence/2026-10-08_det06_fix_r1/run_subvox32.log",
+      "sha256": "bd744c105e7ad950175b8611b340a058a9f11c9cb9ae73465110a09c1a138538",
+      "bytes": 14462
+    },
+    {
+      "path": "docs/sidequests/evidence/2026-10-08_det06_fix_r1/run_zrank11.log",
+      "sha256": "f57d63899d4235fb2002f4903f9b7f50e27ddcb4d6d9d9f2a4bc079568cdcc49",
+      "bytes": 14494
+    }
+  ],
+  "artifacts": {
+    "eval_subvox32": [
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_104_subvox32_pillars.npz",
+        "sha256": "af84ce0d025482eb6c42dec9a2bdb7d7fb02cd5e45bcf7f40914d00561584d41",
+        "bytes": 9646
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_104_subvox32_trace.npz",
+        "sha256": "28ee2a2cb17f463ca7d37dae08a39bc043c7289d9b2c72b5b8d82384f1dc8032",
+        "bytes": 20057
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_139_subvox32_pillars.npz",
+        "sha256": "a3a1517788a65882574700124b22d6e434be66519c8c19bb02c50649acac92ea",
+        "bytes": 9775
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_139_subvox32_trace.npz",
+        "sha256": "38820782dcec85c502c0b2b9efef2f6d56d3e5ae291ed47c8747bf3bf2c2b730",
+        "bytes": 19971
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_174_subvox32_pillars.npz",
+        "sha256": "71fcb047664f639b1436cdae2caa8bc2995a6795028b05e715caf502b1e6fa93",
+        "bytes": 9673
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_174_subvox32_trace.npz",
+        "sha256": "44ac4eb0ffc43ee465f428035b2f65732b999a13fe5738cb887489a7c69dacb4",
+        "bytes": 20204
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_208_subvox32_pillars.npz",
+        "sha256": "8ca69768a764f003ebd7f14ba0eb58b1cb5dc6a2a39a3ce7b7e0df6cbfcea107",
+        "bytes": 9642
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_208_subvox32_trace.npz",
+        "sha256": "29f1e6ad8b74b57f67698eeb2e4fcc1b6745ec676d114ee7d61b7576bf03928d",
+        "bytes": 20372
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_35_subvox32_pillars.npz",
+        "sha256": "f1f7629988f7d6c16d8f58909947b68442dc3ebee2e98d904ee1aeaaadd378ac",
+        "bytes": 10059
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_35_subvox32_trace.npz",
+        "sha256": "4d452b653e6af39d112cd76e7d49fc5d5656e4290464746ed8300a4a6e7ad742",
+        "bytes": 19667
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_35_zrank_control_pillars.npz",
+        "sha256": "15b2fd5c9be8cb4144c71213a9a0074e3add1ce21fbab8ce4f98e6c9ce379170",
+        "bytes": 10003
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_35_zrank_control_trace.npz",
+        "sha256": "44218f8c4135ad3600b6f78373211605e559a3331b27e323fb0c9347cbaae0cf",
+        "bytes": 19897
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_69_subvox32_pillars.npz",
+        "sha256": "57a913a3105f6a58fdafdcca3b66d6f0d1db2e5845263d2021f2bb464573472f",
+        "bytes": 10325
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114205_69_subvox32_trace.npz",
+        "sha256": "e65361df5302e1c5b42d38560325c89978ae2fac2bab3e997a227d732565b4f7",
+        "bytes": 19795
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_116_subvox32_pillars.npz",
+        "sha256": "5677fff6a9dcc88bec1faca998f2036902431a86ebc5bb984d67b27ae829a06b",
+        "bytes": 8610
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_116_subvox32_trace.npz",
+        "sha256": "2e725716508c05b90e600aea600e849736a0a344cb854e39a39203886dc95c87",
+        "bytes": 19515
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_154_subvox32_pillars.npz",
+        "sha256": "fa880c70491edeafcb07598436e2cf217f0999148d027e8efea2017aa5a8fce8",
+        "bytes": 8755
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_154_subvox32_trace.npz",
+        "sha256": "c14b5b7f7b40b10963b264b64d52fe8ab9924a811f4958da1083e45dbf851b74",
+        "bytes": 19584
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_193_subvox32_pillars.npz",
+        "sha256": "88604acfae215bd6d045feff94a025ccf227d3381689769a0e0b33912debb953",
+        "bytes": 8674
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_193_subvox32_trace.npz",
+        "sha256": "45ffc021b974ea7dad86c7875ef281c44012a5440bcc3a8b7bf1ad073005a547",
+        "bytes": 19134
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_231_subvox32_pillars.npz",
+        "sha256": "4395b5e6762eeeb6f5e29ce2b908b1a3bea3e1dbd9a825a45ee656aa264a08e6",
+        "bytes": 8680
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_231_subvox32_trace.npz",
+        "sha256": "d3ae1ae066e9a2783cfde32f7fd1a4648e27f730bfd8117cd705ae4e7ded08c5",
+        "bytes": 19061
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_39_subvox32_pillars.npz",
+        "sha256": "8f836fd1b257dfbefdb4de020394062a8ed900bd697f84520ba7225febb1feb7",
+        "bytes": 8879
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_39_subvox32_trace.npz",
+        "sha256": "4939e6840c90bacbcd99d77473340048a24c593342dc39464403a3ea840034ef",
+        "bytes": 19171
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_77_subvox32_pillars.npz",
+        "sha256": "b2ec7661a4da5ab714a53f158b66bef7e9f3a26444d5106215ea33461d310e0f",
+        "bytes": 8602
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114254_77_subvox32_trace.npz",
+        "sha256": "cdb441b284923538bbc2693e0092ddeab3a6acda15d5723b2255de319ab604e8",
+        "bytes": 19058
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_120_subvox32_pillars.npz",
+        "sha256": "6455619449d94b6c21ed770862d857db9325c0b61cd3fde1515cddc765d4a35a",
+        "bytes": 13151
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_120_subvox32_trace.npz",
+        "sha256": "73ed41d37dac2260753602475f47d320fb68e159287176b75f41fd98492c629f",
+        "bytes": 18663
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_160_subvox32_pillars.npz",
+        "sha256": "288a0263c9c5b82e672ec6ae3189a631eb223815a4d88ac2858c51f9478d5e60",
+        "bytes": 13245
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_160_subvox32_trace.npz",
+        "sha256": "829349d2002c413687f3925e63b82beca8831b1d76fbffb7d6a316e436cff9f3",
+        "bytes": 18397
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_200_subvox32_pillars.npz",
+        "sha256": "c8be2b22f437798c4b03642e16ad00c73b317209c635709c39103392a1c1c191",
+        "bytes": 12807
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_200_subvox32_trace.npz",
+        "sha256": "32870e32df452a35519abd03fe6985272c153d4fb7b094b14ed9f7cbf81b3a5b",
+        "bytes": 18968
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_240_subvox32_pillars.npz",
+        "sha256": "8db3252babb9d8e0269b34cac3e88368b4fc86bef50065203d971d10c05fa0df",
+        "bytes": 12745
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_240_subvox32_trace.npz",
+        "sha256": "6768be0e10b46d9e074b55a8fd29d4ddbb39519f01fee0774265df1eae1b1c59",
+        "bytes": 18163
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_40_subvox32_pillars.npz",
+        "sha256": "ed11c4e2a4faf1eebc65f914779272e5c2b871a0e3453731931d99b64fdfb590",
+        "bytes": 12548
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_40_subvox32_trace.npz",
+        "sha256": "331aee45e6c9a04d4477155af36864f3320375987944cfc66f22f999c67d69b0",
+        "bytes": 18018
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_80_subvox32_pillars.npz",
+        "sha256": "9c8d83796f27ea460db40d830b80f39960a7d1b2e8be103a49b2e2043c49f219",
+        "bytes": 12633
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114340_80_subvox32_trace.npz",
+        "sha256": "882d63e8a34e264396d52bb07e9f36e413b03b2e1a7e3b7dc21cd8dbfc9cd3dd",
+        "bytes": 18744
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_111_subvox32_pillars.npz",
+        "sha256": "7451b1fcb07946c374a18e69106ca29c6d4552d7551517de855a080154a68554",
+        "bytes": 7425
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_111_subvox32_trace.npz",
+        "sha256": "cfedbd67cc802dd7ef48899ee47ff2616a678a1842525006390cb945a5cfc65a",
+        "bytes": 18602
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_139_subvox32_pillars.npz",
+        "sha256": "05e90d948dec593be543ded7ce129af3d8fc0ce9e54e12428d168339cef1a98f",
+        "bytes": 7611
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_139_subvox32_trace.npz",
+        "sha256": "01565c18f930a6a1dc7d4b045351086812edfa8554c3c7ed1d90ec96b65351fc",
+        "bytes": 19043
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_166_subvox32_pillars.npz",
+        "sha256": "685b405918b44527a12ad77d40453e4a1a4d32757cc99d238d9005de68650c98",
+        "bytes": 7559
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_166_subvox32_trace.npz",
+        "sha256": "fe9141e33c67f44df7b8b68d28971aa4eceeddeb0b86d9413de61785344a3657",
+        "bytes": 18723
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_28_subvox32_pillars.npz",
+        "sha256": "63efdb492882a89044070ae5f6144d5394ae6f4802b9a39fa707b4a0be32f0eb",
+        "bytes": 7095
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_28_subvox32_trace.npz",
+        "sha256": "7ebf8b3c56d2ef76c823d8463161b9af8ac13d2f69e4a8e674cf2224b735ca82",
+        "bytes": 18480
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_55_subvox32_pillars.npz",
+        "sha256": "a4887312c5d2c976c3679e4fc77f7cecfd71651b02cc0c5af7e84d1a2746a82c",
+        "bytes": 7239
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_55_subvox32_trace.npz",
+        "sha256": "48bc1a962f51b39cd2c9975e24158f95fc3f8e3e0eff6c48ad8a2f078fab4bed",
+        "bytes": 19025
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_83_subvox32_pillars.npz",
+        "sha256": "3394846757672e849aebc877ec73de00e0ff1be9a3d0d57022bd7fe10cdfaf15",
+        "bytes": 7345
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114422_83_subvox32_trace.npz",
+        "sha256": "8bb528ff06c3e1551428a043d712c3f233e57749fcba7ab089db45d4df78b58b",
+        "bytes": 18785
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_122_subvox32_pillars.npz",
+        "sha256": "46f3eaa155945458e3544d6f833400b433aadc872c50cd15df83a904ce253b3a",
+        "bytes": 9324
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_122_subvox32_trace.npz",
+        "sha256": "db0c305f787c497a9d6ea1f1d41e7071a6619cb84ce89fbf7fb83b06ed65e4a6",
+        "bytes": 20137
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_162_subvox32_pillars.npz",
+        "sha256": "aae7fa0f9b73c70e80ec3a83a1420bd36a8b191c13cdaa112a260f3cd361f01b",
+        "bytes": 9311
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_162_subvox32_trace.npz",
+        "sha256": "fd6c332e80909b0763032bdbb27e13e1877bae57a4c2a6b2a61ef96696537d1b",
+        "bytes": 19655
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_203_subvox32_pillars.npz",
+        "sha256": "1e0029c03911ebfff5b08a250f585efa93acf4169fa11e7cdab9bc692dabbaca",
+        "bytes": 9321
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_203_subvox32_trace.npz",
+        "sha256": "a657ecbc4877d85dc3fe60aeb8ff003e60a2a07f66b618d0a73ab3e39c0f3010",
+        "bytes": 19644
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_243_subvox32_pillars.npz",
+        "sha256": "9396df3561f5fa91e50289fb7eba274ffb8204663e6da535b48f7cf887d3ad3d",
+        "bytes": 9346
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_243_subvox32_trace.npz",
+        "sha256": "0c3cdbb5ded9735161e08519ba61a50c250cd57c0d290b8e3af57f3e397c079f",
+        "bytes": 19600
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_41_subvox32_pillars.npz",
+        "sha256": "65046e3fe435ecbd89dac065665de2ffe2167589f400dae2babbf5401794648a",
+        "bytes": 9274
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_41_subvox32_trace.npz",
+        "sha256": "99e5757729e0f2d8af7f9217ebab30c282ff9a2fcb3be0c4bd4530f474028bed",
+        "bytes": 19663
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_81_subvox32_pillars.npz",
+        "sha256": "c8cca282dda5ca1026c9313c0f46b16c481fef57ca12e2c6a86a727dcf445866",
+        "bytes": 9180
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/114819_81_subvox32_trace.npz",
+        "sha256": "6a9f51ef1393fb1bafcf3e73e3dd41a41c3c340e621243ac04bcd9283f599c37",
+        "bytes": 19977
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/215540_32_subvox32_pillars.npz",
+        "sha256": "29dbc1cb008c8cc9ef48b88f66f2f0754b677175128902dc5c31db3683aaf1e7",
+        "bytes": 7643
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/215540_32_subvox32_trace.npz",
+        "sha256": "50786e3f7ad0062b7e892463d656bfc135546b79adee3784118a28083f69b913",
+        "bytes": 20312
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/215607_33_subvox32_pillars.npz",
+        "sha256": "3fb656569aaf5d6726035d8cc9e9a027f9df7c3b17304476fe4a8fe39ed140d1",
+        "bytes": 7525
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/215607_33_subvox32_trace.npz",
+        "sha256": "e0595999428a4abb1613c1d68f074a1b6263ceddf069e0168407c69d394eede0",
+        "bytes": 20616
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/215623_33_subvox32_pillars.npz",
+        "sha256": "893a4f47240f0909cf83157dc65a694ea216567f5257d2b0e91659124675c3e6",
+        "bytes": 7198
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/215623_33_subvox32_trace.npz",
+        "sha256": "8a9fa0c1065ced5ab6d1eb4acd714af2a7b089de259bea9288def26b7c1f3ad7",
+        "bytes": 20084
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/215643_28_subvox32_pillars.npz",
+        "sha256": "b4a24634d5d5644a466da3a6d116699e8169fb86451532316557c4dff5b277e4",
+        "bytes": 5812
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/215643_28_subvox32_trace.npz",
+        "sha256": "b96f187db1691e6d1e440d4bf8737f2493909565cc1e5fce26869d449565d3a1",
+        "bytes": 20073
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/233658_17_subvox32_pillars.npz",
+        "sha256": "5423cbe13b24c6e62377d7438098b083b5fc807b913593664b408885b4e6dc17",
+        "bytes": 9390
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/233658_17_subvox32_trace.npz",
+        "sha256": "0e706c69a051d08e0b64999aafb90440425fe91662a902a00f8292d8c104e3ff",
+        "bytes": 19907
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/233658_35_subvox32_pillars.npz",
+        "sha256": "be42e7409484cdd27358575209f784adecfab330b2a9fd641df3429d75a6ca25",
+        "bytes": 9346
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/233658_35_subvox32_trace.npz",
+        "sha256": "b492c275203a50f1c2799ea6965ef4067222897340be7d4cf04a91a53c19a18b",
+        "bytes": 19509
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/233658_53_subvox32_pillars.npz",
+        "sha256": "76e651c6ca452164e9fcbb99482dc5447891983393b285e17f45b73ba573b266",
+        "bytes": 9315
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/233658_53_subvox32_trace.npz",
+        "sha256": "e7d36bd6db113d495fe2f1de2f9cc296b205cf3512186c963d88166f4f0e1d2e",
+        "bytes": 19739
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/config.json",
+        "sha256": "837593afc5f72a54572d1385ebd87e7e773f2e12f382ab30774f2087aa05f9f9",
+        "bytes": 616
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/control.json",
+        "sha256": "43565114be309a32d4eecac2829732f0e6c2a30010cb53627beeae8bca801769",
+        "bytes": 181
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/rows.json",
+        "sha256": "2d3f4df966463aea6b3aafc047d155f26450b7781b2d481bc03c5c40b13d974c",
+        "bytes": 545117
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_subvox32/rows.jsonl",
+        "sha256": "59bd01f4738bd7796fef56f48652d73fffa64a20121132df3fd79ee79bb51ff8",
+        "bytes": 302922
+      }
+    ],
+    "eval_zrank11": [
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_104_zrank11_pillars.npz",
+        "sha256": "ab69742698e2a0e8c0d802e00436589dcb52a4bad5d5c253bb7d5fcd72cf27ee",
+        "bytes": 4955
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_104_zrank11_trace.npz",
+        "sha256": "2ef090b103fd7ef85b7aca47a17ecc37ffa086b2d842cdd8272355e98b27ec6a",
+        "bytes": 19397
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_139_zrank11_pillars.npz",
+        "sha256": "a546896f9946b144a7046f7a96cee9fd80a0a471bf08f2c57cf3820a43b46291",
+        "bytes": 4932
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_139_zrank11_trace.npz",
+        "sha256": "efafa0fe03b428749e91950ae5c93a93b8d623790410a8d63c9dd6e5df7787e5",
+        "bytes": 19284
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_174_zrank11_pillars.npz",
+        "sha256": "387cf09ee22b33d347ab2d04fb9d8a288b2e0947c52fc19265a62de6ec887809",
+        "bytes": 4919
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_174_zrank11_trace.npz",
+        "sha256": "fa46fd97e6121938b1331f89f3ce6dc74e2d8056a928bc4efad63a6b5c3515a1",
+        "bytes": 19527
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_208_zrank11_pillars.npz",
+        "sha256": "c3c3beca2b7cb207b03ac1ff362a7acbaa66a5550b2c996df5bb449f661a6430",
+        "bytes": 4963
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_208_zrank11_trace.npz",
+        "sha256": "6a2524d5f0398b65fd6e938ddf95187dfab87bba7c2d7354dbfa49e6c47080ef",
+        "bytes": 18960
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_35_zrank11_pillars.npz",
+        "sha256": "67d1e4965dbdd3d5f919326e19f74cf058b28bc684da56608f52e2a6d61de357",
+        "bytes": 4993
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_35_zrank11_trace.npz",
+        "sha256": "26b933f366e9c91c3c99172c819d9de654b217d8133b2e247d21b94be608cd00",
+        "bytes": 18908
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_35_zrank_control_pillars.npz",
+        "sha256": "15b2fd5c9be8cb4144c71213a9a0074e3add1ce21fbab8ce4f98e6c9ce379170",
+        "bytes": 10003
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_35_zrank_control_trace.npz",
+        "sha256": "44218f8c4135ad3600b6f78373211605e559a3331b27e323fb0c9347cbaae0cf",
+        "bytes": 19897
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_69_zrank11_pillars.npz",
+        "sha256": "20297e0f2eabee9ac4f0ada251d283528f1c482196876eff6a40eaa84402e4e6",
+        "bytes": 5078
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114205_69_zrank11_trace.npz",
+        "sha256": "b10f343f7f4de7a6a239fe788ae1d2c7007d26dcbb7803c0ef0f5d91cbedc8fa",
+        "bytes": 18685
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_116_zrank11_pillars.npz",
+        "sha256": "cdc32f16421fc3250bb89d93cfd48797320327dc09a110461caa10a5c3ee219f",
+        "bytes": 4601
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_116_zrank11_trace.npz",
+        "sha256": "9ee061a080fff22d9c188a69dc383a5cac8aa5771b4ec465c256f0ed5cceee43",
+        "bytes": 19578
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_154_zrank11_pillars.npz",
+        "sha256": "96628a93d5dd0193deff7e7ee2693054df5f4ba84adafc221e9ccac3d103d09a",
+        "bytes": 4672
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_154_zrank11_trace.npz",
+        "sha256": "51eaa2cb54170ffaa8f5bb66076b50842eaee1aff1f3eec890b109a511d9ed2c",
+        "bytes": 19426
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_193_zrank11_pillars.npz",
+        "sha256": "2932a9b680d8b2b4efe4613cb388df509975f12a2fd733a87c7bfc99ab693e0d",
+        "bytes": 4593
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_193_zrank11_trace.npz",
+        "sha256": "445139d0a0e031ddcb5d0e80a8c4dcae3813622d5602855091b89bc68b47288e",
+        "bytes": 19580
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_231_zrank11_pillars.npz",
+        "sha256": "4b7d66bcb6ba61d6643825883338cba1f03967b57db86ae871252c82ee9a72d2",
+        "bytes": 4560
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_231_zrank11_trace.npz",
+        "sha256": "87f101bc05a5e0f2387461cb311dc0b97bbfdf47ea2f726ad1e5fbe68e101fdd",
+        "bytes": 20327
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_39_zrank11_pillars.npz",
+        "sha256": "d59be8ecef2d3529533dc3e8fe0cab725e4f538a003cb3bc66ddcc930a73d683",
+        "bytes": 4695
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_39_zrank11_trace.npz",
+        "sha256": "877afaf7f9dfb2f7ffe930b0e5a67a6f2f127ab10f0e6df84a50ddf80a11161f",
+        "bytes": 19222
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_77_zrank11_pillars.npz",
+        "sha256": "acec62af6acc010972213f1855c9d1b82a0c3883085d032a1b49e1cf66b71ed3",
+        "bytes": 4478
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114254_77_zrank11_trace.npz",
+        "sha256": "bc52197075898f685c498c4d98c1cb0645280b30f744ff5445a88de0e56c2194",
+        "bytes": 19820
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_120_zrank11_pillars.npz",
+        "sha256": "edc00a03e1ddc1c36554ff2408d4ec8332abb9bdc020a0e919de98ba2a1ee57e",
+        "bytes": 5931
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_120_zrank11_trace.npz",
+        "sha256": "21796dd08c1703cefdae88d1b8cf148286704a7c51b9c732c491456aab4e922f",
+        "bytes": 18253
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_160_zrank11_pillars.npz",
+        "sha256": "9ce7001cdc41dad52f3cbc40750ea51e5fdaa30196656f65da231efff9224a7a",
+        "bytes": 6137
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_160_zrank11_trace.npz",
+        "sha256": "ad875c27a8d6b3e31f22f8441aaddbb64d97593a3d333d98d481792b7a1e6da3",
+        "bytes": 18860
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_200_zrank11_pillars.npz",
+        "sha256": "ccc4da680376e5fd8b3a408d43196d32414f1ffcb9f7f66f77bb4053b62cc969",
+        "bytes": 5946
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_200_zrank11_trace.npz",
+        "sha256": "e9a72999c1d2755efaba4d6ae654c120007c913dc17eca05f2a2df3f60c61b9c",
+        "bytes": 19105
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_240_zrank11_pillars.npz",
+        "sha256": "96625b81da098b0cbefbf03d0a19738ec1df0093cdda960c96b8f00da1bd4fc8",
+        "bytes": 5910
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_240_zrank11_trace.npz",
+        "sha256": "ad0a9222042add9d4a67760ffe8ada4f67c183ec854858f53f3ef7c697d988d1",
+        "bytes": 18623
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_40_zrank11_pillars.npz",
+        "sha256": "1553d9280e469f8c62dfdbcaf99a970d0c18296ece4b9929f1b2bfb741151fc7",
+        "bytes": 5894
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_40_zrank11_trace.npz",
+        "sha256": "1ac5a370b32702cc2bb97d734b169c7ad2b4f24b6034cd8702930d32330a232f",
+        "bytes": 18445
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_80_zrank11_pillars.npz",
+        "sha256": "3905de18ad23d97f5459458cdb312b9d6fb92bf9ba1a3cefb37fcd19f8ffacaf",
+        "bytes": 6043
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114340_80_zrank11_trace.npz",
+        "sha256": "52fa577827098debc1f484e4ee096c25c54fd961e32d34511677dc91a271f552",
+        "bytes": 19365
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_111_zrank11_pillars.npz",
+        "sha256": "08f69c5f2a6515425a2d6b5079d1744570cb5336ff3c7940da1a27de125b7e59",
+        "bytes": 4384
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_111_zrank11_trace.npz",
+        "sha256": "ede0da7d43d89e3b10228ca4927092a53620d9fb4999b6d897f1be2b0ee3488e",
+        "bytes": 18650
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_139_zrank11_pillars.npz",
+        "sha256": "e7e74b0cc9d04f5383114c2bdbe68c321d0b8ee3c358e062b697c21c7ab930ff",
+        "bytes": 4474
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_139_zrank11_trace.npz",
+        "sha256": "d5b4cb8722ada9316371a81b00c84c17f1e918fa5146305ce519e030be10b5cf",
+        "bytes": 18835
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_166_zrank11_pillars.npz",
+        "sha256": "bf0745f5224069e061145ced542583b5267cd51b4b5a35abc60ec6076c688049",
+        "bytes": 4393
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_166_zrank11_trace.npz",
+        "sha256": "fc617ed4945be87b990c49a4eaab61751a88d45d694f31d6912713c2f3dd7f91",
+        "bytes": 18723
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_28_zrank11_pillars.npz",
+        "sha256": "ac44cfc3ea739394bb0637b23ca4d70ea9f0d0a8c11e4d988b7ba45ca6ab27e2",
+        "bytes": 4222
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_28_zrank11_trace.npz",
+        "sha256": "fad114bb2310cc3c8dce889a07445782df8ab3d9bb1a54729357b620897a7323",
+        "bytes": 18835
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_55_zrank11_pillars.npz",
+        "sha256": "a18611c510bab18b9bbb5b38c90ba73585ca7a32327cd3f22074a8d67ba76eb1",
+        "bytes": 4271
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_55_zrank11_trace.npz",
+        "sha256": "360b67479e16d42f0b730d847761238a3906349d9336949296859033b9af964c",
+        "bytes": 18569
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_83_zrank11_pillars.npz",
+        "sha256": "b863370db60aaeb8fe621e7a87d25372fa13c185789f2cb664e7cee7ce0543fe",
+        "bytes": 4312
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114422_83_zrank11_trace.npz",
+        "sha256": "e481a0d28104251ec209005cb12bc106ee35c23758478965bb15d95f67641378",
+        "bytes": 18614
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_122_zrank11_pillars.npz",
+        "sha256": "bdf3133f860c88916ad71ee228d875ef4f1bbf5b6f7b62acad8b55a55e63aa0e",
+        "bytes": 4778
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_122_zrank11_trace.npz",
+        "sha256": "bc4e3a40130c0c1e98183c09b1cf924fb5db2054b2dd66c25264e3adad13299a",
+        "bytes": 20249
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_162_zrank11_pillars.npz",
+        "sha256": "2abb4de285301d492e53b011812b7035bbdb72e97296d49e14d13f4079d1afe8",
+        "bytes": 4675
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_162_zrank11_trace.npz",
+        "sha256": "5d6dc09f763c0a6efa245010fe659358284d1f69b436acbd13c1b16bc79bd5ac",
+        "bytes": 19863
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_203_zrank11_pillars.npz",
+        "sha256": "9c2064d9e0cf846144e6a355b9cf085c72eb4da9dc99dc952443b15a39d0ae03",
+        "bytes": 4739
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_203_zrank11_trace.npz",
+        "sha256": "fd4d8afa3e74558766aa0c24bb4ba408411544c5c50c31c53feb811e344fc852",
+        "bytes": 20647
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_243_zrank11_pillars.npz",
+        "sha256": "9206ba4e745f96f58994c7f92822518fee0a2549e0641a597491cb22e3edb764",
+        "bytes": 4714
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_243_zrank11_trace.npz",
+        "sha256": "74db11fb00f716a94393eacead7e5df4207ca18361d140936df936ccc30888be",
+        "bytes": 19931
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_41_zrank11_pillars.npz",
+        "sha256": "14c8c53fb42e2e75101bc3027f45786400c3d8bdc4a0d2a627bbf13f9ee8a546",
+        "bytes": 4732
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_41_zrank11_trace.npz",
+        "sha256": "c55bed22708b3e2deb1c477a8eb70f3dbfcb4108674f346dea93d1035e189d72",
+        "bytes": 19815
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_81_zrank11_pillars.npz",
+        "sha256": "6bb756af3fc4c93b2a11658b7107f34b5aa794f1f596e95536ba9260531dffd3",
+        "bytes": 4628
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/114819_81_zrank11_trace.npz",
+        "sha256": "8db010305bfb642f53cc3c8d4961ed7d1600a6db4fc0b4fbc1d9faa297c3f9d2",
+        "bytes": 20230
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/215540_32_zrank11_pillars.npz",
+        "sha256": "65765c5c24372c6d722c2a7c7859560f752451a46a46a6ae3d24e4fbd15802a9",
+        "bytes": 4541
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/215540_32_zrank11_trace.npz",
+        "sha256": "a3e38d64afb687e84dc4eba1b06f42e96b8facf3ce1715043b83fc306f33ec27",
+        "bytes": 19079
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/215607_33_zrank11_pillars.npz",
+        "sha256": "577b41d139cb4014404245b154f74878baf7353874dc86bc340675852c4b4f35",
+        "bytes": 4510
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/215607_33_zrank11_trace.npz",
+        "sha256": "2169d100b06310cc4a16c1bd09990a283006049db47064ac594f355f0d3fc3ab",
+        "bytes": 19301
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/215623_33_zrank11_pillars.npz",
+        "sha256": "45f5b5c2c51bfb9120374886cb93130ef322b2f53841242675333f00a00c551e",
+        "bytes": 4100
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/215623_33_zrank11_trace.npz",
+        "sha256": "9398992bacf5fdd5ba3f1df497fe0cab25649544ec6708663929014375237ccc",
+        "bytes": 19392
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/215643_28_zrank11_pillars.npz",
+        "sha256": "a5f69aa06879df20ca5e6f2f330efba1c973b649835c58840c0020730ed3379e",
+        "bytes": 3346
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/215643_28_zrank11_trace.npz",
+        "sha256": "9d488b39d2bc025994938ce020304c918a63e169ebf8b86b2f04af705794bb9c",
+        "bytes": 19995
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/233658_17_zrank11_pillars.npz",
+        "sha256": "2276b1dc6508ae7c7d7d7a9e939369408b4d3aad3db997e6f4a004a9f3af66e3",
+        "bytes": 4842
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/233658_17_zrank11_trace.npz",
+        "sha256": "61bd488639842802c5bfa8c6a8b8ece81c5a8f3c873121ee17e93a629a05fa0f",
+        "bytes": 20808
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/233658_35_zrank11_pillars.npz",
+        "sha256": "87929f4d84b16da074703f9d7ae020655ced0aca07b73ddf648903e24ea83d30",
+        "bytes": 4800
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/233658_35_zrank11_trace.npz",
+        "sha256": "bcc131fc9a2bbc718fbc72a2011c8f20b924f976f2af4d3f000f5cb442d356c9",
+        "bytes": 20332
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/233658_53_zrank11_pillars.npz",
+        "sha256": "1cd54b1c7a9823ce2c9930e05eae468e2f4b077cf8aefbf356f3e7b91e130502",
+        "bytes": 4808
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/233658_53_zrank11_trace.npz",
+        "sha256": "4ba03778c8cca2393d3bc6b4be30d00e196e661f690ea3b810da00c733f49dbd",
+        "bytes": 20588
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/config.json",
+        "sha256": "7fdfad64c96696b163269069d35c55c5710ae74b90d997edc2123e45d25eec5a",
+        "bytes": 615
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/control.json",
+        "sha256": "43565114be309a32d4eecac2829732f0e6c2a30010cb53627beeae8bca801769",
+        "bytes": 181
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/rows.json",
+        "sha256": "cc205df8dda0da177e007bbc4984407c154458fc13507146dcad8d5b3da79703",
+        "bytes": 467589
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/eval_zrank11/rows.jsonl",
+        "sha256": "44a4310a9ddc7d69014619a5cee3f9205098d52e36e5da966e2a4cd9cebbf57e",
+        "bytes": 265372
+      }
+    ],
+    "frozen_v2": [
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/frozen_v2/freeze_manifest.json",
+        "sha256": "d2fc668d92ab8cd39d75a3ff762ef7f4feae5c35c727b83ae6ad909039f970d4",
+        "bytes": 405
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/frozen_v2/gt_eval_v2.json",
+        "sha256": "a09ba4cd7c179a99b1c79aad5272643f6b2fee00e8913dc2467f35bdc76ac227",
+        "bytes": 2231961
+      }
+    ],
+    "gt_proposal": [
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/gt_proposal/fig_gt_zmin_proposal.png",
+        "sha256": "be1def8d9ba31dfa1f7ea267ded4b4c9bcab181abde5469ebceb11923802739a",
+        "bytes": 123138
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/gt_proposal/gt_v2_proposal.json",
+        "sha256": "756e623fde7b95fbfbb66e0a88e20d63c694d1fcedce24335ae78dc85c8be9a4",
+        "bytes": 6821
+      }
+    ],
+    "metrics": [
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/metrics/fig_fix_pr.png",
+        "sha256": "f45749c6f89fc39d7107d3dd71ba34674c2cb63e72b63e942803ba26806cc7b8",
+        "bytes": 78449
+      },
+      {
+        "path": "sidequests/human_detectors/artifacts/det06_fix_r1/metrics/summary.json",
+        "sha256": "e32fbc31b6fc0541cf271faf84ab58789222c94d1e4941d7292e385b5642fc22",
+        "bytes": 32601
+      }
+    ]
+  },
+  "forward_budget": {
+    "subvox32": 38,
+    "zrank11": 38,
+    "executed": 76,
+    "relation": "separate from and additional to the 74 DET-06 evaluation forwards; no operating point or default input definition selected; test frames already seen in DET-06"
+  },
+  "tests": "python -B -W error -m unittest discover (sidequests/human_detectors): 21/21 OK"
+}

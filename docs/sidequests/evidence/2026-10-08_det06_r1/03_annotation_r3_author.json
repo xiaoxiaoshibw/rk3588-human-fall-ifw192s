@@ -1,0 +1,1385 @@
+{
+  "tag": "03_annotation",
+  "script_sha256": "ce7e6596c44b6d1178e652a8d90bcc8f57174f073f6b2b7fe497c02f44f8cef6",
+  "params": {
+    "voxel_m": 0.1,
+    "explain_step": 1,
+    "link_m": 0.08,
+    "human_min_n": 100,
+    "human_min_top": 1.2,
+    "hard_min_n": 200,
+    "hard_min_top": 1.2,
+    "hard_max_top": 2.5,
+    "hard_max_bottom": 0.6,
+    "hard_min_z_span": 0.9,
+    "hard_max_span": 1.2,
+    "n_test_frames": 6,
+    "empty_subsample": 8,
+    "empty_frame": "cap_20261008_114819",
+    "old_empty_frames": [
+      17,
+      35,
+      53
+    ]
+  },
+  "pre_manifest_sha256": "5abdbdd8bec3d6136e0647e6b5637a54ca3a28fd8de3d67d26d9bd15caa174fc",
+  "empty_frames": {
+    "new": [
+      {
+        "sid": "cap_20261008_114819",
+        "index": 41
+      },
+      {
+        "sid": "cap_20261008_114819",
+        "index": 81
+      },
+      {
+        "sid": "cap_20261008_114819",
+        "index": 122
+      },
+      {
+        "sid": "cap_20261008_114819",
+        "index": 162
+      },
+      {
+        "sid": "cap_20261008_114819",
+        "index": 203
+      },
+      {
+        "sid": "cap_20261008_114819",
+        "index": 243
+      }
+    ],
+    "old": [
+      {
+        "sid": "cap_20261007_233658",
+        "index": 17
+      },
+      {
+        "sid": "cap_20261007_233658",
+        "index": 35
+      },
+      {
+        "sid": "cap_20261007_233658",
+        "index": 53
+      }
+    ]
+  },
+  "frames": [
+    {
+      "sid": "cap_20261008_114205",
+      "index": 35,
+      "candidate_count": 2518,
+      "person": {
+        "source_component": 1,
+        "n": 2282,
+        "z_min": 0.15978844463825226,
+        "z_max": 1.8729575872421265,
+        "centroid": [
+          1.995786428451538,
+          -0.298444002866745
+        ],
+        "aabb_min": [
+          1.8158435821533203,
+          -0.6632745265960693
+        ],
+        "aabb_max": [
+          2.234992742538452,
+          0.015567260794341564
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.995786428451538,
+          -0.298444002866745
+        ],
+        "z_top": 1.8729575872421265,
+        "aabb_min": [
+          1.8158435821533203,
+          -0.6632745265960693,
+          0.15978844463825226
+        ],
+        "aabb_max": [
+          2.234992742538452,
+          0.015567260794341564,
+          1.8729575872421265
+        ]
+      },
+      "json": "ann_cap_20261008_114205_35.json",
+      "json_sha256": "5c493ae92119466677516422143e2c8e0225710bd9ffa97dfab347476c3f3677",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_35.png",
+      "png_sha256": "217657f7c24423cb7629951a510b65b0333c98ad5e1039cea0722cfe5349f0a7"
+    },
+    {
+      "sid": "cap_20261008_114205",
+      "index": 69,
+      "candidate_count": 2510,
+      "person": {
+        "source_component": 0,
+        "n": 2277,
+        "z_min": 0.15796136856079102,
+        "z_max": 1.8759905099868774,
+        "centroid": [
+          1.9941269159317017,
+          -0.2990124821662903
+        ],
+        "aabb_min": [
+          1.821181297302246,
+          -0.6660771369934082
+        ],
+        "aabb_max": [
+          2.224874973297119,
+          0.015467114746570587
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.9941269159317017,
+          -0.2990124821662903
+        ],
+        "z_top": 1.8759905099868774,
+        "aabb_min": [
+          1.821181297302246,
+          -0.6660771369934082,
+          0.15796136856079102
+        ],
+        "aabb_max": [
+          2.224874973297119,
+          0.015467114746570587,
+          1.8759905099868774
+        ]
+      },
+      "json": "ann_cap_20261008_114205_69.json",
+      "json_sha256": "5d304902256489a3e0a572105c30b7955c8323370d7e2e9a74a2e8652e2a1253",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_69.png",
+      "png_sha256": "96c5eda4680489c56af5e6a720dc301ef8647fcd647b6a45c0c98c0d17b7d0d7"
+    },
+    {
+      "sid": "cap_20261008_114205",
+      "index": 104,
+      "candidate_count": 2540,
+      "person": {
+        "source_component": 0,
+        "n": 2278,
+        "z_min": 0.1581171154975891,
+        "z_max": 1.8839178085327148,
+        "centroid": [
+          1.9924181699752808,
+          -0.3036629259586334
+        ],
+        "aabb_min": [
+          1.8223633766174316,
+          -0.6658973693847656
+        ],
+        "aabb_max": [
+          2.199218273162842,
+          0.013490029610693455
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.9924181699752808,
+          -0.3036629259586334
+        ],
+        "z_top": 1.8839178085327148,
+        "aabb_min": [
+          1.8223633766174316,
+          -0.6658973693847656,
+          0.1581171154975891
+        ],
+        "aabb_max": [
+          2.199218273162842,
+          0.013490029610693455,
+          1.8839178085327148
+        ]
+      },
+      "json": "ann_cap_20261008_114205_104.json",
+      "json_sha256": "3f7972e11cae2124ff8c2cb4efa4c914b913157a4fe4e9dab67f61b21faceb5b",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_104.png",
+      "png_sha256": "7562c91f9ebbcdde0eb490eee712b5539347bf094b5793f57533ddeecf5d5e0a"
+    },
+    {
+      "sid": "cap_20261008_114205",
+      "index": 139,
+      "candidate_count": 2516,
+      "person": {
+        "source_component": 0,
+        "n": 2283,
+        "z_min": 0.15898080170154572,
+        "z_max": 1.8791359663009644,
+        "centroid": [
+          1.9880391359329224,
+          -0.3002590239048004
+        ],
+        "aabb_min": [
+          1.8248659372329712,
+          -0.6643251180648804
+        ],
+        "aabb_max": [
+          2.224855899810791,
+          0.014563065022230148
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.9880391359329224,
+          -0.3002590239048004
+        ],
+        "z_top": 1.8791359663009644,
+        "aabb_min": [
+          1.8248659372329712,
+          -0.6643251180648804,
+          0.15898080170154572
+        ],
+        "aabb_max": [
+          2.224855899810791,
+          0.014563065022230148,
+          1.8791359663009644
+        ]
+      },
+      "json": "ann_cap_20261008_114205_139.json",
+      "json_sha256": "e9766d419b1e6378fa024e234f2964db57e4026440352a0c54df6d4f6e182612",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_139.png",
+      "png_sha256": "8606b562d37acad9879be46ac23bfd39e02c56989b882ec0e23aa34c0d4b7d36"
+    },
+    {
+      "sid": "cap_20261008_114205",
+      "index": 174,
+      "candidate_count": 2564,
+      "person": {
+        "source_component": 1,
+        "n": 2282,
+        "z_min": 0.1578320562839508,
+        "z_max": 1.8711562156677246,
+        "centroid": [
+          1.9883975982666016,
+          -0.30123284459114075
+        ],
+        "aabb_min": [
+          1.8199646472930908,
+          -0.6624392867088318
+        ],
+        "aabb_max": [
+          2.221663236618042,
+          0.013488564640283585
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.9883975982666016,
+          -0.30123284459114075
+        ],
+        "z_top": 1.8711562156677246,
+        "aabb_min": [
+          1.8199646472930908,
+          -0.6624392867088318,
+          0.1578320562839508
+        ],
+        "aabb_max": [
+          2.221663236618042,
+          0.013488564640283585,
+          1.8711562156677246
+        ]
+      },
+      "json": "ann_cap_20261008_114205_174.json",
+      "json_sha256": "449c7476b04ea598d8fb0538366ba3c91d36b5417ea8e26c5876a18b92c321eb",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_174.png",
+      "png_sha256": "ba6982a39a30b44e8ca9f7dd80d08228015e901e399b62b7eb0aff788ffb1845"
+    },
+    {
+      "sid": "cap_20261008_114205",
+      "index": 208,
+      "candidate_count": 2578,
+      "person": {
+        "source_component": 0,
+        "n": 2287,
+        "z_min": 0.15816856920719147,
+        "z_max": 1.8821064233779907,
+        "centroid": [
+          1.9883841276168823,
+          -0.30408355593681335
+        ],
+        "aabb_min": [
+          1.8185151815414429,
+          -0.6670137047767639
+        ],
+        "aabb_max": [
+          2.2159366607666016,
+          0.01240772195160389
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.9883841276168823,
+          -0.30408355593681335
+        ],
+        "z_top": 1.8821064233779907,
+        "aabb_min": [
+          1.8185151815414429,
+          -0.6670137047767639,
+          0.15816856920719147
+        ],
+        "aabb_max": [
+          2.2159366607666016,
+          0.01240772195160389,
+          1.8821064233779907
+        ]
+      },
+      "json": "ann_cap_20261008_114205_208.json",
+      "json_sha256": "4d85d9e1d9d51b3b5a11a6dd3f8a1e40c80baf3c57fc7c90597460db7087cb73",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_208.png",
+      "png_sha256": "6afcb586eedec356785ecdbc730a56ea0f7b669722b3903b81ccbe8e6ec148eb"
+    },
+    {
+      "sid": "cap_20261008_114254",
+      "index": 39,
+      "candidate_count": 3129,
+      "person": {
+        "source_component": 0,
+        "n": 3102,
+        "z_min": 0.15806755423545837,
+        "z_max": 1.9508352279663086,
+        "centroid": [
+          1.6277798414230347,
+          -0.6323865652084351
+        ],
+        "aabb_min": [
+          1.460187554359436,
+          -1.022679328918457
+        ],
+        "aabb_max": [
+          1.822323203086853,
+          -0.30863574147224426
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.6277798414230347,
+          -0.6323865652084351
+        ],
+        "z_top": 1.9508352279663086,
+        "aabb_min": [
+          1.460187554359436,
+          -1.022679328918457,
+          0.15806755423545837
+        ],
+        "aabb_max": [
+          1.822323203086853,
+          -0.30863574147224426,
+          1.9508352279663086
+        ]
+      },
+      "json": "ann_cap_20261008_114254_39.json",
+      "json_sha256": "96725164fc1d994886714bbca8d25036da3439ef0aa3c5bea7a7b2414c8ca1db",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_39.png",
+      "png_sha256": "da12bd76c3cb50ad2e6fc49cba574d297aa67765dda1c0369f33e1caaffc4b35"
+    },
+    {
+      "sid": "cap_20261008_114254",
+      "index": 77,
+      "candidate_count": 3145,
+      "person": {
+        "source_component": 0,
+        "n": 3098,
+        "z_min": 0.1587836891412735,
+        "z_max": 1.9514127969741821,
+        "centroid": [
+          1.6262530088424683,
+          -0.632902979850769
+        ],
+        "aabb_min": [
+          1.4475177526474,
+          -1.0304361581802368
+        ],
+        "aabb_max": [
+          1.820881724357605,
+          -0.3079283833503723
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.6262530088424683,
+          -0.632902979850769
+        ],
+        "z_top": 1.9514127969741821,
+        "aabb_min": [
+          1.4475177526474,
+          -1.0304361581802368,
+          0.1587836891412735
+        ],
+        "aabb_max": [
+          1.820881724357605,
+          -0.3079283833503723,
+          1.9514127969741821
+        ]
+      },
+      "json": "ann_cap_20261008_114254_77.json",
+      "json_sha256": "be807aa544a048d38f2e252c80c7ac94aeef5584d3e3fc059fa8b53ed7af943e",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_77.png",
+      "png_sha256": "d42f3ed1b173fc7c8057ff5b666f2dcaede1118ab87ff374dfff4e53cea72be2"
+    },
+    {
+      "sid": "cap_20261008_114254",
+      "index": 116,
+      "candidate_count": 3154,
+      "person": {
+        "source_component": 0,
+        "n": 3115,
+        "z_min": 0.1578194499015808,
+        "z_max": 1.9500163793563843,
+        "centroid": [
+          1.6227445602416992,
+          -0.6302858591079712
+        ],
+        "aabb_min": [
+          1.4586386680603027,
+          -1.03128182888031
+        ],
+        "aabb_max": [
+          1.8113832473754883,
+          -0.30676963925361633
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.6227445602416992,
+          -0.6302858591079712
+        ],
+        "z_top": 1.9500163793563843,
+        "aabb_min": [
+          1.4586386680603027,
+          -1.03128182888031,
+          0.1578194499015808
+        ],
+        "aabb_max": [
+          1.8113832473754883,
+          -0.30676963925361633,
+          1.9500163793563843
+        ]
+      },
+      "json": "ann_cap_20261008_114254_116.json",
+      "json_sha256": "bcc4e0f7b70e87bf8436c09ef61f8d311873c8b3666e3ea751c2e59f46e0c30d",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_116.png",
+      "png_sha256": "6f0adf7a3ed8c83677fcbc3007fcbc9216f7474d3181cdbf8012c975574ad578"
+    },
+    {
+      "sid": "cap_20261008_114254",
+      "index": 154,
+      "candidate_count": 3143,
+      "person": {
+        "source_component": 0,
+        "n": 3093,
+        "z_min": 0.15918952226638794,
+        "z_max": 1.9410247802734375,
+        "centroid": [
+          1.6294808387756348,
+          -0.6330307722091675
+        ],
+        "aabb_min": [
+          1.4556034803390503,
+          -1.034976601600647
+        ],
+        "aabb_max": [
+          1.8400224447250366,
+          -0.3073272705078125
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.6294808387756348,
+          -0.6330307722091675
+        ],
+        "z_top": 1.9410247802734375,
+        "aabb_min": [
+          1.4556034803390503,
+          -1.034976601600647,
+          0.15918952226638794
+        ],
+        "aabb_max": [
+          1.8400224447250366,
+          -0.3073272705078125,
+          1.9410247802734375
+        ]
+      },
+      "json": "ann_cap_20261008_114254_154.json",
+      "json_sha256": "4b199a0d5f10e099c236d187a36981fdc8e11ad1f198d732c6c61a4d8cab7b0a",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_154.png",
+      "png_sha256": "6fd241d454704de4c88a6b70d21cab9217f7c0c77d28c25961daafc7846aee57"
+    },
+    {
+      "sid": "cap_20261008_114254",
+      "index": 193,
+      "candidate_count": 3141,
+      "person": {
+        "source_component": 0,
+        "n": 3093,
+        "z_min": 0.15908282995224,
+        "z_max": 1.955511212348938,
+        "centroid": [
+          1.6288645267486572,
+          -0.6319120526313782
+        ],
+        "aabb_min": [
+          1.4440969228744507,
+          -1.0294787883758545
+        ],
+        "aabb_max": [
+          1.8340508937835693,
+          -0.30773109197616577
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.6288645267486572,
+          -0.6319120526313782
+        ],
+        "z_top": 1.955511212348938,
+        "aabb_min": [
+          1.4440969228744507,
+          -1.0294787883758545,
+          0.15908282995224
+        ],
+        "aabb_max": [
+          1.8340508937835693,
+          -0.30773109197616577,
+          1.955511212348938
+        ]
+      },
+      "json": "ann_cap_20261008_114254_193.json",
+      "json_sha256": "ba81311c67eeff1fcbed4fca423886a05efa7b237ac28cb882448477e444f24a",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_193.png",
+      "png_sha256": "4b37fd0f696e473f54e28a759a932213e8e72bded25cdb68a25f6bc0215ccb1f"
+    },
+    {
+      "sid": "cap_20261008_114254",
+      "index": 231,
+      "candidate_count": 3166,
+      "person": {
+        "source_component": 0,
+        "n": 3119,
+        "z_min": 0.15854738652706146,
+        "z_max": 1.9520578384399414,
+        "centroid": [
+          1.622693419456482,
+          -0.6302351355552673
+        ],
+        "aabb_min": [
+          1.4531317949295044,
+          -1.0235358476638794
+        ],
+        "aabb_max": [
+          1.8171310424804688,
+          -0.30422520637512207
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          1.622693419456482,
+          -0.6302351355552673
+        ],
+        "z_top": 1.9520578384399414,
+        "aabb_min": [
+          1.4531317949295044,
+          -1.0235358476638794,
+          0.15854738652706146
+        ],
+        "aabb_max": [
+          1.8171310424804688,
+          -0.30422520637512207,
+          1.9520578384399414
+        ]
+      },
+      "json": "ann_cap_20261008_114254_231.json",
+      "json_sha256": "84cf6325bd8bab44aed1f8c4daaa4e701e84c8b2e5fe7019925e43c9a35d2fdd",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_231.png",
+      "png_sha256": "023430aa5fdb8f26dc0dcedcbac185418b1903ebdc8ea2a63894298fc6d80abe"
+    },
+    {
+      "sid": "cap_20261008_114340",
+      "index": 40,
+      "candidate_count": 2000,
+      "person": {
+        "source_component": 0,
+        "n": 1947,
+        "z_min": 0.16447071731090546,
+        "z_max": 1.857187032699585,
+        "centroid": [
+          2.0841450691223145,
+          -0.10094048827886581
+        ],
+        "aabb_min": [
+          1.8925974369049072,
+          -0.41685259342193604
+        ],
+        "aabb_max": [
+          2.239375591278076,
+          0.20167841017246246
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.0841450691223145,
+          -0.10094048827886581
+        ],
+        "z_top": 1.857187032699585,
+        "aabb_min": [
+          1.8925974369049072,
+          -0.41685259342193604,
+          0.16447071731090546
+        ],
+        "aabb_max": [
+          2.239375591278076,
+          0.20167841017246246,
+          1.857187032699585
+        ]
+      },
+      "json": "ann_cap_20261008_114340_40.json",
+      "json_sha256": "ad1203820a8577fd430614301ef27dda39aaccebd2cea522f981ace7983c6294",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_40.png",
+      "png_sha256": "dd779baae5af00556ae2cfa007a10b73b6dce1c1bd1bc0f599d2551ddca6bf7c"
+    },
+    {
+      "sid": "cap_20261008_114340",
+      "index": 80,
+      "candidate_count": 1981,
+      "person": {
+        "source_component": 0,
+        "n": 1935,
+        "z_min": 0.160208061337471,
+        "z_max": 1.861518383026123,
+        "centroid": [
+          2.0873594284057617,
+          -0.10002557188272476
+        ],
+        "aabb_min": [
+          1.8964229822158813,
+          -0.4179062843322754
+        ],
+        "aabb_max": [
+          2.291287660598755,
+          0.20217648148536682
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.0873594284057617,
+          -0.10002557188272476
+        ],
+        "z_top": 1.861518383026123,
+        "aabb_min": [
+          1.8964229822158813,
+          -0.4179062843322754,
+          0.160208061337471
+        ],
+        "aabb_max": [
+          2.291287660598755,
+          0.20217648148536682,
+          1.861518383026123
+        ]
+      },
+      "json": "ann_cap_20261008_114340_80.json",
+      "json_sha256": "566fcd3ee22d75d2666e9a94edec88cb9f5c41943a4b53052bb0064e9b10077f",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_80.png",
+      "png_sha256": "b83bd1e22e7afb68357e547eaac4170cdd3fcd1fd07273b5e95be6a34df83a79"
+    },
+    {
+      "sid": "cap_20261008_114340",
+      "index": 120,
+      "candidate_count": 1993,
+      "person": {
+        "source_component": 0,
+        "n": 1944,
+        "z_min": 0.15853041410446167,
+        "z_max": 1.8613439798355103,
+        "centroid": [
+          2.077382802963257,
+          -0.09793555736541748
+        ],
+        "aabb_min": [
+          1.8915163278579712,
+          -0.4135490655899048
+        ],
+        "aabb_max": [
+          2.239482879638672,
+          0.21640190482139587
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.077382802963257,
+          -0.09793555736541748
+        ],
+        "z_top": 1.8613439798355103,
+        "aabb_min": [
+          1.8915163278579712,
+          -0.4135490655899048,
+          0.15853041410446167
+        ],
+        "aabb_max": [
+          2.239482879638672,
+          0.21640190482139587,
+          1.8613439798355103
+        ]
+      },
+      "json": "ann_cap_20261008_114340_120.json",
+      "json_sha256": "c17334ce335c99bb2b21e727c7c77eb2ec8df6aa2c828d0b2c54c6a8af07a4ed",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_120.png",
+      "png_sha256": "f31260c55c84460f864daa9206eca7a2c238c28b029bb0fd8c8eabf66dbb5938"
+    },
+    {
+      "sid": "cap_20261008_114340",
+      "index": 160,
+      "candidate_count": 1977,
+      "person": {
+        "source_component": 0,
+        "n": 1928,
+        "z_min": 0.16245560348033905,
+        "z_max": 1.8641918897628784,
+        "centroid": [
+          2.0811002254486084,
+          -0.09638547152280807
+        ],
+        "aabb_min": [
+          1.8782645463943481,
+          -0.40584394335746765
+        ],
+        "aabb_max": [
+          2.250988721847534,
+          0.2056048959493637
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.0811002254486084,
+          -0.09638547152280807
+        ],
+        "z_top": 1.8641918897628784,
+        "aabb_min": [
+          1.8782645463943481,
+          -0.40584394335746765,
+          0.16245560348033905
+        ],
+        "aabb_max": [
+          2.250988721847534,
+          0.2056048959493637,
+          1.8641918897628784
+        ]
+      },
+      "json": "ann_cap_20261008_114340_160.json",
+      "json_sha256": "829627f5794c8f657041078af174889c610722da72e90ff5ec9d4ad99895d549",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_160.png",
+      "png_sha256": "58deb3ba77f8d2e356214cbe9ae7d0b3f8b2c3592b83019f64bf1c5042d1bdb9"
+    },
+    {
+      "sid": "cap_20261008_114340",
+      "index": 200,
+      "candidate_count": 1982,
+      "person": {
+        "source_component": 0,
+        "n": 1932,
+        "z_min": 0.15876397490501404,
+        "z_max": 1.8602967262268066,
+        "centroid": [
+          2.083540678024292,
+          -0.09852039068937302
+        ],
+        "aabb_min": [
+          1.8930349349975586,
+          -0.4140257239341736
+        ],
+        "aabb_max": [
+          2.2470016479492188,
+          0.2029973566532135
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.083540678024292,
+          -0.09852039068937302
+        ],
+        "z_top": 1.8602967262268066,
+        "aabb_min": [
+          1.8930349349975586,
+          -0.4140257239341736,
+          0.15876397490501404
+        ],
+        "aabb_max": [
+          2.2470016479492188,
+          0.2029973566532135,
+          1.8602967262268066
+        ]
+      },
+      "json": "ann_cap_20261008_114340_200.json",
+      "json_sha256": "12d9c8f84e3e43d6c0ca989aeb0ab523ad687d9dd578702f092afb1b1e2af000",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_200.png",
+      "png_sha256": "4e78af0c692e95e5b6443adc922a1fb2a1136a23d245023f150a8a5a35b984f5"
+    },
+    {
+      "sid": "cap_20261008_114340",
+      "index": 240,
+      "candidate_count": 1991,
+      "person": {
+        "source_component": 0,
+        "n": 1941,
+        "z_min": 0.15814928710460663,
+        "z_max": 1.8654158115386963,
+        "centroid": [
+          2.07942533493042,
+          -0.09833379834890366
+        ],
+        "aabb_min": [
+          1.8967794179916382,
+          -0.41405877470970154
+        ],
+        "aabb_max": [
+          2.2478139400482178,
+          0.20471642911434174
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.07942533493042,
+          -0.09833379834890366
+        ],
+        "z_top": 1.8654158115386963,
+        "aabb_min": [
+          1.8967794179916382,
+          -0.41405877470970154,
+          0.15814928710460663
+        ],
+        "aabb_max": [
+          2.2478139400482178,
+          0.20471642911434174,
+          1.8654158115386963
+        ]
+      },
+      "json": "ann_cap_20261008_114340_240.json",
+      "json_sha256": "f924308b240a78d783d06c194d650efe9039799c97909fb42fffcb338736d4a1",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_240.png",
+      "png_sha256": "97318c04900e8c633294a719ef501a725875307c553d7b14a6f1ee151dc61f0d"
+    },
+    {
+      "sid": "cap_20261008_114422",
+      "index": 28,
+      "candidate_count": 2684,
+      "person": {
+        "source_component": 11,
+        "n": 2312,
+        "z_min": 0.15900899469852448,
+        "z_max": 2.125389814376831,
+        "centroid": [
+          2.1012461185455322,
+          -0.35640057921409607
+        ],
+        "aabb_min": [
+          1.9224274158477783,
+          -0.7210919857025146
+        ],
+        "aabb_max": [
+          2.365056037902832,
+          -0.012034340761601925
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.1012461185455322,
+          -0.35640057921409607
+        ],
+        "z_top": 2.125389814376831,
+        "aabb_min": [
+          1.9224274158477783,
+          -0.7210919857025146,
+          0.15900899469852448
+        ],
+        "aabb_max": [
+          2.365056037902832,
+          -0.012034340761601925,
+          2.125389814376831
+        ]
+      },
+      "json": "ann_cap_20261008_114422_28.json",
+      "json_sha256": "89ea84f6419189a8ea6a3757c21a7a6971a4add4685a6f287e5ddbf44482f13e",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_28.png",
+      "png_sha256": "2a03df96050b95c5f7e902ca9d72af2a3cc04df5fc389043cd8077f82d9b9043"
+    },
+    {
+      "sid": "cap_20261008_114422",
+      "index": 55,
+      "candidate_count": 2698,
+      "person": {
+        "source_component": 7,
+        "n": 2325,
+        "z_min": 0.1599084436893463,
+        "z_max": 2.1265554428100586,
+        "centroid": [
+          2.1037230491638184,
+          -0.36074504256248474
+        ],
+        "aabb_min": [
+          1.9397743940353394,
+          -0.7117806673049927
+        ],
+        "aabb_max": [
+          2.3584611415863037,
+          -0.01190658938139677
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.1037230491638184,
+          -0.36074504256248474
+        ],
+        "z_top": 2.1265554428100586,
+        "aabb_min": [
+          1.9397743940353394,
+          -0.7117806673049927,
+          0.1599084436893463
+        ],
+        "aabb_max": [
+          2.3584611415863037,
+          -0.01190658938139677,
+          2.1265554428100586
+        ]
+      },
+      "json": "ann_cap_20261008_114422_55.json",
+      "json_sha256": "fdd43354237655b5da2392d0a7bf8a6b9e362b9ecfee382461c85277b095b2b6",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_55.png",
+      "png_sha256": "205555736c8543a8f95f2aee2668027379bbe9fb4f57d80e505aa3a62e8bc4b5"
+    },
+    {
+      "sid": "cap_20261008_114422",
+      "index": 83,
+      "candidate_count": 2698,
+      "person": {
+        "source_component": 9,
+        "n": 2317,
+        "z_min": 0.16036951541900635,
+        "z_max": 2.1315906047821045,
+        "centroid": [
+          2.103764057159424,
+          -0.3625085651874542
+        ],
+        "aabb_min": [
+          1.9065591096878052,
+          -0.7189849019050598
+        ],
+        "aabb_max": [
+          2.3455557823181152,
+          -0.0144143495708704
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.103764057159424,
+          -0.3625085651874542
+        ],
+        "z_top": 2.1315906047821045,
+        "aabb_min": [
+          1.9065591096878052,
+          -0.7189849019050598,
+          0.16036951541900635
+        ],
+        "aabb_max": [
+          2.3455557823181152,
+          -0.0144143495708704,
+          2.1315906047821045
+        ]
+      },
+      "json": "ann_cap_20261008_114422_83.json",
+      "json_sha256": "3049a1776b63e4e84f72674ce1353bc760dcbb010bad631a9af8d2fb11231655",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_83.png",
+      "png_sha256": "46f2ecf34ff0093703788c75ca79674b28fa7622aee2f75bb5b263364e85fe99"
+    },
+    {
+      "sid": "cap_20261008_114422",
+      "index": 111,
+      "candidate_count": 2710,
+      "person": {
+        "source_component": 10,
+        "n": 2305,
+        "z_min": 0.15784069895744324,
+        "z_max": 2.133887529373169,
+        "centroid": [
+          2.1035947799682617,
+          -0.36361458897590637
+        ],
+        "aabb_min": [
+          1.9319722652435303,
+          -0.7165932059288025
+        ],
+        "aabb_max": [
+          2.3436970710754395,
+          -0.014878724701702595
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.1035947799682617,
+          -0.36361458897590637
+        ],
+        "z_top": 2.133887529373169,
+        "aabb_min": [
+          1.9319722652435303,
+          -0.7165932059288025,
+          0.15784069895744324
+        ],
+        "aabb_max": [
+          2.3436970710754395,
+          -0.014878724701702595,
+          2.133887529373169
+        ]
+      },
+      "json": "ann_cap_20261008_114422_111.json",
+      "json_sha256": "d814754c8cfdf1a0f9e17fdcfc4c696c7785850c259ca5a6261738bbf61b963b",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_111.png",
+      "png_sha256": "1d941201376da3a5fa25ef19f14102b7f3a27e2b59d3f11a7ba3b476989f5ee3"
+    },
+    {
+      "sid": "cap_20261008_114422",
+      "index": 139,
+      "candidate_count": 2705,
+      "person": {
+        "source_component": 9,
+        "n": 2297,
+        "z_min": 0.15793809294700623,
+        "z_max": 2.1326348781585693,
+        "centroid": [
+          2.103212594985962,
+          -0.36770763993263245
+        ],
+        "aabb_min": [
+          1.9175808429718018,
+          -0.7037336826324463
+        ],
+        "aabb_max": [
+          2.342665433883667,
+          -0.01548730954527855
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.103212594985962,
+          -0.36770763993263245
+        ],
+        "z_top": 2.1326348781585693,
+        "aabb_min": [
+          1.9175808429718018,
+          -0.7037336826324463,
+          0.15793809294700623
+        ],
+        "aabb_max": [
+          2.342665433883667,
+          -0.01548730954527855,
+          2.1326348781585693
+        ]
+      },
+      "json": "ann_cap_20261008_114422_139.json",
+      "json_sha256": "6d7b04e00adfeefc668d0293dc744742ffba263c45f9f0f71f6aeb44dc6a073e",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_139.png",
+      "png_sha256": "6665f785e9f69965df22798acf7b9bc1ae967b6bfb06d40b76842b1809562dfd"
+    },
+    {
+      "sid": "cap_20261008_114422",
+      "index": 166,
+      "candidate_count": 2715,
+      "person": {
+        "source_component": 12,
+        "n": 2307,
+        "z_min": 0.16027963161468506,
+        "z_max": 2.129744291305542,
+        "centroid": [
+          2.1016809940338135,
+          -0.36563462018966675
+        ],
+        "aabb_min": [
+          1.9269219636917114,
+          -0.7030982971191406
+        ],
+        "aabb_max": [
+          2.3415865898132324,
+          -0.015227535739541054
+        ],
+        "id": 0
+      },
+      "needs_manual": false,
+      "gt_proposal": {
+        "centroid_xy": [
+          2.1016809940338135,
+          -0.36563462018966675
+        ],
+        "z_top": 2.129744291305542,
+        "aabb_min": [
+          1.9269219636917114,
+          -0.7030982971191406,
+          0.16027963161468506
+        ],
+        "aabb_max": [
+          2.3415865898132324,
+          -0.015227535739541054,
+          2.129744291305542
+        ]
+      },
+      "json": "ann_cap_20261008_114422_166.json",
+      "json_sha256": "2d8e24feb80c78057d7777e8557ecf193edc71af62b134ac540fbcf69cecddfa",
+      "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_166.png",
+      "png_sha256": "bee4bf18dd84b0cce3c0b4a60cf674dac4f508d4e255adca4720a37f2232751a"
+    }
+  ],
+  "hardneg": {
+    "sid": "cap_20261008_114819",
+    "index": 122,
+    "count": 3,
+    "json": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/hardneg_cap_20261008_114819_122.json",
+    "png": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/hardneg_cap_20261008_114819_122.png",
+    "png_sha256": "fb1404c5bb665d71c20fcef9f6dfb16758fe94150a14de5c0ac110edeea83462"
+  },
+  "files": [
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114205_104.json",
+      "sha256": "3f7972e11cae2124ff8c2cb4efa4c914b913157a4fe4e9dab67f61b21faceb5b"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114205_139.json",
+      "sha256": "e9766d419b1e6378fa024e234f2964db57e4026440352a0c54df6d4f6e182612"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114205_174.json",
+      "sha256": "449c7476b04ea598d8fb0538366ba3c91d36b5417ea8e26c5876a18b92c321eb"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114205_208.json",
+      "sha256": "4d85d9e1d9d51b3b5a11a6dd3f8a1e40c80baf3c57fc7c90597460db7087cb73"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114205_35.json",
+      "sha256": "5c493ae92119466677516422143e2c8e0225710bd9ffa97dfab347476c3f3677"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114205_69.json",
+      "sha256": "5d304902256489a3e0a572105c30b7955c8323370d7e2e9a74a2e8652e2a1253"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114254_116.json",
+      "sha256": "bcc4e0f7b70e87bf8436c09ef61f8d311873c8b3666e3ea751c2e59f46e0c30d"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114254_154.json",
+      "sha256": "4b199a0d5f10e099c236d187a36981fdc8e11ad1f198d732c6c61a4d8cab7b0a"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114254_193.json",
+      "sha256": "ba81311c67eeff1fcbed4fca423886a05efa7b237ac28cb882448477e444f24a"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114254_231.json",
+      "sha256": "84cf6325bd8bab44aed1f8c4daaa4e701e84c8b2e5fe7019925e43c9a35d2fdd"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114254_39.json",
+      "sha256": "96725164fc1d994886714bbca8d25036da3439ef0aa3c5bea7a7b2414c8ca1db"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114254_77.json",
+      "sha256": "be807aa544a048d38f2e252c80c7ac94aeef5584d3e3fc059fa8b53ed7af943e"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114340_120.json",
+      "sha256": "c17334ce335c99bb2b21e727c7c77eb2ec8df6aa2c828d0b2c54c6a8af07a4ed"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114340_160.json",
+      "sha256": "829627f5794c8f657041078af174889c610722da72e90ff5ec9d4ad99895d549"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114340_200.json",
+      "sha256": "12d9c8f84e3e43d6c0ca989aeb0ab523ad687d9dd578702f092afb1b1e2af000"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114340_240.json",
+      "sha256": "f924308b240a78d783d06c194d650efe9039799c97909fb42fffcb338736d4a1"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114340_40.json",
+      "sha256": "ad1203820a8577fd430614301ef27dda39aaccebd2cea522f981ace7983c6294"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114340_80.json",
+      "sha256": "566fcd3ee22d75d2666e9a94edec88cb9f5c41943a4b53052bb0064e9b10077f"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114422_111.json",
+      "sha256": "d814754c8cfdf1a0f9e17fdcfc4c696c7785850c259ca5a6261738bbf61b963b"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114422_139.json",
+      "sha256": "6d7b04e00adfeefc668d0293dc744742ffba263c45f9f0f71f6aeb44dc6a073e"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114422_166.json",
+      "sha256": "2d8e24feb80c78057d7777e8557ecf193edc71af62b134ac540fbcf69cecddfa"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114422_28.json",
+      "sha256": "89ea84f6419189a8ea6a3757c21a7a6971a4add4685a6f287e5ddbf44482f13e"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114422_55.json",
+      "sha256": "fdd43354237655b5da2392d0a7bf8a6b9e362b9ecfee382461c85277b095b2b6"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/ann_cap_20261008_114422_83.json",
+      "sha256": "3049a1776b63e4e84f72674ce1353bc760dcbb010bad631a9af8d2fb11231655"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/hardneg_cap_20261008_114819_122.json",
+      "sha256": "b46c08061e8b75bbd5dcfe5b2cd4a40790c02609aad9713f7f3dd6ca682cc097"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_104.png",
+      "sha256": "7562c91f9ebbcdde0eb490eee712b5539347bf094b5793f57533ddeecf5d5e0a"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_139.png",
+      "sha256": "8606b562d37acad9879be46ac23bfd39e02c56989b882ec0e23aa34c0d4b7d36"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_174.png",
+      "sha256": "ba6982a39a30b44e8ca9f7dd80d08228015e901e399b62b7eb0aff788ffb1845"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_208.png",
+      "sha256": "6afcb586eedec356785ecdbc730a56ea0f7b669722b3903b81ccbe8e6ec148eb"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_35.png",
+      "sha256": "217657f7c24423cb7629951a510b65b0333c98ad5e1039cea0722cfe5349f0a7"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114205_69.png",
+      "sha256": "96c5eda4680489c56af5e6a720dc301ef8647fcd647b6a45c0c98c0d17b7d0d7"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_116.png",
+      "sha256": "6f0adf7a3ed8c83677fcbc3007fcbc9216f7474d3181cdbf8012c975574ad578"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_154.png",
+      "sha256": "6fd241d454704de4c88a6b70d21cab9217f7c0c77d28c25961daafc7846aee57"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_193.png",
+      "sha256": "4b37fd0f696e473f54e28a759a932213e8e72bded25cdb68a25f6bc0215ccb1f"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_231.png",
+      "sha256": "023430aa5fdb8f26dc0dcedcbac185418b1903ebdc8ea2a63894298fc6d80abe"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_39.png",
+      "sha256": "da12bd76c3cb50ad2e6fc49cba574d297aa67765dda1c0369f33e1caaffc4b35"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114254_77.png",
+      "sha256": "d42f3ed1b173fc7c8057ff5b666f2dcaede1118ab87ff374dfff4e53cea72be2"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_120.png",
+      "sha256": "f31260c55c84460f864daa9206eca7a2c238c28b029bb0fd8c8eabf66dbb5938"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_160.png",
+      "sha256": "58deb3ba77f8d2e356214cbe9ae7d0b3f8b2c3592b83019f64bf1c5042d1bdb9"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_200.png",
+      "sha256": "4e78af0c692e95e5b6443adc922a1fb2a1136a23d245023f150a8a5a35b984f5"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_240.png",
+      "sha256": "97318c04900e8c633294a719ef501a725875307c553d7b14a6f1ee151dc61f0d"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_40.png",
+      "sha256": "dd779baae5af00556ae2cfa007a10b73b6dce1c1bd1bc0f599d2551ddca6bf7c"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114340_80.png",
+      "sha256": "b83bd1e22e7afb68357e547eaac4170cdd3fcd1fd07273b5e95be6a34df83a79"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_111.png",
+      "sha256": "1d941201376da3a5fa25ef19f14102b7f3a27e2b59d3f11a7ba3b476989f5ee3"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_139.png",
+      "sha256": "6665f785e9f69965df22798acf7b9bc1ae967b6bfb06d40b76842b1809562dfd"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_166.png",
+      "sha256": "bee4bf18dd84b0cce3c0b4a60cf674dac4f508d4e255adca4720a37f2232751a"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_28.png",
+      "sha256": "2a03df96050b95c5f7e902ca9d72af2a3cc04df5fc389043cd8077f82d9b9043"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_55.png",
+      "sha256": "205555736c8543a8f95f2aee2668027379bbe9fb4f57d80e505aa3a62e8bc4b5"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/ann_cap_20261008_114422_83.png",
+      "sha256": "46f2ecf34ff0093703788c75ca79674b28fa7622aee2f75bb5b263364e85fe99"
+    },
+    {
+      "path": "sidequests/human_detectors/artifacts/det06_r1/annotate_r3/renders/hardneg_cap_20261008_114819_122.png",
+      "sha256": "fb1404c5bb665d71c20fcef9f6dfb16758fe94150a14de5c0ac110edeea83462"
+    }
+  ],
+  "note": "author proposal v1; pending user confirmation before gt_eval_v1 freeze"
+}

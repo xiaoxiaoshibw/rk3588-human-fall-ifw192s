@@ -1,0 +1,169 @@
+{
+  "client_date": "2026-10-08",
+  "writer": "OpenCode only (opencode-go/deepseek-v4.1-flash)",
+  "skill": "opencode skill tool (id=ponytail, intensity=full); base C:/Users/30680/.config/opencode/skills/ponytail; SKILL.md verified",
+  "commands": [
+    {
+      "log": "00_baseline.log",
+      "command": "python -B -W error docs/sidequests/evidence/2026-10-08_det05_r1/00_baseline.py",
+      "exit_code": 0
+    },
+    {
+      "log": "03_annotation_run.log",
+      "command": "python -B -W error sidequests/human_detectors/det05_annotate.py --out sidequests/human_detectors/artifacts/det05_r1/annotate --evidence docs/sidequests/evidence/2026-10-08_det05_r1",
+      "exit_code": 0
+    },
+    {
+      "log": "03_annotation_dev_fail.log",
+      "command": "python -B -W error sidequests/human_detectors/det05_annotate.py (first run; relative-to bug)",
+      "exit_code": 1
+    },
+    {
+      "log": "03c_freeze.json",
+      "command": "python -B -W error sidequests/human_detectors/det05_freeze.py --out sidequests/human_detectors/artifacts/det05_r1/frozen --evidence docs/sidequests/evidence/2026-10-08_det05_r1 --confirm-file <utf8 file>",
+      "exit_code": 0
+    },
+    {
+      "log": "08_regression.log",
+      "command": "python -B -W error -m unittest discover -s sidequests/human_detectors -p test_experiment.py -v",
+      "exit_code": 0
+    },
+    {
+      "log": "09_experiment.log",
+      "command": "python -B -W error sidequests/human_detectors/det05.py --out sidequests/human_detectors/artifacts/det05_r1/runs --evidence docs/sidequests/evidence/2026-10-08_det05_r1",
+      "exit_code": 0
+    },
+    {
+      "log": "10_independent_checks.log",
+      "command": "python -B -W error docs/sidequests/evidence/2026-10-08_det05_r1/10_independent_checks.py",
+      "exit_code": 0
+    },
+    {
+      "log": "18_integrity.log",
+      "command": "python -B -W error docs/sidequests/evidence/2026-10-08_det05_r1/18_integrity.py",
+      "exit_code": 0
+    },
+    {
+      "log": "17_packaging.log",
+      "command": "python -B -W error docs/sidequests/evidence/2026-10-08_det05_r1/17_package.py",
+      "exit_code": 0
+    }
+  ],
+  "new_network_forwards": 20,
+  "regression_tests": 12,
+  "code": [
+    {
+      "path": "sidequests\\human_detectors\\audit_inputs_det03.py",
+      "sha256": "af050e8e82e927742a8d484af1fa32088ad8bf65d3a9f50de00646c8e48bdefd"
+    },
+    {
+      "path": "sidequests\\human_detectors\\audit_truth.py",
+      "sha256": "f0980d22d7f7d5e0e231a7df8c60d04ce4b29def65bcd97089ac8bc2768299a8"
+    },
+    {
+      "path": "sidequests\\human_detectors\\batch_static.py",
+      "sha256": "aacddaaca4a0af05411e366fd22410ef1bc87f75d753d9bb3c06607521813f93"
+    },
+    {
+      "path": "sidequests\\human_detectors\\cpu_pointpillars.py",
+      "sha256": "a96295143653ee932af874e1ca0a90ccfde4ff7ea8171f553eebfa27214d7224"
+    },
+    {
+      "path": "sidequests\\human_detectors\\det04.py",
+      "sha256": "00fec42efaf9c468ed3eafbbadd06591d92c6d0051bb437d1c2e4a50c021f689"
+    },
+    {
+      "path": "sidequests\\human_detectors\\det05.py",
+      "sha256": "10e69e4d03dc5ed03b001999d90c31e5082db33048034aec015a2ad9c445320f"
+    },
+    {
+      "path": "sidequests\\human_detectors\\det05_annotate.py",
+      "sha256": "d8f109ee3bd4020a647c2c203ee5d6c59088397149e3f4b2f8ad0e145aa25bb8"
+    },
+    {
+      "path": "sidequests\\human_detectors\\det05_freeze.py",
+      "sha256": "412d1ae5a30b5f2d3504a52cb38f15f7ff9cc533cd30b2b4593210afc37605b2"
+    },
+    {
+      "path": "sidequests\\human_detectors\\diagnose_low_scores.py",
+      "sha256": "df22717aba7c17d65c8ac5004f9d509f05259f574aa9fc32bb7aa492ba93e873"
+    },
+    {
+      "path": "sidequests\\human_detectors\\download_pointpillars.py",
+      "sha256": "89e08d7e1c42316ae9fa84100785a5fb420bfe3ac97792a35832ce63c19c4b0b"
+    },
+    {
+      "path": "sidequests\\human_detectors\\experiment.py",
+      "sha256": "996e1332e258a83d682291065186e009c2e3176e87ace44cb500eafae814ec5d"
+    },
+    {
+      "path": "sidequests\\human_detectors\\head_probe.py",
+      "sha256": "e8c3873f0a17ee2f1647284d2e2424c8ce1fca495ff5fae543ee15ff76f58b50"
+    },
+    {
+      "path": "sidequests\\human_detectors\\infer_background.py",
+      "sha256": "0be5aa1c63d66144ba7ae106a26991c88bd0826d398c79a8c7a112e1b53dae4f"
+    },
+    {
+      "path": "sidequests\\human_detectors\\plot_background.py",
+      "sha256": "9a72262585d47dfd4163fbbe34c0cfd21ca9c2b85a3bae8ec2abbe6bfbec1abc"
+    },
+    {
+      "path": "sidequests\\human_detectors\\plot_static.py",
+      "sha256": "0b1798860bdc7db4f8be0fe214ada5a8d803b7043be886c9906ad6b19dbea124"
+    },
+    {
+      "path": "sidequests\\human_detectors\\prepare_background.py",
+      "sha256": "28305a1078dfaf7afad47baa7adb536896eeadb26963a52463d2cbf1c6c09493"
+    },
+    {
+      "path": "sidequests\\human_detectors\\README.md",
+      "sha256": "5df5ca6b773ae3535cc2f85b313579cffac58a614225a29541c4a5e5b8092ae3"
+    },
+    {
+      "path": "sidequests\\human_detectors\\sampling_attribution.py",
+      "sha256": "ca18ff6e8e7ceaf1fee568788fa8f842358956dd25b4dc71f43de08b3615eee6"
+    },
+    {
+      "path": "sidequests\\human_detectors\\summarize_det03.py",
+      "sha256": "312dafb4d47ee9bf93c83dbac38312ab63f00b61acbe28ddbeeaecdca7a298d7"
+    },
+    {
+      "path": "sidequests\\human_detectors\\test_experiment.py",
+      "sha256": "d94a2e54f08539967fb5a20563251cff92285c5f85f0734af478ea6262d5b121"
+    },
+    {
+      "path": "sidequests\\human_detectors\\upstream_kernel_check.py",
+      "sha256": "03cb11d9fdc8d1957a27c924b258e37ad8ee98e8d92482cc6fdee434d96ff715"
+    },
+    {
+      "path": "sidequests\\human_detectors\\voxel_kernel_check.py",
+      "sha256": "b550660b9959b12ca5bbcfd41e967d97ebb8b3557d87d6e58554c2aa70c088c0"
+    },
+    {
+      "path": "sidequests\\human_detectors\\voxel_probe.py",
+      "sha256": "a245f42287f52123d59d24033b8dbecb74566219aab1f62b52b1219fd7fa12c2"
+    }
+  ],
+  "script_execution_sha256": "10e69e4d03dc5ed03b001999d90c31e5082db33048034aec015a2ad9c445320f",
+  "script_final_sha256": "10e69e4d03dc5ed03b001999d90c31e5082db33048034aec015a2ad9c445320f",
+  "annotate_sha256": "d8f109ee3bd4020a647c2c203ee5d6c59088397149e3f4b2f8ad0e145aa25bb8",
+  "freeze_sha256": "412d1ae5a30b5f2d3504a52cb38f15f7ff9cc533cd30b2b4593210afc37605b2",
+  "checkpoint_sha256": "482dfcf63b932cc5ccf012b4bbdad52aa51aa33becf87d0a39d61c39b377b5b1",
+  "plan_sha256": "ac73722b2313476ed4e2e7ea8b5235604ff66bdf57d31ae3cec5b36bbabd40aa",
+  "acceptance_prerun_sha256": "5181abbff2379d64ebe1536dc8d5784ef87bf6df22e00b6161eb2714107982fd",
+  "acceptance_submission_sha256": "462c91519c18d4242a467bcb92146550faa8e810df608f746e65816d51c2b537",
+  "labels_v1_sha256": "c0b27d5e6b31fcbc60037dd163c1951f4efe7180254819b503abdcc609aa9604",
+  "gt_v1_sha256": "b1516d317cc010c770fe0600ee5a32a52197b57e8c79dfc6599be256cddc6d48",
+  "report_sha256": "de35454e3c763947c7af0ea2965442e6123d710a46f48e4f55d85455471bd797",
+  "return_sha256": "a50aac46d95afccd9d7fbf850f3c59db122b1fb6ffedfb6b598d8552cf490384",
+  "consumed_assets_checked": 3211,
+  "consumed_assets_changes": [],
+  "ignored_existing_checked": 5809,
+  "ignored_existing_changes": [],
+  "additional_consumption": "DET03/04 archived rows/traces/pillars, FG/PRE inputs, seed: protected by 00 baseline; new det05 code/config/plan/frozen bound here",
+  "original_external_changes": [],
+  "integrity_sha256": "e793619b246d31c83f61924e0dd396403f14ba99ac2e01016dc9941e82eb840d",
+  "index_policy": "17 index excludes itself/22 scope/final-check and active packaging log to avoid cyclic or incomplete hashes",
+  "note": "17b refresh: return gained its per-ID self-check table after the first packaging pass; all other bound SHAs reverified; no other changes"
+}

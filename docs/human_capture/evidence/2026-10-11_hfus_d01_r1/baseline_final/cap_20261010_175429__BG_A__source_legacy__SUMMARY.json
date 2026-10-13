@@ -1,0 +1,120 @@
+{
+  "sid": "cap_20261010_175429",
+  "label": "BG_A",
+  "inputMode": "source_legacy",
+  "input_sha256": {
+    "meta": "4ee0d149864139f4ac3f55610ab28bf248da5283b03f1ba12edc3ace824e7278",
+    "points": "6e5874b41c92ba178e154c55d4b49c01aa7e1457b8c59bb0658973de3da7f809"
+  },
+  "gt_sha256": "3b7ba46e168d84394adeca2df06a0a05ab384997f93db13ad5766aae1671f162",
+  "gt_binding_valid": true,
+  "coordinate": {
+    "already_leveled": false,
+    "R": [
+      0.893544,
+      0,
+      0.448975,
+      -0.014337,
+      0.99949,
+      0.028533,
+      -0.448746,
+      -0.031932,
+      0.893089
+    ],
+    "T": [
+      0,
+      0,
+      1.380286
+    ]
+  },
+  "config": {
+    "mode": "FUSION",
+    "background": "ref_only",
+    "candidates": "fg_plus_retained",
+    "classifier": "rf51",
+    "rf51_threshold": 0.55,
+    "confirm_window": 5,
+    "confirm_votes": 3,
+    "min_age_frames": 3,
+    "track_gate_xy_m": 0.75,
+    "track_lost_max": 8,
+    "ema_alpha": 0.35,
+    "retention": {
+      "window_confirm": 3,
+      "timeout_s": 180,
+      "hot_cell_radius_m": 0.4,
+      "max_lost_for_retain": 30
+    },
+    "leveling_rt": null,
+    "hard_gate_n500": false,
+    "replay_policy": "strict",
+    "diagnostics": true,
+    "fusion_cfg": {
+      "assoc_gate_xy_m": 0.75,
+      "track_gate_xy_m": 0.75,
+      "track_lost_max": 30,
+      "track_still_confirm_window": 5,
+      "track_still_confirm_votes": 3,
+      "track_still_confirm_min_age": 3,
+      "rf51_threshold": 0.55,
+      "bg_envelope_path": null,
+      "online_background": false
+    }
+  },
+  "total_frames": 258,
+  "qualified_frames": 258,
+  "unknown_frames": 0,
+  "exposure_seconds": 26.74331307411194,
+  "strict": {
+    "proposal": {
+      "tp": 163,
+      "fn": 95,
+      "fp": 0,
+      "unmatched_unknown": 478
+    },
+    "accepted": {
+      "tp": 163,
+      "fn": 95,
+      "fp": 0,
+      "unmatched_unknown": 114
+    },
+    "observed_confirmed": {
+      "tp": 161,
+      "fn": 97,
+      "fp": 0,
+      "unmatched_unknown": 104
+    }
+  },
+  "legacy": {
+    "accepted": {
+      "tp": 258,
+      "fp": 19,
+      "fn": 0
+    },
+    "confirmed": {
+      "tp": 256,
+      "fp": 9,
+      "fn": 2
+    }
+  },
+  "component_count": 17190,
+  "hard_rejected_components": 16549,
+  "invalid_candidate_row_count": 0,
+  "coast_observations": 4,
+  "duplicate_track_ids": 0,
+  "performance": {
+    "warmup": 5,
+    "p50_ms": 82.26059999999416,
+    "p95_ms": 96.00780000000668,
+    "p99_ms": 102.13940000000002,
+    "peak_heap_mb": 261.5191192626953,
+    "includes_diagnostic_shadow": true
+  },
+  "failures_file": "cap_20261010_175429__BG_A__source_legacy__FAILURES.json",
+  "limits": [
+    "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+    "propagated observations conditional, not independent human review",
+    "diagnostic shadow performance not pure detector performance",
+    "nine sessions development regression, not blind test"
+  ]
+}

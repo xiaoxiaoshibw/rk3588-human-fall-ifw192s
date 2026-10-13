@@ -1,0 +1,167 @@
+TEST human_replay_lib.test.js
+ok replay.js: 浏览器脚本完整可解析（sid 接口注册前置）
+ok frame_slice: 正常帧表 + 累计区间
+ok frame_slice: 断裂 offset 报错
+ok frame_slice: 空帧表报错
+ok strided_f32_copy: 从 7-f32 跨步抽 [x,y,z,i]
+ok strided_f32_copy: 中间帧切片
+ok pick_intensity_range: 宽分布给 [p2,p98]
+ok pick_intensity_range: 常数强度退化为防零窗口
+ok intensity_to_gray: clamp 0..1
+ok format_hhmmss
+ok fly_aim: 鼠标右移=向右转（yaw&lt;旧值），下移=低头，pitch 钳位 ±88.8°
+ok fly_axes: 零角度时 fwd=+X right=-Y；俯仰 90° 时 fwd=+Z
+ok fly_aim_from_dir: 反推能得到正前方 (1,0,0) 的 yaw=0 pitch=0，向上看 pitch=π/2
+ok default_fps: 用 meta 值,异常回退 10
+ok trim: 合法 [s,e] 切片 → frames 重新 0 起累计 + byte_range 对齐
+ok trim: 越界 [s,e] 抛 '区间越界'
+ok trim: seq 断档抛 'seq 非连续'（中断 clip 视为不合法）
+ok trim: 累计和 ≠ bin 大小抛 '字节数不符'
+ok trim: rewrite_meta_for_trim 白名单 + extraction 重写 + 刻度继承
+ok trim: pre_trim_check 磁盘余量档位
+ok trim: trim_command_string 含 src/start/end
+ok trim.js: 端到端切片 byte-identical + 字段契约
+ok trim.js: 已存在 dst → exit 2
+ok view_preset: 四个预设 + home 字段齐全
+ok view_preset: front 与 VIEW_FRONT 同向（雷达后方朝 +X，驾驶第二视角）
+ok view_preset: 未知名称抛错
+ok measure_dist / measure_format: 欧氏距离 + 格式化
+ok ray_ground_intersect: 射线打地
+ok find_nearest_xy: 按 xy 最近点
+ok HR-04 exports: LS_PREFIX 非空前缀
+ok bbox_from_ground_rect: 无点云回退默认 1.8m
+ok bbox_from_ground_rect: 点云 z 分位 = 2%/98%
+ok bbox_from_rect: 点云缺失/空时回退
+ok undo_stack: 20 层容量 + pop/push 往返
+ok annotation_validate_box: 字段/数值合法双通道
+ok annotation_snap_step: 捕捉步进表
+ok annotation_serialize: 只输出已定稿，契约字段全
+ok HR-05 exports: 必备函数齐全
+ok pick_point_on_ray: 射线正中挑到最近点
+ok pick_point_on_ray: 距离半径太近/太远都落空
+ok pick_point_on_ray: 背后点被跳过
+ok human_box_from_pick: 有 pick —— 落 pick 的 (x,y)
+ok human_box_from_pick: 无 pick 有 ray∩z=0 —— 落地面点 (x,y)
+ok human_box_from_pick: 两者都无 → null（不放空）
+ok make_click_throttle: 200ms 门闸
+all 45 tests passed
+EXIT 0
+TEST panel.test.js
+PASS O1/O5: local-first, offline click, timeout, recovery, selection, stale refresh, remote auto-sync+load, rename; R1 stuck-recover-retry; R2 recording elapsed
+EXIT 0
+TEST human_detect_lib.test.js
+ok  DETECT.defaults 物理合理
+ok  points_in_cylinder: 仅取 ROI 内 + z 带内点
+ok  frame_human_features: 站立 → standing / is_human_like
+ok  frame_human_features: 弯腰 → bending（身高降、躯干前倾）
+ok  frame_human_features: 躺平 → lying（主轴横躺）
+ok  frame_human_features: 衣柜 decoy → 不判 is_human_like
+ok  frame_human_features: 点太少 → ok:false 带 reason
+ok  EmaTracker: 平滑人形移动 & 突变保护
+ok  EmaTracker: 连丢 max_lost_frames+1 帧 → reset
+ok  smoothed_to_box: 生成 Three 友好 bbox
+ok  _eig3_sym: 三特征值正确（直立 ≈ z 主轴）
+
+11 passed, 0 failed
+EXIT 0
+TEST human_pipe_lib.test.js
+ok  PIPE 阈值物理合理
+ok  denoise: 距窗 + 有限点过滤
+ok  voxelize: 协方差累加器逐帧单遍、体素键聚合
+ok  build_static_map: 家具在 N 帧全占用 → 进背景；动人不进
+ok  extract_foreground: 工作空间 + 背景匹配后，前景只剩人附近区域
+ok  classify: 站立人 → HUMAN_CANDIDATE（几何只能「像人」，不拖黑 HUMAN）
+ok  classify 衣柜: 仅靠几何也即HUMAN_CANDIDATE（同 limb 教训：沙发≈衣柜≈直立人）
+ok  classify 沙发: NON_HUMAN 因身高不足
+ok  Tracker: 单人跨帧保持 ID + EMA 平滑 + lost 关闭
+ok  evidence: 衣柜/均匀盒体 → SOLID_UNIFORM / 立体人 → HUMAN_SHAPE (HR-07 five-dim one-evidence 反切)
+ok  fall_assess: 直→躺 判 fall / 弯腰不判 / 恢复取消
+ok  pipeline_frame: 全链路返回结构完整
+ok  【根因回归】build_static_map 必须先剔地面: 地板上的人不被当地板吞
+ok  【根因回归】extract_foreground 点级剔地面后, 人簇内无贴地板点
+ok  工作空间裁剪: z>z_max_m 不进前景/背景（不叫去噪）
+ok  背景两级(R2.2/R2.3): 强静态 / 邻域支持 / 孤立不补 / 抖动超限不补
+ok  joint_status: 硬门 × 证据 → 绿/紫/灰 三态
+ok  Tracker 时间确认(R2.5): 3/5 帧 CONFIRMED_HUMAN 且 age≥3 才 human_confirmed
+ok  R2.6 孤立清理: 独立单点体素 → 删除
+ok  R2.6 孤立清理: 单点体素旁有前景体素（面邻） → 保留
+ok  R2.6 孤立清理: 对角邻（26 邻域）也算前景邻居 → 保留
+ok  R2.6 孤立清理: 两个相邻单点体素 → 都保留
+ok  R2.6 孤立清理: single-pass 语义（A-B-主体链 + 远处孤立点，不连锁删除）
+ok  R2.6 孤立清理: 多点孤立体素（≥2 点） → 不删除
+ok  R2.6b-A 真孤立单点: XY degree=0 → REMOVE
+ok  R2.6b-B XY 叶子（度1, cell 最后占用） → REMOVE
+ok  R2.6b-C XY 桥（度2, cell 最后占用） → VETO / KEEP
+ok  R2.6b-D 度3 → VETO / KEEP
+ok  R2.6b-E 同 XY cell 其他 Z 层仍占用 → 直接删（Case A，无需 veto）
+ok  R2.6b-F snapshot 语义: 链 q1-q2-q3 不级联（q2 按原图度2 veto）
+ok  R2.6b-G frame16 型桥接回归: 长簇不得 split
+ok  R2.6b 诊断分区: 混合场景 candidates == vetoed + removed_voxels
+ok  R3.1: 每帧仅 1 点也计 observed（≥1 门）；在线 ≥2 门看不见的稀疏面进参考图
+ok  R3.1: persistence 抵御噪声（单帧噪声不入图）+ 阈值显式可控
+ok  R3.1: 统计字段（形心/抖动/密度）+ 工作空间裁剪与在线一致
+ok  HR-RET-V2: extract_foreground_fused —— 参考删 / 在线-邻域支持删 / 在线-only 保留
+ok  HR-RET-V2: 退化语义 —— refkeys=null 保守（在线-only 不删）；online=null 纯参考
+ok  HR-RET-V2 inc2: pipeline_frame 旗标缺省/refkeys=null = P 逐位；给 refkeys 才走 v2
+
+38 passed, 0 failed
+EXIT 0
+TEST detect_overlay.test.js
+PASS: level_frame already_leveled 透传
+PASS: level_frame 带 R/T 变换 (x)
+PASS: grid_key(0,0)=0
+PASS: grid_key(0.11,0.11)=8194
+PASS: grid_key 负数 floor 一致
+PASS: find_clusters 29 点簇被丢, 只剩 1 簇 (含 30 点)
+PASS: 剩下簇点数=30
+PASS: find_clusters 相距远给 2 簇
+PASS: CE1.a 建 track age=1
+PASS: CE1.b FIX-1: 同帧两簇→两 track (实际 2)
+PASS: CE1.c FIX-1: 原 track age 单帧只 +: 2 (修复前为 3)
+PASS: CE1.d FIX-1: 原 track 位置被其认领簇 A 更新 (不被后簇 B 覆写), cx=2.02
+PASS: CE1.e FIX-1: 两 track 有各自 id (不再共享)
+PASS: 顺序扰动: 两种输入 track 总数均=2 (确定性) AB=2 BA=2
+PASS: CE2 FIX-1: 同帧两簇 track_id 不再共享 (1 vs 2)
+PASS: CE2 FIX-1: clusters track_id 无重复, HUD 不再出现 (track #3 #3)
+PASS: CE3 语义: track 层对连续输入只维护时序 (age=5), 不扮演分类器
+PASS: CE3 FIX-2: is_stable 已从导出删除
+PASS: CE3 FIX-2: stat_count 假字段已删
+PASS: CE4 FIX: 真人漏帧 miss=1, track 留住 (TTL 内)
+PASS: CE4 FIX: age 不因 miss 增长 (单帧至多单++)
+PASS: CE4 FIX: 回帧接回同 track, age=11
+PASS: CE5.a 会话 A 有 1 track
+PASS: CE5.b 切会话: gen 自增 + track 清空
+PASS: CE5.c FIX-3: 旧 gen on_frame 被守卫忽略 (tracks=0)
+PASS: CE5.d FIX-3: 新 gen on_frame 通过, frame_no=1
+PASS: CE6.a 切前多 track, id 到 6
+PASS: CE6.b FIX-3: 切会话后新 track id=1 (不再累计 #8/#11)
+PASS: CE7.a 稳定 A: miss=0 age=6
+PASS: CE7.b 间歇 B: 命中 3 帧 age=3 (单帧单++)
+PASS: CE7.c 间歇 B: 末帧其命中间隔 miss=1
+PASS: 保留: 1.5m 外簇新建 track
+PASS: 保留: 2.0m 簇仍绑回原 id
+PASS: assoc f1: 新建 1 track
+PASS: assoc f2: 保留 track id
+PASS: assoc f3..20: 无目标 18 帧后 track 销毁
+PASS: assoc: 断档 18 帧后回来, 新 track id
+ALL PASS
+EXIT 0
+TEST rf_person.test.js
+PASS: fv[0]=n 点数
+PASS: fv[4]=log10(i_std+1) 落在合理量纲
+PASS: 分位数有限
+PASS: z 带 非负
+PASS: z 带 比例 之和 ≈ 1
+PASS: z_range 非负
+PASS: upright 非负
+PASS: n_pts_ratio_near 占比范围内
+JS features 前 10 维: 
+  100.000 10.000 2000.000 497.365 2.470 1.646 2.022 2.386 0.591 1.016
+p(person) = 0.800
+PASS: 本场 pts 是人形状 (JS fv 中 fv[37..39] 为 0 简化占位), RF 应该给高概率 (>= 0.75)
+person fixture: 6/6 >= 0.7
+PASS: person fixture 应至少 4/5 高概率
+noperson fixture: 9/9 <= 0.3
+PASS: noperson fixture 应全部低概率, 实际未通
+ALL RF_PERSON PASS
+EXIT 0

@@ -1,0 +1,101 @@
+{
+  "source": "diagnostic",
+  "fixed": true,
+  "source_count": 11959,
+  "raw_count": 9897,
+  "kept_count": 5938,
+  "raw_coverage": 0.8275775566518939,
+  "trimmed_coverage": 0.4965298101847981,
+  "max_trimmed_coverage": 0.5999665523873233,
+  "raw_needed": 9967,
+  "raw_coverage_needed": 0.8334308888703069,
+  "keep_needed": 5980,
+  "missing_support": {
+    "NO_TARGET_WITHIN_008": 1684,
+    "NEAREST_TARGET_NO_NORMAL": 378,
+    "RAW_CORRESPONDENCE": 9897
+  },
+  "bySector": [
+    {
+      "sector": 0,
+      "source": 0,
+      "raw": 0,
+      "kept": 0
+    },
+    {
+      "sector": 1,
+      "source": 0,
+      "raw": 0,
+      "kept": 0
+    },
+    {
+      "sector": 2,
+      "source": 1869,
+      "raw": 1845,
+      "kept": 1259
+    },
+    {
+      "sector": 3,
+      "source": 4009,
+      "raw": 3805,
+      "kept": 2489
+    },
+    {
+      "sector": 4,
+      "source": 3744,
+      "raw": 3110,
+      "kept": 1685
+    },
+    {
+      "sector": 5,
+      "source": 2337,
+      "raw": 1137,
+      "kept": 505
+    },
+    {
+      "sector": 6,
+      "source": 0,
+      "raw": 0,
+      "kept": 0
+    },
+    {
+      "sector": 7,
+      "source": 0,
+      "raw": 0,
+      "kept": 0
+    }
+  ],
+  "zero_xyz_findings": [
+    {
+      "side": "source",
+      "zeros": 1250003,
+      "gate_sample": [
+        {
+          "i": 0,
+          "support": 1250003,
+          "reason": "NEAREST_TARGET_NO_NORMAL",
+          "trim": "NO_PAIR"
+        }
+      ]
+    },
+    {
+      "side": "reference",
+      "zeros": 778477,
+      "gate_sample": []
+    }
+  ],
+  "design_only": [
+    "Use explicit raw_valid_correspondence_ratio and trimmed_support_ratio names in a future versioned schema; retain current v1 ratio and 50% gate.",
+    "Contract currently calls n_correspondence final accepted iteration; implementation recomputes sorted/trimmed pairs at fixed B, not saved point-to-point B solver iteration. Clarify protocol without replacing B.",
+    "No independent multi-pair safety calibration supports a new profile; provisional support bands remain conservative. No new profile published.",
+    "Separate matched-only fit residual at radius .30 from fit support radius .08, and validate input/normal coverage before attributing physical causes."
+  ],
+  "physical_causes": {
+    "occlusion": "UNKNOWN",
+    "FOV": "UNKNOWN",
+    "dynamic": "UNKNOWN",
+    "quantization": "UNKNOWN",
+    "physical_floor": "UNKNOWN"
+  },
+  "gate_override": false
+}

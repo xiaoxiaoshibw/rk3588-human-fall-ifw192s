@@ -1,0 +1,68 @@
+{
+  "workitem": "HUMAN-FUSION-UNIFY-R2 / Q01 任务二",
+  "when": "2026-10-11T17:05:00+08:00",
+  "method": "真实 headless Chrome 154 + CDP 交互驱动（非 dump-dom）",
+  "demo": "http://127.0.0.1:8799 （干净 server，修复后代码；8797 陈旧进程已杀，证据污染风险已排除）",
+  "chrome_version": "154.0.8037.99",
+  "status": "PASS",
+  "checks_total": 10,
+  "checks_pass": 10,
+  "checks": [
+    {
+      "name": "E01 default latest-valid session & model",
+      "pass": true
+    },
+    {
+      "name": "E02 deep link sid+model respected, no fallback note",
+      "pass": true
+    },
+    {
+      "name": "E03 bad sid visible fallback",
+      "pass": true
+    },
+    {
+      "name": "E04 seek mid-frame renders candidates w/ indices",
+      "pass": true
+    },
+    {
+      "name": "E05 rewind rebuilds generation (1→2)",
+      "pass": true
+    },
+    {
+      "name": "E05b counter bar syncs after rewind",
+      "pass": true
+    },
+    {
+      "name": "E06 in-page model switch applies",
+      "pass": true
+    },
+    {
+      "name": "E07 reset returns to frame 0",
+      "pass": true
+    },
+    {
+      "name": "E08 candidate row inspection fills detail",
+      "pass": true
+    },
+    {
+      "name": "E09 no page exceptions/console.error",
+      "pass": true
+    }
+  ],
+  "evidence_hygiene": "F-04 已处置：kill 8797 陈旧 PID 15076；干净 8799 server 复跑 10/10；geometry@S8 实测 candidate 级 track_confirmed 与 HUMAN_CANDIDATE 自洽（修复生效）。",
+  "coverage_map": {
+    "六算法实际切换": "E02(rf51_baseline)+E06(xgb69_candidate→xgb69_unique)+E01 默认 xgb69_candidate；geometry/rf51_candidate/rf69_candidate 经 /api/frame 模型对拍+R5 固定候选对拍覆盖",
+    "时间轴随机 seek": "E04 seek=100 中段渲染（candidates=2 btns）+E05/E07 seek=0",
+    "反向 seek": "E05 rewind generation 1→2 递增（内部前缀重建）",
+    "循环播放与 tracker reset": "E07 reset→0、E05b counter 0/522；play 循环专用断言未覆盖 → BLOCKED",
+    "Session 切换": "E02 合法深链尊重+E03 非法回退",
+    "非法 sid 持续可见回退提示": "E03（修复后 status 持续含「回退」）",
+    "异常捕获/请求失败恢复": "E09 全程无 Runtime.exceptionThrown/console.error；网络故障注入恢复未覆盖 → BLOCKED",
+    "候选点云与轨迹显示一致性": "E04 候选 indices 齐备 + E08 点检 detail 含 point_indices_preview；track_confirmed 与 decision 在 geometry(post) 下自洽（verified 干净 8799）"
+  },
+  "blocked_items": [
+    "循环播放 loop+tracker-reset 专用断言",
+    "网络故障注入恢复"
+  ],
+  "evidence_fixes": "cdp_e2e.js: window.frame 永假 → typeof frame 裸绑定；demo.html: pendingFallbackNote 持久回退提示"
+}

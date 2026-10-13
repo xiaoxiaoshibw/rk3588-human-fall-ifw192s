@@ -1,0 +1,18 @@
+............................E
+======================================================================
+ERROR: leveling_test (unittest.loader._FailedTest.leveling_test)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: leveling_test
+Traceback (most recent call last):
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\unittest\loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\docs\sidequests\evidence\2026-10-09_cl2_09b_r1\frozen\leveling_test.py", line 17, in <module>
+    import human_replay_lib as H
+ModuleNotFoundError: No module named 'human_replay_lib'
+
+
+----------------------------------------------------------------------
+Ran 29 tests in 14.900s
+
+FAILED (errors=1)

@@ -1,0 +1,356 @@
+[0m
+> build · deepseek-v4.1-flash
+[0m
+[0m→ [0mSkill "ponytail"
+[0m
+[0m$ [0mls -la "D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/" && echo "=== r2 ===" && ls -la "D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/"
+total 96
+drwxr-xr-x 1 30680 197609     0 Oct 10 12:12 .
+drwxr-xr-x 1 30680 197609     0 Oct  9 22:37 ..
+-rw-r--r-- 1 30680 197609  8841 Oct  9 22:58 C1_INDEPENDENT_REVIEW.md
+-rw-r--r-- 1 30680 197609  2535 Oct  9 22:55 C1_REVIEW_PROMPT.md
+-rw-r--r-- 1 30680 197609 10240 Oct  9 23:12 FINAL_REPORT.md
+-rw-r--r-- 1 30680 197609  7624 Oct  9 23:14 SHA_MANIFEST.sha256
+drwxr-xr-x 1 30680 197609     0 Oct  9 22:52 ab
+drwxr-xr-x 1 30680 197609     0 Oct  9 22:43 attribution
+drwxr-xr-x 1 30680 197609     0 Oct  9 22:45 attribution_v2
+-rw-r--r-- 1 30680 197609 21132 Oct  9 22:58 flicker_analysis.json
+drwxr-xr-x 1 30680 197609     0 Oct 10 12:12 label_audit
+drwxr-xr-x 1 30680 197609     0 Oct 10 12:21 r2
+drwxr-xr-x 1 30680 197609     0 Oct  9 23:09 rf_v2
+drwxr-xr-x 1 30680 197609     0 Oct  9 23:12 workspace
+=== r2 ===
+total 57
+drwxr-xr-x 1 30680 197609     0 Oct 10 12:21 .
+drwxr-xr-x 1 30680 197609     0 Oct 10 12:12 ..
+-rw-r--r-- 1 30680 197609  4659 Oct 10 12:21 C1_REVIEW_PROMPT_R2.md
+-rw-r--r-- 1 30680 197609   886 Oct 10 12:20 CODE_DIFF_R2.md
+-rw-r--r-- 1 30680 197609 14117 Oct 10 12:19 REVIEW_AND_RERUN_R2.md
+-rw-r--r-- 1 30680 197609 12118 Oct 10 12:19 SHA_MANIFEST_R2.sha256
+-rw-r--r-- 1 30680 197609   816 Oct 10 12:22 TEST_LOG_R2.md
+-rw-r--r-- 1 30680 197609    74 Oct 10 12:22 _opencode_raw.txt
+drwxr-xr-x 1 30680 197609     0 Oct 10 12:11 ab
+drwxr-xr-x 1 30680 197609     0 Oct 10 12:12 label_audit
+drwxr-xr-x 1 30680 197609     0 Oct 10 12:11 workspace
+[0m
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/C1_INDEPENDENT_REVIEW.md
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/REVIEW_AND_RERUN_R2.md
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/FINAL_REPORT.md
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/SHA_MANIFEST_R2.sha256
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/CODE_DIFF_R2.md
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/TEST_LOG_R2.md
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/_opencode_raw.txt
+[0m
+[0m$ [0mls -R "D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/label_audit" "D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/ab" "D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/workspace"
+D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/ab:
+v2_raw
+
+D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/ab/v2_raw:
+cap_20261009_121622.clusters.jsonl
+cap_20261009_121622.tracks.jsonl
+cap_20261009_121647.clusters.jsonl
+cap_20261009_121647.tracks.jsonl
+cap_20261009_121723.clusters.jsonl
+cap_20261009_121723.tracks.jsonl
+cap_20261009_122616.clusters.jsonl
+cap_20261009_122616.tracks.jsonl
+cap_20261009_122637.clusters.jsonl
+cap_20261009_122637.tracks.jsonl
+cap_20261009_122700.clusters.jsonl
+cap_20261009_122700.tracks.jsonl
+
+D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/label_audit:
+
+D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/workspace:
+b2a_shadow_probe_v2.js
+c1_ab_metrics.py
+c1_attribution_v2.py
+c1_hierarchical_gate.py
+c1_label_audit.py
+c1_miss_attribution.py
+c1_repair_r1.py
+c1_rf_v2.py
+c1_rf_v2_eval.py
+c1_wilson_perfeature.py
+c1_wilson_r58.py
+extract_cluster_features.py
+outs
+shadow_raw
+
+D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/workspace/outs:
+
+D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/workspace/shadow_raw:
+cap_20261009_121622.clusters.jsonl
+cap_20261009_121622.tracks.jsonl
+cap_20261009_121647.clusters.jsonl
+cap_20261009_121647.tracks.jsonl
+cap_20261009_121723.clusters.jsonl
+cap_20261009_121723.tracks.jsonl
+cap_20261009_122616.clusters.jsonl
+cap_20261009_122616.tracks.jsonl
+cap_20261009_122637.clusters.jsonl
+cap_20261009_122637.tracks.jsonl
+cap_20261009_122700.clusters.jsonl
+cap_20261009_122700.tracks.jsonl
+[0m
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/label_audit/report.md
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/rf_v2/gate_by_session.md
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/rf_v2/leakage_slice.md
+[0m
+[0m$ [0mcd "D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization"
+echo "=== anchors ==="
+sha256sum workspace/b2a_shadow_probe_v2.js ../../../../pc_apps/human_replay/detect_overlay.js ../../../../pc_apps/human_replay/human_pipe_lib.js 2>/dev/null
+echo "=== rf/bg ==="
+find . ../../../../pc_apps -name rf_person_v1.json -o -name bg_envelope.json 2>/dev/null | head
+echo "=== cmp v2_raw 24 ==="
+for f in ab/v2_raw/*.jsonl; do cmp -s "$f" "r2/$f" && echo "OK $f" || echo "DIFF $f"; done
+echo "=== cmp shadow_raw 24 ==="
+for f in workspace/shadow_raw/*.jsonl; do cmp -s "$f" "r2/$f" && echo "OK $f" || echo "DIFF $f"; done
+=== anchors ===
+7ab9623fbc7b21942100ab83867bcf830ccdf020624af8f8e2933a4214eb602d *workspace/b2a_shadow_probe_v2.js
+585d2964e2927fd8dac97bc950190088ba315d89a0dea17564aed3917ad73963 *../../../../pc_apps/human_replay/detect_overlay.js
+8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176 *../../../../pc_apps/human_replay/human_pipe_lib.js
+=== rf/bg ===
+../../../../pc_apps/human_replay/bg_envelope.json
+../../../../pc_apps/human_replay/rf_person_v1.json
+=== cmp v2_raw 24 ===
+OK ab/v2_raw/cap_20261009_121622.clusters.jsonl
+OK ab/v2_raw/cap_20261009_121622.tracks.jsonl
+OK ab/v2_raw/cap_20261009_121647.clusters.jsonl
+OK ab/v2_raw/cap_20261009_121647.tracks.jsonl
+OK ab/v2_raw/cap_20261009_121723.clusters.jsonl
+OK ab/v2_raw/cap_20261009_121723.tracks.jsonl
+OK ab/v2_raw/cap_20261009_122616.clusters.jsonl
+OK ab/v2_raw/cap_20261009_122616.tracks.jsonl
+OK ab/v2_raw/cap_20261009_122637.clusters.jsonl
+OK ab/v2_raw/cap_20261009_122637.tracks.jsonl
+OK ab/v2_raw/cap_20261009_122700.clusters.jsonl
+OK ab/v2_raw/cap_20261009_122700.tracks.jsonl
+=== cmp shadow_raw 24 ===
+OK workspace/shadow_raw/cap_20261009_121622.clusters.jsonl
+OK workspace/shadow_raw/cap_20261009_121622.tracks.jsonl
+OK workspace/shadow_raw/cap_20261009_121647.clusters.jsonl
+OK workspace/shadow_raw/cap_20261009_121647.tracks.jsonl
+OK workspace/shadow_raw/cap_20261009_121723.clusters.jsonl
+OK workspace/shadow_raw/cap_20261009_121723.tracks.jsonl
+OK workspace/shadow_raw/cap_20261009_122616.clusters.jsonl
+OK workspace/shadow_raw/cap_20261009_122616.tracks.jsonl
+OK workspace/shadow_raw/cap_20261009_122637.clusters.jsonl
+OK workspace/shadow_raw/cap_20261009_122637.tracks.jsonl
+OK workspace/shadow_raw/cap_20261009_122700.clusters.jsonl
+OK workspace/shadow_raw/cap_20261009_122700.tracks.jsonl
+[0m
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/workspace/c1_label_audit.py
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/rf_v2/wilson_perfeature.md
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/ab/summary.md
+[0m
+[0m$ [0mcd "D:/Code/ldiar"
+echo "=== find probe files ==="
+find pc_apps/human_replay -name "b2a_shadow_probe*.js" 2>/dev/null
+find . -name "b2a_shadow_probe.js" 2>/dev/null | head
+echo "=== hash rf/bg/probe ==="
+sha256sum pc_apps/human_replay/rf_person_v1.json pc_apps/human_replay/bg_envelope.json 2>/dev/null
+for f in $(find . -name "b2a_shadow_probe.js" 2>/dev/null); do sha256sum "$f"; done
+echo "=== protected snapshot ==="
+find . -name "HRV2.sha256" -o -name "*protected_snapshot*" 2>/dev/null | head
+echo "=== r2 label_audit empty? ==="
+ls -la "docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/label_audit"
+=== find probe files ===
+pc_apps/human_replay/b2a_shadow_probe.js
+./pc_apps/human_replay/b2a_shadow_probe.js
+=== hash rf/bg/probe ===
+4c83db116fe0742d5c1cca8360de6bafcc4ac9abae3910984beabea8d85bfe68 *pc_apps/human_replay/rf_person_v1.json
+28afdaa4838c5fd99221954ab1696bd82289aa1c24c6934afb5808838d6e3f2e *pc_apps/human_replay/bg_envelope.json
+74b4a272e509af609662f430d50376098d5eb3c989adc9c74c73210979b81b81 *./pc_apps/human_replay/b2a_shadow_probe.js
+=== protected snapshot ===
+./docs/human_capture/evidence/2026-10-09_b2a_fix_r1/protected_snapshot
+./docs/human_capture/evidence/2026-10-09_b2a_fix_r1/protected_snapshot/HRV2.sha256
+=== r2 label_audit empty? ===
+total 4
+drwxr-xr-x 1 30680 197609 0 Oct 10 12:12 .
+drwxr-xr-x 1 30680 197609 0 Oct 10 12:21 ..
+[0m
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/ab/per_session.json
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/rf_v2/results.json
+[0m
+[0m$ [0mcd "D:/Code/ldiar"
+echo "=== protected_snapshot HRV2 ==="
+cat "docs/human_capture/evidence/2026-10-09_b2a_fix_r1/protected_snapshot/HRV2.sha256" | grep -i human_pipe_lib
+echo "=== old manifest check (count fail) ==="
+cd "docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization"
+sha256sum -c SHA_MANIFEST.sha256 2>&1 | grep -v ": OK" | head -20
+echo "=== old manifest total lines ==="
+wc -l < SHA_MANIFEST.sha256
+echo "=== r2 dangling review file? ==="
+ls -la r2/C1_INDEPENDENT_REVIEW_R2.md 2>&1
+echo "=== grep vstack/53/51 in c1_rf_v2.py ==="
+grep -n "vstack\|Xf2\|X_t2\|53\|51\|500\|n_pts" workspace/c1_rf_v2.py | head -40
+=== protected_snapshot HRV2 ===
+8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176 *pc_apps/human_replay/human_pipe_lib.js
+917c956398b69637bf6f0ed41dc2c4f9632a522a27981eedbe1a0cf8e8e2e118 *pc_apps/human_replay/human_pipe_lib.test.js
+=== old manifest check (count fail) ===
+./SHA_MANIFEST.sha256: FAILED
+./ab/summary.md: FAILED
+./rf_v2/slice_metrics.json: FAILED
+./rf_v2/wilson_perfeature.md: FAILED
+sha256sum: WARNING: 4 computed checksums did NOT match
+=== old manifest total lines ===
+70
+=== r2 dangling review file? ===
+ls: cannot access 'r2/C1_INDEPENDENT_REVIEW_R2.md': No such file or directory
+=== grep vstack/53/51 in c1_rf_v2.py ===
+70:    Xa = np.vstack([Xa, Xa[dup]]); ya = np.concatenate([ya, ya[dup]])
+98:        X = np.vstack([X, extra_clusters[0]])
+171:    Xcomb = np.vstack([X_t, Xf, Xp_dup])
+175:                        extra_clusters=(np.vstack([Xf, Xp_dup]),
+183:    Xf_dup = np.vstack([Xf, Xf[furn_low_x3]])
+187:                        extra_clusters=(np.vstack([Xf_dup, Xp_dup]),
+193:    X_t2 = X_t[:, :51]
+194:    Xf2 = np.column_stack([Xf, np.zeros((len(Xf), 2), np.float32)])
+196:    Xcomb2 = np.vstack([X_t2, Xf2, Xp2])
+200:                        extra_clusters=(np.vstack([Xf, Xp_dup]),
+[0m
+[0m$ [0mcd "D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization"
+echo "=== old manifest entries for failed files ==="
+grep -E "ab/summary.md|slice_metrics.json|wilson_perfeature.md|SHA_MANIFEST" SHA_MANIFEST.sha256
+echo "=== current hashes ==="
+sha256sum ab/summary.md rf_v2/slice_metrics.json rf_v2/wilson_perfeature.md
+echo "=== old manifest line count vs entries ==="
+grep -c "" SHA_MANIFEST.sha256
+echo "=== mtimes ==="
+ls -la --time-style=+%Y-%m-%dT%H:%M ab/summary.md rf_v2/slice_metrics.json rf_v2/wilson_perfeature.md SHA_MANIFEST.sha256
+=== old manifest entries for failed files ===
+73db32d3612aa0cad1d8aeead9561fbd185ad77720207001d47d1e80e97e82e8 *./SHA_MANIFEST.sha256
+bc55dc78116e6146d3bdd41a50b69ab225f8c989ac8bd83f6420df568a1ce341 *./ab/summary.md
+7ecc18bc4dc4641fbd5a526540a50838e063329ab0111b9a199a5750ad9aaf6d *./rf_v2/slice_metrics.json
+223af251a5eb28815c458eb5f23a503eebf4522f7970395feb1f6ae094e78b3f *./rf_v2/wilson_perfeature.md
+=== current hashes ===
+e91aa9d41e87752fdf233c6b66979931f7152bab2ac57aedacc7b13007773e17 *ab/summary.md
+e34f40cab3c34593a02f1f30fef7ebfbad47b00647dc4e885c6118efc1538474 *rf_v2/slice_metrics.json
+71ba7f68ddc503172484e5d53a5f9ab698920045e16ae56938b633f3fd08bfcd *rf_v2/wilson_perfeature.md
+=== old manifest line count vs entries ===
+70
+=== mtimes ===
+-rw-r--r-- 1 30680 197609 7624 2026-10-09T23:14 SHA_MANIFEST.sha256
+-rw-r--r-- 1 30680 197609 1867 2026-10-10T12:13 ab/summary.md
+-rw-r--r-- 1 30680 197609 3672 2026-10-10T12:19 rf_v2/slice_metrics.json
+-rw-r--r-- 1 30680 197609 2312 2026-10-10T12:19 rf_v2/wilson_perfeature.md
+[0m
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/workspace/c1_rf_v2.py[90m [offset=155, limit=60][0m
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/flicker_analysis.json[90m [limit=60][0m
+[0m
+[0m$ [0mcd "D:/Code/ldiar/pc_apps/human_replay"
+node detect_overlay.test.js 2>&1 | tail -5
+echo "=== human_pipe_lib ==="
+node human_pipe_lib.test.js 2>&1 | tail -3
+echo "=== panel ==="
+node panel.test.js 2>&1 | tail -3
+PASS: assoc f1: 新建 1 track
+PASS: assoc f2: 保留 track id
+PASS: assoc f3..20: 无目标 18 帧后 track 销毁
+PASS: assoc: 断档 18 帧后回来, 新 track id
+ALL PASS
+=== human_pipe_lib ===
+ok  HR-RET-V2 inc2: pipeline_frame 旗标缺省/refkeys=null = P 逐位；给 refkeys 才走 v2
+
+38 passed, 0 failed
+=== panel ===
+PASS O1/O5: local-first, offline click, timeout, recovery, selection, stale refresh, remote auto-sync+load, rename; R1 stuck-recover-retry; R2 recording elapsed
+[0m
+[0m$ [0mcd "D:/Code/ldiar/docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization"
+echo "=== r2 empty dirs ==="
+ls -la r2/label_audit r2/workspace/outs 2>&1
+echo "=== grep dangling review refs ==="
+grep -rn "C1_INDEPENDENT_REVIEW_R2" r2/ 2>/dev/null
+echo "=== r2 manifest self-ref? ==="
+grep -c "SHA_MANIFEST_R2" r2/SHA_MANIFEST_R2.sha256
+echo "=== r2 manifest entry count ==="
+grep -c "" r2/SHA_MANIFEST_R2.sha256
+=== r2 empty dirs ===
+r2/label_audit:
+total 4
+drwxr-xr-x 1 30680 197609 0 Oct 10 12:12 .
+drwxr-xr-x 1 30680 197609 0 Oct 10 12:21 ..
+
+r2/workspace/outs:
+total 4
+drwxr-xr-x 1 30680 197609 0 Oct 10 12:11 .
+drwxr-xr-x 1 30680 197609 0 Oct 10 12:11 ..
+=== grep dangling review refs ===
+r2/REVIEW_AND_RERUN_R2.md:155:复审 prompt 见 `r2/C1_REVIEW_PROMPT_R2.md`，复审原文见 `r2/C1_INDEPENDENT_REVIEW_R2.md`（由 opencode `opencode-go/deepseek-v4.1-flash` 独立执行，只读）。复审结论并入 §9 终判。
+r2/REVIEW_AND_RERUN_R2.md:176:### **进入 C2 资格：以 OpenCode R2 复审为准**（见 §8 引用的 C1_INDEPENDENT_REVIEW_R2.md）
+r2/_opencode_raw.txt:185:ls -la r2/C1_INDEPENDENT_REVIEW_R2.md 2>&1
+r2/_opencode_raw.txt:200:ls: cannot access 'r2/C1_INDEPENDENT_REVIEW_R2.md': No such file or directory
+=== r2 manifest self-ref? ===
+0
+=== r2 manifest entry count ===
+110
+[0m
+[0m→ [0mRead docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/r2/C1_REVIEW_PROMPT_R2.md
+# C1 独立复审报告 R2（OpenCode `opencode-go/deepseek-v4.1-flash`）
+
+- 审计员：OpenCode（独立、只读、未改任何文件）；已加载 `ponytail` skill (full)，按“读全再断”执行。
+- 证据根：`docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/`
+- 独立动作：对磁盘上文件重算 SHA256、逐位 `cmp`、重跑 JS 单测、静态读源码（非采信报告自述）。
+
+---
+
+## A. R2 复核轮是否可信 — 5 主张逐条独立核验
+
+| # | 主张 | 独立核验 | 裁定 |
+|---|---|---|---|
+| 1 | 探针重跑 24/24 cmp IDENTICAL | 我在磁盘上对 `ab/v2_raw/*`(12) 与 `r2/ab/v2_raw/*`(12)、`workspace/shadow_raw/*`(12) 与 `r2/workspace/shadow_raw/*`(12) 逐位 `cmp` → **24/24 IDENTICAL** | **PASS** |
+| 2 | 5 枚锚点 SHA 未变 | 重算：`b2a_shadow_probe.js`=`74b4a272…`、`detect_overlay.js`=`585d2964…`、`human_pipe_lib.js`=`8b50a221…`（≡`2026-10-09_b2a_fix_r1/protected_snapshot/HRV2.sha256`）、`rf_person_v1.json`=`4c83db11…`、`bg_envelope.json`=`28afdaa4…`，逐位一致 | **PASS** |
+| 3 | label_audit 13/13 全 PASS（数值指纹一致） | `label_audit/report.md:14` 的 “z_band …一致” 在 `c1_label_audit.py:107-108` 为 **`checks.append({... , "pass": True})` 硬编码恒真**（`z_bands` 计算后从未使用）；其余 12 项为真比对（`numsig` 仅比数字字面量序列，`c1_label_audit.py:85-96`，属弱指纹） | **FAIL**（12 真 + 1 恒真，非 13/13） |
+| 4 | JS 单测 detect_overlay 36/36、human_pipe_lib 38/38、panel 全 PASS | 重跑：`detect_overlay.test.js` → ALL PASS；`human_pipe_lib.test.js` → `38 passed, 0 failed`；`panel.test.js` → PASS | **PASS** |
+| 5 | 旧 manifest 68/69 一致，唯一 FAILED = 自身 | 独立 `sha256sum -c SHA_MANIFEST.sha256`：**4 个 FAILED，非 1 个**——`./ab/summary.md`、`./rf_v2/slice_metrics.json`、`./rf_v2/wilson_perfeature.md` 三个**内容文件**哈希不符（mtime 2026-10-10T12:13–12:19，即 **R2 期间被就地改写**），加 manifest 自身 | **FAIL**（报告 §7 与 r2 prompt 主张 #5 被直接证伪） |
+
+**小结**：1/2/4 可信；3 含 1 项恒真锚点（“数值指纹”并非全为真比对）；5 严重失实。R2 同时**违反了“旧 r1 产物已冻结/不得覆盖”**（就地改了 3 个旧证据文件）。
+
+---
+
+## B. R1 FAIL → R2 逐条闭环裁定
+
+| R1 裁定 | R2 处置证据锚 | 裁定 |
+|---|---|---|
+| #1 Wilson 帧级伪重复 | `rf_v2/gate_by_session.md:8,11`（段级 n=6，person 下界 0.610，显式作废旧 `gate_confidence.md`） | **CLOSED** |
+| #2 泄漏审计方向反/域混合 | `rf_v2/leakage_slice.md:5-9` + `wilson_perfeature.md:6-15`；主张降级为“域内不可证” | **CLOSED（降级式）**：诚实撤回“泄漏已排除”，但 `full_51≡noleak_48` 逐位相同仍**无正分离证据**，只达成“不作主张”，非解决 |
+| #3 v_airoi=100% 循环论证 | `REVIEW_AND_RERUN_R2.md:55` 降为不作独立证据，仅采 `v_p`(98.1–99.1%) | **CLOSED** |
+| #4 furniture_tracks 命名/悬空引用 | `ab/per_session.json:7,12,23…` 更名 `furniture_reentry_episodes`；`flicker_analysis.json` 已在证据根 | **CLOSED**，但**引入新悬空引用**：`REVIEW_AND_RERUN_R2.md:155,176` 指向不存在的 `r2/C1_INDEPENDENT_REVIEW_R2.md` |
+| #5 推理耗时定性 | `ab/summary.md:22-27` 结构性估算 + JS/Py prob 差上限 0.0500 | **CLOSED** |
+| A1 mf_v2 空目录 | 已删 | **CLOSED**，但**新增空目录** `r2/label_audit/`、`r2/workspace/outs/`（同类卫生问题回归） |
+| A2 零动态真值 | `REVIEW_AND_RERUN_R2.md:124,170` 动态召回标 UNKNOWN，不造 GT | **CLOSED（诚实声明）**，但见 §C3 |
+
+---
+
+## C. 审查重点
+
+### C1. 复核轮有效性 — 一致性只证明“探针确定”，不能证明“探针贴合生产”
+- 24/24 cmp 只证明**重跑的确定性**（同代码同输入同输出），**逻辑上不排除**“R1 探针本就偏离生产并被原样重跑”。
+- “探针≡生产”实际由两条独立证据支撑：(a) 生产文件本体 SHA 未变（`detect_overlay.js`/`human_pipe_lib.js`，见 A#2）；(b) label_audit 的 blueprint 比对。但 (b) 的 13 项中 **1 项恒真**（`c1_label_audit.py:107-108`），且真比对的 3 项 `numsig` **只比数字字面量序列**（`c1_label_audit.py:85-96`），不校验标识符/控制流——逻辑可不同而数字相同仍 PASS。**裁定：PASS（有限）**，但“13/13 数值指纹全绿”的表述**不可采信**。
+
+### C2. 53 维特征 bug — 属实，影响 C2 透明度
+- `workspace/c1_rf_v2.py:193-196`：`X_t2`(51 维) 与 `Xf2`(column_stack 成 53 维) `vstack`；且 `194-195` 构造的 `Xcomb2/ycomb2/scomb2` **从未传入** `train_eval_exp`（`:199-202` 用回 `X_t,Xf,Xp_dup`），`Xp2=…[0]` 又塌成单行。故 `results.json` 的 `v2e_feat_ablate`（`results.json:1237`，person 0.9997）**并非真正的特征消融**，标签不可靠。
+- R2 已在 `REVIEW_AND_RERUN_R2.md:147` 披露该 bug 并列入 C2 修复项；但 `REVIEW_AND_RERUN_R2.md:86` §4 表格仍把 v2e 列为“特征消融”，**与自身披露矛盾**。C1 未授权新特征，故 **不影响 C1 判定**，但削弱 C2 透明度。**裁定：PASS（已披露）+ 表内标注瑕疵**。
+
+### C3. 动态=UNKNOWN — 诚实，但等于核心目标未验证
+- 6 段全静态（`label_audit/report.md:25-30` xy 跨度 0.03–0.06m），`ab/per_session.json` 无动态 GT。标 UNKNOWN 而非凑数**是诚实**。
+- 但 C1 名义即“**动态**稳定化”，“动态召回”既不可测，则 C1 核心交付**无真值审计通过**。因此第 (b) 项必为 NO。**裁定：PASS（诚实）≠ C1 目标达成**。
+
+### C4. 硬门 n_pts≥500 域限 — “域内预过滤”可辩护，“安全”需限定
+- 段级 Wilson 下界 0.61（`gate_by_session.md:8`）、person 仅 ≤2.5m、家具仅同批柜面；硬门已丢弃 1 个真实 person 簇（n=33，`gate_by_session.md:12`）。
+- `gate_by_session.md:8` 作为**同域保守下界**成立；R2 措辞已限定“限本采样域”（`REVIEW_AND_RERUN_R2.md:174`）。若作泛化“安全”论断则**过度**。**裁定：PASS（限域措辞）+ 不可外推**。
+
+### C5. 复核轮审计卫生（prompt 列 5 重点处实际仅 4 条，此为附加）
+- 旧证据被就地覆盖（A#5）、新悬空引用（B#4）、新空目录（B#A1）、报告 §4 与 §7-A 自相矛盾（C2）——四项均为“返修轮引入的旧缺陷回归”，独立性受损。
+
+---
+
+## D. 最终结论
+
+**(a) C1 = PASS（条件性）** — 限本采样域（同房间 ≤2.5m、6 段 915 帧、静态 stand）；硬门 `n_pts≥500` 于该域内有效（家具 12/13/18/15→0、人零回归），B2-A-FIX-R1 完好，锚点 4/5 SHA 与 24/24 重跑可复现。**但 R2 报告本身含 2 项失实主张（A#3 恒真锚点、A#5 旧 manifest 4 项 FAILED 而非 1）与 1 项自相矛盾（§4 v2e）**，C1 的“通过”是基于底稿证据、非基于报告结论。
+
+**(b) 进入 C2 = NO** — 主理由：C1 核心目标“动态真人识别”在全部数据上**无动态真值**（`label_audit/report.md:25-30`，xy 跨度 0.03–0.06m），动态召回 UNKNOWN 即目标不可测；统计泛化主张已自我作废（段级 Wilson 下界 0.61，`gate_by_session.md:8`）；泄漏消融仅达成“域内不作主张”而非正证据（`leakage_slice.md:6-9`）；且本轮复核自身出现证据冻结违例与失实陈述。故维持 R1 的 NO；待补真实动态 GT、域外 holdout、修 53 维脚本（`c1_rf_v2.py:193-196`）后方可再评。
+
+---
+**复审人署名**：OpenCode `opencode-go/deepseek-v4.1-flash`；工具链：ponytail(full)、sha256sum/cmp、node 单测、只读源码。

@@ -1,0 +1,3031 @@
+{
+  "version": "R02-comparison-v1",
+  "sessions": [
+    {
+      "sid": "cap_20261010_175227",
+      "frames": 304,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "PARTIAL_REVIEWED_BOUND",
+      "gt_sources": {
+        "FURNITURE/human": 5,
+        "BACKGROUND/human": 1,
+        "FURNITURE/propagated": 1515,
+        "BACKGROUND/propagated": 303
+      },
+      "variants": {
+        "base": {
+          "counts": {
+            "proposal/tp": 0,
+            "proposal/fp": 0,
+            "proposal/fn": 0,
+            "proposal/unmatched_unknown": 617,
+            "accepted/tp": 0,
+            "accepted/fp": 0,
+            "accepted/fn": 0,
+            "accepted/unmatched_unknown": 355,
+            "observed_confirmed/tp": 0,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 0,
+            "observed_confirmed/unmatched_unknown": 329,
+            "legacy_accepted/tp": 0,
+            "legacy_accepted/fp": 355,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 0,
+            "legacy_confirmed/fp": 347,
+            "legacy_confirmed/fn": 0,
+            "legacy_confirmed/unmatched_unknown": 0
+          },
+          "reasons": {},
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 7156,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {
+            "human/objects": 5,
+            "human/accepted_overlaps": 1,
+            "propagated/objects": 1515,
+            "propagated/accepted_overlaps": 351
+          },
+          "tracking": {
+            "first": null,
+            "longest_qualified_fn": 0,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": null,
+            "last_gt_frame": -2,
+            "duplicate_ids": 0,
+            "max_coast_lost": 0,
+            "confirmed_coast_frames": 0
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 52.67380000000048,
+            "diagnostic_compute_p95_ms": 56.195300000000316,
+            "diagnostic_compute_p99_ms": 62.3721000000005,
+            "heap_max_mb": 499.8720016479492,
+            "layers": {
+              "leveled": {
+                "p50": 6.50170000000071,
+                "p95": 9.82260000000042,
+                "p99": 10.747699999999895
+              },
+              "foreground": {
+                "p50": 5.339599999999791,
+                "p95": 7.93369999999959,
+                "p99": 8.63130000000001
+              },
+              "cleanup": {
+                "p50": 0.22190000000045984,
+                "p95": 0.26250000000027285,
+                "p99": 0.3055999999996857
+              },
+              "retained": {
+                "p50": 1.5877000000000407,
+                "p95": 3.9429000000000087,
+                "p99": 4.711699999999837
+              },
+              "cluster": {
+                "p50": 0.5794999999998254,
+                "p95": 0.6645000000003165,
+                "p99": 3.0707000000002154
+              },
+              "classifier": {
+                "p50": 0.024500000001353328,
+                "p95": 0.03509999999732827,
+                "p99": 0.0625
+              },
+              "foreground_b": {
+                "p50": 0.45859999999993306,
+                "p95": 0.6671000000023923,
+                "p99": 2.9271000000007916
+              },
+              "cluster_b": {
+                "p50": 0.5378999999993539,
+                "p95": 0.6610000000000582,
+                "p99": 0.7484000000004016
+              },
+              "classifier_b": {
+                "p50": 0.0005000000019208528,
+                "p95": 0.0031999999991967343,
+                "p99": 0.16959999999926367
+              },
+              "track": {
+                "p50": 0.022399999999834108,
+                "p95": 0.03260000000045693,
+                "p99": 0.07079999999950815
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "proposal/tp": 0,
+            "proposal/fp": 0,
+            "proposal/fn": 0,
+            "proposal/unmatched_unknown": 644,
+            "accepted/tp": 0,
+            "accepted/fp": 0,
+            "accepted/fn": 0,
+            "accepted/unmatched_unknown": 375,
+            "observed_confirmed/tp": 0,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 0,
+            "observed_confirmed/unmatched_unknown": 330,
+            "legacy_accepted/tp": 0,
+            "legacy_accepted/fp": 375,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 0,
+            "legacy_confirmed/fp": 348,
+            "legacy_confirmed/fn": 0,
+            "legacy_confirmed/unmatched_unknown": 0
+          },
+          "reasons": {},
+          "point_totals": {
+            "net_bg_recovery": 4190,
+            "net_final_recovery": 3214,
+            "new_accepted_points": 2487,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 7249,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {
+            "human/objects": 5,
+            "human/accepted_overlaps": 1,
+            "propagated/objects": 1515,
+            "propagated/accepted_overlaps": 351
+          },
+          "tracking": {
+            "first": null,
+            "longest_qualified_fn": 0,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": null,
+            "last_gt_frame": -2,
+            "duplicate_ids": 0,
+            "max_coast_lost": 0,
+            "confirmed_coast_frames": 0
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 60.23500000000058,
+            "diagnostic_compute_p95_ms": 66.21250000000055,
+            "diagnostic_compute_p99_ms": 75.69750000000204,
+            "heap_max_mb": 510.44702911376953,
+            "layers": {
+              "leveled": {
+                "p50": 7.762800000000425,
+                "p95": 10.931700000001001,
+                "p99": 11.981799999999566
+              },
+              "foreground": {
+                "p50": 6.709599999998318,
+                "p95": 9.366399999999885,
+                "p99": 10.043700000000172
+              },
+              "cleanup": {
+                "p50": 0.24559999999974025,
+                "p95": 0.2848999999987427,
+                "p99": 0.3778999999994994
+              },
+              "retained": {
+                "p50": 1.8171999999976833,
+                "p95": 4.342899999999645,
+                "p99": 4.77469999999812
+              },
+              "cluster": {
+                "p50": 0.6470999999992273,
+                "p95": 0.7646999999997206,
+                "p99": 1.123200000001816
+              },
+              "classifier": {
+                "p50": 0.026400000000649015,
+                "p95": 0.03709999999773572,
+                "p99": 0.0684000000001106
+              },
+              "foreground_b": {
+                "p50": 0.5075000000006185,
+                "p95": 0.6607999999996537,
+                "p99": 2.736300000000483
+              },
+              "cluster_b": {
+                "p50": 0.6111999999993714,
+                "p95": 0.7551000000003114,
+                "p99": 0.8544000000001688
+              },
+              "classifier_b": {
+                "p50": 0.0005000000001018634,
+                "p95": 0.0037000000002080924,
+                "p99": 0.16849999999976717
+              },
+              "track": {
+                "p50": 0.026700000000346336,
+                "p95": 0.03450000000157161,
+                "p99": 0.07459999999991851
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "proposal/tp": 0,
+            "proposal/fp": 0,
+            "proposal/fn": 0,
+            "proposal/unmatched_unknown": 644,
+            "accepted/tp": 0,
+            "accepted/fp": 0,
+            "accepted/fn": 0,
+            "accepted/unmatched_unknown": 375,
+            "observed_confirmed/tp": 0,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 0,
+            "observed_confirmed/unmatched_unknown": 330,
+            "legacy_accepted/tp": 0,
+            "legacy_accepted/fp": 375,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 0,
+            "legacy_confirmed/fp": 348,
+            "legacy_confirmed/fn": 0,
+            "legacy_confirmed/unmatched_unknown": 0
+          },
+          "reasons": {},
+          "point_totals": {
+            "net_bg_recovery": 4190,
+            "net_final_recovery": 3214,
+            "new_accepted_points": 2487,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 7249,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {
+            "human/objects": 5,
+            "human/accepted_overlaps": 1,
+            "propagated/objects": 1515,
+            "propagated/accepted_overlaps": 351
+          },
+          "tracking": {
+            "first": null,
+            "longest_qualified_fn": 0,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": null,
+            "last_gt_frame": -2,
+            "duplicate_ids": 0,
+            "max_coast_lost": 0,
+            "confirmed_coast_frames": 0
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 67.64589999999953,
+            "diagnostic_compute_p95_ms": 138.4930000000004,
+            "diagnostic_compute_p99_ms": 181.3063000000002,
+            "heap_max_mb": 491.0261459350586,
+            "layers": {
+              "leveled": {
+                "p50": 8.378399999997782,
+                "p95": 18.346600000000763,
+                "p99": 25.710500000001048
+              },
+              "foreground": {
+                "p50": 7.3373999999967054,
+                "p95": 17.245700000001307,
+                "p99": 22.196100000001024
+              },
+              "cleanup": {
+                "p50": 0.2687999999980093,
+                "p95": 0.5015999999995984,
+                "p99": 0.772000000000844
+              },
+              "retained": {
+                "p50": 2.0349999999998545,
+                "p95": 4.991100000002916,
+                "p99": 5.87310000000025
+              },
+              "cluster": {
+                "p50": 0.8783000000003085,
+                "p95": 2.083699999999226,
+                "p99": 3.788499999999658
+              },
+              "classifier": {
+                "p50": 0.029699999999138527,
+                "p95": 0.04830000000038126,
+                "p99": 0.07670000000143773
+              },
+              "foreground_b": {
+                "p50": 0.548399999999674,
+                "p95": 1.3083000000005995,
+                "p99": 3.141300000002957
+              },
+              "cluster_b": {
+                "p50": 0.6680000000014843,
+                "p95": 1.2890999999999622,
+                "p99": 1.7340000000003783
+              },
+              "classifier_b": {
+                "p50": 0.000800000001618173,
+                "p95": 0.0046999999995023245,
+                "p99": 0.17339999999967404
+              },
+              "track": {
+                "p50": 0.029499999999643478,
+                "p95": 0.05019999999967695,
+                "p99": 0.0820000000003347
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "frames": 258,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "PARTIAL_REVIEWED_BOUND",
+      "gt_sources": {
+        "PERSON/human": 258
+      },
+      "variants": {
+        "base": {
+          "counts": {
+            "proposal/tp": 114,
+            "proposal/fp": 0,
+            "proposal/fn": 144,
+            "proposal/unmatched_unknown": 1018,
+            "accepted/tp": 114,
+            "accepted/fp": 0,
+            "accepted/fn": 144,
+            "accepted/unmatched_unknown": 761,
+            "observed_confirmed/tp": 111,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 147,
+            "observed_confirmed/unmatched_unknown": 705,
+            "legacy_accepted/tp": 225,
+            "legacy_accepted/fp": 650,
+            "legacy_accepted/fn": 33,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 213,
+            "legacy_confirmed/fp": 625,
+            "legacy_confirmed/fn": 45,
+            "legacy_confirmed/unmatched_unknown": 0
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 3,
+            "human/2_BG_UNKNOWN_LOSS": 83,
+            "human/OBSERVED_STRICT_MATCH": 111,
+            "human/4_MIXED_COMPONENT": 61
+          },
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 5907,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 5,
+            "longest_qualified_fn": 33,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 1,
+            "reacquisition": 18,
+            "last_id": "FUS_t0_7",
+            "last_gt_track": "t1",
+            "last_gt_frame": 257,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 23
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 58.769899999999325,
+            "diagnostic_compute_p95_ms": 67.80519999999888,
+            "diagnostic_compute_p99_ms": 75.60069999999541,
+            "heap_max_mb": 349.23644256591797,
+            "layers": {
+              "leveled": {
+                "p50": 6.887199999997392,
+                "p95": 8.949900000003254,
+                "p99": 9.419199999996636
+              },
+              "foreground": {
+                "p50": 7.157700000003388,
+                "p95": 9.486799999998766,
+                "p99": 14.16820000000007
+              },
+              "cleanup": {
+                "p50": 0.3004000000000815,
+                "p95": 0.42629999999917345,
+                "p99": 0.44830000000365544
+              },
+              "retained": {
+                "p50": 1.8947000000007392,
+                "p95": 2.9931000000033237,
+                "p99": 4.048000000002503
+              },
+              "cluster": {
+                "p50": 0.7305999999989581,
+                "p95": 0.8702999999950407,
+                "p99": 2.8096000000005006
+              },
+              "classifier": {
+                "p50": 0.029500000000552973,
+                "p95": 0.040300000000570435,
+                "p99": 0.06779999999707798
+              },
+              "foreground_b": {
+                "p50": 0.5242999999973108,
+                "p95": 0.6875,
+                "p99": 2.121999999999389
+              },
+              "cluster_b": {
+                "p50": 0.5648999999975786,
+                "p95": 0.7092000000047847,
+                "p99": 0.7541000000019267
+              },
+              "classifier_b": {
+                "p50": 0.09969999999884749,
+                "p95": 0.1518999999971129,
+                "p99": 0.21030000000246218
+              },
+              "track": {
+                "p50": 0.02299999999377178,
+                "p95": 0.031199999997625127,
+                "p99": 0.05670000000100117
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "proposal/tp": 186,
+            "proposal/fp": 0,
+            "proposal/fn": 72,
+            "proposal/unmatched_unknown": 873,
+            "accepted/tp": 186,
+            "accepted/fp": 0,
+            "accepted/fn": 72,
+            "accepted/unmatched_unknown": 648,
+            "observed_confirmed/tp": 184,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 74,
+            "observed_confirmed/unmatched_unknown": 595,
+            "legacy_accepted/tp": 258,
+            "legacy_accepted/fp": 576,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 255,
+            "legacy_confirmed/fp": 541,
+            "legacy_confirmed/fn": 3,
+            "legacy_confirmed/unmatched_unknown": 0
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 2,
+            "human/OBSERVED_STRICT_MATCH": 184,
+            "human/4_MIXED_COMPONENT": 55,
+            "human/2_BG_UNKNOWN_LOSS": 17
+          },
+          "point_totals": {
+            "net_bg_recovery": 107568,
+            "net_final_recovery": 74195,
+            "new_accepted_points": 78551,
+            "human_supported_net_bg_points": 97505,
+            "cleanup_deleted": 6004,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 2,
+            "longest_qualified_fn": 18,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 1,
+            "reacquisition": 14,
+            "last_id": "FUS_t0_9",
+            "last_gt_track": "t1",
+            "last_gt_frame": 257,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 15
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 71.09540000000561,
+            "diagnostic_compute_p95_ms": 79.41310000000158,
+            "diagnostic_compute_p99_ms": 88.6265999999996,
+            "heap_max_mb": 337.1339797973633,
+            "layers": {
+              "leveled": {
+                "p50": 7.86529999999766,
+                "p95": 10.326200000003155,
+                "p99": 11.64890000000014
+              },
+              "foreground": {
+                "p50": 12.885699999998906,
+                "p95": 16.95850000000064,
+                "p99": 18.032499999993888
+              },
+              "cleanup": {
+                "p50": 0.39879999999538995,
+                "p95": 0.48409999999421416,
+                "p99": 0.5476000000053318
+              },
+              "retained": {
+                "p50": 2.2805999999982305,
+                "p95": 4.68300000000454,
+                "p99": 5.224799999996321
+              },
+              "cluster": {
+                "p50": 0.8194000000003143,
+                "p95": 0.9507999999987078,
+                "p99": 3.2669000000023516
+              },
+              "classifier": {
+                "p50": 0.033999999999650754,
+                "p95": 0.04550000000017462,
+                "p99": 0.07400000000052387
+              },
+              "foreground_b": {
+                "p50": 0.5984000000025844,
+                "p95": 0.742099999999482,
+                "p99": 1.7631000000037602
+              },
+              "cluster_b": {
+                "p50": 0.6200000000026193,
+                "p95": 0.7848000000012689,
+                "p99": 2.0516999999999825
+              },
+              "classifier_b": {
+                "p50": 0.1091999999989639,
+                "p95": 0.1614999999947031,
+                "p99": 0.22250000000349246
+              },
+              "track": {
+                "p50": 0.027599999993981328,
+                "p95": 0.036700000000564614,
+                "p99": 0.051800000001094304
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "proposal/tp": 186,
+            "proposal/fp": 0,
+            "proposal/fn": 72,
+            "proposal/unmatched_unknown": 873,
+            "accepted/tp": 186,
+            "accepted/fp": 0,
+            "accepted/fn": 72,
+            "accepted/unmatched_unknown": 648,
+            "observed_confirmed/tp": 184,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 74,
+            "observed_confirmed/unmatched_unknown": 595,
+            "legacy_accepted/tp": 258,
+            "legacy_accepted/fp": 576,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 255,
+            "legacy_confirmed/fp": 541,
+            "legacy_confirmed/fn": 3,
+            "legacy_confirmed/unmatched_unknown": 0
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 2,
+            "human/OBSERVED_STRICT_MATCH": 184,
+            "human/4_MIXED_COMPONENT": 55,
+            "human/2_BG_UNKNOWN_LOSS": 17
+          },
+          "point_totals": {
+            "net_bg_recovery": 107568,
+            "net_final_recovery": 74195,
+            "new_accepted_points": 78551,
+            "human_supported_net_bg_points": 97505,
+            "cleanup_deleted": 6004,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 2,
+            "longest_qualified_fn": 18,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 1,
+            "reacquisition": 14,
+            "last_id": "FUS_t0_9",
+            "last_gt_track": "t1",
+            "last_gt_frame": 257,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 15
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 73.42079999999987,
+            "diagnostic_compute_p95_ms": 88.80029999999533,
+            "diagnostic_compute_p99_ms": 100.07289999999921,
+            "heap_max_mb": 346.8163070678711,
+            "layers": {
+              "leveled": {
+                "p50": 8.32340000000113,
+                "p95": 11.33629999999539,
+                "p99": 12.970699999998033
+              },
+              "foreground": {
+                "p50": 13.568600000005972,
+                "p95": 17.697999999996682,
+                "p99": 20.214099999997416
+              },
+              "cleanup": {
+                "p50": 0.40590000000520376,
+                "p95": 0.5608999999967637,
+                "p99": 2.8836999999984982
+              },
+              "retained": {
+                "p50": 2.2577000000019325,
+                "p95": 3.187900000004447,
+                "p99": 5.070099999997183
+              },
+              "cluster": {
+                "p50": 0.9928000000072643,
+                "p95": 1.2948000000033062,
+                "p99": 4.085800000000745
+              },
+              "classifier": {
+                "p50": 0.03540000000066357,
+                "p95": 0.04920000000129221,
+                "p99": 0.07730000000447035
+              },
+              "foreground_b": {
+                "p50": 0.6234000000040396,
+                "p95": 0.8162999999985914,
+                "p99": 1.6714999999967404
+              },
+              "cluster_b": {
+                "p50": 0.6499000000039814,
+                "p95": 0.8315000000002328,
+                "p99": 0.887300000002142
+              },
+              "classifier_b": {
+                "p50": 0.11590000000433065,
+                "p95": 0.18250000000261934,
+                "p99": 1.498700000003737
+              },
+              "track": {
+                "p50": 0.02860000000509899,
+                "p95": 0.04019999999582069,
+                "p99": 0.05230000000301516
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "frames": 464,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "PARTIAL_REVIEWED_BOUND",
+      "gt_sources": {
+        "PERSON/human": 99
+      },
+      "variants": {
+        "base": {
+          "counts": {
+            "proposal/tp": 17,
+            "proposal/fp": 0,
+            "proposal/fn": 82,
+            "proposal/unmatched_unknown": 220,
+            "accepted/tp": 17,
+            "accepted/fp": 0,
+            "accepted/fn": 82,
+            "accepted/unmatched_unknown": 191,
+            "observed_confirmed/tp": 14,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 85,
+            "observed_confirmed/unmatched_unknown": 181,
+            "legacy_accepted/tp": 99,
+            "legacy_accepted/fp": 109,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 95,
+            "legacy_confirmed/fp": 104,
+            "legacy_confirmed/fn": 4,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 365
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 3,
+            "human/OBSERVED_STRICT_MATCH": 14,
+            "human/4_MIXED_COMPONENT": 82
+          },
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 11025,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 2,
+            "longest_qualified_fn": 30,
+            "current_fn": 1,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 3,
+            "last_id": null,
+            "last_gt_track": "t1",
+            "last_gt_frame": 463,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 29
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 67.29679999999644,
+            "diagnostic_compute_p95_ms": 86.17440000000352,
+            "diagnostic_compute_p99_ms": 98.87039999999979,
+            "heap_max_mb": 357.50640869140625,
+            "layers": {
+              "leveled": {
+                "p50": 7.2203000000008615,
+                "p95": 9.57609999999113,
+                "p99": 10.317399999999907
+              },
+              "foreground": {
+                "p50": 8.86689999999362,
+                "p95": 11.810600000011618,
+                "p99": 19.075900000010733
+              },
+              "cleanup": {
+                "p50": 0.4466000000029453,
+                "p95": 1.3951999999990221,
+                "p99": 3.469100000002072
+              },
+              "retained": {
+                "p50": 2.316899999997986,
+                "p95": 4.45690000000468,
+                "p99": 6.292999999997846
+              },
+              "cluster": {
+                "p50": 0.8796999999976833,
+                "p95": 1.3883999999961816,
+                "p99": 2.1642999999967287
+              },
+              "classifier": {
+                "p50": 0.026400000002468005,
+                "p95": 0.036999999996623956,
+                "p99": 0.04609999999956926
+              },
+              "foreground_b": {
+                "p50": 0.6362999999983003,
+                "p95": 1.2596000000048662,
+                "p99": 1.6204999999972642
+              },
+              "cluster_b": {
+                "p50": 0.5627000000094995,
+                "p95": 0.7530000000042492,
+                "p99": 0.8822999999974854
+              },
+              "classifier_b": {
+                "p50": 0.000800000001618173,
+                "p95": 0.11000000000058208,
+                "p99": 0.1540999999997439
+              },
+              "track": {
+                "p50": 0.022700000001350418,
+                "p95": 0.029699999999138527,
+                "p99": 0.04959999999846332
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "proposal/tp": 23,
+            "proposal/fp": 0,
+            "proposal/fn": 76,
+            "proposal/unmatched_unknown": 227,
+            "accepted/tp": 23,
+            "accepted/fp": 0,
+            "accepted/fn": 76,
+            "accepted/unmatched_unknown": 196,
+            "observed_confirmed/tp": 20,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 79,
+            "observed_confirmed/unmatched_unknown": 176,
+            "legacy_accepted/tp": 99,
+            "legacy_accepted/fp": 120,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 96,
+            "legacy_confirmed/fp": 105,
+            "legacy_confirmed/fn": 3,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 365
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 3,
+            "human/OBSERVED_STRICT_MATCH": 20,
+            "human/4_MIXED_COMPONENT": 76
+          },
+          "point_totals": {
+            "net_bg_recovery": 185860,
+            "net_final_recovery": 143613,
+            "new_accepted_points": 279767,
+            "human_supported_net_bg_points": 6297,
+            "cleanup_deleted": 11123,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 2,
+            "longest_qualified_fn": 30,
+            "current_fn": 1,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 3,
+            "last_id": null,
+            "last_gt_track": "t1",
+            "last_gt_frame": 463,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 29
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 83.11750000000757,
+            "diagnostic_compute_p95_ms": 101.54230000000098,
+            "diagnostic_compute_p99_ms": 107.04379999999946,
+            "heap_max_mb": 364.71102142333984,
+            "layers": {
+              "leveled": {
+                "p50": 7.972999999998137,
+                "p95": 10.86040000000503,
+                "p99": 19.87709999999788
+              },
+              "foreground": {
+                "p50": 12.086599999995087,
+                "p95": 28.86500000000524,
+                "p99": 34.24899999999616
+              },
+              "cleanup": {
+                "p50": 0.6224999999976717,
+                "p95": 1.3791999999957625,
+                "p99": 2.9685000000026776
+              },
+              "retained": {
+                "p50": 2.8245999999926426,
+                "p95": 4.604000000006636,
+                "p99": 6.324699999997392
+              },
+              "cluster": {
+                "p50": 0.9992999999958556,
+                "p95": 1.4248000000079628,
+                "p99": 3.3496000000013737
+              },
+              "classifier": {
+                "p50": 0.02959999999438878,
+                "p95": 0.043500000014319085,
+                "p99": 0.0650000000023283
+              },
+              "foreground_b": {
+                "p50": 0.7926000000006752,
+                "p95": 1.2703000000037719,
+                "p99": 2.0164999999979045
+              },
+              "cluster_b": {
+                "p50": 0.6190999999962514,
+                "p95": 0.8107999999920139,
+                "p99": 1.0594999999957508
+              },
+              "classifier_b": {
+                "p50": 0.0004999999946448952,
+                "p95": 0.11100000000442378,
+                "p99": 0.16700000000128057
+              },
+              "track": {
+                "p50": 0.02509999999892898,
+                "p95": 0.03850000000966247,
+                "p99": 0.04919999999401625
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "proposal/tp": 69,
+            "proposal/fp": 0,
+            "proposal/fn": 30,
+            "proposal/unmatched_unknown": 335,
+            "accepted/tp": 69,
+            "accepted/fp": 0,
+            "accepted/fn": 30,
+            "accepted/unmatched_unknown": 246,
+            "observed_confirmed/tp": 67,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 32,
+            "observed_confirmed/unmatched_unknown": 213,
+            "legacy_accepted/tp": 99,
+            "legacy_accepted/fp": 216,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 97,
+            "legacy_confirmed/fp": 188,
+            "legacy_confirmed/fn": 2,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 365
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 2,
+            "human/OBSERVED_STRICT_MATCH": 67,
+            "human/4_MIXED_COMPONENT": 30
+          },
+          "point_totals": {
+            "net_bg_recovery": 185860,
+            "net_final_recovery": 515029,
+            "new_accepted_points": 257040,
+            "human_supported_net_bg_points": 6297,
+            "cleanup_deleted": 11123,
+            "split_parents": 144
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 2,
+            "longest_qualified_fn": 28,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 3,
+            "last_id": "FUS_t0_1",
+            "last_gt_track": "t1",
+            "last_gt_frame": 463,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 28
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 83.73429999999644,
+            "diagnostic_compute_p95_ms": 141.64100000000326,
+            "diagnostic_compute_p99_ms": 192.33870000000752,
+            "heap_max_mb": 341.15557861328125,
+            "layers": {
+              "leveled": {
+                "p50": 8.361199999999371,
+                "p95": 14.101500000004307,
+                "p99": 18.07600000000093
+              },
+              "foreground": {
+                "p50": 13.42960000000312,
+                "p95": 32.09399999999732,
+                "p99": 55.99360000000161
+              },
+              "cleanup": {
+                "p50": 0.6111999999993714,
+                "p95": 2.092099999994389,
+                "p99": 4.587100000004284
+              },
+              "retained": {
+                "p50": 2.815600000001723,
+                "p95": 7.0077000000019325,
+                "p99": 9.329899999996996
+              },
+              "cluster": {
+                "p50": 1.2118999999947846,
+                "p95": 3.3405000000057044,
+                "p99": 4.708299999998417
+              },
+              "classifier": {
+                "p50": 0.03130000000237487,
+                "p95": 0.04959999999846332,
+                "p99": 0.062399999995250255
+              },
+              "foreground_b": {
+                "p50": 0.7446000000054482,
+                "p95": 1.7453000000095926,
+                "p99": 2.3733999999967637
+              },
+              "cluster_b": {
+                "p50": 0.6494999999995343,
+                "p95": 1.049700000003213,
+                "p99": 1.3043999999936204
+              },
+              "classifier_b": {
+                "p50": 0.0013000000035390258,
+                "p95": 0.17369999999937136,
+                "p99": 0.2378000000026077
+              },
+              "track": {
+                "p50": 0.02719999999681022,
+                "p95": 0.05349999999452848,
+                "p99": 0.07429999999294523
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "frames": 239,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "PARTIAL_REVIEWED_BOUND",
+      "gt_sources": {
+        "PERSON/human": 11
+      },
+      "variants": {
+        "base": {
+          "counts": {
+            "proposal/tp": 4,
+            "proposal/fp": 0,
+            "proposal/fn": 7,
+            "proposal/unmatched_unknown": 37,
+            "accepted/tp": 4,
+            "accepted/fp": 0,
+            "accepted/fn": 7,
+            "accepted/unmatched_unknown": 27,
+            "observed_confirmed/tp": 3,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 8,
+            "observed_confirmed/unmatched_unknown": 23,
+            "legacy_accepted/tp": 10,
+            "legacy_accepted/fp": 21,
+            "legacy_accepted/fn": 1,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 9,
+            "legacy_confirmed/fp": 17,
+            "legacy_confirmed/fn": 2,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 228
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 1,
+            "human/4_MIXED_COMPONENT": 2,
+            "human/2_BG_UNKNOWN_LOSS": 5,
+            "human/OBSERVED_STRICT_MATCH": 3
+          },
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 5458,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 100,
+            "longest_qualified_fn": 1,
+            "current_fn": 1,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": "P1",
+            "last_gt_frame": 238,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 34
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 64.46210000000428,
+            "diagnostic_compute_p95_ms": 71.17510000000766,
+            "diagnostic_compute_p99_ms": 79.50960000000487,
+            "heap_max_mb": 342.6400146484375,
+            "layers": {
+              "leveled": {
+                "p50": 7.270499999998719,
+                "p95": 9.429799999998068,
+                "p99": 9.754400000005262
+              },
+              "foreground": {
+                "p50": 7.944099999993341,
+                "p95": 10.407100000011269,
+                "p99": 13.974399999991874
+              },
+              "cleanup": {
+                "p50": 0.3307000000058906,
+                "p95": 0.5353999999933876,
+                "p99": 2.6837999999988824
+              },
+              "retained": {
+                "p50": 2.14089999999851,
+                "p95": 4.028800000000047,
+                "p99": 4.568400000003749
+              },
+              "cluster": {
+                "p50": 0.877200000002631,
+                "p95": 1.0334000000002561,
+                "p99": 1.290000000008149
+              },
+              "classifier": {
+                "p50": 0.034099999989848584,
+                "p95": 0.04899999999906868,
+                "p99": 0.05969999999797437
+              },
+              "foreground_b": {
+                "p50": 0.6509999999980209,
+                "p95": 0.8591000000014901,
+                "p99": 1.4984000000113156
+              },
+              "cluster_b": {
+                "p50": 0.5170999999972992,
+                "p95": 0.6625000000058208,
+                "p99": 0.7831000000005588
+              },
+              "classifier_b": {
+                "p50": 0.0010999999940395355,
+                "p95": 0.10180000000400469,
+                "p99": 0.16539999999804422
+              },
+              "track": {
+                "p50": 0.025599999993573874,
+                "p95": 0.030900000012479722,
+                "p99": 0.043099999995320104
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "proposal/tp": 10,
+            "proposal/fp": 0,
+            "proposal/fn": 1,
+            "proposal/unmatched_unknown": 33,
+            "accepted/tp": 10,
+            "accepted/fp": 0,
+            "accepted/fn": 1,
+            "accepted/unmatched_unknown": 25,
+            "observed_confirmed/tp": 9,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 2,
+            "observed_confirmed/unmatched_unknown": 22,
+            "legacy_accepted/tp": 11,
+            "legacy_accepted/fp": 24,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 10,
+            "legacy_confirmed/fp": 21,
+            "legacy_confirmed/fn": 1,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 228
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 1,
+            "human/OBSERVED_STRICT_MATCH": 9,
+            "human/4_MIXED_COMPONENT": 1
+          },
+          "point_totals": {
+            "net_bg_recovery": 127889,
+            "net_final_recovery": 111899,
+            "new_accepted_points": 122008,
+            "human_supported_net_bg_points": 6348,
+            "cleanup_deleted": 5537,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 25,
+            "longest_qualified_fn": 1,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": "FUS_t0_9",
+            "last_gt_track": "P1",
+            "last_gt_frame": 238,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 20
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 74.78469999998924,
+            "diagnostic_compute_p95_ms": 86.95119999999588,
+            "diagnostic_compute_p99_ms": 96.37609999999404,
+            "heap_max_mb": 333.6972885131836,
+            "layers": {
+              "leveled": {
+                "p50": 7.905899999997928,
+                "p95": 10.358500000002095,
+                "p99": 11.973700000002282
+              },
+              "foreground": {
+                "p50": 14.353699999992386,
+                "p95": 18.19670000000042,
+                "p99": 19.28979999999865
+              },
+              "cleanup": {
+                "p50": 0.43460000000777654,
+                "p95": 0.541800000006333,
+                "p99": 2.698099999994156
+              },
+              "retained": {
+                "p50": 2.397499999991851,
+                "p95": 4.528599999990547,
+                "p99": 5.073600000003353
+              },
+              "cluster": {
+                "p50": 0.9416999999957625,
+                "p95": 1.0779999999940628,
+                "p99": 1.5974999999889405
+              },
+              "classifier": {
+                "p50": 0.03659999999217689,
+                "p95": 0.056299999996554106,
+                "p99": 0.09220000001369044
+              },
+              "foreground_b": {
+                "p50": 0.6753000000026077,
+                "p95": 0.8678999999974621,
+                "p99": 1.6728000000002794
+              },
+              "cluster_b": {
+                "p50": 0.5617999999958556,
+                "p95": 0.724499999996624,
+                "p99": 0.8414999999949941
+              },
+              "classifier_b": {
+                "p50": 0.0007000000041443855,
+                "p95": 0.13640000000305008,
+                "p99": 0.17870000000402797
+              },
+              "track": {
+                "p50": 0.024600000004284084,
+                "p95": 0.030700000002980232,
+                "p99": 0.0443000000086613
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "proposal/tp": 11,
+            "proposal/fp": 0,
+            "proposal/fn": 0,
+            "proposal/unmatched_unknown": 32,
+            "accepted/tp": 11,
+            "accepted/fp": 0,
+            "accepted/fn": 0,
+            "accepted/unmatched_unknown": 24,
+            "observed_confirmed/tp": 10,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 1,
+            "observed_confirmed/unmatched_unknown": 21,
+            "legacy_accepted/tp": 11,
+            "legacy_accepted/fp": 24,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 10,
+            "legacy_confirmed/fp": 21,
+            "legacy_confirmed/fn": 1,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 228
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 1,
+            "human/OBSERVED_STRICT_MATCH": 10
+          },
+          "point_totals": {
+            "net_bg_recovery": 127889,
+            "net_final_recovery": 112409,
+            "new_accepted_points": 121682,
+            "human_supported_net_bg_points": 6348,
+            "cleanup_deleted": 5537,
+            "split_parents": 1
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 25,
+            "longest_qualified_fn": 1,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": "FUS_t0_9",
+            "last_gt_track": "P1",
+            "last_gt_frame": 238,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 20
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 91.99059999999008,
+            "diagnostic_compute_p95_ms": 120.94449999998324,
+            "diagnostic_compute_p99_ms": 140.4949000000197,
+            "heap_max_mb": 327.616943359375,
+            "layers": {
+              "leveled": {
+                "p50": 9.55480000001262,
+                "p95": 13.118699999991804,
+                "p99": 18.214999999996508
+              },
+              "foreground": {
+                "p50": 17.334399999992456,
+                "p95": 24.627899999992223,
+                "p99": 29.5170999999973
+              },
+              "cleanup": {
+                "p50": 0.5125999999872874,
+                "p95": 0.7486000000062631,
+                "p99": 0.8867999999783933
+              },
+              "retained": {
+                "p50": 2.845100000005914,
+                "p95": 5.338600000017323,
+                "p99": 6.035399999993388
+              },
+              "cluster": {
+                "p50": 1.3335000000079162,
+                "p95": 1.7590999999956694,
+                "p99": 2.0339999999996508
+              },
+              "classifier": {
+                "p50": 0.041800000006332994,
+                "p95": 0.06729999999515712,
+                "p99": 0.1075999999884516
+              },
+              "foreground_b": {
+                "p50": 0.7937000000092667,
+                "p95": 1.2844000000040978,
+                "p99": 2.4187999999849126
+              },
+              "cluster_b": {
+                "p50": 0.6529999999911524,
+                "p95": 0.9768000000040047,
+                "p99": 1.1731000000145286
+              },
+              "classifier_b": {
+                "p50": 0.001400000008288771,
+                "p95": 0.19690000000991859,
+                "p99": 0.23660000000381842
+              },
+              "track": {
+                "p50": 0.02749999999650754,
+                "p95": 0.0413000000116881,
+                "p99": 0.08209999999962747
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "frames": 202,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "PARTIAL_REVIEWED_BOUND",
+      "gt_sources": {
+        "PERSON/human": 6
+      },
+      "variants": {
+        "base": {
+          "counts": {
+            "proposal/tp": 0,
+            "proposal/fp": 0,
+            "proposal/fn": 6,
+            "proposal/unmatched_unknown": 19,
+            "accepted/tp": 0,
+            "accepted/fp": 0,
+            "accepted/fn": 6,
+            "accepted/unmatched_unknown": 10,
+            "observed_confirmed/tp": 0,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 6,
+            "observed_confirmed/unmatched_unknown": 6,
+            "legacy_accepted/tp": 0,
+            "legacy_accepted/fp": 10,
+            "legacy_accepted/fn": 6,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 0,
+            "legacy_confirmed/fp": 6,
+            "legacy_confirmed/fn": 6,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 196
+          },
+          "reasons": {
+            "human/2_BG_UNKNOWN_LOSS": 6
+          },
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 4061,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": null,
+            "longest_qualified_fn": 1,
+            "current_fn": 1,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": "P1",
+            "last_gt_frame": 201,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 5
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 60.40979999999399,
+            "diagnostic_compute_p95_ms": 66.78690000000643,
+            "diagnostic_compute_p99_ms": 71.65770000001066,
+            "heap_max_mb": 345.8186721801758,
+            "layers": {
+              "leveled": {
+                "p50": 7.244600000005448,
+                "p95": 9.76940000000468,
+                "p99": 10.307199999995646
+              },
+              "foreground": {
+                "p50": 8.526799999992363,
+                "p95": 10.54320000000007,
+                "p99": 14.058600000003935
+              },
+              "cleanup": {
+                "p50": 0.18819999998959247,
+                "p95": 0.2736999999906402,
+                "p99": 2.080999999991036
+              },
+              "retained": {
+                "p50": 1.7899999999935972,
+                "p95": 3.502999999996973,
+                "p99": 3.9541000000026543
+              },
+              "cluster": {
+                "p50": 0.7115000000048894,
+                "p95": 0.8591000000014901,
+                "p99": 0.9866999999940163
+              },
+              "classifier": {
+                "p50": 0.031000000002677552,
+                "p95": 0.03770000000076834,
+                "p99": 0.04310000000987202
+              },
+              "foreground_b": {
+                "p50": 0.5194999999948777,
+                "p95": 0.6579000000056112,
+                "p99": 1.534299999999348
+              },
+              "cluster_b": {
+                "p50": 0.42269999999552965,
+                "p95": 0.6331000000063796,
+                "p99": 0.7405999999900814
+              },
+              "classifier_b": {
+                "p50": 0.0014999999984866008,
+                "p95": 0.12729999999282882,
+                "p99": 0.16539999999804422
+              },
+              "track": {
+                "p50": 0.021399999997811392,
+                "p95": 0.025800000003073364,
+                "p99": 0.06289999998989515
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "proposal/tp": 4,
+            "proposal/fp": 0,
+            "proposal/fn": 2,
+            "proposal/unmatched_unknown": 15,
+            "accepted/tp": 4,
+            "accepted/fp": 0,
+            "accepted/fn": 2,
+            "accepted/unmatched_unknown": 10,
+            "observed_confirmed/tp": 4,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 2,
+            "observed_confirmed/unmatched_unknown": 6,
+            "legacy_accepted/tp": 5,
+            "legacy_accepted/fp": 9,
+            "legacy_accepted/fn": 1,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 4,
+            "legacy_confirmed/fp": 6,
+            "legacy_confirmed/fn": 2,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 196
+          },
+          "reasons": {
+            "human/2_BG_UNKNOWN_LOSS": 2,
+            "human/OBSERVED_STRICT_MATCH": 4
+          },
+          "point_totals": {
+            "net_bg_recovery": 87712,
+            "net_final_recovery": 244498,
+            "new_accepted_points": 257974,
+            "human_supported_net_bg_points": 2725,
+            "cleanup_deleted": 4052,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 52,
+            "longest_qualified_fn": 1,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": "FUS_t0_2",
+            "last_gt_track": "P1",
+            "last_gt_frame": 201,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 19
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 76.12669999999343,
+            "diagnostic_compute_p95_ms": 84.22939999998198,
+            "diagnostic_compute_p99_ms": 90.52689999999711,
+            "heap_max_mb": 325.65311431884766,
+            "layers": {
+              "leveled": {
+                "p50": 7.92180000001099,
+                "p95": 10.323999999993248,
+                "p99": 10.594799999991665
+              },
+              "foreground": {
+                "p50": 17.61939999999595,
+                "p95": 21.605799999990268,
+                "p99": 27.582699999999022
+              },
+              "cleanup": {
+                "p50": 0.2731999999959953,
+                "p95": 0.34750000000349246,
+                "p99": 0.4237000000139233
+              },
+              "retained": {
+                "p50": 2.105599999980768,
+                "p95": 2.8555000000051223,
+                "p99": 5.024900000018533
+              },
+              "cluster": {
+                "p50": 0.831899999990128,
+                "p95": 0.9712999999755993,
+                "p99": 3.475800000014715
+              },
+              "classifier": {
+                "p50": 0.033899999980349094,
+                "p95": 0.04330000001937151,
+                "p99": 0.09159999998519197
+              },
+              "foreground_b": {
+                "p50": 0.6196000000054482,
+                "p95": 0.7362000000139233,
+                "p99": 1.6530000000202563
+              },
+              "cluster_b": {
+                "p50": 0.4654000000155065,
+                "p95": 0.6492999999900348,
+                "p99": 0.8123999999952503
+              },
+              "classifier_b": {
+                "p50": 0.0005000000237487257,
+                "p95": 0.11620000001857989,
+                "p99": 0.17149999999674037
+              },
+              "track": {
+                "p50": 0.022399999987101182,
+                "p95": 0.026000000012572855,
+                "p99": 0.03169999999227002
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "proposal/tp": 4,
+            "proposal/fp": 0,
+            "proposal/fn": 2,
+            "proposal/unmatched_unknown": 15,
+            "accepted/tp": 4,
+            "accepted/fp": 0,
+            "accepted/fn": 2,
+            "accepted/unmatched_unknown": 10,
+            "observed_confirmed/tp": 4,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 2,
+            "observed_confirmed/unmatched_unknown": 6,
+            "legacy_accepted/tp": 5,
+            "legacy_accepted/fp": 9,
+            "legacy_accepted/fn": 1,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 4,
+            "legacy_confirmed/fp": 6,
+            "legacy_confirmed/fn": 2,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 196
+          },
+          "reasons": {
+            "human/2_BG_UNKNOWN_LOSS": 2,
+            "human/OBSERVED_STRICT_MATCH": 4
+          },
+          "point_totals": {
+            "net_bg_recovery": 87712,
+            "net_final_recovery": 244498,
+            "new_accepted_points": 257915,
+            "human_supported_net_bg_points": 2725,
+            "cleanup_deleted": 4052,
+            "split_parents": 3
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 52,
+            "longest_qualified_fn": 1,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": "FUS_t0_6",
+            "last_gt_track": "P1",
+            "last_gt_frame": 201,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 18
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 74.26620000001276,
+            "diagnostic_compute_p95_ms": 100.06830000001355,
+            "diagnostic_compute_p99_ms": 112.15460000000894,
+            "heap_max_mb": 342.26831817626953,
+            "layers": {
+              "leveled": {
+                "p50": 7.953799999988405,
+                "p95": 12.193299999984447,
+                "p99": 14.681400000001304
+              },
+              "foreground": {
+                "p50": 16.786100000026636,
+                "p95": 23.630199999985052,
+                "p99": 26.752600000007078
+              },
+              "cleanup": {
+                "p50": 0.26410000000032596,
+                "p95": 0.38189999997848645,
+                "p99": 0.48889999999664724
+              },
+              "retained": {
+                "p50": 2.077900000003865,
+                "p95": 3.0732000000134576,
+                "p99": 5.306299999996554
+              },
+              "cluster": {
+                "p50": 0.9879999999830034,
+                "p95": 1.7264000000141095,
+                "p99": 4.173700000013923
+              },
+              "classifier": {
+                "p50": 0.03500000000349246,
+                "p95": 0.05149999997229315,
+                "p99": 0.11220000000321306
+              },
+              "foreground_b": {
+                "p50": 0.6277999999874737,
+                "p95": 0.8945999999996275,
+                "p99": 1.8567000000039116
+              },
+              "cluster_b": {
+                "p50": 0.47749999997904524,
+                "p95": 0.786099999997532,
+                "p99": 1.2987999999895692
+              },
+              "classifier_b": {
+                "p50": 0.001400000008288771,
+                "p95": 0.11549999998533167,
+                "p99": 0.15420000001904555
+              },
+              "track": {
+                "p50": 0.023100000020349398,
+                "p95": 0.03190000000176951,
+                "p99": 0.03900000001885928
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "frames": 238,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "PARTIAL_REVIEWED_BOUND",
+      "gt_sources": {
+        "PERSON/human": 71
+      },
+      "variants": {
+        "base": {
+          "counts": {
+            "proposal/tp": 8,
+            "proposal/fp": 0,
+            "proposal/fn": 63,
+            "proposal/unmatched_unknown": 226,
+            "accepted/tp": 8,
+            "accepted/fp": 0,
+            "accepted/fn": 63,
+            "accepted/unmatched_unknown": 163,
+            "observed_confirmed/tp": 7,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 64,
+            "observed_confirmed/unmatched_unknown": 147,
+            "legacy_accepted/tp": 66,
+            "legacy_accepted/fp": 105,
+            "legacy_accepted/fn": 5,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 65,
+            "legacy_confirmed/fp": 93,
+            "legacy_confirmed/fn": 6,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 167
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 1,
+            "human/4_MIXED_COMPONENT": 59,
+            "human/OBSERVED_STRICT_MATCH": 7,
+            "human/2_BG_UNKNOWN_LOSS": 4
+          },
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 5285,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 50,
+            "longest_qualified_fn": 23,
+            "current_fn": 1,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": "P1",
+            "last_gt_frame": 237,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 20
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 60.444599999987986,
+            "diagnostic_compute_p95_ms": 71.80319999999483,
+            "diagnostic_compute_p99_ms": 146.18210000000545,
+            "heap_max_mb": 357.30614471435547,
+            "layers": {
+              "leveled": {
+                "p50": 7.370699999999488,
+                "p95": 10.246500000008382,
+                "p99": 14.131099999998696
+              },
+              "foreground": {
+                "p50": 6.578900000022259,
+                "p95": 9.351499999989755,
+                "p99": 14.314299999998184
+              },
+              "cleanup": {
+                "p50": 0.3141999999934342,
+                "p95": 0.4285999999847263,
+                "p99": 0.5676000000094064
+              },
+              "retained": {
+                "p50": 1.9261000000115018,
+                "p95": 2.652200000011362,
+                "p99": 4.218800000002375
+              },
+              "cluster": {
+                "p50": 0.7335999999777414,
+                "p95": 0.9732999999832828,
+                "p99": 2.7441000000108033
+              },
+              "classifier": {
+                "p50": 0.03150000001187436,
+                "p95": 0.04069999998318963,
+                "p99": 0.07520000002114102
+              },
+              "foreground_b": {
+                "p50": 0.5178999999770895,
+                "p95": 0.6827000000048429,
+                "p99": 1.5432999999902677
+              },
+              "cluster_b": {
+                "p50": 0.6727000000246335,
+                "p95": 0.8678000000072643,
+                "p99": 0.996000000013737
+              },
+              "classifier_b": {
+                "p50": 0.10869999998249114,
+                "p95": 0.15380000000004657,
+                "p99": 0.18069999999715947
+              },
+              "track": {
+                "p50": 0.020900000003166497,
+                "p95": 0.02529999997932464,
+                "p99": 0.034699999989243224
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "proposal/tp": 11,
+            "proposal/fp": 0,
+            "proposal/fn": 60,
+            "proposal/unmatched_unknown": 226,
+            "accepted/tp": 11,
+            "accepted/fp": 0,
+            "accepted/fn": 60,
+            "accepted/unmatched_unknown": 163,
+            "observed_confirmed/tp": 10,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 61,
+            "observed_confirmed/unmatched_unknown": 144,
+            "legacy_accepted/tp": 65,
+            "legacy_accepted/fp": 109,
+            "legacy_accepted/fn": 6,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 64,
+            "legacy_confirmed/fp": 94,
+            "legacy_confirmed/fn": 7,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 167
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 1,
+            "human/OBSERVED_STRICT_MATCH": 10,
+            "human/4_MIXED_COMPONENT": 53,
+            "human/2_BG_UNKNOWN_LOSS": 7
+          },
+          "point_totals": {
+            "net_bg_recovery": 33939,
+            "net_final_recovery": 13588,
+            "new_accepted_points": 12330,
+            "human_supported_net_bg_points": 2838,
+            "cleanup_deleted": 5341,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 19,
+            "longest_qualified_fn": 23,
+            "current_fn": 1,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": "P1",
+            "last_gt_frame": 237,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 14
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 65.44959999999264,
+            "diagnostic_compute_p95_ms": 81.65220000001136,
+            "diagnostic_compute_p99_ms": 89.5225999999966,
+            "heap_max_mb": 369.19857025146484,
+            "layers": {
+              "leveled": {
+                "p50": 7.92269999999553,
+                "p95": 10.838799999997718,
+                "p99": 11.401400000002468
+              },
+              "foreground": {
+                "p50": 7.418799999984913,
+                "p95": 18.324900000006892,
+                "p99": 21.493799999996554
+              },
+              "cleanup": {
+                "p50": 0.3196999999927357,
+                "p95": 0.4855000000097789,
+                "p99": 0.5411000000021886
+              },
+              "retained": {
+                "p50": 2.0478999999759253,
+                "p95": 2.7822999999916647,
+                "p99": 4.6754000000073574
+              },
+              "cluster": {
+                "p50": 0.7533000000112224,
+                "p95": 0.9922000000078697,
+                "p99": 3.0586999999941327
+              },
+              "classifier": {
+                "p50": 0.03269999998155981,
+                "p95": 0.042200000025331974,
+                "p99": 0.056799999991199
+              },
+              "foreground_b": {
+                "p50": 0.5396000000182539,
+                "p95": 0.7113000000244938,
+                "p99": 1.4257999999972526
+              },
+              "cluster_b": {
+                "p50": 0.71919999999227,
+                "p95": 0.8992999999900348,
+                "p99": 1.0152999999991152
+              },
+              "classifier_b": {
+                "p50": 0.1065000000235159,
+                "p95": 0.1640999999945052,
+                "p99": 0.2036999999836553
+              },
+              "track": {
+                "p50": 0.022300000011455268,
+                "p95": 0.025800000003073364,
+                "p99": 0.033899999980349094
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "proposal/tp": 11,
+            "proposal/fp": 0,
+            "proposal/fn": 60,
+            "proposal/unmatched_unknown": 226,
+            "accepted/tp": 11,
+            "accepted/fp": 0,
+            "accepted/fn": 60,
+            "accepted/unmatched_unknown": 163,
+            "observed_confirmed/tp": 10,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 61,
+            "observed_confirmed/unmatched_unknown": 144,
+            "legacy_accepted/tp": 65,
+            "legacy_accepted/fp": 109,
+            "legacy_accepted/fn": 6,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 64,
+            "legacy_confirmed/fp": 94,
+            "legacy_confirmed/fn": 7,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 167
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 1,
+            "human/OBSERVED_STRICT_MATCH": 10,
+            "human/4_MIXED_COMPONENT": 53,
+            "human/2_BG_UNKNOWN_LOSS": 7
+          },
+          "point_totals": {
+            "net_bg_recovery": 33939,
+            "net_final_recovery": 13588,
+            "new_accepted_points": 12330,
+            "human_supported_net_bg_points": 2838,
+            "cleanup_deleted": 5341,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 19,
+            "longest_qualified_fn": 23,
+            "current_fn": 1,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": "P1",
+            "last_gt_frame": 237,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 14
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 61.82360000000335,
+            "diagnostic_compute_p95_ms": 76.25500000000466,
+            "diagnostic_compute_p99_ms": 80.16039999999339,
+            "heap_max_mb": 364.1906204223633,
+            "layers": {
+              "leveled": {
+                "p50": 7.345999999990454,
+                "p95": 9.933599999989383,
+                "p99": 10.503800000005867
+              },
+              "foreground": {
+                "p50": 6.972699999983888,
+                "p95": 17.073100000008708,
+                "p99": 19.285600000002887
+              },
+              "cleanup": {
+                "p50": 0.30110000001150183,
+                "p95": 0.4471000000194181,
+                "p99": 0.5126999999920372
+              },
+              "retained": {
+                "p50": 1.94450000001234,
+                "p95": 2.510999999998603,
+                "p99": 4.153699999995297
+              },
+              "cluster": {
+                "p50": 0.8604999999806751,
+                "p95": 1.1033999999926891,
+                "p99": 1.394300000014482
+              },
+              "classifier": {
+                "p50": 0.02969999998458661,
+                "p95": 0.04029999999329448,
+                "p99": 0.06720000001951121
+              },
+              "foreground_b": {
+                "p50": 0.5163000000175089,
+                "p95": 0.6794999999983702,
+                "p99": 0.9059999999881256
+              },
+              "cluster_b": {
+                "p50": 0.6858000000065658,
+                "p95": 0.8423000000184402,
+                "p99": 0.9377999999851454
+              },
+              "classifier_b": {
+                "p50": 0.09900000001653098,
+                "p95": 0.1516000000119675,
+                "p99": 0.17179999998188578
+              },
+              "track": {
+                "p50": 0.021799999987706542,
+                "p95": 0.024999999994179234,
+                "p99": 0.029400000028545037
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "frames": 251,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "PARTIAL_REVIEWED_BOUND",
+      "gt_sources": {
+        "PERSON/human": 12
+      },
+      "variants": {
+        "base": {
+          "counts": {
+            "proposal/tp": 5,
+            "proposal/fp": 0,
+            "proposal/fn": 7,
+            "proposal/unmatched_unknown": 28,
+            "accepted/tp": 5,
+            "accepted/fp": 0,
+            "accepted/fn": 7,
+            "accepted/unmatched_unknown": 19,
+            "observed_confirmed/tp": 5,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 7,
+            "observed_confirmed/unmatched_unknown": 14,
+            "legacy_accepted/tp": 12,
+            "legacy_accepted/fp": 12,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 11,
+            "legacy_confirmed/fp": 9,
+            "legacy_confirmed/fn": 1,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 239
+          },
+          "reasons": {
+            "human/4_MIXED_COMPONENT": 5,
+            "human/OBSERVED_STRICT_MATCH": 5,
+            "human/2_BG_UNKNOWN_LOSS": 2
+          },
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 4825,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 125,
+            "longest_qualified_fn": 1,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": "FUS_t0_5",
+            "last_gt_track": "P1",
+            "last_gt_frame": 250,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 14
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 61.99880000000121,
+            "diagnostic_compute_p95_ms": 78.47289999999339,
+            "diagnostic_compute_p99_ms": 82.62320000000182,
+            "heap_max_mb": 350.88658142089844,
+            "layers": {
+              "leveled": {
+                "p50": 7.2956000000122,
+                "p95": 9.988600000011502,
+                "p99": 10.603200000012293
+              },
+              "foreground": {
+                "p50": 7.540799999987939,
+                "p95": 16.95429999998305,
+                "p99": 17.438500000018394
+              },
+              "cleanup": {
+                "p50": 0.29449999998905696,
+                "p95": 0.3764999999839347,
+                "p99": 0.48440000001573935
+              },
+              "retained": {
+                "p50": 1.931700000015553,
+                "p95": 2.3900999999896158,
+                "p99": 3.9087999999755993
+              },
+              "cluster": {
+                "p50": 0.7140000000072177,
+                "p95": 1.0574999999953434,
+                "p99": 1.6460999999835622
+              },
+              "classifier": {
+                "p50": 0.03129999997327104,
+                "p95": 0.03800000000046566,
+                "p99": 0.04649999999674037
+              },
+              "foreground_b": {
+                "p50": 0.52379999999539,
+                "p95": 1.0258000000030734,
+                "p99": 1.921200000011595
+              },
+              "cluster_b": {
+                "p50": 0.5685999999986961,
+                "p95": 0.7196999999869149,
+                "p99": 0.8409000000101514
+              },
+              "classifier_b": {
+                "p50": 0.09169999998994172,
+                "p95": 0.11830000000190921,
+                "p99": 0.16219999999157153
+              },
+              "track": {
+                "p50": 0.01799999998183921,
+                "p95": 0.022300000011455268,
+                "p99": 0.02669999998761341
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "proposal/tp": 7,
+            "proposal/fp": 0,
+            "proposal/fn": 5,
+            "proposal/unmatched_unknown": 27,
+            "accepted/tp": 7,
+            "accepted/fp": 0,
+            "accepted/fn": 5,
+            "accepted/unmatched_unknown": 18,
+            "observed_confirmed/tp": 7,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 5,
+            "observed_confirmed/unmatched_unknown": 13,
+            "legacy_accepted/tp": 12,
+            "legacy_accepted/fp": 13,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 11,
+            "legacy_confirmed/fp": 10,
+            "legacy_confirmed/fn": 1,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 239
+          },
+          "reasons": {
+            "human/4_MIXED_COMPONENT": 5,
+            "human/OBSERVED_STRICT_MATCH": 7
+          },
+          "point_totals": {
+            "net_bg_recovery": 318602,
+            "net_final_recovery": 77754,
+            "new_accepted_points": 76231,
+            "human_supported_net_bg_points": 14216,
+            "cleanup_deleted": 4927,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 125,
+            "longest_qualified_fn": 1,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": "FUS_t0_2",
+            "last_gt_track": "P1",
+            "last_gt_frame": 250,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 14
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 67.76550000000861,
+            "diagnostic_compute_p95_ms": 243.05280000000494,
+            "diagnostic_compute_p99_ms": 262.03740000000107,
+            "heap_max_mb": 347.87933349609375,
+            "layers": {
+              "leveled": {
+                "p50": 7.851399999985006,
+                "p95": 11.291200000006938,
+                "p99": 12.340899999981048
+              },
+              "foreground": {
+                "p50": 9.354599999991478,
+                "p95": 157.20689999999013,
+                "p99": 172.36530000000494
+              },
+              "cleanup": {
+                "p50": 0.3581000000122003,
+                "p95": 1.14179999998305,
+                "p99": 1.5204999999841675
+              },
+              "retained": {
+                "p50": 2.1807999999728054,
+                "p95": 4.717999999993481,
+                "p99": 6.736800000013318
+              },
+              "cluster": {
+                "p50": 0.7738000000244938,
+                "p95": 1.3194000000075903,
+                "p99": 3.1303999999945518
+              },
+              "classifier": {
+                "p50": 0.03440000000409782,
+                "p95": 0.043399999995017424,
+                "p99": 0.09339999998337589
+              },
+              "foreground_b": {
+                "p50": 0.5654999999969732,
+                "p95": 1.250499999994645,
+                "p99": 1.425199999997858
+              },
+              "cluster_b": {
+                "p50": 0.5903000000107568,
+                "p95": 0.7551000000094064,
+                "p99": 0.8601999999955297
+              },
+              "classifier_b": {
+                "p50": 0.09919999999692664,
+                "p95": 0.13289999999688007,
+                "p99": 0.2479999999923166
+              },
+              "track": {
+                "p50": 0.019300000014482066,
+                "p95": 0.024200000014388934,
+                "p99": 0.060799999977461994
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "proposal/tp": 7,
+            "proposal/fp": 0,
+            "proposal/fn": 5,
+            "proposal/unmatched_unknown": 27,
+            "accepted/tp": 7,
+            "accepted/fp": 0,
+            "accepted/fn": 5,
+            "accepted/unmatched_unknown": 18,
+            "observed_confirmed/tp": 7,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 5,
+            "observed_confirmed/unmatched_unknown": 13,
+            "legacy_accepted/tp": 12,
+            "legacy_accepted/fp": 13,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 11,
+            "legacy_confirmed/fp": 10,
+            "legacy_confirmed/fn": 1,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 239
+          },
+          "reasons": {
+            "human/4_MIXED_COMPONENT": 5,
+            "human/OBSERVED_STRICT_MATCH": 7
+          },
+          "point_totals": {
+            "net_bg_recovery": 318602,
+            "net_final_recovery": 77754,
+            "new_accepted_points": 76231,
+            "human_supported_net_bg_points": 14216,
+            "cleanup_deleted": 4927,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 125,
+            "longest_qualified_fn": 1,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": "FUS_t0_2",
+            "last_gt_track": "P1",
+            "last_gt_frame": 250,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 14
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 71.5335999999952,
+            "diagnostic_compute_p95_ms": 207.6710000000021,
+            "diagnostic_compute_p99_ms": 241.63790000000154,
+            "heap_max_mb": 348.03284454345703,
+            "layers": {
+              "leveled": {
+                "p50": 7.641299999988405,
+                "p95": 10.809200000017881,
+                "p99": 12.57819999998901
+              },
+              "foreground": {
+                "p50": 9.39100000000326,
+                "p95": 135.71189999999478,
+                "p99": 162.09450000000652
+              },
+              "cleanup": {
+                "p50": 0.3543999999819789,
+                "p95": 1.0382000000099652,
+                "p99": 2.572100000019418
+              },
+              "retained": {
+                "p50": 2.178199999994831,
+                "p95": 3.8650999999954365,
+                "p99": 4.889399999985471
+              },
+              "cluster": {
+                "p50": 0.9459999999962747,
+                "p95": 1.4435999999986961,
+                "p99": 2.587599999998929
+              },
+              "classifier": {
+                "p50": 0.033100000000558794,
+                "p95": 0.04570000001695007,
+                "p99": 0.09260000000358559
+              },
+              "foreground_b": {
+                "p50": 0.5832999999984168,
+                "p95": 1.0742999999783933,
+                "p99": 2.1745999999984633
+              },
+              "cluster_b": {
+                "p50": 0.5887999999977183,
+                "p95": 0.7907000000122935,
+                "p99": 1.0221000000019558
+              },
+              "classifier_b": {
+                "p50": 0.1010999999998603,
+                "p95": 0.14970000000903383,
+                "p99": 0.18999999997322448
+              },
+              "track": {
+                "p50": 0.01840000000083819,
+                "p95": 0.023199999995995313,
+                "p99": 0.05540000001201406
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "frames": 523,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "PARTIAL_REVIEWED_BOUND",
+      "gt_sources": {
+        "PERSON/human": 53
+      },
+      "variants": {
+        "base": {
+          "counts": {
+            "proposal/tp": 53,
+            "proposal/fp": 0,
+            "proposal/fn": 0,
+            "proposal/unmatched_unknown": 165,
+            "accepted/tp": 53,
+            "accepted/fp": 0,
+            "accepted/fn": 0,
+            "accepted/unmatched_unknown": 124,
+            "observed_confirmed/tp": 51,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 2,
+            "observed_confirmed/unmatched_unknown": 112,
+            "legacy_accepted/tp": 53,
+            "legacy_accepted/fp": 124,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 51,
+            "legacy_confirmed/fp": 115,
+            "legacy_confirmed/fn": 2,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 470
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 2,
+            "human/OBSERVED_STRICT_MATCH": 51
+          },
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 11454,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 2,
+            "longest_qualified_fn": 2,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 1,
+            "last_id": "FUS_t0_2",
+            "last_gt_track": "P1",
+            "last_gt_frame": 522,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 15
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 60.32210000001942,
+            "diagnostic_compute_p95_ms": 68.61809999999241,
+            "diagnostic_compute_p99_ms": 76.31700000001001,
+            "heap_max_mb": 365.9592819213867,
+            "layers": {
+              "leveled": {
+                "p50": 7.266399999993155,
+                "p95": 9.553699999989476,
+                "p99": 10.907299999991665
+              },
+              "foreground": {
+                "p50": 7.314799999992829,
+                "p95": 9.596699999994598,
+                "p99": 11.456600000004983
+              },
+              "cleanup": {
+                "p50": 0.29810000001452863,
+                "p95": 0.3842000000004191,
+                "p99": 0.45929999998770654
+              },
+              "retained": {
+                "p50": 1.9563000000198372,
+                "p95": 3.651899999997113,
+                "p99": 4.187400000024354
+              },
+              "cluster": {
+                "p50": 0.7078999999794178,
+                "p95": 0.8377999999793246,
+                "p99": 1.1457999999984168
+              },
+              "classifier": {
+                "p50": 0.028599999990547076,
+                "p95": 0.037500000005820766,
+                "p99": 0.046999999991385266
+              },
+              "foreground_b": {
+                "p50": 0.5359999999927823,
+                "p95": 0.6581000000005588,
+                "p99": 1.367499999993015
+              },
+              "cluster_b": {
+                "p50": 0.5403000000223983,
+                "p95": 0.6454000000085216,
+                "p99": 0.7294000000110827
+              },
+              "classifier_b": {
+                "p50": 0.10770000002230518,
+                "p95": 0.16099999999278225,
+                "p99": 0.18189999999594875
+              },
+              "track": {
+                "p50": 0.017500000016298145,
+                "p95": 0.020900000003166497,
+                "p99": 0.030800000007729977
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "proposal/tp": 53,
+            "proposal/fp": 0,
+            "proposal/fn": 0,
+            "proposal/unmatched_unknown": 165,
+            "accepted/tp": 53,
+            "accepted/fp": 0,
+            "accepted/fn": 0,
+            "accepted/unmatched_unknown": 124,
+            "observed_confirmed/tp": 51,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 2,
+            "observed_confirmed/unmatched_unknown": 112,
+            "legacy_accepted/tp": 53,
+            "legacy_accepted/fp": 124,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 51,
+            "legacy_confirmed/fp": 115,
+            "legacy_confirmed/fn": 2,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 470
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 2,
+            "human/OBSERVED_STRICT_MATCH": 51
+          },
+          "point_totals": {
+            "net_bg_recovery": 156383,
+            "net_final_recovery": 18570,
+            "new_accepted_points": 15062,
+            "human_supported_net_bg_points": 16356,
+            "cleanup_deleted": 11603,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 2,
+            "longest_qualified_fn": 2,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 1,
+            "last_id": "FUS_t0_2",
+            "last_gt_track": "P1",
+            "last_gt_frame": 522,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 15
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 72.22039999999106,
+            "diagnostic_compute_p95_ms": 87.2276000000129,
+            "diagnostic_compute_p99_ms": 100.49559999999474,
+            "heap_max_mb": 352.4555969238281,
+            "layers": {
+              "leveled": {
+                "p50": 8.474699999991572,
+                "p95": 11.805300000007264,
+                "p99": 13.47829999998794
+              },
+              "foreground": {
+                "p50": 11.434399999998277,
+                "p95": 14.756200000003446,
+                "p99": 21.0567999999912
+              },
+              "cleanup": {
+                "p50": 0.3525000000081491,
+                "p95": 0.47000000000116415,
+                "p99": 2.7972000000008848
+              },
+              "retained": {
+                "p50": 2.3171999999904074,
+                "p95": 3.9523000000044703,
+                "p99": 5.04739999998128
+              },
+              "cluster": {
+                "p50": 0.8191999999980908,
+                "p95": 1.0622999999905005,
+                "p99": 3.257500000006985
+              },
+              "classifier": {
+                "p50": 0.03250000000116415,
+                "p95": 0.04070000001229346,
+                "p99": 0.05400000000372529
+              },
+              "foreground_b": {
+                "p50": 0.6073000000033062,
+                "p95": 0.7967000000062399,
+                "p99": 1.9751000000105705
+              },
+              "cluster_b": {
+                "p50": 0.604700000025332,
+                "p95": 0.7514000000082888,
+                "p99": 1.0558000000019092
+              },
+              "classifier_b": {
+                "p50": 0.11340000000200234,
+                "p95": 0.17370000001392327,
+                "p99": 0.2813000000023749
+              },
+              "track": {
+                "p50": 0.019699999975273386,
+                "p95": 0.02449999999953434,
+                "p99": 0.034699999989243224
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "proposal/tp": 53,
+            "proposal/fp": 0,
+            "proposal/fn": 0,
+            "proposal/unmatched_unknown": 165,
+            "accepted/tp": 53,
+            "accepted/fp": 0,
+            "accepted/fn": 0,
+            "accepted/unmatched_unknown": 124,
+            "observed_confirmed/tp": 51,
+            "observed_confirmed/fp": 0,
+            "observed_confirmed/fn": 2,
+            "observed_confirmed/unmatched_unknown": 112,
+            "legacy_accepted/tp": 53,
+            "legacy_accepted/fp": 124,
+            "legacy_accepted/fn": 0,
+            "legacy_accepted/unmatched_unknown": 0,
+            "legacy_confirmed/tp": 51,
+            "legacy_confirmed/fp": 115,
+            "legacy_confirmed/fn": 2,
+            "legacy_confirmed/unmatched_unknown": 0,
+            "unknown_frames": 470
+          },
+          "reasons": {
+            "human/7_ASSOCIATION_CONFIRMATION": 2,
+            "human/OBSERVED_STRICT_MATCH": 51
+          },
+          "point_totals": {
+            "net_bg_recovery": 156383,
+            "net_final_recovery": 18570,
+            "new_accepted_points": 15062,
+            "human_supported_net_bg_points": 16356,
+            "cleanup_deleted": 11603,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": 2,
+            "longest_qualified_fn": 2,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 1,
+            "last_id": "FUS_t0_2",
+            "last_gt_track": "P1",
+            "last_gt_frame": 522,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 15
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 64.29610000000685,
+            "diagnostic_compute_p95_ms": 83.44779999999446,
+            "diagnostic_compute_p99_ms": 95.3922999999777,
+            "heap_max_mb": 344.00548553466797,
+            "layers": {
+              "leveled": {
+                "p50": 7.442600000009406,
+                "p95": 10.841000000014901,
+                "p99": 13.159400000004098
+              },
+              "foreground": {
+                "p50": 10.084100000036415,
+                "p95": 14.072299999999814,
+                "p99": 17.595200000010664
+              },
+              "cleanup": {
+                "p50": 0.31330000000889413,
+                "p95": 0.433099999994738,
+                "p99": 0.7389999999722932
+              },
+              "retained": {
+                "p50": 2.063899999979185,
+                "p95": 3.997899999958463,
+                "p99": 4.856399999989662
+              },
+              "cluster": {
+                "p50": 0.8740999999572523,
+                "p95": 1.1859000000113156,
+                "p99": 3.190499999996973
+              },
+              "classifier": {
+                "p50": 0.0328999999910593,
+                "p95": 0.04370000000926666,
+                "p99": 0.054900000017369166
+              },
+              "foreground_b": {
+                "p50": 0.5543000000179745,
+                "p95": 0.7421000000031199,
+                "p99": 1.5304999999934807
+              },
+              "cluster_b": {
+                "p50": 0.5646999999880791,
+                "p95": 0.7250999999814667,
+                "p99": 0.9032000000006519
+              },
+              "classifier_b": {
+                "p50": 0.12449999997625127,
+                "p95": 0.19269999998505227,
+                "p99": 0.23600000000442378
+              },
+              "track": {
+                "p50": 0.016499999968800694,
+                "p95": 0.022100000001955777,
+                "p99": 0.02629999999771826
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "frames": 126,
+      "frozen_base_exact_terminal_and_candidates": true,
+      "qualification": "INVALID_BINDING",
+      "gt_sources": {},
+      "variants": {
+        "base": {
+          "counts": {
+            "unknown_frames": 126
+          },
+          "reasons": {},
+          "point_totals": {
+            "net_bg_recovery": 0,
+            "net_final_recovery": 0,
+            "new_accepted_points": 0,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 2264,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": null,
+            "longest_qualified_fn": 0,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": null,
+            "last_gt_frame": -2,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 15
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 67.70250000001397,
+            "diagnostic_compute_p95_ms": 79.71119999999064,
+            "diagnostic_compute_p99_ms": 87.30920000001788,
+            "heap_max_mb": 304.7554016113281,
+            "layers": {
+              "leveled": {
+                "p50": 7.2418000000179745,
+                "p95": 9.301399999996647,
+                "p99": 10.060699999972712
+              },
+              "foreground": {
+                "p50": 11.544200000003912,
+                "p95": 13.7896999999939,
+                "p99": 15.119800000014948
+              },
+              "cleanup": {
+                "p50": 0.31140000000596046,
+                "p95": 0.7367000000085682,
+                "p99": 2.1385999999765772
+              },
+              "retained": {
+                "p50": 1.9792000000015832,
+                "p95": 3.31160000001546,
+                "p99": 3.885999999998603
+              },
+              "cluster": {
+                "p50": 0.7630000000062864,
+                "p95": 1.2070999999996275,
+                "p99": 1.941499999986263
+              },
+              "classifier": {
+                "p50": 0.03659999999217689,
+                "p95": 0.04879999998956919,
+                "p99": 0.0629999999946449
+              },
+              "foreground_b": {
+                "p50": 0.586200000019744,
+                "p95": 0.9766999999992549,
+                "p99": 1.125499999994645
+              },
+              "cluster_b": {
+                "p50": 0.4949999999953434,
+                "p95": 0.713900000002468,
+                "p99": 0.9003000000084285
+              },
+              "classifier_b": {
+                "p50": 0.12679999999818392,
+                "p95": 0.20360000000800937,
+                "p99": 0.2265999999945052
+              },
+              "track": {
+                "p50": 0.021000000007916242,
+                "p95": 0.02470000000903383,
+                "p99": 0.02590000000782311
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "a06": {
+          "counts": {
+            "unknown_frames": 126
+          },
+          "reasons": {},
+          "point_totals": {
+            "net_bg_recovery": 229220,
+            "net_final_recovery": 213964,
+            "new_accepted_points": 95882,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 2254,
+            "split_parents": 0
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": null,
+            "longest_qualified_fn": 0,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": null,
+            "last_gt_frame": -2,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 11
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 111.78860000002896,
+            "diagnostic_compute_p95_ms": 139.05349999997998,
+            "diagnostic_compute_p99_ms": 166.12039999995613,
+            "heap_max_mb": 284.7977752685547,
+            "layers": {
+              "leveled": {
+                "p50": 8.14100000000326,
+                "p95": 10.920299999997951,
+                "p99": 21.063600000052247
+              },
+              "foreground": {
+                "p50": 43.582600000023376,
+                "p95": 53.8403999999864,
+                "p99": 71.77230000001146
+              },
+              "cleanup": {
+                "p50": 0.7439999999478459,
+                "p95": 1.352599999983795,
+                "p99": 3.1006000000052154
+              },
+              "retained": {
+                "p50": 3.026899999997113,
+                "p95": 5.395699999993667,
+                "p99": 8.176800000015646
+              },
+              "cluster": {
+                "p50": 1.086699999985285,
+                "p95": 1.4360999999917112,
+                "p99": 1.6349000000045635
+              },
+              "classifier": {
+                "p50": 0.036300000036135316,
+                "p95": 0.056299999996554106,
+                "p99": 0.08840000000782311
+              },
+              "foreground_b": {
+                "p50": 0.9211999999824911,
+                "p95": 1.243300000031013,
+                "p99": 2.3324000000138767
+              },
+              "cluster_b": {
+                "p50": 0.5874000000185333,
+                "p95": 0.7762000000220723,
+                "p99": 0.9822000000276603
+              },
+              "classifier_b": {
+                "p50": 0.15839999995660037,
+                "p95": 0.22970000002533197,
+                "p99": 0.2662000000127591
+              },
+              "track": {
+                "p50": 0.022300000011455268,
+                "p95": 0.027799999981652945,
+                "p99": 0.03359999996609986
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        },
+        "split": {
+          "counts": {
+            "unknown_frames": 126
+          },
+          "reasons": {},
+          "point_totals": {
+            "net_bg_recovery": 229220,
+            "net_final_recovery": 227528,
+            "new_accepted_points": 86294,
+            "human_supported_net_bg_points": 0,
+            "cleanup_deleted": 2254,
+            "split_parents": 45
+          },
+          "furniture_diagnostic": {},
+          "tracking": {
+            "first": null,
+            "longest_qualified_fn": 0,
+            "current_fn": 0,
+            "id_changes_contiguous_gt": 0,
+            "reacquisition": 0,
+            "last_id": null,
+            "last_gt_track": null,
+            "last_gt_frame": -2,
+            "duplicate_ids": 0,
+            "max_coast_lost": 2,
+            "confirmed_coast_frames": 13
+          },
+          "performance": {
+            "diagnostic_compute_p50_ms": 103.48649999999907,
+            "diagnostic_compute_p95_ms": 124.28120000002673,
+            "diagnostic_compute_p99_ms": 156.34289999998873,
+            "heap_max_mb": 292.11682891845703,
+            "layers": {
+              "leveled": {
+                "p50": 7.618400000035763,
+                "p95": 10.631699999968987,
+                "p99": 12.839600000006612
+              },
+              "foreground": {
+                "p50": 41.449199999973644,
+                "p95": 50.26600000000326,
+                "p99": 61.472900000051595
+              },
+              "cleanup": {
+                "p50": 0.7123000000137836,
+                "p95": 0.9886999999871477,
+                "p99": 3.2343999999575317
+              },
+              "retained": {
+                "p50": 2.999599999981001,
+                "p95": 4.975099999981467,
+                "p99": 5.9549999999580905
+              },
+              "cluster": {
+                "p50": 1.3316000000340864,
+                "p95": 1.6511000000173226,
+                "p99": 4.466699999989942
+              },
+              "classifier": {
+                "p50": 0.04119999997783452,
+                "p95": 0.05340000003343448,
+                "p99": 0.07949999999254942
+              },
+              "foreground_b": {
+                "p50": 0.9213999999919906,
+                "p95": 1.1308999999891967,
+                "p99": 1.5140999999712221
+              },
+              "cluster_b": {
+                "p50": 0.5805000000400469,
+                "p95": 0.9222999999765307,
+                "p99": 1.473699999973178
+              },
+              "classifier_b": {
+                "p50": 0.11660000000847504,
+                "p95": 0.18910000001778826,
+                "p99": 0.23579999996582046
+              },
+              "track": {
+                "p50": 0.022400000016205013,
+                "p95": 0.028999999980442226,
+                "p99": 0.035299999988637865
+              }
+            },
+            "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+          }
+        }
+      }
+    }
+  ],
+  "limits": [
+    "partial GT, contiguous identity metrics only on contiguous same GT track",
+    "furniture human/propagated overlap diagnostic; no independent negative qualification",
+    "S9 INVALID_BINDING; no formal metrics",
+    "Windows instrumentation timings not board runtime",
+    "missing GT frames UNKNOWN; not zero FN success"
+  ]
+}

@@ -1,0 +1,310 @@
+{
+ "task": "HUMAN-FUSION-BG-V3 最终整树对账",
+ "date": "2026-10-11",
+ "baseline_files": 12154,
+ "final_files": 12261,
+ "added": [
+  "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/02_SKELETON_STATE_AND_ADAPT.md",
+  "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/03_SUMMARY.md",
+  "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/skeleton_coarse/skeleton_cap_20261010_175429_f100.svg",
+  "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/skeleton_coarse/skeleton_cap_20261010_180235_f60.svg",
+  "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/skeleton_coarse/skeleton_cap_20261010_180557_f200.svg",
+  "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/skeleton_coarse/skel_f100.png",
+  "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/skeleton_coarse/skel_f200.png",
+  "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/skeleton_coarse/skel_f60.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/BG_AUDIT.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/BG_GROUPS_EVAL.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/CANDIDATE_IMPROVE_S6.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/cap_20261010_175227_bg.jsonl",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/cap_20261010_180751_bg.jsonl",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/CASES.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/CONTROLLED_COMPARISON.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/LAYER_ATTRIBUTION_cap_20261010_180235_f91_128_B.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/REPORT_FINAL.md",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/S9_GT_PROVENANCE_DRAFT.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/S9_GT_REPAIR.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/TRAIN_BG_REPORT.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/V3_BASELINE.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/V3_FREEZE_FINAL.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_175227_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_175429_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_175553_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_175804_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_175943_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_180235_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_180337_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_180557_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SESSION_cap_20261010_180751_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/CLAUDE_TASKBOOK.md",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/historical_v2_recalculation.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/INTEGRITY.md",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/missing_reference_ab.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/missing_reference_ab.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/missing_reference_ab.log",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/prepare_snapshot.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/REPORT.md",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/4DVLab__LiveHPS/models.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/4DVLab__LiveHPS/test.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/4DVLab__LiveHPS/tree.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/baberjunaid__LiDAR_Tracking_3D/package.xml",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/baberjunaid__LiDAR_Tracking_3D/src/Track_3D.cpp",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/baberjunaid__LiDAR_Tracking_3D/tree.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/charlesq34__pointnet2/models/pointnet2_cls_msg.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/charlesq34__pointnet2/tree.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/charlesq34__pointnet2/utils/pointnet_util.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/crossref_10.1080_01691864.2022.2126732.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/crossref_10.3390_s23104720_verified.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/crossref_10.3390_s23104781.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/koide3__hdl_people_tracking/apps/hdl_people_detection_nodelet.cpp",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/koide3__hdl_people_tracking/include/hdl_people_detection/background_subtractor.hpp",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/koide3__hdl_people_tracking/src/kidono_human_classifier.cpp",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/koide3__hdl_people_tracking/tree.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/manifest.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/nilushacj__O-LiPeDeT-Overhead-LiDAR-Person-Detection-and-Tracking/lidar-human-detection/cfgs/pointpillars_crane.yaml",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/nilushacj__O-LiPeDeT-Overhead-LiDAR-Person-Detection-and-Tracking/lidar-human-detection/cfgs/voxelnext_crane.yaml",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/nilushacj__O-LiPeDeT-Overhead-LiDAR-Person-Detection-and-Tracking/lidar-human-detection/lidar_human_detection_models/train.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/nilushacj__O-LiPeDeT-Overhead-LiDAR-Person-Detection-and-Tracking/tree.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/supplement_manifest.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/thkreutz__umosmots/src/data/MOTS_Datasets.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/thkreutz__umosmots/src/data/__init__.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/thkreutz__umosmots/tree.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/tusen-ai__SimpleTrack/docs/config.md",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/tusen-ai__SimpleTrack/mot_3d/association.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research/tusen-ai__SimpleTrack/tree.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research_fetch.log",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research_fetch.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/RESEARCH_NOTES.md",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research_supplement.log",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research_supplement.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/research_supplement_r2.log",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/s6_stage_probe.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/s6_stage_probe.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/s6_stage_probe.log",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/snapshot_manifest.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/verify_final.py",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/core/data_loader.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/core/engine.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/core/engine_keep_unknown.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/core/engine_r4.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/core/evaluate_fusion_gt.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/core/fusion.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/core/leveling.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/core/schema.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/detector.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/detector_keep_unknown.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/export.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/human_replay/bg_envelope.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/human_replay/detect_overlay.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/human_replay/gt_lib.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/human_replay/human_pipe_lib.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/human_replay/rf_person.js",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/human_replay/rf_person_v1.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/models/xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/results/AUDIT.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/workspace/unique_tracker.js",
+  "docs/human_capture/returns/HUMAN-FUSION-DIAG.md",
+  "sidequests/human_fusion_lab/render_skeleton_coarse.js",
+  "sidequests/human_fusion_lab/run_r3_all.js",
+  "sidequests/human_fusion_lab_v3/demo_v3.html",
+  "sidequests/human_fusion_lab_v3/README.md",
+  "sidequests/human_fusion_lab_v3/results/V3_FREEZE_FINAL.json",
+  "sidequests/human_fusion_lab_v3/server_v3.js",
+  "sidequests/human_fusion_lab_v3/tools/freeze_v3.js",
+  "sidequests/human_fusion_lab_v3/v3_runtime.js"
+ ],
+ "removed": [],
+ "changed": [
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/BROWSER_CHECK_02.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175227__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175227__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175429__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175429__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175553__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175553__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175804__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175804__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175943__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175943__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180235__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180235__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180337__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180337__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180557__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180557__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180751__rf51_baseline.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180751__xgb69_candidate.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/FOREGROUND_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/FURNITURE_RF51_F20_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/PERSON_MISS_F128_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/S9_UNKNOWN_F0_02.png",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SUCCESS_NEAR_F20_02.png",
+  "sidequests/human_fusion_lab/results/chrome_q01b.log",
+  "sidequests/human_fusion_lab_v3/results/CONTROLLED_COMPARISON.json"
+ ],
+ "intentionally_added_v3": [
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/BG_AUDIT.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/BG_GROUPS_EVAL.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/CANDIDATE_IMPROVE_S6.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/cap_20261010_175227_bg.jsonl",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/cap_20261010_180751_bg.jsonl",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/CASES.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/CONTROLLED_COMPARISON.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/LAYER_ATTRIBUTION_cap_20261010_180235_f91_128_B.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/REPORT_FINAL.md",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/S9_GT_PROVENANCE_DRAFT.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/S9_GT_REPAIR.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/TRAIN_BG_REPORT.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/V3_BASELINE.json",
+  "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/V3_FREEZE_FINAL.json",
+  "sidequests/human_fusion_lab_v3/demo_v3.html",
+  "sidequests/human_fusion_lab_v3/README.md",
+  "sidequests/human_fusion_lab_v3/results/V3_FREEZE_FINAL.json",
+  "sidequests/human_fusion_lab_v3/server_v3.js",
+  "sidequests/human_fusion_lab_v3/tools/freeze_v3.js",
+  "sidequests/human_fusion_lab_v3/v3_runtime.js"
+ ],
+ "externally_changed_at_v2_state": {
+  "0": {
+   "base_at_task_start": "?",
+   "final": "?",
+   "unchanged_by_us": true
+  },
+  "1": {
+   "base_at_task_start": "?",
+   "final": "?",
+   "unchanged_by_us": true
+  },
+  "2": {
+   "base_at_task_start": "?",
+   "final": "?",
+   "unchanged_by_us": true
+  },
+  "3": {
+   "base_at_task_start": "?",
+   "final": "?",
+   "unchanged_by_us": true
+  },
+  "4": {
+   "base_at_task_start": "?",
+   "final": "?",
+   "unchanged_by_us": true
+  }
+ },
+ "status": "PASS_SOFTWARE_SELF_CHECK — 只 V3 意识新增 + 自动验证自写 (内容等价), 无防御/生产改动, 外在文件未前进",
+ "self_rewritten_during_v3": [
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/BROWSER_CHECK_02.json",
+   "why": "check_v2_browser.js 自动浏览器检查重写"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175227__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175227__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175429__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175429__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175553__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175553__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175804__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175804__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175943__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_175943__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180235__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180235__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180337__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180337__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180557__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180557__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180751__rf51_baseline.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/cap_20261010_180751__xgb69_candidate.json",
+   "why": "validate_v2.js 自动回放回归重写 (内容等价)"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/FOREGROUND_F0_02.png",
+   "why": "check_v2_browser.js 截图重写"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/FURNITURE_RF51_F20_02.png",
+   "why": "check_v2_browser.js 截图重写"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/PERSON_MISS_F128_02.png",
+   "why": "check_v2_browser.js 截图重写"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/S9_UNKNOWN_F0_02.png",
+   "why": "check_v2_browser.js 截图重写"
+  },
+  {
+   "file": "docs/human_capture/evidence/2026-10-11_human_fusion_demo_v2_r1/SUCCESS_NEAR_F20_02.png",
+   "why": "check_v2_browser.js 截图重写"
+  },
+  {
+   "file": "sidequests/human_fusion_lab/results/chrome_q01b.log",
+   "why": "Q01 工单 chrome 日志 (外在历史)"
+  },
+  {
+   "file": "sidequests/human_fusion_lab_v3/results/CONTROLLED_COMPARISON.json",
+   "why": "v3 自行补充 XGB 证伪数据"
+  }
+ ],
+ "incidental_changes": [],
+ "summary": {
+  "baseline_files": 12154,
+  "final_files": 12261,
+  "intentionally_added_v3": 20,
+  "self_rewritten_during_v3": 26,
+  "incidental_changes": 0,
+  "incidental_removed": 0,
+  "external_unchanged": true
+ }
+}

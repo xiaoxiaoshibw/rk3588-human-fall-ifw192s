@@ -1,0 +1,266 @@
+{
+  "source": "diagnostic",
+  "branch": "master",
+  "head": "cfbb80c57508be1a0435fdb92260f698dc763934",
+  "ponytail": "C:/Users/30680/.codex/skills/ponytail/SKILL.md",
+  "runtime": "v24.14.0",
+  "input_binding": {
+    "kind": "registration_provenance",
+    "schema": 1,
+    "source_session": {
+      "sid": "cap_20261002_223757",
+      "meta_sha256": "71915d5181b8fc409d83a8e1650671801d2d50cf09ef4a3832d43b51ec3f4ca8",
+      "bin_sha256": "8afb660b7bf0631462d4cde6f82bd89884b2e83acea1da25c07316c87b5fbb37"
+    },
+    "reference_session": {
+      "sid": "cap_20261004_203349",
+      "meta_sha256": "c3b55d1e11ed8a043bd3645af7ed07e920024c05f3cb48b15d523405edd38392",
+      "bin_sha256": "2ed3fc60d99b3a2f42e0951835ad847fae2f490859e487b167fbccb1b5f10323"
+    },
+    "source_leveling": {
+      "job_id": "6bc5aabf8f0041ffa961758b4e84da94",
+      "method": "tls",
+      "transform_id": "de973fdbbec95379dfce52063cc8bdf473c9bbbf146a05a58452ec8f441b9a1f",
+      "transform_sha256": "7f1cd4f734f8d14e6da9bfc97d0e24d5a213a9fe10d1cafde1048a8df118a7b2",
+      "report_sha256": "5b8854eb81295f8f69cf3625d3776279d6076ac4fc1dc102de55fcc4a2dc18e0",
+      "manifest_sha256": "6a86d536dfd62030ed218f37725a4c9ada089c0c275422fc3b216c5a3f7ffba7"
+    },
+    "reference_leveling": {
+      "job_id": "c9712acad48c4fb7a78cb119c08d4cdb",
+      "method": "tls",
+      "transform_id": "5d8fd5c032f2b8131e5d5ef2027e0560605e9a7ba83376c55528b9c8edff6f03",
+      "transform_sha256": "c845929272d350faa35deb0c1595e93cda46a9562e23aa9927476029cb46c194",
+      "report_sha256": "e7455741fc74a1fb24c9e5d5d21dab0eda4f927428088f76057799e001d55a15",
+      "manifest_sha256": "4fb6ae20b7ee462807b4cf113e718bf3d5c89c2026a614a4fbc9230acd260e7b"
+    },
+    "background_reference": {
+      "builder": "build_reference_map",
+      "code_id": "54187d79f285e9f0ec5fb9e49a4da222b822ea8cf7d09c44667a6f713b7810a6",
+      "params": {
+        "bg_ref_hit_min_pts": 1,
+        "bg_ref_occ_min": 0.5,
+        "bg_voxel_xy": 0.15,
+        "bg_voxel_z": 0.12,
+        "ground_keep_below_m": 0.1,
+        "z_max_m": 2.5
+      },
+      "nframes": 102,
+      "ref_voxels_total": 5286,
+      "universe_count": 3707,
+      "digest": {
+        "algo": "refmap_digest_v1",
+        "value": "ea9fc78bb0c2b598e1132f60572d77bb72994452eefee852103a961cc3e95e3b"
+      }
+    },
+    "code": {
+      "files": {
+        "pc_apps/human_replay/human_pipe_lib.js": "f580778c366767529d74d17af8ff2ecba4a22728dcd9fc06743e74d510a4dc83",
+        "pc_apps/human_replay/human_replay_lib.js": "bbcbc547f79da60d0e6f915eeccb403997b1c192a3a37ba00e6d3c4d367cf1cc",
+        "pc_apps/human_replay/registration_method.js": "958f646ff41adbca7840a0a09ae6ba2ed87db7254b2d16f5365b64625caac141",
+        "pc_apps/human_replay/registration.js": "19c1fced9dbeabdefbc20dc8666fec601e3da8a42de68dec2ccdf195865379f5"
+      },
+      "code_id": "ef686f4d1cf7341ab902b4d4f7f8c239646872c172626fa34d576ba766e84d81"
+    },
+    "verified": [
+      {
+        "check": "session_sha",
+        "pass": true
+      },
+      {
+        "check": "leveling_sha",
+        "pass": true
+      }
+    ],
+    "writer": {
+      "tool": "registration.js",
+      "version": "1",
+      "runtime": "v24.14.0"
+    },
+    "created_utc": "2026-10-07T07:02:39.802Z",
+    "artifact_id": "ae5c8f4c021e91665c9e23cedd66730122d5f0552fd794de86a9b5f99e7a5e66"
+  },
+  "source_sha256": {
+    "human_pipe_lib.js": "af4cdea6d35c73633b12b0d230f3e91f8ba606d9e42fb2ba69bd4083b4af14e5",
+    "human_replay_lib.js": "bbcbc547f79da60d0e6f915eeccb403997b1c192a3a37ba00e6d3c4d367cf1cc",
+    "registration.js": "19c1fced9dbeabdefbc20dc8666fec601e3da8a42de68dec2ccdf195865379f5",
+    "registration_method.js": "958f646ff41adbca7840a0a09ae6ba2ed87db7254b2d16f5365b64625caac141",
+    "human_detect.js": "45d1305577e53dee79887b454e291c3904ae753c07f69984269310e2b6ad6307",
+    "leveling.py": "3c3a88196cfd9851e2cadac76690a8343d6c949c4c7f467950495c32e6b54a6e"
+  },
+  "acceptance": {
+    "file": "../2026-10-07_hrw03_r37_productionization/06_test_matrix.md",
+    "version": 1,
+    "sha256": "70c82e401d0e4055ad85e1bef847d82dd32e718d682533ff25f22a24ac1f9b18"
+  },
+  "params": {
+    "PIPE": {
+      "range_min_m": 0.35,
+      "range_max_m": 25,
+      "voxel_m": 0.15,
+      "ground_keep_below_m": 0.1,
+      "z_max_m": 2.5,
+      "bg_voxel_xy": 0.15,
+      "bg_voxel_z": 0.12,
+      "bg_hit_min_pts": 2,
+      "bg_occ_strong": 0.85,
+      "bg_occ_supported": 0.65,
+      "bg_jitter_max": 0.05,
+      "bg_neighbor_min": 2,
+      "bg_match_radius": 0.12,
+      "bg_ref_hit_min_pts": 1,
+      "bg_ref_occ_min": 0.5,
+      "cluster_min_voxels": 3,
+      "cluster_neighbor_hops": 1,
+      "human_n_min": 60,
+      "human_height_min": 0.9,
+      "human_height_max": 2.3,
+      "human_width_max": 0.7,
+      "human_radius_max": 0.45,
+      "human_upcos_min": 0.5,
+      "band_edges": [
+        0,
+        0.3,
+        0.6,
+        0.9,
+        1.2,
+        1.5,
+        1.8,
+        2.2,
+        3
+      ],
+      "ev_band_min_pts_abs": 15,
+      "ev_band_min_pts_frac": 0.04,
+      "ev_bands_min": 3,
+      "ev_spread_cv_person": 0.18,
+      "ev_spread_cv_box": 0.15,
+      "ev_aniso_box": 4,
+      "ev_aniso_box_soft": 2.5,
+      "ev_aniso_person": 3,
+      "human_confirm_window": 5,
+      "human_confirm_votes": 3,
+      "human_confirm_min_age": 3,
+      "track_gate_xy_m": 0.75,
+      "track_lost_max": 8,
+      "ema_alpha": 0.35,
+      "fall_upcos_max": 0.45,
+      "fall_height_max": 0.9,
+      "fall_sustain_frames": 10,
+      "fall_recover_frames": 5
+    },
+    "R": [
+      0.9991163122018949,
+      -0.04174203049116343,
+      0.004919103837092246,
+      0.04157323670075327,
+      0.9986699484975371,
+      0.030495900677789723,
+      -0.006185521991590849,
+      -0.03026444875429344,
+      0.9995227873636952
+    ],
+    "t": [
+      -0.016848405460309426,
+      -0.031789475922615384,
+      -0.00013234032701056955
+    ],
+    "gate_profile": {
+      "profile_id": "reg_gate_v1",
+      "bands": {
+        "fit_p50": [
+          "max",
+          0.02,
+          0.03,
+          "RESIDUAL_HIGH"
+        ],
+        "fit_p90": [
+          "max",
+          0.08,
+          0.1,
+          "RESIDUAL_HIGH"
+        ],
+        "holdout_p50": [
+          "max",
+          0.02,
+          0.03,
+          "HOLDOUT_MISMATCH"
+        ],
+        "holdout_fit_ratio_p50": [
+          "max",
+          1.5,
+          2,
+          "HOLDOUT_MISMATCH"
+        ],
+        "n_static_source": [
+          "min",
+          5000,
+          2000,
+          "WEAK_SUPPORT"
+        ],
+        "n_static_target": [
+          "min",
+          5000,
+          2000,
+          "WEAK_SUPPORT"
+        ],
+        "n_correspondence": [
+          "min",
+          500,
+          200,
+          "SPARSE_CORRESPONDENCE"
+        ],
+        "inlier_ratio": [
+          "min",
+          0.5,
+          0.3,
+          "SPARSE_CORRESPONDENCE"
+        ],
+        "coverage_xy": [
+          "min",
+          0.5,
+          0.3,
+          "LOW_COVERAGE"
+        ],
+        "max_sector_share": [
+          "max",
+          0.6,
+          0.75,
+          "WALL_CONCENTRATION"
+        ],
+        "condition_number": [
+          "max",
+          10000,
+          100000,
+          "ILL_CONDITIONED"
+        ],
+        "eig_ratio": [
+          "min",
+          0.0001,
+          0.00001,
+          "ILL_CONDITIONED"
+        ]
+      },
+      "sanity": {
+        "roll_deg": 6,
+        "pitch_deg": 3,
+        "yaw_deg": 5,
+        "theta_deg": 7,
+        "translation": 0.2,
+        "t_z": 0.15
+      },
+      "self_rot": 0.25,
+      "self_t": 0.01,
+      "compete_rot": 0.02,
+      "compete_t": 0.01,
+      "advantage": 0.95,
+      "provisional": [
+        "n_correspondence",
+        "inlier_ratio",
+        "coverage_xy",
+        "max_sector_share",
+        "condition_number",
+        "eig_ratio"
+      ]
+    },
+    "diagnostic_only": true
+  }
+}

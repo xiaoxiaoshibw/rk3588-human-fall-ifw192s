@@ -1,0 +1,48 @@
+--- before/cpu_pointpillars.py
++++ after/cpu_pointpillars.py
+@@ -46,15 +46,19 @@
+                 torch.tensor(counts, dtype=torch.int32))
+ 
+ 
+-def nms_cuda(boxes, scores, thresh, pre_maxsize=None, post_max_size=None):
+-    """Exact rotated polygon IoU on CPU; upstream boxes are xyxy + CCW yaw."""
++def nms_cuda(boxes, scores, thresh, pre_maxsize=None, post_max_size=None, clockwise=True):
++    """CPU polygon IoU; pinned upstream uses xyxy + clockwise KITTI ry.
++
++    clockwise=False exists only to reproduce pre-DET03 evidence, not a model setting.
++    """
+     polys = []
+     for x1, y1, x2, y2, yaw in boxes.detach().cpu().numpy():
+         center = np.array([(x1+x2)/2, (y1+y2)/2])
+         corners = np.array([[x1,y1],[x2,y1],[x2,y2],[x1,y2]]) - center
++        yaw = -yaw if clockwise else yaw
+         c, s = np.cos(yaw), np.sin(yaw)
+         polys.append(Polygon(corners @ np.array([[c,s],[-s,c]]) + center))
+-    order = np.argsort(-scores.detach().cpu().numpy(), kind="stable")
++    order = scores.detach().cpu().sort(descending=True).indices.numpy()
+     if pre_maxsize is not None:
+         order = order[:pre_maxsize]
+     keep = []
+--- before/audit_truth.py
++++ after/audit_truth.py
+@@ -14,7 +14,8 @@
+         raise ValueError("invalid predicted box")
+     dx,dy=xy[0]-x,xy[1]-y
+     c,s=math.cos(yaw),math.sin(yaw)
+-    return abs(c*dx+s*dy)<=w/2 and abs(-s*dx+c*dy)<=l/2
++    # The pinned checkpoint retains KITTI camera ry: clockwise around lidar z.
++    return abs(c*dx-s*dy)<=w/2 and abs(s*dx+c*dy)<=l/2
+ 
+ 
+ def main():
+--- before/plot_static.py
++++ after/plot_static.py
+@@ -32,7 +32,7 @@
+     for d in persons:
+         x,y,z,w,l,h,yaw=d["box_xyz_bottom_wlh_yaw"]
+         c,s=np.cos(yaw),np.sin(yaw)
+-        corners=np.array([[-w/2,-l/2],[w/2,-l/2],[w/2,l/2],[-w/2,l/2]]) @ np.array([[c,s],[-s,c]])+[x,y]
++        corners=np.array([[-w/2,-l/2],[w/2,-l/2],[w/2,l/2],[-w/2,l/2]]) @ np.array([[c,-s],[s,c]])+[x,y]
+         color="#D55E00" if d["score"]>=.3 else "#0072B2"
+         ax.add_patch(Polygon(corners,fill=False,edgecolor=color,linewidth=1))
+         ax.text(x,y,"%.2f"%d["score"],fontsize=7,color=color)

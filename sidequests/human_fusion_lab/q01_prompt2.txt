@@ -1,0 +1,5 @@
+你是独立审查者（不信任作者结论）。工作目录在 fusion lab。先把骨架写盘，再逐条填。两步：
+第一步：立即用 bash heredoc 把 ../../docs/human_capture/evidence/2026-10-11_q01_review_r1/opencode_findings.json 写入（哪怕先占位）。
+第二步：写 opencode_review_report.md，逐条给 PASS/FAIL/BLOCKED/UNKNOWN + minimal repro。最后必须明确回答 (a) geometry(post) track/决策错位是否真缺陷（你此前用 FusionTracker hook 已复现 tracker 输入=CONFIRMED_HUMAN、override 后 tc 与 dec 不一致）(b) R7 泄漏 (c) R8 UNKNOWN (d) 生产接入是否继续 BLOCKED。
+现在源码是修复态（detector.js 16:40 改），你验证后 mismatch=0。
+不要修改任何 pc_apps/ 或 src/。

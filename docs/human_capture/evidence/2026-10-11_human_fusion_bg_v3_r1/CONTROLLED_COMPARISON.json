@@ -1,0 +1,290 @@
+{
+ "task": "V3 四模型+PointNet影子 同点集受控对照",
+ "date": "2026-10-11",
+ "thr": 0.55,
+ "splits": {
+  "train": {
+   "n": 708,
+   "pos": 142,
+   "neg": 566,
+   "models": {
+    "rf51_baseline": {
+     "tp": 142,
+     "fp": 566,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 0.20056497175141244,
+     "specificity": 0,
+     "specificity_known": true
+    },
+    "rf51_candidate": {
+     "tp": 142,
+     "fp": 0,
+     "fn": 0,
+     "tn": 566,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 1,
+     "specificity_known": true
+    },
+    "rf69_candidate": {
+     "tp": 142,
+     "fp": 0,
+     "fn": 0,
+     "tn": 566,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 1,
+     "specificity_known": true
+    },
+    "xgb69_candidate": {
+     "tp": 142,
+     "fp": 0,
+     "fn": 0,
+     "tn": 566,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 1,
+     "specificity_known": true
+    },
+    "pointnet_shadow": {
+     "tp": 142,
+     "fp": 504,
+     "fn": 0,
+     "tn": 62,
+     "recall": 1,
+     "precision": 0.21981424148606812,
+     "specificity": 0.10954063604240283,
+     "specificity_known": true
+    },
+    "dual_pointnet_shadow": {
+     "tp": 142,
+     "fp": 566,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 0.20056497175141244,
+     "specificity": 0,
+     "specificity_known": true
+    }
+   }
+  },
+  "validation": {
+   "n": 28,
+   "pos": 28,
+   "neg": 0,
+   "models": {
+    "rf51_baseline": {
+     "tp": 28,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "rf51_candidate": {
+     "tp": 13,
+     "fp": 0,
+     "fn": 15,
+     "tn": 0,
+     "recall": 0.4642857142857143,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "rf69_candidate": {
+     "tp": 17,
+     "fp": 0,
+     "fn": 11,
+     "tn": 0,
+     "recall": 0.6071428571428571,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "xgb69_candidate": {
+     "tp": 28,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "pointnet_shadow": {
+     "tp": 28,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "dual_pointnet_shadow": {
+     "tp": 28,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    }
+   }
+  },
+  "test": {
+   "n": 65,
+   "pos": 65,
+   "neg": 0,
+   "models": {
+    "rf51_baseline": {
+     "tp": 65,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "rf51_candidate": {
+     "tp": 57,
+     "fp": 0,
+     "fn": 8,
+     "tn": 0,
+     "recall": 0.8769230769230769,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "rf69_candidate": {
+     "tp": 60,
+     "fp": 0,
+     "fn": 5,
+     "tn": 0,
+     "recall": 0.9230769230769231,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "xgb69_candidate": {
+     "tp": 65,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "pointnet_shadow": {
+     "tp": 65,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "dual_pointnet_shadow": {
+     "tp": 65,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    }
+   }
+  },
+  "stress": {
+   "n": 58,
+   "pos": 58,
+   "neg": 0,
+   "models": {
+    "rf51_baseline": {
+     "tp": 58,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "rf51_candidate": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 54,
+     "tn": 0,
+     "recall": 0.06896551724137931,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "rf69_candidate": {
+     "tp": 33,
+     "fp": 0,
+     "fn": 25,
+     "tn": 0,
+     "recall": 0.5689655172413793,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "xgb69_candidate": {
+     "tp": 58,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "pointnet_shadow": {
+     "tp": 58,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    },
+    "dual_pointnet_shadow": {
+     "tp": 58,
+     "fp": 0,
+     "fn": 0,
+     "tn": 0,
+     "recall": 1,
+     "precision": 1,
+     "specificity": 0,
+     "specificity_known": false
+    }
+   }
+  }
+ },
+ "xgb_b_group_furniture_falsification": {
+  "date": "2026-10-11",
+  "note": "同 S1 会话, A 链 566 家具 → spec=1.000 (XGB 见过 S1 训练, 记忆), B 组 608 家具 (同会话不同 BG 提取) → spec=0.021. 证明 XGB 的 A 家具拒绝为记忆非泛化, 独立家具泛化 UNKNOWN.",
+  "xgb_on_A_S1_furniture": {
+   "fp": 0,
+   "tn": 566,
+   "specificity": 1
+  },
+  "xgb_on_B_S1_furniture": {
+   "fp": 595,
+   "tn": 13,
+   "specificity": 0.0214
+  },
+  "reframed": "V3 新增 \"+B 家具 neg 训练\" 尝试: 在 B 独立负样本上重训, 但 +B_neg 训练后在 validation/test/stress 召回 0.034..0.738 随种子漂移 — 模型不稳定, 已删除。"
+ }
+}

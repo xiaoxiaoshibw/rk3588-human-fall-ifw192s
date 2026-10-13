@@ -1,0 +1,26 @@
+请对 evidence/2026-10-10_spike_cluster_r1/ 做一次独立代码+证据审计, 严苛对待.
+
+仓库 D:\Code\ldiar, 关键文件:
+  pc_apps/human_ml/spike_cluster/_harness_lib.py      (A/B 复现 + eval 核心)
+  pc_apps/human_ml/spike_cluster/_harness_lib_v2.py   (C 点级 z-band 防并簇)
+  pc_apps/human_ml/spike_cluster/eval_cluster.py      (3 变体逐帧评估, 输出 eval_frames.jsonl)
+  pc_apps/human_ml/spike_cluster/calibrate_k.py       (k 标定, 用 scipy cKDTree)
+  pc_apps/human_ml/spike_cluster/summarize_eval.py    (汇总)
+  pc_apps/human_ml/spike_cluster/params_frozen.json   (冻结参数 k=0.0092 b=-0.0031 eps_min=0.08 SF=1.8 6 带)
+  pc_apps/human_ml/spike_cluster/rerun_crosscheck.py  (A 的 Python-vs-JS IoU=1.0 对拍)
+  pc_apps/human_ml/spike_cluster/freeze_baseline.py   (SHA 冻结)
+  docs/human_capture/evidence/2026-10-10_spike_cluster_r1/  (本 evidence 全部产出)
+
+审计要点 — 对每条, 给出"PASS / 不可证伪(UKNOWN) / FAIL"判定 + 1-2 行证据:
+1. A 的 Python 复现与 JS 原版逐点一致 (IoU=1.0): 是否仅在 4 帧对拍过? 是否 tie 簇致错已被处理?
+2. t0 调参会话 114641 被同时列入 T0 与 E0 的时间窗 — 是否从 calibrate TUNING 名单中去除? (看 calibrate_k.py L<35>/freeze_baseline.py)
+3. params_frozen.json 的 k 是否严格只在 TUNING 上估计, 没有用过 E0 input?
+4. eval_cluster.py 的 `evaluate_frame` 是否对 A/B/C 公平 (共享 hot 计算, 但是分变体的 find_clusters 计时)?
+5. SUMMARY.md 中"独立段"的 Wilson CI 是不是被 track_runs(min_consec=3) 正确计算? 有没有"用帧数取代段数"的隐藏偏差?
+6. eval_frames.jsonl 里 d_anchor/d_cabinet 是基于 cluster_summary 的 cx,cy 中位数, 不是基于真 ROI 点集 IoU — 该近似的风险是否被记录?
+7. 输入侧是否有"修改了生产 detect_overlay.js/rf_person.js/bg_envelope.json"的痕迹? (看 SHA 和 git status)
+8. C 在 121622 反而比 A 差 (cab=53.3 vs 21.5) 的根源归因 (z-band 过细导致柜位独立成 34 点簇超 30 点门) 是否成立?
+9. SUMMARY 声称"hit=100%"但有 0 段差, 独立段=1/段的 Wilson 区间是 [21,100] -- 报告有没有对读者混淆"帧 100%"与"段级 100%"?
+
+请用最多 12 行回答; 实在无法证伪的, 写 UNKNOWN; 只能证伪到 PASS 的写 PASS + 引用 1-2 个 file:line 证据.
+不要补写"看起来不错"的非陈述.

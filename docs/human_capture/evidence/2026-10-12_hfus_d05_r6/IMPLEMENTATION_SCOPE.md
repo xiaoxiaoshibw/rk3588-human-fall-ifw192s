@@ -1,0 +1,1 @@
+实际H5只在原legal bank.xy写入前新增distance>原hot_cell_radius_m判断；等号不改。diagnostic新增anchor_changed，未来分析断言从实际config读取原rf51_threshold，旧R05不覆盖。单因素原票/TTL/半径/模型/候选/GT-free全部保持。PRECHECK真实child30112 exit0；±边界/FG-MERGED资格/同分字典序/xy以外字段保持。源码推理已冻结，运行后不修改这些共享JS；后续新分析/Demo新文件单独版本SHA。

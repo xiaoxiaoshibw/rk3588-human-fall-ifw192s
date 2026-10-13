@@ -1,0 +1,32 @@
+[
+  {
+    "command": [
+      "python",
+      "-B",
+      "-W",
+      "error",
+      "joint_capture_test.py"
+    ],
+    "exit_code": 0,
+    "output": ".......\n----------------------------------------------------------------------\nRan 7 tests in 5.665s\n\nOK\n"
+  },
+  {
+    "command": [
+      "python",
+      "-B",
+      "-W",
+      "error",
+      "console_test.py"
+    ],
+    "exit_code": 0,
+    "output": "human_replay 服务 http://127.0.0.1:58562/（随控制台退出）\n...[20:18:36] \"GET /api/leveling/sessions HTTP/1.1\" 200 -\n....\n----------------------------------------------------------------------\nRan 7 tests in 0.548s\n\nOK\n"
+  },
+  {
+    "command": [
+      "node",
+      "console_html.test.js"
+    ],
+    "exit_code": 0,
+    "output": "ok  内联脚本能 parse 并转移出 <script> 块\nok  板端 WebUI 带 fail 文案且本地应用不带\nok  APPS[1] fail 文案 = 当前不在内网\nok  探活成功 → 直接嵌 iframe，不弹提示\nok  探活失败（不在内网）→ 弹提示并隐藏 iframe\nok  无 fail 文案的本地应用不探活，直接嵌\nok  重进同应用不重载（保留页内状态）\nok  「重试」重新探活：先失败后成功 → 收起提示并嵌板端\nok  CSS 回归：#err 在 hidden 时必须 display:none（防 #err{display:flex} 盖掉 [hidden]）\nok  回归：不再靠读 iframe location 判断（跨域必抛 SecurityError，成功/失败无法区分）\nok  骨架倒地入口使用本实例端口，缺端口时显示说明而不误连临时服务\nok  联合录制入口使用本实例端口，缺端口时提示重新打开\n\n12 passed, 0 failed\n"
+  }
+]

@@ -1,0 +1,104 @@
+{
+  "acceptance": "HR_SKELETON_OFFLINE_ACCEPTANCE.md v1",
+  "sha256": "92d92f70ee67061f9dad59bad2acdc6df9281fbafb6755bd715510ab7f0d1e10",
+  "delivery_status": "SUBMITTED / BLOCKED; R3 guided review UI only",
+  "accepted": false,
+  "rows": [
+    {
+      "id": "SKO-01",
+      "status": "PASS",
+      "evidence": "R3 full baseline 6711 paths/44,727,944,634 bytes; dirty/tracked/untracked/ignored assets included"
+    },
+    {
+      "id": "SKO-02",
+      "status": "PASS",
+      "evidence": "R1 unchanged evidence carried forward: R2全部交付SHA/传递导入、固定TLS与诊断矩阵核对；独立raw复算336簇/871476坐标/票据"
+    },
+    {
+      "id": "SKO-03",
+      "status": "PASS",
+      "evidence": "R1 unchanged evidence carried forward: 100唯一raw帧/120分支行；336未审簇/20无簇行全部保留；固定按会话划分，不称盲测"
+    },
+    {
+      "id": "SKO-04",
+      "status": "BLOCKED",
+      "evidence": "R1 unchanged evidence carried forward: 真实reviewer/PERSON/连续person_id=0；两个开发sid各3连续实际帧门未满足，用户回复无"
+    },
+    {
+      "id": "SKO-05",
+      "status": "PASS",
+      "evidence": "R1 unchanged evidence carried forward: CONTRACT/params-v1在首算法前冻结；参数SHA三次源码冻结间未变；无验证调参；真人参数标定BLOCKED"
+    },
+    {
+      "id": "SKO-06",
+      "status": "PASS",
+      "evidence": "R1 unchanged evidence carried forward: 纯XY平移、全有效成员/原Z/row保存；synthetic独立逆变换0m≤1e-5；真实PERSON标准化BLOCKED"
+    },
+    {
+      "id": "SKO-07",
+      "status": "PASS",
+      "evidence": "R1 unchanged evidence carried forward: 完整raw/member/global映射独立核验；20绑定/节点区域挑战；synthetic合法节点support独立重算；真人支撑BLOCKED"
+    },
+    {
+      "id": "SKO-08",
+      "status": "PASS",
+      "evidence": "R1 unchanged evidence carried forward: 空、非有限/原零XYZ、低支撑、家具/MIXED/UNKNOWN拒绝测试；184125无效源成员已定位，无上游重聚类"
+    },
+    {
+      "id": "SKO-09",
+      "status": "BLOCKED",
+      "evidence": "R1 unchanged evidence carried forward: synthetic真实形状数学正例产7节点，真人可见躯干正例没有GT；不得用全拒绝算阳性通过"
+    },
+    {
+      "id": "SKO-10",
+      "status": "BLOCKED",
+      "evidence": "R1 unchanged evidence carried forward: synthetic头/手和缺头拒绝PASS；实际举手窗口HEAD可见性未标，不验证真实头能力"
+    },
+    {
+      "id": "SKO-11",
+      "status": "BLOCKED",
+      "evidence": "R1 unchanged evidence carried forward: PCA退化/符号UNKNOWN、单下部/双A-B synthetic PASS；真实分离/朝向GT未闭合"
+    },
+    {
+      "id": "SKO-12",
+      "status": "PASS",
+      "evidence": "R1 unchanged evidence carried forward: 独立SkeletonTracker；实际整数stamp/dt；重复/倒退/seek/缺帧/换5类键/恢复/跳变实测；原Tracker/Fall无变化"
+    },
+    {
+      "id": "SKO-13",
+      "status": "PASS",
+      "evidence": "Chinese responsive guided UI; 10 synthetic UI contracts and 10 actual browser checks; original receipt/enum/source/export core reused; user old unsubmitted draft backed up, original tab untouched"
+    },
+    {
+      "id": "SKO-14",
+      "status": "BLOCKED",
+      "evidence": "R1 unchanged evidence carried forward: 逐节点336未审/valid0/UNKNOWN336；1680槽观测；区域误差、真人跳变/恢复和精度均BLOCKED，无伪造正确率"
+    },
+    {
+      "id": "SKO-15",
+      "status": "BLOCKED",
+      "evidence": "R1 unchanged evidence carried forward: 固定验证/举手/空场拒绝流程运行；40空场分支行0有效PERSON节点；隔板/举手真人效果因GT缺失BLOCKED"
+    },
+    {
+      "id": "SKO-16",
+      "status": "PASS",
+      "evidence": "R1 unchanged evidence carried forward: 独立struct+标量变换复算raw/票据，synthetic显式胸中心[10,20,1.05]/support/逆变换；最终pass5/6三个数据SHA相等"
+    },
+    {
+      "id": "SKO-17",
+      "status": "PASS",
+      "evidence": "R3 guide_tests_verified exit0; Python -B -W error; old6711 asset SHA unchanged; return old prefix checked before/after append; original production/algorithms/evidence unchanged"
+    },
+    {
+      "id": "SKO-18",
+      "status": "PASS",
+      "evidence": "R3 UI-only SUBMITTED/BLOCKED; ponytail read and recorded; no agents, no production, no new algorithm or fabricated GT"
+    }
+  ],
+  "counts": {
+    "PASS": 12,
+    "BLOCKED": 6
+  },
+  "outside_scope": "NOT_RUN/BLOCKED; no W04/W05 qualification, WD02 remains BLOCKED",
+  "scope": "R1 algorithm outcomes carried forward by unchanged source/data SHA; R3 only revisits UI and asset checks; no real GT created"
+}

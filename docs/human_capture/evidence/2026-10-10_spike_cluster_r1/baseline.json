@@ -1,0 +1,262 @@
+{
+  "code_frozen": {
+    "pc_apps/human_ml/spike_cluster/_harness_lib.py": {
+      "sha256": "5aed189717d022a682195498774472c2244e2cf1a8fc50e908174fa27f4975e8"
+    },
+    "pc_apps/human_replay/bg_envelope.json": {
+      "sha256": "28afdaa4838c5fd99221954ab1696bd82289aa1c24c6934afb5808838d6e3f2e"
+    },
+    "pc_apps/human_replay/detect_overlay.js": {
+      "sha256": "585d2964e2927fd8dac97bc950190088ba315d89a0dea17564aed3917ad73963"
+    },
+    "pc_apps/human_replay/human_replay_lib.js": {
+      "sha256": "69d8975a0176760713708ca26f7b45a4ba166d4be1f4a5162fcc6e04627fd623"
+    },
+    "pc_apps/human_replay/rf_person.js": {
+      "sha256": "78c4ce6625ee847b6c1a06eb915bce779edca340227e282f12978c35abf56d22"
+    }
+  },
+  "constants": {
+    "BG_DELTA_M": 0.25,
+    "BG_PATH": "pc_apps/human_replay/bg_envelope.json",
+    "GRID_CELL_M": 0.05,
+    "KEY_MOD": 4096,
+    "MIN_POINTS": 30,
+    "R": "0.893544,0.0,0.448975;-0.014337,0.99949,0.028533;-0.448746,-0.031932,0.893089",
+    "T": "0.0,0.0,1.380286",
+    "TOP_K": 4,
+    "Z_HI": 2.3,
+    "Z_LO": 0.1
+  },
+  "freeze_utc": "2026-10-10T05:38:38.690568Z",
+  "git_state": {
+    "HEAD": "347a5bf05ee82766436382f4fc3d1a8ed15c1132",
+    "dirty_files_count": 132
+  },
+  "inputs": {
+    "cap_20261007_143945": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261007_143945",
+      "exists": true,
+      "meta.json.bytes": 22483,
+      "meta.json.sha256": "253aa34a901ba3a93e769a06a2033e88141d0b849b634ab50a0ccca78d0ec7a5",
+      "points.bin.bytes": 148554140,
+      "points.bin.sha256_head8k+size": "6ab31b6bd6c73acb2320af3ad1ff66cfaf8fea24e9e743e9bfd12b702ac9518a"
+    },
+    "cap_20261007_150455": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261007_150455",
+      "exists": true,
+      "meta.json.bytes": 4286,
+      "meta.json.sha256": "26828917bef42fd92ada12ef8a2fcc8349f5c9251d1323ad4cdd7792718ac8fe",
+      "points.bin.bytes": 22006264,
+      "points.bin.sha256_head8k+size": "756ca94487f0585cbc6fc91836949da4ce61f649fa445e53c52adba19b3cd51e"
+    },
+    "cap_20261007_154007": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261007_154007",
+      "exists": true,
+      "meta.json.bytes": 17534,
+      "meta.json.sha256": "f4676dad7b698f7eb9082be0d9e9cf79d57a70e8b85d5c05ca97d8f23786a392",
+      "points.bin.bytes": 114166668,
+      "points.bin.sha256_head8k+size": "a5dda2e27ac6b67e56347ec99a8933d10f439533f6770ad7707a52b5f4ebe922"
+    },
+    "cap_20261007_154341": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261007_154341",
+      "exists": true,
+      "meta.json.bytes": 8242,
+      "meta.json.sha256": "9a407515840c2c3aa8952810e54c42c0607b6c89eb9d0a0e6215bce3a2569e4f",
+      "points.bin.bytes": 49513912,
+      "points.bin.sha256_head8k+size": "92d4f2269ef91337f945acb8bba030a5ffc4e22d89de1ccc0b8fcbafbac5aa48"
+    },
+    "cap_20261007_154545": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261007_154545",
+      "exists": true,
+      "meta.json.bytes": 10611,
+      "meta.json.sha256": "305e868f3f0359dcf48ba2f1781e1f2928511e39a20c9108040c254c486e6f9e",
+      "points.bin.bytes": 66018596,
+      "points.bin.sha256_head8k+size": "5c1c7ccd06a44cce1c966e87148ffa88e1fffbf437dd8fda6d549a4d43cd589c"
+    },
+    "cap_20261007_154920": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261007_154920",
+      "exists": true,
+      "meta.json.bytes": 7844,
+      "meta.json.sha256": "45cc9bcfc60be06ceb877141bbf49a0df14d44aa0d39dd9c2f395638066a9b49",
+      "points.bin.bytes": 46761960,
+      "points.bin.sha256_head8k+size": "dbaca97956e94111ad143ad23061fde9d651bd68cc59eb23e1f7fe55c3f7686b"
+    },
+    "cap_20261007_215540": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261007_215540",
+      "exists": true,
+      "meta.json.bytes": 13848,
+      "meta.json.sha256": "2de360a321c742abc103963606d39d26f276dedeba5326d1b702b3509fc2cc6d",
+      "points.bin.bytes": 88044180,
+      "points.bin.sha256_head8k+size": "78a2797c2e1d3e66ef00d2236ed88fb72a6dd949b5b6795796263953c5919f27"
+    },
+    "cap_20261008_114205": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261008_114205",
+      "exists": true,
+      "meta.json.bytes": 51974,
+      "meta.json.sha256": "29338217821b94e4e1a859d7504c355c4d1bf07c88864d039c24fa5b934851f5",
+      "points.bin.bytes": 335634348,
+      "points.bin.sha256_head8k+size": "e46bbf3c517fc4981590d031459a89d25386739c26083050eff017b49da86655"
+    },
+    "cap_20261008_114254": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261008_114254",
+      "exists": true,
+      "meta.json.bytes": 57593,
+      "meta.json.sha256": "29ab022c6e811e2d54610036b1479f64b1abc10d578fe529ac24203ab4c1dc45",
+      "points.bin.bytes": 372720600,
+      "points.bin.sha256_head8k+size": "f61cb3f9d84509699cf6bce8df5734263963f64d0c3629d3dffddb1e89a1824f"
+    },
+    "cap_20261008_114340": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261008_114340",
+      "exists": true,
+      "meta.json.bytes": 59697,
+      "meta.json.sha256": "a79c00ca031093750e21b555ed3f78025aff1b73c0afbd82c0a8fd424169a4aa",
+      "points.bin.bytes": 386420916,
+      "points.bin.sha256_head8k+size": "ff1d8ac6bba9cef6131c5166aece0c7dab256b476414dd37a70772e115be6a3c"
+    },
+    "cap_20261008_114422": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261008_114422",
+      "exists": true,
+      "meta.json.bytes": 41747,
+      "meta.json.sha256": "4a68fda807889f81381f7c886525ed41f2811e47bc5bc0e1641bc71b6d00c1e3",
+      "points.bin.bytes": 268222472,
+      "points.bin.sha256_head8k+size": "8c2e61cf6def3cc3d2d078a73950ce3be67e8343ebfa697a57cc9ea7c198c8e6"
+    },
+    "cap_20261009_113611": {
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_113611",
+      "exists": true,
+      "meta.json.bytes": 43401,
+      "meta.json.sha256": "6e1640b69075805b1e59384ccd34ea2cb064ba6dce7587706574a529cd41570c",
+      "points.bin.bytes": 279242908,
+      "points.bin.sha256_head8k+size": "5e9a7ba266fb06cb4fe41416312808a7844979bfb645b1fba782a736d6a70736"
+    },
+    "cap_20261009_114709": {
+      "ai_labels.json.bytes": 20430,
+      "ai_labels.json.sha256": "201491879092f6f656eb755a4711193e10a1428635db0847e115f6bc460f607b",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_114709",
+      "exists": true,
+      "meta.json.bytes": 36963,
+      "meta.json.sha256": "3aab5cb5f6dd2d8f50c4937b43dc565f65ef82dc5076371bce093ca95e6e2e3e",
+      "points.bin.bytes": 236600700,
+      "points.bin.sha256_head8k+size": "c8b84bba1359f3590139b125a04b5e2cc49dd8484d95964980c5b3ca137c702c"
+    },
+    "cap_20261009_114734": {
+      "ai_labels.json.bytes": 11756,
+      "ai_labels.json.sha256": "107f52186f5b3000b2685a78394bae02f8c48396fb3f8ad9761dd2fa5456890d",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_114734",
+      "exists": true,
+      "meta.json.bytes": 21796,
+      "meta.json.sha256": "4599dc4ac3118302e728c6c3d51449ba8eb3e74cc0cf82d94f10c5b6a42b5008",
+      "points.bin.bytes": 136181248,
+      "points.bin.sha256_head8k+size": "0a4d05d2018e02fc8c6c634278ccc2ab631ecfa80c41cf1c3a8e06c08593a691"
+    },
+    "cap_20261009_114754": {
+      "ai_labels.json.bytes": 14578,
+      "ai_labels.json.sha256": "2fc57d0861be7a70ef8933f86ec7fb05ca6f3049a485e93826aab868152902ef",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_114754",
+      "exists": true,
+      "meta.json.bytes": 26779,
+      "meta.json.sha256": "04abbe8a1883c5d53d3a7f4fdd3deabccd655bbbd3360650670612e01b26384d",
+      "points.bin.bytes": 169198456,
+      "points.bin.sha256_head8k+size": "8b82bafd80cefcefa665eb760790c0f4987ec6b7e6ef3ef4fd8acab70f9258d2"
+    },
+    "cap_20261009_114817": {
+      "ai_labels.json.bytes": 15586,
+      "ai_labels.json.sha256": "7ce8fb6ed40d5fd176fe27051de733bbebc2e191922fe0e0d5cd46653b7d44e4",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_114817",
+      "exists": true,
+      "meta.json.bytes": 28451,
+      "meta.json.sha256": "c828ca5a87ac1cc0be37576fa446265306b51cf518a204d48580f1999334854e",
+      "points.bin.bytes": 180205396,
+      "points.bin.sha256_head8k+size": "c9f357c9bc10912c3853e9b299bea9d4a582da58af2ff42530bde51e843c122f"
+    },
+    "cap_20261009_121622": {
+      "ai_labels.json.bytes": 12730,
+      "ai_labels.json.sha256": "075238b8f85780ae2fe1e5e5b9e611ba46c3d3a4f3da8104f8fb5853b019a75e",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_121622",
+      "exists": true,
+      "meta.json.bytes": 23452,
+      "meta.json.sha256": "71ccca5242278ab8128834408c29874d67d320b28768f0f8bc076ac40569c1be",
+      "points.bin.bytes": 147175980,
+      "points.bin.sha256_head8k+size": "9fadc0b0654e2c73cd89702058ba05205a416906f826a4033697e6941a8c71a1"
+    },
+    "cap_20261009_121647": {
+      "ai_labels.json.bytes": 25867,
+      "ai_labels.json.sha256": "9f04788f26593b1091ef1d7e996a13344a3cd3ec8beefc57d777fe6278336cad",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_121647",
+      "exists": true,
+      "meta.json.bytes": 46531,
+      "meta.json.sha256": "af492de942cc6cc13c338a52c2f8e24e7bf322351ddddd26c64f16a21945303c",
+      "points.bin.bytes": 299844748,
+      "points.bin.sha256_head8k+size": "7965f9428016704492e53e5dce98ee41ed0e958c292d57d92c72eadf92b601ea"
+    },
+    "cap_20261009_121723": {
+      "ai_labels.json.bytes": 26287,
+      "ai_labels.json.sha256": "9ad590555e1ad30b1452025a251cdbaff73d4d20bb50f294ecd369e51a8b7e97",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_121723",
+      "exists": true,
+      "meta.json.bytes": 47577,
+      "meta.json.sha256": "98dc4e98b371c1d3d80f71716991347413ccecf65440b44ddc29b65be923fd4a",
+      "points.bin.bytes": 306739440,
+      "points.bin.sha256_head8k+size": "47e84d49b520ae12d39ed6657cc1f8142cb3ee1444197f653cdbce9e87dc9f4e"
+    },
+    "cap_20261009_122616": {
+      "ai_labels.json.bytes": 16546,
+      "ai_labels.json.sha256": "37b87acab274bddcacdb7a20fe27b1e82c0a2c630cf50f2100587973f4f5d335",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_122616",
+      "exists": true,
+      "meta.json.bytes": 30093,
+      "meta.json.sha256": "dafbf359c3351d2b74b2f038c4f11ec5f0c9412ba6b65a321b6f1f3a56efe697",
+      "points.bin.bytes": 191178288,
+      "points.bin.sha256_head8k+size": "34fa3617af7870e7b289ce3748644854a3d59d17d325e03cc83829e94a356a46"
+    },
+    "cap_20261009_122637": {
+      "ai_labels.json.bytes": 13812,
+      "ai_labels.json.sha256": "2c34e3d9ddd827b248b086d2b2024c88c677f34fb76b07947924699a1dbe1802",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_122637",
+      "exists": true,
+      "meta.json.bytes": 25323,
+      "meta.json.sha256": "5eede5c8b793890d8c23bd173d323617fcfa22c3489c59979ae10d30d36b1beb",
+      "points.bin.bytes": 159550300,
+      "points.bin.sha256_head8k+size": "6365ccd5cef2a102571f09a57f906ef3b10152093d55f72c719b076f539b3ed1"
+    },
+    "cap_20261009_122700": {
+      "ai_labels.json.bytes": 13137,
+      "ai_labels.json.sha256": "2bd2314e2256544efa13d10249b6450bf2524844d3d0d327dab02820f5918ec8",
+      "dir": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_122700",
+      "exists": true,
+      "meta.json.bytes": 24282,
+      "meta.json.sha256": "210c858f7ac0621828238fbb12e2eb52796ddfff32261e89cd68967849665f5a",
+      "points.bin.bytes": 152657260,
+      "points.bin.sha256_head8k+size": "ada9169c68c18f10462e2b85675494c5c2574f6a54f537f1b695e5f5ca45eed7"
+    }
+  },
+  "purpose": "CLUSTER-ADAPTIVE-SPIKE-R1 baseline freeze",
+  "repo_root": "D:\\Code\\ldiar",
+  "sessions_eval": [
+    "cap_20261009_114709",
+    "cap_20261009_114734",
+    "cap_20261009_114754",
+    "cap_20261009_114817",
+    "cap_20261009_121622",
+    "cap_20261009_121647",
+    "cap_20261009_121723",
+    "cap_20261009_122616",
+    "cap_20261009_122637",
+    "cap_20261009_122700",
+    "cap_20261007_215540",
+    "cap_20261009_113611",
+    "cap_20261008_114205",
+    "cap_20261008_114254",
+    "cap_20261008_114340",
+    "cap_20261008_114422"
+  ],
+  "sessions_tuning": [
+    "cap_20261007_143945",
+    "cap_20261007_150455",
+    "cap_20261007_154007",
+    "cap_20261007_154341",
+    "cap_20261007_154545",
+    "cap_20261007_154920"
+  ]
+}

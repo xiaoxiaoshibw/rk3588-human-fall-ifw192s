@@ -1,0 +1,402 @@
+{
+  "schema": 1,
+  "kind": "human_semantic_sa_review",
+  "thresholds": {
+    "h_hdr": 0.1,
+    "w_max": 0.3,
+    "c_min": 0.05,
+    "c_slab": 0.05,
+    "w_slab": 0.25,
+    "t_wide": 0.15,
+    "l_dmin": 0.08,
+    "l_dmax": 0.4,
+    "l_col": 0.1,
+    "a_hdr": 0.08,
+    "o_arm": 0.25,
+    "center_max": 0.2,
+    "min_pts": 400,
+    "min_bands": 3
+  },
+  "summary": {
+    "thresholds_frozen_from": "semantic_sa.js r1 (c_slab=0.05)",
+    "neg_components": 11,
+    "neg_any_human": 0,
+    "neg_majority_human": 0,
+    "neg_any_human_list": [],
+    "pos_rows": [
+      {
+        "id": "pos-540",
+        "n": 118640,
+        "used": 64,
+        "human": 64,
+        "other": 0,
+        "unknown": 0,
+        "any_human": true,
+        "majority_human": true
+      },
+      {
+        "id": "pos-607",
+        "n": 127295,
+        "used": 67,
+        "human": 67,
+        "other": 0,
+        "unknown": 0,
+        "any_human": true,
+        "majority_human": true
+      },
+      {
+        "id": "pos-623",
+        "n": 127348,
+        "used": 66,
+        "human": 66,
+        "other": 0,
+        "unknown": 0,
+        "any_human": true,
+        "majority_human": true
+      },
+      {
+        "id": "pos-643",
+        "n": 69062,
+        "used": 56,
+        "human": 56,
+        "other": 0,
+        "unknown": 0,
+        "any_human": true,
+        "majority_human": true
+      }
+    ]
+  },
+  "negatives": [
+    {
+      "sid": "cap_20261007_233658",
+      "id": "233658:c0",
+      "n": 1258692,
+      "ctr": [
+        0.98,
+        -0.62
+      ],
+      "z": [
+        0.1,
+        2.5
+      ],
+      "used": 54,
+      "human": 0,
+      "other": 54,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP",
+        "cv": 0.419,
+        "w": 1.046,
+        "head": false,
+        "arm": false,
+        "legs": false,
+        "torso": false,
+        "slab": false,
+        "flat": true
+      }
+    },
+    {
+      "sid": "cap_20261007_233658",
+      "id": "233658:c1",
+      "n": 346618,
+      "ctr": [
+        1.96,
+        1.12
+      ],
+      "z": [
+        0.1,
+        1.31
+      ],
+      "used": 54,
+      "human": 0,
+      "other": 54,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP",
+        "cv": 0.145,
+        "w": 0.845,
+        "head": false,
+        "arm": false,
+        "legs": false,
+        "torso": false,
+        "slab": false,
+        "flat": true
+      }
+    },
+    {
+      "sid": "cap_20261007_233658",
+      "id": "233658:c2",
+      "n": 3454,
+      "ctr": [
+        5.5,
+        -1.02
+      ],
+      "z": [
+        0.1,
+        1.04
+      ],
+      "used": 0,
+      "human": 0,
+      "other": 0,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "HUMAN_EVIDENCE",
+        "reason": "STRUCT_OK",
+        "cv": 0.364,
+        "w": 0.047,
+        "head": true,
+        "arm": false,
+        "legs": false,
+        "torso": true,
+        "slab": false,
+        "flat": false
+      }
+    },
+    {
+      "sid": "cap_20261007_233658",
+      "id": "233658:c3",
+      "n": 128067,
+      "ctr": [
+        9.43,
+        4.2
+      ],
+      "z": [
+        0.22,
+        2.5
+      ],
+      "used": 54,
+      "human": 0,
+      "other": 54,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP",
+        "cv": 1.009,
+        "w": 2.956,
+        "head": false,
+        "arm": false,
+        "legs": true,
+        "torso": false,
+        "slab": false,
+        "flat": true
+      }
+    },
+    {
+      "sid": "cap_20261007_215540",
+      "id": "215540:c1",
+      "n": 26619,
+      "ctr": [
+        5.02,
+        0.14
+      ],
+      "z": [
+        0.1,
+        1.14
+      ],
+      "used": 64,
+      "human": 0,
+      "other": 64,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP",
+        "cv": 0.116,
+        "w": 0.408,
+        "head": false,
+        "arm": false,
+        "legs": false,
+        "torso": false,
+        "slab": false,
+        "flat": true
+      }
+    },
+    {
+      "sid": "cap_20261007_215540",
+      "id": "215540:c2",
+      "n": 130398,
+      "ctr": [
+        9.47,
+        4.25
+      ],
+      "z": [
+        0.78,
+        2.5
+      ],
+      "used": 64,
+      "human": 0,
+      "other": 64,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP",
+        "cv": 0.501,
+        "w": 2.997,
+        "head": false,
+        "arm": false,
+        "legs": false,
+        "torso": false,
+        "slab": false,
+        "flat": true
+      }
+    },
+    {
+      "sid": "cap_20261007_215540",
+      "id": "215540:c5",
+      "n": 1051,
+      "ctr": [
+        10.64,
+        -1.8
+      ],
+      "z": [
+        1.84,
+        2.5
+      ],
+      "used": 0,
+      "human": 0,
+      "other": 0,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "ok": false,
+        "reason": "TORSO_LOW",
+        "n": 1051
+      }
+    },
+    {
+      "sid": "cap_20261007_215623",
+      "id": "215623:c1",
+      "n": 126730,
+      "ctr": [
+        9.33,
+        4.54
+      ],
+      "z": [
+        0.8,
+        2.5
+      ],
+      "used": 66,
+      "human": 0,
+      "other": 66,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP",
+        "cv": null,
+        "w": 3.022,
+        "head": false,
+        "arm": false,
+        "legs": false,
+        "torso": false,
+        "slab": false,
+        "flat": true
+      }
+    },
+    {
+      "sid": "cap_20261007_215623",
+      "id": "215623:c2",
+      "n": 929,
+      "ctr": [
+        8.38,
+        -0.11
+      ],
+      "z": [
+        0.89,
+        1.33
+      ],
+      "used": 0,
+      "human": 0,
+      "other": 0,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP",
+        "cv": null,
+        "w": 0.24,
+        "head": false,
+        "arm": false,
+        "legs": false,
+        "torso": false,
+        "slab": false,
+        "flat": true
+      }
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "id": "215643:c1",
+      "n": 121937,
+      "ctr": [
+        9.5,
+        4.4
+      ],
+      "z": [
+        0.66,
+        2.5
+      ],
+      "used": 56,
+      "human": 0,
+      "other": 56,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP",
+        "cv": 0.477,
+        "w": 2.931,
+        "head": false,
+        "arm": false,
+        "legs": false,
+        "torso": false,
+        "slab": false,
+        "flat": true
+      }
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "id": "215643:c3",
+      "n": 842,
+      "ctr": [
+        7.09,
+        -1.84
+      ],
+      "z": [
+        2.39,
+        2.5
+      ],
+      "used": 0,
+      "human": 0,
+      "other": 0,
+      "unknown": 0,
+      "any_human": false,
+      "majority_human": false,
+      "whole": {
+        "ok": false,
+        "reason": "TORSO_LOW",
+        "n": 842
+      }
+    }
+  ],
+  "code_binding": {
+    "human_pipe_lib": "af4cdea6d35c73633b12b0d230f3e91f8ba606d9e42fb2ba69bd4083b4af14e5",
+    "script": "9db551e4c546344954ea69aed4c0ff45d66011505b9300f49f6788c6a42b3e4c"
+  }
+}

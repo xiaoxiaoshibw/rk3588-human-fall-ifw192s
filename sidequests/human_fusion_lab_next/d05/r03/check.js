@@ -1,0 +1,10 @@
+'use strict';
+const fs=require('fs'),path=require('path'),assert=require('assert');
+const {geometry}=require('./hook_gate'),B=require('../../background/detector_b');
+const old=path.join(B.ROOT,'docs/human_capture/evidence/2026-10-11_hfus_d05_r2/FIXED_CANDIDATE_MODEL_AUDIT.json');
+const doc=JSON.parse(fs.readFileSync(old)),rows=doc.rows.map(r=>({...r,gate:geometry(r.features),effective_prob:geometry(r.features).veto?0:r.prob}));
+assert(rows.every(r=>r.features.length===69&&(!r.gate.veto||r.effective_prob===0)));
+const success=rows.find(r=>r.variant==='split'&&r.sid.endsWith('175804')&&r.f===75&&r.gt_hits.some(g=>g.class_name==='PERSON'&&g.purity>=.8&&g.coverage>=.5));assert(success&&!success.gate.veto,'wide upright successful human must survive');
+const furniture=rows.filter(r=>r.variant==='split'&&r.sid.endsWith('175227')&&r.gt_hits.some(g=>g.class_name==='FURNITURE'&&g.purity>=.8));assert(furniture.some(r=>r.gate.veto)&&furniture.some(r=>!r.gate.veto&&r.prob>.9),'both mitigated broad and remaining upright furniture retained');
+const test=new Float32Array(69);test[26]=.45*.45/2;test[39]=.5;assert(!geometry(test).veto);test[26]=1;test[39]=.49;assert(geometry(test).veto);assert.throws(()=>geometry(new Float32Array(51)));
+const output=process.argv[2];assert(output&&!fs.existsSync(output));fs.writeFileSync(output,JSON.stringify({version:'R03-fixed-candidate-counterfactual-v1',status:'PASS',source_sha256:B.sha(old),samples:rows.length,vetoed:rows.filter(r=>r.gate.veto).length,rows,qualification:'counterfactual only; actual full replay required; no training; GT used only evaluation'},null,2),{flag:'wx'});console.log('R03_FIXED_CANDIDATE_CHECK_PASS',rows.length,rows.filter(r=>r.gate.veto).length);

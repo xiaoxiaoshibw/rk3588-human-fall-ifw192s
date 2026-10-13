@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "known_candidates": 859,
+  "native_float32_input_maxdiff": 0.0,
+  "forward_onnx_logit_maxdiff": 2.86102294921875e-06,
+  "XGB_native_JS_maxdiff": 1.1672832223030838e-07,
+  "XGB_decision_changes": 0,
+  "splits": {
+    "train": {
+      "centered": {
+        "n": 708,
+        "tp": 139,
+        "fp": 13,
+        "fn": 3,
+        "tn": 553
+      },
+      "legacy_uncentered": {
+        "n": 708,
+        "tp": 142,
+        "fp": 504,
+        "fn": 0,
+        "tn": 62
+      }
+    },
+    "validation": {
+      "centered": {
+        "n": 28,
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "legacy_uncentered": {
+        "n": 28,
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      }
+    },
+    "test": {
+      "centered": {
+        "n": 65,
+        "tp": 58,
+        "fp": 0,
+        "fn": 7,
+        "tn": 0
+      },
+      "legacy_uncentered": {
+        "n": 65,
+        "tp": 65,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      }
+    },
+    "stress": {
+      "centered": {
+        "n": 58,
+        "tp": 39,
+        "fp": 0,
+        "fn": 19,
+        "tn": 0
+      },
+      "legacy_uncentered": {
+        "n": 58,
+        "tp": 58,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      }
+    }
+  },
+  "source_model_input_sha256": {
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_175227.jsonl": "a89f1e009d0ea9807cf7004c3f2a85b7933fb3265b3517475ee0747068c744cf",
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_175429.jsonl": "51561394a3467251660666e9c0f96cf0960c9ccfd22180feaca5dbd678a7ec19",
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_175804.jsonl": "8bd826d09983f2df11ea33fa6e38d028967c5d2d8960e75515698439883cad07",
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_175943.jsonl": "1cb2dabcbdfcc61134cdfc7c9045de1d9c22e9497323768401247c2893310312",
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_175553.jsonl": "f4b740c488cca298f5d3fc29ed4f91e7496afa0be981c6fc1b9854c686d2fb92",
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_180337.jsonl": "e2e16298befdbb47d6ef2c3bba5f9925ce09154e0d60d378caaaba6c16a98d9f",
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_180557.jsonl": "d8799d9140b500e2a93616c0ab3a448364aafb5399cbd1316695cd122de63a2e",
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_180235.jsonl": "6ea71a5ea72b2f8ca21d9f97db437289f64a85f90b9ac807f7059a6bc56a9fff",
+    "sidequests\\human_fusion_lab\\results\\cap_20261010_180751.jsonl": "942271359490e50c43ee653d0aff23d3623f9152ff2ca248edddf7c91974e572",
+    "sidequests\\human_fusion_lab\\models\\pointnet_shadow.pt": "fa07658857ec83f964f5c5f302541d116260d475e99bb5bd5e2b3a0dc4743f90",
+    "sidequests\\human_fusion_lab\\models\\pointnet_shadow.onnx": "639fe3244953f4b62fe2afe8af25163f7ad776485274172328fc74c0ce5f21ba",
+    "sidequests\\human_fusion_lab\\models\\xgb69_native.ubj": "bb335df20388b84dad799ed8a5e6cd057aed890c5ea24b458223fa9b321ab6f0",
+    "sidequests\\human_fusion_lab\\models\\xgb69_candidate.json": "84edb5f02b9f480fdfd4f5609fe678008051914400c977033e1ef6f6aac890d8",
+    "sidequests\\human_fusion_lab\\models\\rf51_candidate.json": "56dce7cc06155d2befd3e33482537482eb55767a2289a0a8f32f84cf72201194",
+    "sidequests\\human_fusion_lab\\models\\rf69_candidate.json": "23b847417e057868d5760dc3d55dcf21bfd02cbad3b028973f3920852cfb24f6",
+    "sidequests\\human_fusion_lab_next\\eval\\pointnet.py": "3078f94bb493b0000f4b9c40cc43117b5b7d0ed6bd9c98ac4e0f1bede800c297",
+    "docs\\human_capture\\evidence\\2026-10-11_hfus_d01_r1\\FIXED_JS.json": "6e3f6044cd1a53e9d72a83d496e549dd6fb150f2a1dc366ab032e3b394b4fd8d"
+  },
+  "versions": {
+    "numpy": "1.26.4",
+    "torch": "2.12.0+cpu",
+    "onnxruntime": "1.24.4",
+    "xgboost": "3.2.0"
+  },
+  "limits": [
+    "All frozen rows come from exposed development sessions, not independent detection test.",
+    "Candidate labels overlap-derived, not new human negative qualification.",
+    "Existing PointNet weights unchanged; corrected shadow consumer, no training/model replacement."
+  ]
+}

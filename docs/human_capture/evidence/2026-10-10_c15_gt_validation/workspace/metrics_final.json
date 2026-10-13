@@ -1,0 +1,108 @@
+{
+ "generated": "2026-10-10 C1.5",
+ "threshold": "0.55",
+ "independent_unit": "session",
+ "gt_quality": {
+  "coordinate_gt": "UNRELIABLE (multi-labeller grid-count disagreement; 143945 x=0.55/1.9/3.4 互斥)",
+  "usable": "categorical present/activity for self-consistent sessions only",
+  "contested": [
+   "cap_20261007_143945"
+  ]
+ },
+ "results": {
+  "v1_no_gate": {
+   "dyn_154007": {
+    "gt_person_frames": 83,
+    "person_region_confirmed_frames": 29,
+    "person_region_confirmed_recall": 0.3494,
+    "distinct_confirmed_ids_in_person_region": 2,
+    "confirmed_id_set_changes_all_tracks": 26,
+    "note": "GT真人区 cy∈[1.7,3.0]; 探针confirmed多集中 y<0.75 非人静态簇"
+   },
+   "still_114340": {
+    "frames": 281,
+    "confirmed_present_frames": 279,
+    "still_retention": 0.9929,
+    "confirmed_id_set_changes": 136
+   },
+   "still_114254": {
+    "frames": 271,
+    "confirmed_present_frames": 269,
+    "still_retention": 0.9926,
+    "confirmed_id_set_changes": 90
+   },
+   "empty_113611_fp": {
+    "frames": 203,
+    "confirmed_fp_events": 0
+   }
+  },
+  "v2_hard_gate": {
+   "dyn_154007": {
+    "gt_person_frames": 83,
+    "person_region_confirmed_frames": 0,
+    "person_region_confirmed_recall": 0.0,
+    "distinct_confirmed_ids_in_person_region": 0,
+    "confirmed_id_set_changes_all_tracks": 3,
+    "note": "GT真人区 cy∈[1.7,3.0]; 探针confirmed多集中 y<0.75 非人静态簇"
+   },
+   "still_114340": {
+    "frames": 281,
+    "confirmed_present_frames": 279,
+    "still_retention": 0.9929,
+    "confirmed_id_set_changes": 58
+   },
+   "still_114254": {
+    "frames": 271,
+    "confirmed_present_frames": 269,
+    "still_retention": 0.9926,
+    "confirmed_id_set_changes": 0
+   }
+  }
+ },
+ "ab_hard_gate_effect": {
+  "dyn_154007": {
+   "recall_v1": 0.3494,
+   "recall_v2": 0.0,
+   "delta": -0.3494
+  },
+  "still_114340": {
+   "retention_v1": 0.9929,
+   "retention_v2": 0.9929,
+   "delta": 0.0
+  },
+  "still_114254": {
+   "retention_v1": 0.9926,
+   "retention_v2": 0.9926,
+   "delta": 0.0
+  }
+ },
+ "ab_note": "delta<0 = 硬门误杀 (recall/retention 降); 本批 GT 会话主导簇 n_pts>>500, 预期 delta≈0; R2 已证 6 静态段家具清零人零回归",
+ "dynamic_recall": {
+  "n_usable_sessions": 1,
+  "session": "cap_20261007_154007",
+  "person_region_confirmed_recall_v1": 0.3494,
+  "wilson95": "n=1 不可算 (需>=2 独立动态会话); 单点观察",
+  "contested_excluded": [
+   "cap_20261007_143945"
+  ]
+ },
+ "still_retention_summary": {
+  "per_session": [
+   0.9929,
+   0.9926
+  ],
+  "ge_0.95_sessions": 2,
+  "n": 2,
+  "wilson95": [
+   0.34237195288961925,
+   1
+  ]
+ },
+ "caveats": [
+  "detector=生产 FIX-R1 探针 (associate≡detect_overlay.js, C1 label_audit 已校验), 档 0.55",
+  "GT 坐标不可靠 → 仅分类级 + 探针锚定; 143945 CONTESTED 不计 recall",
+  "动态有效样本 n=1 → 动态 recall 是单点观察, 无 Wilson, 不足以支撑 C2",
+  "空场 FP=0 (203 帧 confirmed=0) 强截证, 但单会话",
+  "样本域=同房间近/中场; 无 >2.5m 远距 GT / 多人 / 跌倒 / 明确转身遮挡"
+ ]
+}

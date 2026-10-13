@@ -1,0 +1,7 @@
+# HFUS-D05-R05 当前可审查交付
+
+唯一验收ACCEPTANCE_V1，最终裁定ACCEPTANCE_FINAL与FINAL_REPORT；算法FAIL，不晋级。字段等价限定PARITY_SUMMARY_V2；REVIEW_DEFECT_HANDLING/REVIEW_FINAL_SUPPLEMENT。
+Demo v2 http://127.0.0.1:8917/ ，默认保留control。可选anchor观察远行收益与near220–224回退；九会话/三窗同步/原始人工参照/点集与模型调用来源/有限coast/SHA；BROWSER_OPERATIONS_V2、BROWSER_VERIFICATION_V2与DEMO_V2_FINAL_FAR5_XZ截图是真实操作证据。
+原始D04与R04保留；runs/control与anchor各9会话合计2605帧。analysis_v2的COMPARISON、FRAME_COMPARISON、FAILURE_LEDGER、CASE_INDEX和WIN_LOSS_INDEX；CAUSAL_WINDOWS连续片段。MINIMAL_HUMAN_REVIEW_V2人工最小包；S9 INVALID_BINDING。
+源码sidequests/human_fusion_lab_next/d05/r05，实际推理源SHA各SUMMARY；工具V5与结束增量SHA。指定独审01/02及缺陷处理；失败分析、旧Demo与浏览器错误不覆盖。
+性能实际FAIL，环境竞争资格BLOCKED；不宣称全树冻结、板端实时或ACCEPTED。工程材料PASS；算法FAIL；GT/生产BLOCKED；设备物理部署采集NOT_RUN。

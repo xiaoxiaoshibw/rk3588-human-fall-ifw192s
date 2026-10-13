@@ -1,0 +1,1 @@
+结束增量枚举15662文件，53新增/元数据变化实际SHA；70个实际加载源与ToolingV5复核无SHA差异，errors/drift空。外部HFUS-RD-01文件仍在变更，另有其pycache/common.cpython-312.pyc缺失，不归本主控、不删除或恢复。下一轮R06写前baseline自身作为独立阶段新增列在R05范围外，不混入R05算法结果。具体actual新增/变化/缺失路径和SHA见FINAL_INCREMENTAL_BOUNDARY。非原子/元数据未变沿用之前实际SHA，不能说全树冻结。最终此说明/return/证据SHA追加后由FINAL_ARTIFACT_SHA覆盖，本清单自身排除。

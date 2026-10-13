@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>FUSION 演示 — HUMAN-UNIFY-FUSION-R1(仅示读, 不接管生产主入口)</title>
+<style>
+body{font:12px "Consolas","Courier New",monospace;background:#141419;color:#c8c8d4;margin:0;padding:14px}
+h1{font-size:14px;margin:0 0 6px;color:#e8e8f0}
+.sub{color:#8a8a99;font-size:11px;margin-bottom:12px}
+select,input[type=file]{background:#1e1e28;color:#c8c8d4;border:1px solid #3a3a48;padding:4px 8px;font:inherit}
+table{border-collapse:collapse;margin-top:10px;max-width:100%}
+th,td{border:1px solid #2c2c38;padding:4px 8px;text-align:left;font:11px inherit}
+th{background:#1e1e28;color:#a8a8b8;font-weight:normal}
+tr:hover td{background:#1a1a24}
+.warn{color:#e0a050}
+.ok{color:#70c070}
+code{background:#1e1e28;padding:1px 4px;font:inherit}
+.box{background:#1a1a24;border:1px solid #2c2c38;padding:10px;margin-top:10px}
+.row{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+</style>
+</head>
+<body>
+<h1>HUMAN-UNIFY-FUSION-R1 — FUSION 演示 (示读)</h1>
+<div class="sub">
+    只读取 <code>runner.js --modes FUSION</code> 生成的 JSON / CSV / meta。
+    数据源同工单 BASELINE_AUDIT, 不改任何生产路径; F2 融合算法在 <code>pc_apps/human_core/fusion.js</code> + <code>engine.js</code>。
+    本页面只做<em>离线回放可视化</em>, 没有发布权限。
+</div>
+
+<div class="box">
+<div class="row">
+  <label>会话: <select id="sid">
+    <option value="cap_20261010_175227">cap_20261010_175227 (S1-empty-with-furniture)</option>
+    <option value="cap_20261010_175429">cap_20261010_175429 (S3-walk-x-near)</option>
+    <option value="cap_20261010_175553">cap_20261010_175553 (S3-walk-y-far)</option>
+    <option value="cap_20261010_175804">cap_20261010_175804 (S4-walk-stop-walk)</option>
+    <option value="cap_20261010_175943" selected>cap_20261010_175943 (S5-turn-in-place)</option>
+    <option value="cap_20261010_180235">cap_20261010_180235 (S6-occlusion)</option>
+    <option value="cap_20261010_180337">cap_20261010_180337 (S7-far-5m)</option>
+    <option value="cap_20261010_180557">cap_20261010_180557 (S8-still-retention-long)</option>
+    <option value="cap_20261010_180751">cap_20261010_180751 (S9-two-person-cross)</option>
+  </select></label>
+  <label>路线: <select id="mode"><option>FUSION</option><option>U3</option><option>BASE_A</option><option>BASE_B</option></select></label>
+  <button id="load">加载本地 runs_fusion</button>
+  <span id="stat" class="sub"></span>
+</div>
+<div class="sub">读取路径: <code>runs_fusion/&lt;sid&gt;/&lt;sid&gt;__&lt;mode&gt;.json</code></div>
+</div>
+
+<div id="out"></div>
+
+<script>
+"use strict";
+function el(h){var e=document.createElement("div");e.innerHTML=h;return e.firstElementChild;}
+function fmt(n){return typeof n==="number"? +n.toFixed(2): n;}
+function load(){
+  var sid=document.getElementById("sid").value, mode=document.getElementById("mode").value;
+  var url="runs_fusion/"+sid+"/"+sid+"__"+mode+".json";
+  var stat=document.getElementById("stat"); stat.textContent="加载 "+url+" …";
+  fetch(url).then(function(r){ if(!r.ok)throw new Error(r.status); return r.json(); }).then(function(j){
+    var out=document.getElementById("out"); out.innerHTML="";
+    out.appendChild(el("<h2 style='margin:8px 0 4px;font-size:12px'>"+j.run_meta.sid+" × "+j.run_meta.mode+" (gt="+j.run_meta.gt_level+")</h2>"));
+    var meta=j.session_summary, rows=j.frames||[];
+    var accepted=rows.filter(r=>r.n_accepted_cand>0).length;
+    var rejected=rows.filter(r=>r.n_rejected_cand>0).length;
+    var confirmedCur=meta.n_tracks_confirmed_current, confirmedEver=meta.n_tracks_ever_confirmed;
+    var summaryHtml=`
+      <table><tr><th>帧数</th><th>accepted帧</th><th>rejected帧</th><th>confirmed当前</th><th>confirmed ever</th>
+      <th>ms/f (P95)</th><th>max ms</th><th>heap peak MB</th><th>坐标契约</th></tr>
+      <tr><td>${meta.n_frames}</td><td>${accepted}</td><td>${rejected}</td>
+      <td class="${confirmedCur?'ok':'warn'}">${confirmedCur}</td><td>${confirmedEver}</td>
+      <td>n/a</td><td>${meta.max_ms_per_frame}</td><td>${meta.peak_memory?meta.peak_memory.heap_mb:'?'}</td>
+      <td style="font-size:10px;max-width:260px;word-break:break-all">${JSON.stringify(j.run_meta.coordinate_contract||{})}</td></tr></table>`;
+    out.appendChild(el(summaryHtml));
+    var tbl=el(`<table style="margin-top:8px"><tr><th>#</th><th>ms</th><th>cands</th><th>accepted</th><th>rejected</th><th>tracks</th><th>confirmed</th><th>fall</th></tr></table>`);
+    rows.forEach(function(r,i){
+      var tr=document.createElement("tr");
+      tr.innerHTML="<td>"+r.frame_index+"</td><td>"+fmt(r.total_ms)+"</td><td>"+(r.n_cand||0)+"</td><td>"+(r.n_accepted_cand||0)+"</td><td>"+(r.n_rejected_cand||0)+"</td><td>"+(r.n_tracks_active||0)+"</td><td class='"+((r.n_tracks_confirmed_current||0)>0?"ok":"warn")+"'>"+(r.n_tracks_confirmed_current||0)+"</td><td>"+(r.n_fall_events||0)+"</td>";
+      tbl.appendChild(tr);
+    });
+    out.appendChild(el("<div class='sub' style='margin-top:8px'>逐帧</div>"));
+    out.appendChild(tbl);
+    stat.textContent="OK ("+rows.length+" 帧)";
+  }).catch(function(e){
+    document.getElementById("stat").innerHTML="<span class='warn'>失败 "+e.message+" — 会话尚未跑过四路线, 或 mode 没有 runner 产物</span>";
+  });
+}
+document.getElementById("load").onclick=load;
+</script>
+</body>
+</html>

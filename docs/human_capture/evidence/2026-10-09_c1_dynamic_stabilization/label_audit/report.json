@@ -1,0 +1,283 @@
+{
+  "generated": "2026-10-09 C1",
+  "inputs_sha": {
+    "b2a_shadow_probe.js": "74b4a272e509af609662f430d50376098d5eb3c989adc9c74c73210979b81b81",
+    "detect_overlay.js": "585d2964e2927fd8dac97bc950190088ba315d89a0dea17564aed3917ad73963",
+    "rf_person_v1.json": "4c83db116fe0742d5c1cca8360de6bafcc4ac9abae3910984beabea8d85bfe68",
+    "bg_envelope.json": "28afdaa4838c5fd99221954ab1696bd82289aa1c24c6934afb5808838d6e3f2e"
+  },
+  "blueprint_consistency": [
+    {
+      "anchor": "find_hot (z带/bg差分支干) — 数值指纹一致",
+      "pass": true,
+      "probe_sig_len": 4,
+      "overlay_sig_len": 4
+    },
+    {
+      "anchor": "find_clusters (漫水/min30/top4) — 数值指纹一致",
+      "pass": true,
+      "probe_sig_len": 17,
+      "overlay_sig_len": 17
+    },
+    {
+      "anchor": "associate (claimed/gate/TTL/MIN_AGE) — 数值指纹一致",
+      "pass": true,
+      "probe_sig_len": 11,
+      "overlay_sig_len": 11
+    },
+    {
+      "anchor": "const TRACK_GATE_M",
+      "pass": true
+    },
+    {
+      "anchor": "const TRACK_TTL_FRAMES",
+      "pass": true
+    },
+    {
+      "anchor": "const TRACK_MIN_AGE",
+      "pass": true
+    },
+    {
+      "anchor": "const BG_CELL",
+      "pass": true
+    },
+    {
+      "anchor": "z_band 0.1-2.3 常量在两侧调用处一致",
+      "pass": true,
+      "probe_occurrences": 1,
+      "overlay_occurrences": 1
+    },
+    {
+      "anchor": "bg envelope boost +0.25 m",
+      "pass": true
+    },
+    {
+      "anchor": "cluster min 30 pts",
+      "pass": true
+    },
+    {
+      "anchor": "top-4 clusters",
+      "pass": true
+    },
+    {
+      "anchor": "FIX-1 claimed 单帧一对一 (两侧)",
+      "pass": true
+    },
+    {
+      "anchor": "线上阈值 0.55 / 探针档 [0.55,0.65,0.80]",
+      "pass": true
+    }
+  ],
+  "points_bin_check": {
+    "cap_20261009_121622": {
+      "n_frames": 107,
+      "frame0_pts": 49126,
+      "frame1_pts": 49126,
+      "frames_identical": false,
+      "frame0_finite": true,
+      "frame0_allzero_rows": 10708
+    },
+    "cross_session_point_order_stable": true,
+    "verdict": "点序恒定 (memmap 读 only); 重复帧按 identity 处理由 replay.set_idx 守门"
+  },
+  "ai_labels_rows": [
+    {
+      "sid": "cap_20261009_122637",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 116
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 116,
+      "person_xy_span_m": 0.037,
+      "human_annotations": 0,
+      "semantic_class": "STATIC_HUMAN_STAND_POSE (站立真人; 帧级 auto 标签, 无人工逐帧确认)"
+    },
+    {
+      "sid": "cap_20261009_122616",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 139
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 139,
+      "person_xy_span_m": 0.046,
+      "human_annotations": 0,
+      "semantic_class": "STATIC_HUMAN_STAND_POSE (站立真人; 帧级 auto 标签, 无人工逐帧确认)"
+    },
+    {
+      "sid": "cap_20261009_122700",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 111
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 111,
+      "person_xy_span_m": 0.03,
+      "human_annotations": 0,
+      "semantic_class": "STATIC_HUMAN_STAND_POSE (站立真人; 帧级 auto 标签, 无人工逐帧确认)"
+    },
+    {
+      "sid": "cap_20261009_121647",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 218
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 218,
+      "person_xy_span_m": 0.06,
+      "human_annotations": 0,
+      "semantic_class": "STATIC_HUMAN_STAND_POSE (站立真人; 帧级 auto 标签, 无人工逐帧确认)"
+    },
+    {
+      "sid": "cap_20261009_121622",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 107
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 107,
+      "person_xy_span_m": 0.035,
+      "human_annotations": 0,
+      "semantic_class": "STATIC_HUMAN_STAND_POSE (站立真人; 帧级 auto 标签, 无人工逐帧确认)"
+    },
+    {
+      "sid": "cap_20261009_121723",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 223
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 223,
+      "person_xy_span_m": 0.056,
+      "human_annotations": 0,
+      "semantic_class": "STATIC_HUMAN_STAND_POSE (站立真人; 帧级 auto 标签, 无人工逐帧确认)"
+    },
+    {
+      "sid": "cap_20261009_114641",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 177
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 177,
+      "person_xy_span_m": 0.043,
+      "human_annotations": 0,
+      "semantic_class": "UNKNOWN_HAT_STAND (人戴帽站立; 无人工标注, 动态性未确认)"
+    },
+    {
+      "sid": "cap_20261009_114709",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 172
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 172,
+      "person_xy_span_m": 0.044,
+      "human_annotations": 0,
+      "semantic_class": "UNKNOWN_HAT_STAND (人戴帽站立; 无人工标注, 动态性未确认)"
+    },
+    {
+      "sid": "cap_20261009_114734",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 99
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 99,
+      "person_xy_span_m": 0.032,
+      "human_annotations": 0,
+      "semantic_class": "UNKNOWN_HAT_STAND (人戴帽站立; 无人工标注, 动态性未确认)"
+    },
+    {
+      "sid": "cap_20261009_114754",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 123
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 123,
+      "person_xy_span_m": 0.049,
+      "human_annotations": 0,
+      "semantic_class": "UNKNOWN_HAT_STAND (人戴帽站立; 无人工标注, 动态性未确认)"
+    },
+    {
+      "sid": "cap_20261009_114817",
+      "labelled_by": "auto_person_label.py+empty-template-bgdiff",
+      "posture_set": [
+        "stand"
+      ],
+      "posture_count": {
+        "stand": 131
+      },
+      "confidence_set": [
+        "auto"
+      ],
+      "n_person_frames": 131,
+      "person_xy_span_m": 0.031,
+      "human_annotations": 0,
+      "semantic_class": "UNKNOWN_HAT_STAND (人戴帽站立; 无人工标注, 动态性未确认)"
+    }
+  ],
+  "leak_audit": {
+    "person_session_count": 11,
+    "none_session": "cap_20261009_113611",
+    "dedup_none": true,
+    "loso_mode": "leave-one-session-out (按会话 fold, 非帧)",
+    "empty_dup_into_far_fold": "none_idx[half:] 副本并进最远 person fold 保双类",
+    "potential_issue": "empty 副本与 person 同 fold 只保 predict_proba 不崩; 不是泄漏",
+    "cross_session_shared_frames": "各会话 points.bin 独立 (momstransfer), 无跨会话共享帧",
+    "frame_to_cluster_domain": "训练=全帧ROI特征; 推理=BG diff 簇特征; 域偏移存在 (柜/front-sitting 部分)",
+    "recommendation": "C1 把柜位 clusters 作难负样本入库, 标签 FURNITURE 与 none 分开"
+  }
+}

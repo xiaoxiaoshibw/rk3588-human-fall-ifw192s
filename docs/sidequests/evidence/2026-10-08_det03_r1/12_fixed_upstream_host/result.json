@@ -1,0 +1,62 @@
+{
+  "source_sha256": "c7b3c34c62b33c5488580485dbb297392305f50ccd0f82b1fb46431b1b287546",
+  "host_cpp_sha256": "d997490b5e03355c70e4fd175e2dbc81ca9477f38bcb65c9b1184ce1447c4b37",
+  "dll_sha256": "6018063b097ee547690d283363449a28f01eb03b371eae636a7b566763df68c8",
+  "command": [
+    "g++",
+    "-O2",
+    "-shared",
+    "-static-libgcc",
+    "-static-libstdc++",
+    "docs\\sidequests\\evidence\\2026-10-08_det03_r1\\12_fixed_upstream_host\\upstream_geometry_host.cpp",
+    "-o",
+    "docs\\sidequests\\evidence\\2026-10-08_det03_r1\\12_fixed_upstream_host\\upstream_geometry_host.dll"
+  ],
+  "boundary": "Original float geometry compiled on host, not actual GPU/ATen execution",
+  "old_keep": [
+    0,
+    1,
+    2,
+    8,
+    10,
+    12,
+    16,
+    19,
+    37,
+    44,
+    46,
+    61,
+    74
+  ],
+  "corrected_keep": [
+    0,
+    2,
+    3,
+    8,
+    10,
+    14,
+    19,
+    32,
+    47
+  ],
+  "upstream_host_keep": [
+    0,
+    2,
+    3,
+    8,
+    10,
+    14,
+    19,
+    32,
+    47
+  ],
+  "diagonal_pair_iou": 0.6995572447776794,
+  "old_pair_keep": [
+    0,
+    1
+  ],
+  "corrected_pair_keep": [
+    0
+  ],
+  "gpu_status": "BLOCKED: torch CPU build, no CUDA runtime"
+}

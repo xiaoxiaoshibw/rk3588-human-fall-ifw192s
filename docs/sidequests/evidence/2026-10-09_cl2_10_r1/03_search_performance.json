@@ -1,0 +1,23 @@
+{
+  "rows": [
+    {
+      "case": "failed_with_feasible",
+      "n": 100,
+      "seconds": 4.0383984000072815,
+      "exact_reference_dict_equal": true,
+      "reference_sha256": "47f321b0886340f668421c8e50a256d5e7492943daf6d125191fb659b1022c2f",
+      "reference_median_seconds": 2.83565809999709
+    },
+    {
+      "case": "noncollinear_no_solution",
+      "n": 100,
+      "seconds": 7.182793700005277,
+      "exact_reference_dict_equal": true,
+      "reference_sha256": "47f321b0886340f668421c8e50a256d5e7492943daf6d125191fb659b1022c2f",
+      "reference_median_seconds": 4.7025394999946
+    }
+  ],
+  "runtime_sha256": "d0b3e31395543e495cb2bcc8307c90baaabc48dd6f5bca780039e052744c7b55",
+  "unchanged_CL209C_source": true,
+  "complexity": "Still O(n4) worst and O(n2) memory; one measured call per input, no statistical latency limit or board assertion."
+}

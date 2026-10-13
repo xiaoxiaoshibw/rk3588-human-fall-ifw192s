@@ -1,0 +1,883 @@
+{
+  "status": "FULL_REPLAY_SOFTWARE_CHECKS_PASS_FREEZE_BLOCKED",
+  "threshold_accepted": 0.35,
+  "threshold_strong": 0.55,
+  "gate_m": 0.75,
+  "models": [
+    "rf51_baseline",
+    "rf51_candidate",
+    "rf69_candidate",
+    "xgb69_candidate"
+  ],
+  "rows": [
+    {
+      "sid": "cap_20261010_175227",
+      "activity": "S1-empty-with-furniture",
+      "model": "rf51_baseline",
+      "frames": 304,
+      "gt_known": 304,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 604,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 600,
+        "fn": 0
+      },
+      "furniture_false_positive": 566,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 604,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "FURNITURE_FALSE_POSITIVE": 304,
+        "UNMATCHED_PREDICTION": 304,
+        "MODEL_DISAGREEMENT": 304
+      },
+      "p95_detection_ms": 17.709499999999025
+    },
+    {
+      "sid": "cap_20261010_175227",
+      "activity": "S1-empty-with-furniture",
+      "model": "xgb69_candidate",
+      "frames": 304,
+      "gt_known": 304,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 294,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 233
+      },
+      "p95_detection_ms": 7.600399999999354
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "activity": "S3-walk-x-near",
+      "model": "rf51_baseline",
+      "frames": 258,
+      "gt_known": 258,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 258,
+        "fp": 393,
+        "fn": 0
+      },
+      "track": {
+        "tp": 256,
+        "fp": 372,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 258,
+          "fp": 393,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 258,
+          "fp": 28,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 258,
+          "fp": 28,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 258,
+          "fp": 27,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 258,
+        "MODEL_DISAGREEMENT": 258
+      },
+      "p95_detection_ms": 23.12460000000283
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "activity": "S3-walk-x-near",
+      "model": "xgb69_candidate",
+      "frames": 258,
+      "gt_known": 258,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 258,
+        "fp": 19,
+        "fn": 0
+      },
+      "track": {
+        "tp": 256,
+        "fp": 9,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 258,
+          "fp": 223,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 178,
+        "UNMATCHED_PREDICTION": 17
+      },
+      "p95_detection_ms": 11.299299999998766
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "activity": "S3-walk-y-far",
+      "model": "rf51_baseline",
+      "frames": 464,
+      "gt_known": 99,
+      "gt_unknown": 365,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 99,
+        "fp": 227,
+        "fn": 0
+      },
+      "track": {
+        "tp": 97,
+        "fp": 211,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 99,
+          "fp": 227,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 87,
+          "fp": 99,
+          "fn": 12
+        },
+        "rf69_candidate": {
+          "tp": 99,
+          "fp": 100,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 99,
+          "fp": 99,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 99,
+        "MODEL_DISAGREEMENT": 463,
+        "GT_UNKNOWN": 365
+      },
+      "p95_detection_ms": 36.11789999999746
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "activity": "S3-walk-y-far",
+      "model": "xgb69_candidate",
+      "frames": 464,
+      "gt_known": 99,
+      "gt_unknown": 365,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 99,
+        "fp": 97,
+        "fn": 0
+      },
+      "track": {
+        "tp": 97,
+        "fp": 93,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 99,
+          "fp": 163,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 56,
+          "fp": 97,
+          "fn": 43
+        },
+        "rf69_candidate": {
+          "tp": 99,
+          "fp": 98,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 99,
+          "fp": 97,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 96,
+        "MODEL_DISAGREEMENT": 347,
+        "GT_UNKNOWN": 365
+      },
+      "p95_detection_ms": 38.73530000000028
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "activity": "S4-walk-stop-walk",
+      "model": "rf51_baseline",
+      "frames": 239,
+      "gt_known": 11,
+      "gt_unknown": 228,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 11,
+        "fp": 26,
+        "fn": 0
+      },
+      "track": {
+        "tp": 10,
+        "fp": 22,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 11,
+          "fp": 26,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 11,
+          "fp": 8,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 11,
+          "fp": 8,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 11,
+          "fp": 8,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 11,
+        "MODEL_DISAGREEMENT": 239,
+        "GT_UNKNOWN": 228
+      },
+      "p95_detection_ms": 30.260500000003958
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "activity": "S4-walk-stop-walk",
+      "model": "xgb69_candidate",
+      "frames": 239,
+      "gt_known": 11,
+      "gt_unknown": 228,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 11,
+        "fp": 9,
+        "fn": 0
+      },
+      "track": {
+        "tp": 10,
+        "fp": 8,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 11,
+          "fp": 22,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 9,
+        "MODEL_DISAGREEMENT": 182,
+        "GT_UNKNOWN": 228
+      },
+      "p95_detection_ms": 17.669699999998556
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "activity": "S5-turn-in-place",
+      "model": "rf51_baseline",
+      "frames": 202,
+      "gt_known": 6,
+      "gt_unknown": 196,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 6,
+        "fp": 6,
+        "fn": 0
+      },
+      "track": {
+        "tp": 5,
+        "fp": 5,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 6,
+          "fp": 6,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 6,
+        "MODEL_DISAGREEMENT": 202,
+        "GT_UNKNOWN": 196
+      },
+      "p95_detection_ms": 27.48960000000079
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "activity": "S5-turn-in-place",
+      "model": "xgb69_candidate",
+      "frames": 202,
+      "gt_known": 6,
+      "gt_unknown": 196,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 6,
+          "fp": 4,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 137,
+        "GT_UNKNOWN": 196
+      },
+      "p95_detection_ms": 16.994800000014948
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "activity": "S6-occlusion",
+      "model": "rf51_baseline",
+      "frames": 238,
+      "gt_known": 71,
+      "gt_unknown": 167,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 64,
+        "fp": 139,
+        "fn": 7
+      },
+      "track": {
+        "tp": 60,
+        "fp": 137,
+        "fn": 11
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 64,
+          "fp": 139,
+          "fn": 7
+        },
+        "rf51_candidate": {
+          "tp": 60,
+          "fp": 0,
+          "fn": 11
+        },
+        "rf69_candidate": {
+          "tp": 63,
+          "fp": 1,
+          "fn": 8
+        },
+        "xgb69_candidate": {
+          "tp": 64,
+          "fp": 0,
+          "fn": 7
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 71,
+        "MODEL_DISAGREEMENT": 238,
+        "GT_UNKNOWN": 167,
+        "PERSON_MISS": 7
+      },
+      "p95_detection_ms": 24.32870000001276
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "activity": "S6-occlusion",
+      "model": "xgb69_candidate",
+      "frames": 238,
+      "gt_known": 71,
+      "gt_unknown": 167,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 65,
+        "fp": 1,
+        "fn": 6
+      },
+      "track": {
+        "tp": 61,
+        "fp": 1,
+        "fn": 10
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 65,
+          "fp": 92,
+          "fn": 6
+        },
+        "rf51_candidate": {
+          "tp": 60,
+          "fp": 1,
+          "fn": 11
+        },
+        "rf69_candidate": {
+          "tp": 64,
+          "fp": 2,
+          "fn": 7
+        },
+        "xgb69_candidate": {
+          "tp": 65,
+          "fp": 1,
+          "fn": 6
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 206,
+        "GT_UNKNOWN": 167,
+        "UNMATCHED_PREDICTION": 1,
+        "PERSON_MISS": 6
+      },
+      "p95_detection_ms": 13.683499999984633
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "activity": "S7-far-5m",
+      "model": "rf51_baseline",
+      "frames": 251,
+      "gt_known": 12,
+      "gt_unknown": 239,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 12,
+        "fp": 21,
+        "fn": 0
+      },
+      "track": {
+        "tp": 11,
+        "fp": 18,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 12,
+          "fp": 21,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 12,
+        "MODEL_DISAGREEMENT": 251,
+        "GT_UNKNOWN": 239
+      },
+      "p95_detection_ms": 23.943599999998696
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "activity": "S7-far-5m",
+      "model": "xgb69_candidate",
+      "frames": 251,
+      "gt_known": 12,
+      "gt_unknown": 239,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 12,
+        "fp": 1,
+        "fn": 0
+      },
+      "track": {
+        "tp": 11,
+        "fp": 1,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 12,
+          "fp": 13,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 12,
+          "fp": 1,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 12,
+          "fp": 1,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "GT_UNKNOWN": 239,
+        "MODEL_DISAGREEMENT": 193,
+        "UNMATCHED_PREDICTION": 1
+      },
+      "p95_detection_ms": 17.007199999992736
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "activity": "S8-still-retention-long",
+      "model": "rf51_baseline",
+      "frames": 523,
+      "gt_known": 53,
+      "gt_unknown": 470,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 53,
+        "fp": 53,
+        "fn": 0
+      },
+      "track": {
+        "tp": 51,
+        "fp": 51,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 53,
+          "fp": 53,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 53,
+        "MODEL_DISAGREEMENT": 523,
+        "GT_UNKNOWN": 470
+      },
+      "p95_detection_ms": 20.71909999998752
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "activity": "S8-still-retention-long",
+      "model": "xgb69_candidate",
+      "frames": 523,
+      "gt_known": 53,
+      "gt_unknown": 470,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 53,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 53,
+          "fp": 29,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 308,
+        "GT_UNKNOWN": 470
+      },
+      "p95_detection_ms": 9.492299999983516
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "activity": "S9-two-person-cross",
+      "model": "rf51_baseline",
+      "frames": 126,
+      "gt_known": 0,
+      "gt_unknown": 126,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "GT_UNKNOWN": 126,
+        "MODEL_DISAGREEMENT": 126
+      },
+      "p95_detection_ms": 30.866199999989476
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "activity": "S9-two-person-cross",
+      "model": "xgb69_candidate",
+      "frames": 126,
+      "gt_known": 0,
+      "gt_unknown": 126,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "GT_UNKNOWN": 126,
+        "MODEL_DISAGREEMENT": 115
+      },
+      "p95_detection_ms": 15.684799999988172
+    }
+  ],
+  "holdout_status": "RETROSPECTIVE_SESSION_HOLDOUT; historical test sessions previously inspected; prospective unseen actor/scene performance UNKNOWN",
+  "freeze": {
+    "checked": 525,
+    "changed": [
+      "docs/human_capture/evidence/2026-10-11_q01_review_r1/Q01_BROWSER_E2E.json",
+      "docs/human_capture/evidence/2026-10-11_q01_review_r1/Q01_FINDINGS.json",
+      "sidequests/human_fusion_lab/results/DEMO_BROWSER_E2E.json",
+      "sidequests/human_fusion_lab/results/UNIFY_REGRESSION.json"
+    ]
+  },
+  "limits": "S1 is training furniture, no independently held-out furniture session. Sparse annotations not full-session GT. TP/FP/FN use XY one-to-one gate, furniture FP separately requires >=80% point overlap."
+}

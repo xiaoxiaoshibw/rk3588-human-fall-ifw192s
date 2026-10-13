@@ -1,0 +1,161 @@
+ M docs/human_capture/README.md
+ M pc_apps/console/console.html
+ M pc_apps/human_core/data_loader.js
+ M pc_apps/human_core/engine.js
+ M pc_apps/human_core/leveling.js
+ M pc_apps/human_core/run_all_tests.js
+ M pc_apps/human_core/runner.js
+ M pc_apps/human_core/schema.js
+ M pc_apps/human_core/test_edge_cases.js
+ M pc_apps/human_core/test_engine_smoke.js
+ M pc_apps/human_core/test_perf.js
+ M pc_apps/human_core/test_replay_contract.js
+ M pc_apps/human_replay/config.py
+ M pc_apps/human_replay/detect_overlay.js
+ M pc_apps/human_replay/detect_overlay.test.js
+ M pc_apps/human_replay/detect_ui.js
+ M pc_apps/human_replay/human_detect.html
+ M pc_apps/human_replay/human_detect.js
+ M pc_apps/human_replay/human_pipe_lib.js
+ M pc_apps/human_replay/human_pipe_lib.test.js
+ M pc_apps/human_replay/human_replay_lib.py
+ M pc_apps/human_replay/human_track.html
+ M pc_apps/human_replay/replay.js
+ M pc_apps/human_replay/rf_person.js
+ M pc_apps/human_replay/validation.html
+ M pc_apps/human_replay/validation.py
+?? docs/human_capture/B2A_DISPLAY_FIX_AND_SHADOW_PLAN.md
+?? docs/human_capture/CAPTURE_PROTOCOL_DRAFT.md
+?? docs/human_capture/CAPTURE_RUNSHEET_R1.md
+?? docs/human_capture/FUSION_PRIORITY_RULE_DRAFT.md
+?? docs/human_capture/HRRETV2_ACCEPTANCE.md
+?? docs/human_capture/HR_SEM_SHADOW_ACCEPTANCE.md
+?? docs/human_capture/HR_SKELETON_OFFLINE_ACCEPTANCE.md
+?? docs/human_capture/HUMAN_RECOGNITION_NEXT_STAGE_PLAN.md
+?? docs/human_capture/HUMAN_RECOGNITION_REVIEW_AND_PLAN.md
+?? docs/human_capture/HUMAN_SEMANTIC_CLASSIFICATION_DRAFT.md
+?? docs/human_capture/HUMAN_SKELETON_OFFLINE_PLAN.md
+?? docs/human_capture/HUMAN_UNIFY_R1_ACCEPTANCE.md
+?? docs/human_capture/RF_OPTIMIZATION_R1_ACCEPTANCE.md
+?? docs/human_capture/SILENT_REGION_MEMORY_DRAFT.md
+?? docs/human_capture/STILL_PERSON_RETENTION_PLAN.md
+?? docs/human_capture/W03_CLOSEOUT_AND_PROTECTION_PLAN.md
+?? docs/human_capture/evidence/2026-10-06_hrw03_r7/
+?? docs/human_capture/evidence/2026-10-06_hrw03_r8/
+?? docs/human_capture/evidence/2026-10-06_hrw03_r8_e1/
+?? docs/human_capture/evidence/2026-10-06_hrw03_r9_ref_coverage/
+?? docs/human_capture/evidence/2026-10-07_hrw03_external_research_r1/
+?? docs/human_capture/evidence/2026-10-07_hrw03_r37_productionization/
+?? docs/human_capture/evidence/2026-10-07_hrw03_r38/
+?? docs/human_capture/evidence/2026-10-07_hrw03_r39_closeout/
+?? docs/human_capture/evidence/2026-10-07_hrw03_r40_research_r1/
+?? docs/human_capture/evidence/2026-10-07_hrw03_r41_comparison_r1/
+?? docs/human_capture/evidence/2026-10-07_new_sessions_person_probe_r1/
+?? docs/human_capture/evidence/2026-10-08_external_research_r2/
+?? docs/human_capture/evidence/2026-10-08_fusion_v2_ab_r1/
+?? docs/human_capture/evidence/2026-10-08_hrretv2_r1/
+?? docs/human_capture/evidence/2026-10-08_hrretv2_r2/
+?? docs/human_capture/evidence/2026-10-08_hrretv2_visual_r1/
+?? docs/human_capture/evidence/2026-10-08_hrsemshadow_plan_r1/
+?? docs/human_capture/evidence/2026-10-08_hrsemshadow_r1/
+?? docs/human_capture/evidence/2026-10-08_hrsemshadow_r2/
+?? docs/human_capture/evidence/2026-10-08_hrsemshadow_review_r1/
+?? docs/human_capture/evidence/2026-10-08_hrskeleton_plan_r1/
+?? docs/human_capture/evidence/2026-10-08_human_semantic_sa_r1/
+?? docs/human_capture/evidence/2026-10-08_human_semantic_sa_r2/
+?? docs/human_capture/evidence/2026-10-08_new_static_sessions_r1/
+?? docs/human_capture/evidence/2026-10-08_patches_p1p2p3/
+?? docs/human_capture/evidence/2026-10-08_semantic_new_holdout_r1/
+?? docs/human_capture/evidence/2026-10-09_b2a_fix_r1/
+?? docs/human_capture/evidence/2026-10-09_b2a_review_r1.sha256
+?? docs/human_capture/evidence/2026-10-09_b2a_review_r1/
+?? docs/human_capture/evidence/2026-10-09_b2a_shadow_r1/
+?? docs/human_capture/evidence/2026-10-09_c1_dynamic_stabilization/
+?? docs/human_capture/evidence/2026-10-09_console_release_candidate/
+?? docs/human_capture/evidence/2026-10-09_hrskeleton_offline_r1/
+?? docs/human_capture/evidence/2026-10-09_hrskeleton_offline_r2/
+?? docs/human_capture/evidence/2026-10-09_hrskeleton_offline_r3/
+?? docs/human_capture/evidence/2026-10-10_c15_gt_validation/
+?? docs/human_capture/evidence/2026-10-10_commit_audit_r1/baseline-tracked.patch
+?? docs/human_capture/evidence/2026-10-10_commit_audit_r1/group_a-commit-message.txt
+?? docs/human_capture/evidence/2026-10-10_commit_audit_r1/group_a.patch
+?? docs/human_capture/evidence/2026-10-10_commit_audit_r1/group_b-commit-message.txt
+?? docs/human_capture/evidence/2026-10-10_commit_audit_r1/group_b.patch
+?? docs/human_capture/evidence/2026-10-10_gt_annotator_r1/
+?? docs/human_capture/evidence/2026-10-10_human_unify_fusion_r1/
+?? docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/
+?? docs/human_capture/evidence/2026-10-10_human_unify_r1/gt_verify/
+?? docs/human_capture/evidence/2026-10-10_human_unify_review_r1/
+?? docs/human_capture/evidence/2026-10-10_human_unify_rework_r2/
+?? docs/human_capture/evidence/2026-10-10_rf_optimization_r1/
+?? docs/human_capture/evidence/2026-10-10_spike_cluster_r1/
+?? docs/human_capture/returns/HR-RET-V2.md
+?? docs/human_capture/returns/HR-SEM-SHADOW.md
+?? docs/human_capture/returns/HR-SKELETON-OFFLINE.md
+?? docs/human_capture/returns/HR-W03.md
+?? docs/human_capture/returns/HUMAN-UNIFY-R1.md
+?? docs/human_capture/returns/RF-OPTIMIZATION-R1.md
+?? docs/human_capture/tickets/HR-RET-V2.md
+?? docs/human_capture/tickets/HR-SEM-SHADOW.md
+?? docs/human_capture/tickets/HR-SKELETON-OFFLINE.md
+?? docs/human_capture/tickets/HR-W03-R38.md
+?? docs/human_capture/tickets/HR-W03-R39-CLOSEOUT.md
+?? docs/human_capture/tickets/RF-OPTIMIZATION-R1.md
+?? docs/sidequests/DET01_ACCEPTANCE.md
+?? docs/sidequests/DET01_ACCEPTANCE_V2.md
+?? docs/sidequests/DET02_ACCEPTANCE.md
+?? docs/sidequests/DET02_PLAN.md
+?? docs/sidequests/DET03_ACCEPTANCE.md
+?? docs/sidequests/DET03_PLAN.md
+?? docs/sidequests/DET04_ACCEPTANCE.md
+?? docs/sidequests/DET04_PLAN.md
+?? docs/sidequests/DET05_ACCEPTANCE.md
+?? docs/sidequests/DET05_PLAN.md
+?? docs/sidequests/DET06_ACCEPTANCE.md
+?? docs/sidequests/DET06_PLAN.md
+?? docs/sidequests/DET07_ACCEPTANCE.md
+?? docs/sidequests/DET07_CAPTURE_DESIGN.md
+?? docs/sidequests/DET07_PLAN.md
+?? docs/sidequests/evidence/
+?? docs/sidequests/returns/
+?? pc_apps/console/make_leveling_release.py
+?? pc_apps/human_core/README.md
+?? pc_apps/human_core/fusion.js
+?? pc_apps/human_core/perf_profile_fusion.js
+?? pc_apps/human_core/summarize_fusion_runs.js
+?? pc_apps/human_core/test_baseline_parity.js
+?? pc_apps/human_core/test_fusion_specific.js
+?? pc_apps/human_core/test_rework.js
+?? pc_apps/human_ml/audit_fusion_sessions.py
+?? pc_apps/human_ml/dump_parity_dataset.py
+?? pc_apps/human_ml/export_furniture_hard_neg.py
+?? pc_apps/human_ml/gt_workbench_export.py
+?? pc_apps/human_ml/spike_cluster/
+?? pc_apps/human_replay/FREEZE_REPORT_2026-10-10.md
+?? pc_apps/human_replay/GT_ANNOTATOR_USER_GUIDE.md
+?? pc_apps/human_replay/HANDOVER_TO_CODEX.md
+?? pc_apps/human_replay/WORKORDER_PATHS_FOR_CODEX.md
+?? pc_apps/human_replay/approve_session.py
+?? pc_apps/human_replay/b2a_review_probe.js
+?? pc_apps/human_replay/b2a_shadow_flicker.js
+?? pc_apps/human_replay/b2a_shadow_probe.js
+?? pc_apps/human_replay/b2a_shadow_report.js
+?? pc_apps/human_replay/freeze_all.py
+?? pc_apps/human_replay/gt_annotator.html
+?? pc_apps/human_replay/gt_annotator.js
+?? pc_apps/human_replay/gt_audit_fix_test.py
+?? pc_apps/human_replay/gt_fill_static.py
+?? pc_apps/human_replay/gt_lib.js
+?? pc_apps/human_replay/gt_lib.test.js
+?? pc_apps/human_replay/gt_roundtrip.test.js
+?? pc_apps/human_replay/gt_server.py
+?? pc_apps/human_replay/gt_server_e2e_test.py
+?? pc_apps/human_replay/gt_server_test.py
+?? pc_apps/human_replay/gt_store/
+?? pc_apps/human_replay/gt_suggest.js
+?? pc_apps/human_replay/registration.js
+?? pc_apps/human_replay/registration.test.js
+?? pc_apps/human_replay/registration_method.js
+?? pc_apps/human_replay/test_fusion_feature_parity.js
+?? pelican_bike.html
+?? sidequests/human_detectors/

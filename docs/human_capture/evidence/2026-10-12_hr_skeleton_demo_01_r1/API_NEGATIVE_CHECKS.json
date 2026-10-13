@@ -1,0 +1,30 @@
+[
+  {
+    "query": "sid=unknown&f=0",
+    "status": 400,
+    "body": {
+      "error": "UNKNOWN_SESSION"
+    }
+  },
+  {
+    "query": "sid=cap_20261010_175429&f=-1",
+    "status": 400,
+    "body": {
+      "error": "FRAME_OUT_OF_RANGE"
+    }
+  },
+  {
+    "query": "sid=cap_20261010_175429&f=258",
+    "status": 400,
+    "body": {
+      "error": "FRAME_OUT_OF_RANGE"
+    }
+  },
+  {
+    "query": "sid=cap_20261010_175429&f=220&mode=wrong",
+    "status": 400,
+    "body": {
+      "error": "INVALID_INPUT_MODE"
+    }
+  }
+]

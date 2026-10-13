@@ -1,0 +1,1276 @@
+{
+  "diagnostic_only": true,
+  "removed": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    23,
+    24,
+    41,
+    48,
+    68
+  ],
+  "columns": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67
+  ],
+  "n_features": 58,
+  "note": "post-run position sensitivity; not preregistered model selection evidence; residual count/geometry may proxy range",
+  "routes": {
+    "rf": {
+      "folds": [
+        {
+          "holdout": "cap_20261009_121622",
+          "metrics": {
+            "n": 131,
+            "tn": 23,
+            "fp": 0,
+            "fn": 1,
+            "tp": 107,
+            "precision": 1.0,
+            "recall": 0.9907407407407407,
+            "specificity": 1.0,
+            "threshold": 0.7
+          },
+          "selection": {
+            "params": {
+              "max_depth": 8,
+              "min_samples_leaf": 5,
+              "max_features": "sqrt",
+              "class_weight": "balanced"
+            },
+            "inner_score": 0.8411458333333334,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 8,
+                  "min_samples_leaf": 5,
+                  "max_features": "sqrt",
+                  "class_weight": "balanced"
+                },
+                "score": 0.8411458333333334
+              },
+              {
+                "params": {
+                  "max_depth": 20,
+                  "min_samples_leaf": 1,
+                  "max_features": 0.5,
+                  "class_weight": null
+                },
+                "score": 0.8346354166666666
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 10,
+                  "max_features": 1.0,
+                  "class_weight": "balanced"
+                },
+                "score": 0.8346354166666666
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121723",
+                  "cap_20261009_122616",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_121723",
+                  "cap_20261009_122637"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121723",
+                  "cap_20261009_122637"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_121647",
+          "metrics": {
+            "n": 271,
+            "tn": 53,
+            "fp": 0,
+            "fn": 0,
+            "tp": 218,
+            "precision": 1.0,
+            "recall": 1.0,
+            "specificity": 1.0,
+            "threshold": 0.65
+          },
+          "selection": {
+            "params": {
+              "max_depth": 8,
+              "min_samples_leaf": 5,
+              "max_features": "sqrt",
+              "class_weight": "balanced"
+            },
+            "inner_score": 0.8344269259818731,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 8,
+                  "min_samples_leaf": 5,
+                  "max_features": "sqrt",
+                  "class_weight": "balanced"
+                },
+                "score": 0.8344269259818731
+              },
+              {
+                "params": {
+                  "max_depth": 20,
+                  "min_samples_leaf": 1,
+                  "max_features": 0.5,
+                  "class_weight": null
+                },
+                "score": 0.8328298086606244
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 10,
+                  "max_features": 1.0,
+                  "class_weight": "balanced"
+                },
+                "score": 0.8328298086606244
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122616"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122616"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_122616",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_121723",
+          "metrics": {
+            "n": 223,
+            "tn": 0,
+            "fp": 0,
+            "fn": 0,
+            "tp": 223,
+            "precision": 1.0,
+            "recall": 1.0,
+            "specificity": null,
+            "threshold": 0.65
+          },
+          "selection": {
+            "params": {
+              "max_depth": 8,
+              "min_samples_leaf": 5,
+              "max_features": "sqrt",
+              "class_weight": "balanced"
+            },
+            "inner_score": 0.9107142857142857,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 8,
+                  "min_samples_leaf": 5,
+                  "max_features": "sqrt",
+                  "class_weight": "balanced"
+                },
+                "score": 0.9107142857142857
+              },
+              {
+                "params": {
+                  "max_depth": 20,
+                  "min_samples_leaf": 1,
+                  "max_features": 0.5,
+                  "class_weight": null
+                },
+                "score": 0.8325892857142857
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 10,
+                  "max_features": 1.0,
+                  "class_weight": "balanced"
+                },
+                "score": 0.8325892857142857
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_122616",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121647",
+                  "cap_20261009_122637"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_122637"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_122616",
+          "metrics": {
+            "n": 267,
+            "tn": 0,
+            "fp": 128,
+            "fn": 0,
+            "tp": 139,
+            "precision": 0.5205992509363296,
+            "recall": 1.0,
+            "specificity": 0.0,
+            "threshold": 0.39999999999999997
+          },
+          "selection": {
+            "params": {
+              "max_depth": 8,
+              "min_samples_leaf": 5,
+              "max_features": "sqrt",
+              "class_weight": "balanced"
+            },
+            "inner_score": 0.9822259439263249,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 8,
+                  "min_samples_leaf": 5,
+                  "max_features": "sqrt",
+                  "class_weight": "balanced"
+                },
+                "score": 0.9822259439263249
+              },
+              {
+                "params": {
+                  "max_depth": 20,
+                  "min_samples_leaf": 1,
+                  "max_features": 0.5,
+                  "class_weight": null
+                },
+                "score": 0.9752814994818803
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 10,
+                  "max_features": 1.0,
+                  "class_weight": "balanced"
+                },
+                "score": 0.9752814994818803
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121647",
+                  "cap_20261009_121723"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_122637",
+          "metrics": {
+            "n": 236,
+            "tn": 120,
+            "fp": 0,
+            "fn": 0,
+            "tp": 116,
+            "precision": 1.0,
+            "recall": 1.0,
+            "specificity": 1.0,
+            "threshold": 0.65
+          },
+          "selection": {
+            "params": {
+              "max_depth": 8,
+              "min_samples_leaf": 5,
+              "max_features": "sqrt",
+              "class_weight": "balanced"
+            },
+            "inner_score": 0.847152725327291,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 8,
+                  "min_samples_leaf": 5,
+                  "max_features": "sqrt",
+                  "class_weight": "balanced"
+                },
+                "score": 0.847152725327291
+              },
+              {
+                "params": {
+                  "max_depth": 20,
+                  "min_samples_leaf": 1,
+                  "max_features": 0.5,
+                  "class_weight": null
+                },
+                "score": 0.8445485586606244
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 10,
+                  "max_features": 1.0,
+                  "class_weight": "balanced"
+                },
+                "score": 0.8458506419939577
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121647",
+                  "cap_20261009_121723"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_122700",
+          "metrics": {
+            "n": 111,
+            "tn": 0,
+            "fp": 0,
+            "fn": 0,
+            "tp": 111,
+            "precision": 1.0,
+            "recall": 1.0,
+            "specificity": null,
+            "threshold": 0.6
+          },
+          "selection": {
+            "params": {
+              "max_depth": 8,
+              "min_samples_leaf": 5,
+              "max_features": "sqrt",
+              "class_weight": "balanced"
+            },
+            "inner_score": 0.8631346578366447,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 8,
+                  "min_samples_leaf": 5,
+                  "max_features": "sqrt",
+                  "class_weight": "balanced"
+                },
+                "score": 0.8631346578366447
+              },
+              {
+                "params": {
+                  "max_depth": 20,
+                  "min_samples_leaf": 1,
+                  "max_features": 0.5,
+                  "class_weight": null
+                },
+                "score": 0.8548381162619574
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 10,
+                  "max_features": 1.0,
+                  "class_weight": "balanced"
+                },
+                "score": 0.8576158940397351
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122616",
+                  "cap_20261009_122637"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_121723",
+                  "cap_20261009_122637"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_122616"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121647",
+                  "cap_20261009_122616"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121723",
+                  "cap_20261009_122637"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "totals": {
+        "tp": 914,
+        "fp": 128,
+        "tn": 196,
+        "fn": 1
+      }
+    },
+    "gbdt": {
+      "folds": [
+        {
+          "holdout": "cap_20261009_121622",
+          "metrics": {
+            "n": 131,
+            "tn": 23,
+            "fp": 0,
+            "fn": 1,
+            "tp": 107,
+            "precision": 1.0,
+            "recall": 0.9907407407407407,
+            "specificity": 1.0,
+            "threshold": 0.95
+          },
+          "selection": {
+            "params": {
+              "max_depth": 3,
+              "min_samples_leaf": 10,
+              "learning_rate": 0.05
+            },
+            "inner_score": 0.9622395833333334,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 3,
+                  "min_samples_leaf": 10,
+                  "learning_rate": 0.05
+                },
+                "score": 0.9622395833333334
+              },
+              {
+                "params": {
+                  "max_depth": 6,
+                  "min_samples_leaf": 20,
+                  "learning_rate": 0.1
+                },
+                "score": 0.9622395833333334
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 30,
+                  "learning_rate": 0.05
+                },
+                "score": 0.9622395833333334
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121723",
+                  "cap_20261009_122616",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_121723",
+                  "cap_20261009_122637"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121723",
+                  "cap_20261009_122637"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_121647",
+          "metrics": {
+            "n": 271,
+            "tn": 53,
+            "fp": 0,
+            "fn": 0,
+            "tp": 218,
+            "precision": 1.0,
+            "recall": 1.0,
+            "specificity": 1.0,
+            "threshold": 0.25
+          },
+          "selection": {
+            "params": {
+              "max_depth": 6,
+              "min_samples_leaf": 20,
+              "learning_rate": 0.1
+            },
+            "inner_score": 0.8328298086606244,
+            "inner_precision_target_reached": false,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 3,
+                  "min_samples_leaf": 10,
+                  "learning_rate": 0.05
+                },
+                "score": 0.8314409197717355
+              },
+              {
+                "params": {
+                  "max_depth": 6,
+                  "min_samples_leaf": 20,
+                  "learning_rate": 0.1
+                },
+                "score": 0.8328298086606244
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 30,
+                  "learning_rate": 0.05
+                },
+                "score": 0.8328298086606244
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122616"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122616"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_122616",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_121723",
+          "metrics": {
+            "n": 223,
+            "tn": 0,
+            "fp": 0,
+            "fn": 0,
+            "tp": 223,
+            "precision": 1.0,
+            "recall": 1.0,
+            "specificity": null,
+            "threshold": 0.05
+          },
+          "selection": {
+            "params": {
+              "max_depth": 3,
+              "min_samples_leaf": 10,
+              "learning_rate": 0.05
+            },
+            "inner_score": 0.8325892857142857,
+            "inner_precision_target_reached": false,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 3,
+                  "min_samples_leaf": 10,
+                  "learning_rate": 0.05
+                },
+                "score": 0.8325892857142857
+              },
+              {
+                "params": {
+                  "max_depth": 6,
+                  "min_samples_leaf": 20,
+                  "learning_rate": 0.1
+                },
+                "score": 0.8065954019222369
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 30,
+                  "learning_rate": 0.05
+                },
+                "score": 0.8325892857142857
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_122616",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121647",
+                  "cap_20261009_122637"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_122637"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_122616",
+          "metrics": {
+            "n": 267,
+            "tn": 128,
+            "fp": 0,
+            "fn": 0,
+            "tp": 139,
+            "precision": 1.0,
+            "recall": 1.0,
+            "specificity": 1.0,
+            "threshold": 0.95
+          },
+          "selection": {
+            "params": {
+              "max_depth": 3,
+              "min_samples_leaf": 10,
+              "learning_rate": 0.05
+            },
+            "inner_score": 0.9953298086606243,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 3,
+                  "min_samples_leaf": 10,
+                  "learning_rate": 0.05
+                },
+                "score": 0.9953298086606243
+              },
+              {
+                "params": {
+                  "max_depth": 6,
+                  "min_samples_leaf": 20,
+                  "learning_rate": 0.1
+                },
+                "score": 0.9953298086606243
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 30,
+                  "learning_rate": 0.05
+                },
+                "score": 0.9953298086606243
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121647",
+                  "cap_20261009_121723"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_122637",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_122637",
+          "metrics": {
+            "n": 236,
+            "tn": 86,
+            "fp": 34,
+            "fn": 0,
+            "tp": 116,
+            "precision": 0.7733333333333333,
+            "recall": 1.0,
+            "specificity": 0.7166666666666667,
+            "threshold": 0.05
+          },
+          "selection": {
+            "params": {
+              "max_depth": 3,
+              "min_samples_leaf": 10,
+              "learning_rate": 0.05
+            },
+            "inner_score": 0.8341318919939577,
+            "inner_precision_target_reached": false,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 3,
+                  "min_samples_leaf": 10,
+                  "learning_rate": 0.05
+                },
+                "score": 0.8341318919939577
+              },
+              {
+                "params": {
+                  "max_depth": 6,
+                  "min_samples_leaf": 20,
+                  "learning_rate": 0.1
+                },
+                "score": 0.8341318919939577
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 30,
+                  "learning_rate": 0.05
+                },
+                "score": 0.8341318919939577
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121647",
+                  "cap_20261009_121723"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_122616",
+                  "cap_20261009_122700"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "holdout": "cap_20261009_122700",
+          "metrics": {
+            "n": 111,
+            "tn": 0,
+            "fp": 0,
+            "fn": 0,
+            "tp": 111,
+            "precision": 1.0,
+            "recall": 1.0,
+            "specificity": null,
+            "threshold": 0.6
+          },
+          "selection": {
+            "params": {
+              "max_depth": 6,
+              "min_samples_leaf": 20,
+              "learning_rate": 0.1
+            },
+            "inner_score": 0.960942233959836,
+            "inner_precision_target_reached": true,
+            "trials": [
+              {
+                "params": {
+                  "max_depth": 3,
+                  "min_samples_leaf": 10,
+                  "learning_rate": 0.05
+                },
+                "score": 0.9512200117376137
+              },
+              {
+                "params": {
+                  "max_depth": 6,
+                  "min_samples_leaf": 20,
+                  "learning_rate": 0.1
+                },
+                "score": 0.960942233959836
+              },
+              {
+                "params": {
+                  "max_depth": null,
+                  "min_samples_leaf": 30,
+                  "learning_rate": 0.05
+                },
+                "score": 0.960942233959836
+              }
+            ],
+            "splits": [
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121723",
+                  "cap_20261009_122616",
+                  "cap_20261009_122637"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121647"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121647",
+                  "cap_20261009_121723",
+                  "cap_20261009_122637"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_122616"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "train_sessions": [
+                  "cap_20261009_121622",
+                  "cap_20261009_121647",
+                  "cap_20261009_122616"
+                ],
+                "validation_sessions": [
+                  "cap_20261009_121723",
+                  "cap_20261009_122637"
+                ],
+                "validation_classes": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "totals": {
+        "tp": 914,
+        "fp": 34,
+        "tn": 290,
+        "fn": 1
+      }
+    }
+  }
+}

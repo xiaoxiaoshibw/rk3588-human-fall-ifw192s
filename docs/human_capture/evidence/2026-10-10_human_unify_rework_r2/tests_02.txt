@@ -1,0 +1,116 @@
+=== test_schema.js ===
+PASS: FrameContext n_points=4
+PASS: FrameContext frame_id=test:0
+PASS: 非 Float32Array 拒绝: FrameContext.xyzi 必须是 Float32Array
+PASS: 非 %4 拒绝: FrameContext.xyzi 长度必须 % 4
+PASS: 有效 candidate validate=[]
+PASS: point_indices 非 Uint32Array 应报错
+PASS: Track 构造正确
+PASS: Diagnostics 初始为空
+PASS: LayerDiag 字段正确
+PASS: 空 meta → UNKNOWN
+PASS: 有 human_annotations → HUMAN_UNVERIFIED
+PASS: ai_labels → PSEUDO_LABEL (实测 PSEUDO_LABEL)
+PASS: PSEUDO disclaimer 含'非人工 GT'
+
+== schema: 13 PASS, 0 FAIL ==
+=== test_data_loader.js ===
+PASS: meta 校验通过
+PASS: 非28拒绝
+PASS: load_session frames.length=2
+PASS: frame 0 n_points=2
+PASS: frame0 point0 x=1
+PASS: frame0 point0 y=2
+PASS: frame0 point0 z=3
+PASS: frame0 point0 intensity=4
+PASS: frame0 point1 x=10
+PASS: frame1 point0 x=100
+PASS: frame1 point1 x=-1
+PASS: points_sha256 64 字符
+PASS: meta_sha256 64 字符
+PASS: lazy frame0
+PASS: lazy frame1
+PASS: lazy 尽头 null
+
+== data_loader: 16 PASS, 0 FAIL ==
+=== test_engine_smoke.js ===
+PASS: 空场 BASE_B person_cand_frames=0 (实测 0)
+PASS: 空场 BASE_B 无 track (实测 0)
+PASS: 空场 BASE_A confirmed=0 (实测 0)
+PASS: 高个 BASE_B confirmed>=1 (实测 2)
+PASS: 高个 BASE_B 每帧有 person cand (实测 177/177)
+PASS: 动态 BASE_B person_cand 帧≥50% (实测 83/83)
+PASS: 动态 BASE_B confirmed>=1 (实测 4)
+PASS: strict 重复帧抛错
+PASS: rf.extract n<10 返回零向量 （协议)
+
+== engine_smoke: 9 PASS, 0 FAIL ==
+=== test_replay_contract.js ===
+PASS: 连续三帧age确认
+PASS: 同帧strict抛错且不累计
+PASS: 同帧lenient忽略且有诊断
+PASS: 换会话清报告/track/保留/背景
+PASS: 异sid旧帧不得污染新会话
+PASS: 同sid循环代际拒绝旧回调
+PASS: 缺少代际拒绝
+PASS: 跳帧清票窗/保留，身份带segment
+PASS: 未见过的倒序索引也拒绝
+PASS: B缺帧15次仍存活，第16次删除
+PASS: 切换/循环reason记录
+== replay_contract: 11 PASS, 0 FAIL ==
+=== test_edge_cases.js ===
+PASS: 空帧 0 cand (实测 0)
+PASS: z<0.1 前景剔除 fg=0 (实测 0)
+PASS: 点不足 0 cand (实测 0)
+PASS: 家具+人 ≥1 cand (实测 2)
+PASS: 人消失10帧后无active track
+PASS: 多候选跨帧 ≥1 (实测 2)
+PASS: 同帧 track_id 唯一 (2 个 id, 2 唯一)
+PASS: 无 cfg 构造不抛
+PASS: 空 cfg 构造不抛
+PASS: U4 BLOCKED 抛错: U4 BLOCKED — 无推理artifact
+PASS: U5 BLOCKED 抛错: U5 BLOCKED — 无推理artifact
+PASS: 空 fc 抛错
+PASS: session_id 数字 → 字符串化
+PASS: point_count=0 validate 报错
+
+== edge_cases: 14 PASS, 0 FAIL ==
+=== test_model_compat.js ===
+PASS: rf_person_v1 n_features=51 (实测 51)
+PASS: 100 trees (实测 100)
+PASS: classes=[0,1]
+PASS: tree0 长度一致
+PASS: value 全 [2] 组
+PASS: init n_features≠51 拒绝
+PASS: extract 输出 51 维 (实测 51)
+PASS: predict_person 全 0 → [0,1] (实测 0.83)
+PASS: predict_person 输出在 [0,1] (实测 0.5)
+PASS: 同输入 predict_person 严格相等
+PASS: 同输入 extract 严格相等
+PASS: rf_test_fixture 存在， 供 Python 对拍
+
+== model_compat: 12 PASS, 0 FAIL ==
+=== test_rework.js ===
+PASS: R01 .9m关联与实例隔离
+PASS: R01 同帧近邻两簇一对一
+PASS: R02 B前置无效点后强度/索引正确
+PASS: R02 A过滤后raw索引/强度可追溯
+PASS: R03 leveled背景不二次变换
+PASS: R03 raw自定义R/T作用于背景和帧
+PASS: R03 输入状态冲突在处理前拒绝
+PASS: R03 CLI identity确实改变raw处理
+PASS: R05 long lifetime/gate/EMA配置与其他实例隔离
+PASS: R05 U6有效配置，未知/未实现配置拒绝
+PASS: RF闭包状态隔离
+PASS: R07 accepted/rejected不输出家具字段
+PASS: R08 retained去重/来源/原索引/过期退出
+PASS: R08 mixed来源且不重复已有前景
+PASS: R06 eager/lazy合法解码一致，close幂等
+PASS: R06 eager/lazy初始截断/多余数据拒绝
+PASS: R06 读取中截断抛错并close
+PASS: R06 partial read累积而非当整帧
+PASS: R06 metadata负数/小数/重叠/越界/时间回退拒绝
+== rework: 19 PASS, 0 FAIL ==
+
+========== overall: 7/7 suites pass ==========
+core exit=0

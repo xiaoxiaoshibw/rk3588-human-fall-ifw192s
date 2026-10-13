@@ -1,0 +1,65 @@
+{
+ "source": "actual Codex exec_command/write_stdin completion exit codes; failures preserved",
+ "commands": [
+  {
+   "command": "python -B -W error pc_apps/human_ml/train_person_rf_v2.py --outdir docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/train_01",
+   "exit": 1,
+   "log": "train_01.log",
+   "log_sha256": "36db51741f53da629d2d17122a73e2e25682b2a9cb4f6670fc98a5f875ced90e"
+  },
+  {
+   "command": "python -B -W error pc_apps/human_ml/train_person_rf_v2.py --outdir docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/train_02",
+   "exit": 0,
+   "log": "train_02.log",
+   "log_sha256": "b84abd047f03877cbdee9bae12570be9b84b78a19cbbbc8733555f3aaca2b789"
+  },
+  {
+   "command": "node --max-old-space-size=2048 pc_apps/human_core/evaluate_fusion_gt.js docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/train_02 docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/runs_01",
+   "exit": 1,
+   "log": "runs_01.log",
+   "log_sha256": "2c20b311736c95ab23503442f67613e1d0f5ee6d3e7bcf166e407135bd3ed1a9"
+  },
+  {
+   "command": "node --max-old-space-size=2048 pc_apps/human_core/evaluate_fusion_gt.js docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/train_02 docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/runs_02",
+   "exit": 1,
+   "log": "runs_02.log",
+   "log_sha256": "b510483c00176b1a2499a0cd3ac0a2188e0a549dac1c6ea78dde9923ce658a2d"
+  },
+  {
+   "command": "node --max-old-space-size=2048 pc_apps/human_core/evaluate_fusion_gt.js docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/train_02 docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/runs_03",
+   "exit": 0,
+   "log": "runs_03.log",
+   "log_sha256": "f705937009bde8704ffa524cef1a963cd784558458a8295f448bde8d40713b21"
+  },
+  {
+   "command": "node pc_apps/human_core/test_fusion_gt.js",
+   "exit": 0,
+   "log": "test_fusion_gt.log",
+   "log_sha256": "d0e048fd46179d3700592ef8a97d0c090c9da2c650031c9c52e96c96fbb3a655"
+  },
+  {
+   "command": "python -B -W error pc_apps/human_ml/test_frozen_gt.py",
+   "exit": 0,
+   "log": "test_frozen_gt.log",
+   "log_sha256": "d624895c00d1a035d9dd1765556a9ee323492642992bd8901c34d628427c6561"
+  },
+  {
+   "command": "node --max-old-space-size=2048 pc_apps/human_core/test_fusion_specific.js",
+   "exit": 0,
+   "log": "test_fusion_specific.log",
+   "log_sha256": "ad7e2f7b2763de0611a0323da6454a3c0afe24d06a3298cd0e536dbf83219443"
+  },
+  {
+   "command": "python -B -W error docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/verify_artifacts.py",
+   "exit": 0,
+   "log": "verify_artifacts.log",
+   "log_sha256": "3257a2cd81b61960ecb5fac09526e03f53d535206a97f29520bad8f4cf916864"
+  },
+  {
+   "command": "python -B -W error docs/human_capture/evidence/2026-10-10_human_unify_fusion_r2/run_review.py",
+   "exit": 0,
+   "log": "review_driver.log",
+   "log_sha256": "b22b13781065d295eece8a800ffed461a602d403899e42863d146963dd830966"
+  }
+ ]
+}

@@ -1,0 +1,1759 @@
+{
+  "scope": "Late V3 source/artifact audit plus 859 fixed-row PointNet inference and 608 B-furniture XGB rescoring. No training or pipeline replay.",
+  "background_actual": [
+    {
+      "sid": "cap_20261010_175227",
+      "groups": {
+        "A": {
+          "person_raw": 0,
+          "person_lost": 0,
+          "person_kept": 0,
+          "furniture_raw": 7220011,
+          "furniture_kept": 174472,
+          "furniture_removed": 7045539,
+          "fg_points_total": 185346,
+          "in_points_total": 14931203,
+          "reason_hist": {
+            "within_envelope+0.25": 6955915,
+            "no_envelope_cell": 3558293,
+            "z_below_0.1": 3410578,
+            "z_above_2.3": 821071,
+            "hot_above_envelope": 185346
+          },
+          "person_loss_ratio": null,
+          "furniture_residual_ratio": 0.0242,
+          "fg_ratio": 0.0124
+        },
+        "B": {
+          "person_raw": 0,
+          "person_lost": 0,
+          "person_kept": 0,
+          "furniture_raw": 7220011,
+          "furniture_kept": 171958,
+          "furniture_removed": 7048053,
+          "fg_points_total": 233640,
+          "in_points_total": 14931203,
+          "reason_hist": {
+            "bg_voxel_match": 10580148,
+            "z_below_ground": 3410578,
+            "z_above_max": 706837,
+            "no_bg_voxel_match": 233640
+          },
+          "person_loss_ratio": null,
+          "furniture_residual_ratio": 0.0238,
+          "fg_ratio": 0.0156
+        },
+        "C": {
+          "person_raw": 0,
+          "person_lost": 0,
+          "person_kept": 0,
+          "furniture_raw": 7220011,
+          "furniture_kept": 339828,
+          "furniture_removed": 6880183,
+          "fg_points_total": 3758708,
+          "in_points_total": 14931203,
+          "reason_hist": {
+            "within_adaptive_envelope": 6926944,
+            "no_envelope_cell_keep_unknown": 3544391,
+            "z_below_0.1": 3410578,
+            "z_above_2.3": 821071,
+            "low_cell_support_keep_unknown": 40628,
+            "hot_above_tau(r=1.21,tau=0.21)": 17457,
+            "hot_above_tau(r=1.20,tau=0.21)": 15475,
+            "hot_above_tau(r=1.22,tau=0.21)": 15287
+          },
+          "person_loss_ratio": null,
+          "furniture_residual_ratio": 0.0471,
+          "fg_ratio": 0.2517
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "groups": {
+        "A": {
+          "person_raw": 286822,
+          "person_lost": 34847,
+          "person_kept": 251975,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 429466,
+          "in_points_total": 12673527,
+          "reason_hist": {
+            "within_envelope+0.25": 5757923,
+            "no_envelope_cell": 2991094,
+            "z_below_0.1": 2802304,
+            "z_above_2.3": 692740,
+            "hot_above_envelope": 429466
+          },
+          "person_loss_ratio": 0.1215,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0339
+        },
+        "B": {
+          "person_raw": 286822,
+          "person_lost": 13149,
+          "person_kept": 273673,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 480012,
+          "in_points_total": 12673527,
+          "reason_hist": {
+            "bg_voxel_match": 8792915,
+            "z_below_ground": 2802304,
+            "z_above_max": 598296,
+            "no_bg_voxel_match": 480012
+          },
+          "person_loss_ratio": 0.0458,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0379
+        },
+        "C": {
+          "person_raw": 286822,
+          "person_lost": 35759,
+          "person_kept": 251063,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 3430760,
+          "in_points_total": 12673527,
+          "reason_hist": {
+            "within_adaptive_envelope": 5737221,
+            "no_envelope_cell_keep_unknown": 2980592,
+            "z_below_0.1": 2802304,
+            "z_above_2.3": 692740,
+            "low_cell_support_keep_unknown": 32630,
+            "hot_above_tau(r=1.21,tau=0.21)": 14762,
+            "hot_above_tau(r=1.20,tau=0.21)": 12979,
+            "hot_above_tau(r=1.22,tau=0.21)": 12881
+          },
+          "person_loss_ratio": 0.1247,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.2707
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "groups": {
+        "A": {
+          "person_raw": 561361,
+          "person_lost": 40666,
+          "person_kept": 520695,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 1735895,
+          "in_points_total": 22796699,
+          "reason_hist": {
+            "within_envelope+0.25": 9535618,
+            "no_envelope_cell": 5380620,
+            "z_below_0.1": 4896122,
+            "hot_above_envelope": 1735895,
+            "z_above_2.3": 1248444
+          },
+          "person_loss_ratio": 0.0724,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0761
+        },
+        "B": {
+          "person_raw": 561361,
+          "person_lost": 22370,
+          "person_kept": 538991,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 1902181,
+          "in_points_total": 22796699,
+          "reason_hist": {
+            "bg_voxel_match": 14922022,
+            "z_below_ground": 4896122,
+            "no_bg_voxel_match": 1902181,
+            "z_above_max": 1076374
+          },
+          "person_loss_ratio": 0.0398,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0834
+        },
+        "C": {
+          "person_raw": 561361,
+          "person_lost": 30788,
+          "person_kept": 530573,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 7144707,
+          "in_points_total": 22796699,
+          "reason_hist": {
+            "within_adaptive_envelope": 9485837,
+            "no_envelope_cell_keep_unknown": 5359031,
+            "z_below_0.1": 4896122,
+            "z_above_2.3": 1248444,
+            "low_cell_support_keep_unknown": 56928,
+            "hot_above_tau(r=1.21,tau=0.21)": 34634,
+            "hot_above_tau(r=1.22,tau=0.21)": 31284,
+            "hot_above_tau(r=1.20,tau=0.21)": 30963
+          },
+          "person_loss_ratio": 0.0548,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.3134
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "groups": {
+        "A": {
+          "person_raw": 13327,
+          "person_lost": 1339,
+          "person_kept": 11988,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 448249,
+          "in_points_total": 11740802,
+          "reason_hist": {
+            "within_envelope+0.25": 5355689,
+            "no_envelope_cell": 2768002,
+            "z_below_0.1": 2531001,
+            "z_above_2.3": 637861,
+            "hot_above_envelope": 448249
+          },
+          "person_loss_ratio": 0.1005,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0382
+        },
+        "B": {
+          "person_raw": 13327,
+          "person_lost": 389,
+          "person_kept": 12938,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 490551,
+          "in_points_total": 11740802,
+          "reason_hist": {
+            "bg_voxel_match": 8167555,
+            "z_below_ground": 2531001,
+            "z_above_max": 551695,
+            "no_bg_voxel_match": 490551
+          },
+          "person_loss_ratio": 0.0292,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0418
+        },
+        "C": {
+          "person_raw": 13327,
+          "person_lost": 1325,
+          "person_kept": 12002,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 3227088,
+          "in_points_total": 11740802,
+          "reason_hist": {
+            "within_adaptive_envelope": 5334479,
+            "no_envelope_cell_keep_unknown": 2757629,
+            "z_below_0.1": 2531001,
+            "z_above_2.3": 637861,
+            "low_cell_support_keep_unknown": 31854,
+            "hot_above_tau(r=1.21,tau=0.21)": 14283,
+            "hot_above_tau(r=1.96,tau=0.25)": 13591,
+            "hot_above_tau(r=1.94,tau=0.25)": 13559
+          },
+          "person_loss_ratio": 0.0994,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.2749
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "groups": {
+        "A": {
+          "person_raw": 8841,
+          "person_lost": 858,
+          "person_kept": 7983,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 412801,
+          "in_points_total": 9924142,
+          "reason_hist": {
+            "within_envelope+0.25": 4532337,
+            "no_envelope_cell": 2299709,
+            "z_below_0.1": 2164674,
+            "z_above_2.3": 514621,
+            "hot_above_envelope": 412801
+          },
+          "person_loss_ratio": 0.097,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0416
+        },
+        "B": {
+          "person_raw": 8841,
+          "person_lost": 265,
+          "person_kept": 8576,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 409550,
+          "in_points_total": 9924142,
+          "reason_hist": {
+            "bg_voxel_match": 6906210,
+            "z_below_ground": 2164674,
+            "z_above_max": 443708,
+            "no_bg_voxel_match": 409550
+          },
+          "person_loss_ratio": 0.03,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0413
+        },
+        "C": {
+          "person_raw": 8841,
+          "person_lost": 765,
+          "person_kept": 8076,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 2723616,
+          "in_points_total": 9924142,
+          "reason_hist": {
+            "within_adaptive_envelope": 4513982,
+            "no_envelope_cell_keep_unknown": 2292460,
+            "z_below_0.1": 2164674,
+            "z_above_2.3": 514621,
+            "low_cell_support_keep_unknown": 28100,
+            "hot_above_tau(r=2.20,tau=0.26)": 13897,
+            "hot_above_tau(r=2.21,tau=0.26)": 13606,
+            "hot_above_tau(r=2.24,tau=0.26)": 13531
+          },
+          "person_loss_ratio": 0.0865,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.2744
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "groups": {
+        "A": {
+          "person_raw": 27268,
+          "person_lost": 15148,
+          "person_kept": 12120,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 255248,
+          "in_points_total": 11693048,
+          "reason_hist": {
+            "within_envelope+0.25": 5373256,
+            "no_envelope_cell": 2801164,
+            "z_below_0.1": 2630121,
+            "z_above_2.3": 633259,
+            "hot_above_envelope": 255248
+          },
+          "person_loss_ratio": 0.5555,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0218
+        },
+        "B": {
+          "person_raw": 27268,
+          "person_lost": 2125,
+          "person_kept": 25143,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 331449,
+          "in_points_total": 11693048,
+          "reason_hist": {
+            "bg_voxel_match": 8185683,
+            "z_below_ground": 2630121,
+            "z_above_max": 545795,
+            "no_bg_voxel_match": 331449
+          },
+          "person_loss_ratio": 0.0779,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0283
+        },
+        "C": {
+          "person_raw": 27268,
+          "person_lost": 2169,
+          "person_kept": 25099,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 3065725,
+          "in_points_total": 11693048,
+          "reason_hist": {
+            "within_adaptive_envelope": 5352965,
+            "no_envelope_cell_keep_unknown": 2790186,
+            "z_below_0.1": 2630121,
+            "z_above_2.3": 633259,
+            "low_cell_support_keep_unknown": 31829,
+            "hot_above_tau(r=1.21,tau=0.21)": 14241,
+            "hot_above_tau(r=1.22,tau=0.21)": 12849,
+            "hot_above_tau(r=1.20,tau=0.21)": 12348
+          },
+          "person_loss_ratio": 0.0795,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.2622
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "groups": {
+        "A": {
+          "person_raw": 24361,
+          "person_lost": 3307,
+          "person_kept": 21054,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 602304,
+          "in_points_total": 12328975,
+          "reason_hist": {
+            "within_envelope+0.25": 5580263,
+            "no_envelope_cell": 2892156,
+            "z_below_0.1": 2652421,
+            "hot_above_envelope": 602304,
+            "z_above_2.3": 601831
+          },
+          "person_loss_ratio": 0.1357,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0489
+        },
+        "B": {
+          "person_raw": 24361,
+          "person_lost": 1194,
+          "person_kept": 23167,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 648124,
+          "in_points_total": 12328975,
+          "reason_hist": {
+            "bg_voxel_match": 8513117,
+            "z_below_ground": 2652421,
+            "no_bg_voxel_match": 648124,
+            "z_above_max": 515313
+          },
+          "person_loss_ratio": 0.049,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0526
+        },
+        "C": {
+          "person_raw": 24361,
+          "person_lost": 1842,
+          "person_kept": 22519,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 3506206,
+          "in_points_total": 12328975,
+          "reason_hist": {
+            "within_adaptive_envelope": 5558631,
+            "no_envelope_cell_keep_unknown": 2882270,
+            "z_below_0.1": 2652421,
+            "z_above_2.3": 601831,
+            "low_cell_support_keep_unknown": 31127,
+            "hot_above_tau(r=1.21,tau=0.21)": 26624,
+            "hot_above_tau(r=1.20,tau=0.21)": 25924,
+            "hot_above_tau(r=1.22,tau=0.21)": 24638
+          },
+          "person_loss_ratio": 0.0756,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.2844
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "groups": {
+        "A": {
+          "person_raw": 57045,
+          "person_lost": 9851,
+          "person_kept": 47194,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 784594,
+          "in_points_total": 25689368,
+          "reason_hist": {
+            "within_envelope+0.25": 11788232,
+            "no_envelope_cell": 5993678,
+            "z_below_0.1": 5746115,
+            "z_above_2.3": 1376749,
+            "hot_above_envelope": 784594
+          },
+          "person_loss_ratio": 0.1727,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0305
+        },
+        "B": {
+          "person_raw": 57045,
+          "person_lost": 1163,
+          "person_kept": 55882,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 836123,
+          "in_points_total": 25689368,
+          "reason_hist": {
+            "bg_voxel_match": 17915263,
+            "z_below_ground": 5746115,
+            "z_above_max": 1191867,
+            "no_bg_voxel_match": 836123
+          },
+          "person_loss_ratio": 0.0204,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0325
+        },
+        "C": {
+          "person_raw": 57045,
+          "person_lost": 3693,
+          "person_kept": 53352,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 6793342,
+          "in_points_total": 25689368,
+          "reason_hist": {
+            "within_adaptive_envelope": 11748494,
+            "no_envelope_cell_keep_unknown": 5969010,
+            "z_below_0.1": 5746115,
+            "z_above_2.3": 1376749,
+            "low_cell_support_keep_unknown": 72094,
+            "hot_above_tau(r=2.96,tau=0.30)": 38156,
+            "hot_above_tau(r=2.95,tau=0.30)": 37918,
+            "hot_above_tau(r=2.97,tau=0.30)": 37730
+          },
+          "person_loss_ratio": 0.0647,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.2644
+        }
+      }
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "groups": {
+        "A": {
+          "person_raw": 0,
+          "person_lost": 0,
+          "person_kept": 0,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 468521,
+          "in_points_total": 6190058,
+          "reason_hist": {
+            "within_envelope+0.25": 2712957,
+            "no_envelope_cell": 1447341,
+            "z_below_0.1": 1279421,
+            "hot_above_envelope": 468521,
+            "z_above_2.3": 281818
+          },
+          "person_loss_ratio": null,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0757
+        },
+        "B": {
+          "person_raw": 0,
+          "person_lost": 0,
+          "person_kept": 0,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 507236,
+          "in_points_total": 6190058,
+          "reason_hist": {
+            "bg_voxel_match": 4162693,
+            "z_below_ground": 1279421,
+            "no_bg_voxel_match": 507236,
+            "z_above_max": 240708
+          },
+          "person_loss_ratio": null,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.0819
+        },
+        "C": {
+          "person_raw": 0,
+          "person_lost": 0,
+          "person_kept": 0,
+          "furniture_raw": 0,
+          "furniture_kept": 0,
+          "furniture_removed": 0,
+          "fg_points_total": 1921361,
+          "in_points_total": 6190058,
+          "reason_hist": {
+            "within_adaptive_envelope": 2702920,
+            "no_envelope_cell_keep_unknown": 1442803,
+            "z_below_0.1": 1279421,
+            "z_above_2.3": 281818,
+            "low_cell_support_keep_unknown": 13099,
+            "hot_above_tau(r=1.42,tau=0.22)": 9513,
+            "hot_above_tau(r=1.44,tau=0.22)": 9462,
+            "hot_above_tau(r=1.45,tau=0.22)": 9455
+          },
+          "person_loss_ratio": null,
+          "furniture_residual_ratio": null,
+          "fg_ratio": 0.3104
+        }
+      }
+    }
+  ],
+  "v3_layer_attribution": {
+    "task": "V3 逐层归因 (B 组背景)",
+    "date": "2026-10-11",
+    "sid": "cap_20261010_180235",
+    "activity": "S6-occlusion",
+    "frames": [
+      91,
+      128
+    ],
+    "group": "B",
+    "rf_threshold": 0.55,
+    "human_n_min": 60,
+    "layers": [
+      "RAW",
+      "LEVELING",
+      "BG_B",
+      "CLEANUP",
+      "PROPOSAL(voxelize+cluster+n_min)",
+      "CLASSIFIER(rf51@0.55)",
+      "TRACKER(pipe.Tracker)"
+    ],
+    "per_person": [
+      {
+        "frame": 91,
+        "id": "obj_f91_n8",
+        "track_id": "P1",
+        "raw": 303,
+        "kept_after_bg": 295,
+        "kept_after_cleanup": 295,
+        "best_proposal_coverage_pts": 295,
+        "loss": "NONE",
+        "bg_top_reasons": [
+          [
+            "z_below_ground",
+            5
+          ],
+          [
+            "bg_voxel_match",
+            3
+          ]
+        ]
+      },
+      {
+        "frame": 128,
+        "id": "obj_f128_n37",
+        "track_id": "P1",
+        "raw": 33,
+        "kept_after_bg": 15,
+        "kept_after_cleanup": 15,
+        "best_proposal_coverage_pts": 15,
+        "loss": "NONE",
+        "bg_top_reasons": [
+          [
+            "bg_voxel_match",
+            17
+          ],
+          [
+            "z_below_ground",
+            1
+          ]
+        ]
+      }
+    ]
+  },
+  "v3_candidate_result": {
+    "task": "V3 S6 候选改进 (不放宽门)",
+    "date": "2026-10-11",
+    "group": "B",
+    "frames": {
+      "f91": {
+        "gt_persons": [
+          {
+            "id": "obj_f91_n8",
+            "frame": 91,
+            "raw": 303,
+            "kept_after_bg": 295,
+            "covered_by_clusters": 295,
+            "orphan": 0,
+            "production_cluster_n": [
+              190,
+              304,
+              273,
+              64
+            ],
+            "orphan_candidate": null
+          }
+        ],
+        "orphan_candidates": []
+      },
+      "f128": {
+        "gt_persons": [
+          {
+            "id": "obj_f128_n37",
+            "frame": 128,
+            "raw": 33,
+            "kept_after_bg": 15,
+            "covered_by_clusters": 15,
+            "orphan": 0,
+            "production_cluster_n": [
+              191,
+              374
+            ],
+            "orphan_candidate": null
+          }
+        ],
+        "orphan_candidates": []
+      }
+    }
+  },
+  "pointnet_preprocessing_ab": {
+    "train": {
+      "n": 708,
+      "uncentered_v3": {
+        "tp": 142,
+        "fp": 504,
+        "fn": 0,
+        "tn": 62
+      },
+      "centered_training_contract": {
+        "tp": 139,
+        "fp": 13,
+        "fn": 3,
+        "tn": 553
+      }
+    },
+    "validation": {
+      "n": 28,
+      "uncentered_v3": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "centered_training_contract": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      }
+    },
+    "test": {
+      "n": 65,
+      "uncentered_v3": {
+        "tp": 65,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "centered_training_contract": {
+        "tp": 58,
+        "fp": 0,
+        "fn": 7,
+        "tn": 0
+      }
+    },
+    "stress": {
+      "n": 58,
+      "uncentered_v3": {
+        "tp": 58,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "centered_training_contract": {
+        "tp": 39,
+        "fp": 0,
+        "fn": 19,
+        "tn": 0
+      }
+    }
+  },
+  "b_furniture_xgb_rescore": {
+    "n": 608,
+    "tp": 0,
+    "fp": 595,
+    "fn": 0,
+    "tn": 13
+  },
+  "current_v2_summaries": [
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175227__rf51_baseline.json",
+      "sha256": "762d017ae2ddbb24a4bd8bf51955908e80b8c770f41c2bbda9e7577e2ebb1c51",
+      "summary": {
+        "sid": "cap_20261010_175227",
+        "activity": "S1-empty-with-furniture",
+        "model": "rf51_baseline",
+        "frames": 304,
+        "gt_known": 304,
+        "gt_unknown": 0,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 0,
+          "fp": 604,
+          "fn": 0
+        },
+        "track": {
+          "tp": 0,
+          "fp": 600,
+          "fn": 0
+        },
+        "furniture_false_positive": 566,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 0,
+            "fp": 604,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "FURNITURE_FALSE_POSITIVE": 304,
+          "UNMATCHED_PREDICTION": 304,
+          "MODEL_DISAGREEMENT": 304
+        },
+        "p95_detection_ms": 18.745699999999488
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175227__xgb69_candidate.json",
+      "sha256": "3c1c5767381da2f9a20239dfe31f042f51e2f534680ce75dac9b01289b89eafa",
+      "summary": {
+        "sid": "cap_20261010_175227",
+        "activity": "S1-empty-with-furniture",
+        "model": "xgb69_candidate",
+        "frames": 304,
+        "gt_known": 304,
+        "gt_unknown": 0,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "track": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 0,
+            "fp": 294,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "MODEL_DISAGREEMENT": 233
+        },
+        "p95_detection_ms": 8.534299999999348
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175429__rf51_baseline.json",
+      "sha256": "0c13c7a2912f68aaef825084e9f51d7c4f68ef238abd8692d5c40feb63a4f150",
+      "summary": {
+        "sid": "cap_20261010_175429",
+        "activity": "S3-walk-x-near",
+        "model": "rf51_baseline",
+        "frames": 258,
+        "gt_known": 258,
+        "gt_unknown": 0,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 258,
+          "fp": 393,
+          "fn": 0
+        },
+        "track": {
+          "tp": 256,
+          "fp": 372,
+          "fn": 2
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 258,
+            "fp": 393,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 258,
+            "fp": 28,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 258,
+            "fp": 28,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 258,
+            "fp": 27,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 258,
+          "MODEL_DISAGREEMENT": 258
+        },
+        "p95_detection_ms": 31.44670000000042
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175429__xgb69_candidate.json",
+      "sha256": "0beebae659229fd263e8d6b8ff1a07f36c9218a417837d6197d73c571236dee1",
+      "summary": {
+        "sid": "cap_20261010_175429",
+        "activity": "S3-walk-x-near",
+        "model": "xgb69_candidate",
+        "frames": 258,
+        "gt_known": 258,
+        "gt_unknown": 0,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "track": {
+          "tp": 256,
+          "fp": 9,
+          "fn": 2
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 258,
+            "fp": 223,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 258,
+            "fp": 19,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 258,
+            "fp": 19,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 258,
+            "fp": 19,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "MODEL_DISAGREEMENT": 178,
+          "UNMATCHED_PREDICTION": 17
+        },
+        "p95_detection_ms": 16.956500000000233
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175553__rf51_baseline.json",
+      "sha256": "8146c0fab53c7943a26e03e902171bc11c4c75454ffd8fd7a0e29dd91b82467e",
+      "summary": {
+        "sid": "cap_20261010_175553",
+        "activity": "S3-walk-y-far",
+        "model": "rf51_baseline",
+        "frames": 464,
+        "gt_known": 99,
+        "gt_unknown": 365,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 99,
+          "fp": 227,
+          "fn": 0
+        },
+        "track": {
+          "tp": 97,
+          "fp": 211,
+          "fn": 2
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 99,
+            "fp": 227,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 87,
+            "fp": 99,
+            "fn": 12
+          },
+          "rf69_candidate": {
+            "tp": 99,
+            "fp": 100,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 99,
+            "fp": 99,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 99,
+          "MODEL_DISAGREEMENT": 463,
+          "GT_UNKNOWN": 365
+        },
+        "p95_detection_ms": 36.43000000000757
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175553__xgb69_candidate.json",
+      "sha256": "14b940d0fea58ecefad77addd42f46be9ebc1a18bf903c4b8e9a342ab43b1c84",
+      "summary": {
+        "sid": "cap_20261010_175553",
+        "activity": "S3-walk-y-far",
+        "model": "xgb69_candidate",
+        "frames": 464,
+        "gt_known": 99,
+        "gt_unknown": 365,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 99,
+          "fp": 97,
+          "fn": 0
+        },
+        "track": {
+          "tp": 97,
+          "fp": 93,
+          "fn": 2
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 99,
+            "fp": 163,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 56,
+            "fp": 97,
+            "fn": 43
+          },
+          "rf69_candidate": {
+            "tp": 99,
+            "fp": 98,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 99,
+            "fp": 97,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 96,
+          "MODEL_DISAGREEMENT": 347,
+          "GT_UNKNOWN": 365
+        },
+        "p95_detection_ms": 43.896000000007916
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175804__rf51_baseline.json",
+      "sha256": "1a7897dff51a29047ea16b211524d73cd2702ff4f48f6c3d0ae32686910e7cf8",
+      "summary": {
+        "sid": "cap_20261010_175804",
+        "activity": "S4-walk-stop-walk",
+        "model": "rf51_baseline",
+        "frames": 239,
+        "gt_known": 11,
+        "gt_unknown": 228,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 11,
+          "fp": 26,
+          "fn": 0
+        },
+        "track": {
+          "tp": 10,
+          "fp": 22,
+          "fn": 1
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 11,
+            "fp": 26,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 11,
+            "fp": 8,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 11,
+            "fp": 8,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 11,
+            "fp": 8,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 11,
+          "MODEL_DISAGREEMENT": 239,
+          "GT_UNKNOWN": 228
+        },
+        "p95_detection_ms": 31.60700000001816
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175804__xgb69_candidate.json",
+      "sha256": "4de56ac22f27bebe2429084b6ad6564a8f331f89493e678bb713605458d907c4",
+      "summary": {
+        "sid": "cap_20261010_175804",
+        "activity": "S4-walk-stop-walk",
+        "model": "xgb69_candidate",
+        "frames": 239,
+        "gt_known": 11,
+        "gt_unknown": 228,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        },
+        "track": {
+          "tp": 10,
+          "fp": 8,
+          "fn": 1
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 11,
+            "fp": 22,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 11,
+            "fp": 9,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 11,
+            "fp": 9,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 11,
+            "fp": 9,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 9,
+          "MODEL_DISAGREEMENT": 182,
+          "GT_UNKNOWN": 228
+        },
+        "p95_detection_ms": 17.109700000000885
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175943__rf51_baseline.json",
+      "sha256": "dca348fb4538421ef797841a56cf50dee6232e3e7c509a1a767e0208f64f0ba1",
+      "summary": {
+        "sid": "cap_20261010_175943",
+        "activity": "S5-turn-in-place",
+        "model": "rf51_baseline",
+        "frames": 202,
+        "gt_known": 6,
+        "gt_unknown": 196,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 6,
+          "fp": 6,
+          "fn": 0
+        },
+        "track": {
+          "tp": 5,
+          "fp": 5,
+          "fn": 1
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 6,
+            "fp": 6,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 6,
+          "MODEL_DISAGREEMENT": 202,
+          "GT_UNKNOWN": 196
+        },
+        "p95_detection_ms": 23.399399999994785
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_175943__xgb69_candidate.json",
+      "sha256": "f3a97bf4601c6e80fda816b80ee185fe498dcdf38e66fbc0ba113a5e1bf4f6a9",
+      "summary": {
+        "sid": "cap_20261010_175943",
+        "activity": "S5-turn-in-place",
+        "model": "xgb69_candidate",
+        "frames": 202,
+        "gt_known": 6,
+        "gt_unknown": 196,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "track": {
+          "tp": 5,
+          "fp": 0,
+          "fn": 1
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 6,
+            "fp": 4,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 6,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "MODEL_DISAGREEMENT": 137,
+          "GT_UNKNOWN": 196
+        },
+        "p95_detection_ms": 9.804199999984121
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_180235__rf51_baseline.json",
+      "sha256": "442e9d5599523ee3dd96ac83f5591b1a7170a8bd45916a55c8ed51616f3da585",
+      "summary": {
+        "sid": "cap_20261010_180235",
+        "activity": "S6-occlusion",
+        "model": "rf51_baseline",
+        "frames": 238,
+        "gt_known": 71,
+        "gt_unknown": 167,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 64,
+          "fp": 139,
+          "fn": 7
+        },
+        "track": {
+          "tp": 60,
+          "fp": 137,
+          "fn": 11
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 64,
+            "fp": 139,
+            "fn": 7
+          },
+          "rf51_candidate": {
+            "tp": 60,
+            "fp": 0,
+            "fn": 11
+          },
+          "rf69_candidate": {
+            "tp": 63,
+            "fp": 1,
+            "fn": 8
+          },
+          "xgb69_candidate": {
+            "tp": 64,
+            "fp": 0,
+            "fn": 7
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 71,
+          "MODEL_DISAGREEMENT": 238,
+          "GT_UNKNOWN": 167,
+          "PERSON_MISS": 7
+        },
+        "p95_detection_ms": 16.019999999989523
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_180235__xgb69_candidate.json",
+      "sha256": "ceb7d112ad01f9473bc00138c295498160de02a579ffdc40156c01e7561496b9",
+      "summary": {
+        "sid": "cap_20261010_180235",
+        "activity": "S6-occlusion",
+        "model": "xgb69_candidate",
+        "frames": 238,
+        "gt_known": 71,
+        "gt_unknown": 167,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 65,
+          "fp": 1,
+          "fn": 6
+        },
+        "track": {
+          "tp": 61,
+          "fp": 1,
+          "fn": 10
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 65,
+            "fp": 92,
+            "fn": 6
+          },
+          "rf51_candidate": {
+            "tp": 60,
+            "fp": 1,
+            "fn": 11
+          },
+          "rf69_candidate": {
+            "tp": 64,
+            "fp": 2,
+            "fn": 7
+          },
+          "xgb69_candidate": {
+            "tp": 65,
+            "fp": 1,
+            "fn": 6
+          }
+        },
+        "risks": {
+          "MODEL_DISAGREEMENT": 206,
+          "GT_UNKNOWN": 167,
+          "UNMATCHED_PREDICTION": 1,
+          "PERSON_MISS": 6
+        },
+        "p95_detection_ms": 8.679300000017975
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_180337__rf51_baseline.json",
+      "sha256": "a8f99f8b7fad186db6ac572813cca780127258df1c085657dc6d399b7547fb67",
+      "summary": {
+        "sid": "cap_20261010_180337",
+        "activity": "S7-far-5m",
+        "model": "rf51_baseline",
+        "frames": 251,
+        "gt_known": 12,
+        "gt_unknown": 239,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 12,
+          "fp": 21,
+          "fn": 0
+        },
+        "track": {
+          "tp": 11,
+          "fp": 18,
+          "fn": 1
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 12,
+            "fp": 21,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 12,
+          "MODEL_DISAGREEMENT": 251,
+          "GT_UNKNOWN": 239
+        },
+        "p95_detection_ms": 19.78320000000531
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_180337__xgb69_candidate.json",
+      "sha256": "55fd2d7916830eb434f39224e603cb92250efb83cf04b3038ad588e84eaa6621",
+      "summary": {
+        "sid": "cap_20261010_180337",
+        "activity": "S7-far-5m",
+        "model": "xgb69_candidate",
+        "frames": 251,
+        "gt_known": 12,
+        "gt_unknown": 239,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 12,
+          "fp": 1,
+          "fn": 0
+        },
+        "track": {
+          "tp": 11,
+          "fp": 1,
+          "fn": 1
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 12,
+            "fp": 13,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 12,
+            "fp": 1,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 12,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 12,
+            "fp": 1,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "GT_UNKNOWN": 239,
+          "MODEL_DISAGREEMENT": 193,
+          "UNMATCHED_PREDICTION": 1
+        },
+        "p95_detection_ms": 16.156600000016624
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_180557__rf51_baseline.json",
+      "sha256": "a94c3268608ee68c4919cafd8235f224fe8c8610099a93ee529ada2a2484b8ef",
+      "summary": {
+        "sid": "cap_20261010_180557",
+        "activity": "S8-still-retention-long",
+        "model": "rf51_baseline",
+        "frames": 523,
+        "gt_known": 53,
+        "gt_unknown": 470,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 53,
+          "fp": 53,
+          "fn": 0
+        },
+        "track": {
+          "tp": 51,
+          "fp": 51,
+          "fn": 2
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 53,
+            "fp": 53,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 53,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 53,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 53,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "UNMATCHED_PREDICTION": 53,
+          "MODEL_DISAGREEMENT": 523,
+          "GT_UNKNOWN": 470
+        },
+        "p95_detection_ms": 18.926299999991897
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_180557__xgb69_candidate.json",
+      "sha256": "d688d5805743646b611450c241e74cd3ca39199dfa13f5ba8d34fea7b60b4021",
+      "summary": {
+        "sid": "cap_20261010_180557",
+        "activity": "S8-still-retention-long",
+        "model": "xgb69_candidate",
+        "frames": 523,
+        "gt_known": 53,
+        "gt_unknown": 470,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "track": {
+          "tp": 51,
+          "fp": 0,
+          "fn": 2
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 53,
+            "fp": 29,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 53,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 53,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 53,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "MODEL_DISAGREEMENT": 308,
+          "GT_UNKNOWN": 470
+        },
+        "p95_detection_ms": 10.01579999999376
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_180751__rf51_baseline.json",
+      "sha256": "f54ddee6ef3475c75eab3422a63f37fb9eb20e6bfbd917c4b16b4893063aa3e6",
+      "summary": {
+        "sid": "cap_20261010_180751",
+        "activity": "S9-two-person-cross",
+        "model": "rf51_baseline",
+        "frames": 126,
+        "gt_known": 0,
+        "gt_unknown": 126,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "track": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "GT_UNKNOWN": 126,
+          "MODEL_DISAGREEMENT": 126
+        },
+        "p95_detection_ms": 30.069099999964237
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    },
+    {
+      "path": "docs\\human_capture\\evidence\\2026-10-11_human_fusion_demo_v2_r1\\cap_20261010_180751__xgb69_candidate.json",
+      "sha256": "801f76b79d3f1a5f9de6ac5a5d07e39c6a38dbe125d27defbb9fc112153bfd1d",
+      "summary": {
+        "sid": "cap_20261010_180751",
+        "activity": "S9-two-person-cross",
+        "model": "xgb69_candidate",
+        "frames": 126,
+        "gt_known": 0,
+        "gt_unknown": 126,
+        "duplicate_ids": 0,
+        "candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "track": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "furniture_false_positive": 0,
+        "same_candidate": {
+          "rf51_baseline": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf51_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "rf69_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "xgb69_candidate": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "risks": {
+          "GT_UNKNOWN": 126,
+          "MODEL_DISAGREEMENT": 115
+        },
+        "p95_detection_ms": 16.73410000000149
+      },
+      "candidate_counts_equal": true,
+      "track_counts_equal": true
+    }
+  ],
+  "limits": [
+    "B furniture labels inherited same-session overlap GT; independent furniture generalization UNKNOWN.",
+    "No new V3 detector integration, browser run or skeleton accuracy test.",
+    "V3 report loss percentages do not imply downstream detection gains."
+  ]
+}

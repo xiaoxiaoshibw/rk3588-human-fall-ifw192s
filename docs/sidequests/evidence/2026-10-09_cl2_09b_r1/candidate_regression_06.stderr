@@ -1,0 +1,75 @@
+test_candidate_python38_syntax (test_selector.SelectorTest.test_candidate_python38_syntax) ... ok
+test_complete_small_corpus_matches_feasibility_oracle (test_selector.SelectorTest.test_complete_small_corpus_matches_feasibility_oracle) ... ok
+test_duplicate_keys_cannot_displace_valid_four (test_selector.SelectorTest.test_duplicate_keys_cannot_displace_valid_four) ... ok
+test_frozen_success_and_determinism_and_caller_ownership (test_selector.SelectorTest.test_frozen_success_and_determinism_and_caller_ownership) ... ok
+test_gate_boundary_and_profiles_unchanged (test_selector.SelectorTest.test_gate_boundary_and_profiles_unchanged) ... ok
+test_known_five_cell_false_rejection (test_selector.SelectorTest.test_known_five_cell_false_rejection) ... ok
+test_large_greedy_failure_has_feasible_alternative (test_selector.SelectorTest.test_large_greedy_failure_has_feasible_alternative) ... ok
+test_tied_feasible_fallback_keeps_first_sorted_combo (test_selector.SelectorTest.test_tied_feasible_fallback_keeps_first_sorted_combo) ... ok
+test_true_insufficiency_and_condition_failure_still_rejected (test_selector.SelectorTest.test_true_insufficiency_and_condition_failure_still_rejected) ... ok
+test_v3_defers_to_repaired_v2_without_fine_reselection (test_selector.SelectorTest.test_v3_defers_to_repaired_v2_without_fine_reselection) ... ok
+test_dense_table_never_wins_and_mixed_height_cells_are_not_ground (floor_detector_test.FloorDetectorTest.test_dense_table_never_wins_and_mixed_height_cells_are_not_ground) ... ok
+test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes (floor_detector_test.FloorDetectorTest.test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes) ... ok
+test_table_without_visible_floor_is_rejected (floor_detector_test.FloorDetectorTest.test_table_without_visible_floor_is_rejected) ... ok
+test_adjacent_clean_cells_insufficient_support (floor_sheet_test.FloorSheetTest.test_adjacent_clean_cells_insufficient_support) ... ok
+test_bridge_requires_contact_and_bounded_gap (floor_sheet_test.FloorSheetTest.test_bridge_requires_contact_and_bounded_gap) ... ok
+test_clean_cell_normal_direction_regression (floor_sheet_test.FloorSheetTest.test_clean_cell_normal_direction_regression) ... ok
+test_contact_bridge_merges_fragmented_sheet (floor_sheet_test.FloorSheetTest.test_contact_bridge_merges_fragmented_sheet) ... ok
+test_leg_on_continuous_floor_identity_ok (floor_sheet_test.FloorSheetTest.test_leg_on_continuous_floor_identity_ok) ... ok
+test_low_platforms_with_empty_gaps_identity_rejected (floor_sheet_test.FloorSheetTest.test_low_platforms_with_empty_gaps_identity_rejected) ... ok
+test_out_of_band_surface_not_floor (floor_sheet_test.FloorSheetTest.test_out_of_band_surface_not_floor) ... ok
+test_scattered_clean_cells_on_one_sheet_succeed (floor_sheet_test.FloorSheetTest.test_scattered_clean_cells_on_one_sheet_succeed) ... ok
+test_scattered_coplanar_patches_identity_rejected (floor_sheet_test.FloorSheetTest.test_scattered_coplanar_patches_identity_rejected) ... ok
+test_small_satellite_fragment_ignored (floor_sheet_test.FloorSheetTest.test_small_satellite_fragment_ignored) ... ok
+test_undulating_floor_stays_connected (floor_sheet_test.FloorSheetTest.test_undulating_floor_stays_connected) ... ok
+test_v1_success_passthrough (floor_sheet_test.FloorSheetTest.test_v1_success_passthrough) ... ok
+test_fine_boxes_keep_purity_gates (floor_roi_test.FineRoiTest.test_fine_boxes_keep_purity_gates) ... ok
+test_fine_roi_insufficient_when_even_fine_dirty (floor_roi_test.FineRoiTest.test_fine_roi_insufficient_when_even_fine_dirty) ... ok
+test_fine_roi_succeeds_where_25cm_fails (floor_roi_test.FineRoiTest.test_fine_roi_succeeds_where_25cm_fails) ... ok
+test_v3_identity_rejected (floor_roi_test.FineRoiTest.test_v3_identity_rejected) ... ok
+test_v3_returns_v1_verbatim (floor_roi_test.FineRoiTest.test_v3_returns_v1_verbatim) ... ok
+test_v3_returns_v2_verbatim_when_25cm_ok (floor_roi_test.FineRoiTest.test_v3_returns_v2_verbatim_when_25cm_ok) ... ok
+test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board) ... [18:41:38] "GET /api/leveling/sessions HTTP/1.1" 200 -
+[18:41:38] "GET /api/leveling/source?sid=cap_20990101_000001 HTTP/1.1" 200 -
+[18:41:39] "POST /api/leveling/run HTTP/1.1" 400 -
+[18:41:39] "POST /api/leveling/run HTTP/1.1" 409 -
+[18:41:39] "POST /api/leveling/run HTTP/1.1" 202 -
+[18:41:39] "GET /api/leveling/job?id=9b78cafd7a6d4ad5b7e4a63afb908f30 HTTP/1.1" 200 -
+[18:41:39] "GET /api/leveling/job?id=9b78cafd7a6d4ad5b7e4a63afb908f30 HTTP/1.1" 200 -
+[18:41:39] "GET /api/leveling/job?id=9b78cafd7a6d4ad5b7e4a63afb908f30 HTTP/1.1" 200 -
+[18:41:39] "GET /api/leveling/job?id=9b78cafd7a6d4ad5b7e4a63afb908f30 HTTP/1.1" 200 -
+[18:41:39] "GET /api/leveling/artifact?id=9b78cafd7a6d4ad5b7e4a63afb908f30&method=tls&name=dataset.zip HTTP/1.1" 200 -
+[18:41:39] "POST /api/leveling/run HTTP/1.1" 202 -
+[18:41:39] "GET /api/leveling/job?id=fccb73e8d6f94a98aaf1b516b28b13c4 HTTP/1.1" 200 -
+[18:41:39] "POST /api/leveling/run HTTP/1.1" 202 -
+[18:41:39] "GET /api/leveling/job?id=4ca69fd12119424a871720d78bd1f798 HTTP/1.1" 200 -
+[18:41:39] "GET /api/leveling/job?id=4ca69fd12119424a871720d78bd1f798 HTTP/1.1" 200 -
+[18:41:39] "POST /api/leveling/run HTTP/1.1" 202 -
+[18:41:39] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:39] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:39] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:39] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/job?id=349bd5ddcf434892ab81dd3b8d6b2461 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/leveled_latest?sid=cap_20990101_000002 HTTP/1.1" 200 -
+[18:41:40] "GET /api/leveling/leveled_latest?sid=nonexistent_ HTTP/1.1" 404 -
+ok
+test_line_domain_and_ls_majority_cannot_override_conflict (leveling_test.WorkbenchTest.test_line_domain_and_ls_majority_cannot_override_conflict) ... ok
+test_request_boundary_source_drift_and_owned_config (leveling_test.WorkbenchTest.test_request_boundary_source_drift_and_owned_config) ... ok
+test_transform_export_and_frozen_disjoint_rows (leveling_test.WorkbenchTest.test_transform_export_and_frozen_disjoint_rows) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 19.383s
+
+OK

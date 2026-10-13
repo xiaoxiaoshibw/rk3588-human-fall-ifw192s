@@ -1,0 +1,51 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>静立人保留 · P（仅在线） vs v2（融合删除）</title>
+<style>
+body{margin:0;background:#111922;color:#e6edf4;font:14px system-ui}header{padding:14px 16px;border-bottom:1px solid #354150}
+h1{font-size:20px;margin:0 0 8px}button,select,input{padding:6px;background:#243347;color:white;border:1px solid #586577;border-radius:4px}
+label{margin-right:12px}.dim{color:#9da9b5}.wrap{display:flex;height:calc(100vh - 140px);min-height:420px}
+#view{flex:1;min-width:0;position:relative}canvas{display:block}
+aside{width:360px;border-left:1px solid #354150;padding:12px;overflow:auto;font-size:13px}
+aside h3{margin:10px 0 6px;font-size:14px}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+#stats{background:#1c2834;padding:10px;border-radius:6px;line-height:1.7}#modeDesc{color:#c8d3de;line-height:1.6;margin-top:6px}
+.note{color:#9da9b5;font-size:12px;line-height:1.6;margin-top:10px}
+</style>
+<header><h1>静立人保留 · 现状 P（仅在线） vs v2（融合删除）— HR-RET-V2 inc2 效果视图</h1>
+<div><label>会话 <select id="session"></select></label><label>帧 <input id="frame" type="range" min="0" max="7" value="0" style="width:220px;vertical-align:middle"></label><span id="frameLabel" class="dim"></span></div>
+<div style="margin-top:8px">
+<label><input type="radio" name="mode" value="input"> 原始</label>
+<label><input type="radio" name="mode" value="p"> ① 现状 P（仅在线）</label>
+<label><input type="radio" name="mode" value="v2" checked> ② v2（参考 ∨ 在线∧参考支持）</label>
+<label><input type="radio" name="mode" value="diff"> ③ 救回高亮</label>
+<label><input type="checkbox" id="refvox"> 显示空场模板体素</label>
+<label><input type="checkbox" id="refpts" checked> 显示空场模板原始点（233658 抽样）</label>
+<button id="home">归位</button>
+</div>
+<div class="dim" style="margin-top:6px;font-size:12px">鼠标左键旋转 / 滚轮缩放 / 右键平移。坐标=对齐到空场会话的配平系；裁剪区=人位±1.9m、z∈[−0.15,2.4]m。数据与计数为显示抽稀后（比例与全量一致）。</div>
+</header>
+<div class="wrap"><div id="view"></div><aside>
+<h3>当前视图</h3><div id="modeDesc"></div>
+<h3>本帧统计</h3><div id="stats"></div>
+<h3>图例</h3>
+<div><span class="sw" style="background:#8fd0ff"></span>两臂都保留（真前景）</div>
+<div><span class="sw" style="background:#51e3a5"></span>救回·人通道（链判确认，绿）</div>
+<div><span class="sw" style="background:#e0b050"></span>救回·几何候选（硬门过、证据门未过）</div>
+<div><span class="sw" style="background:#5d6b4f"></span>救回·链判非人（家具泄漏，如桌子）</div>
+<div><span class="sw" style="background:#59636b"></span>救回·未成簇/被清理</div>
+<div><span class="sw" style="background:#4f7d63"></span>空场模板原始点（233658 抽样，默认开）</div>
+<div><span class="sw" style="background:#ff4d5e"></span>P 误删（模式①点级）</div>
+<div><span class="sw" style="background:#2b2f36"></span>v2 删除（参考命中 / 在线∧参考支持）</div>
+<div><span class="sw" style="background:#4a4f58"></span>预剔除（地面/范围/工作空间）</div>
+<div class="note">诊断口径：artifact 现因代码绑定漂移为 STALE，本视图直读其 transform（非生产消费）；参考层/在线层与 A/B、inc2 digest 同参。<br>
+v2 链逐帧：人进候选、3/5 时间确认（帧行见统计区）。<br>
+绿点=空场模板体素（occ≥0.5，共 <span id="refvoxCount"></span> 个）。</div>
+</aside></div>
+<script src="../../../../pc_apps/human_replay/vendor/three.min.js"></script>
+<script src="../../../../pc_apps/human_replay/vendor/OrbitControls.js"></script>
+<script src="v2_view_refvox.js"></script>
+<script src="v2_view_refpts.js"></script>
+<script src="v2_view_data_cap_20261007_215540.js"></script>
+<script src="v2_view_data_cap_20261007_215623.js"></script>
+<script src="v2_view_data_cap_20261007_215643.js"></script>
+<script src="v2_view.js"></script>
+<script>document.getElementById("refvoxCount").textContent=(window.RETV2_REFVOX||[]).length;</script>
+</html>

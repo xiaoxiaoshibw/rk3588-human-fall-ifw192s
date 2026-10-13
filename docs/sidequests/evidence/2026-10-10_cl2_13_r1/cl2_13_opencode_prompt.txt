@@ -1,0 +1,74 @@
+你是 CL2-13 独立复算审计员，实际指定模型 opencode-go/deepseek-v4.1-flash。你有 read 与
+受限 bash 两个工具；bash 严格限两类：(1) 执行 `python <脚本名>` 且脚本必须位于
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_13_r1/（CLAUDE.md 约定 JSON 目录名
+2026-10-10_cl2_13_r1），(2) 对本仓库文件的只读管道（cat/head/tail/grep/find）。违反者
+拒绝执行并把该项 UNKNOWN。
+
+【本轮背景】CL2-12 修正版经上一轮只读评审"有条件接受"，评审指出其证据缺口："初版
+FAIL 后完成修复，不等于最终版本已经独立 PASS"，指示 CL2-13A = 修正版本独立复算（验证
+截距、M1/M2、空间 CV、冻结回归和 manifest），CL2-13B = E3 输入清单/精度预算/判别规则/
+停止条件准备。本轮作者（Claude）已完成独立重实现，在复算过程中**发现 CL2-12 修正版的
+M3 设计矩阵仍带一个 baseline 索引 bug（下称 F-AUTHOR-1）**，必须在移交给 E3 设计之前由
+你独立复现或反驳。
+
+【你的任务（1）— 复现 / 反驳 F-AUTHOR-1】
+
+作者主张：CL2-12 `02_identifiability.py` 的 `design_m3` 有如下构造
+```
+ridx = {r: i-1 for i, r in enumerate(r_levels)}
+cidx = {c: (g-1)+i-1 for i, c in enumerate(c_levels)}
+```
+对 baseline cell `c_levels[0]`，`cidx = g-2`，会把该 cell 的行错加进"最后一个 ring 哑元"
+列。作者给了三条独立证据：(a) 用写法正确的设计替换后拟合值 max|diff|=0.0816 m；
+(b) QR 投影残差 13.33（投 CL2-12 空间）vs 5.5e-12（投正确空间）；(c) ROI2/w0.05 正确
+σ²=119.70 µm² vs 公布 142.56 µm²。
+
+请你不盲信、独立验证：
+1. 读 `02_identifiability.py` 中 `design_m3` 的真实列构造（注意 baseline cell 的 cidx），
+   读 `03_within_ring.py` 的 CV 段（c_levels 是否用 plain sorted 与 02 的 morton 不同 →
+   这是作者的 F-AUTHOR-2: 02/03 基线 cell 不同）。
+2. 在本目录跑作者的 **`03_verify_minimal.py`**（单文件 ~1 分钟），它把**资产 SHA、frame72
+   冻结回归、F-AUTHOR-1 σ² 对比、M1/M2 独立留出、空间 CV M3** 全部一次走完且与脚本
+   零依赖（你可以逐行核）。比对它的 stdout 与本目录 02_RECOMPUTE_ANALYSIS.md 的主张。
+3. 若 03 结果与作者主张一致，F-AUTHOR-1/F-AUTHOR-2 给 **CONFIRMED**；若有任一不一致，
+   列出你的反例；若你另行重算得到不同数字，给出你的命令与数字。
+4. 判定：F-AUTHOR-1 = CONFIRMED/REFUTED/PARTIALLY_CONFIRMED；F-AUTHOR-2 = 同。
+
+【你的任务（2）— 常规独立复算（评审点名的五项）】
+
+在不受 F-AUTHOR-1 影响的范围，独立核对（用你自己的命令，别只抄作者输出）：
+- **冻结回归**：frame72 ROI2 300 点 RMS / P95(abs, 线性插值)。作者复算
+  RMS=27.417988 mm / P95=50.291869360 mm，与冻结值 <1e-9。你独立重跑一次。
+- **manifest**：CL2-12 目录 28 文件 SHA 逐点（作者：全过）。抽样至少 8 个关键文件重算核对。
+- **截距**：M3 留出预测含截距（m3_intercept_m ≠ 0 参与 pred）；公布值 −174.0 mm
+  （ROI2/w0.05，受 F-AUTHOR-1 影响；正确修正 −145.8 mm）。你独立判"截距确实参与 pred"
+  这一**结构修正**是否成立（这是上一轮 audit finding #1 的核心）。
+- **M1/M2 独立性**：修正版改为独立拟合而非 M3 切片（上一轮 audit finding #2 核心）。
+  独立复算若干组留出 RMSE（至少 ROI2/w0.05: M1=17.58, M2=16.21, M3=12.09 mm 公布的
+  忠实复算；以及 M3 正确化后 ~10.99 mm）。判定修正版 M1/M2 **拟合口径**是否纠正。
+- **空间 CV**：Morton 5-fold 空间留出 M1=18.22 / M3=111.62 mm（ROI2/w0.05，忠实于其 bug
+  设计）；判定"空间外推失败"的方向是否受 F-AUTHOR-1 翻转。
+
+【你的任务（3）— 影响判定】
+
+CL2-12 修正版最终六项裁定（CROSS_COVERAGE PASS / STATISTICAL_IDENTIFIABILITY FAIL /
+HOLDOUT_GENERALIZATION FAIL / PHYSICAL_CAUSAL_IDENTIFICATION UNKNOWN / READY_FOR_E3 YES /
+READY_FOR_ALGORITHM_REPAIR NO）是否因 F-AUTHOR-1 而**方向翻转或需补充脚注**？逐项判断，
+别把"数值被高估"直接等同于"裁定作废"——按上轮 CL2-12 00 验收表的预注册门执行语义评估。
+
+【必读文件（先读再跑）】
+- 本目录 00_SCOPE_AND_ACCEPTANCE.md（CL2-13 冻结验收表）
+- 本目录 02_independent_recompute.py（作者实现的全量复核逻辑，可跑可审；跑得较慢可只看）
+- 本目录 **03_verify_minimal.py**（单文件快速复算通道，~1 分钟）
+- 本目录 02_RECOMPUTE_ANALYSIS.md + 02_RECOMPUTE_RESULTS.json（作者主张与落盘数字）
+- 本目录 05_E3_PREREGISTRATION_DESIGN.md（B 包，仅做"判别矩阵是否穷尽"审计，不重写）
+- CL2-12 目录 02_identifiability.py、03_within_ring.py、04_HOLDOUT_VALIDATION.md、
+  02_IDENTIFIABILITY_RESULTS.json、03_WITHIN_RING_DATA.json、06_INDEPENDENT_REVIEW.md、
+  FINAL_REPORT.md（被复核对象；只读，其 manifest SHA 已冻结）
+
+【裁决输出要求】
+- 逐 ID（I130..I134、T1301、T1302）给 PASS/FAIL/BLOCKED/UNKNOWN；
+- 对 F-AUTHOR-1 给 CONFIRMED/REFUTED/PARTIALLY_CONFIRMED + 证据；
+- 对 CL2-12 修正版六项裁定方向稳定性给出"保持/需脚注/需降级"判定；
+- 作者未亲自核验的部分一律 UNKNOWN，不虚构执行；
+- 结束写 AUDIT_COMPLETE。

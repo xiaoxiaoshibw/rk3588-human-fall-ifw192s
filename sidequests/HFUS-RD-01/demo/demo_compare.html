@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>HFUS-RD-01 对照工作台</title>
+<style>
+  body{margin:0;font:13px/1.4 system-ui,sans-serif;background:#101114;color:#dde}
+  #bar{padding:6px 10px;border-bottom:1px solid #333;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  #bar label{display:flex;align-items:center;gap:4px;cursor:pointer}
+  #view{display:grid;grid-template-columns:1fr 1fr;gap:2px;height:calc(100vh - 42px)}
+  .pane{position:relative;background:#0a0b0d}
+  .pane canvas{width:100%;height:100%;display:block}
+  .label{position:absolute;top:4px;left:6px;background:#000a;padding:2px 6px;font-size:11px;border-radius:3px;pointer-events:none}
+  select,button,input[type=range]{background:#222;color:#dde;border:1px solid #444;padding:3px 6px}
+  .on{background:#345}
+  #cases{position:absolute;right:8px;top:6px;background:#000a;padding:4px 8px;font-size:11px;text-align:right}
+</style>
+</head>
+<body>
+<div id="bar">
+  <label>会话 <select id="sid"></select></label>
+  <label>变体 <select id="variant"></select></label>
+  <label>帧 <input type="range" id="frame" min="0" value="0" style="width:200px"> <span id="fi">0</span>/<span id="fmax">?</span></label>
+  <button id="prev">⟨</button><button id="play">▶</button><button id="next">⟩</button><button id="reset">reset</button>
+  <label><input type="checkbox" id="showMain" checked>mainline 候选</label>
+  <label><input type="checkbox" id="showGT" checked>GT</label>
+  <label><input type="checkbox" id="showVariant" checked>变体候选</label>
+  <label><input type="checkbox" id="showBgDel">BG 删点</label>
+  <div id="cases">案例: <span id="caseHint">载入中…</span></div>
+</div>
+<div id="view">
+  <div class="pane"><canvas id="cvL"></canvas><div class="label" id="labL">左: mainline</div></div>
+  <div class="pane"><canvas id="cvR"></canvas><div class="label" id="labR">右: 选择变体</div></div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+let meta=null, cur={sid:null, fi:0, variant:'C0', playing:false, timer:null, payload:null};
+const COLORS = {mainline:'#f6b73c', acc:'#4ad07a', gt:'#ff5252', variant:'#7fceff',
+                bgdel:'#666', readd:'#9df', valid:'#2e5a77'};
+
+async function j(url){const r=await fetch(url);return r.json();}
+
+function draw(cv, payload, mode){
+  const ctx=cv.getContext('2d');
+  const W=cv.width=cv.clientWidth*devicePixelRatio, H=cv.height=cv.clientHeight*devicePixelRatio;
+  ctx.fillStyle='#0a0b0d'; ctx.fillRect(0,0,W,H);
+  if(!payload) return;
+  // 全帧 fit
+  let pts=[];
+  const push=(a,c,r)=>{for(const p of a) pts.push([p[0],p[1],c,r]);};
+  if(mode==='L'){
+    if($('showBgDel').checked) push(payload.diag.bg_deleted_ids||[], COLORS.bgdel, 1);
+    if($('showVariant').checked) push(payload.diag.final_ids||[], COLORS.valid, 1);
+    if($('showMain').checked){
+      for(const c of payload.mainline){
+        const col = c.decision==='CONFIRMED_HUMAN'?COLORS.acc:COLORS.mainline;
+        push(c.pts, col, 2);
+      }
+    }
+    if($('showGT').checked) for(const g of payload.gt) push(g.pts, COLORS.gt, 2);
+    $('labL').textContent=`左: mainline 候选=${payload.mainline.length} acc=${payload.mainline.filter(c=>c.decision==='CONFIRMED_HUMAN').length} GT=${payload.gt.length}`;
+  } else {
+    const vn=$('variant').value;
+    if($('showBgDel').checked) push(payload.diag.bg_deleted_ids||[], COLORS.bgdel, 1);
+    if($('showGT').checked) for(const g of payload.gt) push(g.pts, COLORS.gt, 2);
+    if($('showVariant').checked){
+      for(const c of (payload.variants[vn]||[])) push(c.pts, COLORS.variant, 2);
+    }
+    $('labR').textContent=`右: ${vn} 候选=${(payload.variants[vn]||[]).length}`;
+  }
+  if(!pts.length) return;
+  let xmin=1e9,xmax=-1e9,ymin=1e9,ymax=-1e9;
+  for(const p of pts){xmin=Math.min(xmin,p[0]);xmax=Math.max(xmax,p[0]);ymin=Math.min(ymin,p[1]);ymax=Math.max(ymax,p[1]);}
+  const sc=Math.min(W/(xmax-xmin+0.1), H/(ymax-ymin+0.1))*0.92;
+  const cx=(xmin+xmax)/2, cy=(ymin+ymax)/2;
+  for(const p of pts){
+    const sx=(p[0]-cx)*sc+W/2, sy=H/2-(p[1]-cy)*sc;
+    ctx.fillStyle=p[2]; ctx.fillRect(sx-p[3],sy-p[3],p[3]*2,p[3]*2);
+  }
+}
+
+async function load(){
+  const p=await j(`/api/frame?sid=${cur.sid}&fi=${cur.fi}`);
+  cur.payload=p;
+  draw($('cvL'), p, 'L');
+  draw($('cvR'), p, 'R');
+  $('fi').textContent=cur.fi;
+  $('fmax').textContent=(meta.sids.find(s=>s.sid===cur.sid)||{}).frames-1;
+  $('frame').max=(meta.sids.find(s=>s.sid===cur.sid)||{}).frames-1;
+  $('frame').value=cur.fi;
+}
+
+async function init(){
+  meta=await j('/api/meta');
+  $('sid').innerHTML=meta.sids.map(s=>`<option value="${s.sid}">${s.short} (${s.frames}f)</option>`).join('');
+  $('variant').innerHTML=meta.variants.filter(v=>v!=='mainline').map(v=>`<option>${v}</option>`).join('');
+  cur.sid=meta.sids[0].sid;
+  const cb=await j('/api/casebook');
+  $('caseHint').textContent=cb.text ? '已注册' : '待写';
+  await load();
+}
+$('sid').onchange=e=>{cur.sid=e.target.value;cur.fi=0;load();};
+$('variant').onchange=e=>{cur.variant=e.target.value;load();};
+$('frame').oninput=e=>{cur.fi=+e.target.value;load();};
+$('prev').onclick=()=>{cur.fi=Math.max(0,cur.fi-1);load();};
+$('next').onclick=()=>{const mx=+$('frame').max;cur.fi=Math.min(mx,cur.fi+1);load();};
+$('reset').onclick=()=>{cur.fi=0;load();};
+$('play').onclick=()=>{
+  cur.playing=!cur.playing;
+  $('play').textContent=cur.playing?'⏸':'▶';
+  if(cur.playing){cur.timer=setInterval(()=>{const mx=+$('frame').max;if(cur.fi>=mx){cur.playing=false;$('play').textContent='▶';clearInterval(cur.timer);}else{cur.fi++;load();}},300);}
+  else clearInterval(cur.timer);
+};
+['showMain','showGT','showVariant','showBgDel'].forEach(id=>$(id).onchange=()=>{draw($('cvL'),cur.payload,'L');draw($('cvR'),cur.payload,'R');});
+window.onresize=()=>{draw($('cvL'),cur.payload,'L');draw($('cvR'),cur.payload,'R');};
+init();
+</script>
+</body>
+</html>

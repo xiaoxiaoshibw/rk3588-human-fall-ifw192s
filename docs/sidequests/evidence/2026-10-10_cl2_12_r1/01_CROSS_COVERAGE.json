@@ -1,0 +1,524 @@
+{
+  "input_sha": {
+    "bin_full_sha256_ok": true,
+    "bin_sha256": "97def5d21c28d695c686bb79b255fddd4f666ea856c39593f5dff567506017fc",
+    "npz_arrays": {
+      "source_points": [
+        136942,
+        3
+      ],
+      "source_rows": [
+        136942
+      ],
+      "region_codes": [
+        136942
+      ],
+      "frame_ordinals": [
+        136942
+      ],
+      "holdout_rows": [
+        1915
+      ],
+      "holdout_regions": [
+        1915
+      ],
+      "holdout_ordinals": [
+        1915
+      ]
+    }
+  },
+  "gates": {
+    "min_ring_pts": 50,
+    "min_cell_pts": 20,
+    "multiring_share_min": 0.5,
+    "cond_max": 10000.0
+  },
+  "per_roi": {
+    "1": {
+      "n_points": 45117,
+      "n_rings_raw": 21,
+      "n_rings_effective": 18,
+      "scales": {
+        "0.05": {
+          "n_cells": 36,
+          "n_ring_groups": 18,
+          "cells_per_ring_quantiles": [
+            2.0,
+            6.5,
+            11.0,
+            11.0,
+            13.0
+          ],
+          "rings_per_cell_quantiles": [
+            1.0,
+            4.0,
+            5.0,
+            5.25,
+            7.0
+          ],
+          "multiring_cell_share": 0.9722222222222222,
+          "multiring_point_share": 0.9979608573265066,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.11515151515151516,
+          "n_edges": 165,
+          "design_rank": 53,
+          "design_n_params": 53,
+          "design_cond": 34.63612825972333,
+          "singleton_cells": 0,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 0.9979608573265066,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        },
+        "0.10": {
+          "n_cells": 12,
+          "n_ring_groups": 18,
+          "cells_per_ring_quantiles": [
+            2.0,
+            4.0,
+            5.0,
+            5.0,
+            6.0
+          ],
+          "rings_per_cell_quantiles": [
+            3.0,
+            4.0,
+            6.5,
+            8.25,
+            11.0
+          ],
+          "multiring_cell_share": 1.0,
+          "multiring_point_share": 1.0,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.07692307692307693,
+          "n_edges": 78,
+          "design_rank": 29,
+          "design_n_params": 29,
+          "design_cond": 28.92709528096858,
+          "singleton_cells": 0,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 1.0,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        },
+        "0.15": {
+          "n_cells": 6,
+          "n_ring_groups": 18,
+          "cells_per_ring_quantiles": [
+            1.0,
+            2.0,
+            3.0,
+            3.0,
+            4.0
+          ],
+          "rings_per_cell_quantiles": [
+            4.0,
+            6.0,
+            6.5,
+            10.75,
+            12.0
+          ],
+          "multiring_cell_share": 1.0,
+          "multiring_point_share": 1.0,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.0,
+          "n_edges": 47,
+          "design_rank": 23,
+          "design_n_params": 23,
+          "design_cond": 30.916799745753664,
+          "singleton_cells": 0,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 1.0,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        }
+      }
+    },
+    "2": {
+      "n_points": 63959,
+      "n_rings_raw": 20,
+      "n_rings_effective": 18,
+      "scales": {
+        "0.05": {
+          "n_cells": 36,
+          "n_ring_groups": 18,
+          "cells_per_ring_quantiles": [
+            5.0,
+            11.0,
+            11.0,
+            12.0,
+            12.0
+          ],
+          "rings_per_cell_quantiles": [
+            2.0,
+            4.75,
+            6.0,
+            7.0,
+            8.0
+          ],
+          "multiring_cell_share": 1.0,
+          "multiring_point_share": 1.0,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.14358974358974358,
+          "n_edges": 195,
+          "design_rank": 53,
+          "design_n_params": 53,
+          "design_cond": 30.395453000847024,
+          "singleton_cells": 0,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 1.0,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        },
+        "0.10": {
+          "n_cells": 16,
+          "n_ring_groups": 18,
+          "cells_per_ring_quantiles": [
+            3.0,
+            4.0,
+            6.0,
+            7.75,
+            8.0
+          ],
+          "rings_per_cell_quantiles": [
+            2.0,
+            3.75,
+            7.0,
+            10.0,
+            10.0
+          ],
+          "multiring_cell_share": 1.0,
+          "multiring_point_share": 1.0,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.12380952380952381,
+          "n_edges": 105,
+          "design_rank": 33,
+          "design_n_params": 33,
+          "design_cond": 30.844461446720672,
+          "singleton_cells": 0,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 1.0,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        },
+        "0.15": {
+          "n_cells": 6,
+          "n_ring_groups": 18,
+          "cells_per_ring_quantiles": [
+            2.0,
+            3.0,
+            3.0,
+            3.75,
+            6.0
+          ],
+          "rings_per_cell_quantiles": [
+            8.0,
+            9.25,
+            11.0,
+            12.0,
+            12.0
+          ],
+          "multiring_cell_share": 1.0,
+          "multiring_point_share": 1.0,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.047619047619047616,
+          "n_edges": 63,
+          "design_rank": 23,
+          "design_n_params": 23,
+          "design_cond": 28.040678570236373,
+          "singleton_cells": 0,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 1.0,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        }
+      }
+    },
+    "3": {
+      "n_points": 20428,
+      "n_rings_raw": 11,
+      "n_rings_effective": 11,
+      "scales": {
+        "0.05": {
+          "n_cells": 35,
+          "n_ring_groups": 11,
+          "cells_per_ring_quantiles": [
+            3.0,
+            8.5,
+            11.0,
+            12.0,
+            13.0
+          ],
+          "rings_per_cell_quantiles": [
+            1.0,
+            3.0,
+            3.0,
+            4.0,
+            4.0
+          ],
+          "multiring_cell_share": 0.9714285714285714,
+          "multiring_point_share": 0.9914333268063442,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.21100917431192662,
+          "n_edges": 109,
+          "design_rank": 45,
+          "design_n_params": 45,
+          "design_cond": 37.72041891512124,
+          "singleton_cells": 1,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 0.9914333268063442,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        },
+        "0.10": {
+          "n_cells": 15,
+          "n_ring_groups": 11,
+          "cells_per_ring_quantiles": [
+            2.0,
+            5.0,
+            5.0,
+            7.0,
+            8.0
+          ],
+          "rings_per_cell_quantiles": [
+            2.0,
+            3.0,
+            4.0,
+            5.0,
+            6.0
+          ],
+          "multiring_cell_share": 1.0,
+          "multiring_point_share": 1.0,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.16393442622950818,
+          "n_edges": 61,
+          "design_rank": 25,
+          "design_n_params": 25,
+          "design_cond": 31.63806580515834,
+          "singleton_cells": 1,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 1.0,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        },
+        "0.15": {
+          "n_cells": 8,
+          "n_ring_groups": 11,
+          "cells_per_ring_quantiles": [
+            2.0,
+            3.0,
+            3.0,
+            4.5,
+            6.0
+          ],
+          "rings_per_cell_quantiles": [
+            2.0,
+            4.25,
+            5.5,
+            6.25,
+            7.0
+          ],
+          "multiring_cell_share": 1.0,
+          "multiring_point_share": 1.0,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.125,
+          "n_edges": 40,
+          "design_rank": 18,
+          "design_n_params": 18,
+          "design_cond": 29.23646923973601,
+          "singleton_cells": 1,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 1.0,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        }
+      }
+    },
+    "4": {
+      "n_points": 7438,
+      "n_rings_raw": 6,
+      "n_rings_effective": 5,
+      "scales": {
+        "0.05": {
+          "n_cells": 32,
+          "n_ring_groups": 5,
+          "cells_per_ring_quantiles": [
+            6.0,
+            8.0,
+            9.0,
+            10.0,
+            10.0
+          ],
+          "rings_per_cell_quantiles": [
+            1.0,
+            1.0,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "multiring_cell_share": 0.34375,
+          "multiring_point_share": 0.39822532938962085,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.18604651162790697,
+          "n_edges": 43,
+          "design_rank": 36,
+          "design_n_params": 36,
+          "design_cond": 138.2610170452134,
+          "singleton_cells": 3,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 0.39822532938962085,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": false
+        },
+        "0.10": {
+          "n_cells": 12,
+          "n_ring_groups": 5,
+          "cells_per_ring_quantiles": [
+            3.0,
+            4.0,
+            5.0,
+            5.0,
+            6.0
+          ],
+          "rings_per_cell_quantiles": [
+            1.0,
+            1.0,
+            2.0,
+            2.25,
+            3.0
+          ],
+          "multiring_cell_share": 0.6666666666666666,
+          "multiring_point_share": 0.8463296585103522,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.13043478260869565,
+          "n_edges": 23,
+          "design_rank": 16,
+          "design_n_params": 16,
+          "design_cond": 50.81874689562319,
+          "singleton_cells": 0,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 0.8463296585103522,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        },
+        "0.15": {
+          "n_cells": 6,
+          "n_ring_groups": 5,
+          "cells_per_ring_quantiles": [
+            2.0,
+            2.0,
+            3.0,
+            4.0,
+            4.0
+          ],
+          "rings_per_cell_quantiles": [
+            1.0,
+            1.5,
+            3.0,
+            3.0,
+            4.0
+          ],
+          "multiring_cell_share": 0.6666666666666666,
+          "multiring_point_share": 0.9721699381554181,
+          "n_components": 1,
+          "isolated_rings": [],
+          "isolated_cells": 0,
+          "sparse_edge_share": 0.2,
+          "n_edges": 15,
+          "design_rank": 10,
+          "design_n_params": 10,
+          "design_cond": 45.26329987116802,
+          "singleton_cells": 0,
+          "gates": {
+            "connected_single_component": true,
+            "rank_sufficient": true,
+            "multiring_point_share": 0.9721699381554181,
+            "cond_ok": true
+          },
+          "identifiable_at_scale": true
+        }
+      }
+    }
+  },
+  "verdicts": {
+    "per_roi_identifiable": {
+      "1": {
+        "0.05": true,
+        "0.10": true,
+        "0.15": true
+      },
+      "2": {
+        "0.05": true,
+        "0.10": true,
+        "0.15": true
+      },
+      "3": {
+        "0.05": true,
+        "0.10": true,
+        "0.15": true
+      },
+      "4": {
+        "0.05": false,
+        "0.10": true,
+        "0.15": true
+      }
+    },
+    "ROI2_0.05_identifiable": true,
+    "CROSS_COVERAGE": "PASS"
+  }
+}

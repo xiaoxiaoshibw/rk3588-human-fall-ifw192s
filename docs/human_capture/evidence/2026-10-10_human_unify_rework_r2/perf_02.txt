@@ -1,0 +1,16 @@
+
+session  mode    n     p50_ms  p95_ms  max_ms  peak_heap_mb
+dynamic  BASE_A  83  P50=27.23  P95=35.17  max=46.74  heap=61.9MB rss=277.7MB external=132.2MB
+dynamic  BASE_B  83  P50=34.12  P95=41.89  max=49.28  heap=121.8MB rss=358.6MB external=135.6MB
+dynamic  U3  83  P50=49.28  P95=71.49  max=87.81  heap=102.2MB rss=420.6MB external=133.3MB
+empty  BASE_A  203  P50=22.31  P95=27.15  max=33.41  heap=109MB rss=613.5MB external=320.7MB
+empty  BASE_B  203  P50=3.79  P95=5.55  max=18.18  heap=102.7MB rss=606.8MB external=336.4MB
+empty  U3  203  P50=20.15  P95=28.18  max=39.59  heap=103.6MB rss=609.3MB external=318.1MB
+standing  BASE_A  177  P50=22.25  P95=33.53  max=46.06  heap=105.4MB rss=539.2MB external=272.3MB
+standing  BASE_B  177  P50=10.01  P95=13.74  max=30.31  heap=95.5MB rss=403.5MB external=156.9MB
+standing  U3  177  P50=18.75  P95=26.62  max=43.81  heap=109.2MB rss=575MB external=279.2MB
+FAIL: 全部 P95<50ms 且 heap<1500MB (8/9)
+PASS: dynamic A+B 都有数据
+PASS: 性能运行期间实现SHA不变
+
+== perf: 2 PASS, 1 FAIL ==

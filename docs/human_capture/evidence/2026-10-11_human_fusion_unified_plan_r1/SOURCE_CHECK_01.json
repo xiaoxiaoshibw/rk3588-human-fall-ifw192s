@@ -1,0 +1,559 @@
+{
+  "scope": "read-only source/JSON and plan links; no pipeline execution",
+  "totals": {
+    "candidate": {
+      "tp": 504,
+      "fp": 127,
+      "fn": 6
+    },
+    "track": {
+      "tp": 491,
+      "fp": 112,
+      "fn": 19
+    }
+  },
+  "xgb_rows": [
+    {
+      "sid": "cap_20261010_175227",
+      "activity": "S1-empty-with-furniture",
+      "model": "xgb69_candidate",
+      "frames": 304,
+      "gt_known": 304,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 294,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 233
+      },
+      "p95_detection_ms": 8.534299999999348
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "activity": "S3-walk-x-near",
+      "model": "xgb69_candidate",
+      "frames": 258,
+      "gt_known": 258,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 258,
+        "fp": 19,
+        "fn": 0
+      },
+      "track": {
+        "tp": 256,
+        "fp": 9,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 258,
+          "fp": 223,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 178,
+        "UNMATCHED_PREDICTION": 17
+      },
+      "p95_detection_ms": 16.956500000000233
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "activity": "S3-walk-y-far",
+      "model": "xgb69_candidate",
+      "frames": 464,
+      "gt_known": 99,
+      "gt_unknown": 365,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 99,
+        "fp": 97,
+        "fn": 0
+      },
+      "track": {
+        "tp": 97,
+        "fp": 93,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 99,
+          "fp": 163,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 56,
+          "fp": 97,
+          "fn": 43
+        },
+        "rf69_candidate": {
+          "tp": 99,
+          "fp": 98,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 99,
+          "fp": 97,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 96,
+        "MODEL_DISAGREEMENT": 347,
+        "GT_UNKNOWN": 365
+      },
+      "p95_detection_ms": 43.896000000007916
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "activity": "S4-walk-stop-walk",
+      "model": "xgb69_candidate",
+      "frames": 239,
+      "gt_known": 11,
+      "gt_unknown": 228,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 11,
+        "fp": 9,
+        "fn": 0
+      },
+      "track": {
+        "tp": 10,
+        "fp": 8,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 11,
+          "fp": 22,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 9,
+        "MODEL_DISAGREEMENT": 182,
+        "GT_UNKNOWN": 228
+      },
+      "p95_detection_ms": 17.109700000000885
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "activity": "S5-turn-in-place",
+      "model": "xgb69_candidate",
+      "frames": 202,
+      "gt_known": 6,
+      "gt_unknown": 196,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 6,
+          "fp": 4,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 137,
+        "GT_UNKNOWN": 196
+      },
+      "p95_detection_ms": 9.804199999984121
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "activity": "S6-occlusion",
+      "model": "xgb69_candidate",
+      "frames": 238,
+      "gt_known": 71,
+      "gt_unknown": 167,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 65,
+        "fp": 1,
+        "fn": 6
+      },
+      "track": {
+        "tp": 61,
+        "fp": 1,
+        "fn": 10
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 65,
+          "fp": 92,
+          "fn": 6
+        },
+        "rf51_candidate": {
+          "tp": 60,
+          "fp": 1,
+          "fn": 11
+        },
+        "rf69_candidate": {
+          "tp": 64,
+          "fp": 2,
+          "fn": 7
+        },
+        "xgb69_candidate": {
+          "tp": 65,
+          "fp": 1,
+          "fn": 6
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 206,
+        "GT_UNKNOWN": 167,
+        "UNMATCHED_PREDICTION": 1,
+        "PERSON_MISS": 6
+      },
+      "p95_detection_ms": 8.679300000017975
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "activity": "S7-far-5m",
+      "model": "xgb69_candidate",
+      "frames": 251,
+      "gt_known": 12,
+      "gt_unknown": 239,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 12,
+        "fp": 1,
+        "fn": 0
+      },
+      "track": {
+        "tp": 11,
+        "fp": 1,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 12,
+          "fp": 13,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 12,
+          "fp": 1,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 12,
+          "fp": 1,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "GT_UNKNOWN": 239,
+        "MODEL_DISAGREEMENT": 193,
+        "UNMATCHED_PREDICTION": 1
+      },
+      "p95_detection_ms": 17.007199999992736
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "activity": "S8-still-retention-long",
+      "model": "xgb69_candidate",
+      "frames": 523,
+      "gt_known": 53,
+      "gt_unknown": 470,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 53,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 53,
+          "fp": 29,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 308,
+        "GT_UNKNOWN": 470
+      },
+      "p95_detection_ms": 9.492299999983516
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "activity": "S9-two-person-cross",
+      "model": "xgb69_candidate",
+      "frames": 126,
+      "gt_known": 0,
+      "gt_unknown": 126,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "GT_UNKNOWN": 126,
+        "MODEL_DISAGREEMENT": 115
+      },
+      "p95_detection_ms": 15.684799999988172
+    }
+  ],
+  "late_json_keys": [
+    "scope",
+    "background_actual",
+    "v3_layer_attribution",
+    "v3_candidate_result",
+    "pointnet_preprocessing_ab",
+    "b_furniture_xgb_rescore",
+    "current_v2_summaries",
+    "limits"
+  ],
+  "sources_sha256": {
+    "AGENTS.md": "37afbfceda021fb51a189009ff0c79834ef8b6d824eaa03cb21904cc3b8de4ec",
+    "docs/human_fall/WORKFLOW.md": "2a9f8754da2289a2b734ecfce6e82b2304253a500212695c5810c92d948c9f9f",
+    "docs/human_capture/README.md": "21415fbb4082cf27b151bf59eb00731d24d82f5b0ccb00d0e61f865b2df083ad",
+    "sidequests/human_fusion_lab/v2_runtime.js": "fce2dce5350856cbe4b2a680e39a69047aec74755c006a2f224969be0145c12e",
+    "sidequests/human_fusion_lab/unique_tracker.js": "762bbc83169a3fe54824b3e93a06d48dea75f75265b0d62c89d862d5111451d7",
+    "sidequests/human_fusion_lab/detector.js": "6e9c6604cf9f5d86555ee487930c9b5ca0bc1245a0a32822b19ea200f9630d1c",
+    "sidequests/human_fusion_lab/core/engine.js": "5345739ca95472410feaf4bafe7cd83ad35d6dafd40a42f584ca98b65e4afead",
+    "sidequests/human_fusion_lab/core/evaluate_fusion_gt.js": "bd3c65e3d6888431a998fb928ea9def35b0e84d07f6f6a4d292df5dacdac1991",
+    "sidequests/human_fusion_lab/train.py": "1c1083178d027e4886ef83008d5c7028c2c747974ad6b38cd97c50e54c9bf8a2",
+    "sidequests/human_fusion_lab_v3/v3_runtime.js": "fdab0c825477f942df04e25154a04e11236853fee3283ad60ec4dd4256c99e70",
+    "sidequests/human_fusion_lab_v3/core/bg_groups.js": "32287604f380769d0713d46faefdda82483d2b178803f2e9208b4a07e6934186",
+    "sidequests/human_fusion_lab_v3/tools/eval_controlled_comparison.py": "0bf34ca4d113a6cdc5244c7020d0b1776283aee34abc2c9c10ef1f946caa94cc",
+    "pc_apps/human_core/engine.js": "df5909fd2082dcd12ce1a5ce1fb3d0a9ec7ccb0ab88674534871a5038e6294ea",
+    "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/REPORT.md": "94196f0f007d9b24414c165eb7527ba4fc8e767faf8c5de1c9d08c935078760e",
+    "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/late_review.json": "775837f4c037796f91187d0e6ebdcef898b2cb1bfc445a57d30ff91b4fc8417a",
+    "docs/human_capture/evidence/2026-10-11_human_fusion_diagnosis_r1/historical_v2_recalculation.json": "837eb26776b0ea5462c5830649d4fb7e9734bf2e4016d8fe9349f9bba8311569",
+    "docs/human_capture/evidence/2026-10-11_cc_mainline_r1/03_SUMMARY.md": "f4016cdad997338ebccb61b8616414753477d432827c6e79f01ecdd29ee348b6",
+    "docs/human_capture/evidence/2026-10-11_human_fusion_bg_v3_r1/REPORT_FINAL.md": "a4872b806d70ce3307d40356acc64f3829aa7522f2e427ddbeba37f656433c56",
+    "sidequests/human_fusion_lab_v3/results/CANDIDATE_IMPROVE_S6.json": "2130f8afafaee48380f69b356c56f75d0ef041da498a7b5918bfe95a4b5f5838"
+  },
+  "source_drift_since_baseline": [],
+  "links": [
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "returns/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/BASELINE_BEFORE.json",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/ROUND_01_RECONCILIATION.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/ROUND_02_ARCHITECTURE.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_unified_plan_r1/ROUND_03_ADVERSARIAL.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_cc_mainline_r1/03_SUMMARY.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_bg_v3_r1/REPORT_FINAL.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_diagnosis_r1/REPORT.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN.md",
+      "target": "evidence/2026-10-11_human_fusion_diagnosis_r1/late_review.json",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md",
+      "target": "tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md",
+      "target": "HUMAN_FUSION_UNIFIED_PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../HUMAN_FUSION_UNIFIED_PLAN.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../HUMAN_FUSION_UNIFIED_PLAN_ACCEPTANCE.md",
+      "exists": true
+    },
+    {
+      "file": "docs/human_capture/tickets/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "target": "../returns/HUMAN-FUSION-UNIFIED-PLAN.md",
+      "exists": true
+    }
+  ],
+  "helper_python_syntax": "PASS"
+}

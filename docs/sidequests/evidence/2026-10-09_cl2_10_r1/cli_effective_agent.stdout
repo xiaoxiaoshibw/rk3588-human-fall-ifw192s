@@ -1,0 +1,5980 @@
+{
+  "name": "cl210audit",
+  "mode": "primary",
+  "permission": [
+    {
+      "permission": "*",
+      "action": "allow",
+      "pattern": "*"
+    },
+    {
+      "permission": "doom_loop",
+      "action": "ask",
+      "pattern": "*"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "*",
+      "action": "ask"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.local\\share\\opencode\\tool-output\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\AppData\\Local\\Temp\\opencode\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.claude\\skills\\ponytail\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.config\\opencode\\skills\\ponytail\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "question",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "plan_enter",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "plan_exit",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env",
+      "action": "ask"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env.*",
+      "action": "ask"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env.example",
+      "action": "allow"
+    },
+    {
+      "permission": "*",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "deny"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\baseline\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/baseline/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\baseline\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/baseline/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "baseline\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "baseline/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114641\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114641/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114641\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114641/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114641\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114641/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114709\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114709/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114709\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114709/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114709\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114709/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114734\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114734/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114734\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114734/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114734\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114734/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114754\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114754/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114754\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114754/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114754\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114754/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114817\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114817/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114817\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114817/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114817\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114817/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121622\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121622/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121622\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121622/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121622\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121622/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121647\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121647/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121647\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121647/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121647\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121647/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121723\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121723/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121723\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121723/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121723\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121723/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122616\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122616/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122616\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122616/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122616\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122616/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122637\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122637/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122637\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122637/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122637\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122637/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122700\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122700/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122700\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122700/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122700\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122700/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "*",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "deny"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "PONYTAIL_SKILL.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_SCOPE_AND_ACCEPTANCE.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_EXPERIMENT_PLAN.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_input_catalog.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_baseline.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_prepare_attempt1.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_prepare_02.stderr",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "00_prepare_03.stdout",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "01_root_cause.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "01_reproduction.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "01_channel_diagnostics.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "01_gate_cross_checks.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "02_shadow_ab_results.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_regression_results.txt",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_regression_command.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_search_performance.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "03_search_paired.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "04_source_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "04_audit_numeric_bundle.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "04_audit_summary.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "README.md",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "build_reports.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "cross_checks.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "prepare.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "prepare_review.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "run_logged.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "run_opencode.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "search_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "search_paired_check.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "test_diagnostics.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "test_equivalence.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "test_selector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "candidate/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/config.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_detector.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_detector_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_roi.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_roi_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/floor_sheet_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/human_replay_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_auto_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_lib.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_quality.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_test.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/validation.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/ransac.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/svd.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/tls.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen\\leveling_estimators\\__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "frozen/leveling_estimators/__init__.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\baseline\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/baseline/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\baseline\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/baseline/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "baseline\\floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "baseline/floor_sheet.py",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114641\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114641/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114641\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114641/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114641\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114641/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114641\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114641/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114709\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114709/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114709\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114709/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114709\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114709/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114709\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114709/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114734\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114734/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114734\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114734/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114734\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114734/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114734\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114734/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114754\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114754/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114754\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114754/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114754\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114754/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114754\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114754/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114817\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114817/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114817\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114817/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_114817\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_114817/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_114817\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_114817/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121622\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121622/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121622\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121622/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121622\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121622/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121622\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121622/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121647\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121647/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121647\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121647/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121647\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121647/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121647\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121647/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121723\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121723/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121723\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121723/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_121723\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_121723/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_121723\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_121723/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122616\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122616/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122616\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122616/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122616\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122616/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122616\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122616/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122637\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122637/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122637\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122637/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122637\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122637/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122637\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122637/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122700\\manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122700/manifest.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122700\\meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122700/meta.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:\\Code\\ldiar\\docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs\\sidequests\\evidence\\2026-10-09_cl2_10_r1\\inputs\\cap_20261009_122700\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "docs/sidequests/evidence/2026-10-09_cl2_10_r1/inputs/cap_20261009_122700/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs\\cap_20261009_122700\\report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "inputs/cap_20261009_122700/report.json",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.local\\share\\opencode\\tool-output\\*",
+      "action": "allow"
+    }
+  ],
+  "options": {},
+  "native": false,
+  "prompt": "Read-only audit. No shell, writing, task, network or other tool actions. Do not claim numerical/SHA executions.",
+  "description": "CL2-10 causal-diagnosis read-only audit",
+  "tools": {
+    "invalid": false,
+    "question": false,
+    "bash": false,
+    "read": true,
+    "glob": false,
+    "grep": false,
+    "edit": false,
+    "write": false,
+    "task": false,
+    "webfetch": false,
+    "todowrite": false,
+    "websearch": false,
+    "skill": false
+  }
+}

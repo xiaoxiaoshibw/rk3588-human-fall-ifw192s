@@ -1,0 +1,173 @@
+{
+ "objects": [
+  {
+   "id": "density_peak_y=1.66",
+   "kind": "wall_or_large_object",
+   "y_center": 1.662500023841858,
+   "obs": 223,
+   "source": "lidar_corridor_slice"
+  },
+  {
+   "id": "density_peak_y=1.55",
+   "kind": "wall_or_large_object",
+   "y_center": 1.5458333492279053,
+   "obs": 183,
+   "source": "lidar_corridor_slice"
+  },
+  {
+   "id": "density_peak_y=1.60",
+   "kind": "wall_or_large_object",
+   "y_center": 1.6041667461395264,
+   "obs": 183,
+   "source": "lidar_corridor_slice"
+  },
+  {
+   "id": "density_peak_y=1.72",
+   "kind": "wall_or_large_object",
+   "y_center": 1.7208333015441895,
+   "obs": 129,
+   "source": "lidar_corridor_slice"
+  },
+  {
+   "id": "end_stool_table",
+   "kind": "furniture",
+   "note": "正前方尽头小桌/凳",
+   "estimated_position_range": {
+    "x": [
+     16.0,
+     20.0
+    ],
+    "y": [
+     1.4,
+     1.9
+    ],
+    "z": [
+     0.0,
+     0.8
+    ]
+   },
+   "confidence": "medium",
+   "source": "assistant_vision_CAM_F0000",
+   "in_lidar_240fov": "maybe_beyond_15m_range"
+  },
+  {
+   "id": "left_wall_handrail",
+   "kind": "wall_feature",
+   "note": "左侧红色横条扶手",
+   "estimated_position_range": {
+    "x": [
+     0.0,
+     12.0
+    ],
+    "y": [
+     1.0,
+     1.4
+    ],
+    "z": [
+     0.85,
+     1.05
+    ]
+   },
+   "confidence": "medium",
+   "source": "assistant_vision_CAM_F0000"
+  },
+  {
+   "id": "right_wall_handrail",
+   "kind": "wall_feature",
+   "note": "右侧红色横条扶手（接近右墙）",
+   "estimated_position_range": {
+    "x": [
+     0.0,
+     12.0
+    ],
+    "y": [
+     2.3,
+     2.8
+    ],
+    "z": [
+     0.85,
+     1.05
+    ]
+   },
+   "confidence": "medium",
+   "source": "assistant_vision_CAM_F0000"
+  },
+  {
+   "id": "floor_tile_strip",
+   "kind": "floor_feature",
+   "note": "深灰色瓷砖纵横条带",
+   "estimated_position_range": {
+    "x": [
+     0.0,
+     12.0
+    ],
+    "y": [
+     1.2,
+     2.2
+    ],
+    "z": [
+     0.0,
+     0.02
+    ]
+   },
+   "confidence": "high",
+   "source": "assistant_vision_CAM_F0000",
+   "lidar_visibility": "usually below ground_keep threshold"
+  },
+  {
+   "id": "person_realtime",
+   "kind": "human",
+   "note": "CAM 实时帧中景人 持裙摆/袋",
+   "estimated_position_range": {
+    "x": [
+     3.0,
+     8.0
+    ],
+    "y": [
+     1.3,
+     2.1
+    ],
+    "z": [
+     0.1,
+     1.85
+    ]
+   },
+   "confidence": "high",
+   "source": "assistant_vision_CAM_F0000_F0100_F0200"
+  }
+ ],
+ "corridor_slice_histogram_peaks": [
+  {
+   "id": "density_peak_y=1.66",
+   "kind": "wall_or_large_object",
+   "y_center": 1.662500023841858,
+   "obs": 223,
+   "source": "lidar_corridor_slice"
+  },
+  {
+   "id": "density_peak_y=1.55",
+   "kind": "wall_or_large_object",
+   "y_center": 1.5458333492279053,
+   "obs": 183,
+   "source": "lidar_corridor_slice"
+  }
+ ],
+ "f10_reclassification": {
+  "UNKNOWN": 476,
+  "PERSON_LEFT_ARM_OBJECT": 819,
+  "PERSON_TRUNK_or_RIGHT_WALL": 57
+ },
+ "corridor_geometry": {
+  "estimated_wall_y_range": [
+   1.0,
+   2.7
+  ],
+  "corridor_width_m": 1.7,
+  "lidar_corridor_slice_x_m": 2.0
+ },
+ "fringe_benefits": [
+  "lidar f10 left-lower strip looks like furniture, but camera shows person holding skirt/bag",
+  "walls y≈1.0 / 2.7 constrain HF-REAL-01 seed [1.4, 2.6] x [1.25, 2.2] to walking center lane",
+  "093958 camera-direct view unavailable for that session — camera not time-synced"
+ ]
+}

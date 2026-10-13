@@ -1,0 +1,328 @@
+{
+ "task": "HUMAN-FUSION-BG-V3 阶段2 背景资格核查",
+ "date": "2026-10-11",
+ "background_source": {
+  "empty_sid": "cap_20261009_113611",
+  "chain": "pc_apps/human_ml/auto_person_label.py background_envelope → pc_apps/human_ml/dump_bg_envelope.py → human_replay/bg_envelope.json",
+  "envelope_sha256": "28afdaa4838c5fd99221954ab1696bd82289aa1c24c6934afb5808838d6e3f2e",
+  "level_contract": "sidequests/human_fusion_lab/core/leveling.js REF_RT (同 render_person_label.R/T)"
+ },
+ "template_audit": {
+  "sid": "cap_20261009_113611",
+  "recomputed_cells": 988,
+  "envelope_cells": 4867,
+  "common_cells": 987,
+  "cell_coverage": 0.2028,
+  "exact_mm": 65,
+  "close_2cm": 581,
+  "mismatch_samples": [
+   {
+    "k": 49130,
+    "env": 1.301,
+    "rec": 1.334
+   },
+   {
+    "k": 53225,
+    "env": 1.308,
+    "rec": 1.343
+   },
+   {
+    "k": 53226,
+    "env": 1.372,
+    "rec": 1.445
+   },
+   {
+    "k": 57322,
+    "env": 1.391,
+    "rec": 1.449
+   },
+   {
+    "k": 61417,
+    "env": 1.212,
+    "rec": 1.371
+   }
+  ],
+  "recompute_faithful": "auto_person_label.background_envelope 同构 (groundPeak+zband+5cm key+frame p95+cross max)",
+  "meta_sha": "6e1640b69075805b1e59384ccd34ea2cb064ba6dce7587706574a529cd41570c",
+  "points_sha": "7b0c5051a00ad3c8956dc5ac9342d647715225bccf8c955d07b565daa4f48d7f",
+  "frames": 203,
+  "verdict": "TRACEABLE_WITH_DRIFT",
+  "python_reconciliation": {
+   "tool": "pc_apps/human_ml/auto_person_label.background_envelope (源生成器, numpy)",
+   "rerun_2026_10_11": "cells=4867 envelope=4867 common=4867 exact(<1.5mm)=4867 — 与冻结文件逐值相等",
+   "note": "JS 同构重算仅近似 (common 987/4867, 差异根源: JS 浮点/percentile 插值与 numpy 不完全一致); 以 python 源生成器 (SHA 28afdaa4… 已复核) 为对账基准。"
+  }
+ },
+ "sessions": [
+  {
+   "sid": "cap_20261010_175227",
+   "activity": "S1-empty-with-furniture",
+   "frames": 304,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49126,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11239,
+    "total": 49126
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 5202,
+    "total": 15516
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7136,
+   "static_ground_cells": 1001,
+   "static_match_8cm": 955,
+   "static_drift": 46,
+   "static_max_drift": 1.177,
+   "sparse_ground_cells_unobserved": 845,
+   "static_match_ratio": 0.954,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  },
+  {
+   "sid": "cap_20261010_175429",
+   "activity": "S3-walk-x-near",
+   "frames": 258,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49116,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11270,
+    "total": 49116
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 5171,
+    "total": 15013
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7182,
+   "static_ground_cells": 978,
+   "static_match_8cm": 914,
+   "static_drift": 64,
+   "static_max_drift": 1.186,
+   "sparse_ground_cells_unobserved": 583,
+   "static_match_ratio": 0.9346,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  },
+  {
+   "sid": "cap_20261010_175553",
+   "activity": "S3-walk-y-far",
+   "frames": 464,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49139,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11341,
+    "total": 49139
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 4739,
+    "total": 13711
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7155,
+   "static_ground_cells": 859,
+   "static_match_8cm": 816,
+   "static_drift": 43,
+   "static_max_drift": 0.855,
+   "sparse_ground_cells_unobserved": 840,
+   "static_match_ratio": 0.9499,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  },
+  {
+   "sid": "cap_20261010_175804",
+   "activity": "S4-walk-stop-walk",
+   "frames": 239,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49127,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11263,
+    "total": 49127
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 5164,
+    "total": 14871
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7194,
+   "static_ground_cells": 928,
+   "static_match_8cm": 892,
+   "static_drift": 36,
+   "static_max_drift": 0.883,
+   "sparse_ground_cells_unobserved": 642,
+   "static_match_ratio": 0.9612,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  },
+  {
+   "sid": "cap_20261010_175943",
+   "activity": "S5-turn-in-place",
+   "frames": 202,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49123,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11257,
+    "total": 49123
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 5197,
+    "total": 15124
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7221,
+   "static_ground_cells": 957,
+   "static_match_8cm": 919,
+   "static_drift": 38,
+   "static_max_drift": 1.28,
+   "sparse_ground_cells_unobserved": 695,
+   "static_match_ratio": 0.9603,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  },
+  {
+   "sid": "cap_20261010_180235",
+   "activity": "S6-occlusion",
+   "frames": 238,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49133,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11298,
+    "total": 49133
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 5322,
+    "total": 14791
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7282,
+   "static_ground_cells": 968,
+   "static_match_8cm": 914,
+   "static_drift": 54,
+   "static_max_drift": 1.28,
+   "sparse_ground_cells_unobserved": 600,
+   "static_match_ratio": 0.9442,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  },
+  {
+   "sid": "cap_20261010_180337",
+   "activity": "S7-far-5m",
+   "frames": 251,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49124,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11226,
+    "total": 49124
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 5346,
+    "total": 15483
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7099,
+   "static_ground_cells": 1004,
+   "static_match_8cm": 951,
+   "static_drift": 53,
+   "static_max_drift": 1.859,
+   "sparse_ground_cells_unobserved": 847,
+   "static_match_ratio": 0.9472,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  },
+  {
+   "sid": "cap_20261010_180557",
+   "activity": "S8-still-retention-long",
+   "frames": 523,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49128,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11246,
+    "total": 49128
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 5212,
+    "total": 15269
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7228,
+   "static_ground_cells": 1007,
+   "static_match_8cm": 958,
+   "static_drift": 49,
+   "static_max_drift": 1.187,
+   "sparse_ground_cells_unobserved": 753,
+   "static_match_ratio": 0.9513,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  },
+  {
+   "sid": "cap_20261010_180751",
+   "activity": "S9-two-person-cross",
+   "frames": 126,
+   "meta_sha_ok": true,
+   "points_sha_ok": true,
+   "already_leveled_in_meta": false,
+   "finite_points": 49122,
+   "structural_peak": {
+    "peak": 1.4000000000000001,
+    "count": 11297,
+    "total": 49122
+   },
+   "ground": {
+    "peak": 0.04,
+    "count": 5133,
+    "total": 14818
+   },
+   "zero_xyz_points": 0,
+   "zero_xyz_ratio": 0,
+   "env_point_coverage": 0.7215,
+   "static_ground_cells": 951,
+   "static_match_8cm": 897,
+   "static_drift": 54,
+   "static_max_drift": 0.849,
+   "sparse_ground_cells_unobserved": 666,
+   "static_match_ratio": 0.9432,
+   "verdict": "ELIGIBLE",
+   "blocked_reasons": []
+  }
+ ]
+}

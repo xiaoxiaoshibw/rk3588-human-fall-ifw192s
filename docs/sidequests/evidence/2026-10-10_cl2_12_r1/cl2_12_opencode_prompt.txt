@@ -1,0 +1,50 @@
+你是 CL2-12 独立只读审计员，实际指定模型 opencode-go/deepseek-v4.1-flash。
+只允许 read 工具；无 shell / write / edit / task / network；不要把未亲自执行的数值/SHA/代码运行说成已执行
+（UNKNOWN 保留；你能读 JSON/MD/脚本，但不能在本审计会话里执行代码重算）。
+
+背景：121647 (cap_20261009_121647) 固定 TLS 因 GL_HOLDOUT_QUALITY 拒绝，frame72 ROI2 300 点
+P95=50.291869360mm>50mm。CL2-10/CL2-11 结论：物理根因 UNKNOWN、二维 cell×ring 分解"未做"是潜在判别量。
+本轮（CL2-12）实际执行了该二维分解与同 ring 内梯度、三组留出，问三个问题：
+(1) 空间×ring 交叉观测是否足够分离效应？(2) 简单 ring 常量偏差模型能否解释残差结构？
+(3) 不能可靠区分物理原因时最少需要什么 E3。
+
+先读以下本轮产物，然后按需读历史证据：
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_12_r1/00_SCOPE_AND_ACCEPTANCE.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_12_r1/01_CROSS_COVERAGE.json
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_12_r1/02_IDENTIFIABILITY_RESULTS.json
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_12_r1/03_WITHIN_RING_DATA.json
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_12_r1/03_WITHIN_RING_ANALYSIS.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_12_r1/04_HOLDOUT_VALIDATION.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_12_r1/05_MINIMUM_E3_PLAN.md
+- 计算脚本（审计其逻辑与口径，不是让你运行）：
+  01_cross_coverage.py / 02_identifiability.py / 03_within_ring.py
+
+历史关键证据可读（只读）：
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/FINAL_REPORT.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_10_r1/01_root_cause.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/FINAL_REPORT.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/02_EVIDENCE_IDENTIFIABILITY.md
+- D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_11_r1/06_INDEPENDENT_REVIEW_NOTES.md
+
+主动检查并反驳（逐条给证据或指出漏洞）：
+1) 预注册声明（00/P1-P6）是否与实际执行一致？有没有先射箭后画靶？判定门（rank充分/cond<1e4/
+   符号一致≥0.9/σ²降≥20%/留出M3≤min单效应×1.05）是否被事后改动？
+2) 泄漏：FIT 与留出(72/144/217)是否互斥？合并表/cell尺度是否真只由训练折决定？脚本里有没有
+   把留出点用于拟合/调参/选尺度？
+3) 数值自洽：M3(σ²训练降)与"留出爆炸"是否矛盾？M3 在训练合法（rank/cond OK）但留出劣于零模型，
+   作者的解释（时间漂移+ring↔cell混淆+加性失配）是否成立，还是有更简单的解释（例如纯过拟合、
+   或 β/h 编码方向互相抵消导致的伪结构）？
+4) 相邻环重叠区"系统性同号负差 −3.7..−17mm"是否与 CL2-11 的"重叠区平滑过渡、无跳变台阶"说法冲突？
+   作者有没有夸大/over-claim（把它当成可辨识物理信号）？
+5) STEP3 是否只回答了"每环常量偏差不足"，没有越权排除任何 B 的非恒定型式或证成 A？有没有把
+   β(ring) 命名为传感器偏差、把 h(cell) 命名为真实地面？
+6) 05_MINIMUM_E3_PLAN 收窄是否合理？包C( bag 比对 )包A(九点)保留、包B降级、剔除"更多同源点云"
+   的裁决是否与 STEP2/04 的失效证据自洽？停止条件是否诚实（而不是变相推进修复）？
+7) 边界：是否新增 TLS 候选/改门控/改算法/改历史封号目录字节/解锁 121647/设备操作？
+8) 最终裁定六项（CROSS_COVERAGE / STATISTICAL_IDENTIFIABILITY / HOLDOUT_GENERALIZATION /
+   PHYSICAL_CAUSAL_IDENTIFICATION / READY_FOR_E3 / READY_FOR_ALGORITHM_REPAIR）有无越级
+   （例如把 CROSS_COVERAGE PASS 当成可辨识/可修复）？
+
+请逐 ID（I120-I126、T1201/T1202/T1203）给中文裁定（PASS/FAIL/BLOCKED/UNKNOWN），列具体逻辑
+FAIL、证据不足项和非阻塞建议；未亲自核验的一律 UNKNOWN，不虚构执行。评价作者 CL2-12 是否该得
+PASS / PASS_WITH_FINDINGS / FAIL。结束写 AUDIT_COMPLETE。

@@ -1,5 +1,29 @@
 # 支线任务盘点 / 2026-10-02 重制定（v2）
 
+## 2026-10-12 HFUS-RD-02 完成（最新；下方 10-02 v2 表为历史盘点）
+
+用户授权的高召回候选优化 + 困难负例分类实验已完成，**SUBMITTED**：
+[回传](returns/HFUS-RD-02.md) · 报告 `sidequests/HFUS-RD-02/docs/`（5 份）
+· 证据 `evidence/2026-10-12_HFUS_RD_02_r1/`（8 JSON）· 审核台 `:8932`。
+
+**同轮推翻 RD-01 四项结论**（详见 `FINAL_ARCHITECTURE_DECISION.md` §0）：
+① RD-01 的 `rf_extract_node.js` 复刻与生产打分不一致（生产在抽特征前
+采样，`model_calls` 特征首维 `[5018,10]`）→ CLASSIFIER_ABLATION /
+LAYER_ATTRIBUTION §3 全部作废；② C4 的"100% 召回"中 92% 命中 ≥2000 点
+的房间级大团，而 ledger 实测这类候选生产接受率 0/258；③ 真分下 S1 型
+场景判别力存在（人 p5=0.9672 > 家具 p99=0.9658），真缺陷是阈值 0.55 未校准；
+④ **校准不可跨场景**（阈值 0.9666 在 S8 拒 100%、S6 拒 94.5% 候选，
+两场景共 124 个 GT 人）→ 须分场景校准，本轮 NOT_RUN。
+
+**工程收益**：C4AH（ROI + scipy.csgraph）= P95 88.7→13.2ms（6.7×），
+逐帧集合级等价证明 15/15，7 会话召回 1.000。
+
+**BLOCKED**：分类器收益（人工负例 0/125 队列待审）、多人检测资格
+（S9 INVALID_BINDING）、生产采样协议（属 HF/GL 侧）。
+**STATUS 保持**：未 commit/push/deploy/采集；生产树零改动。
+
+---
+
 > **归档说明**：本表是 2026-10-02 晚基于主线时点重新制定的现行视图。首次编制的旧版见 [REVIEW_v1_archive.md](REVIEW_v1_archive.md)（2026-10-02 早，板端不可达、HR-01/HR-02 未落地时的口径）。**原版 T1 的结论已被 HR-01/HR-02 直接推翻——不要按 v1 行动。**
 
 ## 自 v1 以来的关键变化（重制定的依据）
@@ -35,6 +59,7 @@
 | T4 | 10-1 数据集调研 README 补强 | 🟢 **已完成** | `49eb758` 已入库（6 篇均判**不能直接复用**，借密度/阈值）。原文留档 [T4_dataset_survey.md](T4_dataset_survey.md) |
 | T5 | `open_webui.bat` 运维通道盘点 | 🟢 **已完成，建议并入 S4** | SSH 在线；bat 本身可用，3 条改进可并入 S4 的一次板端巡检。原文留档 [T5_webui_ops.md](T5_webui_ops.md) |
 | T6 | 仓库卫生与分批入库 | 🟢 **已完成** | 所有批次已入库（`ef67461` → `8633eac` 全链）。原文留档 [T6_repo_hygiene.md](T6_repo_hygiene.md) |
+| **DET-01..07** | 预训练 3D 检测器（PointPillars/CenterPoint）自采点云离线实验 | 🔒 **已归档关闭**（2026-10-11 用户决定） | DET-01..06 已完成 SUBMITTED（evidence/returns 全链留档）；DET-07 草案从未冻结/执行。接替路线：HR-09 起自采数据 + RF 人检（已进 `pc_apps/human_core/`）。归档对账 [returns/DET-07.md](returns/DET-07.md) |
 
 ## 现在的明确阻塞 / 下一步
 

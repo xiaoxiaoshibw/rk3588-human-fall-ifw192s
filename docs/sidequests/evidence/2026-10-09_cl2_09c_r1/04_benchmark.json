@@ -1,0 +1,444 @@
+{
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "executable": "C:\\Users\\30680\\scoop\\apps\\python312\\current\\python.exe",
+  "numpy": "1.26.4",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "processor": "",
+  "baseline_sha256": "066a816a3a63350a58704042b939b476cfa6be02bbf898a78110e7a46d9c6b91",
+  "candidate_sha256": "d0b3e31395543e495cb2bcc8307c90baaabc48dd6f5bca780039e052744c7b55",
+  "results": [
+    {
+      "size": 25,
+      "case": "failed_with_feasible",
+      "quartets": 12650,
+      "samples_sec": {
+        "baseline": [
+          0.15508509999199305,
+          0.15602409999701194,
+          0.17072270000062417
+        ],
+        "candidate": [
+          0.02138109999941662,
+          0.021825000003445894,
+          0.03047339999466203
+        ]
+      },
+      "median_sec": {
+        "baseline": 0.15602409999701194,
+        "candidate": 0.021825000003445894
+      },
+      "speedup": 7.148870560017306,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": true,
+        "clean_cells": 25,
+        "selected": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            12.0
+          ],
+          [
+            0.0,
+            20.0
+          ],
+          [
+            2.0,
+            6.0
+          ]
+        ],
+        "min_sep_m": 1.5811388300841898,
+        "independent_count": 4,
+        "condition": 0.11247565042625104
+      }
+    },
+    {
+      "size": 25,
+      "case": "noncollinear_no_solution",
+      "quartets": 12650,
+      "samples_sec": {
+        "baseline": [
+          0.19844890000240412,
+          0.1614661000057822,
+          0.13722180000331718
+        ],
+        "candidate": [
+          0.053505400006542914,
+          0.04836450000584591,
+          0.03358689999731723
+        ]
+      },
+      "median_sec": {
+        "baseline": 0.1614661000057822,
+        "candidate": 0.04836450000584591
+      },
+      "speedup": 3.338525157631434,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": false,
+        "clean_cells": 25,
+        "selected": [
+          [
+            -96.0,
+            0.0
+          ],
+          [
+            88.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ],
+          [
+            -48.0,
+            0.0
+          ]
+        ],
+        "min_sep_m": 12.0,
+        "independent_count": 4,
+        "condition": 0.006325381303006379
+      }
+    },
+    {
+      "size": 25,
+      "case": "line",
+      "quartets": 12650,
+      "samples_sec": {
+        "baseline": [
+          0.0006543000054080039,
+          8.97999998414889e-05,
+          8.820000221021473e-05
+        ],
+        "candidate": [
+          0.0003209999995306134,
+          9.770000178832561e-05,
+          8.709999383427203e-05
+        ]
+      },
+      "median_sec": {
+        "baseline": 8.97999998414889e-05,
+        "candidate": 9.770000178832561e-05
+      },
+      "speedup": 0.9191402067325172,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": false,
+        "clean_cells": 25,
+        "selected": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            96.0
+          ],
+          [
+            0.0,
+            48.0
+          ],
+          [
+            0.0,
+            24.0
+          ]
+        ],
+        "min_sep_m": 6.0,
+        "independent_count": 4,
+        "condition": 0.0
+      }
+    },
+    {
+      "size": 60,
+      "case": "failed_with_feasible",
+      "quartets": 487635,
+      "samples_sec": {
+        "baseline": [
+          4.119983000011416,
+          4.276485299997148,
+          4.082601500005694
+        ],
+        "candidate": [
+          0.5629179999959888,
+          0.43992679999792017,
+          0.6085239999956684
+        ]
+      },
+      "median_sec": {
+        "baseline": 4.119983000011416,
+        "candidate": 0.5629179999959888
+      },
+      "speedup": 7.318975410345333,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": true,
+        "clean_cells": 60,
+        "selected": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            12.0
+          ],
+          [
+            0.0,
+            20.0
+          ],
+          [
+            2.0,
+            6.0
+          ]
+        ],
+        "min_sep_m": 1.5811388300841898,
+        "independent_count": 4,
+        "condition": 0.11247565042625104
+      }
+    },
+    {
+      "size": 60,
+      "case": "noncollinear_no_solution",
+      "quartets": 487635,
+      "samples_sec": {
+        "baseline": [
+          4.2839151000080165,
+          4.330749499989906,
+          4.160866599995643
+        ],
+        "candidate": [
+          0.8488804000080563,
+          0.7772516000113683,
+          0.7817317000008188
+        ]
+      },
+      "median_sec": {
+        "baseline": 4.2839151000080165,
+        "candidate": 0.7817317000008188
+      },
+      "speedup": 5.4800324715033675,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": false,
+        "clean_cells": 60,
+        "selected": [
+          [
+            -240.0,
+            0.0
+          ],
+          [
+            224.0,
+            0.0
+          ],
+          [
+            -8.0,
+            0.0
+          ],
+          [
+            -128.0,
+            0.0
+          ]
+        ],
+        "min_sep_m": 28.0,
+        "independent_count": 4,
+        "condition": 0.0
+      }
+    },
+    {
+      "size": 60,
+      "case": "line",
+      "quartets": 487635,
+      "samples_sec": {
+        "baseline": [
+          0.00025669999013189226,
+          0.0001365999924018979,
+          0.0001331999956164509
+        ],
+        "candidate": [
+          0.00015729998995084316,
+          0.00013880000915378332,
+          0.00013190000026952475
+        ]
+      },
+      "median_sec": {
+        "baseline": 0.0001365999924018979,
+        "candidate": 0.00013880000915378332
+      },
+      "speedup": 0.98414973626228,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": false,
+        "clean_cells": 60,
+        "selected": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            236.0
+          ],
+          [
+            0.0,
+            116.0
+          ],
+          [
+            0.0,
+            176.0
+          ]
+        ],
+        "min_sep_m": 15.0,
+        "independent_count": 4,
+        "condition": 0.0
+      }
+    },
+    {
+      "size": 100,
+      "case": "failed_with_feasible",
+      "quartets": 3921225,
+      "samples_sec": {
+        "baseline": [
+          33.486556100004236,
+          43.03058000000601,
+          48.55322419998993
+        ],
+        "candidate": [
+          2.83565809999709,
+          2.4888108000013744,
+          3.900594999999157
+        ]
+      },
+      "median_sec": {
+        "baseline": 43.03058000000601,
+        "candidate": 2.83565809999709
+      },
+      "speedup": 15.174812506504281,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": true,
+        "clean_cells": 100,
+        "selected": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            12.0
+          ],
+          [
+            0.0,
+            20.0
+          ],
+          [
+            2.0,
+            6.0
+          ]
+        ],
+        "min_sep_m": 1.5811388300841898,
+        "independent_count": 4,
+        "condition": 0.11247565042625104
+      }
+    },
+    {
+      "size": 100,
+      "case": "noncollinear_no_solution",
+      "quartets": 3921225,
+      "samples_sec": {
+        "baseline": [
+          46.90524690000166,
+          39.278038500007824,
+          42.700001899997005
+        ],
+        "candidate": [
+          4.7206546000088565,
+          4.7025394999946,
+          4.210163700001431
+        ]
+      },
+      "median_sec": {
+        "baseline": 42.700001899997005,
+        "candidate": 4.7025394999946
+      },
+      "speedup": 9.080200580993745,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": false,
+        "clean_cells": 100,
+        "selected": [
+          [
+            -400.0,
+            0.0
+          ],
+          [
+            384.0,
+            0.0
+          ],
+          [
+            -8.0,
+            0.0
+          ],
+          [
+            -208.0,
+            0.0
+          ]
+        ],
+        "min_sep_m": 48.0,
+        "independent_count": 4,
+        "condition": 0.0
+      }
+    },
+    {
+      "size": 100,
+      "case": "line",
+      "quartets": 3921225,
+      "samples_sec": {
+        "baseline": [
+          0.0007418000022880733,
+          0.00011740000627469271,
+          0.0002384999970672652
+        ],
+        "candidate": [
+          0.0003634000022429973,
+          0.00012419999984558672,
+          0.00017579999985173345
+        ]
+      },
+      "median_sec": {
+        "baseline": 0.0002384999970672652,
+        "candidate": 0.00017579999985173345
+      },
+      "speedup": 1.3566552745643448,
+      "exact_dict_equal": true,
+      "result": {
+        "ok": false,
+        "clean_cells": 100,
+        "selected": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            396.0
+          ],
+          [
+            0.0,
+            196.0
+          ],
+          [
+            0.0,
+            296.0
+          ]
+        ],
+        "min_sep_m": 25.0,
+        "independent_count": 4,
+        "condition": 0.0
+      }
+    }
+  ],
+  "method": "Three uninstrumented actual calls each; first sample is first invocation for this input, not a cold OS/BLAS process. Alternate order; no production latency bound or board assertion."
+}

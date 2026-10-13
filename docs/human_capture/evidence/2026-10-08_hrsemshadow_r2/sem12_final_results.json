@@ -1,0 +1,109 @@
+{
+  "failed": 0,
+  "results": [
+    {
+      "case": "positive_two_different_members",
+      "result": "ACCEPT"
+    },
+    {
+      "case": "1_replace_member_keep_old_sha",
+      "result": "REJECT",
+      "error": "MEMBER_ROWS_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/rows"
+    },
+    {
+      "case": "2_swap_member_sha",
+      "result": "REJECT",
+      "error": "RECORD_BINDING_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/member_sha256"
+    },
+    {
+      "case": "3_rename_member_only",
+      "result": "REJECT",
+      "error": "MEMBER_UNBOUND: cap_20261008_114205/REF_SHADOW/0/0-renamed"
+    },
+    {
+      "case": "3b_rename_display_only",
+      "result": "REJECT",
+      "error": "DISPLAY_ID_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/review_id"
+    },
+    {
+      "case": "4_member_content_changed_source_bytes",
+      "result": "REJECT",
+      "error": "AUTHORITY_SHA_MISMATCH: points.bin"
+    },
+    {
+      "case": "4b_content_receipt_changed_without_authority",
+      "result": "REJECT",
+      "error": "RECORD_BINDING_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/raw_member_sha256"
+    },
+    {
+      "case": "5_display_and_ticket_member_differ",
+      "result": "REJECT",
+      "error": "VOTE_BINDING_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/vote_member_id"
+    },
+    {
+      "case": "5b_ticket_frame_digest_differ",
+      "result": "REJECT",
+      "error": "VOTE_BINDING_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/vote_frame_sha256"
+    },
+    {
+      "case": "6_missing_required_member",
+      "result": "REJECT",
+      "error": "MEMBER_ROWS_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/rows"
+    },
+    {
+      "case": "6b_duplicate_member_id",
+      "result": "REJECT",
+      "error": "DUPLICATE_ID: cap_20261008_114205/REF_SHADOW/0/0"
+    },
+    {
+      "case": "6c_missing_required_rows",
+      "result": "REJECT",
+      "error": "MEMBER_ROWS_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/rows"
+    },
+    {
+      "case": "7_internally_consistent_forgery",
+      "result": "REJECT",
+      "error": "MEMBER_ROWS_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/rows"
+    },
+    {
+      "case": "7b_candidate_redefines_authority",
+      "result": "REJECT",
+      "error": "AUTHORITY_BINDING_MISMATCH: root"
+    },
+    {
+      "case": "source_path_redirect",
+      "result": "REJECT",
+      "error": "RECORD_BINDING_MISMATCH: cap_20261008_114205/REF_SHADOW/0/0/source_path"
+    },
+    {
+      "case": "positive_bound_deleted_point",
+      "result": "ACCEPT"
+    },
+    {
+      "case": "PERSON_without_identity",
+      "result": "REJECT",
+      "error": "PERSON_ID_REQUIRED: cap_20261008_114205/REF_SHADOW/0/0"
+    },
+    {
+      "case": "positive_embedded_page_export_validates",
+      "result": "ACCEPT"
+    },
+    {
+      "case": "page_tampered_index_and_stale_display",
+      "result": "REJECT",
+      "error": "INDEX_SHA_MISMATCH; DISPLAY_NOT_VERIFIED"
+    },
+    {
+      "case": "positive_full_index_raw_page_export_validates",
+      "result": "ACCEPT"
+    },
+    {
+      "case": "page_tampered_content",
+      "result": "REJECT",
+      "error": "source SHA mismatch; DISPLAY_NOT_VERIFIED"
+    }
+  ],
+  "embedded_cases": 34,
+  "headless_only": true,
+  "real_human_labels_created": 0
+}

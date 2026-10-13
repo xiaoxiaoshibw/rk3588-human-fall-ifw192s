@@ -1,0 +1,135 @@
+{
+  "name": "cl213audit",
+  "mode": "primary",
+  "permission": [
+    {
+      "permission": "*",
+      "action": "allow",
+      "pattern": "*"
+    },
+    {
+      "permission": "doom_loop",
+      "action": "ask",
+      "pattern": "*"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "*",
+      "action": "ask"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.local\\share\\opencode\\tool-output\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\AppData\\Local\\Temp\\opencode\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.claude\\skills\\ponytail\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.config\\opencode\\skills\\ponytail\\*",
+      "action": "allow"
+    },
+    {
+      "permission": "question",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "plan_enter",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "plan_exit",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "allow"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env",
+      "action": "ask"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env.*",
+      "action": "ask"
+    },
+    {
+      "permission": "read",
+      "pattern": "*.env.example",
+      "action": "allow"
+    },
+    {
+      "permission": "*",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "*",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "read",
+      "pattern": "*",
+      "action": "allow"
+    },
+    {
+      "permission": "bash",
+      "pattern": "*",
+      "action": "allow"
+    },
+    {
+      "permission": "external_directory",
+      "action": "deny",
+      "pattern": "*"
+    },
+    {
+      "permission": "external_directory",
+      "pattern": "C:\\Users\\30680\\.local\\share\\opencode\\tool-output\\*",
+      "action": "allow"
+    }
+  ],
+  "options": {},
+  "native": false,
+  "prompt": "You are a CL2-13 independent recompute auditor. You have `read` and `bash` tools; bash is STRICTLY limited to: (1) `python <script.py>` where script.py lives in the CL2-13 evidence directory (D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_13_r1/), and (2) read-only shell pipes (cat/head/tail/grep/find on files inside this repo). No writing outside this directory, no network, no edit/write task tools. If a bash command would violate this whitelist, refuse and mark that check UNKNOWN. Do not claim numerical/SHA executions you did not personally run; reserve UNKNOWN for anything you cannot verify from files you actually read or commands you actually ran.",
+  "description": "CL2-13 corrected-version independent recompute audit",
+  "tools": {
+    "invalid": false,
+    "question": false,
+    "bash": true,
+    "read": true,
+    "glob": false,
+    "grep": false,
+    "edit": false,
+    "write": false,
+    "task": false,
+    "webfetch": false,
+    "todowrite": false,
+    "websearch": false,
+    "skill": false
+  }
+}

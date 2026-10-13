@@ -1,0 +1,6501 @@
+{
+  "schema": 1,
+  "kind": "new_session_person_probe",
+  "sid": "cap_20261007_215623",
+  "person_region": {
+    "center": [
+      2.14,
+      -0.45
+    ],
+    "radius_m": 0.55,
+    "z": [
+      0.05,
+      2.3
+    ],
+    "source": "prior leveled localization (fixed cylinder; not point GT)"
+  },
+  "leveling": {
+    "job": "a9e1e01fa6644f93aa686daa330a5fcd",
+    "authoritative": true,
+    "note": "recommended=tls",
+    "transform_id": "a30199b959701985843239316a092266f13030b5f0b20e9d39ab257a7efc4ddf",
+    "pitch_deg": 26.6433844858512,
+    "roll_deg": -1.2227582636231584
+  },
+  "online_map": {
+    "voxels": 2045,
+    "strong": 1854,
+    "supported": 191
+  },
+  "code_binding": {
+    "human_pipe_lib": "af4cdea6d35c73633b12b0d230f3e91f8ba606d9e42fb2ba69bd4083b4af14e5",
+    "registration": "19c1fced9dbeabdefbc20dc8666fec601e3da8a42de68dec2ccdf195865379f5",
+    "audit_lib": "5b7b1fd95c602274e6891565482c81e5db0ff66973fb7437fa41a151ece7bb5e",
+    "probe": "3a0c0b47c04a29c0c4081ba8e749dca9043bbf7a9bace724e17df9aeeed27cd6"
+  },
+  "summary": {
+    "frames": 66,
+    "person_foreground": {
+      "min": 25,
+      "p50": 32,
+      "max": 39
+    },
+    "person_cleanup": {
+      "min": 22,
+      "p50": 32,
+      "max": 39
+    },
+    "person_clustered": {
+      "min": 0,
+      "p50": 0,
+      "max": 39
+    },
+    "zero_foreground_frames": [],
+    "zero_clustered_frames": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6,
+      7,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      30,
+      31,
+      32,
+      33,
+      36,
+      38,
+      39,
+      40,
+      41,
+      44,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "top_label_counts": {
+      "NONE": 55,
+      "NON_HUMAN": 9,
+      "HUMAN_CANDIDATE": 2
+    },
+    "top_joint_counts": {
+      "NON_HUMAN": 9,
+      "HUMAN_CANDIDATE": 2
+    },
+    "mechanism_totals": {
+      "RANGE": 0,
+      "GROUND": 2761,
+      "STATIC": 122461,
+      "CLEANUP": 54,
+      "OTHER": 0
+    },
+    "person_points_online_tier_sampled": {
+      "strong": 9,
+      "supported": 0,
+      "absent": 305
+    },
+    "merge_suspect_frames": [],
+    "person_track_ids": {
+      "5": {
+        "first": 5,
+        "last": 14,
+        "frames": 3
+      },
+      "7": {
+        "first": 29,
+        "last": 45,
+        "frames": 7
+      },
+      "13": {
+        "first": 60,
+        "last": 60,
+        "frames": 1
+      }
+    },
+    "confirmed_frames": []
+  },
+  "frames": [
+    {
+      "i": 0,
+      "n_in": 49135,
+      "n_denoise": 49135,
+      "n_foreground": 1155,
+      "n_dropped": 47980,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1938,
+        "denoise": 1938,
+        "workspace": 1895,
+        "foreground": 34,
+        "cleanup": 34,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1861,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.187369303193902,
+          "y": 5.736161809042748,
+          "height": 1.5035860538482666,
+          "upcos": 0.008035518424609074,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 2,
+          "x": 11.691459230348176,
+          "y": 0.6721466165949025,
+          "height": 1.6738029718399048,
+          "upcos": 0.08895391717821548,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 1,
+      "n_in": 49136,
+      "n_denoise": 49136,
+      "n_foreground": 1159,
+      "n_dropped": 47977,
+      "clusters_before_cleanup": 19,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1938,
+        "denoise": 1938,
+        "workspace": 1899,
+        "foreground": 35,
+        "cleanup": 35,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 39,
+          "STATIC": 1864,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.062992651311149,
+          "y": 5.762279286359252,
+          "height": 1.503224605321884,
+          "upcos": 0.005878435664891888,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 2,
+          "x": 11.688972094116243,
+          "y": 0.69714305229832,
+          "height": 1.6737510055303573,
+          "upcos": 0.06473095532709776,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 2,
+      "n_in": 49129,
+      "n_denoise": 49129,
+      "n_foreground": 1139,
+      "n_dropped": 47990,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1936,
+        "denoise": 1936,
+        "workspace": 1896,
+        "foreground": 32,
+        "cleanup": 32,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1864,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.10990100500651,
+          "y": 5.756864128576547,
+          "height": 1.5033281436562538,
+          "upcos": 0.005317517852788864,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 2,
+          "x": 11.690034160359696,
+          "y": 0.6412552162065123,
+          "height": 1.6731066285073757,
+          "upcos": 0.06308568225354318,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 3,
+      "n_in": 49134,
+      "n_denoise": 49134,
+      "n_foreground": 1145,
+      "n_dropped": 47989,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1939,
+        "denoise": 1939,
+        "workspace": 1896,
+        "foreground": 28,
+        "cleanup": 27,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1868,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.140749238124712,
+          "y": 5.7547617243524485,
+          "height": 1.503292720928788,
+          "upcos": 0.006852085967393701,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 2,
+          "x": 11.693013085760974,
+          "y": 0.6870337105884818,
+          "height": 1.683286887012422,
+          "upcos": 0.052464509845632126,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "0000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 4,
+      "n_in": 49124,
+      "n_denoise": 49124,
+      "n_foreground": 1122,
+      "n_dropped": 48002,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1934,
+        "denoise": 1934,
+        "workspace": 1893,
+        "foreground": 29,
+        "cleanup": 27,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1864,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.06318305842777,
+          "y": 5.769710053476519,
+          "height": 1.5036515473522245,
+          "upcos": 0.005287303869614308,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.693013085760974,
+          "y": 0.6870337105884818,
+          "height": 1.683286887012422,
+          "upcos": 0.052464509845632126,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.645104614464012,
+          "y": -0.39392683967142494,
+          "height": 1.6480857133865356,
+          "upcos": 0.7071851866383655,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 5,
+      "n_in": 49130,
+      "n_denoise": 49130,
+      "n_foreground": 1140,
+      "n_dropped": 47990,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1936,
+        "denoise": 1936,
+        "workspace": 1891,
+        "foreground": 31,
+        "cleanup": 30,
+        "clustered": 19,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 45,
+          "STATIC": 1860,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 19
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 19,
+          "foreign_points": 61,
+          "n": 80,
+          "cx": 2.767079773545265,
+          "cy": -1.19504436776042,
+          "cz": 0.8576582057401538,
+          "zmin": 0.10032816976308823,
+          "zmax": 1.8482134342193604,
+          "height_m": 1.7478852644562721,
+          "width_m": 0.5252849452281637,
+          "depth_m": 0.9757177891359708,
+          "radius_m": 0.7835654017756724,
+          "upcos": 0.2725361070996279,
+          "label": "NON_HUMAN",
+          "confidence": 0.25,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "SOLID_UNIFORM",
+          "reasons": [
+            "宽/深(0.7m 2σ): 0.53/0.98m",
+            "躯干半径(0.45m 2σ): 0.78m",
+            "主直立度 0.27 < 0.5"
+          ],
+          "track_id": 5,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.078303775877565,
+          "y": 5.770647470912154,
+          "height": 1.5032187562662735,
+          "upcos": 0.006357108856607773,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.688726321299217,
+          "y": 0.7071575801093897,
+          "height": 1.6781055540259926,
+          "upcos": 0.03904272580786016,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.645104614464012,
+          "y": -0.39392683967142494,
+          "height": 1.6480857133865356,
+          "upcos": 0.7071851866383655,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 5,
+          "x": 2.767079773545265,
+          "y": -1.19504436776042,
+          "height": 1.7478852644562721,
+          "upcos": 0.2725361070996279,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 6,
+      "n_in": 49139,
+      "n_denoise": 49139,
+      "n_foreground": 1135,
+      "n_dropped": 48004,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 23,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1930,
+        "denoise": 1930,
+        "workspace": 1889,
+        "foreground": 30,
+        "cleanup": 29,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1859,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.126193628219394,
+          "y": 5.767237710790302,
+          "height": 1.5032803654631917,
+          "upcos": 0.006134334862110337,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.680467737703463,
+          "y": 0.7298895707688126,
+          "height": 1.6689870552987418,
+          "upcos": 0.03316245701910412,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.645104614464012,
+          "y": -0.39392683967142494,
+          "height": 1.6480857133865356,
+          "upcos": 0.7071851866383655,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 5,
+          "x": 2.767079773545265,
+          "y": -1.19504436776042,
+          "height": 1.7478852644562721,
+          "upcos": 0.2725361070996279,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 7,
+      "n_in": 49130,
+      "n_denoise": 49130,
+      "n_foreground": 1128,
+      "n_dropped": 48002,
+      "clusters_before_cleanup": 19,
+      "clusters_after_cleanup": 18,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1937,
+        "denoise": 1937,
+        "workspace": 1892,
+        "foreground": 29,
+        "cleanup": 28,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 45,
+          "STATIC": 1863,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.167887898347747,
+          "y": 5.758911787384596,
+          "height": 1.5028652733539158,
+          "upcos": 0.00571793372233662,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.685144891996213,
+          "y": 0.7525535853054314,
+          "height": 1.6705644794206684,
+          "upcos": 0.03903400741662143,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.645104614464012,
+          "y": -0.39392683967142494,
+          "height": 1.6480857133865356,
+          "upcos": 0.7071851866383655,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 5,
+          "x": 2.767079773545265,
+          "y": -1.19504436776042,
+          "height": 1.7478852644562721,
+          "upcos": 0.2725361070996279,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 8,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1154,
+      "n_dropped": 47977,
+      "clusters_before_cleanup": 25,
+      "clusters_after_cleanup": 23,
+      "cleanup_split_delta": -2,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1934,
+        "denoise": 1934,
+        "workspace": 1893,
+        "foreground": 34,
+        "cleanup": 34,
+        "clustered": 22,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1859,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 22
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 22,
+          "foreign_points": 63,
+          "n": 85,
+          "cx": 2.76980338938096,
+          "cy": -1.1816963469280917,
+          "cz": 0.8651316870661343,
+          "zmin": 0.10910016298294067,
+          "zmax": 1.8465205430984497,
+          "height_m": 1.737420380115509,
+          "width_m": 0.5454902943527097,
+          "depth_m": 0.9803967287989246,
+          "radius_m": 0.7933276142529762,
+          "upcos": 0.35245124308807674,
+          "label": "NON_HUMAN",
+          "confidence": 0.25,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "SOLID_UNIFORM",
+          "reasons": [
+            "宽/深(0.7m 2σ): 0.55/0.98m",
+            "躯干半径(0.45m 2σ): 0.79m",
+            "主直立度 0.35 < 0.5"
+          ],
+          "track_id": 5,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.17770104406259,
+          "y": 5.758236205585574,
+          "height": 1.502093011228591,
+          "upcos": 0.004000297916741339,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.689369173376132,
+          "y": 0.7457298753410601,
+          "height": 1.6651107682919069,
+          "upcos": 0.034393853534818525,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.645104614464012,
+          "y": -0.39392683967142494,
+          "height": 1.6480857133865356,
+          "upcos": 0.7071851866383655,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 5,
+          "x": 2.7680330390877583,
+          "y": -1.1903725604691051,
+          "height": 1.744222554937005,
+          "upcos": 0.300506404695585,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 9,
+      "n_in": 49135,
+      "n_denoise": 49135,
+      "n_foreground": 1141,
+      "n_dropped": 47994,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": -3,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1939,
+        "denoise": 1939,
+        "workspace": 1900,
+        "foreground": 31,
+        "cleanup": 31,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 39,
+          "STATIC": 1869,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.18051318195811,
+          "y": 5.762397813843453,
+          "height": 1.502435561177559,
+          "upcos": 0.004880113935053808,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.68934060340967,
+          "y": 0.7787013421903124,
+          "height": 1.673311618883224,
+          "upcos": 0.0358698576448838,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.645104614464012,
+          "y": -0.39392683967142494,
+          "height": 1.6480857133865356,
+          "upcos": 0.7071851866383655,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 5,
+          "x": 2.7680330390877583,
+          "y": -1.1903725604691051,
+          "height": 1.744222554937005,
+          "upcos": 0.300506404695585,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 10,
+      "n_in": 49140,
+      "n_denoise": 49140,
+      "n_foreground": 1154,
+      "n_dropped": 47986,
+      "clusters_before_cleanup": 24,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1937,
+        "denoise": 1937,
+        "workspace": 1897,
+        "foreground": 30,
+        "cleanup": 28,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1867,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.211488471286701,
+          "y": 5.753151299842149,
+          "height": 1.5022303675634938,
+          "upcos": 0.0050749217643215865,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.69285948622675,
+          "y": 0.7904686546627853,
+          "height": 1.6745141150029774,
+          "upcos": 0.0464973947378028,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.645104614464012,
+          "y": -0.39392683967142494,
+          "height": 1.6480857133865356,
+          "upcos": 0.7071851866383655,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 5,
+          "x": 2.7680330390877583,
+          "y": -1.1903725604691051,
+          "height": 1.744222554937005,
+          "upcos": 0.300506404695585,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 11,
+      "n_in": 49135,
+      "n_denoise": 49135,
+      "n_foreground": 1152,
+      "n_dropped": 47983,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 23,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1929,
+        "denoise": 1929,
+        "workspace": 1892,
+        "foreground": 30,
+        "cleanup": 30,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 37,
+          "STATIC": 1862,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.19671641943171,
+          "y": 5.754371384861978,
+          "height": 1.5021212955082586,
+          "upcos": 0.005642789718762182,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.692612079269148,
+          "y": 0.7776697721756248,
+          "height": 1.679404288625417,
+          "upcos": 0.03921448267754289,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.645104614464012,
+          "y": -0.39392683967142494,
+          "height": 1.6480857133865356,
+          "upcos": 0.7071851866383655,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 5,
+          "x": 2.7680330390877583,
+          "y": -1.1903725604691051,
+          "height": 1.744222554937005,
+          "upcos": 0.300506404695585,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 12,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1153,
+      "n_dropped": 47978,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1926,
+        "denoise": 1926,
+        "workspace": 1887,
+        "foreground": 32,
+        "cleanup": 32,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 39,
+          "STATIC": 1855,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.257791563854317,
+          "y": 5.5563252516181825,
+          "height": 1.502966766441597,
+          "upcos": 0.010789304227737384,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.692612079269148,
+          "y": 0.7776697721756248,
+          "height": 1.679404288625417,
+          "upcos": 0.03921448267754289,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.690366008064963,
+          "y": 1.4488569638042739,
+          "height": 1.6737920641899109,
+          "upcos": 0.26137999434653386,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 4,
+          "x": 11.655877178014057,
+          "y": -0.39412776048567505,
+          "height": 1.6463415563106536,
+          "upcos": 0.7599971098150586,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 5,
+          "x": 2.7680330390877583,
+          "y": -1.1903725604691051,
+          "height": 1.744222554937005,
+          "upcos": 0.300506404695585,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 13,
+      "n_in": 49129,
+      "n_denoise": 49129,
+      "n_foreground": 1158,
+      "n_dropped": 47971,
+      "clusters_before_cleanup": 30,
+      "clusters_after_cleanup": 29,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1934,
+        "denoise": 1934,
+        "workspace": 1891,
+        "foreground": 37,
+        "cleanup": 36,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1854,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.23003861394558,
+          "y": 5.624070173318857,
+          "height": 1.5034339399884908,
+          "upcos": 0.008948066939706952,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.692612079269148,
+          "y": 0.7776697721756248,
+          "height": 1.679404288625417,
+          "upcos": 0.03921448267754289,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.695838647288875,
+          "y": 1.530034934027698,
+          "height": 1.605234295129776,
+          "upcos": 0.4106477066466313,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 4,
+          "x": 11.66959481813958,
+          "y": -0.28508193888988526,
+          "height": 1.6456096282601356,
+          "upcos": 0.5269609560819565,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 5,
+          "x": 2.7680330390877583,
+          "y": -1.1903725604691051,
+          "height": 1.744222554937005,
+          "upcos": 0.300506404695585,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 14,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1152,
+      "n_dropped": 47979,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1932,
+        "denoise": 1932,
+        "workspace": 1886,
+        "foreground": 36,
+        "cleanup": 36,
+        "clustered": 32,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "STATIC": 1850,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 32
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 32,
+          "foreign_points": 28,
+          "n": 60,
+          "cx": 2.586918222904205,
+          "cy": -0.7812988912065824,
+          "cz": 0.8710812193651994,
+          "zmin": 0.10911022871732712,
+          "zmax": 1.7804747819900513,
+          "height_m": 1.6713645532727242,
+          "width_m": 0.4721949092936059,
+          "depth_m": 0.36386265924166966,
+          "radius_m": 0.4215234674091207,
+          "upcos": 0.9912608890703644,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 5,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.094197281193319,
+          "y": 5.688240326613816,
+          "height": 1.5034425359604755,
+          "upcos": 0.006104641044801481,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.694736537733583,
+          "y": 0.7964735665493158,
+          "height": 1.6766857371352153,
+          "upcos": 0.0479147929000988,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.695838647288875,
+          "y": 1.530034934027698,
+          "height": 1.605234295129776,
+          "upcos": 0.4106477066466313,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 4,
+          "x": 11.66959481813958,
+          "y": -0.28508193888988526,
+          "height": 1.6456096282601356,
+          "upcos": 0.5269609560819565,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 15,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1150,
+      "n_dropped": 47981,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": -1,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1928,
+        "denoise": 1928,
+        "workspace": 1888,
+        "foreground": 33,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1855,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.094197281193319,
+          "y": 5.688240326613816,
+          "height": 1.5034425359604755,
+          "upcos": 0.006104641044801481,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.694736537733583,
+          "y": 0.7964735665493158,
+          "height": 1.6766857371352153,
+          "upcos": 0.0479147929000988,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.695838647288875,
+          "y": 1.530034934027698,
+          "height": 1.605234295129776,
+          "upcos": 0.4106477066466313,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 4,
+          "x": 11.66959481813958,
+          "y": -0.28508193888988526,
+          "height": 1.6456096282601356,
+          "upcos": 0.5269609560819565,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 1,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 16,
+      "n_in": 49129,
+      "n_denoise": 49129,
+      "n_foreground": 1156,
+      "n_dropped": 47973,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1926,
+        "denoise": 1926,
+        "workspace": 1888,
+        "foreground": 33,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 38,
+          "STATIC": 1855,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 9.99502768856688,
+          "y": 5.730915219455071,
+          "height": 1.503704763061275,
+          "upcos": 0.00531385219422642,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.696991479442648,
+          "y": 0.7394465856437145,
+          "height": 1.6683750542654916,
+          "upcos": 0.06718524481628199,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.695838647288875,
+          "y": 1.530034934027698,
+          "height": 1.605234295129776,
+          "upcos": 0.4106477066466313,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 4,
+          "x": 11.66959481813958,
+          "y": -0.28508193888988526,
+          "height": 1.6456096282601356,
+          "upcos": 0.5269609560819565,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 2,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 17,
+      "n_in": 49132,
+      "n_denoise": 49132,
+      "n_foreground": 1143,
+      "n_dropped": 47989,
+      "clusters_before_cleanup": 25,
+      "clusters_after_cleanup": 23,
+      "cleanup_split_delta": -2,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1937,
+        "denoise": 1937,
+        "workspace": 1891,
+        "foreground": 33,
+        "cleanup": 32,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "STATIC": 1858,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.06166320658512,
+          "y": 5.738126531058136,
+          "height": 1.503524067793494,
+          "upcos": 0.00590804259109103,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.71386238802785,
+          "y": 0.8645415685614765,
+          "height": 1.602453680358858,
+          "upcos": 0.15462821016232264,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.695838647288875,
+          "y": 1.530034934027698,
+          "height": 1.605234295129776,
+          "upcos": 0.4106477066466313,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 4,
+          "x": 11.670222655260131,
+          "y": -0.31718536081381277,
+          "height": 1.647357703462243,
+          "upcos": 0.6384793291555761,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 3,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 18,
+      "n_in": 49133,
+      "n_denoise": 49133,
+      "n_foreground": 1153,
+      "n_dropped": 47980,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1928,
+        "denoise": 1928,
+        "workspace": 1884,
+        "foreground": 29,
+        "cleanup": 28,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1855,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 9.984724080831514,
+          "y": 5.761063007697583,
+          "height": 1.5037331628960704,
+          "upcos": 0.004095993925473324,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.71386238802785,
+          "y": 0.8645415685614765,
+          "height": 1.602453680358858,
+          "upcos": 0.15462821016232264,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.699406145227538,
+          "y": 1.4951692142390531,
+          "height": 1.5605644330382347,
+          "upcos": 0.3450015439062343,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 4,
+          "x": 11.67303140773588,
+          "y": -0.3441598412533543,
+          "height": 1.6480961837269366,
+          "upcos": 0.7152867483434477,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 4,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 19,
+      "n_in": 49137,
+      "n_denoise": 49137,
+      "n_foreground": 1159,
+      "n_dropped": 47978,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1925,
+        "denoise": 1925,
+        "workspace": 1885,
+        "foreground": 30,
+        "cleanup": 29,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1855,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.054554779353507,
+          "y": 5.759223595220473,
+          "height": 1.5034615011320032,
+          "upcos": 0.0042962157355811645,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.70112195634361,
+          "y": 0.8054968775187542,
+          "height": 1.620319523900395,
+          "upcos": 0.10352921637402229,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.699406145227538,
+          "y": 1.4951692142390531,
+          "height": 1.5605644330382347,
+          "upcos": 0.3450015439062343,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 4,
+          "x": 11.67303140773588,
+          "y": -0.3441598412533543,
+          "height": 1.6480961837269366,
+          "upcos": 0.7152867483434477,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 5,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 20,
+      "n_in": 49133,
+      "n_denoise": 49133,
+      "n_foreground": 1157,
+      "n_dropped": 47976,
+      "clusters_before_cleanup": 19,
+      "clusters_after_cleanup": 18,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1931,
+        "denoise": 1931,
+        "workspace": 1887,
+        "foreground": 31,
+        "cleanup": 30,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1856,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.099565212785663,
+          "y": 5.7542025754962,
+          "height": 1.5042575108357852,
+          "upcos": 0.005147602724492552,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.700284185044907,
+          "y": 0.8106641868641867,
+          "height": 1.6395348618609402,
+          "upcos": 0.0893794875380618,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.699406145227538,
+          "y": 1.4951692142390531,
+          "height": 1.5605644330382347,
+          "upcos": 0.3450015439062343,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 4,
+          "x": 11.67303140773588,
+          "y": -0.3441598412533543,
+          "height": 1.6480961837269366,
+          "upcos": 0.7152867483434477,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 6,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 21,
+      "n_in": 49137,
+      "n_denoise": 49137,
+      "n_foreground": 1158,
+      "n_dropped": 47979,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1926,
+        "denoise": 1926,
+        "workspace": 1884,
+        "foreground": 30,
+        "cleanup": 30,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "STATIC": 1854,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.010082744323514,
+          "y": 5.771395593321777,
+          "height": 1.5034447381671847,
+          "upcos": 0.0038565400798099368,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.698841343586187,
+          "y": 0.7864924169844554,
+          "height": 1.6445570579785855,
+          "upcos": 0.06321824648830189,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.699406145227538,
+          "y": 1.4951692142390531,
+          "height": 1.5605644330382347,
+          "upcos": 0.3450015439062343,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 4,
+          "x": 11.67303140773588,
+          "y": -0.3441598412533543,
+          "height": 1.6480961837269366,
+          "upcos": 0.7152867483434477,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 7,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 22,
+      "n_in": 49138,
+      "n_denoise": 49138,
+      "n_foreground": 1153,
+      "n_dropped": 47985,
+      "clusters_before_cleanup": 24,
+      "clusters_after_cleanup": 23,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1927,
+        "denoise": 1927,
+        "workspace": 1887,
+        "foreground": 31,
+        "cleanup": 31,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1856,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.085610193069185,
+          "y": 5.758295966468101,
+          "height": 1.5038012609238205,
+          "upcos": 0.003281468315438849,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.698841343586187,
+          "y": 0.7864924169844554,
+          "height": 1.6445570579785855,
+          "upcos": 0.06321824648830189,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.687678896394566,
+          "y": 1.4566028921200471,
+          "height": 1.599455685839057,
+          "upcos": 0.2568828548683446,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 4,
+          "x": 11.68529743992165,
+          "y": -0.38925312547961943,
+          "height": 1.6469174671802298,
+          "upcos": 0.7867048680284906,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 5,
+          "x": 2.7046428534235147,
+          "y": -1.047196776227222,
+          "height": 1.7187222543545067,
+          "upcos": 0.5422704742267578,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 8,
+          "born": 5,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 23,
+      "n_in": 49132,
+      "n_denoise": 49132,
+      "n_foreground": 1149,
+      "n_dropped": 47983,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": -2,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1928,
+        "denoise": 1928,
+        "workspace": 1886,
+        "foreground": 30,
+        "cleanup": 28,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "STATIC": 1856,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.012566260586016,
+          "y": 5.78224821409459,
+          "height": 1.5021280422290768,
+          "upcos": 0.0035108347627007264,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.698841343586187,
+          "y": 0.7864924169844554,
+          "height": 1.6445570579785855,
+          "upcos": 0.06321824648830189,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.684767403408564,
+          "y": 1.387247954470688,
+          "height": 1.6247423434518278,
+          "upcos": 0.22843291612005132,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 6,
+          "x": 10.634116966277361,
+          "y": 4.406383492513366,
+          "height": 1.6787113547325134,
+          "upcos": 0.04005932551091403,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 15,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 24,
+      "n_in": 49137,
+      "n_denoise": 49137,
+      "n_foreground": 1171,
+      "n_dropped": 47966,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 23,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1935,
+        "denoise": 1935,
+        "workspace": 1891,
+        "foreground": 36,
+        "cleanup": 36,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1855,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 9.947426832771063,
+          "y": 5.793664946051704,
+          "height": 1.5021017018370224,
+          "upcos": 0.002803345639911821,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.698841343586187,
+          "y": 0.7864924169844554,
+          "height": 1.6445570579785855,
+          "upcos": 0.06321824648830189,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.672329968124592,
+          "y": 1.4626991737080262,
+          "height": 1.6488058481385932,
+          "upcos": 0.21018083400385584,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 25,
+      "n_in": 49135,
+      "n_denoise": 49135,
+      "n_foreground": 1156,
+      "n_dropped": 47979,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1928,
+        "denoise": 1928,
+        "workspace": 1889,
+        "foreground": 33,
+        "cleanup": 32,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 39,
+          "STATIC": 1856,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.033677763480595,
+          "y": 5.783693263984434,
+          "height": 1.5018677657065844,
+          "upcos": 0.003460666378913825,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.704432913796918,
+          "y": 0.762206535546767,
+          "height": 1.6128562534403987,
+          "upcos": 0.06275994362062359,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.672329968124592,
+          "y": 1.4626991737080262,
+          "height": 1.6488058481385932,
+          "upcos": 0.21018083400385584,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 26,
+      "n_in": 49130,
+      "n_denoise": 49130,
+      "n_foreground": 1162,
+      "n_dropped": 47968,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1928,
+        "denoise": 1928,
+        "workspace": 1887,
+        "foreground": 33,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1854,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.075632060209298,
+          "y": 5.777126457348845,
+          "height": 1.5026741528900203,
+          "upcos": 0.004689777488324448,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.704432913796918,
+          "y": 0.762206535546767,
+          "height": 1.6128562534403987,
+          "upcos": 0.06275994362062359,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.678578190386233,
+          "y": 1.395638083636066,
+          "height": 1.5890026007047202,
+          "upcos": 0.17320099720211354,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 27,
+      "n_in": 49128,
+      "n_denoise": 49128,
+      "n_foreground": 1144,
+      "n_dropped": 47984,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1927,
+        "denoise": 1927,
+        "workspace": 1886,
+        "foreground": 29,
+        "cleanup": 29,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1857,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 9.982141820102802,
+          "y": 5.792921943161659,
+          "height": 1.502701130296253,
+          "upcos": 0.004792364081263991,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.704857121707002,
+          "y": 0.8617332496680324,
+          "height": 1.5994380612133863,
+          "upcos": 0.21623274874292256,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.678578190386233,
+          "y": 1.395638083636066,
+          "height": 1.5890026007047202,
+          "upcos": 0.17320099720211354,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 4,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 28,
+      "n_in": 49135,
+      "n_denoise": 49135,
+      "n_foreground": 1149,
+      "n_dropped": 47986,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": -3,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1930,
+        "denoise": 1930,
+        "workspace": 1889,
+        "foreground": 33,
+        "cleanup": 31,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1856,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 9.94338277865582,
+          "y": 5.7952836497876365,
+          "height": 1.5023258829221635,
+          "upcos": 0.003866228609245508,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.704857121707002,
+          "y": 0.8617332496680324,
+          "height": 1.5994380612133863,
+          "upcos": 0.21623274874292256,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.683778773838222,
+          "y": 1.3640624095466298,
+          "height": 1.591894588278541,
+          "upcos": 0.17812725535606913,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 5,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 29,
+      "n_in": 49133,
+      "n_denoise": 49133,
+      "n_foreground": 1146,
+      "n_dropped": 47987,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1929,
+        "denoise": 1929,
+        "workspace": 1886,
+        "foreground": 32,
+        "cleanup": 32,
+        "clustered": 26,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1854,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 26
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 26,
+          "foreign_points": 34,
+          "n": 60,
+          "cx": 2.610490163167318,
+          "cy": -0.9129327148199081,
+          "cz": 0.8437335190673669,
+          "zmin": 0.10225547105073929,
+          "zmax": 1.7462433576583862,
+          "height_m": 1.643987886607647,
+          "width_m": 0.45123986441483915,
+          "depth_m": 0.6494696381998754,
+          "radius_m": 0.5592084701525002,
+          "upcos": 0.9405118163666052,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.56m"
+          ],
+          "track_id": 7,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.023367177360724,
+          "y": 5.782262776748731,
+          "height": 1.5028564599820555,
+          "upcos": 0.00370720703244567,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.70375855918637,
+          "y": 0.8902384095429446,
+          "height": 1.602315195830991,
+          "upcos": 0.1413629923200847,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.683778773838222,
+          "y": 1.3640624095466298,
+          "height": 1.591894588278541,
+          "upcos": 0.17812725535606913,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 6,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.610490163167318,
+          "y": -0.9129327148199081,
+          "height": 1.643987886607647,
+          "upcos": 0.9405118163666052,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 30,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1157,
+      "n_dropped": 47974,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 18,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1929,
+        "denoise": 1929,
+        "workspace": 1889,
+        "foreground": 34,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1855,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 9.961281260248409,
+          "y": 5.790558023491265,
+          "height": 1.5025661611541685,
+          "upcos": 0.0034664633361092376,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.70317616338532,
+          "y": 0.9039552263300499,
+          "height": 1.6010005558341887,
+          "upcos": 0.09418907783005485,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.683778773838222,
+          "y": 1.3640624095466298,
+          "height": 1.591894588278541,
+          "upcos": 0.17812725535606913,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 7,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.610490163167318,
+          "y": -0.9129327148199081,
+          "height": 1.643987886607647,
+          "upcos": 0.9405118163666052,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 31,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1121,
+      "n_dropped": 48010,
+      "clusters_before_cleanup": 24,
+      "clusters_after_cleanup": 23,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1931,
+        "denoise": 1931,
+        "workspace": 1885,
+        "foreground": 31,
+        "cleanup": 30,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 46,
+          "STATIC": 1854,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 9.961281260248409,
+          "y": 5.790558023491265,
+          "height": 1.5025661611541685,
+          "upcos": 0.0034664633361092376,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.70317616338532,
+          "y": 0.9039552263300499,
+          "height": 1.6010005558341887,
+          "upcos": 0.09418907783005485,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.688716736307379,
+          "y": 1.5341455666925965,
+          "height": 1.557580940837091,
+          "upcos": 0.2585185682999558,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 4,
+          "x": 11.697247215388902,
+          "y": -0.42367855310626035,
+          "height": 1.6477662624529694,
+          "upcos": 0.8371132329226766,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 8,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.610490163167318,
+          "y": -0.9129327148199081,
+          "height": 1.643987886607647,
+          "upcos": 0.9405118163666052,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 32,
+      "n_in": 49132,
+      "n_denoise": 49132,
+      "n_foreground": 1137,
+      "n_dropped": 47995,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1928,
+        "denoise": 1928,
+        "workspace": 1885,
+        "foreground": 36,
+        "cleanup": 36,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1849,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.043871946694914,
+          "y": 5.779082567602935,
+          "height": 1.5024703011502798,
+          "upcos": 0.0036439685741778624,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.70317616338532,
+          "y": 0.9039552263300499,
+          "height": 1.6010005558341887,
+          "upcos": 0.09418907783005485,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.6859717376223,
+          "y": 1.4765678684372743,
+          "height": 1.5754169448160895,
+          "upcos": 0.19866947956997785,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.610490163167318,
+          "y": -0.9129327148199081,
+          "height": 1.643987886607647,
+          "upcos": 0.9405118163666052,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 33,
+      "n_in": 49138,
+      "n_denoise": 49138,
+      "n_foreground": 1159,
+      "n_dropped": 47979,
+      "clusters_before_cleanup": 26,
+      "clusters_after_cleanup": 25,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1923,
+        "denoise": 1923,
+        "workspace": 1882,
+        "foreground": 31,
+        "cleanup": 31,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1851,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.118899149764124,
+          "y": 5.70764553276765,
+          "height": 1.5021409633391583,
+          "upcos": 0.0069124557680621986,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.702061076124894,
+          "y": 0.9540653887414355,
+          "height": 1.5928648735211883,
+          "upcos": 0.2457122944291542,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.6859717376223,
+          "y": 1.4765678684372743,
+          "height": 1.5754169448160895,
+          "upcos": 0.19866947956997785,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.610490163167318,
+          "y": -0.9129327148199081,
+          "height": 1.643987886607647,
+          "upcos": 0.9405118163666052,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 34,
+      "n_in": 49133,
+      "n_denoise": 49133,
+      "n_foreground": 1153,
+      "n_dropped": 47980,
+      "clusters_before_cleanup": 19,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": 0,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1924,
+        "denoise": 1924,
+        "workspace": 1880,
+        "foreground": 34,
+        "cleanup": 32,
+        "clustered": 32,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1846,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 32
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 32,
+          "foreign_points": 29,
+          "n": 61,
+          "cx": 2.5928864557234967,
+          "cy": -0.679015289808883,
+          "cz": 0.9331102597176052,
+          "zmin": 0.10295487940311432,
+          "zmax": 1.7635579109191895,
+          "height_m": 1.6606030315160751,
+          "width_m": 0.4535361947793083,
+          "depth_m": 0.41467078987028594,
+          "radius_m": 0.4345382284371201,
+          "upcos": 0.9980247584048697,
+          "label": "HUMAN_CANDIDATE",
+          "confidence": 1,
+          "joint": "HUMAN_CANDIDATE",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [],
+          "track_id": 7,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.137946542687363,
+          "y": 5.723344462237089,
+          "height": 1.502763632705983,
+          "upcos": 0.007133193780134982,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.702916858699346,
+          "y": 0.9394346751799624,
+          "height": 1.598152397705345,
+          "upcos": 0.1698060887073064,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.6859717376223,
+          "y": 1.4765678684372743,
+          "height": 1.5754169448160895,
+          "upcos": 0.19866947956997785,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6043288655619805,
+          "y": -0.8310616160660493,
+          "height": 1.6498031873255967,
+          "upcos": 0.9606413460799977,
+          "label": "HUMAN_CANDIDATE",
+          "lost": 0,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 35,
+      "n_in": 49137,
+      "n_denoise": 49137,
+      "n_foreground": 1153,
+      "n_dropped": 47984,
+      "clusters_before_cleanup": 19,
+      "clusters_after_cleanup": 17,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1920,
+        "denoise": 1920,
+        "workspace": 1880,
+        "foreground": 31,
+        "cleanup": 29,
+        "clustered": 27,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1849,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 27
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 27,
+          "foreign_points": 58,
+          "n": 85,
+          "cx": 2.7456111290875604,
+          "cy": -1.0824701568659614,
+          "cz": 0.9439473081160994,
+          "zmin": 0.10060735046863556,
+          "zmax": 1.9320181608200073,
+          "height_m": 1.8314108103513718,
+          "width_m": 0.5704887915354601,
+          "depth_m": 0.9452257896960623,
+          "radius_m": 0.7806757504797156,
+          "upcos": 0.9963584382753204,
+          "label": "NON_HUMAN",
+          "confidence": 0.5,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "SOLID_UNIFORM",
+          "reasons": [
+            "宽/深(0.7m 2σ): 0.57/0.95m",
+            "躯干半径(0.45m 2σ): 0.78m"
+          ],
+          "track_id": 7,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.137946542687363,
+          "y": 5.723344462237089,
+          "height": 1.502763632705983,
+          "upcos": 0.007133193780134982,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.702916858699346,
+          "y": 0.9394346751799624,
+          "height": 1.598152397705345,
+          "upcos": 0.1698060887073064,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.6859717376223,
+          "y": 1.4765678684372743,
+          "height": 1.5754169448160895,
+          "upcos": 0.19866947956997785,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6537776577959336,
+          "y": -0.9190546053460186,
+          "height": 1.713365855384618,
+          "upcos": 0.9731423283483607,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 36,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1153,
+      "n_dropped": 47978,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1924,
+        "denoise": 1924,
+        "workspace": 1880,
+        "foreground": 38,
+        "cleanup": 37,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1842,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.16481410128381,
+          "y": 5.730846236889086,
+          "height": 1.502387391975785,
+          "upcos": 0.005849061102739254,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.702916858699346,
+          "y": 0.9394346751799624,
+          "height": 1.598152397705345,
+          "upcos": 0.1698060887073064,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.670437166911098,
+          "y": 1.50748693764133,
+          "height": 1.5864378418091385,
+          "upcos": 0.22847964717876745,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6537776577959336,
+          "y": -0.9190546053460186,
+          "height": 1.713365855384618,
+          "upcos": 0.9731423283483607,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 37,
+      "n_in": 49137,
+      "n_denoise": 49137,
+      "n_foreground": 1154,
+      "n_dropped": 47983,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": 0,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1925,
+        "denoise": 1925,
+        "workspace": 1882,
+        "foreground": 36,
+        "cleanup": 36,
+        "clustered": 31,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1846,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 31
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 31,
+          "foreign_points": 60,
+          "n": 91,
+          "cx": 2.7139524548918335,
+          "cy": -1.1377889114421802,
+          "cz": 0.8618250960832113,
+          "zmin": 0.10252954810857773,
+          "zmax": 1.9315563440322876,
+          "height_m": 1.8290267959237099,
+          "width_m": 0.5652030811140791,
+          "depth_m": 0.9766248770711968,
+          "radius_m": 0.7978880477282445,
+          "upcos": 0.05531691457343566,
+          "label": "NON_HUMAN",
+          "confidence": 0.25,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "SOLID_UNIFORM",
+          "reasons": [
+            "宽/深(0.7m 2σ): 0.57/0.98m",
+            "躯干半径(0.45m 2σ): 0.80m",
+            "主直立度 0.06 < 0.5"
+          ],
+          "track_id": 7,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.06188902678565,
+          "y": 5.753679815029522,
+          "height": 1.5030089893374066,
+          "upcos": 0.004014748556021554,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.702916858699346,
+          "y": 0.9394346751799624,
+          "height": 1.598152397705345,
+          "upcos": 0.1698060887073064,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6748388367794984,
+          "y": -0.9956116124796751,
+          "height": 1.7538471845733001,
+          "upcos": 0.651903433527137,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 38,
+      "n_in": 49138,
+      "n_denoise": 49138,
+      "n_foreground": 1140,
+      "n_dropped": 47998,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1920,
+        "denoise": 1920,
+        "workspace": 1880,
+        "foreground": 32,
+        "cleanup": 32,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1848,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.116841908935648,
+          "y": 5.746691779125956,
+          "height": 1.5019293279430859,
+          "upcos": 0.004176897874878983,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.701594569414036,
+          "y": 0.9079401247136083,
+          "height": 1.591923283648092,
+          "upcos": 0.11434256515063551,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6748388367794984,
+          "y": -0.9956116124796751,
+          "height": 1.7538471845733001,
+          "upcos": 0.651903433527137,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 39,
+      "n_in": 49134,
+      "n_denoise": 49134,
+      "n_foreground": 1146,
+      "n_dropped": 47988,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1922,
+        "denoise": 1922,
+        "workspace": 1883,
+        "foreground": 34,
+        "cleanup": 34,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 39,
+          "STATIC": 1849,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.148431661692756,
+          "y": 5.750102544075692,
+          "height": 1.502353283081257,
+          "upcos": 0.0030898278352400124,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.69996042841167,
+          "y": 0.8784750919291991,
+          "height": 1.5878764039501936,
+          "upcos": 0.08362376188220541,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6748388367794984,
+          "y": -0.9956116124796751,
+          "height": 1.7538471845733001,
+          "upcos": 0.651903433527137,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 8,
+          "x": 6.521946606570727,
+          "y": 6.519310121666895,
+          "height": 1.4689955711364746,
+          "upcos": 0.46195045677935437,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 9,
+          "x": 10.750623484875293,
+          "y": 5.702045262113531,
+          "height": 1.4961017370224,
+          "upcos": 0.04689836776423245,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 31,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 40,
+      "n_in": 49139,
+      "n_denoise": 49139,
+      "n_foreground": 1146,
+      "n_dropped": 47993,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1926,
+        "denoise": 1926,
+        "workspace": 1883,
+        "foreground": 37,
+        "cleanup": 37,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1846,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.168425270708584,
+          "y": 5.75358026334755,
+          "height": 1.5028519272843721,
+          "upcos": 0.0025094043020411835,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.69991527280364,
+          "y": 0.8820022998713666,
+          "height": 1.5912825564589603,
+          "upcos": 0.06279860074984399,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6748388367794984,
+          "y": -0.9956116124796751,
+          "height": 1.7538471845733001,
+          "upcos": 0.651903433527137,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 41,
+      "n_in": 49130,
+      "n_denoise": 49130,
+      "n_foreground": 1146,
+      "n_dropped": 47984,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": -2,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1927,
+        "denoise": 1927,
+        "workspace": 1883,
+        "foreground": 36,
+        "cleanup": 36,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1847,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.381505296052298,
+          "y": 5.723582917133787,
+          "height": 1.5003873056198973,
+          "upcos": 0.019122489742372406,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.697997188104571,
+          "y": 0.8739950852409429,
+          "height": 1.587974212073309,
+          "upcos": 0.045771687205442044,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6748388367794984,
+          "y": -0.9956116124796751,
+          "height": 1.7538471845733001,
+          "upcos": 0.651903433527137,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 42,
+      "n_in": 49130,
+      "n_denoise": 49130,
+      "n_foreground": 1155,
+      "n_dropped": 47975,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": -3,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1920,
+        "denoise": 1920,
+        "workspace": 1879,
+        "foreground": 39,
+        "cleanup": 39,
+        "clustered": 39,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1840,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 39
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 39,
+          "foreign_points": 28,
+          "n": 67,
+          "cx": 2.5841542535753392,
+          "cy": -0.7016743523861045,
+          "cz": 0.9056035274667527,
+          "zmin": 0.10632020235061646,
+          "zmax": 1.7792671918869019,
+          "height_m": 1.6729469895362854,
+          "width_m": 0.5089541019220274,
+          "depth_m": 0.5055492293920364,
+          "radius_m": 0.5072545225043043,
+          "upcos": 0.9897804189338832,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.51m"
+          ],
+          "track_id": 7,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.31681339135486,
+          "y": 5.731740001685895,
+          "height": 1.5009352589564307,
+          "upcos": 0.014419692507620633,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.697924107223532,
+          "y": 0.8781074783661033,
+          "height": 1.5919909228652365,
+          "upcos": 0.0394380940508168,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6430992326580425,
+          "y": -0.8927335714469254,
+          "height": 1.725532116310345,
+          "upcos": 0.7701603784194981,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 43,
+      "n_in": 49132,
+      "n_denoise": 49132,
+      "n_foreground": 1143,
+      "n_dropped": 47989,
+      "clusters_before_cleanup": 16,
+      "clusters_after_cleanup": 15,
+      "cleanup_split_delta": -1,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1922,
+        "denoise": 1922,
+        "workspace": 1882,
+        "foreground": 37,
+        "cleanup": 37,
+        "clustered": 37,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1845,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 37
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 37,
+          "foreign_points": 59,
+          "n": 96,
+          "cx": 2.7102916662891707,
+          "cy": -1.0752286055746179,
+          "cz": 0.9330884433196237,
+          "zmin": 0.10319571197032928,
+          "zmax": 1.9310588836669922,
+          "height_m": 1.827863171696663,
+          "width_m": 0.5815489276779375,
+          "depth_m": 1.074029299608671,
+          "radius_m": 0.8636371030998066,
+          "upcos": 0.15550248953138956,
+          "label": "NON_HUMAN",
+          "confidence": 0.25,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "SOLID_UNIFORM",
+          "reasons": [
+            "宽/深(0.7m 2σ): 0.58/1.07m",
+            "躯干半径(0.45m 2σ): 0.86m",
+            "主直立度 0.16 < 0.5"
+          ],
+          "track_id": 7,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.16078556116271,
+          "y": 5.754174717351813,
+          "height": 1.5018364594574678,
+          "upcos": 0.010163478084047217,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.696047269733398,
+          "y": 0.8824007282510906,
+          "height": 1.594306488568611,
+          "upcos": 0.03389582664664056,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6666165844289376,
+          "y": -0.9566068333916178,
+          "height": 1.7613479856955563,
+          "upcos": 0.5550301173086601,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 10,
+          "x": 10.305726943420748,
+          "y": 4.57754308111315,
+          "height": 1.6077560186386108,
+          "upcos": 0.028274977341930022,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 35,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 44,
+      "n_in": 49138,
+      "n_denoise": 49138,
+      "n_foreground": 1164,
+      "n_dropped": 47974,
+      "clusters_before_cleanup": 25,
+      "clusters_after_cleanup": 24,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1914,
+        "denoise": 1914,
+        "workspace": 1875,
+        "foreground": 35,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 39,
+          "STATIC": 1840,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.169281840678305,
+          "y": 5.753076066113465,
+          "height": 1.502822198870514,
+          "upcos": 0.009887861363146762,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.700732222261063,
+          "y": 0.7704574886484999,
+          "height": 1.5888367303488329,
+          "upcos": 0.04503473004668039,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6666165844289376,
+          "y": -0.9566068333916178,
+          "height": 1.7613479856955563,
+          "upcos": 0.5550301173086601,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 45,
+      "n_in": 49129,
+      "n_denoise": 49129,
+      "n_foreground": 1166,
+      "n_dropped": 47963,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": 0,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1916,
+        "denoise": 1916,
+        "workspace": 1878,
+        "foreground": 36,
+        "cleanup": 36,
+        "clustered": 32,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 38,
+          "STATIC": 1842,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 32
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 32,
+          "foreign_points": 32,
+          "n": 64,
+          "cx": 2.6131639257073402,
+          "cy": -0.7968032849021256,
+          "cz": 0.9140043687075377,
+          "zmin": 0.10161832720041275,
+          "zmax": 1.7795315980911255,
+          "height_m": 1.6779132708907127,
+          "width_m": 0.523262062254857,
+          "depth_m": 0.418477551238426,
+          "radius_m": 0.4737756044192838,
+          "upcos": 0.9909498001138527,
+          "label": "NON_HUMAN",
+          "confidence": 0.75,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "AMBIGUOUS",
+          "reasons": [
+            "躯干半径(0.45m 2σ): 0.47m"
+          ],
+          "track_id": 7,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.067758067047247,
+          "y": 5.7652913074121,
+          "height": 1.5031962553280365,
+          "upcos": 0.00683031619934212,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.696733904333104,
+          "y": 0.7931830078436183,
+          "height": 1.5853700494150806,
+          "upcos": 0.02999691003109166,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.674380787020105,
+          "y": 1.4572934709601018,
+          "height": 1.5904773964103303,
+          "upcos": 0.17716825030026476,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 46,
+      "n_in": 49130,
+      "n_denoise": 49130,
+      "n_foreground": 1149,
+      "n_dropped": 47981,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": 0,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1920,
+        "denoise": 1920,
+        "workspace": 1877,
+        "foreground": 36,
+        "cleanup": 35,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1841,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.025286826193216,
+          "y": 5.772192138260541,
+          "height": 1.5034316106390506,
+          "upcos": 0.005158862118666457,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.690099515301911,
+          "y": 0.5456590388004661,
+          "height": 1.5805962886410274,
+          "upcos": 0.10936259806749334,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 47,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1146,
+      "n_dropped": 47985,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1920,
+        "denoise": 1920,
+        "workspace": 1880,
+        "foreground": 35,
+        "cleanup": 35,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1845,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.118715016194031,
+          "y": 5.762098006555908,
+          "height": 1.5036632607816167,
+          "upcos": 0.0053559239887422455,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.68540449455566,
+          "y": 0.6496191038714474,
+          "height": 1.579102902004943,
+          "upcos": 0.07291286597635857,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 48,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1138,
+      "n_dropped": 47993,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1920,
+        "denoise": 1920,
+        "workspace": 1879,
+        "foreground": 33,
+        "cleanup": 32,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1846,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.026736168794693,
+          "y": 5.781864166331824,
+          "height": 1.5032856587355365,
+          "upcos": 0.004356092555958459,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.68588569959259,
+          "y": 0.7118203408312386,
+          "height": 1.580240184519079,
+          "upcos": 0.05117332853776215,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 49,
+      "n_in": 49132,
+      "n_denoise": 49132,
+      "n_foreground": 1145,
+      "n_dropped": 47987,
+      "clusters_before_cleanup": 27,
+      "clusters_after_cleanup": 27,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1924,
+        "denoise": 1924,
+        "workspace": 1884,
+        "foreground": 29,
+        "cleanup": 27,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1855,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.093619086520235,
+          "y": 5.770788748907197,
+          "height": 1.503599225527075,
+          "upcos": 0.006580292311948906,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.690497012431159,
+          "y": 0.7515772898526476,
+          "height": 1.5865032637066656,
+          "upcos": 0.0531289370547011,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 11,
+          "x": 6.1316220373169985,
+          "y": 6.5400429016504535,
+          "height": 1.4693949818611145,
+          "upcos": 0.07093338926851928,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 41,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 50,
+      "n_in": 49133,
+      "n_denoise": 49133,
+      "n_foreground": 1146,
+      "n_dropped": 47987,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1927,
+        "denoise": 1927,
+        "workspace": 1883,
+        "foreground": 25,
+        "cleanup": 22,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1858,
+          "CLEANUP": 3,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.117480868043794,
+          "y": 5.770091299244072,
+          "height": 1.502538954595643,
+          "upcos": 0.005041001484069075,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.691413844991974,
+          "y": 0.8001390063665172,
+          "height": 1.5907779372300266,
+          "upcos": 0.047384853014595794,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 51,
+      "n_in": 49133,
+      "n_denoise": 49133,
+      "n_foreground": 1126,
+      "n_dropped": 48007,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 18,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1929,
+        "denoise": 1929,
+        "workspace": 1887,
+        "foreground": 27,
+        "cleanup": 26,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "STATIC": 1860,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.037478655692482,
+          "y": 5.784831154873531,
+          "height": 1.502792202429917,
+          "upcos": 0.0037284587113071057,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.690318423195867,
+          "y": 0.8087740719482154,
+          "height": 1.5872494631774836,
+          "upcos": 0.0318917679275132,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 52,
+      "n_in": 49137,
+      "n_denoise": 49137,
+      "n_foreground": 1138,
+      "n_dropped": 47999,
+      "clusters_before_cleanup": 24,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1926,
+        "denoise": 1926,
+        "workspace": 1882,
+        "foreground": 27,
+        "cleanup": 24,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1855,
+          "CLEANUP": 3,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.101143901886255,
+          "y": 5.769405837739796,
+          "height": 1.5034904330452434,
+          "upcos": 0.004104532910503452,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.693814976126061,
+          "y": 0.7368285383376211,
+          "height": 1.5840353315024525,
+          "upcos": 0.0372412538053595,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 53,
+      "n_in": 49134,
+      "n_denoise": 49134,
+      "n_foreground": 1158,
+      "n_dropped": 47976,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 18,
+      "cleanup_split_delta": -2,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1929,
+        "denoise": 1929,
+        "workspace": 1888,
+        "foreground": 28,
+        "cleanup": 27,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1860,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.101143901886255,
+          "y": 5.769405837739796,
+          "height": 1.5034904330452434,
+          "upcos": 0.004104532910503452,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.693814976126061,
+          "y": 0.7368285383376211,
+          "height": 1.5840353315024525,
+          "upcos": 0.0372412538053595,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 7,
+          "x": 2.6479081538763785,
+          "y": -0.9006755914202955,
+          "height": 1.732145835513861,
+          "upcos": 0.7076020062904775,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 29,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.617252743923602,
+          "y": 4.418621513032273,
+          "height": 1.6068336963653564,
+          "upcos": 0.03776305793577454,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 54,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1138,
+      "n_dropped": 47993,
+      "clusters_before_cleanup": 21,
+      "clusters_after_cleanup": 21,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1930,
+        "denoise": 1930,
+        "workspace": 1889,
+        "foreground": 26,
+        "cleanup": 26,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1863,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.118409865974902,
+          "y": 5.766372026624019,
+          "height": 1.5033995441756745,
+          "upcos": 0.0063181418065584565,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.6899194910584,
+          "y": 0.773408773642753,
+          "height": 1.583062263748727,
+          "upcos": 0.024567414231125767,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 3,
+          "x": 11.682387938671674,
+          "y": 1.5994690049884785,
+          "height": 1.5575780322999315,
+          "upcos": 0.2548095966859118,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 4,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.617252743923602,
+          "y": 4.418621513032273,
+          "height": 1.6068336963653564,
+          "upcos": 0.03776305793577454,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 55,
+      "n_in": 49135,
+      "n_denoise": 49135,
+      "n_foreground": 1146,
+      "n_dropped": 47989,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": -2,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1932,
+        "denoise": 1932,
+        "workspace": 1889,
+        "foreground": 29,
+        "cleanup": 28,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1860,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.018347363722519,
+          "y": 5.796486969425071,
+          "height": 1.5035084859436119,
+          "upcos": 0.004324168859908672,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.688068742312415,
+          "y": 0.7910004033357528,
+          "height": 1.5821740687629513,
+          "upcos": 0.02139094668992203,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.617252743923602,
+          "y": 4.418621513032273,
+          "height": 1.6068336963653564,
+          "upcos": 0.03776305793577454,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 56,
+      "n_in": 49129,
+      "n_denoise": 49129,
+      "n_foreground": 1143,
+      "n_dropped": 47986,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1936,
+        "denoise": 1936,
+        "workspace": 1889,
+        "foreground": 29,
+        "cleanup": 28,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 47,
+          "STATIC": 1860,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.101227490587958,
+          "y": 5.774758630853854,
+          "height": 1.503189769818235,
+          "upcos": 0.005492579263394061,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.694881297507564,
+          "y": 0.7969348624812959,
+          "height": 1.590967200148265,
+          "upcos": 0.02902330673667553,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.617252743923602,
+          "y": 4.418621513032273,
+          "height": 1.6068336963653564,
+          "upcos": 0.03776305793577454,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 57,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1143,
+      "n_dropped": 47988,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": -1,
+      "n_clusters": 1,
+      "person": {
+        "raw": 1933,
+        "denoise": 1933,
+        "workspace": 1890,
+        "foreground": 29,
+        "cleanup": 27,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 43,
+          "STATIC": 1861,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.101227490587958,
+          "y": 5.774758630853854,
+          "height": 1.503189769818235,
+          "upcos": 0.005492579263394061,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.694881297507564,
+          "y": 0.7969348624812959,
+          "height": 1.590967200148265,
+          "upcos": 0.02902330673667553,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 58,
+      "n_in": 49132,
+      "n_denoise": 49132,
+      "n_foreground": 1136,
+      "n_dropped": 47996,
+      "clusters_before_cleanup": 23,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": -4,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1932,
+        "denoise": 1932,
+        "workspace": 1888,
+        "foreground": 28,
+        "cleanup": 26,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 44,
+          "STATIC": 1860,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.124850820998667,
+          "y": 5.772105465169647,
+          "height": 1.5031228153228775,
+          "upcos": 0.005133686062098583,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.699367257594142,
+          "y": 0.72394951424091,
+          "height": 1.5863144658667885,
+          "upcos": 0.0430113325781091,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 59,
+      "n_in": 49126,
+      "n_denoise": 49126,
+      "n_foreground": 1156,
+      "n_dropped": 47970,
+      "clusters_before_cleanup": 19,
+      "clusters_after_cleanup": 18,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1931,
+        "denoise": 1931,
+        "workspace": 1890,
+        "foreground": 28,
+        "cleanup": 27,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1862,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.022899769925479,
+          "y": 5.78666901844436,
+          "height": 1.5031524148988733,
+          "upcos": 0.004308984617147518,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.698536894049752,
+          "y": 0.7534094745640557,
+          "height": 1.5845410099358337,
+          "upcos": 0.034327317887720935,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 60,
+      "n_in": 49131,
+      "n_denoise": 49131,
+      "n_foreground": 1142,
+      "n_dropped": 47989,
+      "clusters_before_cleanup": 25,
+      "clusters_after_cleanup": 24,
+      "cleanup_split_delta": -1,
+      "n_clusters": 4,
+      "person": {
+        "raw": 1939,
+        "denoise": 1939,
+        "workspace": 1894,
+        "foreground": 30,
+        "cleanup": 30,
+        "clustered": 24,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 45,
+          "STATIC": 1864,
+          "CLEANUP": 0,
+          "OTHER": 0
+        },
+        "clusters": {
+          "0": 24
+        },
+        "top": {
+          "cluster_index": 0,
+          "person_points": 24,
+          "foreign_points": 58,
+          "n": 82,
+          "cx": 2.754401832092099,
+          "cy": -1.1948038942930175,
+          "cz": 0.8412773640962635,
+          "zmin": 0.11108563095331192,
+          "zmax": 1.8967450857162476,
+          "height_m": 1.7856594547629356,
+          "width_m": 0.5454079590665502,
+          "depth_m": 0.9813934001636911,
+          "radius_m": 0.7939152497899227,
+          "upcos": 0.48958034720411764,
+          "label": "NON_HUMAN",
+          "confidence": 0.25,
+          "joint": "NON_HUMAN",
+          "evidence_tag": "SOLID_UNIFORM",
+          "reasons": [
+            "宽/深(0.7m 2σ): 0.55/0.98m",
+            "躯干半径(0.45m 2σ): 0.79m",
+            "主直立度 0.49 < 0.5"
+          ],
+          "track_id": 13,
+          "track_confirmed": false
+        }
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.078474127812182,
+          "y": 5.771357635464718,
+          "height": 1.5029338529522425,
+          "upcos": 0.003577621305653297,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.696666394138337,
+          "y": 0.5095621596615416,
+          "height": 1.5802798187707996,
+          "upcos": 0.11128768072226085,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 13,
+          "x": 2.754401832092099,
+          "y": -1.1948038942930175,
+          "height": 1.7856594547629356,
+          "upcos": 0.48958034720411764,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 14,
+          "x": 11.72200122475624,
+          "y": 1.7397788508484762,
+          "height": 1.4946638941764832,
+          "upcos": 0.5281507284559894,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 61,
+      "n_in": 49133,
+      "n_denoise": 49133,
+      "n_foreground": 1143,
+      "n_dropped": 47990,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": 0,
+      "n_clusters": 4,
+      "person": {
+        "raw": 1937,
+        "denoise": 1937,
+        "workspace": 1896,
+        "foreground": 38,
+        "cleanup": 37,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 41,
+          "STATIC": 1858,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.302833077058292,
+          "y": 5.727500321330673,
+          "height": 1.5028271898656969,
+          "upcos": 0.011898085291668827,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.696666394138337,
+          "y": 0.5095621596615416,
+          "height": 1.5802798187707996,
+          "upcos": 0.11128768072226085,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 13,
+          "x": 2.754401832092099,
+          "y": -1.1948038942930175,
+          "height": 1.7856594547629356,
+          "upcos": 0.48958034720411764,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 14,
+          "x": 11.709160957930472,
+          "y": 1.633252002303624,
+          "height": 1.5310099363327025,
+          "upcos": 0.3517753843168475,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 15,
+          "x": 6.001349233544391,
+          "y": 6.542451493636421,
+          "height": 1.4445130825042725,
+          "upcos": 0.03263673327474845,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 16,
+          "x": 11.720644346872966,
+          "y": -0.3880193824569384,
+          "height": 1.4536117315292358,
+          "upcos": 0.8411942666099361,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 62,
+      "n_in": 49134,
+      "n_denoise": 49134,
+      "n_foreground": 1133,
+      "n_dropped": 48001,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 19,
+      "cleanup_split_delta": -1,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1938,
+        "denoise": 1938,
+        "workspace": 1896,
+        "foreground": 37,
+        "cleanup": 35,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "STATIC": 1859,
+          "CLEANUP": 2,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.140412068040286,
+          "y": 5.766435306469776,
+          "height": 1.5012687351573928,
+          "upcos": 0.008762748434434928,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.695843328846857,
+          "y": 0.6375676650530828,
+          "height": 1.5799815421684422,
+          "upcos": 0.0745027175842852,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 13,
+          "x": 2.754401832092099,
+          "y": -1.1948038942930175,
+          "height": 1.7856594547629356,
+          "upcos": 0.48958034720411764,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 14,
+          "x": 11.709160957930472,
+          "y": 1.633252002303624,
+          "height": 1.5310099363327025,
+          "upcos": 0.3517753843168475,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 15,
+          "x": 6.001349233544391,
+          "y": 6.542451493636421,
+          "height": 1.4445130825042725,
+          "upcos": 0.03263673327474845,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 16,
+          "x": 11.720644346872966,
+          "y": -0.3880193824569384,
+          "height": 1.4536117315292358,
+          "upcos": 0.8411942666099361,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "0"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 63,
+      "n_in": 49133,
+      "n_denoise": 49133,
+      "n_foreground": 1146,
+      "n_dropped": 47987,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 18,
+      "cleanup_split_delta": -2,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1940,
+        "denoise": 1940,
+        "workspace": 1898,
+        "foreground": 36,
+        "cleanup": 33,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 42,
+          "STATIC": 1862,
+          "CLEANUP": 3,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.060254661665583,
+          "y": 5.764065490742639,
+          "height": 1.5018662153755749,
+          "upcos": 0.005718476027289129,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.695843328846857,
+          "y": 0.6375676650530828,
+          "height": 1.5799815421684422,
+          "upcos": 0.0745027175842852,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 6,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 13,
+          "x": 2.754401832092099,
+          "y": -1.1948038942930175,
+          "height": 1.7856594547629356,
+          "upcos": 0.48958034720411764,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 14,
+          "x": 11.712358455090415,
+          "y": 1.6729720066199627,
+          "height": 1.5185857659578323,
+          "upcos": 0.40236007215539943,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "000"
+        },
+        {
+          "id": 15,
+          "x": 6.001349233544391,
+          "y": 6.542451493636421,
+          "height": 1.4445130825042725,
+          "upcos": 0.03263673327474845,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 16,
+          "x": 11.713024001121521,
+          "y": -0.2363461727524797,
+          "height": 1.4951917678117752,
+          "upcos": 0.6326452699331926,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "00"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 64,
+      "n_in": 49134,
+      "n_denoise": 49134,
+      "n_foreground": 1135,
+      "n_dropped": 47999,
+      "clusters_before_cleanup": 22,
+      "clusters_after_cleanup": 22,
+      "cleanup_split_delta": 0,
+      "n_clusters": 3,
+      "person": {
+        "raw": 1940,
+        "denoise": 1940,
+        "workspace": 1900,
+        "foreground": 32,
+        "cleanup": 31,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 40,
+          "STATIC": 1868,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.118958521657463,
+          "y": 5.754380710337083,
+          "height": 1.502731223940733,
+          "upcos": 0.004662962050663898,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.695843328846857,
+          "y": 0.6375676650530828,
+          "height": 1.5799815421684422,
+          "upcos": 0.0745027175842852,
+          "label": "NON_HUMAN",
+          "lost": 2,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 7,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 13,
+          "x": 2.754401832092099,
+          "y": -1.1948038942930175,
+          "height": 1.7856594547629356,
+          "upcos": 0.48958034720411764,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 14,
+          "x": 11.692969390219744,
+          "y": 1.7130873859736246,
+          "height": 1.5038944999277593,
+          "upcos": 0.4382860500533796,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 15,
+          "x": 6.001349233544391,
+          "y": 6.542451493636421,
+          "height": 1.4445130825042725,
+          "upcos": 0.03263673327474845,
+          "label": "NON_HUMAN",
+          "lost": 3,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 16,
+          "x": 11.708635293793456,
+          "y": -0.13875169566096707,
+          "height": 1.5227097906172276,
+          "upcos": 0.4998239020215245,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "000"
+        }
+      ],
+      "events": []
+    },
+    {
+      "i": 65,
+      "n_in": 49138,
+      "n_denoise": 49138,
+      "n_foreground": 1145,
+      "n_dropped": 47993,
+      "clusters_before_cleanup": 20,
+      "clusters_after_cleanup": 20,
+      "cleanup_split_delta": 0,
+      "n_clusters": 2,
+      "person": {
+        "raw": 1942,
+        "denoise": 1942,
+        "workspace": 1897,
+        "foreground": 33,
+        "cleanup": 32,
+        "clustered": 0,
+        "mechanism": {
+          "RANGE": 0,
+          "GROUND": 45,
+          "STATIC": 1864,
+          "CLEANUP": 1,
+          "OTHER": 0
+        },
+        "clusters": {},
+        "top": null
+      },
+      "tracks": [
+        {
+          "id": 1,
+          "x": 10.152828334844406,
+          "y": 5.752245498693709,
+          "height": 1.5030663172661503,
+          "upcos": 0.004493481931160686,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 2,
+          "x": 11.694782507381055,
+          "y": 0.7101558395431191,
+          "height": 1.5801198420424754,
+          "upcos": 0.04925672575715942,
+          "label": "NON_HUMAN",
+          "lost": 0,
+          "born": 0,
+          "human_confirmed": false,
+          "votes": "00000"
+        },
+        {
+          "id": 12,
+          "x": 10.521431199355991,
+          "y": 4.449738198760089,
+          "height": 1.6071555286645889,
+          "upcos": 0.034538924600993705,
+          "label": "NON_HUMAN",
+          "lost": 8,
+          "born": 53,
+          "human_confirmed": false,
+          "votes": "00"
+        },
+        {
+          "id": 13,
+          "x": 2.754401832092099,
+          "y": -1.1948038942930175,
+          "height": 1.7856594547629356,
+          "upcos": 0.48958034720411764,
+          "label": "NON_HUMAN",
+          "lost": 5,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 14,
+          "x": 11.692969390219744,
+          "y": 1.7130873859736246,
+          "height": 1.5038944999277593,
+          "upcos": 0.4382860500533796,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 60,
+          "human_confirmed": false,
+          "votes": "0000"
+        },
+        {
+          "id": 15,
+          "x": 6.001349233544391,
+          "y": 6.542451493636421,
+          "height": 1.4445130825042725,
+          "upcos": 0.03263673327474845,
+          "label": "NON_HUMAN",
+          "lost": 4,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "0"
+        },
+        {
+          "id": 16,
+          "x": 11.708635293793456,
+          "y": -0.13875169566096707,
+          "height": 1.5227097906172276,
+          "upcos": 0.4998239020215245,
+          "label": "NON_HUMAN",
+          "lost": 1,
+          "born": 61,
+          "human_confirmed": false,
+          "votes": "000"
+        }
+      ],
+      "events": []
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "scope": "compact source/JSON audit, no algorithm run",
+  "xgb_rows_count": 9,
+  "rows": [
+    {
+      "sid": "cap_20261010_175227",
+      "gt_known": 304,
+      "gt_unknown": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      }
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "gt_known": 258,
+      "gt_unknown": 0,
+      "candidate": {
+        "tp": 258,
+        "fp": 19,
+        "fn": 0
+      },
+      "track": {
+        "tp": 256,
+        "fp": 9,
+        "fn": 2
+      }
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "gt_known": 99,
+      "gt_unknown": 365,
+      "candidate": {
+        "tp": 99,
+        "fp": 97,
+        "fn": 0
+      },
+      "track": {
+        "tp": 97,
+        "fp": 93,
+        "fn": 2
+      }
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "gt_known": 11,
+      "gt_unknown": 228,
+      "candidate": {
+        "tp": 11,
+        "fp": 9,
+        "fn": 0
+      },
+      "track": {
+        "tp": 10,
+        "fp": 8,
+        "fn": 1
+      }
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "gt_known": 6,
+      "gt_unknown": 196,
+      "candidate": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      }
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "gt_known": 71,
+      "gt_unknown": 167,
+      "candidate": {
+        "tp": 65,
+        "fp": 1,
+        "fn": 6
+      },
+      "track": {
+        "tp": 61,
+        "fp": 1,
+        "fn": 10
+      }
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "gt_known": 12,
+      "gt_unknown": 239,
+      "candidate": {
+        "tp": 12,
+        "fp": 1,
+        "fn": 0
+      },
+      "track": {
+        "tp": 11,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "gt_known": 53,
+      "gt_unknown": 470,
+      "candidate": {
+        "tp": 53,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 2
+      }
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "gt_known": 0,
+      "gt_unknown": 126,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      }
+    }
+  ],
+  "totals": {
+    "candidate": {
+      "tp": 504,
+      "fp": 127,
+      "fn": 6
+    },
+    "track": {
+      "tp": 491,
+      "fp": 112,
+      "fn": 19
+    }
+  },
+  "s9_scoring": "UNKNOWN, excluded; zeros are no evaluated observations",
+  "pointnet": {
+    "train": {
+      "n": 708,
+      "uncentered_v3": {
+        "tp": 142,
+        "fp": 504,
+        "fn": 0,
+        "tn": 62
+      },
+      "centered_training_contract": {
+        "tp": 139,
+        "fp": 13,
+        "fn": 3,
+        "tn": 553
+      }
+    },
+    "validation": {
+      "n": 28,
+      "uncentered_v3": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "centered_training_contract": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      }
+    },
+    "test": {
+      "n": 65,
+      "uncentered_v3": {
+        "tp": 65,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "centered_training_contract": {
+        "tp": 58,
+        "fp": 0,
+        "fn": 7,
+        "tn": 0
+      }
+    },
+    "stress": {
+      "n": 58,
+      "uncentered_v3": {
+        "tp": 58,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0
+      },
+      "centered_training_contract": {
+        "tp": 39,
+        "fp": 0,
+        "fn": 19,
+        "tn": 0
+      }
+    }
+  },
+  "b_furniture": {
+    "n": 608,
+    "tp": 0,
+    "fp": 595,
+    "fn": 0,
+    "tn": 13
+  },
+  "retention_source_lines": {
+    "producer": "lab core/engine.js 501-510",
+    "consumer": "lab core/engine.js 322-336",
+    "final_tracker": "lab core/engine.js 517-523"
+  }
+}

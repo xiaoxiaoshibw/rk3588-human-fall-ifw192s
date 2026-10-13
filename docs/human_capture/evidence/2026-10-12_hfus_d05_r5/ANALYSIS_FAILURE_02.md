@@ -1,0 +1,7 @@
+# 对照analysis_v1退出1，UNKNOWN首匹配访问修复另建v2
+
+FULL_COMPARISON_V1实际PID5932退出1，原log/EXIT与analysis_v1下部分账本保留，不进入FINAL。原因是新“首次有资格PERSON匹配”诊断在未标帧访问strict.observed_confirmed=null；formal UNKNOWN本就无此对象，不能按零漏检理解。
+
+新analysis_v2/analyze.py先检查该统计是否存在，只在有资格严格TP时记首次人工支持匹配；UNKNOWN仍跳过，原评分口径/标准/GT/模型不变。base/control/anchor三方同一新审计口径重算，写新的analysis_v2目录。首任实际confirmed输出仍单列工程统计，不等于真人首次确认。
+
+当前完整算法两方实跑已各2605帧exit0，control全部逐帧与R04精确一致；本失败是对照分析器的NULL诊断错误，不能用完整run的存在替代分析完成。

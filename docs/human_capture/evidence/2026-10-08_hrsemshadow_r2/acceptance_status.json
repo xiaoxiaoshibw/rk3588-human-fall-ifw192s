@@ -1,0 +1,100 @@
+{
+  "table": "docs/human_capture/HR_SEM_SHADOW_ACCEPTANCE.md",
+  "version": 1,
+  "sha256": "3b5b83da5a83c460bc7590011034647f77272be70d1f92f7c2ddb9c0bd8498dd",
+  "items": [
+    {
+      "id": "SEM-01",
+      "status": "PASS",
+      "evidence": "baseline/data_r2/full_recompute/integrity"
+    },
+    {
+      "id": "SEM-02",
+      "status": "PASS",
+      "evidence": "full_recompute30 checks+24ROI; negatives12 samples"
+    },
+    {
+      "id": "SEM-03",
+      "status": "PASS",
+      "evidence": "data_r2+full_recompute full-frame/member conservation"
+    },
+    {
+      "id": "SEM-04",
+      "status": "PASS",
+      "evidence": "data_audit/recompute trivalues, invalid row disclosure"
+    },
+    {
+      "id": "SEM-05",
+      "status": "BLOCKED",
+      "evidence": "13/244 upper bound; human identity GT absent"
+    },
+    {
+      "id": "SEM-06",
+      "status": "BLOCKED",
+      "evidence": "269/271 proxy; GT absent; WARN"
+    },
+    {
+      "id": "SEM-07",
+      "status": "BLOCKED",
+      "evidence": "281/281 proxy; edge185+cleanup5 identities UNKNOWN"
+    },
+    {
+      "id": "SEM-08",
+      "status": "BLOCKED",
+      "evidence": "1/195 upper bound; HEAD0; GT absent"
+    },
+    {
+      "id": "SEM-09",
+      "status": "PASS",
+      "evidence": "285 frames both branches zero HUMAN"
+    },
+    {
+      "id": "SEM-10",
+      "status": "BLOCKED",
+      "evidence": "WD01 GT, valid adversarial coverage, WD02 adjudication unresolved"
+    },
+    {
+      "id": "SEM-11",
+      "status": "PASS",
+      "evidence": "1561 votes + independent actual-frame constraints; original43 collision/88 stale disclosed"
+    },
+    {
+      "id": "SEM-12",
+      "status": "PASS",
+      "evidence": "sem12_verified4 accepted/17 rejected; independent_receipts_final; real browser"
+    },
+    {
+      "id": "SEM-13",
+      "status": "PASS",
+      "evidence": "separate denominators/proxies/truth/votes and costs disclosed"
+    },
+    {
+      "id": "SEM-14",
+      "status": "PASS",
+      "evidence": "actual two-pair digests + necessary regressions38/45/23 exit0"
+    },
+    {
+      "id": "SEM-15",
+      "status": "PASS",
+      "evidence": "final integrity old assets + return prefix"
+    },
+    {
+      "id": "SEM-16",
+      "status": "PASS",
+      "evidence": "return/ponytail/reports and authorized stopping point"
+    }
+  ],
+  "WD02": "BLOCKED_CONTRACT_ADJUDICATION",
+  "offline_delivery": "BLOCKED",
+  "production": "NOT_AUTHORIZED",
+  "raw_meta_annotation_counts": {
+    "cap_20261008_114205": 0,
+    "cap_20261008_114254": 0,
+    "cap_20261008_114340": 0,
+    "cap_20261008_114422": 0,
+    "cap_20261008_114819": 0
+  },
+  "independent_method": "Single writer plus independent raw/NumPy audit and explicit adversarial expectations, no third-party signoff",
+  "device_physics_deployment_capture_ML": "NOT_RUN",
+  "SEM15_basis": "final integrity.json required"
+}

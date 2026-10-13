@@ -1,0 +1,96 @@
+import json
+from pathlib import Path
+import tempfile
+import unittest
+
+import numpy as np
+import torch
+from cpu_pointpillars import Voxelization, nms_cuda
+from experiment import adapt, read_frame
+from audit_truth import covers_xy
+
+
+class ExperimentTests(unittest.TestCase):
+    def fixture(self, root, stride):
+        pts=np.array([[1,2,3,740],[4,5,6,978]],dtype="<f4")
+        data=bytearray(stride*len(pts))
+        np.ndarray(pts.shape,dtype="<f4",buffer=data,strides=(stride,4))[:]=pts
+        layout=dict(fields=["x","y","z","intensity"],dtype="<f4",stride_points=4)
+        if stride==28:
+            # Deliberately poison ring/padding/time: these bytes must never become XYZI.
+            data[16:28]=b'\xff'*12
+            layout=dict(fields=["x","y","z","intensity","ring","timestamp"],
+                        dtypes=["<f4"]*4+["<u2","<f4"],endian="little",stride_bytes=28)
+        meta=dict(format="human_capture_session",format_version=1,point_file="points.bin",
+                  point_stride_bytes=stride,point_layout=layout,frames=[dict(seq=5,offset_points=0,count_points=2)])
+        (root/"meta.json").write_text(json.dumps(meta),encoding="utf-8")
+        (root/"points.bin").write_bytes(data)
+        return pts,meta
+
+    def test_both_layouts(self):
+        for stride in (16,28):
+            with tempfile.TemporaryDirectory() as d:
+                root=Path(d); expected,_=self.fixture(root,stride)
+                np.testing.assert_array_equal(read_frame(root,0)[0],expected)
+
+    def test_reject_bad_layout_length_and_frame(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d); _,meta=self.fixture(root,28)
+            for index in (-1,1,True):
+                with self.assertRaises(ValueError):read_frame(root,index)
+            meta["point_layout"]["endian"]="big"
+            (root/"meta.json").write_text(json.dumps(meta),encoding="utf-8")
+            with self.assertRaises(ValueError):read_frame(root,0)
+            self.fixture(root,28)
+            with (root/"points.bin").open("ab") as f:f.write(b'\x00')
+            with self.assertRaises(ValueError):read_frame(root,0)
+
+    def test_reject_nonfinite(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d); self.fixture(root,16)
+            np.full((2,4),np.nan,dtype="<f4").tofile(root/"points.bin")
+            with self.assertRaises(ValueError):read_frame(root,0)
+
+    def test_transform_and_intensity(self):
+        p=np.array([[1,0,2,1023]],dtype=np.float32)
+        t=dict(R=[[0,-1,0],[1,0,0],[0,0,1]],t=[0,0,1])
+        np.testing.assert_allclose(adapt(p,t,-1.73,1023),[[0,1,1.27,1]],atol=1e-6)
+        with self.assertRaises(ValueError):adapt(p,t,0,0)
+        t["R"][0][1]=1
+        with self.assertRaises(ValueError):adapt(p,t,0,1)
+
+    def test_zero_xyz_removed_before_translation(self):
+        points=np.array([[0,0,0,978],[2,1,1,1023]],dtype=np.float32)
+        t=dict(R=np.eye(3).tolist(),t=[0,0,1.36])
+        np.testing.assert_allclose(adapt(points,t,-1.73,1023),[[2,1,.63,1]],atol=1e-6)
+        with self.assertRaises(ValueError):adapt(points[:1],t,-1.73,1023)
+
+    def test_voxel_first_seen_and_capacity(self):
+        v=Voxelization([1,1,1],[0,0,0,3,3,3],2,(2,2))
+        pts=torch.tensor([[1.1,.1,.1,1],[1.2,.1,.1,2],[1.3,.1,.1,3],
+                          [.1,.1,.1,4],[2.1,.1,.1,5],[1.4,.1,.1,6],[3,0,0,7]],dtype=torch.float32)
+        vox,coords,counts=v(pts)
+        self.assertEqual(coords.tolist(),[[1,0,0],[0,0,0]])
+        self.assertEqual(counts.tolist(),[2,1])
+        self.assertEqual(vox[0,:,3].tolist(),[1,2])
+        with self.assertRaises(ValueError):v(torch.tensor([[3.,0,0,1]]))
+
+    def test_rotated_nms(self):
+        # Thin perpendicular boxes have IoU ~0.026, unlike identical axis-aligned boxes.
+        boxes=torch.tensor([[-2,-.1,2,.1,0],[-2,-.1,2,.1,np.pi/2],[-2,-.1,2,.1,0]],dtype=torch.float32)
+        scores=torch.tensor([.9,.8,.7])
+        self.assertEqual(nms_cuda(boxes,scores,.1).tolist(),[0,1])
+        self.assertEqual(nms_cuda(boxes,scores,.1,post_max_size=1).tolist(),[0])
+        self.assertEqual(nms_cuda(boxes[:0],scores[:0],.1).tolist(),[])
+
+    def test_pinned_upstream_clockwise_yaw(self):
+        boxes=torch.tensor([[-2,-.1,2,.1,np.pi/4],[-1.5,-.6,2.5,-.4,np.pi/4]],dtype=torch.float32)
+        scores=torch.tensor([.9,.8])
+        self.assertEqual(nms_cuda(boxes,scores,.01).tolist(),[0])
+        self.assertEqual(nms_cuda(boxes,scores,.01,clockwise=False).tolist(),[0,1])
+        box=[0,0,-.6,4,.2,1.73,np.pi/4]
+        self.assertTrue(covers_xy(box,[1,-1]))
+        self.assertFalse(covers_xy(box,[1,1]))
+
+
+if __name__=="__main__":unittest.main()

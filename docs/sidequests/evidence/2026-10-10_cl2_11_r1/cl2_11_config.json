@@ -1,0 +1,23 @@
+{
+  "permission": {
+    "*": "deny",
+    "read": {
+      "*": "allow"
+    },
+    "external_directory": "deny"
+  },
+  "agent": {
+    "cl211audit": {
+      "description": "CL2-11 causal-identifiability read-only audit",
+      "mode": "primary",
+      "permission": {
+        "*": "deny",
+        "read": {"*": "allow"},
+        "external_directory": "deny"
+      },
+      "prompt": "Read-only audit. No shell, writing, task, network or other tool actions. Do not claim numerical/SHA executions."
+    }
+  },
+  "mcp": {},
+  "plugin": []
+}

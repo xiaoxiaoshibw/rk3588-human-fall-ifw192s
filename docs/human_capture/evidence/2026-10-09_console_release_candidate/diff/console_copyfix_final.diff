@@ -1,0 +1,144 @@
+diff --git a/pc_apps/console/Console.spec b/pc_apps/console/Console.spec
+index add373d..182d3ff 100644
+--- a/pc_apps/console/Console.spec
++++ b/pc_apps/console/Console.spec
+@@ -9,6 +9,9 @@ a = Analysis(
+     datas=[('console.html', '.'), ('console_icon.png', '.'),
+            ('../human_replay', 'human_replay')],
+     # Workbench Python sources remain in datas: their real bytes are version-hashed at run time.
++    # datas 是相对 cwd 的目录级拷贝: 本工单在 clean worktree(pc_apps/console) 跑且 worktree 内无
++    # __pycache__/*.pyc(gitignored, git worktree add 不展开); excludes 只挡 import 模块,
++    # 挡不了 datas 文件拷贝——输入洁净靠"worktree 隔离 + cwd 钉死", 见 evidence manifest.
+     hiddenimports=['json', 'urllib.request', 'webbrowser', 'numpy', 'numpy.linalg', 'uuid', 'zipfile'],
+     hookspath=[],
+     hooksconfig={},
+diff --git a/pc_apps/console/README.txt b/pc_apps/console/README.txt
+index 74969a3..13dbf9b 100644
+--- a/pc_apps/console/README.txt
++++ b/pc_apps/console/README.txt
+@@ -13,11 +13,12 @@
+     - 板端 WebUI   连接 RK3588 板 (需板在线)
+     - 离线配平     四区评估 (TLS / SVD / RANSAC)
+     - 算法验证     四个会话配平结果与算法对照
+-    - 人体识别     路线 A 聚类检测 · pin ROI 姿态判定
++    - 人体识别     纯几何 · pin ROI 辅助判别人/家具 (不跑模型)
+                    (默认载入 cap_20261002_223757,
+                     需要先对同一会话跑过一次「离线配平」)
+-    - 人检锁定     路线 B 模型检测 · 实时 ROI 跟踪 (B1)
+-                   会话回放中自动按帧识别人形, 红框 + track_id
++    - 人检锁定     B2a RandomForest 51维人/非人 · rf_person_v1 · 实时跟踪
++                   会话回放中聚类出候选后, rf_person.js 提 51 维几何特征
++                   并跑 rf_person_v1.json 推断 P(person), 实时画红框 + track_id
+ 
+   回放/配平/人体识别/人检锁定服务 (127.0.0.1:8901) 随控制台一起启动，
+   关闭控制台窗口即自动停止，无需另开命令行。
+diff --git a/pc_apps/console/console.html b/pc_apps/console/console.html
+index f6e5eb1..a339135 100644
+--- a/pc_apps/console/console.html
++++ b/pc_apps/console/console.html
+@@ -102,8 +102,8 @@ const APPS = [
+   {name:"板端 WebUI", desc:"RK3588 · 192.168.31.58:8090", icon:svg('<rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>'), url:"http://192.168.31.58:8090/",
+    fail:"当前不在内网，无法连接板端 WebUI"},
+   {name:"算法验证", desc:"四区评估 · TLS / SVD / RANSAC", icon:svg('<path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>'), url:replayBase + "/validation.html"},
+-  {name:"人体识别", desc:"路线 A · 聚类检测 · pin ROI 姿态判定", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html?sid=cap_20261002_223757"},
+-  {name:"人检锁定", desc:"路线 B · 模型检测 · 实时 ROI 跟踪", icon:svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:replayBase + "/human_track.html"},
++  {name:"人体识别", desc:"纯几何 · pin ROI 辅助判别人/家具 · 不跑模型", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html?sid=cap_20261002_223757"},
++  {name:"人检锁定", desc:"B2a RandomForest 51维人/非人 · rf_person_v1 · 实时跟踪", icon:svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:replayBase + "/human_track.html"},
+ ];
+ // ============================================================
+ const $ = s => document.querySelector(s);
+diff --git a/pc_apps/console/console_html.test.js b/pc_apps/console/console_html.test.js
+index f31b92b..b61737c 100644
+--- a/pc_apps/console/console_html.test.js
++++ b/pc_apps/console/console_html.test.js
+@@ -83,61 +83,61 @@ t('内联脚本能 parse 并转移出 <script> 块', () => {
+ t('板端 WebUI 带 fail 文案且本地应用不带', () => {
+   const win = loadShell();
+   const APPS = vm.runInContext('APPS', win);
+-  if (!APPS[2].fail) throw new Error('板端 WebUI 缺 fail 文案');
+-  if (APPS[0].fail || APPS[1].fail || APPS[3].fail) throw new Error('本地应用不应有 fail');
++  if (!APPS[1].fail) throw new Error('板端 WebUI 缺 fail 文案');
++  if (APPS[0].fail || APPS[2].fail || APPS[3].fail) throw new Error('本地应用不应有 fail');
+ });
+ 
+-t('APPS[2] fail 文案 = 当前不在内网', () => {
++t('APPS[1] fail 文案 = 当前不在内网', () => {
+   const win = loadShell();
+   const APPS = vm.runInContext('APPS', win);
+-  eq(APPS[2].fail, '当前不在内网，无法连接板端 WebUI');
++  eq(APPS[1].fail, '当前不在内网，无法连接板端 WebUI');
+   eq(APPS[0].fail, undefined);
+-  eq(APPS[1].fail, undefined);
++  eq(APPS[2].fail, undefined);
+   eq(APPS[3].fail, undefined);
+ });
+ 
+ t('探活成功 → 直接嵌 iframe，不弹提示', () => {
+   const win = loadShell(null, okFetch);
+-  vm.runInContext('open(2)', win);
++  vm.runInContext('open(1)', win);
+   eq(registry.err.hidden, true, '应无提示');
+   eq(registry.f.hidden, false, 'iframe 应可见');
+-  eq(registry.f.src, 'http://192.168.3.125:8090/', '探活成功后才设 src');
++  eq(registry.f.src, 'http://192.168.31.58:8090/', '探活成功后才设 src');
+ });
+ 
+ t('探活失败（不在内网）→ 弹提示并隐藏 iframe', () => {
+   const win = loadShell(null, failFetch);
+-  vm.runInContext('open(2)', win);
++  vm.runInContext('open(1)', win);
+   eq(registry.err.hidden, false, '应弹提示');
+   eq(registry.f.hidden, true, 'iframe 应隐藏');
+   eq(registry.errmsg.textContent, '当前不在内网，无法连接板端 WebUI');
+-  eq(registry.errurl.textContent, 'http://192.168.3.125:8090');
++  eq(registry.errurl.textContent, 'http://192.168.31.58:8090');
+ });
+ 
+ t('无 fail 文案的本地应用不探活，直接嵌', () => {
+   const win = loadShell(null, { then() { throw new Error('本地应用不应探活'); } });
+-  vm.runInContext('open(0)', win);  // 数据标注（本地服务）
++  vm.runInContext('open(0)', win);  // 会话回放（本地服务）
+   eq(registry.err.hidden, true, '本地应用永不弹提示');
+-  eq(registry.f.src, 'http://127.0.0.1:8901/annotator.html');
++  eq(registry.f.src, 'http://127.0.0.1:8901/');
+ });
+ 
+ t('重进同应用不重载（保留页内状态）', () => {
+   let probes = 0;
+   const win = loadShell(null, { then(onOk) { probes++; onOk({}); } });
+-  vm.runInContext('open(2)', win);
+-  vm.runInContext('open(2)', win);
++  vm.runInContext('open(1)', win);
++  vm.runInContext('open(1)', win);
+   eq(probes, 1, '同应用只探活一次');
+ });
+ 
+ t('「重试」重新探活：先失败后成功 → 收起提示并嵌板端', () => {
+   let n = 0;
+   const win = loadShell(null, { then(onOk, onErr) { (n++ ? onOk : onErr)({}); } });
+-  vm.runInContext('open(2)', win);
++  vm.runInContext('open(1)', win);
+   eq(registry.err.hidden, false, '首次应弹提示');
+   if (typeof registry.retry.onclick !== 'function') throw new Error('retry.onclick 未挂');
+   registry.retry.onclick.call({});
+   eq(registry.err.hidden, true);
+   eq(registry.f.hidden, false);
+-  eq(registry.f.src, 'http://192.168.3.125:8090/', '重试成功后应嵌板端');
++  eq(registry.f.src, 'http://192.168.31.58:8090/', '重试成功后应嵌板端');
+ });
+ 
+ t('CSS 回归：#err 在 hidden 时必须 display:none（防 #err{display:flex} 盖掉 [hidden]）', () => {
+diff --git a/pc_apps/console/console_test.py b/pc_apps/console/console_test.py
+index de9afa5..cbc761b 100644
+--- a/pc_apps/console/console_test.py
++++ b/pc_apps/console/console_test.py
+@@ -25,7 +25,8 @@ class ConsoleStartupTest(unittest.TestCase):
+     def test_replay_dir_found_in_source_layout(self):
+         # 源码运行时 human_replay 与 console/ 平级（pc_apps/human_replay），
+         # 不在 console/ 里（2026-10-05 修复，此前源码启动直接 FileNotFoundError）。
+-        d = G._replay_dir()
++        # _replay_dir 返回 (source_dir, origin)，见 console_gui ENV/INI/PACKAGED 分层。
++        d, _origin = G._replay_dir()
+         self.assertTrue(os.path.isfile(os.path.join(d, 'human_replay_lib.py')), d)
+ 
+     def test_frozen_capture_root_ignores_shortcut_cwd(self):

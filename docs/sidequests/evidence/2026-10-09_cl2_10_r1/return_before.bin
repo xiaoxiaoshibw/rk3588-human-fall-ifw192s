@@ -1,0 +1,182 @@
+## CLUSTER-01 R1 — 2026-10-09 / Codex primary / SUBMITTED
+
+- 唯一验收表：`docs/sidequests/CLUSTER01_ACCEPTANCE.md` v1。
+- 授权：用户明确要求继续传统聚类，并确认目标是回放 `human_pipe_lib.js` 的 15 cm XY 四邻 BFS。
+- worktree：`C:/Users/30680/.codex/worktrees/traditional-clustering/ldiar`，分支 `codex/traditional-clustering`，起止 HEAD `cfbb80c57508be1a0435fdb92260f698dc763934`。
+- 唯一 writer：Codex primary。ponytail full 实际加载路径：`C:/Users/30680/.codex/skills/ponytail/SKILL.md`。
+- 主树 `D:/Code/ldiar` 和原始 `captures/remote` 只读；未 commit/push/deploy/采集。
+- 全树基线：`docs/sidequests/evidence/2026-10-09_cluster01_r1/00_baseline.json`（主树与 worktree 的 tracked/untracked/ignored 文件 SHA）；用户 12 段源数据与已配平模板 SHA 留档。
+
+### 结果
+
+- 11 段人体会话使用现有 auto leveling 全量跑完三法。9 段推荐 TLS；`cap_20261009_114754` TLS 有效但三法无综合推荐，仅用于诊断；`cap_20261009_121647` TLS 因 `GL_HOLDOUT_QUALITY` 拒绝，未用于聚类。
+- 空场前 135 帧建参考、后 68 帧留出：0 候选帧。
+- 10 段 TLS 有效会话全帧 1,398 帧中均至少出现一个 `HUMAN_CANDIDATE`；这不是逐帧 GT 召回率。
+- 20 帧出现第二个 60–74 点候选；它们都带 `SOLID_UNIFORM` 证据，joint gate 标为 `NON_HUMAN`，且位置附近没有空场参考体素落入 0.12 m 匹配半径。身份未知，逐帧复核清单见 [`12_manual_review_targets.md`](../evidence/2026-10-09_cluster01_r1/12_manual_review_targets.md)。
+- 用户随后确认红框定位正确：这 20 簇全都不是人且不会移动，属于噪声或其他物体。已按逐簇 SID/帧号/seq 冻结到 [`19_user_confirmed_labels.json`](../evidence/2026-10-09_cluster01_r1/19_user_confirmed_labels.json)；“噪声”与“其他物体”子类未强行区分。
+- 保留原始复核页，并新增 [21_manual_review_user_confirmed.html](../evidence/2026-10-09_cluster01_r1/21_manual_review_user_confirmed.html)，20 张卡片预填该确认，仍可导出 JSON。
+- 用户后续要求提供 HTML 框选页；已生成 [`16_manual_review.html`](../evidence/2026-10-09_cluster01_r1/16_manual_review.html)，含 20 帧的 XY/XZ/YZ 投影、次级簇红框、主候选蓝框和可导出的人工标签。页面生成器确认 20 张卡、60 个内嵌 SVG；本地 `file://` 页面被浏览器自动化安全策略拦截，未做截图级目视验收。
+- 单因素 `human_n_min=60→100` A/B 将候选总数 1,418 降到 1,398，仍保留 1,398/1,398 个人体会话候选帧，空场仍 0；前景点与清理后簇数逐帧不变。仅在本 worktree 将默认候选门改为 100，主树未改。
+
+### 逐 ID 作者自验
+
+| ID | 结果 | 证据 |
+|---|---|---|
+| S01 | PASS | `00_baseline.json` |
+| P01 | PASS | 12 段 SID/name/frame 与输入 SHA |
+| P02 | PASS | `01_leveling_index.json`；9 推荐、1 TLS诊断、1 TLS无效已区分 |
+| P03 | BLOCKED | 10 个有效 TLS 会话的变换差 P95 在 0.12 m 内；女生近距 TLS 无效未测 |
+| P04 | PASS | `04_reference_support.json`；不推断小簇身份 |
+| G01 | PASS | `19_user_confirmed_labels.json`；用户确认 20/20 红框为静止非人 |
+| C01 | PASS | 固定快照、15 cm XY、4 邻、最小 3 voxel |
+| C02 | PASS | `03_cluster_summary.json` / `02_cluster_rows.jsonl`；不报 P/R/F1 |
+| C03 | PASS | `05_min_points_ab.json`；单因素对照，分支仅改一项 |
+| T01 | PASS | `cluster_replay.test.js` PASS；`human_pipe_lib.test.js` 35/35 |
+| R01 | PASS | 新证据目录、命令结果、哈希与忽略派生包 |
+| R02 | PASS | 本回传与 sidequest README |
+| E01 | BLOCKED | 生产/主树接入本轮未授权 |
+| D01 | NOT_RUN | 设备、采集、部署、物理校准未执行 |
+
+### 结论边界
+
+仅 `SUBMITTED / STOPPED`；未独立复审，未 `ACCEPTED`。女生近距会话的 TLS 质量门仍失败。100 点门清理了用户确认的 20 个静止非人候选，主要价值是减少未确认候选/track；不代表识别率提升。跨距离或其他场景仍需验证。
+
+- 最终完整性：[25_final_integrity_r12.json](../evidence/2026-10-09_cluster01_r1/25_final_integrity_r12.json)。首次完整性记录因未关闭读取流出现 `ResourceWarning`，已保留为 `08_final_integrity.json`；修正后重跑无警告，原始输入、模板、TLS 输出、两版 HTML 和用户标注均与 SHA 记录一致。
+- 主树仍为 `master` / 原 HEAD，`human_pipe_lib.js` 与基线 SHA 一致；基线后另出现的 13 个主树状态项包括同回放管线的 `replay.js`/`detect_overlay.js` 等，均为范围外且未触碰，详见 [06_findings.md](../evidence/2026-10-09_cluster01_r1/06_findings.md)。
+
+## CLUSTER-01 R1 — 2026-10-09 / 独立复审（OpenCode 只读复核）+ 文档修复 / REVIEWED
+
+- 复审人：OpenCode（opencode-go/deepseek-v4.1-flash），只读独立复核，ponytail full 加载。复审基线：worktree `codex/traditional-clustering` / HEAD `cfbb80c57508be1a0435fdb92260f698dc763934`（未变），主树 `master` 只读、零改动。
+- 做法：记录哈希逐一重算（约 13 GB：12 段源会话 meta/points、模板、10 段 TLS 导出、17 个 source 文件、主树/冻结/分支三个 `human_pipe_lib.js` 版本）；基线全帧与单因素 A/B 用冻结快照独立复跑（输出只写系统临时目录）；逐帧重算 20 个红框簇；两版 HTML 卡片绑定与 `21=f(16)` 确定性变换复核。
+- 复现结果：复跑 rows 与 `02_cluster_rows.jsonl` 字节级相同（sha256 `69fc3a4c…`）；A/B 1418→1398 与 `05_min_points_ab.json` 逐项一致，10 段 1398/1398 帧保留候选，移除集恰为 20 个已确认红框；20/20 红框簇点数/中心/seq/成员/SOLID_UNIFORM/NON_HUMAN 复现，0.12 m 内空场参考体素=0；两树各抽查 40 个 tracked 文件 SHA 全对。
+- 哈希差异说明（均已解释，无矛盾）：`git show HEAD:` 与磁盘 SHA 差 = `core.autocrlf=true` 换行（LF→CRLF 后与记录一致）；主树状态项现为 15 个（r12 时 13 个），多出的 `human_track.html` 等为 r12 之后外部并发工作，与本 sidequest 无关。
+- 逐 ID 复审判定：S01 / P01 / P02 / P04 / G01 / V02 / C01 / C02 / C03 / T01 / R01 / R02 / V01 = PASS；P03 = PASS（范围=10 个有效 TLS 会话；121647 会话级 TLS 阻断未测，作者原 BLOCKED 标注保守、留存历史）；E01 = BLOCKED；D01 = NOT_RUN。R01 弱项：首跑失败 stdout 未逐字留档，不追溯补档。
+- 建议：样本内接受（限离线、当前 12 段、`human_n_min=100` worktree 候选）；生产/接入维持 BLOCKED。未完成项转入 CLUSTER-02 提案（未开工）：60–99 点全帧全量审计、track/event 级 A/B、分支文件全帧冒烟、`leveling.py` SHA 在配平索引补记。
+- 本次修复：验收表删除重复 V01 行、状态行更新为已复审、表后补复审指引；追加本记录。修复后 SHA：`CLUSTER01_ACCEPTANCE.md` = `d0bb8ffa1f3bf96cf6d7ed9c991c3fb06b6248f2e8823df663f87158ae8d8162`。复审哈希钉扎见 `docs/sidequests/evidence/2026-10-09_cluster01_r1_review/00_review_hash_pins.json`（本文件修复后 SHA 亦收录其中）。
+
+## CLUSTER-01 R2 — 2026-10-09 / 离线补审（CL2-02 60–99 点全量审计 + CL2-03 track/event A/B）/ SUBMITTED
+
+- 授权与边界：用户直派"继续 CL2-02/03"；仍为离线 sidequest，未接生产、未提交、未采集；`captures/` 与 r1 证据只读。
+- 方法：新增 `sidequests/traditional_clustering/sub100_audit_ab.js`（内置断言，输出存在即拒绝覆盖），用 r1 冻结快照（`8b50a221…`）对 10 段 TLS 有效会话 + 空场留出全帧（1,398 + 68）双门逐帧跑（基线 60 / 变体 100，独立 Tracker）。
+- CL2-02：100 门共移除 208 个 60–99 点簇 = 20 个 `HUMAN_CANDIDATE`（与 19 号用户负样本 20/20 绑定，n 60–74）+ 188 个 `NON_HUMAN`（176 SOLID_UNIFORM + 12 HUMAN_SHAPE，n 60–97）；分布 114641=7、114709=153、114734=2、122616=6、122637=40，其余 5 段 0，空场留出 0。r1"100 门只隐藏红框候选"应修正为"隐藏全部 60–99 点簇（含非候选小簇）"。
+- CL2-03：200 帧 `active_tracks` 减少 1–2（187 帧涉非候选小簇）；fall `events` 两版均 0（本批无跌倒，事件层影响不可测）；候选零丢失（1,398/1,398 帧 ≥1 候选；总数 1,418→1,398）；逐帧前景点/清理后原始簇数不变。
+- 结论：r1 候选层结论复核成立，并补充了非候选小簇连带移除的量化；建议不变（样本内接受，生产/接入 BLOCKED）。未完成：CL2-05（分支全帧冒烟）、`leveling.py` SHA 补记。
+- 证据：`docs/sidequests/evidence/2026-10-09_cluster01_r2/`（00 摘要 / 01 全量审计 / 02 track·event A/B / 03–04 完整性）。
+
+## CLUSTER-01 R3 — 2026-10-09 / CL2-05 分支全帧等价只读验证 / SUBMITTED · STOPPED
+
+- 授权：仅验证、写新证据、追加本 return；生产算法/阈值/主树/captures/冻结 R1-R2 不写；未 commit/push/deploy/capture，未 B2/B3。执行者 Codex primary，ponytail full 读取路径 `C:/Users/30680/.codex/skills/ponytail/SKILL.md`。
+- 工作树 `C:/Users/30680/.codex/worktrees/traditional-clustering/ldiar` / `codex/traditional-clustering`，主树 `master`；起始 HEAD 两树 `cfbb80c57508be1a0435fdb92260f698dc763934`。起止整树钉扎（含 tracked/untracked/ignored）：新证据 `00_before.json` / `07_after.json`，return 保持原字节前缀，仅追加。
+- 依据：唯一 `CLUSTER01_ACCEPTANCE.md` v1、R1/R2 return、冻结源码及 CL2-02/03 原始证据。本轮不修改唯一验收表、不回填旧证据。验收表/源码/输入 SHA 均收录起止完整性记录。
+- P 的含义：默认回放 `human_pipe_lib.js:pipeline_frame`，无 fusion 配置；从 `human_detect.js` 消费者一路经去噪/前景/清理/四邻聚类/特征分类/Tracker.tick/fall_assess。实验沿用 R1 前 135 帧空场参考图（68 帧留出），不是生产接入或重新验证 UI 自建背景。
+- 方法：实际分支与冻结文件各加载独立实例，branch60↔frozen60、branch100↔frozen100 同配置逐帧对比；另做 frozen60↔frozen100 因果对照。观察实际阶段结果，并逐帧与未包装入口验证等价。阈值覆盖只在进程内，不写源码。分支 SHA `fb988846c81987ac159900d753441bd9b495a5a10af79fb828db9efad5c0e917`；冻结 SHA `8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176`。
+- 全部 12 段 1,819 帧完成冒烟：空场 TLS 203 + 10 段有效 TLS 人体 1,398 + 121647 raw 218。121647 的有效 TLS 仍 **BLOCKED（GL_HOLDOUT_QUALITY）**，raw/no-background 只比较这段分支/冻结的同配置行为，不能当作有效配平证据；114754 NO_RECOMMENDATION 仍只作诊断。
+- 前景/清理点身份使用 float32 四通道 bit pattern 与源帧点序号绑定；raw 簇完整 voxel keys、累加器和成员点序号留档。候选完整特征/证据/原因、Track 完整状态（含 next_id、不活跃记录、votes/pose_history）、Event 同配置无未解释差异；未包装入口与观测入口 1,819 帧一致。
+- R2 精确复现：208 个 60–99 点簇 = 20 已确认负样本 HUMAN_CANDIDATE + 188 NON_HUMAN；1,398 帧保留候选，候选数 1,418→1,398；200 帧 active_tracks 差（192×−1、8×−2），187 帧涉非候选小簇；全部逐帧审计与旧记录逐项相同。
+- 生命周期补证：R2 每帧新建 Tracker，200 帧不是连续生命周期统计。本轮连续 Tracker 的 active_tracks 在 **348 帧**不同（302×−1、46×−2），完整状态在 **523 帧**不同（含分配计数/不活跃历史）。保留簇数值 Track ID 改变为 0 帧，但 **105 帧保留 NON_HUMAN Track 的 EMA/历史或出生时刻不同**，不能称为无副作用。114709 第159帧 Track2 在100门才出生（60门 born=0），第168帧100门 lost=9关闭；122616 第33帧 n=97 更新被跳过，造成后续 EMA/历史传递。保留人体候选 Track 完整状态未发现额外变化。
+- 因果验证：只过滤 frozen60 实际分类输出中的 n<100 簇，喂独立 frozen100 Tracker/fall_assess；1,819 帧的赋值、完整 tracker 状态、事件均与实际100门完全一致，未解释副作用 0。所有阈值影响可追溯，但两门事件均0只说明样本内无新增事件，不验证跌倒能力。
+- 既有源码版本差异单列：冻结有默认不调用的 fusion 能力；分支旧诊断字段 `clusters_before/after_cleanup` 返回数组，冻结返回计数，1,819 帧严格返回值不一致；分支数组相减令 1,616 帧 split delta 为 NaN。完整原始差异与源码 diff 保留，未把它归因于60→100，也未修改生产算法。
+- **本轮 verdict：CL2-05 PASS（按用户“无未解释差异、预期变化可追溯、完整性通过”的契约，限定样本内默认P行为）；严格完整返回值等价 FAIL；121647 有效TLS范围 BLOCKED。** 只完成 CLUSTER-01 当前样本内实验闭环，不称为全12段TLS通过或全部返回字段逐字一致，不自行宣布 ACCEPTED。
+- 原验收ID本轮对应：S01/P01/G01/C01/C02/C03/T01/R01/R02=PASS；P02/P03/P04/V01/V02=NOT_RUN（不重复配平、变换/支撑探针、视觉验收，不覆盖历史状态）；E01=BLOCKED；D01=NOT_RUN。具体范围见新报告。
+- 回归：`node sidequests/traditional_clustering/cluster_replay.test.js` 自检 PASS；`node human_pipe_lib.test.js`（pc_apps/human_replay）35 passed/0 failed，exit0。`verify.js` 成功第三次全量运行 exit0；首跑零簇处理错误 exit1、第二次慢VM中断 exit15 的脚本/日志/部分证据均保留，没有覆盖。
+- 完整性：执行前 97 项历史 SHA 全匹配、两树14,062文件已钉扎；执行后重算结果见 `07_after.json`，最终判定绑定 `09_verdict.json`。可复跑 `verify.js` 必须写不存在的新目录；完整性脚本 before/after 写入即拒绝覆盖。
+- 证据：[CL2-05 报告及复跑说明](../evidence/2026-10-09_cl2_05_r1/README.md)、[全帧摘要](../evidence/2026-10-09_cl2_05_r1/run03/summary.json)、[生命周期逐项分析](../evidence/2026-10-09_cl2_05_r1/06_lifecycle_analysis.json)、`run03/frames.jsonl` / `point_membership.jsonl` / `threshold_differences.jsonl` / `diagnostic_differences.jsonl`（逐帧原始身份/成员/差异），`unexplained_differences.jsonl`为空。
+- **生产接入继续 BLOCKED**：缺低点数真人正样本和跌倒事件验证；诊断接口仍有上述已知差异。本轮完成后停止，不改阈值、不部署、不开展 B2/B3、不开始下一阶段。
+
+### CL2-05 最终完整性守护纠正 — 2026-10-09 / BLOCKED · STOPPED
+
+上述 R3 的候选 CL2-05 PASS 是等待最终整树守护时的样本行为结论；**最终总体 verdict 改为 BLOCKED**，不宣布 CLUSTER-01 完整闭环 PASS。原文不删除，追加本纠正。
+
+- `integrity.py after` 实际 exit1；`07_after.json` 的 historical_integrity=true（97项输入/模板/TLS/冻结证据SHA全部通过）、return_append_only=true、worktree非return文件及branch/HEAD未变，但 branches_HEADs_unchanged=false / unexpected_changes非空 / 全树PASS=false。
+- 主树 HEAD 从 `cfbb80c57508be1a0435fdb92260f698dc763934` 到 `9c3d8b33c247518373bb53fd79fb359873548e44`。21项范围外状态差：17项仅 untracked→tracked，4项涉及内容或存在性；完整清单保留在 `07_after.json`。只读日志显示 B1/ML/Console 相关提交，末项是14:48:50的 human_track.html 修复。本轮没有写主树或调用 commit，不推断所有范围外变动的操作者，不恢复、不reset、不回滚其他工作。
+- 分支实际验证源码、原始12段输入、模板、R1/R2冻结证据仍完整；同配置算法/簇成员/Track/Event语义验证PASS；阈值/生命周期因果验证PASS；严格诊断返回值等价FAIL与121647有效TLS BLOCKED保持不变。这里的BLOCKED来自无法证明全主树起止冻结，不伪装为算法不一致。
+- 原验收ID本轮 S01 的最终全树守护状态修正为 BLOCKED；其他逐项范围和历史记录不变。`09_verdict.json` 将分层结论绑定，`10_evidence_manifest.json` 封存包括失败守护及最终return SHA的证据。
+- 缺低点数真人正样本和跌倒事件验证，生产接入继续BLOCKED。所有请求的只读验证、逐帧记录、可复跑脚本和最终verdict已交付；停止，不改阈值、不部署、不开展B2/B3、不启动下一阶段。
+
+## CLUSTER-01 R4 — 2026-10-09 / CL2-06 接口收口与独立隔离验证 / SUBMITTED · STOPPED
+
+- 用户授权阶段A审计、阶段B分支接口/诊断最小修复、阶段C隔离验证；Codex primary唯一writer。ponytail实际使用路径：C:/Users/30680/.codex/skills/ponytail/SKILL.md。
+- 唯一验收表CLUSTER01_ACCEPTANCE.md v1保持，SHA d0bb8ffa1f3bf96cf6d7ed9c991c3fb06b6248f2e8823df663f87158ae8d8162；本轮五项新增门逐项报告，不改历史。
+- 根因审计见[02_AUDIT.md](../evidence/2026-10-09_cl2_06_r1/02_AUDIT.md)：簇数组外泄、数组相减NaN、潜在topology假阴性均为既有诊断接口缺陷；UI拼接与sidequest诊断汇总受影响，算法决策无消费。冻结参考无此计数缺陷。额外fusion能力差异不在默认P契约，不移植。
+- 仅三个表达式改length；[最小diff](../evidence/2026-10-09_cl2_06_r1/03_minimal_review.diff)，实际源码SHA 2155734f608b91beb2aca12b1fbecee425b9089f0096b2af9a446fd9f3c8a805。60/100阈值、聚类几何、前景/簇成员、分类、Track/Event核心未改。分支HEAD cfbb80c57508be1a0435fdb92260f698dc763934；生产主树只读。
+- 独立执行采用固定已有commit的detached工作树 + 明确SHA覆盖白名单（未commit，不能冒称提交源码）。全1819帧、两阈值完整原生返回值严格比较、声明类型/所有嵌套数值有限检查、连续生命周期/Event/R2归因复现；97项输入/模板/TLS/冻结/decoder历史SHA起止核验、隔离树全文件SHA守护。首次验证器漏声明字段的exit1日志保留，attempt02补全原契约；两项既有回归exit0。详见新报告及命令JSON。
+- **CL2-06规定检查=PASS**：STRICT_RETURN_EQUIVALENCE=PASS; SEMANTIC_EQUIVALENCE=PASS; INPUT_INTEGRITY=PASS; ISOLATED_TREE_GUARD=PASS; TRACK_EVENT_REGRESSION=PASS; RETURN_STRUCTURE_TYPES=PASS; DIAGNOSTIC_FINITE=PASS; APPROVED_CHANGE_SCOPE=PASS; CORPUS_COVERAGE=PASS; CL2_05_CORE_REGRESSION=PASS; TLS_121647=BLOCKED; PRODUCTION=BLOCKED; DEVICE=NOT_RUN。任何必需项FAIL均不构成完整通过。不自行宣布ACCEPTED。
+- 唯一表本轮映射：S01/P01/G01/C01/C02/C03/T01/R01/R02=PASS（S01隔离范围）；P02/P03/P04/V01/V02=NOT_RUN；E01=BLOCKED；D01=NOT_RUN。旧CL2-05全主树守护FAIL保持，主树HEAD/内容/验证器输出分别归因，不回滚范围外工作。
+- 有效TLS仅1601帧；121647的218 raw诊断继续独立BLOCKED，不替代有效配平。事件样本为0，不验证跌倒敏感性，低点数真人正样本不足；生产接入BLOCKED。
+- 新证据：[CL2-06报告](../evidence/2026-10-09_cl2_06_r1/README.md)、[verdict](../evidence/2026-10-09_cl2_06_r1/09_verdict.json)、run02逐帧身份/成员/返回值/Track/Event、白名单、起止SHA和最终manifest。return只追加，未覆盖旧证据。
+- 本轮完成立即停止：无部署、无合并生产、无B2/B3、无新阶段；CL2-06 PASS不等于生产准入。
+
+## CLUSTER-01 R5 — 2026-10-09 / CL2-07 121647 TLS阻断只读审计 / SUBMITTED · STOPPED
+
+- 用户直派只读审计；承接CL2-06 PASS隔离基线。Codex primary；ponytail实际读取/使用：`C:/Users/30680/.codex/skills/ponytail/SKILL.md`。未修改生产、算法、TLS参数或门控、CL2-06冻结源及证据；未commit/push/合并/部署/采集/B2/B3。
+- 唯一表 `docs/sidequests/CLUSTER01_ACCEPTANCE.md` v1，SHA `d0bb8ffa1f3bf96cf6d7ed9c991c3fb06b6248f2e8823df663f87158ae8d8162`，未改。已读CL2-05/06 README和SHA manifest及本return；历史CL2-05最终BLOCKED保留，CL2-06规定检查PASS且121647 TLS BLOCKED不变。
+- 执行工作树 `C:/Users/30680/.codex/worktrees/traditional-clustering/ldiar` / `codex/traditional-clustering` / HEAD `cfbb80c57508be1a0435fdb92260f698dc763934`；CL2-06 detached树同HEAD。主树起点master/`fb18dde26a022cf931a32e762cfc60f23f858ba9`，只读。三树tracked/untracked/ignored全SHA起止库存：00_before.json/07_after.json；201项历史核验，return旧字节保留return_before.bin；最终以09_verdict.json与07_after.json为准。
+- **直接根因：ordinal72（第73帧、seq3225977）、ROI2 [0.75,1.0)×[−0.25,0)，TLS P95=0.05029186936019117m > 0.05m，超0.291869mm → GL_HOLDOUT_QUALITY → valid=false → 不导出。** 300点、284个5cm支持点、RMS0.0274179876m与支持率0.9466666667均PASS；全域/拟合四区/三个留出full全部PASS。完整report的留出逐区判据被索引摘要省略，不能由full PASS推导有效TLS。
+- 原meta/bin SHA分别 `af492de942cc6cc13c338a52c2f8e24e7bf322351ddddd26c64f16a21945303c` / `97def5d21c28d695c686bb79b255fddd4f666ea856c39593f5dff567506017fc`；作业389dc570b0cd4eb38dd405244effbe20正常completed/error:none，仅report/domain/manifest，artifacts={}。现有valid条件导出行为符合契约，无运行异常或导出链缺陷。
+- 复用原freeze_domain，NPZ七数组精确相等；源行/XYZ/区域/帧与config/domain/code ID独立重算通过；9个工具SHA及profile一致。原compare三法全部结果复现。TLS/SVD同一LS家族，同72/ROI2失败；RANSAC在144/ROI2 P950.0509088747m失败，只作诊断，不替代TLS。
+- 218帧10708741行，28B布局/连续offset/大小校验通过；0个非有限XYZ，2336624个零XYZ（21.8198%，同批正常样本比例相近），8372117个有限非零点。seq连续、stamp单调。拟合136942点、lambda2/lambda3=0.372066、切向跨度1.877376/2.469121m；单位法向/锚定/姿态/三法一致性均PASS，无几何退化证据。
+- auto ROI已成功返回四区；区域2局部纯度预门通过但下游留出P95边缘失败。固定TLS全帧诊断ROI2在72/107/112/126/127/139/171共7帧P95超限，其他区0失败；描述性逐帧拟合夹角最大0.136468°，不新增时稳放行门。10段其他TLS有效会话留出逐区最大P95均<0.05m，同版工具/profile，114754仍仅NO_RECOMMENDATION诊断。
+- **现场残差尾部成因UNKNOWN**：缺地面/尾点身份GT，不能确定地面粗糙、遮挡、边缘混合或回波原因；本地无原bag，metadata中的板端bag SHA仅声明，bag→bin端到端核验NOT_RUN。没有证据支持立即强制重采集；当前121647仍不能作为有效TLS输入。最小补证是离线人工核验四ROI和CSV绑定超限点邻域，必要时另授权原bag复解码；仍不明再另授权同姿态空场/近距成对采集。补证实验本轮不执行。
+- 未发现TLS求解/门控/导出软件缺陷。最小建议仅给balance_sessions摘要增加失败ordinal/region/metric/actual/limit或保留regions；不改门控，不实施修复。
+- **CL2-07审计结论PASS（限定SHA、输入绑定与已有TLS拒绝链可复现，最终守护失败则BLOCKED）；121647有效TLS=BLOCKED；物理唯一原因=UNKNOWN；生产=BLOCKED；设备=NOT_RUN。** 不宣布ACCEPTED、不放行。
+- 逐ID本轮：S01/P01/T01/R01/R02=审计范围PASS；P02=既有拒绝链审计PASS且121647有效TLS BLOCKED；P03/P04/G01/C01/C02/C03/V01/V02=NOT_RUN；E01=BLOCKED；D01=NOT_RUN。旧验收状态不回填。
+- 独立证据：[CL2-07完整报告](../evidence/2026-10-09_cl2_07_r1/README.md)；01三法复算、02失败链、03正常会话对照、04逐帧记录、05三个留出ROI2全点CSV、06原始有效性、07起止SHA、09verdict、10manifest。`audit.py before/audit/after`可复跑，必须新revision，拒绝覆盖；内置数据绑定/原质量结果/失败定位/导出缺席断言，`python -X utf8 -B -W error`实际运行。首个manifest键名解析KeyError exit1保留attempt01.log，兼容既有两种格式后before/audit exit0。最终after退出码见09verdict。
+- 本轮完成停止，未修改任何已冻结算法/旧证据，无后续阶段。
+
+### CL2-07 最终守护结果 — 2026-10-09 / BLOCKED · STOPPED
+
+上述R5的拒绝链/输入审计分项PASS成立，但最终整体 **CL2-07=BLOCKED**，不宣布冻结审计闭环PASS。
+
+- `audit.py after` exit1；201项历史SHA全部匹配，原始输入、工具、旧TLS作业、CL2-05/06证据完整。return原前缀保持。支线与CL2-06隔离树非return全文件SHA/branch/HEAD不变。
+- 主树发生范围外并发变动：HEAD fb18dde26a022cf931a32e762cfc60f23f858ba9 → 70ba62cc8d03312c2f0470060215e9011ffe6514；detect_overlay.js SHA 7bf9aad6695e292d273f01b3a6c64d6d96f564105cccfd461ed1d77a76b31bbe → 906156c0069939d0f1d08ef0719b4ccf845a071a6467b5aa388551e6b05fac05；新增ignored Console/EXE-00.toc、PKG-00.toc。完整起止差异在07_after.json。未回滚、未重设基线或放宽守护，保留exit1。
+- 本轮无这些主树写入/提交操作，不推测所有变动操作者；仅记录外部并发迹象。S01最终=BLOCKED；P01/T01/R01/R02及拒绝链分项PASS不受影响，P02有效TLS仍BLOCKED，其余NOT_RUN边界不变。
+- **121647直接阻断已复现：72/ROI2的TLS P95>0.05m；有效TLS BLOCKED；现场尾部成因 UNKNOWN；生产 BLOCKED；设备 NOT_RUN。** 不因边缘超限降低门控，不以raw冒烟替代TLS。先离线核验原始点身份，重采集必要性未被证实，补证本轮未执行。
+- 最终报告/独立标量P95核验/verdict/manifest位于2026-10-09_cl2_07_r1；守护后仅追加本段已知字节，manifest封存最终return SHA与前缀。本轮交付后停止，无修复、合并、部署、采集或B2/B3。
+
+
+## CLUSTER-01 R6 — 2026-10-09 / CL2-08 Codex × OpenCode CLI独立审计 / SUBMITTED · STOPPED
+
+- 当前用户明确授权双重独立只读审计；未修改算法、生产源码、门控、旧证据或验收表；未commit/push/deploy/capture/生产接入/B2/B3。ponytail实际读取：Codex `C:/Users/30680/.codex/skills/ponytail/SKILL.md`；OpenCode `D:/Code/cl208audit/audit_inputs/ponytail/SKILL.md`。
+- 唯一表CLUSTER01_ACCEPTANCE.md v1/SHA d0bb8ffa1f3bf96cf6d7ed9c991c3fb06b6248f2e8823df663f87158ae8d8162未改。新证据 `docs/sidequests/evidence/2026-10-09_cl2_08_r1/`，完整最终报告FINAL_REPORT.md，对照COMPARISON.md、两方独立报告、真实CLI原始stdout/stderr/argv/exit/session export、SHA manifest均保存。
+- 固定detached HEAD cfbb80c57508be1a0435fdb92260f698dc763934，隔离树D:/Code/cl208audit，explicit overlay来自传统聚类分支及121647原输入，未冒称已提交版本。4726文件和108项输入origin/frozen SHA起止一致，历史code/report/domain/meta/bin SHA复核。原树全库存只作上下文，审计期间主树新增范围外rf_person.test.js已留档，不影响冻结输入。旧CL2-07整树守护BLOCKED不回填。
+- OpenCode真实执行：CLI1.18.35、实际opencode-go/deepseek-v4.1-flash（session export验证），新session ses_ee04f293dffe6EtAYfV71MASYF，exit0/finish stop；50次合法read完成，1次offset越界失败保留。默认plan许可不适合严格只读；使用本机验证的进程内cl2audit逐文件白名单，仅read可用。首轮exit0但全部read拒绝，实质审计BLOCKED，不计完成，原报告保留。没有模型/供应商/密钥/DB切换。
+- Codex独立从原bin解码、重建七数组、SVD求解与标量P95，三方法/历史拒绝链全复现：72/ROI2 P95=0.05029186936019118m，超限0.291869mm；300点/284支持点/RMS27.418mm均过各自门，P95唯一失败，GL_HOLDOUT_QUALITY→valid=false→no export。七帧超限清单不变，未发现当前TLS误判。
+- 新增F01：ROI2持续X残差梯度，corrX全218帧0.603–0.713，局部平面与共同TLS夹角13.68–17.05°；解释预门PASS但共同P95擦线的数值机制，现场物理原因仍UNKNOWN。新增F02：v2先选最大间距后检查条件数，5格合成反例拒绝共线组合，尽管4个替代组合满足原间距/条件门；CL2-07遗漏算法问题。本会话ROI已成功，因此不推翻其P95拒绝。本轮没有修复。
+- 双方分歧裁决：接受留出逐区文档可更清晰的保留，不接受以文字未单独展开为由取消冻结逐区子门；“必然擦线”仅推断；最差区限定RMS，P95并非每帧最差。OpenCode未重算SHA/运行Python的UNKNOWN保留，由Codex起止重算闭合本轮字节一致性，不假称双份独立全量数值执行。
+- 分层结论：审计可信度PASS（固定输入/实际CLI/证据交叉复核），源码并非无缺陷；121647有效TLS仍BLOCKED；TLS生产放行BLOCKED；物理原因UNKNOWN；原bag复解码NOT_RUN；没有充分证据要求立即重采，先现有ROI点身份/尾点邻域与原bag证据，必要时另授权配对受控采集。
+- 逐ID本轮：S01/P01/T01/R01/R02=PASS（审计范围）；P02拒绝链审计PASS、有效TLS BLOCKED；P03/P04/G01/C01/C02/C03/V01/V02=NOT_RUN；E01=BLOCKED；D01=NOT_RUN。旧表/旧结果不改，不宣布ACCEPTED。完整性见final_integrity.json，最终verdict.json与evidence_manifest.json绑定。
+- 本轮交付后停止，无后续阶段。
+
+
+## CLUSTER-01 R7 — 2026-10-09 / CL2-09A 空间残差归因与双模型审计 / SUBMITTED · STOPPED
+
+- 用户授权只读CL2-09A；本轮新证据为docs/sidequests/evidence/2026-10-09_cl2_09a_r1。基线D:/Code/cl208audit detached cfbb80c57508be1a0435fdb92260f698dc763934 + CL2-08 SHA overlay；新文件仅传统聚类worktree证据，return仅追加。主树为上下文，正常原meta/bin只读；隔离/支线全文件及108绑定、历史manifest实际重算。最终守护与verdict以新final_integrity.json、10_evidence_manifest.json及FINAL_REPORT.md为准，本段不预先宣布冻结闭环PASS。
+- ponytail：Codex C:/Users/30680/.codex/skills/ponytail/SKILL.md；OpenCode D:/Code/cl208audit/audit_inputs/ponytail/SKILL.md。无生产writer、未改算法/ROI/TLS解/50mm门控，未删尾点，未修改旧证据/原始输入。无部署/采集/commit/push/B2/B3。
+- 固定目标ROI2与TLS，218帧64850点观测；逐帧P50/90/95/99/RMS/max/点数密度、XY格/边缘中心、局部平面性、时间连续性均记录。七超限72/107/112/126/127/139/171不变；原P95仍50.170–51.179mm。gx中位0.25286m/m，稳定空间图corr中位0.988；仅随机/边缘不足以独立解释全部结构，物理根因UNKNOWN。
+- 全10正常valid TLS、1398帧（114754 TLS自身valid但NO_RECOMMENDATION保留）；同原ROI编号不代表同空间。诊断同盒gx0.1935–0.2433，格均值图corr0.976–0.999，否定目标独有异常。前32帧趋势预测七失败帧、诊断P95降36.6–39.1mm，说明数值宽尾贡献，不替代TLS，不构成物理因果。
+- OpenCode真实CLI1.18.35，opencode-go/deepseek-v4.1-flash，session ses_ee01ccd20ffeWnI4T9y8fIqBb9；初审+纯数据补审均exit0、finish stop，原stdout/stderr/argv/权限/模型export全部保留；独立只read，未数值/SHA复算。双方主要描述和物理UNKNOWN一致，Codex纠正其0.2%fit占比（实际46.705%）及密度/因果等过强措辞；其重拟TLS实验建议不采纳、不实施。详见07交叉裁决。
+- 121647有效TLS仍BLOCKED；生产BLOCKED；现场原因UNKNOWN；设备/原bag复解码/新采集NOT_RUN。不以诊断PASS放行TLS。最小补证设计为原现场对应表面五点独立身份+几何GT核验；无对应证据则BLOCKED，不强制重采。选择器假拒绝与固定域数值独立，可另立09B，本轮未启动。
+- 唯一验收表CLUSTER01_ACCEPTANCE.md v1/SHA d0bb8ffa1f3bf96cf6d7ed9c991c3fb06b6248f2e8823df663f87158ae8d8162不改。本轮S01/P01/T01/R01/R02待最终守护绑定；P02=NOT_RUN（不重复配平有效性验收，121647既有有效TLS BLOCKED）；P03/P04/G01/C01/C02/C03/V01/V02=NOT_RUN；E01=BLOCKED；D01=NOT_RUN。旧CL2-07整体BLOCKED不回填。
+- 提交后停止，不进入CL2-09B、B2/B3或生产修改。
+
+
+### CL2-09A 最终守护与分层裁定 — 2026-10-09 / SUBMITTED · STOPPED
+
+- `audit.py guard`实际exit0，09_integrity.json PASS：隔离全文件/支线非return全文件、HEAD、原输入与历史证据SHA不变，return旧前缀保持。额外历史manifest和原origin/frozen绑定全部核验通过；最终manifest逐项重算见final_integrity.json/10_evidence_manifest.json。
+- **诊断审计PASS；121647有效TLS BLOCKED；物理唯一成因UNKNOWN；生产BLOCKED；设备/原bag复解码/采集NOT_RUN。** 诊断PASS仅固定域数值+双模型证据审计可信度，不等于TLS有效性/生产/ACCEPTED。
+- 唯一表本轮最终：S01/P01/T01/R01/R02=PASS；P02=NOT_RUN并保留121647有效TLS BLOCKED；P03/P04/G01/C01/C02/C03/V01/V02=NOT_RUN；E01=BLOCKED；D01=NOT_RUN。旧结果不回填。
+- 未充分确定成因，最小补证为08设计中的原现场五点独立身份/几何GT，不实施、无推测性强制重采。OpenCode与Codex主要描述一致、物理UNKNOWN一致，因果/密度/拟合占比等分歧按直接证据裁决，原CLI报告未改。
+- CL2-09A到此停止，CL2-09B仅建议另立，未启动；无B2/B3、后续修复、部署或生产修改。
+
+
+## CLUSTER-01 R8 — 2026-10-09 / CL2-09B ROI选择器假拒绝离线修复 / SUBMITTED · STOPPED
+
+- 用户在“CL2-09B离线修复、保留门控、不部署”范围后明确“好的继续”。Codex唯一writer，ponytail实际C:/Users/30680/.codex/skills/ponytail/SKILL.md；OpenCode实际读本轮PONYTAIL_SKILL.md。新证据位于D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/（本轮在主工作区evidence；旧支线return只追加，不误用../evidence相对链接）。完整FINAL_REPORT.md、candidate源码、02_fix.patch、source/input SHA、35项具名原始回归、性能、真实CLI、裁决与manifest均保存。
+- 唯一CL2-09B验收表00_SCOPE_AND_ACCEPTANCE.md v1，SHA见verdict.json；CLUSTER01原v1及CL2-07/08/09A历史不改。来源固定CL2-08 isolation源码复制；当前main起点master/347a5bf…仅上下文，执行用SHA frozen/candidate。仅candidate/floor_sheet.py改变，原main和冻结生产源码未动，未接运行程序、commit/push/发布/部署/采集/B2/B3。
+- 根因量词错误：最大间距或唯一贪心组合不合格，不等于不存在合格四区。新候选旧成功原样返回，只有旧失败在完整可行集最大化间距；原间距0.5m/独立4/condition0.1、A层/purity/15cm全不变。v2原假拒绝修复后v3可直接承接25cm四区、不再进入15cm；此联动明确声明及测试。
+- 35项本地-W error全部PASS，具名日志及argv/PYTHONPATH/test+candidate SHA齐全；原环境/fixture失败保留。5格及25格反例、70小随机oracle、旧成功/重复/并列/拒绝/边界/ownership/调用者、实际回环HTTP均覆盖。板端3.8/NumPy1.17运行NOT_RUN，3.8仅语法。
+- 完整失败兜底最坏O(n4)。非共线无可行项100候选实际遍历3921225四元组，152097 SVD，38.990秒含counter开销；仅离线候选，不作板端/生产时延承诺、不加cap假拒绝。
+- 121647原bin与冻结auto平面重建11 clean格；旧/新完整selector及四ROI精确一致，ordinal72 ROI2 P95=0.05029186936019117m仍FAIL，原TLS valid=false/recommended=null；有效TLS BLOCKED、物理根因UNKNOWN。无重新估计TLS、删点或真实有效导出。
+- OpenCode真实CLI1.18.35/opencode-go/deepseek-v4.1-flash；有效session ses_edfc71127ffelfZe8UBTFTEywA，源码审+补审exit0/finish stop，工具仅read、完整raw IO/argv/权限/model export。首轮所有read拒绝的BLOCKED保留、不计完成。补审代码FAIL=无、结构证据PASS；数值/SHA未由模型执行仍UNKNOWN，由Codex实际起止复算与最终seal闭合，不伪报双份执行。
+- 本轮B01/B02/B03/B04/B05/B06/B07/B08=PASS（离线检查及最终seal绑定）；E01=BLOCKED，D01=NOT_RUN；121647有效TLS BLOCKED。不是ACCEPTED/生产接入许可。main无关overlay两项并发变更仅记录，不回滚；关键原源/输入/历史SHA不变，return前缀保持，最终final_integrity.json及10_evidence_manifest.json逐项封存。
+- 到此停止；未自动进入生产、板端、后续性能改造或任何新阶段。

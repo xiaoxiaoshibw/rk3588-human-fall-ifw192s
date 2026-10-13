@@ -1,0 +1,266 @@
+{
+  "schema": 1,
+  "kind": "human_semantic_sa_prototype",
+  "thresholds": {
+    "h_hdr": 0.1,
+    "w_max": 0.3,
+    "c_min": 0.05,
+    "c_slab": 0.05,
+    "w_slab": 0.25,
+    "t_wide": 0.15,
+    "l_dmin": 0.08,
+    "l_dmax": 0.4,
+    "l_col": 0.1,
+    "a_hdr": 0.08,
+    "o_arm": 0.25,
+    "center_max": 0.2,
+    "min_pts": 400,
+    "min_bands": 3
+  },
+  "samples": [
+    {
+      "id": "pos-540-person-stand",
+      "sid": "cap_20261007_215540",
+      "job": "21666bec7e7b44b2bdbbaa790bf4501b",
+      "z": [
+        0.05,
+        2
+      ],
+      "expect": "HUMAN",
+      "n_points": 118640,
+      "verdict": "HUMAN_EVIDENCE",
+      "pass": true,
+      "feats": {
+        "ok": true,
+        "n": 118640,
+        "zmax": 1.77,
+        "zmin": 0.05,
+        "w_torso": 0.157,
+        "cv": 0.084,
+        "legsOK": true,
+        "legD": 0.277,
+        "legCol": 0.063,
+        "legBal": 0.4847683786505539,
+        "topMax": 0.072,
+        "off": 0.028,
+        "neckMax": 0.127,
+        "head": true,
+        "arm": false,
+        "slab": false,
+        "flat": false,
+        "torso": true,
+        "semantic": "HUMAN_EVIDENCE",
+        "reason": "STRUCT_OK"
+      }
+    },
+    {
+      "id": "pos-607-person-armup",
+      "sid": "cap_20261007_215607",
+      "job": "2ed2cf6a4d2342ebb87f4e7fa68fdf3c",
+      "z": [
+        0.05,
+        2.1
+      ],
+      "expect": "HUMAN",
+      "n_points": 127295,
+      "verdict": "HUMAN_EVIDENCE",
+      "pass": true,
+      "feats": {
+        "ok": true,
+        "n": 127295,
+        "zmax": 2.01,
+        "zmin": 0.05,
+        "w_torso": 0.138,
+        "cv": 0.106,
+        "legsOK": true,
+        "legD": 0.2,
+        "legCol": 0.063,
+        "legBal": 0.4803724306624058,
+        "topMax": 0.052,
+        "off": 0.304,
+        "neckMax": 0.119,
+        "head": false,
+        "arm": true,
+        "slab": false,
+        "flat": false,
+        "torso": true,
+        "semantic": "HUMAN_EVIDENCE",
+        "reason": "STRUCT_OK"
+      }
+    },
+    {
+      "id": "pos-623-person-armup",
+      "sid": "cap_20261007_215623",
+      "job": "a9e1e01fa6644f93aa686daa330a5fcd",
+      "z": [
+        0.05,
+        2.1
+      ],
+      "expect": "HUMAN",
+      "n_points": 127348,
+      "verdict": "HUMAN_EVIDENCE",
+      "pass": true,
+      "feats": {
+        "ok": true,
+        "n": 127348,
+        "zmax": 2.03,
+        "zmin": 0.05,
+        "w_torso": 0.143,
+        "cv": 0.116,
+        "legsOK": true,
+        "legD": 0.199,
+        "legCol": 0.064,
+        "legBal": 0.488840978959556,
+        "topMax": 0.04,
+        "off": 0.32,
+        "neckMax": 0.124,
+        "head": false,
+        "arm": true,
+        "slab": false,
+        "flat": false,
+        "torso": true,
+        "semantic": "HUMAN_EVIDENCE",
+        "reason": "STRUCT_OK"
+      }
+    },
+    {
+      "id": "pos-643-person-stand",
+      "sid": "cap_20261007_215643",
+      "job": "e46d035de1b34378b841ca3bc2a1c8f6",
+      "z": [
+        0.05,
+        2
+      ],
+      "expect": "HUMAN",
+      "n_points": 69062,
+      "verdict": "HUMAN_EVIDENCE",
+      "pass": true,
+      "feats": {
+        "ok": true,
+        "n": 69062,
+        "zmax": 1.75,
+        "zmin": 0.05,
+        "w_torso": 0.103,
+        "cv": 0.144,
+        "legsOK": true,
+        "legD": 0.139,
+        "legCol": 0.046,
+        "legBal": 0.39072709578757125,
+        "topMax": 0.076,
+        "off": 0.119,
+        "neckMax": 0.089,
+        "head": true,
+        "arm": false,
+        "slab": false,
+        "flat": false,
+        "torso": true,
+        "semantic": "HUMAN_EVIDENCE",
+        "reason": "STRUCT_OK"
+      }
+    },
+    {
+      "id": "neg-WD01-furniture",
+      "sid": "cap_20261002_223757",
+      "job": "015df3ff4e9743e38ea2236ea7da2d74",
+      "z": [
+        0.05,
+        2
+      ],
+      "expect": "NOT_HUMAN",
+      "n_points": 167425,
+      "verdict": "OBJECT_EVIDENCE",
+      "pass": true,
+      "feats": {
+        "ok": true,
+        "n": 167425,
+        "zmax": 2,
+        "zmin": 0.05,
+        "w_torso": 0.301,
+        "cv": 0.033,
+        "legsOK": false,
+        "legD": 0.629,
+        "legCol": 0.134,
+        "legBal": 0.45416502171338335,
+        "topMax": 0.143,
+        "off": 0.326,
+        "neckMax": 0.141,
+        "head": false,
+        "arm": false,
+        "slab": true,
+        "flat": false,
+        "torso": false,
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "SLAB"
+      }
+    },
+    {
+      "id": "neg-crates",
+      "sid": "cap_20261007_215540",
+      "job": "21666bec7e7b44b2bdbbaa790bf4501b",
+      "z": [
+        0.05,
+        1.6
+      ],
+      "expect": "NOT_HUMAN",
+      "n_points": 22943,
+      "verdict": "OBJECT_EVIDENCE",
+      "pass": true,
+      "feats": {
+        "ok": true,
+        "n": 22943,
+        "zmax": 1.6,
+        "zmin": 0.05,
+        "w_torso": 0.277,
+        "cv": 0.328,
+        "legsOK": false,
+        "legD": 0.234,
+        "legCol": 0.114,
+        "legBal": 0.4847685296234109,
+        "topMax": 0.255,
+        "off": 0.289,
+        "neckMax": 0.265,
+        "head": false,
+        "arm": false,
+        "slab": false,
+        "flat": true,
+        "torso": true,
+        "semantic": "OBJECT_EVIDENCE",
+        "reason": "FLAT_TOP"
+      }
+    },
+    {
+      "id": "neg-low-bar",
+      "sid": "cap_20261007_215540",
+      "job": "21666bec7e7b44b2bdbbaa790bf4501b",
+      "z": [
+        0.05,
+        0.9
+      ],
+      "expect": "NOT_HUMAN",
+      "n_points": 0,
+      "verdict": "UNKNOWN",
+      "pass": true,
+      "feats": {
+        "ok": false,
+        "reason": "POINTS_LOW",
+        "n": 0
+      }
+    }
+  ],
+  "empty_scene": {
+    "sid": "cap_20261007_233658",
+    "frames": 54,
+    "total_clusters": 66,
+    "max_cluster_points": 985,
+    "human_evidence": 0,
+    "counts": {
+      "OBJECT_EVIDENCE": 54,
+      "UNKNOWN(POINTS_LOW)": 12
+    }
+  },
+  "code_binding": {
+    "human_pipe_lib": "af4cdea6d35c73633b12b0d230f3e91f8ba606d9e42fb2ba69bd4083b4af14e5",
+    "registration": "19c1fced9dbeabdefbc20dc8666fec601e3da8a42de68dec2ccdf195865379f5",
+    "script": "50388454910b98db343b8fc4f20f9184684ca79469632fa6481d814bf0719780"
+  }
+}

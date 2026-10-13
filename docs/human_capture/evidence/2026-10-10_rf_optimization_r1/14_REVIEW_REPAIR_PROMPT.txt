@@ -1,0 +1,4 @@
+继续本轮独立只读复核。05_opencode_review01_raw.jsonl是你刚刚第一审的现场流，不是“历史先前审查”；10_OPENCODE_REVIEW01.md为调用者提取的实际最终原文。已保留不动。
+读取13_REPAIR_NOTES.md、当前workspace/experiment.py/test_research.py；实际运行python -B -W error -m unittest discover -s . -p test_research.py -v，核查单类折排除选参均值、optional_mean空值保护、duplicate/stand_weak口径。新增4/4日志11。不得编辑文件/写pycache/装依赖/生产修改/派subagent。pony tail技能使用路径仍须记录。
+请纠正第一审的“present_class_score单类恒1”主张：运行 y=[1,1] pred=[0,1] 当前函数确实0.5，原函数同样如此。第一审“GBDT优势主要由逐折阈值不稳定驱动”缺因果实验，应降为未验证推断。读取run01/results.json检查121622 range_2_4实际recall，只有负类时应None而非0。
+run02正重新计算三主模型和基线，若已完成请独立对比run01/run02每候选p/threshold/predicted、各折混淆与params一致；未生成时如实标NOT_RUN等待调用者复算，不循环等待/不重训。只输出简洁复核结论，点名是否还存在当前软件FAIL或修复未闭合；数据BLOCKED与R3不放行保持。不要重新审全部原始档案或扫描整个23GB树，第一审未改部分沿用第一审证据。

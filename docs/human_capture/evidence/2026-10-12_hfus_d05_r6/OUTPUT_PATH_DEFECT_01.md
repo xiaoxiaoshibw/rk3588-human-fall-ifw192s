@@ -1,0 +1,1 @@
+R06 v1复制错误：只替换R05/r05未替换证据后缀_r5，execute/run/分析输出仍指R05。PRECHECK真实child30112退出0但其新log/EXIT误落旧R05目录（新增，不覆盖，保留并明确不算R05实验）。FULL_CONTROL wrapper在status已有时assert拒绝启动，统一command实际exit1、没有Node完整评测child/新ledger，无原评分覆盖。原R06根v1源及TOOLING_V1保留；R06/v2新目录修复全部输出后缀与子目录相对依赖/ROOT，输出只新R06；未修改共享运行源。必须以v2新PRECHECK/真实FULL_EXIT与runtime sourceManifest为准。

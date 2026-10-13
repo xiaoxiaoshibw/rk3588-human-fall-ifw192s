@@ -1,0 +1,897 @@
+{
+  "method": "recalculation of existing V2 JSON; not a fresh 9-session experiment",
+  "summaries": [
+    {
+      "sid": "cap_20261010_175227",
+      "activity": "S1-empty-with-furniture",
+      "model": "rf51_baseline",
+      "frames": 304,
+      "gt_known": 304,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 604,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 600,
+        "fn": 0
+      },
+      "furniture_false_positive": 566,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 604,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "FURNITURE_FALSE_POSITIVE": 304,
+        "UNMATCHED_PREDICTION": 304,
+        "MODEL_DISAGREEMENT": 304
+      },
+      "p95_detection_ms": 18.745699999999488
+    },
+    {
+      "sid": "cap_20261010_175227",
+      "activity": "S1-empty-with-furniture",
+      "model": "xgb69_candidate",
+      "frames": 304,
+      "gt_known": 304,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 294,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 233
+      },
+      "p95_detection_ms": 8.534299999999348
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "activity": "S3-walk-x-near",
+      "model": "rf51_baseline",
+      "frames": 258,
+      "gt_known": 258,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 258,
+        "fp": 393,
+        "fn": 0
+      },
+      "track": {
+        "tp": 256,
+        "fp": 372,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 258,
+          "fp": 393,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 258,
+          "fp": 28,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 258,
+          "fp": 28,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 258,
+          "fp": 27,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 258,
+        "MODEL_DISAGREEMENT": 258
+      },
+      "p95_detection_ms": 31.44670000000042
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "activity": "S3-walk-x-near",
+      "model": "xgb69_candidate",
+      "frames": 258,
+      "gt_known": 258,
+      "gt_unknown": 0,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 258,
+        "fp": 19,
+        "fn": 0
+      },
+      "track": {
+        "tp": 256,
+        "fp": 9,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 258,
+          "fp": 223,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 178,
+        "UNMATCHED_PREDICTION": 17
+      },
+      "p95_detection_ms": 16.956500000000233
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "activity": "S3-walk-y-far",
+      "model": "rf51_baseline",
+      "frames": 464,
+      "gt_known": 99,
+      "gt_unknown": 365,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 99,
+        "fp": 227,
+        "fn": 0
+      },
+      "track": {
+        "tp": 97,
+        "fp": 211,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 99,
+          "fp": 227,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 87,
+          "fp": 99,
+          "fn": 12
+        },
+        "rf69_candidate": {
+          "tp": 99,
+          "fp": 100,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 99,
+          "fp": 99,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 99,
+        "MODEL_DISAGREEMENT": 463,
+        "GT_UNKNOWN": 365
+      },
+      "p95_detection_ms": 36.43000000000757
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "activity": "S3-walk-y-far",
+      "model": "xgb69_candidate",
+      "frames": 464,
+      "gt_known": 99,
+      "gt_unknown": 365,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 99,
+        "fp": 97,
+        "fn": 0
+      },
+      "track": {
+        "tp": 97,
+        "fp": 93,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 99,
+          "fp": 163,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 56,
+          "fp": 97,
+          "fn": 43
+        },
+        "rf69_candidate": {
+          "tp": 99,
+          "fp": 98,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 99,
+          "fp": 97,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 96,
+        "MODEL_DISAGREEMENT": 347,
+        "GT_UNKNOWN": 365
+      },
+      "p95_detection_ms": 43.896000000007916
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "activity": "S4-walk-stop-walk",
+      "model": "rf51_baseline",
+      "frames": 239,
+      "gt_known": 11,
+      "gt_unknown": 228,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 11,
+        "fp": 26,
+        "fn": 0
+      },
+      "track": {
+        "tp": 10,
+        "fp": 22,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 11,
+          "fp": 26,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 11,
+          "fp": 8,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 11,
+          "fp": 8,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 11,
+          "fp": 8,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 11,
+        "MODEL_DISAGREEMENT": 239,
+        "GT_UNKNOWN": 228
+      },
+      "p95_detection_ms": 31.60700000001816
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "activity": "S4-walk-stop-walk",
+      "model": "xgb69_candidate",
+      "frames": 239,
+      "gt_known": 11,
+      "gt_unknown": 228,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 11,
+        "fp": 9,
+        "fn": 0
+      },
+      "track": {
+        "tp": 10,
+        "fp": 8,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 11,
+          "fp": 22,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 11,
+          "fp": 9,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 9,
+        "MODEL_DISAGREEMENT": 182,
+        "GT_UNKNOWN": 228
+      },
+      "p95_detection_ms": 17.109700000000885
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "activity": "S5-turn-in-place",
+      "model": "rf51_baseline",
+      "frames": 202,
+      "gt_known": 6,
+      "gt_unknown": 196,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 6,
+        "fp": 6,
+        "fn": 0
+      },
+      "track": {
+        "tp": 5,
+        "fp": 5,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 6,
+          "fp": 6,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 6,
+        "MODEL_DISAGREEMENT": 202,
+        "GT_UNKNOWN": 196
+      },
+      "p95_detection_ms": 23.399399999994785
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "activity": "S5-turn-in-place",
+      "model": "xgb69_candidate",
+      "frames": 202,
+      "gt_known": 6,
+      "gt_unknown": 196,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 6,
+          "fp": 4,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 137,
+        "GT_UNKNOWN": 196
+      },
+      "p95_detection_ms": 9.804199999984121
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "activity": "S6-occlusion",
+      "model": "rf51_baseline",
+      "frames": 238,
+      "gt_known": 71,
+      "gt_unknown": 167,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 64,
+        "fp": 139,
+        "fn": 7
+      },
+      "track": {
+        "tp": 60,
+        "fp": 137,
+        "fn": 11
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 64,
+          "fp": 139,
+          "fn": 7
+        },
+        "rf51_candidate": {
+          "tp": 60,
+          "fp": 0,
+          "fn": 11
+        },
+        "rf69_candidate": {
+          "tp": 63,
+          "fp": 1,
+          "fn": 8
+        },
+        "xgb69_candidate": {
+          "tp": 64,
+          "fp": 0,
+          "fn": 7
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 71,
+        "MODEL_DISAGREEMENT": 238,
+        "GT_UNKNOWN": 167,
+        "PERSON_MISS": 7
+      },
+      "p95_detection_ms": 16.019999999989523
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "activity": "S6-occlusion",
+      "model": "xgb69_candidate",
+      "frames": 238,
+      "gt_known": 71,
+      "gt_unknown": 167,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 65,
+        "fp": 1,
+        "fn": 6
+      },
+      "track": {
+        "tp": 61,
+        "fp": 1,
+        "fn": 10
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 65,
+          "fp": 92,
+          "fn": 6
+        },
+        "rf51_candidate": {
+          "tp": 60,
+          "fp": 1,
+          "fn": 11
+        },
+        "rf69_candidate": {
+          "tp": 64,
+          "fp": 2,
+          "fn": 7
+        },
+        "xgb69_candidate": {
+          "tp": 65,
+          "fp": 1,
+          "fn": 6
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 206,
+        "GT_UNKNOWN": 167,
+        "UNMATCHED_PREDICTION": 1,
+        "PERSON_MISS": 6
+      },
+      "p95_detection_ms": 8.679300000017975
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "activity": "S7-far-5m",
+      "model": "rf51_baseline",
+      "frames": 251,
+      "gt_known": 12,
+      "gt_unknown": 239,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 12,
+        "fp": 21,
+        "fn": 0
+      },
+      "track": {
+        "tp": 11,
+        "fp": 18,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 12,
+          "fp": 21,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 12,
+        "MODEL_DISAGREEMENT": 251,
+        "GT_UNKNOWN": 239
+      },
+      "p95_detection_ms": 23.943599999998696
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "activity": "S7-far-5m",
+      "model": "xgb69_candidate",
+      "frames": 251,
+      "gt_known": 12,
+      "gt_unknown": 239,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 12,
+        "fp": 1,
+        "fn": 0
+      },
+      "track": {
+        "tp": 11,
+        "fp": 1,
+        "fn": 1
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 12,
+          "fp": 13,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 12,
+          "fp": 1,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 12,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 12,
+          "fp": 1,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "GT_UNKNOWN": 239,
+        "MODEL_DISAGREEMENT": 193,
+        "UNMATCHED_PREDICTION": 1
+      },
+      "p95_detection_ms": 17.007199999992736
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "activity": "S8-still-retention-long",
+      "model": "rf51_baseline",
+      "frames": 523,
+      "gt_known": 53,
+      "gt_unknown": 470,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 53,
+        "fp": 53,
+        "fn": 0
+      },
+      "track": {
+        "tp": 51,
+        "fp": 51,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 53,
+          "fp": 53,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "UNMATCHED_PREDICTION": 53,
+        "MODEL_DISAGREEMENT": 523,
+        "GT_UNKNOWN": 470
+      },
+      "p95_detection_ms": 20.71909999998752
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "activity": "S8-still-retention-long",
+      "model": "xgb69_candidate",
+      "frames": 523,
+      "gt_known": 53,
+      "gt_unknown": 470,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 53,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 2
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 53,
+          "fp": 29,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 53,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "MODEL_DISAGREEMENT": 308,
+        "GT_UNKNOWN": 470
+      },
+      "p95_detection_ms": 9.492299999983516
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "activity": "S9-two-person-cross",
+      "model": "rf51_baseline",
+      "frames": 126,
+      "gt_known": 0,
+      "gt_unknown": 126,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "GT_UNKNOWN": 126,
+        "MODEL_DISAGREEMENT": 126
+      },
+      "p95_detection_ms": 30.866199999989476
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "activity": "S9-two-person-cross",
+      "model": "xgb69_candidate",
+      "frames": 126,
+      "gt_known": 0,
+      "gt_unknown": 126,
+      "duplicate_ids": 0,
+      "candidate": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "track": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      },
+      "furniture_false_positive": 0,
+      "same_candidate": {
+        "rf51_baseline": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf51_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "rf69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "xgb69_candidate": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "risks": {
+        "GT_UNKNOWN": 126,
+        "MODEL_DISAGREEMENT": 115
+      },
+      "p95_detection_ms": 15.684799999988172
+    }
+  ],
+  "aggregate": {
+    "rf51_baseline": {
+      "candidate": {
+        "tp": 503,
+        "fp": 1469,
+        "fn": 7,
+        "precision": 0.2550709939148073,
+        "recall": 0.9862745098039216
+      },
+      "track": {
+        "tp": 490,
+        "fp": 1416,
+        "fn": 20,
+        "precision": 0.2570828961175236,
+        "recall": 0.9607843137254902
+      }
+    },
+    "xgb69_candidate": {
+      "candidate": {
+        "tp": 504,
+        "fp": 127,
+        "fn": 6,
+        "precision": 0.7987321711568938,
+        "recall": 0.9882352941176471
+      },
+      "track": {
+        "tp": 491,
+        "fp": 112,
+        "fn": 19,
+        "precision": 0.814262023217247,
+        "recall": 0.9627450980392157
+      }
+    }
+  }
+}

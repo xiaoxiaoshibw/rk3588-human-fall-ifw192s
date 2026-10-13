@@ -1,0 +1,1 @@
+当前实际推理/运行器在r06/v2/，根r06/*.js/*.py的v1输出路径复制错误保留为历史，不运行；v2脚本只写本轮R06 evidence。真实control/guard完整exit0、九会话各合计2605，control对R04和R05control 22字段parity PASS，ledger字节不相等；H5算法门FAIL，不晋级。当前Demo r06/demo_v1/demo_server.py port8918，原R05失败Demo8917保留；源SHA按实际SUMMARY和当前ToolingV4。

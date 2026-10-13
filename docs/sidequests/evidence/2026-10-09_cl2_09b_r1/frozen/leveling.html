@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>离线配平工作台</title>
+<link rel="stylesheet" href="ui.css">
+<style>
+  /* —— 本页布局：左控制 300px / 中 Viewer / 右结果 320px —— */
+  .workbench{grid-template-columns:300px minmax(0,1fr) 320px}
+  .viewer-col{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg-app)}
+  .blk{display:flex;flex-direction:column;min-height:0;padding:10px 12px 12px}
+  .blk + .blk{border-top:1px solid var(--border-subtle)}
+  .blk-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex:none;min-height:28px}
+  .blk-head .cap{font:600 11px var(--font-ui);letter-spacing:1.2px;text-transform:uppercase;color:var(--text-muted)}
+  .blk-head .muted{font-size:11px}
+  .blk-body{flex:1;min-height:0;display:flex}
+  #roi{max-width:100%;max-height:100%;margin:auto;border-radius:var(--r-ctl)}
+  .vcol{flex:1;display:flex;flex-direction:column;min-width:0}
+  .vcol + .vcol{margin-left:10px}
+  .vcol > .cap{font-size:11px;color:var(--text-muted);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .view{flex:1;min-height:120px;background:var(--bg-inset);border-radius:var(--r-ctl)}
+  .inspector .side-sec{padding:12px 14px}
+  #consensus{font-size:12.5px;font-weight:600;margin:2px 0 10px;white-space:normal}
+  .empty-hint{display:none;color:var(--text-muted);font-size:12px}
+  #result[hidden] + .empty-hint{display:block}
+  #downloads{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  #downloads a{display:inline-flex;align-items:center;height:24px;padding:0 9px;font-size:11.5px;
+    color:var(--text-secondary);border:1px solid var(--border-strong);border-radius:var(--r-ctl)}
+  #downloads a:hover{color:var(--text-primary);border-color:#40444c;text-decoration:none}
+  #report{white-space:pre-wrap;font:11px/1.5 var(--font-mono);color:var(--text-secondary);
+    max-height:300px;overflow:auto;background:var(--bg-inset);border:1px solid var(--border-subtle);
+    border-radius:var(--r-ctl);padding:8px;margin:8px 0 0}
+  #regions input{width:52px;height:22px;padding:1px 4px;font-size:11px}
+  #regions td{padding:4px 2px}
+  .scroll{overflow-x:auto;margin:4px 0 0}
+  .scroll table{min-width:100%}
+  #algorithms td,#algorithms th{font-size:11px}
+  #heightViews canvas{display:block;width:100%;height:auto;background:var(--bg-inset);border-radius:var(--r-ctl)}
+  .hcap{font-size:10.5px;color:var(--text-muted);margin-bottom:3px}
+  @media (max-width:1280px){.workbench{grid-template-columns:280px minmax(0,1fr) 300px}}
+</style>
+</head>
+<body class="shell">
+<header class="topbar">
+  <a class="btn ghost sm" href="/">← 会话回放</a>
+  <span class="tb-div"></span>
+  <h1 class="tb-title">离线配平工作台</h1>
+  <span class="tb-sub">本地录制 · 四区同域评估 · 新数据导出</span>
+  <span class="tb-sp"></span>
+  <span class="badge off">OFFLINE</span>
+</header>
+
+<div class="workbench">
+  <!-- ===== 左：控制 ===== -->
+  <aside class="side">
+    <section class="side-sec">
+      <h2 class="sec-title">Session 会话</h2>
+      <select id="session" style="width:100%"><option value="">请选择…</option></select>
+      <div class="row" style="margin-top:8px">
+        <button id="refresh" class="btn sm">刷新本地列表</button>
+      </div>
+      <p id="sourceInfo" class="muted" style="font-size:11.5px;margin:8px 0 0;font-family:var(--font-mono)">载入 meta.json 与 points.bin 后可配平。</p>
+    </section>
+
+    <section class="side-sec">
+      <h2 class="sec-title">安装参考
+        <span class="i">i<span class="i-tip">名义角度用于俯视选区与法向方向锚点；高度仅保存为测量参考。最终平移由拟合 d 决定，这里不是最终配平结果。</span></span>
+      </h2>
+      <div class="field"><label>Pitch<span class="unit">°</span></label><input id="pitch" type="number" value="26" min="-75" max="75" step=".1" style="width:78px"></div>
+      <div class="field"><label>Roll<span class="unit">°</span></label><input id="roll" type="number" value="0" min="-45" max="45" step=".1" style="width:78px"></div>
+      <div class="field"><label>测量高度<span class="unit">m</span></label><input id="height" type="number" value="1.14" min=".01" max="10" step=".01" style="width:78px"></div>
+    </section>
+
+    <section class="side-sec">
+      <h2 class="sec-title">自动识别</h2>
+      <button id="runAuto" class="btn primary" style="width:100%" disabled>识别地面</button>
+      <p id="autoSummary" class="muted" style="font-size:11.5px;margin:8px 0 0">算法从三维点云识别低处、连续、近水平地面，排除混入高处物体的整格。已有手画区域只作独立对照。</p>
+      <details style="margin-top:10px">
+        <summary>手工对照区域与依据（可选）</summary>
+        <div class="scroll" style="margin-top:8px">
+          <table id="regions" class="tbl">
+            <thead><tr><th>区域</th><th>X min</th><th>X max</th><th>Y min</th><th>Y max</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <label class="row" style="margin-top:10px;font-size:12px;color:var(--text-secondary);cursor:pointer">
+          <input id="confirmed" type="checkbox"> 我已确认四区包含要评估的地面
+        </label>
+        <label style="display:block;margin:8px 0 4px;font-size:11.5px;color:var(--text-muted)">确认依据</label>
+        <textarea id="basis" style="width:100%;height:56px" placeholder="例如：本次录制中的木地板四个空置区域，已核对无遮挡"></textarea>
+        <button id="run" class="btn primary" style="width:100%;margin-top:8px" disabled>配平 · 评估三种算法</button>
+      </details>
+      <p id="note" class="muted" role="status" aria-live="polite" style="font-size:11.5px;margin:10px 0 0;white-space:pre-wrap;overflow-wrap:anywhere">等待载入会话。</p>
+    </section>
+
+    <section class="side-sec" style="margin-top:auto">
+      <details>
+        <summary>离线评估协议</summary>
+        <p class="muted" style="font-size:11.5px;margin:8px 0 0">拟合前固定共同域；三个独立帧留出验证。每区 ≥20 点；RMS ≤3 cm，P95 ≤5 cm，5 cm 内支持率 ≥80%。检查二维展开，拒绝线状域。三方法全部有效且两两差 ≤2°／3 cm 时推荐 TLS。TLS 与 SVD 同属最小二乘家族，分歧时不以二票压 RANSAC。输出仅为离线显示数据，数值通过不代表物理标定、全场范围或生产可用。</p>
+      </details>
+    </section>
+  </aside>
+
+  <!-- ===== 中：Viewer ===== -->
+  <main class="viewer-col">
+    <section class="blk" style="flex:1.15">
+      <div class="blk-head">
+        <span class="cap">俯视选区 · 名义显示坐标 (m)</span>
+        <span class="tb-sp"></span>
+        <span class="muted">替换区域</span>
+        <select id="activeRegion" style="width:64px"><option value="0">#1</option><option value="1">#2</option><option value="2">#3</option><option value="3">#4</option></select>
+        <button id="mapReset" class="btn sm ghost">复位视野</button>
+      </div>
+      <div class="blk-body">
+        <canvas id="roi" width="1100" height="440" aria-label="俯视点云，拖框设置地面区域"></canvas>
+      </div>
+    </section>
+    <section class="blk" style="flex:1">
+      <div class="blk-head">
+        <span class="cap">同帧前后对照</span>
+        <span class="tb-sp"></span>
+        <button id="play" class="btn sm" disabled>▶ 播放</button>
+        <input id="frame" type="range" min="0" max="0" value="0" aria-label="帧序号" style="width:150px">
+        <span id="frameInfo" class="muted mono">未载入</span>
+        <select id="method" aria-label="右侧配平方法" style="width:130px"><option value="nominal">名义显示预览</option></select>
+        <button id="cameraReset" class="btn sm ghost">复位视角</button>
+      </div>
+      <div class="blk-body">
+        <div class="vcol"><span class="cap">原始 source · innolidar</span><div id="rawView" class="view"></div></div>
+        <div class="vcol"><span class="cap" id="levelLabel">名义预览 · 未评估</span><div id="levelView" class="view"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== 右：结果 Inspector ===== -->
+  <aside class="side inspector">
+    <section class="side-sec">
+      <h2 class="sec-title">识别结果</h2>
+      <section id="result" hidden>
+        <p id="consensus"></p>
+        <div class="scroll">
+          <table id="algorithms" class="tbl">
+            <thead><tr><th>方法</th><th>离线门</th><th>Pitch / Roll (°)</th><th>tz (m)</th><th>RMS / P95 (cm)</th><th>支持率</th><th>拒绝原因</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <details style="margin-top:10px">
+          <summary>诊断详情 · 逐区 / 留出帧 / 源 SHA / 完整报告</summary>
+          <p id="pairs" class="muted" style="font-size:11.5px;margin:8px 0 0"></p>
+          <div id="downloads"></div>
+          <pre id="report"></pre>
+        </details>
+      </section>
+      <p class="empty-hint">载入会话并识别地面后，这里显示拟合结果。</p>
+    </section>
+    <section class="side-sec">
+      <h2 class="sec-title">选区高度核查</h2>
+      <div id="heightViews" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div><div class="hcap">X-Z 侧视</div><canvas id="heightXZ" width="560" height="250"></canvas></div>
+        <div><div class="hcap">Y-Z 侧视</div><canvas id="heightYZ" width="560" height="250"></canvas></div>
+      </div>
+      <details style="margin-top:8px">
+        <summary>区域厚度统计与口径</summary>
+        <table id="heightStats" class="tbl" style="margin-top:8px">
+          <thead><tr><th>区域</th><th>全部点</th><th>Z min (m)</th><th>Z max (m)</th><th>完整厚度 (m)</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p class="muted" style="font-size:11px;margin:8px 0 0">彩色是自动区域内的所有高度，灰色是场景背景。名义 Z=0 只是显示参考；不按 Z 或平面残差裁掉区域内的物体点。统计使用当前帧完整源点。</p>
+      </details>
+    </section>
+  </aside>
+</div>
+<script src="ui.js"></script>
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="leveling.js"></script>
+</body>
+</html>

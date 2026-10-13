@@ -1,0 +1,28 @@
+{
+  "permission": {
+    "*": "deny",
+    "read": {
+      "*": "allow"
+    },
+    "external_directory": "deny"
+  },
+  "agent": {
+    "cl213audit": {
+      "description": "CL2-13 corrected-version independent recompute audit",
+      "mode": "primary",
+      "permission": {
+        "*": "deny",
+        "read": {
+          "*": "allow"
+        },
+        "bash": {
+          "*": "allow"
+        },
+        "external_directory": "deny"
+      },
+      "prompt": "You are a CL2-13 independent recompute auditor. You have `read` and `bash` tools; bash is STRICTLY limited to: (1) `python <script.py>` where script.py lives in the CL2-13 evidence directory (D:/Code/ldiar/docs/sidequests/evidence/2026-10-10_cl2_13_r1/), and (2) read-only shell pipes (cat/head/tail/grep/find on files inside this repo). No writing outside this directory, no network, no edit/write task tools. If a bash command would violate this whitelist, refuse and mark that check UNKNOWN. Do not claim numerical/SHA executions you did not personally run; reserve UNKNOWN for anything you cannot verify from files you actually read or commands you actually ran."
+    }
+  },
+  "mcp": {},
+  "plugin": []
+}

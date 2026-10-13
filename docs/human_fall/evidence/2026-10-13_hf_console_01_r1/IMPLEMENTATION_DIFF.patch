@@ -1,0 +1,111 @@
+--- original/console_gui.py
++++ current/console_gui.py
+@@ -25,13 +25,32 @@
+ HERE = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
+ 
+ 
+-def _shell_url(port):
++def _shell_url(port, fall_port=None):
+     """壳页 URL：相对路径由 pywebview 内置本地 http 服务供给 WebView2。
+ 
+     不能用 file:// + 查询串：WebView2 会把 '?' 百分号编码进文件名去找，
+     直接 ERR_FILE_NOT_FOUND（2026-10-05 实测）。
+     """
+-    return "console.html?replay_port=%d" % port
++    url = "console.html?replay_port=%d" % port
++    return url + ("&fall_port=%d" % fall_port if fall_port else "")
++
++
++def _start_fall_server():
++    """仓内真人离线原型同进程独立端口；缺数据时保留其他控制台功能。"""
++    root = (os.path.dirname(os.path.dirname(_frozen_capture_root()))
++            if getattr(sys, "frozen", False) else os.path.dirname(os.path.dirname(HERE)))
++    source_dir = os.path.join(root, "sidequests", "human_fusion_lab_next", "real_fall", "r02")
++    if not os.path.isfile(os.path.join(source_dir, "server.py")):
++        return None
++    sys.path.insert(0, source_dir)
++    try:
++        module = runpy.run_path(os.path.join(source_dir, "server.py"))
++        server = module["ThreadingHTTPServer"](("127.0.0.1", 0), module["Handler"])
++    except (OSError, ValueError, ImportError, KeyError) as exc:
++        print("fall replay unavailable: %s" % exc)
++        return None
++    threading.Thread(target=server.serve_forever, daemon=True).start()
++    return server.server_address[1]
+ 
+ 
+ def _is_valid_source_dir(d):
+@@ -181,16 +200,44 @@
+         import multiprocessing
+         multiprocessing.freeze_support()
+ 
++    # Headless release check exercises the frozen servers without opening a GUI.
++    if "--check-startup" in sys.argv:
++        import json
++        import urllib.request
++        report = {}
++        try:
++            report["replay_port"] = _start_replay_server()
++            report["fall_port"] = _start_fall_server()
++            if not report["fall_port"]:
++                raise ValueError("fall replay did not start")
++            with urllib.request.urlopen("http://127.0.0.1:%d/api/info" % report["fall_port"]) as response:
++                info = json.load(response)
++            report["sessions"] = info["sessions"]
++            with urllib.request.urlopen("http://127.0.0.1:%d/api/frame?sid=cap_20261013_094333&i=72" % report["fall_port"]) as response:
++                frame = json.load(response)
++            report["alarm_frame"] = frame["row"]["frame"]
++            report["alert_active"] = frame["row"]["alert_active"]
++            report["skeleton_nodes"] = len(frame["row"]["skeleton"]["nodes"])
++            report["shell_url"] = _shell_url(report["replay_port"], report["fall_port"])
++            report["ok"] = report["alert_active"] and report["skeleton_nodes"] == 13
++        except Exception as exc:
++            report.update(ok=False, error=str(exc))
++        destination = sys.argv[sys.argv.index("--check-startup") + 1]
++        with open(destination, "x", encoding="utf-8") as stream:
++            json.dump(report, stream, ensure_ascii=False, indent=2)
++        sys.exit(0 if report["ok"] else 1)
++
+     replay_dir, origin = _replay_dir()
+     mode = "SOURCE_BYPASS" if origin in ("ENV", "INI") else "PYINSTALLER"
+     print("human_replay source=%s" % origin)
+     print("resolved root=%s" % replay_dir)
+     print("mode=%s" % mode)
+     replay_port = _start_replay_server()
++    fall_port = _start_fall_server()
+     _suppress_edge_save_bubble()
+     webview.create_window(
+         "总控制台",
+-        _shell_url(replay_port),
++        _shell_url(replay_port, fall_port),
+         width=1440, height=900,
+         min_size=(900, 600),
+     )
+--- original/console.html
++++ current/console.html
+@@ -95,6 +95,8 @@
+ //         留给将来拒绝内嵌的站点，如服务端设了 X-Frame-Options)
+ const requestedPort = Number(new URLSearchParams(location.search).get("replay_port") || 8901);
+ const replayBase = "http://127.0.0.1:" + (Number.isInteger(requestedPort) && requestedPort > 0 && requestedPort <= 65535 ? requestedPort : 8901);
++const fallPort = Number(new URLSearchParams(location.search).get("fall_port"));
++const fallBase = Number.isInteger(fallPort) && fallPort > 0 && fallPort <= 65535 ? "http://127.0.0.1:" + fallPort : null;
+ // 线性 SVG 图标（Lucide 风格内嵌，不引外部资源）
+ const svg = p => '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+ const APPS = [
+@@ -106,6 +108,8 @@
+   {name:"人体识别", desc:"纯几何 · pin ROI 辅助判别人/家具 · 不跑模型", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html"},
+   {name:"人检锁定", desc:"B2a RandomForest 51维人/非人 · rf_person_v1 · 实时跟踪", icon:svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:replayBase + "/human_track.html"},
+   {name:"GT 标注", desc:"2D 点云人工 GT 工作台 · 跨帧 track · 冻结版本", icon:svg('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>'), url:replayBase + "/gt_annotator.html"},
++  {name:"骨架与倒地检测", desc:"真人回放 · 人体锁定 / 骨架 / 告警全过程", icon:svg('<circle cx="12" cy="4" r="2"/><path d="M12 6v8m-6-5 6 2 6-2m-6 5-5 7m5-7 5 7"/>'), url:fallBase ? fallBase + "/" : "about:blank",
++   unavailable:fallBase ? null : "当前工作区的真人回放数据未就绪，请在原工作区重新打开总控制台"},
+ ];
+ // ============================================================
+ const $ = s => document.querySelector(s);
+@@ -135,6 +139,7 @@
+ function load(i) {
+   const a = APPS[i];
+   err.hidden = true; f.hidden = false;
++  if (a.unavailable) { showErr({...a, fail:a.unavailable}); $("#errurl").textContent = "本地离线回放"; return; }
+   if (!a.fail) { f.src = a.url; return; }
+   fetch(a.url, {mode: "no-cors", cache: "no-store"})
+     .then(() => { f.src = a.url; }, () => showErr(a));

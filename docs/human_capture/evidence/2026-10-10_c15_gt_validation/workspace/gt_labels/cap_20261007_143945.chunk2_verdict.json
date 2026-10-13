@@ -1,0 +1,20 @@
+{
+  "session_id": "cap_20261007_143945",
+  "segment": "f0036-f0071",
+  "sampled": [
+    {"frame": 35, "top_xy": [0.55, 5.7], "present": true},
+    {"frame": 40, "top_xy": [0.55, 5.8], "present": true},
+    {"frame": 45, "top_xy": [0.55, 5.9], "present": true},
+    {"frame": 50, "top_xy": [0.55, 5.9], "present": true},
+    {"frame": 55, "top_xy": [0.55, 5.9], "present": true},
+    {"frame": 60, "top_xy": [0.55, 5.9], "present": true},
+    {"frame": 65, "top_xy": [0.55, 5.9], "present": true},
+    {"frame": 70, "top_xy": [0.55, 6.0], "present": true},
+    {"frame": 72, "top_xy": [0.55, 6.3], "present": true}
+  ],
+  "segment_activity": "stand",
+  "y_trajectory": "f0035 y~5.7 -> f0050 y~5.9 -> f0071 y~6.0 -> f0072 y~6.3 (nearly stationary within segment, small drift <0.4m over 37 frames)",
+  "consistent_with_neighbors": true,
+  "chunk2_error": "mislocalized",
+  "rationale": "Dense renders across f0035/f0040/f0045/f0050/f0055/f0060/f0065/f0070/f0072 all show the same layout: (a) a static vertical high-color column at top_xy=(0.15, 3.5-4.3) spanning z 0..>=1.8 in side view = tall furniture (chunk2's reported 'x~0.2,y~3.5-4 high-color column'); (b) a single compact person blob at x~0.55, y slowly drifting 5.7->6.3 over the 37-frame window, with a continuous narrow vertical signature in side view from ground to >=1.5-1.8 m and red top pixel = standing human. No compact person-shaped cluster is visible at y~7.6-8.5 in any of the 9 frames; that area in side view is low/dark (furniture floor-height block at x~4-6), so chunk2's 'compact person at y~7.6-8.5' is a mislocalization of the wall/furniture return. Chunk2's activity call (stand) is correct; chunk2's location call is wrong. Chunk3's f72 start y~6.5 is consistent with the observed y~6.3 (small late-frame drift then walk begins). Chunk1's end 'top_xy=(3.4, 6.3) moving toward +y' is incompatible with the dense frames at f0035/f0036 (person actually at x~0.55, y~5.7 and stationary) - likely a different-coordinate or misread frame, but chunk2-segment GT is what we are adjudicating here. Net: segment is stand, spatially continuous with chunk3 (y 6.3->6.5), so chunk1's 'still walking at f0036 toward larger y' is not supported by the pixels; chunk2 got activity right by accident while getting location wrong."
+}

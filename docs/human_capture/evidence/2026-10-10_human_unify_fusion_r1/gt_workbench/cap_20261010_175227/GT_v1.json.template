@@ -1,0 +1,68 @@
+{
+ "schema": "gt_workbench/1",
+ "session_id": "cap_20261010_175227",
+ "session_sha256": {
+  "points": "7ee30e01878205f37463d79d95983321780f6c66a14d2a1ac7c4a5d48e61a5d8",
+  "meta": "2f3139a4cd9aa2ef665a26bfe157224e3fe93ffc3db60dcc6be8275d39661610"
+ },
+ "annotator": null,
+ "annotated_at": null,
+ "review_status": "draft",
+ "review": {
+  "reviewer": null,
+  "reviewed_at": null,
+  "notes": null
+ },
+ "annotation_method": null,
+ "frames": {
+  "<frame_idx>": {
+   "rois": [
+    {
+     "cls": "PERSON|FURNITURE|BACKGROUND|UNKNOWN",
+     "x": 0.0,
+     "y": 0.0,
+     "r_xy": 0.0,
+     "track_id": "P1 (仅 PERSON 必填, 会话内持久)",
+     "visibility": "visible|partial|occluded|null"
+    }
+   ],
+   "note": null
+  }
+ },
+ "episodes": [
+  {
+   "track_id": "P1",
+   "born_frame": 0,
+   "exit_frame": null,
+   "still_frames": [
+    [
+     0,
+     0
+    ]
+   ],
+   "moving_frames": [
+    [
+     0,
+     0
+    ]
+   ],
+   "note": null
+  }
+ ],
+ "uncertain_intervals": [
+  {
+   "start": 0,
+   "end": 0,
+   "reason": "occlusion|blur|out_of_fov|…"
+  }
+ ],
+ "_rules": [
+  "全帧默认 UNKNOWN — 未标帧不参与任何指标",
+  "PERSON 必须 track_id 且同帧唯一; 双人独立 P1/P2",
+  "FURNITURE 逐件标注, 供硬负样本 ROI 裁剪",
+  "AUTO_CANDIDATES 只是加速建议, 逐帧确认/改正后才算 GT",
+  "本文件由人工编辑; review_status 变 reviewed 后才可冻结 SPLITS"
+ ],
+ "display_name": "S1-empty-with-furniture",
+ "n_frames": 304
+}

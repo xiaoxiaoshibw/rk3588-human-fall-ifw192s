@@ -1,0 +1,23 @@
+--- baseline/human_pipe_lib.js
++++ current/human_pipe_lib.js
+@@ -735,7 +735,7 @@
+         clusters_before = clusters_after;
+     }
+     var clusters_raw = clusters_after;
+-    var cleanup_split_delta = clusters_after - clusters_before;
++    var cleanup_split_delta = clusters_after.length - clusters_before.length;
+     /* 5b 证据后处理：第二遍点级扫描 — 喂清理后的真簇点,
+      * 否则地板/背景点又被计数进簇,污染逐带 spread_cv/aniso */
+     var ev_pack = evidence_postpass(fg_pts, clusters_raw);
+@@ -770,8 +770,8 @@
+              xy_cells_preserved_by_other_z: iso.xy_cells_preserved_by_other_z,
+              actually_removed_points: iso.actually_removed_points,
+              actually_removed_voxels: iso.actually_removed_voxels,
+-             clusters_before_cleanup: clusters_before,
+-             clusters_after_cleanup: clusters_after,
++             clusters_before_cleanup: clusters_before.length,
++             clusters_after_cleanup: clusters_after.length,
+              cleanup_split_delta: cleanup_split_delta,
+              topology_regression: cleanup_split_delta > 0,
+              fg_voxels: iso.fg_voxels,
+

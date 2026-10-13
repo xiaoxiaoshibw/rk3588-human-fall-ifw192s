@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>HFUS-RD-02 负例审核台</title>
+<style>
+  body{margin:0;font:13px/1.4 system-ui,sans-serif;background:#101114;color:#dde}
+  #bar{padding:6px 10px;border-bottom:1px solid #333;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  #meta{font-size:12px;color:#9aa}
+  #view{display:grid;grid-template-columns:1.4fr 1fr;gap:2px;height:calc(100vh - 96px)}
+  .pane{position:relative;background:#0a0b0d}
+  .pane canvas{width:100%;height:100%;display:block}
+  .label{position:absolute;top:4px;left:6px;background:#000a;padding:2px 6px;font-size:11px;border-radius:3px}
+  #act{padding:8px 10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid #333}
+  button{background:#222;color:#dde;border:1px solid #444;padding:6px 12px;cursor:pointer;font-size:13px}
+  button:hover{background:#345}
+  button.k{font-weight:600}
+  .p{background:#1e3a24;border-color:#2e5a37}
+  .f{background:#3a2a1e;border-color:#5a3f2e}
+  .w{background:#26303a;border-color:#3a4a5a}
+  .o{background:#2f2438;border-color:#4a3a5a}
+  #prog{font-size:12px;color:#8ab}
+  #side{position:absolute;bottom:6px;right:8px;width:220px;height:150px;background:#000c;border:1px solid #333}
+  #notes{width:240px;background:#1a1b1f;color:#dde;border:1px solid #444;padding:4px}
+</style>
+</head>
+<body>
+<div id="bar">
+  <b>负例审核台</b>
+  <span id="meta">载入中…</span>
+  <span id="prog"></span>
+  <label style="margin-left:auto">
+    <input id="autoNext" type="checkbox" checked> 标注后自动跳下一条
+  </label>
+  <button id="prev">⟨ 上一条</button>
+  <button id="next">下一条 ⟩</button>
+</div>
+<div id="view">
+  <div class="pane">
+    <canvas id="cvTop"></canvas>
+    <div class="label" id="labTop">XY 俯视</div>
+  </div>
+  <div class="pane">
+    <canvas id="cvSide"></canvas>
+    <div class="label" id="labSide">XZ 侧视（高度）</div>
+    <div id="side" style="display:none"></div>
+  </div>
+</div>
+<div id="act">
+  <button class="k p" data-l="PERSON">人名 人[1]</button>
+  <button class="k f" data-l="FURNITURE">家具/衣物架 家具[2]</button>
+  <button class="k w" data-l="WALL_OR_FLOOR">墙/地/天花板 墙[3]</button>
+  <button class="k o" data-l="OTHER_OBJECT">其它物体 其它[4]</button>
+  <button data-l="UNKNOWN">看不清 UNKNOWN[5]</button>
+  <input id="notes" placeholder="备注（可选）">
+  <span id="last"></span>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+let queue=[], labels={}, idx=0, payload=null;
+const COLORS = {PERSON:'#ff5252', FURNITURE:'#f6b73c', WALL_OR_FLOOR:'#7fceff',
+                OTHER_OBJECT:'#b98cff', UNKNOWN:'#888'};
+
+async function j(url, opts){const r=await fetch(url, opts);return r.json();}
+
+function drawPane(cv, pts, mode){
+  const dpr = devicePixelRatio||1;
+  const W = cv.width = cv.clientWidth*dpr, H = cv.height = cv.clientHeight*dpr;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle='#0a0b0d'; ctx.fillRect(0,0,W,H);
+  // 网格
+  ctx.strokeStyle='#1a2030'; ctx.lineWidth=1;
+  for(let g=-6;g<=6;g++){
+    const sx = W/2 + (mode==='top'? g*Math.min(W,H)/14 : 0);
+    const sy = H/2 - (!(mode==='top')? g*Math.min(W,H)/14 : 0);
+    ctx.beginPath();
+    if(mode==='top'){ctx.moveTo(sx,0);ctx.lineTo(sx,H);}
+    else {ctx.moveTo(0,sy);ctx.lineTo(W,sy);}
+    ctx.stroke();
+  }
+  // 原点标记
+  ctx.fillStyle='#334'; ctx.fillRect(W/2-1, H/2-6, 2, 12);
+  if(!pts || !pts.length){return;}
+  let ax = mode==='top'?0:0, ay = mode==='top'?1:2;  // top: x,y ; side: x,z
+  let xmin=1e9,xmax=-1e9,ymin=1e9,ymax=-1e9;
+  for(const p of pts){
+    const px=p[ax], py=p[ay];
+    xmin=Math.min(xmin,px);xmax=Math.max(xmax,px);
+    ymin=Math.min(ymin,py);ymax=Math.max(ymax,py);
+  }
+  const sc = Math.min(W/(xmax-xmin+0.1), H/(ymax-ymin+0.1))*0.92;
+  const cx=(xmin+xmax)/2, cy=(ymin+ymax)/2;
+  ctx.fillStyle='#7fceff';
+  for(const p of pts){
+    const sx=(p[ax]-cx)*sc+W/2, sy=H/2-(p[ay]-cy)*sc;
+    ctx.fillRect(sx-1.5, sy-1.5, 3, 3);
+  }
+  // 底部脚注（高度）
+  if(mode==='side'){
+    ctx.fillStyle='#667'; ctx.font='11px system-ui';
+    ctx.fillText('z: '+ymin.toFixed(2)+' .. '+ymax.toFixed(2)+' m', 8, H-8);
+  }
+}
+
+async function load(){
+  const q = await j('/api/queue');
+  if(q.error){ $('meta').textContent = '队列未构建: '+q.error; return; }
+  queue = q.items || [];
+  const lr = await j('/api/labels');
+  for(const r of (lr.labels||[])) labels[r.qid]=r.label;
+  $('meta').textContent = '种子'+q.seed+' · 共'+q.n_items+' 条 · 桶: '+JSON.stringify(q.buckets_summary);
+  idx = 0;
+  while(idx<queue.length && labels[queue[idx].qid]) idx++;
+  render();
+}
+
+function render(){
+  if(!queue.length) return;
+  const c = queue[idx];
+  $('prog').textContent = (idx+1)+'/'+queue.length
+    + ' · '+c.bucket+' · prob='+(c.prob==null?'?':c.prob.toFixed(3))
+    + ' · n='+c.n+(labels[c.qid]?(' · 已标: '+labels[c.qid]):'');
+  $('labTop').textContent = 'XY 俯视 · '+c.sid.slice(-6)+' f'+c.frame+' · '+c.cand_id
+    +' · 尺寸 '+c.size_x.toFixed(2)+'×'+c.size_y.toFixed(2)+'m · 高 '+c.zmin.toFixed(2)+'~'+c.zmax.toFixed(2)+'m';
+  drawPane($('cvTop'), c.pts, 'top');
+  drawPane($('cvSide'), c.pts, 'side');
+  $('last').textContent = '';
+  for(const b of document.querySelectorAll('[data-l]')){
+    const on = labels[c.qid]===b.dataset.l;
+    b.style.outline = on? '2px solid #4ad07a' : 'none';
+  }
+}
+
+async function label(l){
+  const c = queue[idx];
+  const rec = {qid:c.qid, label:l, note:$('notes').value, reviewer:'rd02',
+               ts:new Date().toISOString()};
+  const r = await j('/api/label', {method:'POST', body:JSON.stringify(rec),
+                                   headers:{'Content-Type':'application/json'}});
+  if(r.ok){
+    labels[c.qid]=l;
+    $('last').textContent = '已记 '+c.qid+' → '+l;
+    $('notes').value='';
+    if($('autoNext').checked) next();
+    else render();
+  } else { $('last').textContent = '写失败: '+JSON.stringify(r); }
+}
+
+function next(){
+  if(idx<queue.length-1){ idx++; render(); }
+}
+function prev(){
+  if(idx>0){ idx--; render(); }
+}
+
+$('next').onclick=next; $('prev').onclick=prev;
+for(const b of document.querySelectorAll('[data-l]')) b.onclick=()=>label(b.dataset.l);
+
+addEventListener('keydown', e=>{
+  const m = {'1':'PERSON','2':'FURNITURE','3':'WALL_OR_FLOOR',
+             '4':'OTHER_OBJECT','5':'UNKNOWN'};
+  if(m[e.key]) { label(m[e.key]); e.preventDefault(); }
+  else if(e.key==='ArrowRight') next();
+  else if(e.key==='ArrowLeft') prev();
+});
+
+addEventListener('resize', ()=>{ if(queue.length) render(); });
+load();
+</script>
+</body>
+</html>

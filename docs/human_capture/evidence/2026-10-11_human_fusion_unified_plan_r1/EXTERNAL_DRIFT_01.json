@@ -1,0 +1,30 @@
+{
+  "scope": "external pre-existing runtime log, not a source/GT/model/capture/evidence change",
+  "file": "sidequests/human_fusion_lab/results/chrome_q01b.log",
+  "changes": {
+    "sidequests/human_fusion_lab/results/chrome_q01b.log": {
+      "before": {
+        "kind": "file",
+        "bytes": 4366,
+        "sha256": "5dceba50475f462b53e0d8db56f00e30ce6f7ddc888c13a2a0c71afc77d4faa5",
+        "stable_during_read": true
+      },
+      "after": {
+        "kind": "file",
+        "bytes": 5470,
+        "sha256": "d7c870388b142f5cdaade5ff0e806046eb94c01138fdf1827f08a0109ebe262d",
+        "stable_during_read": true
+      }
+    }
+  },
+  "observed_process": "{\"Id\":27448,\"ProcessName\":\"chrome\",\"StartTime\":\"\\/Date(1791709123986)\\/\"}",
+  "last_lines": [
+    "[27448:12576:1011/191745.538:ERROR:google_apis\\gcm\\engine\\connection_factory_impl.cc:435] Failed to connect to MCS endpoint with error -100",
+    "[27448:12576:1011/191818.116:ERROR:google_apis\\gcm\\engine\\connection_factory_impl.cc:435] Failed to connect to MCS endpoint with error -100",
+    "[27448:12576:1011/191904.523:ERROR:google_apis\\gcm\\engine\\connection_factory_impl.cc:435] Failed to connect to MCS endpoint with error -100",
+    "[27448:12576:1011/192032.270:ERROR:google_apis\\gcm\\engine\\connection_factory_impl.cc:435] Failed to connect to MCS endpoint with error -100",
+    "[27448:12576:1011/193317.310:ERROR:google_apis\\gcm\\engine\\connection_factory_impl.cc:484] ConnectionHandler failed with net error: -2",
+    "[27448:12576:1011/194317.608:ERROR:google_apis\\gcm\\engine\\connection_factory_impl.cc:484] ConnectionHandler failed with net error: -2"
+  ],
+  "handling": "recorded; no restart/stop/rollback; no claim that every tree SHA stayed equal"
+}

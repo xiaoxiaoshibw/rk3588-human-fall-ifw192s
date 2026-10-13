@@ -1,0 +1,64 @@
+你是 CL2-09C 独立只读审计员，指定模型 opencode-go/deepseek-v4.1-flash。先读取 PONYTAIL_SKILL.md 和 00_SCOPE_AND_ACCEPTANCE.md。
+仅审计 09B 冻结基线后的等价性能优化；不重复 CL2-07～09A 审计、不接生产、不改门控。
+重点读取 baseline/floor_sheet.py、candidate/floor_sheet.py、02_fix.patch、test_equivalence.py、benchmark.py 和证据。
+检查：预计算整数差的 hypot 是否完全保持浮点结果；嵌套循环的部分最小间距剪枝是否必然安全；winner_sep 随循环更新会否删掉更优或改变稳定并列；共线和重复行为是否保持；原成功和拒绝完整 dict 是否相同；无 cap 是否仍可能最坏 O(n4)；剖析分项边界/开销披露是否诚实；基准是否真正无 mock 且同输入同环境；35 原回归和新差分完整性；121647 门控和 BLOCKED。
+按 C01–C09/E01/D01 逐项给中文报告。你没有执行数值或 SHA，作者执行证据和自身只读审查明确区分，未亲自复算标 UNKNOWN，不把 UNKNOWN 当逻辑 FAIL。主动找具体反例、代码行和最小范围内修复。有真实 FAIL 则保留，不降低验收。
+最终 manifest/return 在审计后追加；source_summary 是前置完整性，不假称最终 seal 已闭合。结束写 AUDIT_COMPLETE。
+用 read filePath 读取以下绝对路径：
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/PONYTAIL_SKILL.md
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/00_SCOPE_AND_ACCEPTANCE.md
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/02_fix.patch
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/03_profile_03.json
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/04_benchmark.json
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/05_regression_03_command.json
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/05_regression_03.stderr
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/06_session121647.json
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/06_session_final_binding.json
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate_version.json
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/source_summary.json
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/07_AUTHOR_ANALYSIS.md
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/test_selector.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/test_equivalence.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/benchmark.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/session_probe.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/prepare.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/run_checks.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/baseline/floor_sheet.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/config.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/floor_detector.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/floor_detector_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/floor_roi.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/floor_roi_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/floor_sheet.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/floor_sheet_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/human_replay_lib.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling_auto_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling_lib.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling_quality.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/validation.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling_estimators/ransac.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling_estimators/svd.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling_estimators/tls.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/candidate/leveling_estimators/__init__.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/config.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/floor_detector.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/floor_detector_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/floor_roi.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/floor_roi_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/floor_sheet.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/floor_sheet_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/human_replay_lib.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling_auto_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling_lib.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling_quality.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling_test.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/validation.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling_estimators/ransac.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling_estimators/svd.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling_estimators/tls.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09c_r1/frozen/leveling_estimators/__init__.py
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/FINAL_REPORT.md
+D:/Code/ldiar/docs/sidequests/evidence/2026-10-09_cl2_09b_r1/02_fix.patch

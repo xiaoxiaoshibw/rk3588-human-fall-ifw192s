@@ -1,0 +1,195 @@
+{
+  "schema": 1,
+  "kind": "hrretv2_inc2_digest_regression",
+  "created_utc": "2026-10-08T02:05:23.284Z",
+  "inputs": {
+    "human_pipe_lib": "8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176",
+    "baseline_human_pipe_lib": "96d471adf2e0987346d01981797a4176a0ddb8f61785c8a380b9cddd5eb9929d",
+    "registration_js": "965c6c49e164969d07c399a0a14e4621a1aa3f797b20f8bb220fb6a5dffc85c0",
+    "ab_chain_results": "27da344a564e40aead56d734409d71cb422228f96f20e5e148d85c7fdba4ec84"
+  },
+  "verdicts": [
+    {
+      "id": "D1-215540",
+      "target": "P digest 基线(inc2 前快照) == 当前",
+      "actual": "equal",
+      "pass": true
+    },
+    {
+      "id": "D2-215540",
+      "target": "P digest 当前两遍一致",
+      "actual": "equal",
+      "pass": true
+    },
+    {
+      "id": "D1-223757",
+      "target": "P digest 基线(inc2 前快照) == 当前",
+      "actual": "equal",
+      "pass": true
+    },
+    {
+      "id": "D2-223757",
+      "target": "P digest 当前两遍一致",
+      "actual": "equal",
+      "pass": true
+    },
+    {
+      "id": "D3-real-stale",
+      "target": "真实 artifact 非 VALID → fusionKeys(true) == null（不启用 v2）",
+      "actual": "STALE [\"REFMAP_DRIFT\",\"METHOD_STALE\"]",
+      "pass": true
+    },
+    {
+      "id": "D4-215540",
+      "target": "诊断 v2 复现 A/B v2 数字（raw/fg/cleanup p50 + labels + confirmed）",
+      "actual": "matched",
+      "pass": true
+    },
+    {
+      "id": "D5-215540",
+      "target": "诊断 v2 两遍 digest 一致",
+      "actual": "equal",
+      "pass": true
+    },
+    {
+      "id": "D4-215623",
+      "target": "诊断 v2 复现 A/B v2 数字（raw/fg/cleanup p50 + labels + confirmed）",
+      "actual": "matched",
+      "pass": true
+    },
+    {
+      "id": "D5-215623",
+      "target": "诊断 v2 两遍 digest 一致",
+      "actual": "equal",
+      "pass": true
+    },
+    {
+      "id": "D4-215643",
+      "target": "诊断 v2 复现 A/B v2 数字（raw/fg/cleanup p50 + labels + confirmed）",
+      "actual": "matched",
+      "pass": true
+    },
+    {
+      "id": "D5-215643",
+      "target": "诊断 v2 两遍 digest 一致",
+      "actual": "equal",
+      "pass": true
+    }
+  ],
+  "p_digests": [
+    {
+      "sid": "cap_20261007_215540",
+      "nframes": 64,
+      "baseline": "c86f8623459f723b251844c4cad9bde732783e8565c9629758a77cbea4de2354",
+      "current_run1": "c86f8623459f723b251844c4cad9bde732783e8565c9629758a77cbea4de2354",
+      "current_run2": "c86f8623459f723b251844c4cad9bde732783e8565c9629758a77cbea4de2354"
+    },
+    {
+      "sid": "cap_20261002_223757",
+      "nframes": 165,
+      "baseline": "080a2ff43402ca82daa60abcfa0c30ceb48e2ad2b66865789ff1d9d79670810c",
+      "current_run1": "080a2ff43402ca82daa60abcfa0c30ceb48e2ad2b66865789ff1d9d79670810c",
+      "current_run2": "080a2ff43402ca82daa60abcfa0c30ceb48e2ad2b66865789ff1d9d79670810c"
+    }
+  ],
+  "d3": {
+    "state": "STALE",
+    "reasons": [
+      "REFMAP_DRIFT",
+      "METHOD_STALE"
+    ],
+    "fusionKeys": null
+  },
+  "diag": [
+    {
+      "sid": "cap_20261007_215540",
+      "mine": {
+        "person_raw_p50": 1805,
+        "person_fg_p50": 1803,
+        "person_cleanup_p50": 1803,
+        "labels": {
+          "HUMAN_CANDIDATE": 64
+        },
+        "confirmed_frames": 62,
+        "track_ids": [
+          2
+        ],
+        "fusion_online_only_kept_total": 254359,
+        "digest": "c27ee12945d8b2df726ff9391ef40bc3ac3c4cf095c7dcf4048860b455245bb0"
+      },
+      "ab_ref": {
+        "person_raw_p50": 1805,
+        "person_fg_p50": 1803,
+        "person_cleanup_p50": 1803,
+        "labels": {
+          "HUMAN_CANDIDATE": 64
+        },
+        "confirmed_frames": 62,
+        "track_ids": [
+          2
+        ]
+      },
+      "det_equal": true
+    },
+    {
+      "sid": "cap_20261007_215623",
+      "mine": {
+        "person_raw_p50": 1883,
+        "person_fg_p50": 1883,
+        "person_cleanup_p50": 1883,
+        "labels": {
+          "HUMAN_CANDIDATE": 66
+        },
+        "confirmed_frames": 0,
+        "track_ids": [
+          2
+        ],
+        "fusion_online_only_kept_total": 270256,
+        "digest": "d76f9735f12ca7d8e51dddfbd370c0421a54c355ec64d27754289cc7376ae4d9"
+      },
+      "ab_ref": {
+        "person_raw_p50": 1883,
+        "person_fg_p50": 1883,
+        "person_cleanup_p50": 1883,
+        "labels": {
+          "HUMAN_CANDIDATE": 66
+        },
+        "confirmed_frames": 0,
+        "track_ids": [
+          2
+        ]
+      },
+      "det_equal": true
+    },
+    {
+      "sid": "cap_20261007_215643",
+      "mine": {
+        "person_raw_p50": 1205,
+        "person_fg_p50": 1205,
+        "person_cleanup_p50": 1205,
+        "labels": {
+          "HUMAN_CANDIDATE": 56
+        },
+        "confirmed_frames": 23,
+        "track_ids": [
+          2
+        ],
+        "fusion_online_only_kept_total": 187829,
+        "digest": "da58e5c437fb27ce25251da1911273d3054360fba51d6e54852fe722b4508f66"
+      },
+      "ab_ref": {
+        "person_raw_p50": 1205,
+        "person_fg_p50": 1205,
+        "person_cleanup_p50": 1205,
+        "labels": {
+          "HUMAN_CANDIDATE": 56
+        },
+        "confirmed_frames": 23,
+        "track_ids": [
+          2
+        ]
+      },
+      "det_equal": true
+    }
+  ]
+}

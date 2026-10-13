@@ -1,0 +1,47 @@
+{
+  "rows": [
+    {
+      "case": "failed_with_feasible",
+      "samples_sec": {
+        "control_09c": [
+          2.982256099989172,
+          2.628048700004001,
+          2.9893914999993285
+        ],
+        "local_10": [
+          2.8499486000073375,
+          2.7713592999934917,
+          2.517459599999711
+        ]
+      },
+      "median_sec": {
+        "control_09c": 2.982256099989172,
+        "local_10": 2.7713592999934917
+      },
+      "exact_reference_equal": true
+    },
+    {
+      "case": "noncollinear_no_solution",
+      "samples_sec": {
+        "control_09c": [
+          3.2667342999920947,
+          3.2861683999944944,
+          3.687162400005036
+        ],
+        "local_10": [
+          3.012951600001543,
+          2.997278599999845,
+          3.2625132000102894
+        ]
+      },
+      "median_sec": {
+        "control_09c": 3.2861683999944944,
+        "local_10": 3.012951600001543
+      },
+      "exact_reference_equal": true
+    }
+  ],
+  "source_bytes_identical": true,
+  "source_sha256": "d0b3e31395543e495cb2bcc8307c90baaabc48dd6f5bca780039e052744c7b55",
+  "reason": "Initial single timings higher than old medians; pair with unchanged original 09C in current process. No performance development or claim about thermal/frequency causes; no production latency limit exists."
+}

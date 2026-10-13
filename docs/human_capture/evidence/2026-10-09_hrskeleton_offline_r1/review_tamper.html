@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>SKO 固定窗口人工审阅</title>
+<style>body{font:15px system-ui;background:#f6f8fa;color:#17202a;margin:20px}button,input,select,textarea{font:inherit;margin:4px;padding:5px}canvas{background:white;border:1px solid #bac5cf;width:31%;height:300px}pre{white-space:pre-wrap;word-break:break-all;font-size:12px}#identity{max-height:150px;overflow:auto}fieldset{background:white;margin:10px 0}label{display:inline-block}#error{color:#a00}.row{display:flex;gap:8px}textarea{width:95%}table{border-collapse:collapse}td,th{border:1px solid #ccd;padding:4px}</style>
+<h1>HR-SKELETON-OFFLINE · 固定窗口审阅</h1>
+<p>100 原始帧 / 120 分支行。机器簇不代表人；红点为原始无效XYZ，不具支撑资格。三个正交视图显示完整簇；蓝点为所选簇，橙点为人工选择的区域。raw与filtered为独立输出，当前真实GT未闭合。</p>
+<p id="status">正在核SHA…</p><p id="error"></p>
+<fieldset><legend>来源与完整簇</legend><button id="prev">上一实际帧</button><select id="frame"></select><button id="next">下一实际帧</button><select id="cluster"></select><button id="home">视图归位</button><pre id="identity"></pre></fieldset>
+<div class="row"><canvas id="xy" width="580" height="360"></canvas><canvas id="xz" width="580" height="360"></canvas><canvas id="yz" width="580" height="360"></canvas></div>
+<p>单击拾取原row（所选簇）；拖动矩形把可见结构支撑row加入当前节点；滚轮缩放，归位恢复。无效原row不能选为支撑。人工区域是结构可见性证据，不是精确关节GT。</p>
+<fieldset><legend>实际人工身份</legend><label>实际 reviewer <input id="reviewer"></label><label>完整簇标签 <select id="label"><option>UNKNOWN</option><option>PERSON</option><option>STATIC_OBJECT</option><option>MIXED</option></select></label><label>person_id <input id="person"></label><label>track_epoch <input id="epoch"></label><label><input type="checkbox" id="continuity">我已逐帧核对连续身份</label></fieldset>
+<fieldset><legend>节点可见性与区域</legend><select id="node"></select><select id="visibility"><option>UNCERTAIN</option><option>VISIBLE</option><option>INVISIBLE</option></select><input id="reason" placeholder="理由；确认头区域用HEAD_CONFIRMED" size="58"><button id="clearrows">清空区域</button><textarea id="rows" rows="3" placeholder="当帧有效原row，逗号分隔；也可用矩形选点"></textarea><button id="applynode">保存当前节点审阅草稿</button><pre id="nodedraft"></pre></fieldset>
+<button id="saverecord">保存该完整簇的审阅</button><button id="export">导出人工sidecar</button><label><input type="checkbox" id="attest">以上标签来自我的实际人工审阅</label><input id="import" type="file" accept=".json"><p id="coverage"></p>
+<h2>当帧raw / filtered / 支撑</h2><pre id="output"></pre>
+<script src="review_tamper_config.js"></script><script src="review.js"></script></html>

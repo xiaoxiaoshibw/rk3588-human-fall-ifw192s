@@ -1,0 +1,99 @@
+test_candidate_python38_syntax (test_selector.SelectorTest.test_candidate_python38_syntax) ... ok
+test_complete_small_corpus_matches_feasibility_oracle (test_selector.SelectorTest.test_complete_small_corpus_matches_feasibility_oracle) ... ok
+test_duplicate_keys_cannot_displace_valid_four (test_selector.SelectorTest.test_duplicate_keys_cannot_displace_valid_four) ... ok
+test_frozen_success_and_determinism_and_caller_ownership (test_selector.SelectorTest.test_frozen_success_and_determinism_and_caller_ownership) ... ok
+test_gate_boundary_and_profiles_unchanged (test_selector.SelectorTest.test_gate_boundary_and_profiles_unchanged) ... ok
+test_known_five_cell_false_rejection (test_selector.SelectorTest.test_known_five_cell_false_rejection) ... ok
+test_large_greedy_failure_has_feasible_alternative (test_selector.SelectorTest.test_large_greedy_failure_has_feasible_alternative) ... ok
+test_tied_feasible_fallback_keeps_first_sorted_combo (test_selector.SelectorTest.test_tied_feasible_fallback_keeps_first_sorted_combo) ... ok
+test_true_insufficiency_and_condition_failure_still_rejected (test_selector.SelectorTest.test_true_insufficiency_and_condition_failure_still_rejected) ... ok
+test_v3_defers_to_repaired_v2_without_fine_reselection (test_selector.SelectorTest.test_v3_defers_to_repaired_v2_without_fine_reselection) ... ok
+test_dense_table_never_wins_and_mixed_height_cells_are_not_ground (floor_detector_test.FloorDetectorTest.test_dense_table_never_wins_and_mixed_height_cells_are_not_ground) ... ok
+test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes (floor_detector_test.FloorDetectorTest.test_scattered_small_patches_do_not_make_four_arbitrary_floor_boxes) ... ok
+test_table_without_visible_floor_is_rejected (floor_detector_test.FloorDetectorTest.test_table_without_visible_floor_is_rejected) ... ok
+test_adjacent_clean_cells_insufficient_support (floor_sheet_test.FloorSheetTest.test_adjacent_clean_cells_insufficient_support) ... ok
+test_bridge_requires_contact_and_bounded_gap (floor_sheet_test.FloorSheetTest.test_bridge_requires_contact_and_bounded_gap) ... ok
+test_clean_cell_normal_direction_regression (floor_sheet_test.FloorSheetTest.test_clean_cell_normal_direction_regression) ... ok
+test_contact_bridge_merges_fragmented_sheet (floor_sheet_test.FloorSheetTest.test_contact_bridge_merges_fragmented_sheet) ... ok
+test_leg_on_continuous_floor_identity_ok (floor_sheet_test.FloorSheetTest.test_leg_on_continuous_floor_identity_ok) ... ok
+test_low_platforms_with_empty_gaps_identity_rejected (floor_sheet_test.FloorSheetTest.test_low_platforms_with_empty_gaps_identity_rejected) ... ok
+test_out_of_band_surface_not_floor (floor_sheet_test.FloorSheetTest.test_out_of_band_surface_not_floor) ... ok
+test_scattered_clean_cells_on_one_sheet_succeed (floor_sheet_test.FloorSheetTest.test_scattered_clean_cells_on_one_sheet_succeed) ... ok
+test_scattered_coplanar_patches_identity_rejected (floor_sheet_test.FloorSheetTest.test_scattered_coplanar_patches_identity_rejected) ... ok
+test_small_satellite_fragment_ignored (floor_sheet_test.FloorSheetTest.test_small_satellite_fragment_ignored) ... ok
+test_undulating_floor_stays_connected (floor_sheet_test.FloorSheetTest.test_undulating_floor_stays_connected) ... ok
+test_v1_success_passthrough (floor_sheet_test.FloorSheetTest.test_v1_success_passthrough) ... ok
+test_fine_boxes_keep_purity_gates (floor_roi_test.FineRoiTest.test_fine_boxes_keep_purity_gates) ... ok
+test_fine_roi_insufficient_when_even_fine_dirty (floor_roi_test.FineRoiTest.test_fine_roi_insufficient_when_even_fine_dirty) ... ok
+test_fine_roi_succeeds_where_25cm_fails (floor_roi_test.FineRoiTest.test_fine_roi_succeeds_where_25cm_fails) ... ok
+test_v3_identity_rejected (floor_roi_test.FineRoiTest.test_v3_identity_rejected) ... ok
+test_v3_returns_v1_verbatim (floor_roi_test.FineRoiTest.test_v3_returns_v1_verbatim) ... ok
+test_v3_returns_v2_verbatim_when_25cm_ok (floor_roi_test.FineRoiTest.test_v3_returns_v2_verbatim_when_25cm_ok) ... ok
+test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board) ... ERROR
+test_line_domain_and_ls_majority_cannot_override_conflict (leveling_test.WorkbenchTest.test_line_domain_and_ls_majority_cannot_override_conflict) ... ok
+test_request_boundary_source_drift_and_owned_config (leveling_test.WorkbenchTest.test_request_boundary_source_drift_and_owned_config) ... ok
+test_transform_export_and_frozen_disjoint_rows (leveling_test.WorkbenchTest.test_transform_export_and_frozen_disjoint_rows) ... ok
+test_gate_adjacent_cases_exact (test_equivalence.EquivalenceTest.test_gate_adjacent_cases_exact) ... ok
+test_noncollinear_no_solution_and_true_collinear (test_equivalence.EquivalenceTest.test_noncollinear_no_solution_and_true_collinear) ... ok
+test_random_large_and_duplicates_exact (test_equivalence.EquivalenceTest.test_random_large_and_duplicates_exact) ... ok
+test_random_small_exact_full_dict (test_equivalence.EquivalenceTest.test_random_small_exact_full_dict) ... ok
+test_runtime_profile_and_python38_unchanged (test_equivalence.EquivalenceTest.test_runtime_profile_and_python38_unchanged) ... ok
+test_symmetric_ties_translations_permutations (test_equivalence.EquivalenceTest.test_symmetric_ties_translations_permutations) ... ok
+
+======================================================================
+ERROR: test_actual_http_job_failures_concurrency_download_and_no_board (leveling_test.WorkbenchTest.test_actual_http_job_failures_concurrency_download_and_no_board)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 1344, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1338, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1384, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1333, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1093, in _send_output
+    self.send(msg)
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1037, in send
+    self.connect()
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\http\client.py", line 1003, in connect
+    self.sock = self._create_connection(
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\socket.py", line 865, in create_connection
+    raise exceptions[0]
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\socket.py", line 850, in create_connection
+    sock.connect(sa)
+PermissionError: [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Code\ldiar\docs\sidequests\evidence\2026-10-09_cl2_09c_r1\candidate\leveling_test.py", line 150, in test_actual_http_job_failures_concurrency_download_and_no_board
+    self.assertEqual(get("/api/leveling/sessions")["sessions"][0]["sid"],req["sid"])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\ldiar\docs\sidequests\evidence\2026-10-09_cl2_09c_r1\candidate\leveling_test.py", line 143, in get
+    def get(path):return json.load(urllib.request.urlopen(base+path,timeout=20))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 215, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 515, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 532, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 1373, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\30680\scoop\apps\python312\current\Lib\urllib\request.py", line 1347, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。>
+
+----------------------------------------------------------------------
+Ran 41 tests in 32.720s
+
+FAILED (errors=1)

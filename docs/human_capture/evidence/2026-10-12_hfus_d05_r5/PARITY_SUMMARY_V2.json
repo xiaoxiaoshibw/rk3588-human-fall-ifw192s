@@ -1,0 +1,99 @@
+{
+  "status": "PASS",
+  "frames": 2605,
+  "sessions": [
+    {
+      "sid": "cap_20261010_175227",
+      "frames": 304,
+      "status": "PASS",
+      "reference_ledger_sha256": "7573522a4378fbba20daac2bb40d9101dc439da6e7a0d0959434364050aae355",
+      "current_ledger_sha256": "96c10e2deb562e6e5d2c837292f3f7ad2ecdb8903af04b45b51792642c3681f1"
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "frames": 258,
+      "status": "PASS",
+      "reference_ledger_sha256": "48bd6a132a34d9111607aa648460ee2304e5c9fa1f6d4a080ee98f38514acd84",
+      "current_ledger_sha256": "fef75981f2585bde002f23021ec0cf1907e80cee30dfda31ec779ec9953d040b"
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "frames": 464,
+      "status": "PASS",
+      "reference_ledger_sha256": "9627a3d710f08883a98f79691e53724a431e46288fa8055b1c38de67404bc990",
+      "current_ledger_sha256": "9df3d17eafc40ebc11c2879cd54987a3cfa001ef81d697c4d646867d667815e5"
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "frames": 239,
+      "status": "PASS",
+      "reference_ledger_sha256": "b9df885a477b06b0458e8a41e518c24f5d24bab64df1467c56130ba63bc7fad0",
+      "current_ledger_sha256": "ef9afc77b8bafd0a1a3c8c7f5b9c0585d34540c25bbbf3ffd81b72ce16d421f0"
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "frames": 202,
+      "status": "PASS",
+      "reference_ledger_sha256": "1993e16a6da513d0baa680d91b78c59140a4187db6f9329a0f9e9c316b0d4a27",
+      "current_ledger_sha256": "4f2df0b2ef39468b9e3631696434fb97d4730292e0c5a21c3441c8d7e4fca8b7"
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "frames": 238,
+      "status": "PASS",
+      "reference_ledger_sha256": "89c23c1d3d4f45665a7bb55029a173806244aad1011f964f547f20c86ffd2255",
+      "current_ledger_sha256": "3312f946968a9c9e72d4edb29ccd4f0f214d759b9ad443115eba47ad1f8a9b36"
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "frames": 251,
+      "status": "PASS",
+      "reference_ledger_sha256": "70e44bb3976461d9d5ba3c1f1bc1d51012a95b7974acdfaec9b76ceea196b917",
+      "current_ledger_sha256": "8b0b4afbb331d14542a22b707522fd38c2f88b163979e19e24f642a8a6217236"
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "frames": 523,
+      "status": "PASS",
+      "reference_ledger_sha256": "3cbf91d16e3c1b54b7ff108a8b9d5ab553672647bc775e8aac8e7923e85f152b",
+      "current_ledger_sha256": "08c498f4e70c5af999ddc79d7e909e53f6bf1930bfbb9f9ef40a9127b6a27d1e"
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "frames": 126,
+      "status": "PASS",
+      "reference_ledger_sha256": "c1bea80580c4a3802e1ee9831b05c554613fbfba93aee8a26c77cc2b5bb98d04",
+      "current_ledger_sha256": "d8884819eebb9937b8479bed23955c958d230fd4324f3a81d5cb6574ee05a3bc"
+    }
+  ],
+  "fields": [
+    "sid",
+    "segment",
+    "timestamp_s",
+    "frame_index",
+    "timestamp",
+    "raw_n",
+    "valid_n",
+    "qualification",
+    "exhaustive",
+    "gt",
+    "candidates",
+    "raw_components",
+    "pre_components",
+    "stages",
+    "split_log",
+    "model_calls",
+    "tracks",
+    "visible_candidates",
+    "strict",
+    "legacy",
+    "bg",
+    "foreground_count"
+  ],
+  "limits": "same partial GT and remaining failures as R04; timing excluded; no inference using GT",
+  "field_parity": true,
+  "ledger_byte_parity": false,
+  "compared_field_count": 22,
+  "ledger_diff_reason": "R05 rows add bank_events diagnostics; runtime/version/instrumentation fields outside explicit compared fields are not byte-parity claims",
+  "original_summary_sha_provenance": "PARITY_SUMMARY.json unchanged; control EXIT and original FRAME_PARITY retained"
+}

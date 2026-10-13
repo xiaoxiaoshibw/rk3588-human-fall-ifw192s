@@ -1,0 +1,767 @@
+{
+  "schema_version": "hfus-frame-v2",
+  "branch": "master",
+  "head": "026e06303f60ed1bbe4ddc4d037836db68da6d27",
+  "source_sha256": {
+    "sidequests/human_fusion_lab/core/data_loader.js": "014feb8bbb6d6d208353155a591791ba2af1f0e544fbf8e436b567909e79b1fe",
+    "sidequests/human_fusion_lab/core/engine.js": "5345739ca95472410feaf4bafe7cd83ad35d6dafd40a42f584ca98b65e4afead",
+    "sidequests/human_fusion_lab/core/engine_r4.js": "62303a37290a4ea1d971c5c6232d545fc427b37b8ac928da10f2b82b030fadff",
+    "sidequests/human_fusion_lab/core/evaluate_fusion_gt.js": "bd3c65e3d6888431a998fb928ea9def35b0e84d07f6f6a4d292df5dacdac1991",
+    "sidequests/human_fusion_lab/core/fusion.js": "5a7f0e8378e57baa2ad1ceaa441de9b59bf435f67a6d18f40b1380f6b6c6becf",
+    "sidequests/human_fusion_lab/core/leveling.js": "4a3a854f62c0edd0c287ed0fc1dcd9bd3358d4e8b3c2825687d046e289317f45",
+    "sidequests/human_fusion_lab/core/schema.js": "c045138e33587949d0002ee819bd73c9f326b9c22cfe067fa1176d0aae3eaf0b",
+    "sidequests/human_fusion_lab/detector.js": "6e9c6604cf9f5d86555ee487930c9b5ca0bc1245a0a32822b19ea200f9630d1c",
+    "sidequests/human_fusion_lab/export.js": "6bfca31fa8b304c2ed054ad34977a990f9084e2544cd4de394427f684644600c",
+    "sidequests/human_fusion_lab/human_replay/bg_envelope.json": "28afdaa4838c5fd99221954ab1696bd82289aa1c24c6934afb5808838d6e3f2e",
+    "sidequests/human_fusion_lab/human_replay/detect_overlay.js": "585d2964e2927fd8dac97bc950190088ba315d89a0dea17564aed3917ad73963",
+    "sidequests/human_fusion_lab/human_replay/gt_lib.js": "4013471514915570c32bc0d09f1d100c4f9cbfa2d27a645f9ddd91807fcf8026",
+    "sidequests/human_fusion_lab/human_replay/human_pipe_lib.js": "8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176",
+    "sidequests/human_fusion_lab/human_replay/rf_person.js": "99b02c725f303f07e574b310fdd459ad3e28dd2469ba1e882661c30f370529d6",
+    "sidequests/human_fusion_lab/human_replay/rf_person_v1.json": "4c83db116fe0742d5c1cca8360de6bafcc4ac9abae3910984beabea8d85bfe68",
+    "sidequests/human_fusion_lab/models/dual_pointnet_shadow.onnx": "31d1fb0203cac3a48bd07b0f2737f07498058f2019ba4ebb96179f89bf854ebf",
+    "sidequests/human_fusion_lab/models/dual_pointnet_shadow.pt": "04a9de6ac1f8b9b774fc8597c5d4c6fc2e545ba5780f53f0568499e14c0d021d",
+    "sidequests/human_fusion_lab/models/dual_rf51_candidate.json": "9f4f4b9fdb2b2f1cab42bfa14a55aff423acac48c40303c93bafd035cdfa62c1",
+    "sidequests/human_fusion_lab/models/dual_rf69_candidate.json": "c5d824e249b0a41a309579323fd2549af9409032775b0c0411db0e5d716a1683",
+    "sidequests/human_fusion_lab/models/dual_xgb69_candidate.json": "fc7250363301cd0a51bdfc587c1dfe0e0d83e29a96f2bc5209ccb618ffd58b9b",
+    "sidequests/human_fusion_lab/models/dual_xgb69_native.ubj": "729382aa11165665ca593d539836d579206e7a6d16c78565346caa1a0606fc47",
+    "sidequests/human_fusion_lab/models/pointnet_shadow.onnx": "639fe3244953f4b62fe2afe8af25163f7ad776485274172328fc74c0ce5f21ba",
+    "sidequests/human_fusion_lab/models/pointnet_shadow.pt": "fa07658857ec83f964f5c5f302541d116260d475e99bb5bd5e2b3a0dc4743f90",
+    "sidequests/human_fusion_lab/models/rf51_candidate.json": "56dce7cc06155d2befd3e33482537482eb55767a2289a0a8f32f84cf72201194",
+    "sidequests/human_fusion_lab/models/rf69_candidate.json": "23b847417e057868d5760dc3d55dcf21bfd02cbad3b028973f3920852cfb24f6",
+    "sidequests/human_fusion_lab/models/xgb69_candidate.json": "84edb5f02b9f480fdfd4f5609fe678008051914400c977033e1ef6f6aac890d8",
+    "sidequests/human_fusion_lab/models/xgb69_native.ubj": "bb335df20388b84dad799ed8a5e6cd057aed890c5ea24b458223fa9b321ab6f0",
+    "sidequests/human_fusion_lab/unique_tracker.js": "762bbc83169a3fe54824b3e93a06d48dea75f75265b0d62c89d862d5111451d7",
+    "sidequests/human_fusion_lab/v2_runtime.js": "fce2dce5350856cbe4b2a680e39a69047aec74755c006a2f224969be0145c12e",
+    "sidequests/human_fusion_lab_next/contracts/SCHEMA_V1.json": "1f738c36bb8a8ce691807f8bea6b9911d871983755ce7a033e9e7580c825cae1",
+    "sidequests/human_fusion_lab_next/contracts/SCHEMA_V2.json": "da026e57512c7e182ddb0460ded20f578bd40a974a6e84609945c32c91a8d793",
+    "sidequests/human_fusion_lab_next/contracts/index_v1.js": "dc5dd89c649c0bb2e56c836582ce510f1b78fc1039712e00ca66c15d8bfb3317",
+    "sidequests/human_fusion_lab_next/contracts/strict_v1.js": "1f9e4464cf672ee57d302e7660f59f9aff103ad930613239d496dd4bf23f942d",
+    "sidequests/human_fusion_lab_next/contracts/strict_v2.js": "7916e859334968221bad8ff0e270edcc7e57b3c190413b3af79e5d95bc6a7362",
+    "sidequests/human_fusion_lab_next/eval/baseline.js": "0534d0b5b4228aef68b58ab9664450b5be10ce9f95f3f53526e19320e3346acb",
+    "sidequests/human_fusion_lab_next/eval/instrument.js": "cdc1ee71517bdeca78248cefb290e35094fd9141d2665e7a2b042b5717d7c18b"
+  },
+  "node": "v24.14.0",
+  "cpu": "AMD Ryzen AI 9 H 365 w/ Radeon 880M",
+  "results": [
+    {
+      "sid": "cap_20261010_175227",
+      "label": "BG_A",
+      "inputMode": "source_legacy",
+      "input_sha256": {
+        "meta": "2f3139a4cd9aa2ef665a26bfe157224e3fe93ffc3db60dcc6be8275d39661610",
+        "points": "7ee30e01878205f37463d79d95983321780f6c66a14d2a1ac7c4a5d48e61a5d8"
+      },
+      "gt_sha256": "1280d1953f2520b6291874f83375419bfec93ad4776796204d1d75665ca72d13",
+      "gt_binding_valid": true,
+      "coordinate": {
+        "already_leveled": false,
+        "R": [
+          0.893544,
+          0,
+          0.448975,
+          -0.014337,
+          0.99949,
+          0.028533,
+          -0.448746,
+          -0.031932,
+          0.893089
+        ],
+        "T": [
+          0,
+          0,
+          1.380286
+        ]
+      },
+      "config": {
+        "mode": "FUSION",
+        "background": "ref_only",
+        "candidates": "fg_plus_retained",
+        "classifier": "rf51",
+        "rf51_threshold": 0.55,
+        "confirm_window": 5,
+        "confirm_votes": 3,
+        "min_age_frames": 3,
+        "track_gate_xy_m": 0.75,
+        "track_lost_max": 8,
+        "ema_alpha": 0.35,
+        "retention": {
+          "window_confirm": 3,
+          "timeout_s": 180,
+          "hot_cell_radius_m": 0.4,
+          "max_lost_for_retain": 30
+        },
+        "leveling_rt": null,
+        "hard_gate_n500": false,
+        "replay_policy": "strict",
+        "diagnostics": true,
+        "fusion_cfg": {
+          "assoc_gate_xy_m": 0.75,
+          "track_gate_xy_m": 0.75,
+          "track_lost_max": 30,
+          "track_still_confirm_window": 5,
+          "track_still_confirm_votes": 3,
+          "track_still_confirm_min_age": 3,
+          "rf51_threshold": 0.55,
+          "bg_envelope_path": null,
+          "online_background": false
+        }
+      },
+      "total_frames": 304,
+      "qualified_frames": 304,
+      "unknown_frames": 0,
+      "exposure_seconds": 31.522053956985474,
+      "strict": {
+        "proposal": {
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "unmatched_unknown": 600
+        },
+        "accepted": {
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "unmatched_unknown": 0
+        },
+        "observed_confirmed": {
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "unmatched_unknown": 0
+        }
+      },
+      "legacy": {
+        "accepted": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "confirmed": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "component_count": 24599,
+      "hard_rejected_components": 23999,
+      "invalid_candidate_row_count": 0,
+      "coast_observations": 0,
+      "duplicate_track_ids": 0,
+      "performance": {
+        "warmup": 5,
+        "p50_ms": 54.39549999999963,
+        "p95_ms": 81.91630000000077,
+        "p99_ms": 93.08589999999913,
+        "peak_heap_mb": 262.29237365722656,
+        "includes_diagnostic_shadow": true
+      },
+      "failures_file": "cap_20261010_175227__BG_A__source_legacy__FAILURES.json",
+      "limits": [
+        "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+        "propagated observations conditional, not independent human review",
+        "diagnostic shadow performance not pure detector performance",
+        "nine sessions development regression, not blind test"
+      ]
+    },
+    {
+      "sid": "cap_20261010_175227",
+      "label": "BG_A",
+      "inputMode": "sensor_valid",
+      "input_sha256": {
+        "meta": "2f3139a4cd9aa2ef665a26bfe157224e3fe93ffc3db60dcc6be8275d39661610",
+        "points": "7ee30e01878205f37463d79d95983321780f6c66a14d2a1ac7c4a5d48e61a5d8"
+      },
+      "gt_sha256": "1280d1953f2520b6291874f83375419bfec93ad4776796204d1d75665ca72d13",
+      "gt_binding_valid": true,
+      "coordinate": {
+        "already_leveled": false,
+        "R": [
+          0.893544,
+          0,
+          0.448975,
+          -0.014337,
+          0.99949,
+          0.028533,
+          -0.448746,
+          -0.031932,
+          0.893089
+        ],
+        "T": [
+          0,
+          0,
+          1.380286
+        ]
+      },
+      "config": {
+        "mode": "FUSION",
+        "background": "ref_only",
+        "candidates": "fg_plus_retained",
+        "classifier": "rf51",
+        "rf51_threshold": 0.55,
+        "confirm_window": 5,
+        "confirm_votes": 3,
+        "min_age_frames": 3,
+        "track_gate_xy_m": 0.75,
+        "track_lost_max": 8,
+        "ema_alpha": 0.35,
+        "retention": {
+          "window_confirm": 3,
+          "timeout_s": 180,
+          "hot_cell_radius_m": 0.4,
+          "max_lost_for_retain": 30
+        },
+        "leveling_rt": null,
+        "hard_gate_n500": false,
+        "replay_policy": "strict",
+        "diagnostics": true,
+        "fusion_cfg": {
+          "assoc_gate_xy_m": 0.75,
+          "track_gate_xy_m": 0.75,
+          "track_lost_max": 30,
+          "track_still_confirm_window": 5,
+          "track_still_confirm_votes": 3,
+          "track_still_confirm_min_age": 3,
+          "rf51_threshold": 0.55,
+          "bg_envelope_path": null,
+          "online_background": false
+        }
+      },
+      "total_frames": 304,
+      "qualified_frames": 304,
+      "unknown_frames": 0,
+      "exposure_seconds": 31.522053956985474,
+      "strict": {
+        "proposal": {
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "unmatched_unknown": 600
+        },
+        "accepted": {
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "unmatched_unknown": 0
+        },
+        "observed_confirmed": {
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "unmatched_unknown": 0
+        }
+      },
+      "legacy": {
+        "accepted": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "confirmed": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      "component_count": 24599,
+      "hard_rejected_components": 23999,
+      "invalid_candidate_row_count": 0,
+      "coast_observations": 0,
+      "duplicate_track_ids": 0,
+      "performance": {
+        "warmup": 5,
+        "p50_ms": 71.70889999999781,
+        "p95_ms": 104.60129999999481,
+        "p99_ms": 118.18469999999797,
+        "peak_heap_mb": 269.30020904541016,
+        "includes_diagnostic_shadow": true
+      },
+      "failures_file": "cap_20261010_175227__BG_A__sensor_valid__FAILURES.json",
+      "limits": [
+        "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+        "propagated observations conditional, not independent human review",
+        "diagnostic shadow performance not pure detector performance",
+        "nine sessions development regression, not blind test"
+      ]
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "label": "BG_A",
+      "inputMode": "source_legacy",
+      "input_sha256": {
+        "meta": "4ee0d149864139f4ac3f55610ab28bf248da5283b03f1ba12edc3ace824e7278",
+        "points": "6e5874b41c92ba178e154c55d4b49c01aa7e1457b8c59bb0658973de3da7f809"
+      },
+      "gt_sha256": "3b7ba46e168d84394adeca2df06a0a05ab384997f93db13ad5766aae1671f162",
+      "gt_binding_valid": true,
+      "coordinate": {
+        "already_leveled": false,
+        "R": [
+          0.893544,
+          0,
+          0.448975,
+          -0.014337,
+          0.99949,
+          0.028533,
+          -0.448746,
+          -0.031932,
+          0.893089
+        ],
+        "T": [
+          0,
+          0,
+          1.380286
+        ]
+      },
+      "config": {
+        "mode": "FUSION",
+        "background": "ref_only",
+        "candidates": "fg_plus_retained",
+        "classifier": "rf51",
+        "rf51_threshold": 0.55,
+        "confirm_window": 5,
+        "confirm_votes": 3,
+        "min_age_frames": 3,
+        "track_gate_xy_m": 0.75,
+        "track_lost_max": 8,
+        "ema_alpha": 0.35,
+        "retention": {
+          "window_confirm": 3,
+          "timeout_s": 180,
+          "hot_cell_radius_m": 0.4,
+          "max_lost_for_retain": 30
+        },
+        "leveling_rt": null,
+        "hard_gate_n500": false,
+        "replay_policy": "strict",
+        "diagnostics": true,
+        "fusion_cfg": {
+          "assoc_gate_xy_m": 0.75,
+          "track_gate_xy_m": 0.75,
+          "track_lost_max": 30,
+          "track_still_confirm_window": 5,
+          "track_still_confirm_votes": 3,
+          "track_still_confirm_min_age": 3,
+          "rf51_threshold": 0.55,
+          "bg_envelope_path": null,
+          "online_background": false
+        }
+      },
+      "total_frames": 258,
+      "qualified_frames": 258,
+      "unknown_frames": 0,
+      "exposure_seconds": 26.74331307411194,
+      "strict": {
+        "proposal": {
+          "tp": 163,
+          "fn": 95,
+          "fp": 0,
+          "unmatched_unknown": 478
+        },
+        "accepted": {
+          "tp": 163,
+          "fn": 95,
+          "fp": 0,
+          "unmatched_unknown": 114
+        },
+        "observed_confirmed": {
+          "tp": 161,
+          "fn": 97,
+          "fp": 0,
+          "unmatched_unknown": 104
+        }
+      },
+      "legacy": {
+        "accepted": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "confirmed": {
+          "tp": 256,
+          "fp": 9,
+          "fn": 2
+        }
+      },
+      "component_count": 17190,
+      "hard_rejected_components": 16549,
+      "invalid_candidate_row_count": 0,
+      "coast_observations": 4,
+      "duplicate_track_ids": 0,
+      "performance": {
+        "warmup": 5,
+        "p50_ms": 45.794800000003306,
+        "p95_ms": 72.98949999999604,
+        "p99_ms": 79.64659999999276,
+        "peak_heap_mb": 266.3848342895508,
+        "includes_diagnostic_shadow": true
+      },
+      "failures_file": "cap_20261010_175429__BG_A__source_legacy__FAILURES.json",
+      "limits": [
+        "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+        "propagated observations conditional, not independent human review",
+        "diagnostic shadow performance not pure detector performance",
+        "nine sessions development regression, not blind test"
+      ]
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "label": "BG_A",
+      "inputMode": "sensor_valid",
+      "input_sha256": {
+        "meta": "4ee0d149864139f4ac3f55610ab28bf248da5283b03f1ba12edc3ace824e7278",
+        "points": "6e5874b41c92ba178e154c55d4b49c01aa7e1457b8c59bb0658973de3da7f809"
+      },
+      "gt_sha256": "3b7ba46e168d84394adeca2df06a0a05ab384997f93db13ad5766aae1671f162",
+      "gt_binding_valid": true,
+      "coordinate": {
+        "already_leveled": false,
+        "R": [
+          0.893544,
+          0,
+          0.448975,
+          -0.014337,
+          0.99949,
+          0.028533,
+          -0.448746,
+          -0.031932,
+          0.893089
+        ],
+        "T": [
+          0,
+          0,
+          1.380286
+        ]
+      },
+      "config": {
+        "mode": "FUSION",
+        "background": "ref_only",
+        "candidates": "fg_plus_retained",
+        "classifier": "rf51",
+        "rf51_threshold": 0.55,
+        "confirm_window": 5,
+        "confirm_votes": 3,
+        "min_age_frames": 3,
+        "track_gate_xy_m": 0.75,
+        "track_lost_max": 8,
+        "ema_alpha": 0.35,
+        "retention": {
+          "window_confirm": 3,
+          "timeout_s": 180,
+          "hot_cell_radius_m": 0.4,
+          "max_lost_for_retain": 30
+        },
+        "leveling_rt": null,
+        "hard_gate_n500": false,
+        "replay_policy": "strict",
+        "diagnostics": true,
+        "fusion_cfg": {
+          "assoc_gate_xy_m": 0.75,
+          "track_gate_xy_m": 0.75,
+          "track_lost_max": 30,
+          "track_still_confirm_window": 5,
+          "track_still_confirm_votes": 3,
+          "track_still_confirm_min_age": 3,
+          "rf51_threshold": 0.55,
+          "bg_envelope_path": null,
+          "online_background": false
+        }
+      },
+      "total_frames": 258,
+      "qualified_frames": 258,
+      "unknown_frames": 0,
+      "exposure_seconds": 26.74331307411194,
+      "strict": {
+        "proposal": {
+          "tp": 163,
+          "fn": 95,
+          "fp": 0,
+          "unmatched_unknown": 478
+        },
+        "accepted": {
+          "tp": 163,
+          "fn": 95,
+          "fp": 0,
+          "unmatched_unknown": 114
+        },
+        "observed_confirmed": {
+          "tp": 161,
+          "fn": 97,
+          "fp": 0,
+          "unmatched_unknown": 104
+        }
+      },
+      "legacy": {
+        "accepted": {
+          "tp": 258,
+          "fp": 19,
+          "fn": 0
+        },
+        "confirmed": {
+          "tp": 256,
+          "fp": 9,
+          "fn": 2
+        }
+      },
+      "component_count": 17190,
+      "hard_rejected_components": 16549,
+      "invalid_candidate_row_count": 0,
+      "coast_observations": 4,
+      "duplicate_track_ids": 0,
+      "performance": {
+        "warmup": 5,
+        "p50_ms": 52.70119999999588,
+        "p95_ms": 84.19460000000254,
+        "p99_ms": 90.14930000000459,
+        "peak_heap_mb": 278.90089416503906,
+        "includes_diagnostic_shadow": true
+      },
+      "failures_file": "cap_20261010_175429__BG_A__sensor_valid__FAILURES.json",
+      "limits": [
+        "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+        "propagated observations conditional, not independent human review",
+        "diagnostic shadow performance not pure detector performance",
+        "nine sessions development regression, not blind test"
+      ]
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "label": "BG_A",
+      "inputMode": "source_legacy",
+      "input_sha256": {
+        "meta": "d3127d67cdc1c3ab4e2eadddd11d8a100fb8cb9ab489d588ea9f48684f5f7b48",
+        "points": "0eb22d564361a730a38adbcf72d31b4b907d1f38b32c5908da55d58d341b0173"
+      },
+      "gt_sha256": "f83aa6a75931fc97266c1a2e707ed36f866d6b2d6eafe8f06bc3b2bfd6f6b3d0",
+      "gt_binding_valid": true,
+      "coordinate": {
+        "already_leveled": false,
+        "R": [
+          0.893544,
+          0,
+          0.448975,
+          -0.014337,
+          0.99949,
+          0.028533,
+          -0.448746,
+          -0.031932,
+          0.893089
+        ],
+        "T": [
+          0,
+          0,
+          1.380286
+        ]
+      },
+      "config": {
+        "mode": "FUSION",
+        "background": "ref_only",
+        "candidates": "fg_plus_retained",
+        "classifier": "rf51",
+        "rf51_threshold": 0.55,
+        "confirm_window": 5,
+        "confirm_votes": 3,
+        "min_age_frames": 3,
+        "track_gate_xy_m": 0.75,
+        "track_lost_max": 8,
+        "ema_alpha": 0.35,
+        "retention": {
+          "window_confirm": 3,
+          "timeout_s": 180,
+          "hot_cell_radius_m": 0.4,
+          "max_lost_for_retain": 30
+        },
+        "leveling_rt": null,
+        "hard_gate_n500": false,
+        "replay_policy": "strict",
+        "diagnostics": true,
+        "fusion_cfg": {
+          "assoc_gate_xy_m": 0.75,
+          "track_gate_xy_m": 0.75,
+          "track_lost_max": 30,
+          "track_still_confirm_window": 5,
+          "track_still_confirm_votes": 3,
+          "track_still_confirm_min_age": 3,
+          "rf51_threshold": 0.55,
+          "bg_envelope_path": null,
+          "online_background": false
+        }
+      },
+      "total_frames": 238,
+      "qualified_frames": 71,
+      "unknown_frames": 167,
+      "exposure_seconds": 7.340733528137207,
+      "strict": {
+        "proposal": {
+          "tp": 47,
+          "fn": 24,
+          "fp": 0,
+          "unmatched_unknown": 159
+        },
+        "accepted": {
+          "tp": 47,
+          "fn": 24,
+          "fp": 0,
+          "unmatched_unknown": 19
+        },
+        "observed_confirmed": {
+          "tp": 45,
+          "fn": 26,
+          "fp": 0,
+          "unmatched_unknown": 17
+        }
+      },
+      "legacy": {
+        "accepted": {
+          "tp": 65,
+          "fp": 1,
+          "fn": 6
+        },
+        "confirmed": {
+          "tp": 61,
+          "fp": 1,
+          "fn": 10
+        }
+      },
+      "component_count": 16938,
+      "hard_rejected_components": 16286,
+      "invalid_candidate_row_count": 0,
+      "coast_observations": 8,
+      "duplicate_track_ids": 0,
+      "performance": {
+        "warmup": 5,
+        "p50_ms": 46.19770000000426,
+        "p95_ms": 74.67429999999877,
+        "p99_ms": 80.94109999999637,
+        "peak_heap_mb": 255.68780517578125,
+        "includes_diagnostic_shadow": true
+      },
+      "failures_file": "cap_20261010_180235__BG_A__source_legacy__FAILURES.json",
+      "limits": [
+        "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+        "propagated observations conditional, not independent human review",
+        "diagnostic shadow performance not pure detector performance",
+        "nine sessions development regression, not blind test"
+      ]
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "label": "BG_A",
+      "inputMode": "sensor_valid",
+      "input_sha256": {
+        "meta": "d3127d67cdc1c3ab4e2eadddd11d8a100fb8cb9ab489d588ea9f48684f5f7b48",
+        "points": "0eb22d564361a730a38adbcf72d31b4b907d1f38b32c5908da55d58d341b0173"
+      },
+      "gt_sha256": "f83aa6a75931fc97266c1a2e707ed36f866d6b2d6eafe8f06bc3b2bfd6f6b3d0",
+      "gt_binding_valid": true,
+      "coordinate": {
+        "already_leveled": false,
+        "R": [
+          0.893544,
+          0,
+          0.448975,
+          -0.014337,
+          0.99949,
+          0.028533,
+          -0.448746,
+          -0.031932,
+          0.893089
+        ],
+        "T": [
+          0,
+          0,
+          1.380286
+        ]
+      },
+      "config": {
+        "mode": "FUSION",
+        "background": "ref_only",
+        "candidates": "fg_plus_retained",
+        "classifier": "rf51",
+        "rf51_threshold": 0.55,
+        "confirm_window": 5,
+        "confirm_votes": 3,
+        "min_age_frames": 3,
+        "track_gate_xy_m": 0.75,
+        "track_lost_max": 8,
+        "ema_alpha": 0.35,
+        "retention": {
+          "window_confirm": 3,
+          "timeout_s": 180,
+          "hot_cell_radius_m": 0.4,
+          "max_lost_for_retain": 30
+        },
+        "leveling_rt": null,
+        "hard_gate_n500": false,
+        "replay_policy": "strict",
+        "diagnostics": true,
+        "fusion_cfg": {
+          "assoc_gate_xy_m": 0.75,
+          "track_gate_xy_m": 0.75,
+          "track_lost_max": 30,
+          "track_still_confirm_window": 5,
+          "track_still_confirm_votes": 3,
+          "track_still_confirm_min_age": 3,
+          "rf51_threshold": 0.55,
+          "bg_envelope_path": null,
+          "online_background": false
+        }
+      },
+      "total_frames": 238,
+      "qualified_frames": 71,
+      "unknown_frames": 167,
+      "exposure_seconds": 7.340733528137207,
+      "strict": {
+        "proposal": {
+          "tp": 47,
+          "fn": 24,
+          "fp": 0,
+          "unmatched_unknown": 159
+        },
+        "accepted": {
+          "tp": 47,
+          "fn": 24,
+          "fp": 0,
+          "unmatched_unknown": 19
+        },
+        "observed_confirmed": {
+          "tp": 45,
+          "fn": 26,
+          "fp": 0,
+          "unmatched_unknown": 17
+        }
+      },
+      "legacy": {
+        "accepted": {
+          "tp": 65,
+          "fp": 1,
+          "fn": 6
+        },
+        "confirmed": {
+          "tp": 61,
+          "fp": 1,
+          "fn": 10
+        }
+      },
+      "component_count": 16938,
+      "hard_rejected_components": 16286,
+      "invalid_candidate_row_count": 0,
+      "coast_observations": 8,
+      "duplicate_track_ids": 0,
+      "performance": {
+        "warmup": 5,
+        "p50_ms": 87.67810000000463,
+        "p95_ms": 114.89310000000114,
+        "p99_ms": 138.6432000000059,
+        "peak_heap_mb": 263.6651153564453,
+        "includes_diagnostic_shadow": true
+      },
+      "failures_file": "cap_20261010_180235__BG_A__sensor_valid__FAILURES.json",
+      "limits": [
+        "partial GT unmatched is UNKNOWN; no new complete-negative qualification",
+        "propagated observations conditional, not independent human review",
+        "diagnostic shadow performance not pure detector performance",
+        "nine sessions development regression, not blind test"
+      ]
+    }
+  ]
+}

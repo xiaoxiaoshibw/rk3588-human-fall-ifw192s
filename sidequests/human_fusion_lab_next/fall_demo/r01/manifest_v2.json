@@ -1,0 +1,81 @@
+{
+  "data_sha256": "9e5ed82a81053d9f446e84b66d8a69fb00eb1b4c9e45414da2f62857150e0e42",
+  "sources": {
+    "sidequests/human_fusion_lab_next/fall_demo/r01/build_demo.py": "819b3597e743577aee1831733b312ed329c9d83912bdc06af4234dbf2517973f",
+    "src/human_fall_detection/core/features.py": "6508ba7739f4b285638c1e74e785d4c6ca2ec1fd75ea2d94e656c6b3951ba027",
+    "src/human_fall_detection/core/fall_state.py": "bdf78158e95c0277bcea14ba31ae7706ac23382785ddaec4df493d55d4757126",
+    "src/human_fall_detection/core/timebase.py": "73d505e194d9b9d0b86a6c4ae952503a5bfc70e2cfda2873f6c2c018ef463100",
+    "src/human_fall_detection/scripts/sensor_health.py": "e77f9d7583b81661a26d8119181115307049863e1e94638a54475d1138d38ca1",
+    "src/human_fall_detection/core/__init__.py": "91c65294b02ca1696f8a5243392733fb033f8a65c0823a92ea2e8b97ce9841c4",
+    "sidequests/human_fusion_lab_next/fall_demo/r01/app_v2.js": "8d513c6213cf630819be3398c651bd78ae094e308b954e2a956ce0354d2ec152",
+    "sidequests/human_fusion_lab_next/fall_demo/r01/index_v2.html": "09bd6a2ca2d3a853cab52542bb2e774c036bfbd8ef5b519a1b81fbfc057068d7"
+  },
+  "checks": {
+    "fall": {
+      "events": 1,
+      "states": [
+        "confirmed",
+        "descending",
+        "low_posture_unclassified",
+        "recovering",
+        "suspected",
+        "upright"
+      ],
+      "first_event_s": 7.5
+    },
+    "walk": {
+      "events": 0,
+      "states": [
+        "upright"
+      ],
+      "first_event_s": null
+    },
+    "sit": {
+      "events": 0,
+      "states": [
+        "low_posture_unclassified",
+        "upright"
+      ],
+      "first_event_s": null
+    },
+    "occlusion": {
+      "events": 0,
+      "states": [
+        "unknown",
+        "upright"
+      ],
+      "first_event_s": null
+    },
+    "low": {
+      "events": 0,
+      "states": [
+        "low_posture_unclassified"
+      ],
+      "first_event_s": null
+    },
+    "lie_fast": {
+      "events": 1,
+      "states": [
+        "confirmed",
+        "descending",
+        "low_posture_unclassified",
+        "recovering",
+        "suspected",
+        "upright"
+      ],
+      "first_event_s": 7.5
+    }
+  },
+  "real_fall_accuracy": "NOT_RUN",
+  "settings": {
+    "descending_min_drop_m": 0.35,
+    "descending_min_rate_m_s": 0.35,
+    "low_height_m": 0.7,
+    "low_min_duration_s": 1.5,
+    "confirmed_min_low_duration_s": 3.0,
+    "recovery_fraction": 0.6,
+    "recovery_min_duration_s": 1.0,
+    "mode_verified": true,
+    "allow_confirmed": true
+  }
+}

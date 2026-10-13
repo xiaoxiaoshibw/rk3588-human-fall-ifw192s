@@ -1,0 +1,4 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path'),{createDetector}=require('./detector');const inp={...JSON.parse(fs.readFileSync(path.join(__dirname,'results/MODEL_PARITY_INPUT.json'))),...JSON.parse(fs.readFileSync(path.join(__dirname,'results/dual_MODEL_PARITY_INPUT.json')))};let worst=0;
+for(const [name,r] of Object.entries(inp)){const d=createDetector(name);assert.strictEqual(d.name,name);r.features.forEach((x,i)=>{const p=d.engine.rf.predict_person(Float32Array.from(x)),err=Math.abs(p-r.prob[i]);worst=Math.max(worst,err);assert(err<2e-6,name+':'+err);});}
+const bad=createDetector('missing_model');assert.strictEqual(bad.name,'rf51_baseline');assert(bad.fallback);fs.writeFileSync(path.join(__dirname,'results/MODEL_PARITY.json'),JSON.stringify({status:'PASS',models:Object.keys(inp),samples_per_model:200,max_abs_error:worst,fallback:'PASS'},null,2));console.log('MODEL PARITY PASS',worst);

@@ -1,0 +1,8472 @@
+{
+  "version": "hfus-bg-b-v1",
+  "schema_version": "hfus-strict-v2",
+  "index_version": "hfus-index-v1",
+  "mode": "A",
+  "reference": {
+    "source": "D:\\Code\\ldiar\\captures\\remote\\cap_20261009_113611",
+    "meta_sha": "6e1640b69075805b1e59384ccd34ea2cb064ba6dce7587706574a529cd41570c",
+    "points_sha": "7b0c5051a00ad3c8956dc5ac9342d647715225bccf8c955d07b565daa4f48d7f",
+    "frames": 203,
+    "sample_step": 4,
+    "sampled": 51,
+    "min_occ": 0.5,
+    "voxels": 3487,
+    "static_keys": 2643,
+    "coordinate": {
+      "R": [
+        0.893544,
+        0,
+        0.448975,
+        -0.014337,
+        0.99949,
+        0.028533,
+        -0.448746,
+        -0.031932,
+        0.893089
+      ],
+      "T": [
+        0,
+        0,
+        1.380286
+      ]
+    },
+    "pipe": {
+      "range_min_m": 0.35,
+      "range_max_m": 25,
+      "voxel_m": 0.15,
+      "ground_keep_below_m": 0.1,
+      "z_max_m": 2.5,
+      "bg_voxel_xy": 0.15,
+      "bg_voxel_z": 0.12,
+      "bg_hit_min_pts": 2,
+      "bg_occ_strong": 0.85,
+      "bg_occ_supported": 0.65,
+      "bg_jitter_max": 0.05,
+      "bg_neighbor_min": 2,
+      "bg_match_radius": 0.12,
+      "bg_ref_hit_min_pts": 1,
+      "bg_ref_occ_min": 0.5,
+      "cluster_min_voxels": 3,
+      "cluster_neighbor_hops": 1,
+      "human_n_min": 60,
+      "human_height_min": 0.9,
+      "human_height_max": 2.3,
+      "human_width_max": 0.7,
+      "human_radius_max": 0.45,
+      "human_upcos_min": 0.5,
+      "band_edges": [
+        0,
+        0.3,
+        0.6,
+        0.9,
+        1.2,
+        1.5,
+        1.8,
+        2.2,
+        3
+      ],
+      "ev_band_min_pts_abs": 15,
+      "ev_band_min_pts_frac": 0.04,
+      "ev_bands_min": 3,
+      "ev_spread_cv_person": 0.18,
+      "ev_spread_cv_box": 0.15,
+      "ev_aniso_box": 4,
+      "ev_aniso_box_soft": 2.5,
+      "ev_aniso_person": 3,
+      "human_confirm_window": 5,
+      "human_confirm_votes": 3,
+      "human_confirm_min_age": 3,
+      "track_gate_xy_m": 0.75,
+      "track_lost_max": 8,
+      "ema_alpha": 0.35,
+      "fall_upcos_max": 0.45,
+      "fall_height_max": 0.9,
+      "fall_sustain_frames": 10,
+      "fall_recover_frames": 5
+    },
+    "ray_coverage": "UNKNOWN",
+    "FREE_available": false,
+    "unknown_support": {
+      "kind": "observed_reference_XY_neighborhood",
+      "radius_m": 0.4,
+      "scale_source": "existing retention hot_cell_radius_m; preregistered not tuned",
+      "not_ray_FREE": true
+    }
+  },
+  "sources": [
+    {
+      "path": "sidequests/human_fusion_lab_next/background/engine_b.js",
+      "sha256": "1f6d42df3e83caf380e21ba8cd234cc1935787df3d2f8ae9bc6dca8b42c29ffc"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/background/detector_b.js",
+      "sha256": "001cf074c9047e54545fa98906bd61a7ee55be8da39a1cb9d866110825ffa031"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/background/run_b.js",
+      "sha256": "303acea56c626c1ad6eaac3d3703474307984be33632c2652ea4f230d8566284"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/contracts/index_v1.js",
+      "sha256": "dc5dd89c649c0bb2e56c836582ce510f1b78fc1039712e00ca66c15d8bfb3317"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/contracts/strict_v2.js",
+      "sha256": "7916e859334968221bad8ff0e270edcc7e57b3c190413b3af79e5d95bc6a7362"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/contracts/SCHEMA_V2.json",
+      "sha256": "da026e57512c7e182ddb0460ded20f578bd40a974a6e84609945c32c91a8d793"
+    },
+    {
+      "path": "sidequests/human_fusion_lab_next/eval/instrument.js",
+      "sha256": "cdc1ee71517bdeca78248cefb290e35094fd9141d2665e7a2b042b5717d7c18b"
+    }
+  ],
+  "node": "v24.14.0",
+  "platform": "win32",
+  "sessions": [
+    {
+      "sid": "cap_20261010_175227",
+      "activity": "S1-empty-with-furniture",
+      "frames": 304,
+      "qualified_frames": 304,
+      "gt_persons": 0,
+      "proposal": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 600
+      },
+      "accepted": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "observed_confirmed": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_accepted": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 0,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [],
+      "candidate_count": 294,
+      "performance": {
+        "diagnostic_compute_p50_ms": 86.65369999999893,
+        "diagnostic_compute_p95_ms": 105.32530000000042,
+        "diagnostic_compute_p99_ms": 125.01369999999997,
+        "heap_max_mb": 309.4580612182617,
+        "layers": {
+          "leveled": {
+            "p50": 14.432400000001508,
+            "p95": 18.818500000001222,
+            "p99": 22.704099999999926
+          },
+          "foreground": {
+            "p50": 1.7233000000014727,
+            "p95": 2.3800999999998567,
+            "p99": 3.5244000000020606
+          },
+          "cleanup": {
+            "p50": 0.2638999999999214,
+            "p95": 0.3987999999999374,
+            "p99": 0.5028999999994994
+          },
+          "retained": {
+            "p50": 1.8571999999985565,
+            "p95": 3.5191000000013446,
+            "p99": 4.309500000000298
+          },
+          "cluster": {
+            "p50": 0.26159999999799766,
+            "p95": 0.43919999999980064,
+            "p99": 0.7649999999998727
+          },
+          "classifier": {
+            "p50": 0.03349999999954889,
+            "p95": 0.04730000000017753,
+            "p99": 0.08849999999983993
+          },
+          "foreground_b": {
+            "p50": 0.11110000000007858,
+            "p95": 0.23499999999967258,
+            "p99": 0.3083999999998923
+          },
+          "cluster_b": {
+            "p50": 0.8962000000010448,
+            "p95": 1.9336999999977706,
+            "p99": 2.438000000000102
+          },
+          "classifier_b": {
+            "p50": 0.13609999999971478,
+            "p95": 0.7965999999996711,
+            "p99": 1.3530000000000655
+          },
+          "track": {
+            "p50": 0.023100000002159504,
+            "p95": 0.039099999999962165,
+            "p99": 0.09910000000127184
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_175227.jsonl",
+        "sha256": "7e5e339a231425a317177373a467e05e2bb286410035215fd2af6fc469e9a001"
+      }
+    },
+    {
+      "sid": "cap_20261010_175429",
+      "activity": "S3-walk-x-near",
+      "frames": 258,
+      "qualified_frames": 258,
+      "gt_persons": 258,
+      "proposal": {
+        "tp": 163,
+        "fp": 0,
+        "fn": 95,
+        "unmatched_unknown": 478
+      },
+      "accepted": {
+        "tp": 163,
+        "fp": 0,
+        "fn": 95,
+        "unmatched_unknown": 114
+      },
+      "observed_confirmed": {
+        "tp": 161,
+        "fp": 0,
+        "fn": 97,
+        "unmatched_unknown": 104
+      },
+      "legacy_accepted": {
+        "tp": 258,
+        "fp": 19,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 256,
+        "fp": 9,
+        "fn": 2,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 0,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [
+        {
+          "frame_index": 0,
+          "strict_fn": [
+            "obj_f0_n6"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 1,
+          "strict_fn": [
+            "obj_f1_n8"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 26,
+          "strict_fn": [
+            "obj_f26_n38"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 27,
+          "strict_fn": [
+            "obj_f27_n40"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 28,
+          "strict_fn": [
+            "obj_f28_n41"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 32,
+          "strict_fn": [
+            "obj_f32_n46"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 33,
+          "strict_fn": [
+            "obj_f33_n47"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 34,
+          "strict_fn": [
+            "obj_f34_n48"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 35,
+          "strict_fn": [
+            "obj_f35_n49"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 36,
+          "strict_fn": [
+            "obj_f36_n50"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 37,
+          "strict_fn": [
+            "obj_f37_n51"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 38,
+          "strict_fn": [
+            "obj_f38_n52"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 39,
+          "strict_fn": [
+            "obj_f39_n53"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 40,
+          "strict_fn": [
+            "obj_f40_n54"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 41,
+          "strict_fn": [
+            "obj_f41_n55"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 42,
+          "strict_fn": [
+            "obj_f42_n56"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 43,
+          "strict_fn": [
+            "obj_f43_n57"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 44,
+          "strict_fn": [
+            "obj_f44_n58"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 45,
+          "strict_fn": [
+            "obj_f45_n59"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 46,
+          "strict_fn": [
+            "obj_f46_n60"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 47,
+          "strict_fn": [
+            "obj_f47_n61"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 48,
+          "strict_fn": [
+            "obj_f48_n62"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 49,
+          "strict_fn": [
+            "obj_f49_n63"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 51,
+          "strict_fn": [
+            "obj_f51_n65"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 52,
+          "strict_fn": [
+            "obj_f52_n67"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 54,
+          "strict_fn": [
+            "obj_f54_n69"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 55,
+          "strict_fn": [
+            "obj_f55_n71"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 57,
+          "strict_fn": [
+            "obj_f57_n73"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 59,
+          "strict_fn": [
+            "obj_f59_n75"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 64,
+          "strict_fn": [
+            "obj_f64_n80"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 66,
+          "strict_fn": [
+            "obj_f66_n82"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 67,
+          "strict_fn": [
+            "obj_f67_n83"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 68,
+          "strict_fn": [
+            "obj_f68_n84"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 69,
+          "strict_fn": [
+            "obj_f69_n85"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 70,
+          "strict_fn": [
+            "obj_f70_n86"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 71,
+          "strict_fn": [
+            "obj_f71_n87"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 72,
+          "strict_fn": [
+            "obj_f72_n89"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 73,
+          "strict_fn": [
+            "obj_f73_n90"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 74,
+          "strict_fn": [
+            "obj_f74_n91"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 75,
+          "strict_fn": [
+            "obj_f75_n92"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 76,
+          "strict_fn": [
+            "obj_f76_n93"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 77,
+          "strict_fn": [
+            "obj_f77_n94"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 85,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 86,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 87,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 88,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 2,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 89,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 2,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 90,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 91,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 92,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 114,
+          "strict_fn": [
+            "obj_f114_n136"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 115,
+          "strict_fn": [
+            "obj_f115_n137"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 116,
+          "strict_fn": [
+            "obj_f116_n138"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 117,
+          "strict_fn": [
+            "obj_f117_n139"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 128,
+          "strict_fn": [
+            "obj_f128_n150"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 129,
+          "strict_fn": [
+            "obj_f129_n151"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 130,
+          "strict_fn": [
+            "obj_f130_n152"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 131,
+          "strict_fn": [
+            "obj_f131_n153"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 132,
+          "strict_fn": [
+            "obj_f132_n154"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 133,
+          "strict_fn": [
+            "obj_f133_n155"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 134,
+          "strict_fn": [
+            "obj_f134_n156"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 135,
+          "strict_fn": [
+            "obj_f135_n157"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 136,
+          "strict_fn": [
+            "obj_f136_n158"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 137,
+          "strict_fn": [
+            "obj_f137_n159"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 138,
+          "strict_fn": [
+            "obj_f138_n160"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 139,
+          "strict_fn": [
+            "obj_f139_n161"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 140,
+          "strict_fn": [
+            "obj_f140_n162"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 143,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 158,
+          "strict_fn": [
+            "obj_f158_n181"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 159,
+          "strict_fn": [
+            "obj_f159_n182"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 160,
+          "strict_fn": [
+            "obj_f160_n183"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 161,
+          "strict_fn": [
+            "obj_f161_n184"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 162,
+          "strict_fn": [
+            "obj_f162_n186"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 163,
+          "strict_fn": [
+            "obj_f163_n187"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 164,
+          "strict_fn": [
+            "obj_f164_n188"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 165,
+          "strict_fn": [
+            "obj_f165_n189"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 172,
+          "strict_fn": [
+            "obj_f172_n196"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 177,
+          "strict_fn": [
+            "obj_f177_n201"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 178,
+          "strict_fn": [
+            "obj_f178_n202"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 179,
+          "strict_fn": [
+            "obj_f179_n203"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 180,
+          "strict_fn": [
+            "obj_f180_n204"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 181,
+          "strict_fn": [
+            "obj_f181_n205"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 182,
+          "strict_fn": [
+            "obj_f182_n206"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 183,
+          "strict_fn": [
+            "obj_f183_n207"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 184,
+          "strict_fn": [
+            "obj_f184_n208"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 185,
+          "strict_fn": [
+            "obj_f185_n209"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 186,
+          "strict_fn": [
+            "obj_f186_n210"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 187,
+          "strict_fn": [
+            "obj_f187_n211"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 188,
+          "strict_fn": [
+            "obj_f188_n212"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 189,
+          "strict_fn": [
+            "obj_f189_n213"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 191,
+          "strict_fn": [
+            "obj_f191_n215"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 192,
+          "strict_fn": [
+            "obj_f192_n216"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 193,
+          "strict_fn": [
+            "obj_f193_n217"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 194,
+          "strict_fn": [
+            "obj_f194_n218"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 195,
+          "strict_fn": [
+            "obj_f195_n219"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 196,
+          "strict_fn": [
+            "obj_f196_n220"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 197,
+          "strict_fn": [
+            "obj_f197_n221"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 198,
+          "strict_fn": [
+            "obj_f198_n222"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 199,
+          "strict_fn": [
+            "obj_f199_n223"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 200,
+          "strict_fn": [
+            "obj_f200_n224"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 201,
+          "strict_fn": [
+            "obj_f201_n225"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 202,
+          "strict_fn": [
+            "obj_f202_n226"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 203,
+          "strict_fn": [
+            "obj_f203_n227"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 204,
+          "strict_fn": [
+            "obj_f204_n228"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 205,
+          "strict_fn": [
+            "obj_f205_n229"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 206,
+          "strict_fn": [
+            "obj_f206_n230"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "candidate_count": 481,
+      "performance": {
+        "diagnostic_compute_p50_ms": 99.64730000000418,
+        "diagnostic_compute_p95_ms": 131.55799999999726,
+        "diagnostic_compute_p99_ms": 160.55159999999887,
+        "heap_max_mb": 296.8724060058594,
+        "layers": {
+          "leveled": {
+            "p50": 15.424299999998766,
+            "p95": 21.584899999998015,
+            "p99": 35.69339999999647
+          },
+          "foreground": {
+            "p50": 2.150099999998929,
+            "p95": 3.241600000001199,
+            "p99": 3.907599999998638
+          },
+          "cleanup": {
+            "p50": 0.5208999999958905,
+            "p95": 0.8912000000054832,
+            "p99": 1.1363999999957741
+          },
+          "retained": {
+            "p50": 2.636500000000524,
+            "p95": 4.248599999998987,
+            "p99": 5.926100000004226
+          },
+          "cluster": {
+            "p50": 0.5126000000018394,
+            "p95": 0.8487999999997555,
+            "p99": 0.9335999999966589
+          },
+          "classifier": {
+            "p50": 0.04399999999805004,
+            "p95": 0.06979999999748543,
+            "p99": 0.10339999999996508
+          },
+          "foreground_b": {
+            "p50": 0.27089999999589054,
+            "p95": 0.458199999993667,
+            "p99": 0.9147000000011758
+          },
+          "cluster_b": {
+            "p50": 0.7738000000026659,
+            "p95": 2.2164000000047963,
+            "p99": 2.5577999999950407
+          },
+          "classifier_b": {
+            "p50": 0.15380000000004657,
+            "p95": 0.9383000000016182,
+            "p99": 1.88640000000305
+          },
+          "track": {
+            "p50": 0.03570000000036089,
+            "p95": 0.049299999998766,
+            "p99": 0.06569999999919673
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_175429.jsonl",
+        "sha256": "060f75d5d973f373ca53f24f991e84c17f1ffc87b3eee3ed109190d10bf913ac"
+      }
+    },
+    {
+      "sid": "cap_20261010_175553",
+      "activity": "S3-walk-y-far",
+      "frames": 464,
+      "qualified_frames": 99,
+      "gt_persons": 99,
+      "proposal": {
+        "tp": 38,
+        "fp": 0,
+        "fn": 61,
+        "unmatched_unknown": 310
+      },
+      "accepted": {
+        "tp": 38,
+        "fp": 0,
+        "fn": 61,
+        "unmatched_unknown": 158
+      },
+      "observed_confirmed": {
+        "tp": 36,
+        "fp": 0,
+        "fn": 63,
+        "unmatched_unknown": 154
+      },
+      "legacy_accepted": {
+        "tp": 99,
+        "fp": 97,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 97,
+        "fp": 93,
+        "fn": 2,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 365,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [
+        {
+          "frame_index": 0,
+          "strict_fn": [
+            "obj_f0_n1"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 1,
+          "strict_fn": [
+            "obj_f1_n2"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 3,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 5,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 6,
+          "strict_fn": [
+            "obj_f6_n7"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 7,
+          "strict_fn": [
+            "obj_f7_n8"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 8,
+          "strict_fn": [
+            "obj_f8_n9"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 9,
+          "strict_fn": [
+            "obj_f9_n10"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 10,
+          "strict_fn": [
+            "obj_f10_n11"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 11,
+          "strict_fn": [
+            "obj_f11_n12"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 12,
+          "strict_fn": [
+            "obj_f12_n13"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 13,
+          "strict_fn": [
+            "obj_f13_n14"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 14,
+          "strict_fn": [
+            "obj_f14_n15"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 15,
+          "strict_fn": [
+            "obj_f15_n16"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 16,
+          "strict_fn": [
+            "obj_f16_n17"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 17,
+          "strict_fn": [
+            "obj_f17_n18"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 18,
+          "strict_fn": [
+            "obj_f18_n19"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 19,
+          "strict_fn": [
+            "obj_f19_n20"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 20,
+          "strict_fn": [
+            "obj_f20_n21"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 21,
+          "strict_fn": [
+            "obj_f21_n22"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 22,
+          "strict_fn": [
+            "obj_f22_n23"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 23,
+          "strict_fn": [
+            "obj_f23_n24"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 24,
+          "strict_fn": [
+            "obj_f24_n25"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 25,
+          "strict_fn": [
+            "obj_f25_n26"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 26,
+          "strict_fn": [
+            "obj_f26_n27"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 27,
+          "strict_fn": [
+            "obj_f27_n28"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 28,
+          "strict_fn": [
+            "obj_f28_n29"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 29,
+          "strict_fn": [
+            "obj_f29_n30"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 30,
+          "strict_fn": [
+            "obj_f30_n31"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 31,
+          "strict_fn": [
+            "obj_f31_n32"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 32,
+          "strict_fn": [
+            "obj_f32_n33"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 33,
+          "strict_fn": [
+            "obj_f33_n34"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 34,
+          "strict_fn": [
+            "obj_f34_n35"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 35,
+          "strict_fn": [
+            "obj_f35_n36"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 36,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 37,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 38,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 39,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 40,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 41,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 42,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 43,
+          "strict_fn": [
+            "obj_f43_n44"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 44,
+          "strict_fn": [
+            "obj_f44_n45"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 45,
+          "strict_fn": [
+            "obj_f45_n46"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 46,
+          "strict_fn": [
+            "obj_f46_n47"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 47,
+          "strict_fn": [
+            "obj_f47_n48"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 48,
+          "strict_fn": [
+            "obj_f48_n49"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 49,
+          "strict_fn": [
+            "obj_f49_n50"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 50,
+          "strict_fn": [
+            "obj_f50_n51"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 51,
+          "strict_fn": [
+            "obj_f51_n52"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 52,
+          "strict_fn": [
+            "obj_f52_n53"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 53,
+          "strict_fn": [
+            "obj_f53_n54"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 54,
+          "strict_fn": [
+            "obj_f54_n55"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 55,
+          "strict_fn": [
+            "obj_f55_n56"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 56,
+          "strict_fn": [
+            "obj_f56_n57"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 57,
+          "strict_fn": [
+            "obj_f57_n58"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 58,
+          "strict_fn": [
+            "obj_f58_n59"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 59,
+          "strict_fn": [
+            "obj_f59_n60"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 60,
+          "strict_fn": [
+            "obj_f60_n61"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 61,
+          "strict_fn": [
+            "obj_f61_n62"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 62,
+          "strict_fn": [
+            "obj_f62_n63"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 63,
+          "strict_fn": [
+            "obj_f63_n64"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 64,
+          "strict_fn": [
+            "obj_f64_n65"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 65,
+          "strict_fn": [
+            "obj_f65_n66"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 66,
+          "strict_fn": [
+            "obj_f66_n67"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 67,
+          "strict_fn": [
+            "obj_f67_n68"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 68,
+          "strict_fn": [
+            "obj_f68_n69"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 69,
+          "strict_fn": [
+            "obj_f69_n70"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 70,
+          "strict_fn": [
+            "obj_f70_n71"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 71,
+          "strict_fn": [
+            "obj_f71_n72"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 72,
+          "strict_fn": [
+            "obj_f72_n73"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 73,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 74,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 75,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 77,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 78,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 79,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 2,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 80,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 81,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 82,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 116,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 141,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 166,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 191,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 216,
+          "strict_fn": [
+            "obj_f216_n89"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 241,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 242,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 267,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 292,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 317,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 342,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 367,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 392,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 417,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 442,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 463,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "candidate_count": 1377,
+      "performance": {
+        "diagnostic_compute_p50_ms": 102.99890000000596,
+        "diagnostic_compute_p95_ms": 144.05950000000303,
+        "diagnostic_compute_p99_ms": 172.23949999999604,
+        "heap_max_mb": 316.6609649658203,
+        "layers": {
+          "leveled": {
+            "p50": 14.996199999994133,
+            "p95": 19.673900000001595,
+            "p99": 30.555099999997765
+          },
+          "foreground": {
+            "p50": 2.144700000004377,
+            "p95": 3.424399999988964,
+            "p99": 6.033100000000559
+          },
+          "cleanup": {
+            "p50": 0.7394999999960419,
+            "p95": 2.1550999999963096,
+            "p99": 3.1763999999966472
+          },
+          "retained": {
+            "p50": 3.133300000001327,
+            "p95": 6.994600000005448,
+            "p99": 9.232000000003609
+          },
+          "cluster": {
+            "p50": 0.7436999999918044,
+            "p95": 1.8919999999925494,
+            "p99": 2.4939999999915017
+          },
+          "classifier": {
+            "p50": 0.04069999999774154,
+            "p95": 0.060800000006565824,
+            "p99": 0.10099999999511056
+          },
+          "foreground_b": {
+            "p50": 0.41249999999126885,
+            "p95": 1.5553000000072643,
+            "p99": 2.630199999999604
+          },
+          "cluster_b": {
+            "p50": 0.7841000000044005,
+            "p95": 1.8931000000011409,
+            "p99": 2.606599999999162
+          },
+          "classifier_b": {
+            "p50": 0.21590000001015142,
+            "p95": 0.8834999999962747,
+            "p99": 1.5102000000042608
+          },
+          "track": {
+            "p50": 0.029499999989639036,
+            "p95": 0.05059999998775311,
+            "p99": 0.08509999999660067
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_175553.jsonl",
+        "sha256": "a25164074374eaacea0cb5b7fa460e2fc86c0a431a71c8e0409c7f6147cafad1"
+      }
+    },
+    {
+      "sid": "cap_20261010_175804",
+      "activity": "S4-walk-stop-walk",
+      "frames": 239,
+      "qualified_frames": 11,
+      "gt_persons": 11,
+      "proposal": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 4,
+        "unmatched_unknown": 32
+      },
+      "accepted": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 4,
+        "unmatched_unknown": 13
+      },
+      "observed_confirmed": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 5,
+        "unmatched_unknown": 12
+      },
+      "legacy_accepted": {
+        "tp": 11,
+        "fp": 9,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 10,
+        "fp": 8,
+        "fn": 1,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 228,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [
+        {
+          "frame_index": 0,
+          "strict_fn": [
+            "obj_f0_n1"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 25,
+          "strict_fn": [
+            "obj_f25_n2"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 50,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 75,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 100,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 125,
+          "strict_fn": [
+            "obj_f125_n6"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 150,
+          "strict_fn": [
+            "obj_f150_n7"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 175,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 200,
+          "strict_fn": [
+            "obj_f200_n9"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 225,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 238,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "candidate_count": 672,
+      "performance": {
+        "diagnostic_compute_p50_ms": 96.45309999999881,
+        "diagnostic_compute_p95_ms": 119.36179999999877,
+        "diagnostic_compute_p99_ms": 132.14190000000235,
+        "heap_max_mb": 300.7845916748047,
+        "layers": {
+          "leveled": {
+            "p50": 14.80899999999383,
+            "p95": 18.54559999999765,
+            "p99": 21.496200000008685
+          },
+          "foreground": {
+            "p50": 2.0865000000048894,
+            "p95": 2.966899999999441,
+            "p99": 3.9103999999933876
+          },
+          "cleanup": {
+            "p50": 0.5415999999968335,
+            "p95": 0.8056999999971595,
+            "p99": 1.1566000000020722
+          },
+          "retained": {
+            "p50": 2.739900000015041,
+            "p95": 3.986299999989569,
+            "p99": 4.553799999994226
+          },
+          "cluster": {
+            "p50": 0.6429000000061933,
+            "p95": 1.024699999994482,
+            "p99": 1.2932000000000698
+          },
+          "classifier": {
+            "p50": 0.04700000000593718,
+            "p95": 0.06660000000556465,
+            "p99": 0.1103000000002794
+          },
+          "foreground_b": {
+            "p50": 0.36139999999431893,
+            "p95": 0.53519999999844,
+            "p99": 0.7397000000055414
+          },
+          "cluster_b": {
+            "p50": 0.7394999999960419,
+            "p95": 1.9763000000093598,
+            "p99": 2.3478999999933876
+          },
+          "classifier_b": {
+            "p50": 0.14629999999306165,
+            "p95": 0.8214000000007218,
+            "p99": 1.396099999998114
+          },
+          "track": {
+            "p50": 0.038199999995413236,
+            "p95": 0.06300000000919681,
+            "p99": 0.09059999999590218
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_175804.jsonl",
+        "sha256": "032dec0aba62f630b4797c37f222565e36f9ff07d2c23a94134ccf8d067c1e62"
+      }
+    },
+    {
+      "sid": "cap_20261010_175943",
+      "activity": "S5-turn-in-place",
+      "frames": 202,
+      "qualified_frames": 6,
+      "gt_persons": 6,
+      "proposal": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 6
+      },
+      "accepted": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "observed_confirmed": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 1,
+        "unmatched_unknown": 0
+      },
+      "legacy_accepted": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 1,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 196,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [
+        {
+          "frame_index": 0,
+          "strict_fn": [
+            "obj_f0_n1"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        }
+      ],
+      "candidate_count": 357,
+      "performance": {
+        "diagnostic_compute_p50_ms": 93.4159000000218,
+        "diagnostic_compute_p95_ms": 104.51089999999385,
+        "diagnostic_compute_p99_ms": 113.34909999999218,
+        "heap_max_mb": 314.27305603027344,
+        "layers": {
+          "leveled": {
+            "p50": 14.24790000001667,
+            "p95": 16.169499999989057,
+            "p99": 17.81020000000717
+          },
+          "foreground": {
+            "p50": 2.0006999999750406,
+            "p95": 3.1114999999990687,
+            "p99": 3.8466999999945983
+          },
+          "cleanup": {
+            "p50": 0.5770000000193249,
+            "p95": 0.734599999996135,
+            "p99": 1.8320999999996275
+          },
+          "retained": {
+            "p50": 2.5530000000144355,
+            "p95": 3.6094000000157394,
+            "p99": 4.2185000000172295
+          },
+          "cluster": {
+            "p50": 0.5772999999753665,
+            "p95": 0.7148999999917578,
+            "p99": 0.8687999999965541
+          },
+          "classifier": {
+            "p50": 0.04409999999916181,
+            "p95": 0.0597999999881722,
+            "p99": 0.11360000001150183
+          },
+          "foreground_b": {
+            "p50": 0.3065999999816995,
+            "p95": 0.3947000000043772,
+            "p99": 0.5233000000007451
+          },
+          "cluster_b": {
+            "p50": 0.7385000000067521,
+            "p95": 2.0130999999819323,
+            "p99": 2.4140000000188593
+          },
+          "classifier_b": {
+            "p50": 0.0004999999946448952,
+            "p95": 0.733700000011595,
+            "p99": 1.1155999999900814
+          },
+          "track": {
+            "p50": 0.02350000001024455,
+            "p95": 0.028800000000046566,
+            "p99": 0.07630000001518056
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_175943.jsonl",
+        "sha256": "6cf95bbd9a8452ff8f0f2e2f950d8d648c68dc8476741f901eccd3222a757583"
+      }
+    },
+    {
+      "sid": "cap_20261010_180235",
+      "activity": "S6-occlusion",
+      "frames": 238,
+      "qualified_frames": 71,
+      "gt_persons": 71,
+      "proposal": {
+        "tp": 47,
+        "fp": 0,
+        "fn": 24,
+        "unmatched_unknown": 159
+      },
+      "accepted": {
+        "tp": 47,
+        "fp": 0,
+        "fn": 24,
+        "unmatched_unknown": 19
+      },
+      "observed_confirmed": {
+        "tp": 45,
+        "fp": 0,
+        "fn": 26,
+        "unmatched_unknown": 17
+      },
+      "legacy_accepted": {
+        "tp": 65,
+        "fp": 1,
+        "fn": 6,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 61,
+        "fp": 1,
+        "fn": 10,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 167,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [
+        {
+          "frame_index": 0,
+          "strict_fn": [
+            "obj_f0_n1"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 60,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 115,
+          "strict_fn": [
+            "obj_f115_n24"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 116,
+          "strict_fn": [
+            "obj_f116_n25"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 117,
+          "strict_fn": [
+            "obj_f117_n26"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 118,
+          "strict_fn": [
+            "obj_f118_n27"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 119,
+          "strict_fn": [
+            "obj_f119_n28"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 120,
+          "strict_fn": [
+            "obj_f120_n29"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 121,
+          "strict_fn": [
+            "obj_f121_n30"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 122,
+          "strict_fn": [
+            "obj_f122_n31"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 123,
+          "strict_fn": [
+            "obj_f123_n32"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 124,
+          "strict_fn": [
+            "obj_f124_n33"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 125,
+          "strict_fn": [
+            "obj_f125_n34"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 126,
+          "strict_fn": [
+            "obj_f126_n35"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 127,
+          "strict_fn": [
+            "obj_f127_n36"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 128,
+          "strict_fn": [
+            "obj_f128_n37"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 129,
+          "strict_fn": [
+            "obj_f129_n38"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 130,
+          "strict_fn": [
+            "obj_f130_n39"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 171,
+          "strict_fn": [
+            "obj_f171_n40"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 172,
+          "strict_fn": [
+            "obj_f172_n41"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 173,
+          "strict_fn": [
+            "obj_f173_n42"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 174,
+          "strict_fn": [
+            "obj_f174_n43"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 175,
+          "strict_fn": [
+            "obj_f175_n44"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 176,
+          "strict_fn": [
+            "obj_f176_n45"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "frame_index": 187,
+          "strict_fn": [
+            "obj_f187_n46"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 188,
+          "strict_fn": [
+            "obj_f188_n47"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 192,
+          "strict_fn": [
+            "obj_f192_n48"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        }
+      ],
+      "candidate_count": 496,
+      "performance": {
+        "diagnostic_compute_p50_ms": 88.25190000000293,
+        "diagnostic_compute_p95_ms": 115.38550000000396,
+        "diagnostic_compute_p99_ms": 122.93659999998636,
+        "heap_max_mb": 316.66841888427734,
+        "layers": {
+          "leveled": {
+            "p50": 14.377299999992829,
+            "p95": 19.019200000009732,
+            "p99": 21.49240000001737
+          },
+          "foreground": {
+            "p50": 1.9298999999882653,
+            "p95": 2.9852000000246335,
+            "p99": 3.8306999999913387
+          },
+          "cleanup": {
+            "p50": 0.2973000000056345,
+            "p95": 0.7174999999988358,
+            "p99": 0.9531000000133645
+          },
+          "retained": {
+            "p50": 1.9949999999953434,
+            "p95": 3.4728999999933876,
+            "p99": 5.4306999999971595
+          },
+          "cluster": {
+            "p50": 0.3496000000159256,
+            "p95": 0.7255000000004657,
+            "p99": 0.9184999999997672
+          },
+          "classifier": {
+            "p50": 0.04150000002118759,
+            "p95": 0.0595000000030268,
+            "p99": 0.08460000000195578
+          },
+          "foreground_b": {
+            "p50": 0.14729999998235144,
+            "p95": 0.4210000000020955,
+            "p99": 0.5566999999864493
+          },
+          "cluster_b": {
+            "p50": 0.7822999999916647,
+            "p95": 1.9829999999783468,
+            "p99": 2.4267000000108965
+          },
+          "classifier_b": {
+            "p50": 0.11899999997694977,
+            "p95": 0.7260999999998603,
+            "p99": 0.9061999999976251
+          },
+          "track": {
+            "p50": 0.023399999976390973,
+            "p95": 0.03500000000349246,
+            "p99": 0.05499999999301508
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_180235.jsonl",
+        "sha256": "51deeceddee05d47a16fbd3ffd3fa709cb156b19d1a94f76b577b6cf5af76e5a"
+      }
+    },
+    {
+      "sid": "cap_20261010_180337",
+      "activity": "S7-far-5m",
+      "frames": 251,
+      "qualified_frames": 12,
+      "gt_persons": 12,
+      "proposal": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 1,
+        "unmatched_unknown": 22
+      },
+      "accepted": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 1,
+        "unmatched_unknown": 2
+      },
+      "observed_confirmed": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 1,
+        "unmatched_unknown": 1
+      },
+      "legacy_accepted": {
+        "tp": 12,
+        "fp": 1,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 11,
+        "fp": 1,
+        "fn": 1,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 239,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [
+        {
+          "frame_index": 0,
+          "strict_fn": [
+            "obj_f0_n1"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 200,
+          "strict_fn": [],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 1,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "candidate_count": 517,
+      "performance": {
+        "diagnostic_compute_p50_ms": 98.74850000001607,
+        "diagnostic_compute_p95_ms": 131.78939999997965,
+        "diagnostic_compute_p99_ms": 144.7858000000124,
+        "heap_max_mb": 310.6342010498047,
+        "layers": {
+          "leveled": {
+            "p50": 15.604800000000978,
+            "p95": 22.037799999990966,
+            "p99": 25.312999999994645
+          },
+          "foreground": {
+            "p50": 2.192399999999907,
+            "p95": 3.3255000000062864,
+            "p99": 3.892999999981839
+          },
+          "cleanup": {
+            "p50": 0.48849999997764826,
+            "p95": 1.7031999999890104,
+            "p99": 2.3500999999814667
+          },
+          "retained": {
+            "p50": 2.6054000000003725,
+            "p95": 5.146100000012666,
+            "p99": 6.016800000012154
+          },
+          "cluster": {
+            "p50": 0.5150999999896158,
+            "p95": 1.2568000000028405,
+            "p99": 1.6839000000036322
+          },
+          "classifier": {
+            "p50": 0.04370000000926666,
+            "p95": 0.06270000000949949,
+            "p99": 0.11249999998835847
+          },
+          "foreground_b": {
+            "p50": 0.24410000001080334,
+            "p95": 0.9290000000037253,
+            "p99": 1.1890999999886844
+          },
+          "cluster_b": {
+            "p50": 0.7277999999932945,
+            "p95": 2.023700000019744,
+            "p99": 2.6463000000221655
+          },
+          "classifier_b": {
+            "p50": 0.1371999999973923,
+            "p95": 0.7851000000082422,
+            "p99": 1.1337000000057742
+          },
+          "track": {
+            "p50": 0.024800000013783574,
+            "p95": 0.038299999985611066,
+            "p99": 0.06669999999576248
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_180337.jsonl",
+        "sha256": "7f5dc800a779df9fe0ced4ae29e5fb998343eccf7b49df35a9d858a21e411552"
+      }
+    },
+    {
+      "sid": "cap_20261010_180557",
+      "activity": "S8-still-retention-long",
+      "frames": 523,
+      "qualified_frames": 53,
+      "gt_persons": 53,
+      "proposal": {
+        "tp": 53,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 53
+      },
+      "accepted": {
+        "tp": 53,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "observed_confirmed": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 2,
+        "unmatched_unknown": 0
+      },
+      "legacy_accepted": {
+        "tp": 53,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 2,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 470,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [
+        {
+          "frame_index": 0,
+          "strict_fn": [
+            "obj_f0_n17"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        },
+        {
+          "frame_index": 1,
+          "strict_fn": [
+            "obj_f1_n18"
+          ],
+          "strict_fp": [],
+          "legacy": {
+            "accepted": {
+              "tp": 1,
+              "fn": 0,
+              "fp": 0,
+              "pairs": [
+                [
+                  0,
+                  0
+                ]
+              ]
+            },
+            "confirmed": {
+              "tp": 0,
+              "fn": 1,
+              "fp": 0,
+              "pairs": []
+            }
+          }
+        }
+      ],
+      "candidate_count": 831,
+      "performance": {
+        "diagnostic_compute_p50_ms": 103.14949999999953,
+        "diagnostic_compute_p95_ms": 132.3699000000197,
+        "diagnostic_compute_p99_ms": 169.601800000004,
+        "heap_max_mb": 354.8139190673828,
+        "layers": {
+          "leveled": {
+            "p50": 16.248999999981606,
+            "p95": 22.390299999999115,
+            "p99": 27.72829999998794
+          },
+          "foreground": {
+            "p50": 2.2203999999910593,
+            "p95": 3.426800000015646,
+            "p99": 4.4539999999979045
+          },
+          "cleanup": {
+            "p50": 0.5034000000159722,
+            "p95": 0.7853999999933876,
+            "p99": 1.5623999999952503
+          },
+          "retained": {
+            "p50": 2.654100000014296,
+            "p95": 4.135299999994459,
+            "p99": 4.877500000002328
+          },
+          "cluster": {
+            "p50": 0.5084999999962747,
+            "p95": 0.8120000000053551,
+            "p99": 0.9537000000127591
+          },
+          "classifier": {
+            "p50": 0.03800000000046566,
+            "p95": 0.060599999997066334,
+            "p99": 0.09429999999701977
+          },
+          "foreground_b": {
+            "p50": 0.2545000000100117,
+            "p95": 0.3934000000008382,
+            "p99": 0.6784999999799766
+          },
+          "cluster_b": {
+            "p50": 0.856900000013411,
+            "p95": 2.3646999999764375,
+            "p99": 3.0499000000127126
+          },
+          "classifier_b": {
+            "p50": 0.0005999999993946403,
+            "p95": 0.9342999999935273,
+            "p99": 1.1753000000026077
+          },
+          "track": {
+            "p50": 0.02469999997993,
+            "p95": 0.04020000001764856,
+            "p99": 0.055699999997159466
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_180557.jsonl",
+        "sha256": "9f2c40819d33473dbea549bea5130867bb11bf9b1417703526fc274a45f489d2"
+      }
+    },
+    {
+      "sid": "cap_20261010_180751",
+      "activity": "S9-two-person-cross",
+      "frames": 126,
+      "qualified_frames": 0,
+      "gt_persons": 0,
+      "proposal": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "accepted": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "observed_confirmed": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_accepted": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "legacy_confirmed": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "unmatched_unknown": 0
+      },
+      "unknown_frames": 126,
+      "duplicate_ids": 0,
+      "bare_b_points": 0,
+      "chain_b_points": 0,
+      "unsupported_UNKNOWN_points": 0,
+      "failures": [],
+      "candidate_count": 338,
+      "performance": {
+        "diagnostic_compute_p50_ms": 103.73009999998612,
+        "diagnostic_compute_p95_ms": 119.89429999998538,
+        "diagnostic_compute_p99_ms": 135.140699999989,
+        "heap_max_mb": 302.6481018066406,
+        "layers": {
+          "leveled": {
+            "p50": 15.28479999996489,
+            "p95": 17.908800000033807,
+            "p99": 20.161699999996927
+          },
+          "foreground": {
+            "p50": 2.2832000000053085,
+            "p95": 3.501700000022538,
+            "p99": 16.291199999977835
+          },
+          "cleanup": {
+            "p50": 1.0278999999864027,
+            "p95": 1.5168999999877997,
+            "p99": 2.4954000000143424
+          },
+          "retained": {
+            "p50": 3.7863999999826774,
+            "p95": 5.333900000026915,
+            "p99": 6.1362000000081025
+          },
+          "cluster": {
+            "p50": 0.8861999999498948,
+            "p95": 1.2137999999686144,
+            "p99": 2.296799999952782
+          },
+          "classifier": {
+            "p50": 0.043999999994412065,
+            "p95": 0.05859999998938292,
+            "p99": 0.0893999999971129
+          },
+          "foreground_b": {
+            "p50": 0.6061000000336207,
+            "p95": 0.980100000044331,
+            "p99": 1.1907999999821186
+          },
+          "cluster_b": {
+            "p50": 0.9047000000136904,
+            "p95": 1.968700000026729,
+            "p99": 2.2457000000285916
+          },
+          "classifier_b": {
+            "p50": 0.14459999999962747,
+            "p95": 0.7397999999811873,
+            "p99": 0.8954999999841675
+          },
+          "track": {
+            "p50": 0.026200000022072345,
+            "p95": 0.03580000001238659,
+            "p99": 0.07689999998547137
+          }
+        },
+        "scope": "includes ledger shadow instrumentation; excludes read/render; cold first5 excluded"
+      },
+      "ledger": {
+        "path": "docs\\human_capture\\evidence\\2026-10-11_hfus_d03_r1\\A_cap_20261010_180751.jsonl",
+        "sha256": "d208e98fd9c21f678d78d3ca66c49d99d6274b62dde2219b6c71fd4a708c4b63"
+      }
+    }
+  ],
+  "interpretation": "nine observed sessions development regression; partial GT unmatched UNKNOWN strict; legacy FP only protocol unmatched count; no identity/negative qualification; engine gates/model/tracker frozen"
+}

@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>HFUS-D04 Demo · 旧A/B vs 新变体同帧对比</title>
+<style>
+  html,body{margin:0;padding:0;font-family:"Segoe UI","Microsoft YaHei",sans-serif;background:#0f1115;color:#dbe2ee;font-size:13px}
+  header{padding:8px 12px;background:#161a22;border-bottom:1px solid #2a2f3a;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  header h1{font-size:14px;margin:0;font-weight:600}
+  main{display:flex;height:calc(100vh - 48px)}
+  .pane{flex:1;display:flex;flex-direction:column;border-right:1px solid #2a2f3a;min-width:0}
+  .pane:last-child{border-right:none}
+  .pane .ph{padding:4px 8px;background:#161a22;border-bottom:1px solid #2a2f3a;font-weight:600;display:flex;justify-content:space-between}
+  .pane .pv{flex:1;position:relative;overflow:auto;background:#1a1e27}
+  svg{display:block;width:100%;height:auto}
+  #sidebar{width:340px;background:#13161d;border-right:1px solid #2a2f3a;padding:8px;overflow-y:auto;flex-shrink:0}
+  .row{margin-bottom:6px}
+  .row label{display:block;font-size:11px;color:#9aa4b8;margin-bottom:2px}
+  input[type=file]{width:100%;font-size:12px}
+  select,button,input[type=text]{background:#1a1e27;color:#dbe2ee;border:1px solid #2a2f3a;border-radius:3px;padding:4px 6px;font-size:12px}
+  button{cursor:pointer}
+  button:hover{background:#232936}
+  button.primary{background:#2d6ce0;border-color:#2d6ce0;color:#fff}
+  button.primary:hover{background:#3a78e8}
+  .stats{background:#1a1e27;border:1px solid #2a2f3a;border-radius:3px;padding:6px;font-size:11px;line-height:1.5;margin-top:6px;white-space:pre-wrap}
+  .kv{display:grid;grid-template-columns:110px 1fr;gap:2px 8px;font-size:11px}
+  .kv div:nth-child(odd){color:#9aa4b8}
+  .muted{color:#9aa4b8;font-size:11px}
+  .err{color:#ff7070}
+  .ok{color:#5ed492}
+  .ql{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
+  .ql button{font-size:11px;padding:2px 6px}
+  .hl{outline:2px solid #e0a52d}
+  #failList{max-height:80px;overflow-y:auto;background:#1a1e27;border:1px solid #2a2f3a;padding:4px;font-size:11px}
+  #failList div{cursor:pointer;padding:1px 4px;border-radius:2px}
+  #failList div:hover{background:#2a2f3a}
+  #failList div.cur{background:#2d6ce0;color:#fff}
+  .legend{font-size:11px;color:#9aa4b8;padding:4px 0}
+  .legend span{display:inline-block;margin-right:10px}
+  .sw{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:4px}
+  #manualPane{margin-top:6px;background:#1a1e27;border:1px solid #2a2f3a;padding:6px;border-radius:3px}
+  #manualPane h3{margin:0 0 4px;font-size:12px}
+  #manualOut{font-size:11px;white-space:pre-wrap;background:#0d1016;padding:4px;border-radius:3px;max-height:100px;overflow-y:auto;display:none}
+  details{margin-top:6px}
+  summary{cursor:pointer;font-size:11px;color:#9aa4b8}
+</style>
+</head>
+<body>
+<header>
+  <h1>HFUS-D04 Demo (BASELINE_D04 冻结)</h1>
+  <span class="muted">旧 A(紫) / 旧 B(紫) 对比 新变体(橙) · GT人(红) · GT家具(粉) · GT未知(灰) · 绿色=变体已接受</span>
+</header>
+<main>
+  <div id="sidebar">
+    <div id="autoInputs">
+    <div class="row">
+      <label>1) D04 证据根目录 (含 MANIFEST_DEMO.json 或 runs/&lt;variant&gt;/&lt;mode&gt;_cap_*.jsonl)</label>
+      <input id="d04dir" type="file" webkitdirectory directory multiple>
+    </div>
+    <div class="row">
+      <label>2) D03 证据根目录 (含 A_cap_*.jsonl / B_cap_*.jsonl 对照)</label>
+      <input id="d03dir" type="file" webkitdirectory directory multiple>
+    </div>
+    <div class="row">
+      <label>3) captures/remote 目录 (每个 sid 子目录里的 meta.json + points.bin)</label>
+      <input id="capdir" type="file" webkitdirectory directory multiple>
+    </div>
+    </div>
+    <div id="dirStats" class="stats">尚未选择目录</div>
+    <hr style="border-color:#2a2f3a">
+    <div class="row">
+      <label>会话 (sid)</label>
+      <select id="sidSel"></select>
+    </div>
+    <div class="row">
+      <label>当前查看变体 (D04 侧)</label>
+      <select id="variantSel"></select>
+    </div>
+    <div class="row">
+      <label>Frame (共 <span id="fc">0</span> 帧)</label>
+      <input id="frameSlider" type="range" min="0" max="0" value="0" style="width:100%">
+      <div style="display:flex;gap:4px;margin-top:2px">
+        <select id="frameSel" style="flex:1"></select>
+        <button id="btnPrev">&lt;</button>
+        <button id="btnNext">&gt;</button>
+        <button id="btnPlay">播放</button>
+      </div>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" id="ckFailOnly"> 只列当前变体的失败帧</label>
+      <div class="ql">
+        <button id="btnFail" class="primary">跳到当前变体下一失败帧</button>
+        <button id="btnFailA">跳到对照 A 下一失败帧</button>
+        <button id="btnFailB">跳到对照 B 下一失败帧</button>
+      </div>
+      <div id="failList"><div class="muted">加载会话后在此列出失败帧</div></div>
+    </div>
+    <details>
+      <summary>渲染选项</summary>
+      <div class="row" style="margin-top:4px">
+        <label><input type="checkbox" id="ckFull" checked> 画背景全部点(抽样至 ≤6000/帧/图)</label>
+        <label><input type="checkbox" id="ckLayers" checked> 右侧以手可点候选 (点击候选把点集加入复核框)</label>
+      </div>
+    </details>
+    <div id="manifestInfo" class="stats muted">MANIFEST_DEMO.json 未加载</div>
+    <div id="ledgerStats" class="stats">ledger 未加载</div>
+    <div id="manualPane">
+      <h3>人工复核 DRAFT 导出</h3>
+      <div class="muted">点击右侧候选Point集合 → 加入左侧已选；或点已选条目移除。</div>
+      <div id="selList" class="ql"></div>
+      <div class="row">
+        <label>Label</label>
+        <select id="lblSel" style="width:100%">
+          <option>PERSON</option><option>FURNITURE</option><option>UNKNOWN</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Identity (轨道 id，可留空)</label>
+        <input id="identInput" type="text" placeholder="P1 / 留空" style="width:100%">
+      </div>
+      <div class="row">
+        <button id="btnExport" class="primary" style="width:100%">下载 D04_&lt;variant&gt;_MANUAL_DRAFT_f&lt;idx&gt;.json</button>
+      </div>
+      <div id="manualOut"></div>
+    </div>
+  </div>
+  <div class="pane">
+    <div class="ph"><span>左:GT (灰点=背景, 红=person, 粉=家具, 蓝点=同帧变体候选)</span><span id="lMeta"></span></div>
+    <div class="pv" id="paneGT"></div>
+  </div>
+  <div class="pane">
+    <div class="ph"><span>中:旧 A (紫=候选Points 灰=背景, 绿=本变体Accepted overlay)</span><span id="mMeta"></span></div>
+    <div class="pv" id="paneA"></div>
+  </div>
+  <div class="pane">
+    <div class="ph"><span>右:旧 B (规则同 A)</span><span id="rMeta"></span></div>
+    <div class="pv" id="paneB"></div>
+  </div>
+</main>
+<script>
+'use strict';
+// ==============================================================
+// HFUS-D04 一键 Demo: 旧 A/B vs 新变体 同帧对比 + 失败跳转 + 人工复核导出
+// 设计: 纯 file:// / python -m http.server 可用；不依赖 Node server。
+// 数据流:
+//   D04 证据根 → MANIFEST_DEMO.json(可选) + runs/<variant>/<mode>_cap_<sid>.jsonl
+//   D03 证据根 → A_cap_<sid>.jsonl / B_cap_<sid>.jsonl
+//   captures/remote/<sid>/{meta.json,points.bin} → 根据 frame 切片读出逐点 xyz
+// ==============================================================
+
+const QS = new URLSearchParams(location.search);
+const AUTO = QS.get('AUTO') === '1';   // 一键 bat 模式: 走 HTTP API, 不用选目录
+
+const S = {
+  // file:// 模式 (旧) — AUTO 模式下保持为空
+  d04Ledger: new Map(),  // variant -> Map(sid -> array of ledger row)
+  d03Ledger: {A:new Map(),B:new Map()}, // mode -> Map(sid -> rows)
+  manifest: null,
+  captures: new Map(),   // sid -> {meta, pointsFile}
+
+  curSid: null, curVariant: null, curFrameIdx: 0,
+  frameIndexList: [],
+  variants: [],
+  sel: {
+    // 加入人工复核框的点集
+    points: new Set(),  // raw indices into session frame
+    sourceList: [],     // [{kind, id, n}]
+  },
+  playTimer:null,
+  dirStats: {d04:null, d03:null, cap:null}, // 自诊断: 每个输入扫到的文件/命中数
+
+  // AUTO 模式专用: 按需缓存
+  auto: {
+    framesIndex: new Map(),    // sid -> sorted [fi,...]   (跨 variant 并集, 但下拉只列 sid; 每 variant 内部可能少几帧)
+    rowCache: new Map(),       // (vkey|sid|fi) -> row 对象 (vkey 也包括 'A'/'B' 走 D03)
+    capMeta: new Map(),        // sid -> meta 对象
+    pendingRow: new Map(),     // 在飞的 fetch, 避免重复请求
+    pendingMeta: new Map(),
+  },
+};
+
+// ---------------- AUTO 模式: 通过 fetch 按需取 ----------------
+async function autoFetchJson(url){
+  const r = await fetch(url);
+  if(!r.ok) return null;
+  return await r.json();
+}
+async function autoGetRow(vkey, sid, fi){
+  const key = `${vkey}|${sid}|${fi}`;
+  const cache = S.auto.rowCache;
+  if(cache.has(key)) return cache.get(key);
+  if(S.auto.pendingRow.has(key)) return await S.auto.pendingRow.get(key);
+  const p = (async ()=>{
+    const q = await autoFetchJson(`/api/ledger?variant=${encodeURIComponent(vkey)}&sid=${encodeURIComponent(sid)}&fi=${fi}`);
+    cache.set(key, q);
+    S.auto.pendingRow.delete(key);
+    return q;
+  })();
+  S.auto.pendingRow.set(key, p);
+  return await p;
+}
+async function autoGetCaptureMeta(sid){
+  if(S.auto.capMeta.has(sid)) return S.auto.capMeta.get(sid);
+  if(S.auto.pendingMeta.has(sid)) return await S.auto.pendingMeta.get(sid);
+  const p = (async ()=>{
+    const m = await autoFetchJson(`/api/capture_meta?sid=${encodeURIComponent(sid)}`);
+    S.auto.capMeta.set(sid, m);
+    S.auto.pendingMeta.delete(sid);
+    return m;
+  })();
+  S.auto.pendingMeta.set(sid, p);
+  return await p;
+}
+// 统一异步接口: 取一帧 ledger row (AUTO 走 fetch, file:// 走 Map)
+async function getRow(vkey, sid, fi){
+  if(AUTO) return await autoGetRow(vkey, sid, fi);
+  // file://: 从内存 Map 走 (frame 对齐)
+  const rows = (vkey==='A') ? S.d03Ledger.A.get(sid) :
+               (vkey==='B') ? S.d03Ledger.B.get(sid) :
+               S.d04Ledger.get(vkey) && S.d04Ledger.get(vkey).get(sid);
+  return rowAt(rows, fi);
+}
+async function getCaptureMeta(sid){
+  if(AUTO) return await autoGetCaptureMeta(sid);
+  const c = S.captures.get(sid);
+  return c && c.meta ? c.meta : null;
+}
+async function getFramePoints(sid, fi){
+  if(AUTO){
+    const meta = await getCaptureMeta(sid);
+    if(!meta) return null;
+    const frames = meta.frames || [];
+    const fr = frames[fi];
+    if(!fr) return null;
+    const stride = meta.point_stride_bytes || (meta.point_layout && meta.point_layout.stride_bytes) || 28;
+    const start = fr.offset_points * stride;
+    const len = fr.count_points * stride;
+    // HTTP Range 切片
+    const r = await fetch(`/points/${encodeURIComponent(sid)}`, {headers:{Range:`bytes=${start}-${start+len-1}`}});
+    if(!r.ok) return null;
+    const buf = await r.arrayBuffer();
+    const dv = new DataView(buf);
+    const n = fr.count_points;
+    const pts = new Float32Array(n*4);
+    for(let i=0;i<n;i++){
+      const o = i*stride;
+      pts[i*4+0]=dv.getFloat32(o+0,true);
+      pts[i*4+1]=dv.getFloat32(o+4,true);
+      pts[i*4+2]=dv.getFloat32(o+8,true);
+      pts[i*4+3]=dv.getFloat32(o+12,true);
+    }
+    return pts;
+  }
+  // file:// 模式旧实现
+  return await loadFramePoints(sid, fi);
+}
+// 后台静默预取 (非关键路径, 不阻塞 UI)
+function prefetchAround(sid, fi){
+  if(!AUTO) return;
+  // 只预取当前 variant + A/B 同帧 (前后帧按当前 variant 预取 1 步), 控制数量避免背压
+  const idx = S.frameIndexList;
+  const curPos = idx.indexOf(fi);
+  const v = S.curVariant;
+  const cand = [];
+  if(v) cand.push(['A', fi], ['B', fi]);
+  if(v && curPos>=0 && curPos+1<idx.length) cand.push([v, idx[curPos+1]]);
+  if(v && curPos>=1) cand.push([v, idx[curPos-1]]);
+  for(const [vv, f] of cand){ autoGetRow(vv, sid, f).catch(()=>{}); }
+}
+
+const $ = id => document.getElementById(id);
+
+// ---------- util ----------
+function humanBytes(n){ if(n<1024)return n+'B'; if(n<1<<20)return (n/1024).toFixed(1)+'KB'; if(n<1<<30)return (n/(1<<20)).toFixed(1)+'MB'; return (n/(1<<30)).toFixed(2)+'GB'; }
+function parseModeFile(name){
+  // D03 旧对照: B_cap_20261010_175227.jsonl  -> {mode:'B', sid:'cap_20261010_175227'}
+  // D04 新变体: D04_base_cap_20261010_175227.jsonl -> {mode:'B', sid:'cap_20261010_175227', variantFromName:'base'}
+  //             (variant 以 runs/<variant>/ 目录名为准；文件名里的 <variant> 只用作交叉校验)
+  let m = name.match(/^([AB])_(cap_.*)\.jsonl$/);
+  if(m) return {mode:m[1], sid:m[2]};
+  m = name.match(/^D04_(.+?)_(cap_\d{8}_\d{6})\.jsonl$/);
+  if(m) return {mode:'B', sid:m[2], variantFromName:m[1]};
+  return null;
+}
+function isVariantFile(path){
+  // runs/<variant>/<mode>_cap_*.jsonl  或者 human_fusion_lab_next variant直下
+  const parts = path.split('/');
+  const i = parts.lastIndexOf('runs');
+  if(i>=0 && i+2<parts.length){
+    const variant = parts[i+1];
+    const leaf = parts[parts.length-1];
+    const pm = parseModeFile(leaf);
+    if(pm) return {variant, mode:pm.mode, sid:pm.sid};
+  }
+  // 免 runs/ 层级: 变体直接当顶层目录名 (d04_base/A_cap_xxx.jsonl)
+  if(parts.length>=2){
+    const variant = parts[parts.length-2];
+    const leaf = parts[parts.length-1];
+    const pm = parseModeFile(leaf);
+    if(pm && /^d04_/.test(variant)) return {variant, mode:pm.mode, sid:pm.sid};
+  }
+  return null;
+}
+function isD03Ledger(path){
+  const leaf = path.split('/').pop();
+  const pm = parseModeFile(leaf);
+  return pm && /^[AB]$/.test(pm.mode) ? pm : null;
+}
+function kind(name){ const i=name.lastIndexOf('.'); return i<0?'':name.slice(i+1).toLowerCase(); }
+
+// ---------- ledger loading ----------
+async function loadLedgerFile(file){
+  const text = await file.text();
+  const rows = [];
+  const lines = text.split(/\r?\n/);
+  for(const ln of lines){
+    if(!ln.trim()) continue;
+    try{ rows.push(JSON.parse(ln)); }catch(e){ console.warn('bad line', e); }
+  }
+  rows.sort((a,b)=>a.frame_index-b.frame_index);
+  return rows;
+}
+
+async function readDirFileInput(input, onMatch){
+  const files = input.files;
+  for(const f of files){
+    const rel = f.webkitRelativePath || f.name;
+    await onMatch(rel, f);
+  }
+}
+
+// 自诊断状态行
+function updateDirStatsUI(){
+  const el = $('dirStats');
+  if(!el) return;
+  if(AUTO){
+    const sids = S.auto.framesIndex.size;
+    const vars = S.variants.length;
+    el.innerHTML =
+      `<div style="font-size:11px;font-weight:600;color:#e0a52d">★ AUTO 模式 — 数据从 demo_server 按需获取</div>` +
+      `<div class="muted" style="font-size:11px">已索引 ${sids} 会话 × ${vars} 变体; 点击帧时按需加载</div>`;
+    return;
+  }
+  const cells = [];
+  const fmt = (name, st) => {
+    if(!st) return `<span class="muted">${name}: 未选</span>`;
+    const cls = st.hit>0 ? 'ok' : 'err';
+    return `<span class="${cls}">${name}: 扫到 ${st.total} 文件 / 命中 ${st.hit} ledger</span>` +
+      (st.sample ? `<br><span class="muted" style="font-size:10px">示例路径: ${st.sample.replace(/</g,'&lt;')}</span>` : '');
+  };
+  cells.push('<div style="font-size:11px;font-weight:600;color:#e0a52d">★ 版本 v2 (2026-10-11 修复命名) — 目录加载诊断</div>');
+  cells.push(fmt('1. D04 根', S.dirStats.d04));
+  cells.push(fmt('2. D03 根', S.dirStats.d03));
+  cells.push(fmt('3. captures', S.dirStats.cap));
+  el.innerHTML = cells.join('');
+}
+
+if(!AUTO){
+$('d04dir').addEventListener('change', async (e)=>{
+  S.d04Ledger.clear();
+  const files = e.target.files;
+  S.dirStats.d04 = {total:files.length, hit:0, sample:null};
+  const jobs = [];
+  for(const f of files){
+    const rel = f.webkitRelativePath || f.name;
+    const leaf = rel.split('/').pop();
+    if(leaf === 'MANIFEST_DEMO.json'){
+      jobs.push(f.text().then(t=>{
+        try{ S.manifest = JSON.parse(t); }catch(_){ S.manifest = null; }
+        renderManifestInfo();
+      }));
+      continue;
+    }
+    const v = isVariantFile(rel);
+    if(v){
+      S.dirStats.d04.hit++;
+      if(!S.dirStats.d04.sample) S.dirStats.d04.sample = rel;
+      jobs.push(loadLedgerFile(f).then(rows=>{
+        if(!S.d04Ledger.has(v.variant)) S.d04Ledger.set(v.variant, new Map());
+        const m = S.d04Ledger.get(v.variant);
+        // mode B 的 ledger 含 bg 归因；mode A 只含 candidate
+        // 同 sid 同时存两 mode 时 优先 B （规则与 baseline 一致）
+        const key = v.sid;
+        if(!m.has(key) || v.mode==='B') m.set(key, rows);
+      }));
+    }
+    else if(/^SUMMARY_.*\.json$/.test(leaf) || /^FAILURES_.*\.json$/.test(leaf)){
+      // 可后续扩展
+    }
+  }
+  await Promise.all(jobs);
+  S.variants = [...S.d04Ledger.keys()];
+  renderVariantSel();
+  refreshSidSel();
+  renderManifestInfo();
+  updateDirStatsUI();
+});
+
+$('d03dir').addEventListener('change', async (e)=>{
+  S.d03Ledger.A.clear(); S.d03Ledger.B.clear();
+  const files = e.target.files;
+  S.dirStats.d03 = {total:files.length, hit:0, sample:null};
+  const jobs = [];
+  for(const f of files){
+    const rel = f.webkitRelativePath || f.name;
+    const pm = isD03Ledger(rel);
+    if(!pm) continue;
+    S.dirStats.d03.hit++;
+    if(!S.dirStats.d03.sample) S.dirStats.d03.sample = rel;
+    jobs.push(loadLedgerFile(f).then(rows=>{
+      S.d03Ledger[pm.mode].set(pm.sid, rows);
+    }));
+  }
+  await Promise.all(jobs);
+  refreshSidSel();
+  updateDirStatsUI();
+});
+
+$('capdir').addEventListener('change', async (e)=>{
+  S.captures.clear();
+  const files = e.target.files;
+  S.dirStats.cap = {total:files.length, hit:0, sample:null};
+  const pendingMeta = new Map(); // sid -> Promise
+  for(const f of files){
+    const rel = f.webkitRelativePath || f.name;
+    const parts = rel.split('/');
+    const leaf = parts[parts.length-1];
+    // 只收 <root>/<sid>/{meta.json,points.bin}
+    if(parts.length < 2) continue;
+    const sid = parts[parts.length-2];
+    if(leaf==='meta.json'){
+      pendingMeta.set(sid, f.text().then(t=>JSON.parse(t)));
+      if(!S.dirStats.cap.sample) S.dirStats.cap.sample = rel;
+    }else if(leaf==='points.bin'){
+      // 占位， meta 到后再建立 File 引用
+      const entry = S.captures.get(sid) || {};
+      entry.pointsFile = f;
+      S.captures.set(sid, entry);
+    }
+  }
+  for(const [sid, p] of pendingMeta){
+    try{
+      const meta = await p;
+      const entry = S.captures.get(sid) || {};
+      entry.meta = meta;
+      S.captures.set(sid, entry);
+      S.dirStats.cap.hit++;
+    }catch(e){ console.warn('meta parse', sid, e); }
+  }
+  refreshSidSel();
+  updateDirStatsUI();
+});
+} // end if(!AUTO)
+
+function refreshSidSel(){
+  const sids = new Set();
+  if(AUTO){
+    for(const s of S.auto.framesIndex.keys()) sids.add(s);
+  }else{
+    for(const m of S.d03Ledger.A.keys()) sids.add(m);
+    for(const m of S.d03Ledger.B.keys()) sids.add(m);
+    for(const v of S.d04Ledger.values()) for(const k of v.keys()) sids.add(k);
+  }
+  // 如果选了 captures 仍想用没有 ledger 的 session 也可以
+  const sel = $('sidSel');
+  const cur = sel.value;
+  sel.innerHTML = '';
+  for(const s of [...sids].sort()){
+    const opt = document.createElement('option');
+    opt.value = s; opt.textContent = s;
+    sel.appendChild(opt);
+  }
+  if(cur && sids.has(cur)) sel.value = cur;
+  else if(sids.size) sel.value = [...sids].sort()[0];
+  onSidChange();
+}
+
+function renderVariantSel(){
+  const sel = $('variantSel');
+  const cur = sel.value;
+  sel.innerHTML = '';
+  for(const v of S.variants){
+    const o = document.createElement('option');
+    o.value=v; o.textContent=v;
+    sel.appendChild(o);
+  }
+  if(cur && S.variants.includes(cur)) sel.value = cur;
+  else if(S.variants.length) sel.value = S.variants[0];
+  S.curVariant = sel.value || null;
+}
+
+function renderManifestInfo(){
+  const el = $('manifestInfo');
+  if(!S.manifest){
+    el.innerHTML = '<span class="muted">MANIFEST_DEMO.json 未加载（可缺省: 从 ledger 已载入 '+S.variants.length+' 个变体）</span>';
+    return;
+  }
+  const m = S.manifest;
+  const lines = [
+    'schema: '+(m.schema_version||'?'),
+    'created: '+(m.created_iso||'?'),
+    'variants: '+(m.variants||[]).map(v=>v.name||v).join(', '),
+  ];
+  if(m.input_sha256) lines.push('inputs_sha: '+Object.keys(m.input_sha256).length+' 项');
+  el.innerHTML = lines.map(s=>s.replace(/</g,'&lt;')).join('<br>');
+}
+
+$('variantSel').addEventListener('change', ()=>{
+  S.curVariant = $('variantSel').value;
+  onSidChange();
+});
+$('sidSel').addEventListener('change', onSidChange);
+
+function curLedgers(){
+  const sid = $('sidSel').value;
+  return {
+    sid,
+    d03A: S.d03Ledger.A.get(sid) || [],
+    d03B: S.d03Ledger.B.get(sid) || [],
+    d04: (S.curVariant && S.d04Ledger.get(S.curVariant)) ? (S.d04Ledger.get(S.curVariant).get(sid) || []) : [],
+  };
+}
+
+function onSidChange(){
+  if(AUTO){
+    S.curSid = $('sidSel').value;
+    S.curVariant = $('variantSel').value || S.curVariant;
+    const fid = S.auto.framesIndex.get(S.curSid) || [];
+    S.frameIndexList = fid.slice();
+  }else{
+    const L = curLedgers();
+    // frame 列表 = 优先 d04 ledger；否则 d03A
+    const base = L.d04.length ? L.d04 : (L.d03A.length ? L.d03A : L.d03B);
+    S.frameIndexList = base.map(r=>r.frame_index);
+    S.curSid = L.sid;
+  }
+  $('fc').textContent = S.frameIndexList.length;
+  const sl = $('frameSlider');
+  sl.min=0; sl.max=Math.max(0,S.frameIndexList.length-1); sl.value=0;
+  $('frameSel').innerHTML = '';
+  S.frameIndexList.forEach((fi,i)=>{
+    const o = document.createElement('option');
+    o.value = i; o.textContent = 'f'+fi;
+    $('frameSel').appendChild(o);
+  });
+  S.curFrameIdx = 0;
+  S.sel.points.clear(); S.sel.sourceList = [];
+  renderFailList();
+  renderFrame();
+}
+
+$('frameSlider').addEventListener('input', e=>{
+  S.curFrameIdx = parseInt(e.target.value,10) || 0;
+  $('frameSel').value = String(S.curFrameIdx);
+  renderFrame();
+});
+$('frameSel').addEventListener('change', e=>{
+  S.curFrameIdx = parseInt(e.target.value,10) || 0;
+  $('frameSlider').value = String(S.curFrameIdx);
+  renderFrame();
+});
+$('btnPrev').addEventListener('click', ()=>stepFrame(-1));
+$('btnNext').addEventListener('click', ()=>stepFrame(+1));
+$('btnPlay').addEventListener('click', ()=>{
+  if(S.playTimer){ clearInterval(S.playTimer); S.playTimer=null; $('btnPlay').textContent='播放'; return; }
+  $('btnPlay').textContent='暂停';
+  S.playTimer = setInterval(()=>{
+    if(S.curFrameIdx >= S.frameIndexList.length-1){ clearInterval(S.playTimer); S.playTimer=null; $('btnPlay').textContent='播放'; return; }
+    stepFrame(+1);
+  }, 200);
+});
+function stepFrame(d){
+  const ni = Math.min(Math.max(0, S.curFrameIdx+d), S.frameIndexList.length-1);
+  if(ni===S.curFrameIdx) return;
+  S.curFrameIdx = ni;
+  $('frameSlider').value = String(ni);
+  $('frameSel').value = String(ni);
+  renderFrame();
+}
+
+// ---------- failure listing ----------
+function frameFailures(row){
+  // strict.observed_confirmed.fn>0 / fp>0 或 legacy.confirmed.fp>0 或 strict.accepted.fn>0
+  if(!row) return [];
+  const f = [];
+  const oc = row.strict && row.strict.observed_confirmed;
+  const ac = row.strict && row.strict.accepted;
+  const lc = row.legacy && row.legacy.confirmed;
+  if(oc){ if(oc.fn>0) f.push('strict.observed.fn='+oc.fn); if(oc.fp>0) f.push('strict.observed.fp='+oc.fp); if(oc.unmatched_unknown>0) f.push('strict.observed.unk='+oc.unmatched_unknown); }
+  if(ac){ if(ac.fn>0) f.push('strict.accepted.fn='+ac.fn); if(ac.fp>0) f.push('strict.accepted.fp='+ac.fp); }
+  if(lc){ if(lc.fp>0) f.push('legacy.confirmed.fp='+lc.fp); if(lc.fn>0) f.push('legacy.confirmed.fn='+lc.fn); }
+  return f;
+}
+async function renderFailList(){
+  const onlyVar = $('ckFailOnly').checked;
+  const el = $('failList');
+  el.innerHTML = '<div class="muted">扫描失败帧中…</div>';
+  const sid = AUTO ? S.curSid : curLedgers().sid;
+  const entries = [];
+  if(AUTO){
+    const fis = S.frameIndexList;
+    const variants = onlyVar ? [S.curVariant].filter(Boolean) : ['base','point30_only','point15_only','split_only','unknown04_only'].filter(v=>v===S.curVariant || !onlyVar);
+    // AUTO 模式严格遵循 ckFailOnly: 勾选则只扫当前变体; 不勾扫 5 个变体 (A/B 入列会很慢, 视用户视觉专注在变体上即可)
+    const conc = 8;
+    const queue = [];
+    for(const v of variants){
+      if(!v) continue;
+      for(const fi of fis){
+        queue.push({v, fi, name: v});
+      }
+    }
+    let idx = 0;
+    async function worker(){
+      while(idx < queue.length){
+        const cur = queue[idx++];
+        const row = await getRow(cur.v, sid, cur.fi);
+        if(!row) continue;
+        const fs = frameFailures(row);
+        if(fs.length) entries.push({name: cur.name, i:0, fi: cur.fi, desc: fs.join(' ')});
+      }
+    }
+    await Promise.all(Array.from({length:conc}, worker));
+  }else{
+    const L = curLedgers();
+    const sources = [['变体', L.d04]];
+    if(!onlyVar){ sources.push(['D03.A',L.d03A],['D03.B',L.d03B]); }
+    for(const [name, rows] of sources){
+      rows.forEach((row,i)=>{
+        const fs = frameFailures(row);
+        if(fs.length) entries.push({name, i, fi: row.frame_index, desc: fs.join(' ')});
+      });
+    }
+  }
+  entries.sort((a,b)=>a.fi-b.fi || a.name.localeCompare(b.name));
+  el.innerHTML='';
+  if(!entries.length){ el.innerHTML='<div class="muted">无失败帧</div>'; return; }
+  for(const it of entries.slice(0,500)){
+    const div = document.createElement('div');
+    div.textContent = `[${it.name}] f${it.fi} · ${it.desc}`;
+    div.onclick = ()=>{
+      const pos = S.frameIndexList.indexOf(it.fi);
+      if(pos>=0){ S.curFrameIdx=pos; $('frameSlider').value=String(pos); $('frameSel').value=String(pos); renderFrame(); }
+    };
+    if(it.fi === S.frameIndexList[S.curFrameIdx]) div.classList.add('cur');
+    el.appendChild(div);
+  }
+}
+$('ckFailOnly').addEventListener('change', renderFailList);
+
+async function nextFailAuto(vkey){
+  const sid = AUTO ? S.curSid : curLedgers().sid;
+  const idx = S.frameIndexList;
+  if(!idx.length) return -1;
+  for(let d=1; d<=idx.length; d++){
+    const pos = (S.curFrameIdx+d)%idx.length;
+    const fi = idx[pos];
+    const row = await getRow(vkey, sid, fi);
+    if(row && frameFailures(row).length) return pos;
+  }
+  return -1;
+}
+async function jumpFail(key){
+  let targetPos = -1;
+  if(AUTO){
+    const vkey = key==='var' ? S.curVariant : key; // 'A' or 'B'
+    if(!vkey) return;
+    targetPos = await nextFailAuto(vkey);
+  }else{
+    // 旧内存扫
+    const L = curLedgers();
+    const rows = key==='var'?L.d04 : key==='A'?L.d03A : L.d03B;
+    if(!rows || !rows.length) return;
+    for(let d=1; d<=rows.length; d++){
+      const pos = (S.curFrameIdx+d)%rows.length;
+      const fr = rows[pos];
+      if(fr && frameFailures(fr).length && S.frameIndexList.includes(fr.frame_index)){
+        targetPos = S.frameIndexList.indexOf(fr.frame_index);
+        break;
+      }
+    }
+  }
+  if(targetPos>=0){ S.curFrameIdx=targetPos; $('frameSlider').value=String(targetPos); $('frameSel').value=String(targetPos); renderFrame(); }
+}
+$('btnFail').addEventListener('click', ()=>jumpFail('var'));
+$('btnFailA').addEventListener('click', ()=>jumpFail('A'));
+$('btnFailB').addEventListener('click', ()=>jumpFail('B'));
+
+// ---------- capture point data ----------
+async function loadFramePoints(sid, frame_idx){
+  const cap = S.captures.get(sid);
+  if(!cap || !cap.meta || !cap.pointsFile) return null;
+  const frames = cap.meta.frames || [];
+  const fr = frames.find(f=>f.bag_time_sec!==undefined && f.offset_points!==undefined && f.count_points!==undefined && (frames.indexOf(f)===frame_idx || f.seq===frame_idx || f.frame_index===frame_idx));
+  // meta.frames 通常按采集顺序排， frame_index 即数组下标
+  const fr2 = frames[frame_idx] || fr;
+  if(!fr2) return null;
+  const stride = cap.meta.point_stride_bytes || (cap.meta.point_layout && cap.meta.point_layout.stride_bytes) || 28;
+  const start = fr2.offset_points * stride;
+  const len = fr2.count_points * stride;
+  const buf = await cap.pointsFile.slice(start, start+len).arrayBuffer();
+  const dv = new DataView(buf);
+  const n = fr2.count_points;
+  // layout: <f4 x, f4 y, f4 z, f4 intensity, u2 ring, f4 timestamp ; pad offsets 18,24
+  const pts = new Float32Array(n*4); // x,y,z,i
+  for(let i=0;i<n;i++){
+    const o = i*stride;
+    pts[i*4+0]=dv.getFloat32(o+0,true);
+    pts[i*4+1]=dv.getFloat32(o+4,true);
+    pts[i*4+2]=dv.getFloat32(o+8,true);
+    pts[i*4+3]=dv.getFloat32(o+12,true); // intensity
+  }
+  return pts;
+}
+
+// ---------- render helpers ----------
+function boundsOf(...clouds){
+  let miX=Infinity,miY=Infinity,maX=-Infinity,maY=-Infinity;
+  for(const c of clouds){
+    if(!c) continue;
+    const p = c.pts||c;
+    const n = p.length/4;
+    for(let i=0;i<n;i++){
+      const x=p[i*4],y=p[i*4+1],z=p[i*4+2];
+      if(!Number.isFinite(x)||!Number.isFinite(y)) continue;
+      if(z<0.1||z>2.5) continue;
+      if(x<miX)miX=x; if(y<miY)miY=y; if(x>maX)maX=x; if(y>maY)maY=y;
+    }
+  }
+  if(miX===Infinity){miX=-6;miY=-6;maX=6;maY=6;}
+  // pad
+  const px=(maX-miX)*0.05+0.3, py=(maY-miY)*0.05+0.3;
+  return [miX-px,miY-py,maX+px,maY+py];
+}
+function project(b, W, H){
+  const [miX,miY,maX,maY]=b;
+  const sx = (W-20)/(maX-miX), sy=(H-20)/(maY-miY);
+  const s = Math.min(sx,sy);
+  const ox = (W - s*(maX-miX))/2, oy = (H - s*(maY-miY))/2;
+  return (x,y)=>[ox + s*(x-miX), H - (oy + s*(y-miY))];
+}
+
+function svgCloud(pts, picks, opts){
+  // pts Float32Array(4n), picks = Map(rawIdx -> color/radius)
+  opts = opts||{};
+  const W=opts.W||900, H=opts.H||720;
+  const ptsN = pts ? pts.length/4 : 0;
+  const b = boundsOf({pts});
+  const P = project(b,W,H);
+  const parts = [];
+  parts.push(`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`);
+  parts.push(`<rect width="${W}" height="${H}" fill="#10141b"/>`);
+  parts.push(`<g id="plot">`);
+  if(pts){
+    const showAll = $('ckFull').checked;
+    const N = opts.maxPoints || 6000;
+    const stride = Math.max(1, Math.floor(ptsN/N));
+    for(let i=0;i<ptsN;i++){
+      const pick = picks && picks.get(i);
+      if(!pick && (!showAll || (i%stride)!==0)) continue;
+      const x=pts[i*4],y=pts[i*4+1],z=pts[i*4+2];
+      if(!Number.isFinite(x)||!Number.isFinite(y)) continue;
+      if(z<0.1||z>2.5) continue;
+      const [cx,cy] = P(x,y);
+      if(cx<0||cx>W||cy<0||cy>H) continue;
+      if(pick){
+        parts.push(`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${pick.r||2}" fill="${pick.c}" opacity="${pick.o||1}"${pick.attrs||''}/>`);
+      }else{
+        parts.push(`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="0.8" fill="#5a6478" opacity="0.55"/>`);
+      }
+    }
+  }
+  // overlays (circle of GT / candidate centroids)
+  for(const ov of (opts.overlays||[])) parts.push(ov);
+  parts.push('</g></svg>');
+  return {svg:parts.join(''), b};
+}
+
+function candidateCenterOverlay(cands, proj, color, dash){
+  // 画候选中心点 圆
+  return (cands||[]).map(c=>{
+    const [cx,cy]=proj(c.x,c.y);
+    return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="8" fill="none" stroke="${color}" stroke-width="1" ${dash?'stroke-dasharray="3,3"':''}/>`+
+      `<text x="${(cx+9).toFixed(1)}" y="${cy.toFixed(1)}" fill="${color}" font-size="10">${c.id}</text>`;
+  }).join('');
+}
+
+// 对一帧构建 4 个点集（raw index 级） — 用于着色
+function buildPickMaps(row, bands){
+  // bands: array of {src: 'gt-person'|'gt-furn'|'gt-unk'|'cand-var'|'cand-acc'|'cand-old', color, r, attrs}
+  const m = new Map(); // rawIdx -> picked (later bands override earlier)
+  if(!row) return m;
+  const put = (ids, c, r, o, attrs)=>{ if(!ids) return; for(const i of ids){ m.set(i, {c,r,o,attrs}); } };
+  for(const band of bands){
+    if(band.src==='bg') continue;
+    if(band.src==='gt-person'){
+      for(const g of (row.gt||[])) if(g.class_name==='PERSON') put(g.indices, band.color, band.r, band.o, band.attrs);
+    }else if(band.src==='gt-furn'){
+      for(const g of (row.gt||[])) if(g.class_name==='FURNITURE') put(g.indices, band.color, band.r, band.o, band.attrs);
+    }else if(band.src==='gt-unk'){
+      for(const g of (row.gt||[])) if(g.class_name!=='PERSON'&&g.class_name!=='FURNITURE') put(g.indices, band.color, band.r, band.o, band.attrs);
+    }else if(band.src==='cand-all'){
+      for(const c of (row.candidates||[])) put(c.raw_indices, band.color, band.r, band.o, band.attrs);
+    }else if(band.src==='cand-accepted'){
+      // 接受判定: legacy.accepted.tp/fp 中匹配到的 / prob>=0.35 或 decision HUMAN/CONFIRMED
+      for(const c of (row.candidates||[])){
+        if(c.prob >= 0.35 || c.decision==='HUMAN_CANDIDATE' || c.decision==='CONFIRMED_HUMAN'){
+          put(c.raw_indices, band.color, band.r, band.o, band.attrs);
+        }
+      }
+    }else if(band.src==='cand-visible'){
+      // ledger.visible_candidates =  candidate id list (字符串)
+      const ids = new Set(row.visible_candidates||[]);
+      for(const c of (row.candidates||[])){
+        if(ids.has(c.id)) put(c.raw_indices, band.color, band.r, band.o, band.attrs);
+      }
+    }
+  }
+  return m;
+}
+
+// manual selection (点击 overlay 最近点加入)
+function nearestCandidate(row, xy){
+  if(!row || !row.candidates || !row.candidates.length) return null;
+  let best=null, bd=Infinity;
+  for(const c of row.candidates){
+    const dx=c.x-xy[0], dy=c.y-xy[1];
+    const d = dx*dx+dy*dy;
+    if(d<bd){bd=d; best=c;}
+  }
+  return bd < 0.6*0.6 ? best : null;
+}
+
+// 把 变体/A/B ledger 同帧 row 找出来 (frame_index 对齐)
+function rowAt(rows, fi){
+  if(!rows || !rows.length) return null;
+  // frames 是递增的
+  let lo=0, hi=rows.length-1, ans=null;
+  while(lo<=hi){
+    const mid=(lo+hi)>>1;
+    if(rows[mid].frame_index===fi) return rows[mid];
+    if(rows[mid].frame_index<fi) lo=mid+1; else hi=mid-1;
+  }
+  return null;
+}
+
+async function renderFrame(){
+  const fi = S.frameIndexList[S.curFrameIdx];
+  const sid = AUTO ? S.curSid : curLedgers().sid;
+  S.curSid = sid;
+  let rV, rA, rB;
+  if(AUTO){
+    // 按需 fetch 三条 row + 点云
+    [rV, rA, rB] = await Promise.all([
+      S.curVariant ? getRow(S.curVariant, sid, fi) : Promise.resolve(null),
+      getRow('A', sid, fi),
+      getRow('B', sid, fi),
+    ]);
+  }else{
+    const L = curLedgers();
+    rV = rowAt(L.d04, fi);
+    rA = rowAt(L.d03A, fi);
+    rB = rowAt(L.d03B, fi);
+  }
+  const r0 = rV || rA || rB;
+  if(!r0){
+    $('paneGT').innerHTML = '<div class="muted" style="padding:8px">该帧在所有 ledger 都缺失</div>';
+    $('paneA').innerHTML=''; $('paneB').innerHTML='';
+    renderStats(null,null,null,null);
+    return;
+  }
+  const pts = await getFramePoints(sid, fi);
+  // 静默预取下一批 (AUTO 模式)
+  prefetchAround(sid, fi);
+  // bounds 统一
+  const W=900,H=720;
+  const b = pts ? boundsOf({pts}) : [-6,-6,6,6];
+  const P = project(b, W, H);
+
+  // GT 层 (variant ledger优先因为更全 — 含 unknown 计数 / bare/chain)
+  // 左:GT
+  {
+    const picks = buildPickMaps(rV||rA, [
+      {src:'gt-unk',  color:'#7d8695', r:1.6, o:0.85},
+      {src:'gt-furn', color:'#e07be0', r:1.8, o:0.9},
+      {src:'gt-person',color:'#ef4444', r:2.4, o:1},
+      {src:'cand-all', color:'#f59e0b', r:2.2, o:0.95, attrs:''},
+    ]);
+    const ovg = (rV||rA||{}).gt || [];
+    const ovs = ovg.map(g=>{
+      const [cx,cy]=P(g.x,g.y);
+      const col = g.class_name==='PERSON'?'#ef4444':(g.class_name==='FURNITURE'?'#e07be0':'#7d8695');
+      const rr = (g.radius||0.4);
+      // 半径换算: bbox 范围/m 像素比例. 粗略用 proj(0,0)-proj(rr,0)
+      const [ax,ay]=P(0,0); const [bx2,by2]=P(rr,0);
+      const pixr = Math.max(3, Math.abs(bx2-ax));
+      return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${pixr.toFixed(1)}" fill="none" stroke="${col}" stroke-width="1" stroke-dasharray="4,3" opacity="0.85"/>`+
+        `<text x="${(cx+4).toFixed(1)}" y="${(cy-4).toFixed(1)}" fill="${col}" font-size="10">${g.track_id||g.id||''}</text>`;
+    }).join('');
+    const {svg} = svgCloud(pts, picks, {W,H,overlays:[ovs]});
+    $('paneGT').innerHTML = svg;
+  }
+  // 中:旧A
+  {
+    const picksA = buildPickMaps(rA, [
+      {src:'cand-all', color:'#a855f7', r:1.8, o:0.9},
+      {src:'gt-person',color:'#ef4444', r:2.6, o:1},
+      {src:'gt-furn', color:'#e07be0', r:2.0, o:0.95},
+    ]);
+    // 变体 accepted 叠绿 (points 同 raw index 空间)
+    if(rV){
+      const ids = new Set();
+      for(const c of (rV.candidates||[])){
+        if(c.prob>=0.35||c.decision==='HUMAN_CANDIDATE'||c.decision==='CONFIRMED_HUMAN'){
+          for(const i of c.raw_indices||[]) ids.add(i);
+        }
+      }
+      for(const i of ids){ picksA.set(i, {c:'#16a34a', r:2.2, o:1}); }
+    }
+    const ovs = (rA?candidateCenterOverlay(rA.candidates,P,'#a855f7',false):'') +
+                (rV?candidateCenterOverlay((rV.candidates||[]).filter(c=>c.prob>=0.35||c.decision==='HUMAN_CANDIDATE'||c.decision==='CONFIRMED_HUMAN'),P,'#16a34a',true):'');
+    const {svg} = svgCloud(pts, picksA, {W,H,overlays:[ovs]});
+    $('paneA').innerHTML = svg;
+    attachPaneClick($('paneA'), P, b, W, H, rA, 'A');
+  }
+  // 右:旧B
+  {
+    const picksB = buildPickMaps(rB, [
+      {src:'cand-all', color:'#a855f7', r:1.8, o:0.9},
+      {src:'gt-person',color:'#ef4444', r:2.6, o:1},
+      {src:'gt-furn', color:'#e07be0', r:2.0, o:0.95},
+    ]);
+    if(rV){
+      const ids = new Set();
+      for(const c of (rV.candidates||[])){
+        if(c.prob>=0.35||c.decision==='HUMAN_CANDIDATE'||c.decision==='CONFIRMED_HUMAN'){
+          for(const i of c.raw_indices||[]) ids.add(i);
+        }
+      }
+      for(const i of ids){ picksB.set(i, {c:'#16a34a', r:2.2, o:1}); }
+    }
+    const ovs = (rB?candidateCenterOverlay(rB.candidates,P,'#a855f7',false):'') +
+                (rV?candidateCenterOverlay((rV.candidates||[]).filter(c=>c.prob>=0.35||c.decision==='HUMAN_CANDIDATE'||c.decision==='CONFIRMED_HUMAN'),P,'#16a34a',true):'');
+    const {svg} = svgCloud(pts, picksB, {W,H,overlays:[ovs]});
+    $('paneB').innerHTML = svg;
+    attachPaneClick($('paneB'), P, b, W, H, rB, 'B');
+  }
+
+  $('lMeta').textContent = `f${fi} / ${S.curSid||''}`;
+  $('mMeta').textContent = rA?`A cand=${(rA.candidates||[]).length}`:'A 无 ledger';
+  $('rMeta').textContent = rB?`B cand=${(rB.candidates||[]).length}`:'B 无 ledger';
+  renderStats(rV, rA, rB, fi);
+  renderSelList();
+}
+
+function attachPaneClick(paneEl, P, b, W, H, row, which){
+  const svgEl = paneEl.querySelector('svg');
+  if(!svgEl) return;
+  svgEl.style.cursor = 'crosshair';
+  svgEl.addEventListener('click', (ev)=>{
+    const rect = svgEl.getBoundingClientRect();
+    const sx = W/rect.width, sy = H/rect.height;
+    const px = (ev.clientX-rect.left)*sx, py = (ev.clientY-rect.top)*sy;
+    // inverse project
+    const [miX,miY,maX,maY]=b;
+    const sxw = (W-20)/(maX-miX), syh=(H-20)/(maY-miY);
+    const s = Math.min(sxw,syh);
+    const ox = (W - s*(maX-miX))/2, oy=(H - s*(maY-miY))/2;
+    const wx = miX + (px-ox)/s, wy = miY + (H-py-oy)/s;
+    const c = nearestCandidate(row, [wx,wy]);
+    if(!c) return;
+    addToSelection(c, which);
+  });
+}
+
+function addToSelection(cand, which){
+  const ids = cand.raw_indices||[];
+  let added=0;
+  for(const i of ids){ if(!S.sel.points.has(i)){ S.sel.points.add(i); added++; } }
+  S.sel.sourceList.push({kind:'cand', id:`${which}:${cand.id}`, n:ids.length, added});
+  renderSelList();
+}
+async function removeFromSelection(idx){
+  S.sel.sourceList.splice(idx,1);
+  // 重计算 points 集合
+  S.sel.points.clear();
+  const fi = S.frameIndexList[S.curFrameIdx];
+  const sid = AUTO ? S.curSid : curLedgers().sid;
+  // 各取一次 (rA/rB/rV 可能为 null)
+  const [rA, rB, rV] = AUTO ? await Promise.all([
+    getRow('A', sid, fi),
+    getRow('B', sid, fi),
+    S.curVariant ? getRow(S.curVariant, sid, fi) : Promise.resolve(null),
+  ]) : [
+    rowAt(curLedgers().d03A, fi),
+    rowAt(curLedgers().d03B, fi),
+    rowAt(curLedgers().d04, fi),
+  ];
+  for(const ent of S.sel.sourceList){
+    const m = ent.id.match(/^([ABV]):(.+)$/);
+    if(!m) continue;
+    const row = m[1]==='A'?rA : m[1]==='B'?rB : rV;
+    if(!row) continue;
+    for(const c of row.candidates||[]) if(c.id===m[2]){ for(const i of c.raw_indices||[]) S.sel.points.add(i); }
+  }
+  renderSelList();
+}
+function renderSelList(){
+  const el = $('selList');
+  el.innerHTML = '';
+  if(!S.sel.sourceList.length){ el.innerHTML='<span class="muted">(空)</span>'; return; }
+  S.sel.sourceList.forEach((ent,i)=>{
+    const b = document.createElement('button');
+    b.textContent = `${ent.id}·${ent.n}点 ✕`;
+    b.onclick = ()=>removeFromSelection(i);
+    el.appendChild(b);
+  });
+}
+
+// ---------- stats / ledger pane ----------
+function renderStats(rV, rA, rB, fi){
+  const el = $('ledgerStats');
+  const line = (k,vals)=>`<div><span style="color:#9aa4b8">${k}</span></div><div>${vals}</div>`;
+  const kv = (o, path)=>{
+    if(!o) return '—';
+    let v = o;
+    for(const p of path.split('.')){ if(v==null) return '—'; v=v[p]; }
+    return v;
+  };
+  const rows = [
+    ['variant', S.curVariant||'—'],
+    ['frame', fi],
+    ['foreground_count', kv(rV,'foreground_count')],
+    ['unsupported_UNKNOWN', kv(rV,'bg.unsupported_UNKNOWN_points')],
+    ['bare_b_points', kv(rV,'bg.bare_b_points')],
+    ['chain_b_points', kv(rV,'bg.chain_b_points')],
+    ['raw_components', rV?(rV.raw_components||[]).length:'—'],
+    ['qualification', kv(rV,'qualification')],
+    ['strict.observed_conf', rV&&rV.strict?JSON.stringify(rV.strict.observed_confirmed):'—'],
+    ['strict.accepted', rV&&rV.strict?JSON.stringify(rV.strict.accepted):'—'],
+    ['legacy.confirmed', rV&&rV.legacy?JSON.stringify(rV.legacy.confirmed):'—'],
+    ['legacy.accepted', rV&&rV.legacy?JSON.stringify(rV.legacy.accepted):'—'],
+    ['gt_persons', kv(rV,'strict.gt_persons')],
+    ['frames', S.frameIndexList.length],
+    ['D03.A.strict', rA&&rA.strict?JSON.stringify({obs:rA.strict.observed_confirmed,acc:rA.strict.accepted}):'—'],
+    ['D03.B.strict', rB&&rB.strict?JSON.stringify({obs:rB.strict.observed_confirmed,acc:rB.strict.accepted}):'—'],
+  ];
+  el.innerHTML = '<div class="kv">'+rows.map(r=>line(r[0], r[1])).join('')+'</div>';
+}
+
+// ---------- manual draft export ----------
+async function sha256Hex(u8){
+  const b = await crypto.subtle.digest('SHA-256', u8);
+  return Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+$('btnExport').addEventListener('click', async ()=>{
+  try{
+    if(!S.sel.points.size){ alert('已选点集为空'); return; }
+    const fi = S.frameIndexList[S.curFrameIdx];
+    const sid = AUTO ? S.curSid : curLedgers().sid;
+    const meta = AUTO ? await getCaptureMeta(sid) : (S.captures.get(sid) && S.captures.get(sid).meta);
+    if(!meta){ alert('未加载 captures/meta.json，无法定位 frame offset'); return; }
+    const frameMeta = (meta.frames||[])[fi] || null;
+    // 排序
+    const raw = [...S.sel.points].sort((a,b)=>a-b);
+    const buf = new Uint8Array(raw.length*4);
+    const dv = new DataView(buf.buffer);
+    raw.forEach((r,i)=>dv.setUint32(i*4, r, true));
+    const pointset_sha256 = await sha256Hex(buf);
+    // raw_frame_sha256 = ledger 行 raw_frame_sha256 字段 优先；(否则对整帧 points 切片 hash)
+    const rV = AUTO ? (S.curVariant ? await getRow(S.curVariant, sid, fi) : null) : rowAt(curLedgers().d04, fi);
+    let raw_frame_sha256 = rV && rV.raw_frame_sha256 ? rV.raw_frame_sha256 : null;
+    if(!raw_frame_sha256 && frameMeta){
+      try{
+        const stride = meta.point_stride_bytes || 28;
+        if(AUTO){
+          const start = frameMeta.offset_points*stride;
+          const end = (frameMeta.offset_points+frameMeta.count_points)*stride - 1;
+          const resp = await fetch(`/points/${encodeURIComponent(sid)}`, {headers:{Range:`bytes=${start}-${end}`}});
+          if(resp.ok){
+            const fbuf = await resp.arrayBuffer();
+            raw_frame_sha256 = await sha256Hex(new Uint8Array(fbuf));
+          }
+        }else{
+          const cap = S.captures.get(sid);
+          if(cap && cap.pointsFile){
+            const slice = cap.pointsFile.slice(frameMeta.offset_points*stride, (frameMeta.offset_points+frameMeta.count_points)*stride);
+            const fbuf = await slice.arrayBuffer();
+            raw_frame_sha256 = await sha256Hex(new Uint8Array(fbuf));
+          }
+        }
+      }catch(_){ raw_frame_sha256 = null; }
+    }
+    const out = {
+      schema_version: 'hfus-manual-input-draft-v1',
+      variant: S.curVariant || null,
+      session_id: sid,
+      frame: fi,
+      timestamp_s: (rV && rV.timestamp) || (frameMeta && frameMeta.bag_time_sec) || null,
+      frame_sha256: raw_frame_sha256,
+      raw_frame_sha256,
+      raw_indices: raw,
+      compact_indices: raw.slice(),
+      pointset_sha256,
+      label_suggestion: $('lblSel').value,
+      identity_suggestion: $('identInput').value || 'UNKNOWN',
+      label_source: 'MANUAL_INPUT_UNREVIEWED',
+      review_status: 'DRAFT_UNREVIEWED',
+      qualification: 'UNKNOWN',
+      independent_review: false,
+      model_training_eligible: false,
+      exhaustive: false,
+      demo_build: {
+        source: 'demo_d04.html',
+        ledger_d04_variant: S.curVariant || null,
+        sources: S.sel.sourceList.map(s=>s.id+':'+s.n),
+      },
+    };
+    const blob = new Blob([JSON.stringify(out,null,2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `D04_${S.curVariant||'unknown'}_MANUAL_DRAFT_f${fi}.json`;
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    const m = $('manualOut');
+    m.style.display='block';
+    m.textContent = JSON.stringify(out,null,2).slice(0,1200)+'\n…已触发下载';
+  }catch(e){
+    alert('导出失败: '+e.message);
+  }
+});
+
+// ---------- 首次渲染占位 / AUTO 启动 ----------
+(async function boot(){
+  renderManifestInfo();
+  renderSelList();
+  updateDirStatsUI();
+  if(AUTO){
+    // 隐藏 file input, 改为纯展示
+    const ai = $('autoInputs'); if(ai) ai.style.display='none';
+    try{
+      const [idxPayload, manifest, variantsPayload] = await Promise.all([
+        autoFetchJson('/api/frames_index'),
+        autoFetchJson('/api/manifest'),
+        autoFetchJson('/api/variants'),
+      ]);
+      if(idxPayload && idxPayload.sids){
+        for(const [sid, fis] of Object.entries(idxPayload.sids)){
+          S.auto.framesIndex.set(sid, fis);
+        }
+        S.variants = (variantsPayload && variantsPayload.variants) || [];
+      }
+      if(manifest && !manifest.error) S.manifest = manifest;
+      renderVariantSel();
+      renderManifestInfo();
+      refreshSidSel();
+      updateDirStatsUI();
+      renderFrame(); // 自动进入第一帧
+    }catch(e){
+      console.warn('AUTO boot failed', e);
+      const el = $('dirStats');
+      if(el) el.innerHTML = `<div class="err">AUTO 启动失败: ${String(e && e.message || e)}<br>`+
+        `请确认 demo_server.py 已在 8907 端口运行（运行 tools\\open_demo_d04.bat).</div>`;
+    }
+  }
+})();
+</script>
+</body>
+</html>

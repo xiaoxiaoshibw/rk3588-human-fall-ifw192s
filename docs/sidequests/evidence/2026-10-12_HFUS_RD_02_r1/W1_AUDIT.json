@@ -1,0 +1,201 @@
+{
+  "date": "2026-10-12",
+  "head": "026e06303f60ed1bbe4ddc4d037836db68da6d27",
+  "denominators": {
+    "per_sid": {
+      "cap_20261010_175227": {
+        "reviewed_person_objects": 0,
+        "in_510": true,
+        "note": ""
+      },
+      "cap_20261010_175429": {
+        "reviewed_person_objects": 258,
+        "in_510": true,
+        "note": ""
+      },
+      "cap_20261010_175553": {
+        "reviewed_person_objects": 99,
+        "in_510": true,
+        "note": ""
+      },
+      "cap_20261010_175804": {
+        "reviewed_person_objects": 11,
+        "in_510": true,
+        "note": ""
+      },
+      "cap_20261010_175943": {
+        "reviewed_person_objects": 6,
+        "in_510": true,
+        "note": ""
+      },
+      "cap_20261010_180235": {
+        "reviewed_person_objects": 71,
+        "in_510": true,
+        "note": ""
+      },
+      "cap_20261010_180337": {
+        "reviewed_person_objects": 12,
+        "in_510": true,
+        "note": ""
+      },
+      "cap_20261010_180557": {
+        "reviewed_person_objects": 53,
+        "in_510": true,
+        "note": ""
+      },
+      "cap_20261010_180751": {
+        "reviewed_person_objects": 35,
+        "in_510": false,
+        "note": "S9 INVALID_BINDING→explore only"
+      }
+    },
+    "totals": {
+      "reviewed_person_objects_excl_S9": 510,
+      "reviewed_person_objects_incl_S9": 545,
+      "claim_510_matches": true
+    }
+  },
+  "q2_s1_furniture": {
+    "candidate_rows": 644,
+    "with_prob": 644,
+    "prob_ge_0.55_count": 375,
+    "prob_ge_0.55_frac": 0.5822981366459627,
+    "prob_p50": 0.868046877478731,
+    "prob_p90": 0.868046877478731,
+    "prob_p99": 0.9657938218178498,
+    "source": "mainline ledger candidates (BG 输出点经 XY 体素聚类)",
+    "human_review_status": "S1 GT_V1 全部 class PERSON 0 个；这 644 候选无任何 reviewed 标签——RD-01 按'空场=按定义负'处理，非人工审核",
+    "gt_object_count": 0
+  },
+  "q3_rf69_allpos_val": {
+    "train": {
+      "pos": 259,
+      "neg": 386,
+      "unk": 0,
+      "sids": {
+        "175429/P": 259,
+        "175227/P_FP_S1": 386
+      }
+    },
+    "val": {
+      "pos": 91,
+      "neg": 0,
+      "unk": 0,
+      "sids": {
+        "175553/P": 91
+      }
+    },
+    "_conclusion": {
+      "val_all_positive": true,
+      "train_pos": 259,
+      "train_neg": 386,
+      "val_pos": 91,
+      "val_neg": 0,
+      "train_neg_from": "S1 家具'按定义负'——非 reviewed；train 负例 477 几乎全来自 S1（占 train 行数多数）",
+      "why_not_evidence": "① val fold 全正 → AUPRC/F1 on val 数学上不存在，train 满分=过拟合已分离子样本；② train 负例=S1 家具（非 reviewed），'家具 vs 人'是已被特征族分离的容易二分；③ 满分只证明'在 S1家具+reviewed人 子样本上可分'，对'未见过场景的真负例'零外推。RF69>RF51 的 0.014 AUPRC 增益来源是 train 上 S1 占 60% 的特定分布，不能作为生产提升证据。"
+    }
+  },
+  "q4_bg_retention": {
+    "cap_20261010_175943": {
+      "frames_with_gt": 6,
+      "gt_points_total": 8841,
+      "gt_points_in_bg_kept": 2749,
+      "bg_retention_def": "GT人点 ∩ bg_kept_ids / GT人点总数（点级）",
+      "bg_retention": 0.3109376767334012,
+      "gt_points_in_valid": 8841
+    },
+    "cap_20261010_180557": {
+      "frames_with_gt": 53,
+      "gt_points_total": 57045,
+      "gt_points_in_bg_kept": 55882,
+      "bg_retention_def": "GT人点 ∩ bg_kept_ids / GT人点总数（点级）",
+      "bg_retention": 0.9796125865544746,
+      "gt_points_in_valid": 57045
+    },
+    "_consistency": "S5 与 S8 用同一定义（点级 GT人点∩bg_kept/GT人点）。RD-01 报 S5=31.1%、S8=98.0% 同源同口径——定义一致。差异是真实场景差异（S5 转身稀疏、S8 静立），非口径不一致。"
+  },
+  "q5_c4_contamination": {
+    "cap_20261010_175227": {
+      "frames_checked": 0,
+      "c4_clusters": 0,
+      "multi_obj_frames": 0,
+      "mixed_clusters_ge2gt": 0,
+      "big_static_ge2000pts": 0,
+      "gt_hit_clusters": 0,
+      "note": "单人会话混簇不可判(仅1 GT对象/帧)"
+    },
+    "cap_20261010_175429": {
+      "frames_checked": 20,
+      "c4_clusters": 150,
+      "multi_obj_frames": 0,
+      "mixed_clusters_ge2gt": 0,
+      "big_static_ge2000pts": 60,
+      "gt_hit_clusters": 21,
+      "note": "单人会话混簇不可判(仅1 GT对象/帧)"
+    },
+    "cap_20261010_175553": {
+      "frames_checked": 20,
+      "c4_clusters": 135,
+      "multi_obj_frames": 0,
+      "mixed_clusters_ge2gt": 0,
+      "big_static_ge2000pts": 61,
+      "gt_hit_clusters": 22,
+      "note": "单人会话混簇不可判(仅1 GT对象/帧)"
+    },
+    "cap_20261010_175804": {
+      "frames_checked": 11,
+      "c4_clusters": 100,
+      "multi_obj_frames": 0,
+      "mixed_clusters_ge2gt": 0,
+      "big_static_ge2000pts": 33,
+      "gt_hit_clusters": 11,
+      "note": "单人会话混簇不可判(仅1 GT对象/帧)"
+    },
+    "cap_20261010_175943": {
+      "frames_checked": 6,
+      "c4_clusters": 33,
+      "multi_obj_frames": 0,
+      "mixed_clusters_ge2gt": 0,
+      "big_static_ge2000pts": 18,
+      "gt_hit_clusters": 6,
+      "note": "单人会话混簇不可判(仅1 GT对象/帧)"
+    },
+    "cap_20261010_180235": {
+      "frames_checked": 20,
+      "c4_clusters": 141,
+      "multi_obj_frames": 0,
+      "mixed_clusters_ge2gt": 0,
+      "big_static_ge2000pts": 60,
+      "gt_hit_clusters": 22,
+      "note": "单人会话混簇不可判(仅1 GT对象/帧)"
+    },
+    "cap_20261010_180337": {
+      "frames_checked": 12,
+      "c4_clusters": 95,
+      "multi_obj_frames": 0,
+      "mixed_clusters_ge2gt": 0,
+      "big_static_ge2000pts": 36,
+      "gt_hit_clusters": 12,
+      "note": "单人会话混簇不可判(仅1 GT对象/帧)"
+    },
+    "cap_20261010_180557": {
+      "frames_checked": 20,
+      "c4_clusters": 201,
+      "multi_obj_frames": 0,
+      "mixed_clusters_ge2gt": 0,
+      "big_static_ge2000pts": 60,
+      "gt_hit_clusters": 20,
+      "note": "单人会话混簇不可判(仅1 GT对象/帧)"
+    },
+    "cap_20261010_180751": {
+      "frames_checked": 18,
+      "c4_clusters": 160,
+      "multi_obj_frames": 17,
+      "mixed_clusters_ge2gt": 16,
+      "big_static_ge2000pts": 55,
+      "gt_hit_clusters": 19,
+      "note": ""
+    },
+    "_note": "混簇判定只在多 GT 对象帧有效（S9 双人但 INVALID_BINDING 不进判定）。big_static>=2000 是静态大物体 proxy，需工作二人工复核确认是不是家具/墙。"
+  }
+}
