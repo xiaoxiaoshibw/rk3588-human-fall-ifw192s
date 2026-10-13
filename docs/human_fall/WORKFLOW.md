@@ -1,5 +1,15 @@
 # 工单开发与验收流程 v2
 
+2026-10-13 用户要求"三项一起做"+"开发啊"利用助手视觉排查r02 f10家具、093958配平、P臂吞人画像：**HF-REAL-03** [唯一v1](evidence/2026-10-13_hf_real_03_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-13_hf_real_03_r1/FINAL_REPORT.md)/[回传](returns/HF-REAL-03.md)。助手writer（claude-fable-5），隔离源码r03，r02证据只读。视觉盒被证伪（404点全落HF-REAL-01人区，v2 target不含家具残留→RS04 FAIL需指定独审决定是否关闭）；093958判DATA_BAD（三法pairwise PASS但f5/f60/f115无地斜带）不投入追踪；215540 P臂吞人按部位量化112,903/115,677=97.6%（legs/torso/shoulders/head 97%+）；215623/215643/233658板端本机均不在DATA_BLOCKED。f47/109/118 axis_ambiguous沿用RS05 BLOCKED。SUBMITTED未ACCEPTED，独审/设备/部署/生产/GT NOT_RUN，不再启动r02源码/生产/模型/GT/captures，不commit/push；板上ssh仅只读列出captures_remote。
+
+2026-10-13 用户明确将全过程回放集成进桌面总控制台.lnk：**HF-CONSOLE-01** [唯一v1](evidence/2026-10-13_hf_console_01_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-13_hf_console_01_r1/FINAL_REPORT.md)/[回传](returns/HF-CONSOLE-01.md)。Codex唯一writer，仅console入口/同进程离线服务/回归及实际EXE/ZIP重建；首页“骨架与倒地检测”，动态实例端口自动起r02原回放。JS11/Python6/真浏览器iframe与实际frozen启动自验PASS，SUBMITTED未ACCEPTED。原真人成员FAIL/骨架GT BLOCKED保持，独审/设备物理部署NOT_RUN；不改原算法/数据/GT/模型/板端、快捷方式目标或Git写。
+
+2026-10-13 用户提供空场131958并明确要求完整人体/骨架锁定与倒地检测过程：**HF-REAL-02** [唯一v1](evidence/2026-10-13_hf_real_02_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-13_hf_real_02_r1/FINAL_REPORT.md)/[回传](returns/HF-REAL-02.md)，Codex唯一writer，隔离r02，回放8931。空场配平与离线参考注册通过、164帧候选关联/一次prototype告警，骨架13粗部位/源点支撑及六阶段可视；f10家具污染使完整纯人体FAIL，3帧骨架轴歧义，解剖关节/真人GT/泛化BLOCKED；独审/设备物理部署NOT_RUN，SUBMITTED未ACCEPTED。不改原R01/生产/模型/GT/captures，不采集部署Git写，不替代D05。
+
+2026-10-13 用户明确真人首版 **HF-REAL-01**：新录094333/093958“先配平再去背景，然后再分析，先借助你的视觉”，承接单人追踪倒地离线原型。[唯一验收v1](evidence/2026-10-13_hf_real_01_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-13_hf_real_01_r1/FINAL_REPORT.md)/[回传](returns/HF-REAL-01.md)。Codex唯一writer，隔离sidequests/human_fusion_lab_next/real_fall/r01；094333配平PASS、093958质量FAIL未接入；启动参考排除视觉人体区域，非确认空场；154测量帧同ID候选关联、7.46秒一次未验证prototype告警，core确认关闭。SUBMITTED，独审NOT_RUN、GT/泛化BLOCKED、设备物理部署NOT_RUN；不改生产/GT/模型/原captures，不采集/部署/Git写，不替代D05-R06。
+
+2026-10-12 用户明确授权 **HF-DEMO-01 离线跌倒系统 Demo**（“先做一个跌倒识别系统demo没必要那么准确”）：[唯一验收 v1](evidence/2026-10-12_hf_demo_01_r1/ACCEPTANCE_V1.md)。Codex 唯一 writer；复用现有规则，合成场景明确标注，优先可操作演示；不部署、不采集、不改生产，真实跌倒准确率 NOT_RUN。D05-R06 保留未收口状态。
+
 2026-10-05 用户明确授权《AI_PROMPT_GL_S01S02_BCDE_ONESHOT.md》：按流程独审 → 范围内修复 → 提交（commit，不 push）。复审者 Claude（claude-fable-5）对 GL-S01/S02/B/C/D/E 六单批量独审，**全部软件 PASS、无 FAIL 触发 Phase B 修复**；D01 设备/物理一律 NOT_RUN，**不报 ACCEPTED**。三组 commit 仅登记工单与复审产物，不 push。详见 [REVIEW_LOG.md 顶部](REVIEW_LOG.md)。下方历史条目不动。
 
 2026-10-05 用户明确授权 **HF-12 感知链前置滤波降噪**（本轮”好的定制工单并且开发”）：[工单](tickets/HF-12_point_denoise.md)/[唯一v1](HF12_ACCEPTANCE.md)。writer OpenCode（opencode-go/deepseek-v4.1-flash，本会话），作者自验 SUBMITTED / STOPPED：[回传](returns/HF-12.md)、[证据](evidence/2026-10-05_hf12_r1/)。仅 `build_snapshot` 前置孤立点去噪（体素邻域计数，稠密盒求和）与 `perception.yaml` 启用（core 默认关闭）；H01–H06/R01/S01 作者自验 PASS，D01 设备/实机/部署 NOT_RUN，不自行 ACCEPTED；不动 `voxel_size_m`（HF-09 预留）/配平/跟踪/网页/驱动。

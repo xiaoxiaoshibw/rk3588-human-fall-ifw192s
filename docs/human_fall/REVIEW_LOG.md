@@ -1,5 +1,21 @@
 # 工单审查记录
 
+## 2026-10-13 HF-REAL-03 助手视觉排查三单作者提交
+
+[验收v1](evidence/2026-10-13_hf_real_03_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-13_hf_real_03_r1/FINAL_REPORT.md)/[回传](returns/HF-REAL-03.md)。完成三单排查：①f10家具污染被拒——v2 target在f10未含家具残留，RS04 FAIL需指定独审决定是否关闭（视觉盒被证伪: v3 404点全落人区）；②093958判DATA_BAD——三法pairwise PASS但f5/f60/f115无地斜带，不投入追踪；③215540 P臂吞人定量画像——64帧人区112,903/115,677=97.6%删除，按legs/torso/shoulders/head分带量化。215623/215643/233658板端+本机均无原始点DATA_BLOCKED。f47/109/118 axis_ambiguous沿用RS05 BLOCKED。独审/设备/部署/生产/GT NOT_RUN；SHA清单见SOURCE_AND_END_BOUNDARY.json与ARTIFACTS_FINAL_SHA.json。
+
+## 2026-10-13 HF-CONSOLE-01 总控制台集成作者提交
+
+[验收v1](evidence/2026-10-13_hf_console_01_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-13_hf_console_01_r1/FINAL_REPORT.md)。实际桌面快捷方式目标Console.exe已重建，首页新增骨架倒地入口，控制台自启同进程随机端口离线回放。CI01–05自验PASS：JS11/Python6、真实Edge iframe、实际frozen启动/告警13槽数据、退出关端口、内嵌HTML匹配与ZIP；CI06识别精度BLOCKED、独审/设备物理部署NOT_RUN。未改原r02/数据/GT/模型/板端/快捷方式目标，不ACCEPTED。
+
+## 2026-10-13 HF-REAL-02 全过程作者自验（完整锁定未通过）
+
+[唯一v1](evidence/2026-10-13_hf_real_02_r1/ACCEPTANCE_V1.md)/[完整报告](evidence/2026-10-13_hf_real_02_r1/FINAL_REPORT.md)。真实空场97帧配平通过，未注册匹配.652 FAIL保留，已有ICP数学/静态排除区初始化与留出后.948；实际164候选关联、f72 prototype告警/恢复、骨架支撑显示与8阶段真浏览器完成。RS04完整纯人体FAIL（f10残留家具），RS05完整解剖骨架BLOCKED，47/109/118主轴UNKNOWN；45帧全13粗槽有点不报关节精度。自验数学/源行/core20tests及浏览器通过；真人GT/泛化BLOCKED、独审/设备物理部署NOT_RUN，未ACCEPTED。只新r02/证据/授权记录，原R01/生产/GT/模型/原数据保持。
+
+## 2026-10-13 HF-REAL-01 真人离线原型作者提交（非独立验收）
+
+[唯一v1](evidence/2026-10-13_hf_real_01_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-13_hf_real_01_r1/FINAL_REPORT.md)。RF01/03/04/05/06/07作者自验PASS，各限启动参考/视觉初始化/开发会话；RF02 094333 PASS、093958 FAIL，RF08独审NOT_RUN、真人GT与泛化BLOCKED、设备物理部署NOT_RUN。真实164帧，前10帧初始化、后154帧候选关联；f72 7.46秒一次未验证prototype告警，core confirmed关闭。原HF06 20tests、独立源行audits、真实Edge WebGL与非法HTTP检查通过；CUA初始化与favicon首轮失败保留。Codex为作者，不冒称独立审核/ACCEPTED。仅隔离新source/evidence与授权记录，无生产/模型/GT/原captures/Git写。
+
 ## 2026-10-05 GL-S01/S02/B/C/D/E 批量独审（六单复审 PASS；不报 ACCEPTED）
 
 用户 2026-10-05 授权《AI_PROMPT_GL_S01S02_BCDE_ONESHOT.md》：按流程独审 → 范围内修复 → 提交（commit，不 push）。复审者 Claude（claude-fable-5，通过 Mirasim 会话）与作者 OpenCode（opencode-go/deepseek-v4.1-flash）**不同提供方、不同模型**，未参与实现，ponytail 路径 `C:\Users\30680\.claude\skills\ponytail\SKILL.md`（full）。基线 `master @ b190834`。
@@ -736,3 +752,7 @@ R2 算法与验收表保持 Codex 提交原文不改。本附记只补本轮外�
 复核要点：HEAD/无暂存未变，改前基线 SHA 经验证等于 HEAD blob（lidar_candidates `447E4003…`、perception `70C8F04B…`），8 个最终产物 SHA256 本会话重算与 FINAL 快照逐一相等；新测试 16/16、全量 504/504 复跑 OK（改前 488 对照）；独立 30/30 边界（HEAD 剥离新增键后默认关闭输出逐 JSON 相等、稠密/回退路径对暴力体素计数逐点相等、高度带/背景顺序反例、校验负例与旧 settings 回灌）；探针计数 59668/176/58963/174 与作者证据逐项一致（计时受负载影响不作性能结论）；v1 缺陷复现 [6,6,3]/[T,T,T] 复跑保留；两被审文件 diff 仅意图内 hunk。
 
 观察（非阻断）：体素计数为精确半径邻域的超集（0.19 m@r=0.1 可计入，半径内绝无漏计）；极小半径运行时有界守卫（2^20 回退上限）；`radius=True/None` 沿用既有 `_POSITIVE` 转换风格。合成/桌面范围，板端与真实数据保持 NOT_RUN。完整报告与全部日志：[evidence/2026-10-05_hf12_r1/opencode_review_01/00_review.md](evidence/2026-10-05_hf12_r1/opencode_review_01/00_review.md)。作者保持停写；验收表结果列与 WORKFLOW 顶部指针由用户/Codex 决定是否同步。
+
+## 2026-10-12 HF-DEMO-01 / R1 只读独审与处置
+
+指定 opencode-go/deepseek-v4.1-flash，child31512 exit0；[完整意见](evidence/2026-10-12_hf_demo_01_r1/OPENCODE_01.md)。export超时保留FAIL，SQLite mode=ro仅查本次session核验实际模型与REVIEW_COMPLETE为PASS。v1无P0/P1；来源SHA与文案问题已由主控在独立UI v2处置，见[处置记录](evidence/2026-10-12_hf_demo_01_r1/REVIEW_DEFECT_HANDLING.md)。v2作者浏览器复核，不宣称已获独审者二次确认。工程SUBMITTED，真实算法与设备NOT_RUN，GT及生产BLOCKED，不ACCEPTED；[当前交付](evidence/2026-10-12_hf_demo_01_r1/FINAL_REPORT.md)。
