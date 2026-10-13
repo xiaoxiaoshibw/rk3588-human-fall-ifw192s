@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>GT 标注工作台 · HUMAN-GT-ANNOTATOR-R1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin:0; height:100%; overflow:hidden; background:#101114;
+               color:#e8e9ec; font:13px/1.5 "Segoe UI Variable Text","Segoe UI",Inter,system-ui,
+               "Microsoft YaHei UI","Microsoft YaHei","PingFang SC",sans-serif; }
+  #wrap { display:grid; grid-template-columns: 1fr 320px; height:100vh; }
+  #view { width:100%; height:100%; display:block; background:#0c0d10; cursor:crosshair; }
+  #side { border-left:1px solid #2a2d33; padding:8px 10px; overflow-y:auto; font-size:12px; }
+  #hud { position:absolute; top:8px; left:8px; padding:4px 10px; background:rgba(20,22,26,.85);
+         border-radius:4px; font-size:12px; color:#8f8; z-index:2; }
+  .row { display:flex; gap:4px; align-items:center; margin:4px 0; flex-wrap:wrap; }
+  button { background:#1e2126; color:#e8e9ec; border:1px solid #3a3e46; padding:3px 8px;
+           border-radius:3px; cursor:pointer; font:11px "Segoe UI",sans-serif; }
+  button:hover { background:#283040; }
+  button.pri { background:#2c5dd8; border-color:#2c5dd8; }
+  button.danger { background:#a03; border-color:#a03; }
+  input[type=range] { width:120px; }
+  input, select { background:#1e2126; color:#e8e9ec; border:1px solid #3a3e46;
+                  padding:2px 6px; border-radius:3px; font:12px "Segoe UI",sans-serif; }
+  label { font-size:11px; color:#9aa; }
+  .sep { border-top:1px dashed #333; margin:6px 0; }
+  .obj_row { padding:2px 6px; cursor:pointer; border-radius:2px; }
+  .obj_row:hover { background:#1c2027; }
+  .sug_row { padding:4px 6px; border-radius:2px; margin-bottom:2px; border-left:2px solid #ff6; }
+  .sug_row:hover { background:#1c2027; }
+  .sug_main { display:flex; gap:6px; align-items:baseline; font-size:11px; overflow:hidden; }
+  .sug_main b { color:#fff; font-weight:600; min-width:60px; flex:none; }
+  .sug_loc { color:#9ab; font-family:"Cascadia Mono",Consolas,monospace; font-size:10px; flex:1;
+             overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sug_conf { color:#8f8; font-weight:600; font-size:11px; flex:none; }
+  .sug_ops { display:flex; gap:4px; margin-top:2px; }
+  .sug_ops button { flex:1; padding:1px 4px; font-size:10px; }
+  #progress { font-size:11px; color:#bcd; padding:4px 8px; line-height:1.6; }
+  #frozen_list div { font-size:11px; color:#9db; }
+  kbd { background:#2a2d33; padding:0 4px; border-radius:2px; font:10px "Cascadia Mono",Consolas,monospace; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div style="position:relative">
+    <canvas id="view"></canvas>
+    <div id="hud">载入中…</div>
+    <div id="cadence" style="position:absolute;top:44px;left:8px;padding:4px 10px;background:rgba(20,22,26,.85);
+         border-radius:4px;font-size:11px;color:#cde;max-width:480px;line-height:1.5;display:none"></div>
+  </div>
+  <div id="side">
+    <div class="row"><b>GT 标注</b> v1</div>
+    <div class="row">
+      <label>标注人</label>
+      <input id="annotator_input" type="text" placeholder="annotator-1" style="width:110px">
+    </div>
+    <div class="sep"></div>
+    <div class="row">
+      <label>会话</label>
+      <select id="sid_select" style="width:150px"><option value="">—</option></select>
+      <button id="live_btn" title="从 foxglove_bridge 实时订阅 /innolidar_points（抽稀显示，与录制无关）" style="font-size:11px">📡 实时</button>
+    </div>
+    <div id="live_banner" style="display:none;padding:4px 6px;background:#3a2f1a;color:#fca;font-size:11px;border-radius:3px;margin:2px 0">
+      <span id="live_text">连接实时点云中…</span>
+      <button id="live_close" style="float:right;padding:0 6px;font-size:10px">关闭</button>
+    </div>
+    <!-- 会话/GT 元数据操作：会话改名 / 从板同步 / 录制（PC 模式可用；板端模式会 403 降级） -->
+    <div id="ops_panel" class="row" style="font-size:11px">
+      <button id="pull_btn" title="从板端 8088 拉最新 GT 产物到本机 gt_store">⇣ 从板同步</button>
+      <button id="rename_btn" title="本地改名（写 meta.json name；不动 sid）">改名</button>
+      <button id="alias_btn" title="draft 别名（冻结版别名找其旁 ✎）">GT 别名</button>
+      <button id="rec_btn" title="板端开始/停止录制">● 开始录制</button>
+    </div>
+    <div id="ops_rename_row" class="row" style="display:none">
+      <input id="rename_input" type="text" placeholder="新显示名（空=清除）" style="flex:1">
+      <button id="rename_ok">♂</button>
+      <button id="rename_cancel">×</button>
+    </div>
+    <div id="ops_note" style="font-size:10px;color:#8f8;min-height:14px;padding:2px 2px"></div>
+    <div class="row">
+      <button id="prev_frame_25" title="-25 帧 (,)">◀◀</button>
+      <button id="prev_frame">◀</button>
+      <span id="frame_label" style="flex:1;text-align:center">—</span>
+      <button id="next_frame">▶</button>
+      <button id="next_frame_25" title="+25 帧 (.)">▶▶</button>
+    </div>
+    <input id="frame_slider" type="range" min="0" max="0" value="0" style="width:100%">
+    <div class="sep"></div>
+    <div class="row"><label>Z 带</label>
+      <input id="z_min" type="range" min="-0.5" max="3.0" step="0.05" value="0.05">
+      <input id="z_max" type="range" min="-0.5" max="3.0" step="0.05" value="2.3">
+    </div>
+    <div class="row" style="font-size:10px;color:#9aa">
+      工具: <kbd>P</kbd>平移 <kbd>N</kbd>矩形 <kbd>L</kbd>多边形 (再按 N/L=闭合)
+      <kbd>Esc</kbd>取消 <kbd>Enter</kbd>/<b>双击</b>闭合多边形 <kbd>Space</kbd>播放
+      视角: <kbd>R</kbd><kbd>E</kbd>旋转 <kbd>T</kbd>回正 <kbd>中键拖</kbd>平移
+    </div>
+    <div class="row" style="font-size:10px;color:#9aa">
+      类别: <b>默认=人</b> <kbd>1</kbd>人 <kbd>2</kbd>家具 <kbd>3</kbd>背景 <kbd>4</kbd>未知
+      <kbd>T</kbd>TrackID <kbd>Del</kbd>删 <kbd>K</kbd>关键帧 <kbd>C</kbd>传下帧
+      <kbd>B</kbd>断点 <kbd>G</kbd>审(单) <kbd>H</kbd>审(帧)
+    </div>
+    <div class="row" style="font-size:10px;color:#9aa">
+      <kbd>F</kbd>框拖(<b>左键连续跟</b>) <kbd>V</kbd>粘上帧 <kbd>I</kbd>K帧间线性插 <kbd>WASD</kbd>键移框
+    </div>
+    <div class="row" style="font-size:10px;color:#9aa">
+      <kbd>Ctrl+Z</kbd>撤 <kbd>Ctrl+Y</kbd>重 <kbd>Ctrl+S</kbd>存
+      <kbd>←→</kbd>帧 <kbd>Shift</kbd>×10 <kbd>,</kbd>/<kbd>.</kbd>±25 <kbd>右键压</kbd>翻帧 <kbd>Shift+右键</kbd>倒退
+    </div>
+    <div class="sep"></div>
+    <div class="row">
+      <button id="auto_btn" class="pri">AI 预标 (fusion 预跑)</button>
+    </div>
+    <div id="suggestions_panel" style="border:1px solid #2a2d33;border-radius:3px;padding:4px;max-height:140px;overflow-y:auto">
+      <i>本帧无建议</i>
+    </div>
+    <div class="sep"></div>
+    <div id="objects_panel" style="border:1px solid #2a2d33;border-radius:3px;padding:4px;max-height:180px;overflow-y:auto">
+      <i>本帧无对象</i>
+    </div>
+    <div class="sep"></div>
+    <div id="progress">—</div>
+    <div class="sep"></div>
+    <div class="row">
+      <button id="save_btn" class="pri">保存 (Ctrl+S)</button>
+      <button id="freeze_btn">冻结版本</button>
+      <button id="export_btn">导出</button>
+    </div>
+    <div id="frozen_list" style="border:1px solid #2a2d33;border-radius:3px;padding:4px;margin-top:4px"></div>
+    <div class="sep"></div>
+    <div style="font-size:10px;color:#8b94a0">
+      契约：所有 ROIs 在 leveled-IFW192S 地面系 (render_person_label.R/T)；
+      raw_point_indices 用 leveled-compact 索引（无损映射回原始 points.bin）。
+      自动/传播建议永不置为 reviewed；人工确认才会标 human/reviewed。
+    </div>
+  </div>
+</div>
+<script src="gt_lib.js"></script>
+<script src="gt_live.js"></script>
+<script src="gt_workbench_ops.js"></script>
+<script src="gt_annotator.js"></script>
+</body>
+</html>
