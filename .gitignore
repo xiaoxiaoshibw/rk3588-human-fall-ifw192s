@@ -43,3 +43,30 @@ docs/human_fall/evidence/**/r*_case_real_historical_WHAT_IF_*.json
 docs/human_fall/evidence/**/experiment_results*.json
 docs/human_fall/evidence/**/*.zip.before
 docs/human_fall/evidence/**/source_review.html
+
+# 2026-10-13: human_capture evidence 派生产物同样 policy（账本 ledger 入库， 大型原始 rerun/截图/打包 不入库）
+# 实测 big bucket: jsonl 5.7G (HFUS-D05 per-frame guard/control rerun 回放)、zip 5.0G、png 27M、svg 45M、exe 308M、csv 151M
+# 这些是 captures/leveled 派生 rerun artifacts, 可用 session SHA 复核——同 HF 上一条
+docs/human_capture/evidence/**/*.jsonl
+docs/human_capture/evidence/**/*.zip
+docs/human_capture/evidence/**/*.png
+docs/human_capture/evidence/**/*.jpg
+docs/human_capture/evidence/**/*.svg
+docs/human_capture/evidence/**/*.exe
+docs/human_capture/evidence/**/*.csv
+docs/human_capture/evidence/**/*.bin
+docs/human_capture/evidence/**/*.npz
+
+# GT 标注工作台本地 store（generated, 由 gt_server.py 写入， 566M 单独带外备份在 captures/leveled/gt_store_backup/）
+# 单 S1 429M、S3-walk-y-far 39M、S5 36M；其余 <1M。ledger 文件同名即可再生成。
+/pc_apps/human_replay/gt_store/
+
+# 杂项/解包残留（2026-10-13 盘点发现）
+/pc_apps/console/O console_extracted
+/pelican_bike.html
+/ml_step1/
+
+# HC-JOINT 本机联合录制产物（exe/zip 由 make_leveling_release.py 重建，不入库）
+/pc_apps/console/dist_leveling/
+# O 前缀临时导出产物
+"O console_extracted"
