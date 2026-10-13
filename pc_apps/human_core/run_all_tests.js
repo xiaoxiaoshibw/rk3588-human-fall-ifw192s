@@ -10,6 +10,7 @@ var TESTS = [
     "test_replay_contract.js",
     "test_edge_cases.js",
     "test_model_compat.js",
+    "test_rework.js",
 ];
 
 var failed = 0;

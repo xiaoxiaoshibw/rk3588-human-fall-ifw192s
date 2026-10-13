@@ -39,8 +39,8 @@ function frame_stationary_box(cx, cy, w, h, d, n) {
 (function () {
     var eng = new E.UnifiedEngine({ mode: E.MODE.BASE_A, leveling_rt: { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], T: [0, 0, 0] } });
     eng.begin_session("test");
-    eng.set_online_background([mk_sensor_frame([], 0)]);
-    var fc = S.make_frame_context({ session_id: "test", frame_index: 0, timestamp: 0, xyzi: mk_sensor_frame([], 0), already_leveled: true });
+    eng.set_online_background([mk_sensor_frame([], 0)], {already_leveled:true});
+    var fc = S.make_frame_context({ session_generation:eng.generation, session_id: "test", frame_index: 0, timestamp: 0, xyzi: mk_sensor_frame([], 0), already_leveled: true });
     var d = eng.tick(fc);
     t(d._candidates.length === 0, "空帧 0 cand (实测 " + d._candidates.length + ")");
 })();
@@ -50,8 +50,8 @@ function frame_stationary_box(cx, cy, w, h, d, n) {
     var eng = new E.UnifiedEngine({ mode: E.MODE.BASE_A, leveling_rt: { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], T: [0, 0, 0] } });
     eng.begin_session("test2");
     var raw = mk_sensor_frame([1, 2, 0.0, 1.1, 2.1, 0.05, 0.9, 2.2, 0.09], 0);
-    eng.set_online_background([raw]);
-    var fc = S.make_frame_context({ session_id: "test2", frame_index: 0, timestamp: 0, xyzi: raw, already_leveled: true });
+    eng.set_online_background([raw], {already_leveled:true});
+    var fc = S.make_frame_context({ session_generation:eng.generation, session_id: "test2", frame_index: 0, timestamp: 0, xyzi: raw, already_leveled: true });
     var d = eng.tick(fc);
     var fg_layer = d.layers.find(function (l) { return l.layer === "foreground"; });
     t(fg_layer.out_points === 0, "z<0.1 前景剔除 fg=0 (实测 " + fg_layer.out_points + ")");
@@ -61,10 +61,10 @@ function frame_stationary_box(cx, cy, w, h, d, n) {
 (function () {
     var eng = new E.UnifiedEngine({ mode: E.MODE.BASE_A, leveling_rt: { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], T: [0, 0, 0] } });
     eng.begin_session("test3");
-    eng.set_online_background([mk_sensor_frame([], 0)]);
+    eng.set_online_background([mk_sensor_frame([], 0)], {already_leveled:true});
     /* 5 个点 — 虽会被 fg 保留但聚类至少 3 voxel, 5 点 1 voxel 也不够 */
     var raw = mk_sensor_frame([1, 2, 1.0, 1.01, 2.01, 1.05, 1.02, 2.02, 1.5, 1.03, 2.0, 1.6, 1.04, 2.05, 1.7], 0);
-    var fc = S.make_frame_context({ session_id: "test3", frame_index: 0, timestamp: 0, xyzi: raw, already_leveled: true });
+    var fc = S.make_frame_context({ session_generation:eng.generation, session_id: "test3", frame_index: 0, timestamp: 0, xyzi: raw, already_leveled: true });
     var d = eng.tick(fc);
     t(d._candidates.length === 0, "点不足 0 cand (实测 " + d._candidates.length + ")");
 })();
@@ -73,14 +73,14 @@ function frame_stationary_box(cx, cy, w, h, d, n) {
 (function () {
     var eng = new E.UnifiedEngine({ mode: E.MODE.BASE_A, leveling_rt: { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], T: [0, 0, 0] } });
     eng.begin_session("test4");
-    eng.set_online_background([mk_sensor_frame([], 0)]);
+    eng.set_online_background([mk_sensor_frame([], 0)], {already_leveled:true});
     /* 衣柜： 1×1×2m 宽盒 — 所有高度带一样粗 */
     var furn = frame_stationary_box(2, 2, 1.0, 1.0, 2.0, 500);
     /* 人： 0.3×0.3×1.7m 瘦柱 */
     var human = frame_stationary_box(5, 5, 0.3, 0.3, 1.7, 400);
     var all = furn.concat(human);
     var raw = mk_sensor_frame(all, 100);
-    var fc = S.make_frame_context({ session_id: "test4", frame_index: 0, timestamp: 0, xyzi: raw, already_leveled: true });
+    var fc = S.make_frame_context({ session_generation:eng.generation, session_id: "test4", frame_index: 0, timestamp: 0, xyzi: raw, already_leveled: true });
     var d = eng.tick(fc);
     /* BASE_A 的 hard gate n≥60 会容许两簇； 联合判定 spread_cv 分家具 */
     var n_furn_labeled = d._candidates.filter(function (c) {
@@ -96,22 +96,22 @@ function frame_stationary_box(cx, cy, w, h, d, n) {
         leveling_rt: { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], T: [0, 0, 0] },
     });
     eng.begin_session("t5");
-    eng.set_online_background([mk_sensor_frame([], 0)]);
+    eng.set_online_background([mk_sensor_frame([], 0)], {already_leveled:true});
     /* 喂 5 帧有"人形" */
     for (var i = 0; i < 5; i++) {
         var raw = mk_sensor_frame(frame_stationary_box(2, 2, 0.3, 0.3, 1.7, 400), 100);
-        var fc = S.make_frame_context({ session_id: "t5", frame_index: i, timestamp: i * 0.1, xyzi: raw, already_leveled: true });
+        var fc = S.make_frame_context({ session_generation:eng.generation, session_id: "t5", frame_index: i, timestamp: i * 0.1, xyzi: raw, already_leveled: true });
         eng.tick(fc);
     }
     /* 喂 10 帧空 (ran out) */
     for (var i = 5; i < 15; i++) {
         var raw = mk_sensor_frame([], 0);
-        var fc = S.make_frame_context({ session_id: "t5", frame_index: i, timestamp: i * 0.1, xyzi: raw, already_leveled: true });
+        var fc = S.make_frame_context({ session_generation:eng.generation, session_id: "t5", frame_index: i, timestamp: i * 0.1, xyzi: raw, already_leveled: true });
         var d = eng.tick(fc);
         if (i === 14) {
             /* 第 15 帧： tracker 应已 lost>8 关闭 (pipe track_lost_max=8) */
             var active = d._tracks || [];
-            t(true, "人消失 10 帧后 active_track=" + active.length + " (不崩)");
+            t(active.length === 0, "人消失10帧后无active track");
         }
     }
 })();
@@ -120,12 +120,12 @@ function frame_stationary_box(cx, cy, w, h, d, n) {
 (function () {
     var eng = new E.UnifiedEngine({ mode: E.MODE.BASE_A, leveling_rt: { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], T: [0, 0, 0] } });
     eng.begin_session("t6");
-    eng.set_online_background([mk_sensor_frame([], 0)]);
+    eng.set_online_background([mk_sensor_frame([], 0)], {already_leveled:true});
     /* 两个相距 3m 的人形柱 */
     var combined = frame_stationary_box(2, 2, 0.3, 0.3, 1.7, 400).concat(
         frame_stationary_box(5, 2, 0.3, 0.3, 1.7, 400));
     var raw = mk_sensor_frame(combined, 100);
-    var fc = S.make_frame_context({ session_id: "t6", frame_index: 0, timestamp: 0, xyzi: raw, already_leveled: true });
+    var fc = S.make_frame_context({ session_generation:eng.generation, session_id: "t6", frame_index: 0, timestamp: 0, xyzi: raw, already_leveled: true });
     var d = eng.tick(fc);
     t(d._candidates.length >= 1, "多候选跨帧 ≥1 (实测 " + d._candidates.length + ")");
     /* track_id 唯一性： */

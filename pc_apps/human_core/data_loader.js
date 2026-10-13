@@ -25,7 +25,25 @@ function validate_meta(meta) {
     if (!Array.isArray(L.fields) || L.fields.join(",") !== LAYOUT.join(","))
         throw new Error("layout.fields 非 x,y,z,intensity,ring,timestamp");
     if (!Array.isArray(meta.frames) || !meta.frames.length) throw new Error("frames 空");
+    if (!Number.isSafeInteger(meta.total_points) || meta.total_points < 0
+        || !Number.isSafeInteger(meta.total_points * STRIDE)) throw new Error("total_points 非安全非负整数");
+    if (L.endian !== undefined && L.endian !== "little") throw new Error("只支持little endian");
+    if (L.dtypes && L.dtypes.join(",") !== "<f4,<f4,<f4,<f4,<u2,<f4") throw new Error("layout.dtypes 不匹配");
+    if (L.pad_offsets_bytes && L.pad_offsets_bytes.join(",") !== "18,24") throw new Error("layout.pad 不匹配");
+    var end = 0, previous_time = -Infinity;
+    meta.frames.forEach(function (f) {
+        if (!f || !Number.isSafeInteger(f.offset_points) || f.offset_points !== end
+            || !Number.isSafeInteger(f.count_points) || f.count_points < 0
+            || f.count_points > meta.total_points - end) throw new Error("frame 非连续/越界/非整数");
+        if (!Number.isFinite(f.bag_time_sec) || f.bag_time_sec < previous_time) throw new Error("frame 时间非有限/回退");
+        end += f.count_points; previous_time = f.bag_time_sec;
+    });
+    if (end !== meta.total_points) throw new Error("帧点数与total_points不一致");
     return true;
+}
+
+function validate_size(meta, size) {
+    if (size !== meta.total_points * STRIDE) throw new Error("points.bin 尺寸与meta不一致/截断");
 }
 
 function sha256_path(p) {
@@ -70,26 +88,19 @@ function load_session(session_dir) {
     var points_path = path.join(session_dir, "points.bin");
     if (!fs.existsSync(meta_path)) throw new Error("no meta.json: " + session_dir);
     if (!fs.existsSync(points_path)) throw new Error("no points.bin: " + session_dir);
-    var meta = JSON.parse(fs.readFileSync(meta_path, "utf-8"));
+    var meta_blob = fs.readFileSync(meta_path);
+    var meta = JSON.parse(meta_blob.toString("utf-8"));
     validate_meta(meta);
     var blob = fs.readFileSync(points_path);
-    var total_pts = meta.total_points;
-    var expect_bytes = total_pts * STRIDE;
-    if (blob.length < expect_bytes)
-        throw new Error("points.bin 太小： " + blob.length + " < " + expect_bytes);
+    validate_size(meta, blob.length);
 
     var frames = new Array(meta.frames.length);
     for (var fi = 0; fi < meta.frames.length; fi++) {
         var f = meta.frames[fi];
-        var n = f.count_points | 0;
+        var n = f.count_points;
         var start_b = f.offset_points * STRIDE;
         /* 4B 对齐： blob.buffer 是外部分配 Buffer, byteOffset 可能不 4B 对齐 */
-        var aligned_blob = null;
-        if ((blob.byteOffset + start_b) % 4 === 0) {
-            aligned_blob = Buffer.from(blob.buffer, blob.byteOffset + start_b, n * STRIDE);
-        } else {
-            aligned_blob = blob.slice(start_b, start_b + n * STRIDE);
-        }
+        var aligned_blob = blob.subarray(start_b, start_b + n * STRIDE);
         var xyzi = _slice_frame_xyzi_fast(aligned_blob, n);
         frames[fi] = {
             index: fi,
@@ -103,8 +114,8 @@ function load_session(session_dir) {
         meta: meta,
         frames: frames,
         session_dir: session_dir,
-        points_sha256: sha256_path(points_path),
-        meta_sha256: sha256_path(meta_path),
+        points_sha256: crypto.createHash("sha256").update(blob).digest("hex"),
+        meta_sha256: crypto.createHash("sha256").update(meta_blob).digest("hex"),
     };
 }
 
@@ -116,22 +127,34 @@ function iter_frames_lazy(session_dir) {
     var meta = JSON.parse(fs.readFileSync(meta_path, "utf-8"));
     validate_meta(meta);
     var fd = fs.openSync(points_path, "r");
+    var closed = false;
+    function close() { if (!closed) { closed = true; fs.closeSync(fd); } }
+    try { validate_size(meta, fs.fstatSync(fd).size); }
+    catch (err) { close(); throw err; }
     var i = 0;
     return {
         meta: meta,
         count: meta.frames.length,
         next: function () {
-            if (i >= meta.frames.length) { fs.closeSync(fd); return null; }
+            if (i >= meta.frames.length) { close(); return null; }
+            if (closed) throw new Error("iterator已关闭");
             var f = meta.frames[i];
-            var n = f.count_points | 0;
+            var n = f.count_points;
             var buf = Buffer.alloc(n * STRIDE);
-            fs.readSync(fd, buf, 0, n * STRIDE, f.offset_points * STRIDE);
-            var xyzi = _slice_frame_xyzi_fast(buf, n);
-            var out = { index: i, timestamp: f.bag_time_sec, seq: f.seq, n_points: n, xyzi: xyzi };
-            i++;
-            return out;
+            try {
+                var read = 0;
+                while (read < buf.length) {
+                    var bytes = fs.readSync(fd, buf, read, buf.length - read, f.offset_points * STRIDE + read);
+                    if (!bytes) throw new Error("points.bin short read/截断");
+                    read += bytes;
+                }
+                var xyzi = _slice_frame_xyzi_fast(buf, n);
+                var out = { index: i, timestamp: f.bag_time_sec, seq: f.seq, n_points: n, xyzi: xyzi };
+                i++;
+                return out;
+            } catch (err) { close(); throw err; }
         },
-        close: function () { try { fs.closeSync(fd); } catch (e) { } },
+        close: close,
     };
 }
 

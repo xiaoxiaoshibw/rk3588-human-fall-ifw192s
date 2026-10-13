@@ -64,9 +64,13 @@ var LAYER = Object.freeze({
 /* 帧上下文构造 */
 function make_frame_context(opts) {
     if (!opts) throw new Error("FrameContext 需要 opts");
+    if (opts.session_id === undefined || opts.session_id === null || String(opts.session_id) === "") throw new Error("session_id为空");
+    if (!Number.isSafeInteger(opts.frame_index) || opts.frame_index < 0) throw new Error("frame_index非非负整数");
+    if (opts.timestamp !== undefined && !Number.isFinite(opts.timestamp)) throw new Error("timestamp非有限值");
+    if (opts.session_generation !== undefined && (!Number.isSafeInteger(opts.session_generation) || opts.session_generation < 1)) throw new Error("session_generation非法");
     var fc = {
         session_id: String(opts.session_id),
-        frame_index: opts.frame_index | 0,
+        frame_index: opts.frame_index,
         timestamp: Number(opts.timestamp) || 0,
         xyzi: opts.xyzi,                              /* Float32Array [x,y,z,i]* 传感系（或已 leveled — 看 already_leveled) */
         n_points: opts.xyzi ? opts.xyzi.length / 4 : 0,
@@ -75,6 +79,7 @@ function make_frame_context(opts) {
         frame_id: String(opts.frame_id || (opts.session_id + ":" + opts.frame_index)),
         already_leveled: !!opts.already_leveled,      /* 调用方已 leveled → engine 直通 */
         meta: opts.meta || null,                      /* meta.json (检测 meta.leveling) */
+        session_generation: opts.session_generation === undefined ? null : opts.session_generation,
     };
     if (!(fc.xyzi instanceof Float32Array)) throw new Error("FrameContext.xyzi 必须是 Float32Array");
     if (fc.xyzi.length % 4 !== 0) throw new Error("FrameContext.xyzi 长度必须 % 4");
@@ -135,6 +140,7 @@ function make_layer_diag(name) {
 function make_diagnostics(frame_id) {
     return {
         frame_id: frame_id,
+        notes: [],
         layers: [],                                  /* [LayerDiag]*, 顺序 = 管道 */
         track_transition: [],                        /* [{track_id, from, to, why}] */
         cls_scores: [],                              /* [{candidate_id, model, score, decision}] */
@@ -175,9 +181,10 @@ function validate_candidate(c) {
     if (!c || typeof c !== "object") { errs.push("not object"); return errs; }
     if (typeof c.candidate_id === "undefined") errs.push("candidate_id missing");
     if (!(c.point_indices instanceof Uint32Array)) errs.push("point_indices not Uint32Array");
-    if (!c.centroid || typeof c.centroid.x !== "number") errs.push("centroid bad");
-    if (!c.point_count) errs.push("point_count 0");
-    if (!CAND_SRC[c.foreground_source.toUpperCase()]) errs.push("foreground_source 未知");
+    if (!c.centroid || ![c.centroid.x, c.centroid.y, c.centroid.z].every(Number.isFinite)) errs.push("centroid bad");
+    if (!Number.isSafeInteger(c.point_count) || c.point_count <= 0) errs.push("point_count 非正整数");
+    if (c.point_indices instanceof Uint32Array && c.point_indices.length !== c.point_count) errs.push("point_indices 长度不匹配");
+    if (!Object.values(CAND_SRC).includes(c.foreground_source)) errs.push("foreground_source 未知");
     return errs;
 }
 

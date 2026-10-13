@@ -1,0 +1,27 @@
+/* New GT contract cases: independent inputs, no capture/GT mutations. */
+"use strict";
+const assert=require('assert'),V=require('./evaluate_fusion_gt'),GT=require('../human_replay/gt_lib');
+const p=(x,y=0)=>({x,y});
+assert.deepStrictEqual(V.match([p(0),p(.5)],[p(.4),p(-.5)],.6),[[0,1],[1,0]],'global assignment avoids greedy lost person');
+assert.strictEqual(V.match([p(0),p(.1)],[p(0)],1).length,1,'one prediction cannot hit two persons');
+assert.strictEqual(V.count([p(0)],[p(2)],.75).fn,1);
+const frame=(i,candidates=[])=>({frame_index:i,timestamp:i/10,candidates,tracks:[]});
+const run={frames:[frame(0,[{...p(0),accepted:true}]),frame(1,[{...p(0),accepted:true}]),frame(2)]};
+const doc={frames_objects:{'0':['a'],'2':['b']},objects:{a:{...p(0),class_name:'PERSON',track_id:'P1'},b:{...p(0),class_name:'PERSON',track_id:'P1'}},uncertain_intervals:[]};
+const meta={frames:[0,.1,.2].map(bag_time_sec=>({bag_time_sec}))};
+const m=V.evaluate(run,{eligible:true},doc,meta,.75);
+assert.strictEqual(m.annotated_frames,2);assert.strictEqual(m.unknown_frames,1);assert.strictEqual(m.candidate.fp,0);
+assert.strictEqual(m.candidate.tp,1);assert.strictEqual(m.candidate.fn,1);
+doc.frames_objects['1']=[];
+assert.strictEqual(V.evaluate(run,{eligible:true},doc,meta,.75).annotated_frames,2,'empty frame map is unknown, not negative');
+delete doc.frames_objects['1'];
+assert.strictEqual(V.evaluate(run,{eligible:false,issues:['SHA']},doc,meta,.75).status,'BLOCKED');
+const src={frame_index:0,timestamp:0,raw_sha256:'a',leveled_sha256:'b',coordinate_sha256:'c'};
+V.assert_same_source(src,{...src});assert.throws(()=>V.assert_same_source(src,{...src,raw_sha256:'z'}));
+const breaks=GT.find_breaks({'0':[{track_id:'P1'},{track_id:'P2'}],'1':[{track_id:'P1'}],'2':[{track_id:'P1'},{track_id:'P2'}]},['P1','P2']);
+assert.deepStrictEqual(breaks,[{frame:1,kind:'disappear',track_id:'P2'},{frame:2,kind:'appear',track_id:'P2'}]);
+const trackRun={frames:[{...frame(0),tracks:[{...p(0),id:'0:1'}]},{...frame(1),tracks:[{...p(0),id:'0:2'}]},{...frame(2),tracks:[{...p(0),id:'0:3'}]}]};
+assert.strictEqual(V.evaluate(trackRun,{eligible:true},doc,meta,.75).adjacent_annotated_id_switches,0,'unannotated gap is not ID switch');
+doc.frames_objects['1']=['c'];doc.objects.c={...p(0),class_name:'PERSON',track_id:'P1'};
+assert.strictEqual(V.evaluate(trackRun,{eligible:true},doc,meta,.75).adjacent_annotated_id_switches,2);
+console.log('GT contract assertions PASS');

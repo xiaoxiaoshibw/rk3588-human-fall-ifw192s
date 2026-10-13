@@ -19,11 +19,11 @@ function run_mode(session_dir, mode, extra_cfg) {
     var sid = session_dir.split(/[\\/]/).pop();
     eng.begin_session(sid);
     if (mode !== E.MODE.BASE_B) {
-        eng.set_online_background(s.frames.map(function (f) { return f.xyzi; }));
+        eng.set_online_background(s.frames.map(function (f) { return f.xyzi; }), {meta:s.meta});
     }
     for (var i = 0; i < s.frames.length; i++) {
         var f = s.frames[i];
-        var fc = S.make_frame_context({
+        var fc = S.make_frame_context({ session_generation:eng.generation,
             session_id: sid, frame_index: i, timestamp: f.timestamp,
             xyzi: f.xyzi, meta: s.meta, already_leveled: false,
         });
@@ -35,7 +35,7 @@ function run_mode(session_dir, mode, extra_cfg) {
 /* 空场 → BASE_B 必须零误报 （任何帧 person_cand=0) */
 (function () {
     var r = run_mode("captures/remote/cap_20261009_113611", E.MODE.BASE_B);
-    var n_pf = r.rep.rows.filter(function (x) { return x.n_person_cand > 0; }).length;
+    var n_pf = r.rep.rows.filter(function (x) { return x.n_accepted_cand > 0; }).length;
     t(n_pf === 0, "空场 BASE_B person_cand_frames=0 (实测 " + n_pf + ")");
     var n_tracks = r.rep.tracks.length;
     t(n_tracks === 0, "空场 BASE_B 无 track (实测 " + n_tracks + ")");
@@ -53,7 +53,7 @@ function run_mode(session_dir, mode, extra_cfg) {
     var r = run_mode("captures/remote/cap_20261009_114641", E.MODE.BASE_B);
     var n_conf = r.rep.tracks.filter(function (t) { return t.human_confirmed; }).length;
     t(n_conf >= 1, "高个 BASE_B confirmed>=1 (实测 " + n_conf + ")");
-    var n_pf = r.rep.rows.filter(function (x) { return x.n_person_cand > 0; }).length;
+    var n_pf = r.rep.rows.filter(function (x) { return x.n_accepted_cand > 0; }).length;
     t(n_pf === r.rep.rows.length, "高个 BASE_B 每帧有 person cand (实测 " + n_pf + "/" + r.rep.rows.length + ")");
 })();
 
@@ -61,7 +61,7 @@ function run_mode(session_dir, mode, extra_cfg) {
 (function () {
     var r = run_mode("captures/remote/cap_20261007_154007", E.MODE.BASE_B);
     var n_conf = r.rep.tracks.filter(function (t) { return t.human_confirmed; }).length;
-    var n_pf = r.rep.rows.filter(function (x) { return x.n_person_cand > 0; }).length;
+    var n_pf = r.rep.rows.filter(function (x) { return x.n_accepted_cand > 0; }).length;
     t(n_pf >= 0.5 * r.rep.rows.length, "动态 BASE_B person_cand 帧≥50% (实测 " + n_pf + "/" + r.rep.rows.length + ")");
     t(n_conf >= 1, "动态 BASE_B confirmed>=1 (实测 " + n_conf + ")");
 })();
@@ -72,7 +72,7 @@ function run_mode(session_dir, mode, extra_cfg) {
     eng.begin_session("x");
     var xyzi = new Float32Array([1, 2, 3, 100, 4, 5, 6, 200]);
     eng.load_ref_envelope();
-    var fc = S.make_frame_context({ session_id: "x", frame_index: 0, timestamp: 0, xyzi: xyzi });
+    var fc = S.make_frame_context({ session_generation:eng.generation, session_id: "x", frame_index: 0, timestamp: 0, xyzi: xyzi });
     eng.tick(fc);
     var threw = false;
     try { eng.tick(fc); } catch (e) { threw = true; }
