@@ -6,8 +6,8 @@ a = Analysis(
     ['console_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[('console.html', '.'), ('joint_capture.html', '.'), ('console_icon.png', '.'),
-           ('../human_replay', 'human_replay')],
+    datas=[('console.html', '.'), ('joint_capture.html', '.'), ('console_icon.ico', '.'),
+           ('../human_replay', 'human_replay'), ('plane01_pages', 'plane01_pages')],
     # Workbench Python sources remain in datas: their real bytes are version-hashed at run time.
     hiddenimports=['json', 'urllib.request', 'webbrowser', 'numpy', 'numpy.linalg', 'uuid', 'zipfile'],
     hookspath=[],

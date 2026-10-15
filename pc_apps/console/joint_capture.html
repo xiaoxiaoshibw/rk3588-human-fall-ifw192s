@@ -4,7 +4,7 @@
 :root{color-scheme:dark}body{margin:0;background:#141518;color:#e7e8ea;font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif}main{max-width:1000px;margin:32px auto;padding:0 24px}h1{font-size:22px}p{color:#a0a3ab}label{display:block;margin:12px 0}input{box-sizing:border-box;background:#242630;color:#e7e8ea;border:1px solid #34373e;border-radius:4px;padding:9px;width:100%;font:inherit}#duration{width:110px}button{font:inherit;padding:9px 18px;margin:6px 8px 6px 0;border:1px solid #34373e;border-radius:4px;background:#242630;color:#e7e8ea;cursor:pointer}#start{background:#315d9e}button:disabled{opacity:.45;cursor:default}.panel{padding:18px;background:#1e1f24;border:1px solid #34373e;border-radius:6px;margin-top:18px}#preview{max-width:100%;max-height:440px;display:block;margin:auto}#error{color:#ffaaa0;white-space:pre-wrap}#path{overflow-wrap:anywhere;color:#9dbfff}.counts{display:flex;gap:28px;flex-wrap:wrap}details{margin:16px 0}#previewNote{font-size:12px}
 </style></head><body><main>
 <h1>USB 摄像头＋雷达联合录制（错峰模式）</h1>
-<p>相机只做<strong>实时预览</strong>；雷达由板端 HC 服务<b>先全量录制到板端存储</b>，停止后再一次性完整回拉到本机，板上网口不与相机抢带宽。两路时间基准：相机 = PC 主机接收时刻；雷达 = 板载 HC 时系。</p>
+<p>相机<strong>实时预览并同步录像到本机会话目录</strong>；雷达由板端 HC 服务<b>先全量录制到板端存储</b>，停止后再一次性完整回拉到本机，板上网口不与相机抢带宽。两路时间基准：相机 = PC 主机接收时刻；雷达 = 板载 HC 时系。</p>
 <label>本机保存目录<input id="root" aria-label="本机保存目录" placeholder="读取默认目录…"></label>
 <label>自动停止时间（秒，板端上限 300） <input id="duration" type="number" min="1" max="300" value="60"></label>
 <details><summary>连接设置</summary>
@@ -12,39 +12,105 @@
 <label>雷达板端服务（HC 控制面）<input id="radar" value="http://192.168.31.58:8766"></label>
 <p>录制时网口只走相机流；雷达落袋在板上 SD 卡，停止后按 HC 协议完整回拉（由 <code>fetch.py</code> 权威实现：SHA/布局校验、状态机推进、.part 断点）。</p></details>
 <button id="start" disabled title="板端空闲才可开始">开始录制</button><button id="stop" disabled>停止并保存</button><button id="folder">打开保存目录</button>
-<div class="panel" role="status" aria-live="polite"><b id="state">正在连接本机录制服务…</b><div class="counts"><span id="camCount">相机：预览中</span><span id="radarCount">雷达：板端录制</span><span id="elapsed">0 秒</span><span id="size">0 MB</span></div><div id="path"></div><div id="quality"></div><div id="error"></div></div>
+<div class="panel" role="status" aria-live="polite"><b id="state">正在连接本机录制服务…</b><div class="counts"><span id="camCount">相机：预览中</span><span id="radarCount">雷达：板端录制</span><span id="elapsed">0 秒</span><span id="size">0 MB</span></div><div id="path"></div><div id="error"></div></div>
 <div class="panel"><img id="preview" alt="联合录制的相机画面" hidden><p id="previewNote">开始录制后显示相机实时画面。</p></div>
-<p>保存内容：radar = meta.json + points.bin（HC 格式、可被 human_replay 直接回放），camera = 空 camera.mjpeg 占位；相机若预览中断不影响雷达（雷达在板上持续录制）。</p>
+<div class="panel" id="replayBox" hidden><b>相机录制回看</b>
+<div class="counts" style="margin:8px 0"><button id="camPlay" type="button">▶ 播放</button><span id="camInfo">—</span></div>
+<input id="camSlider" type="range" min="0" max="0" value="0" style="width:100%">
+<img id="camFrame" alt="相机录制回看" style="max-width:100%;max-height:440px;display:block;margin:auto">
+</div>
+<p>保存内容：每次录制独立保存为一个会话目录（目录名 = 板端会话号，与会话回放面板里的板端行同名同源，拉回后该行直接显示本地 ✓，不会再拉第二遍）—— meta.json + points.bin（HC 格式，可被 human_replay 直接回放），相机录像 camera.mjpeg 与逐帧索引 camera_frames.jsonl；相机预览中断不影响板端录制，已录画面保留。停止后从板端拉回本机，拉回完成会自动打开会话回放并载入该会话（在总控制台内），未拉回时可在会话回放中重试。也可在本页下方回看本次相机画面。</p>
 </main><script>
 const $ = id => document.getElementById(id);
-const names = {idle:'等待录制',starting:'正在启动板端录制…',recording:'正在录制（雷达在板上）',stopping:'正在停止板端…',saving:'正在从板端拉回雷达数据…（需要几十秒）',completed:'已保存到本机（可回放）',completed_with_gaps:'已保存到本机（相机预览曾中断）',failed:'录制失败'};
-let busy = false, initialized = false;
+const names = {idle:'等待录制',starting:'正在启动板端录制…',recording:'正在录制（雷达在板上）',stopping:'正在停止板端…',saving:'正在从板端拉回雷达数据…（需要几十秒）',completed:'已保存到本机（可回放）',failed:'录制失败'};
+let busy = false, initialized = false, previewOn = false;
+let lastState = null;  // 上一次状态；只在刚刚进入 completed 的那一刻通知壳页一次
 async function api(path, body) {
   const response = await fetch(path, body === undefined ? {cache:'no-store'} : {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || '请求失败');
   return data;
 }
+function notify_completed(s) {
+  // 拉回完成 → 请总控制台壳页打开「会话回放」并载入该会话（独立窗口打开时无处可跳）
+  if (window.parent === window) return;
+  const sid = (s.path || s.session_id || '').replace(/[\\/]+$/, '').split(/[\\/]/).pop();
+  if (!/^[A-Za-z0-9_-]{1,100}$/.test(sid)) return;
+  window.parent.postMessage({type: 'joint-completed', sid: sid}, '*');
+}
 function render(s) {
   busy = ['starting','recording','stopping','saving'].includes(s.state);
   if (!initialized) { $('root').value=s.output_root; initialized=true; }
   $('state').textContent=names[s.state] || s.state;
-  $('camCount').textContent = s.camera_recovering ? '相机：预览中断（雷达仍在板上录）' : (s.camera_frames ? '相机：预览中' : '相机：未就绪');
+  $('camCount').textContent = s.camera_recovering ? '相机：预览中断（已录画面保留）' : (s.camera_frames ? `相机：已录 ${s.camera_frames} 帧` : '相机：未就绪');
   $('radarCount').textContent = s.radar_frames ? `雷达：${s.radar_frames} 帧` : (s.state==='recording' ? '雷达：板上持续录制…' : '雷达：—');
   $('elapsed').textContent=`${s.elapsed_sec || s.duration_sec || 0} 秒`;
   $('size').textContent=`${(s.bytes/1e6).toFixed(1)} MB`;
   $('path').textContent=s.path || s.output_root;
-  $('quality').textContent = s.state==='completed_with_gaps' ? '说明：相机预览曾中断，但板上雷达未中断；两路各自独立，不视为文件级连续视频。' : '';
   $('error').textContent=s.error ? `${s.error}` : '';
   $('start').disabled=busy; $('stop').disabled=!busy || (s.state!=='recording' && s.state!=='starting');
   for(const id of ['root','duration','camera','radar']) $(id).disabled=busy;
-  if(busy || s.camera_frames>0) { $('preview').hidden=false; $('preview').src='/api/preview?t='+Date.now(); }
-  $('previewNote').textContent=s.state==='recording'||s.state==='saving' ? '当前实时预览；停止后雷达数据从板端回拉，约需几十秒。' : '录制结束后保留最后一帧；本预览不写入磁盘。';
+  previewOn = busy || s.camera_frames>0;
+  if(previewOn) $('preview').hidden=false;
+  $('previewNote').textContent=s.state==='recording'||s.state==='saving' ? '当前实时预览（同时写入会话 camera.mjpeg）；停止后雷达数据从板端回拉，约需几十秒。' : '录制结束后保留最后一帧；本次画面已存入会话 camera.mjpeg。';
+  if (s.state === 'completed' && lastState && lastState !== 'completed') notify_completed(s);
+  lastState = s.state;
+  camMaybe(s);
 }
 async function poll() { try { render(await api('/api/status')); } catch(e) { $('error').textContent=e.message; $('start').disabled=true; $('state').textContent='本机录制服务不可达'; } }
 $('start').onclick=async()=>{ $('start').disabled=true; $('error').textContent=''; try { render(await api('/api/start',{output_root:$('root').value,duration_sec:Number($('duration').value),camera_url:$('camera').value,radar_board_url:$('radar').value})); } catch(e) { $('error').textContent=e.message; $('start').disabled=false; } };
 $('stop').onclick=async()=>{ $('stop').disabled=true; try { render(await api('/api/stop',{})); } catch(e) { $('error').textContent=e.message; } };
 $('folder').onclick=async()=>{ try { await api('/api/open-folder',{}); } catch(e) { $('error').textContent=e.message; } };
+// —— 相机录制回看：按 JPEG 边界切帧，逐帧显示/播放 ——
+// ponytail: 整段读进内存；默认几分钟录制够用，超长会话再改 Range 按需取帧。
+let camFrames = [], camIdx = 0, camSid = null, camTimer = null;
+function camShow(i) {
+  if (!camFrames.length) return;
+  camIdx = (i + camFrames.length) % camFrames.length;
+  const img = $('camFrame');
+  if (img.dataset.url) URL.revokeObjectURL(img.dataset.url);
+  const url = URL.createObjectURL(new Blob([camFrames[camIdx]], {type:'image/jpeg'}));
+  img.dataset.url = url; img.src = url;
+  $('camSlider').value = camIdx;
+  $('camInfo').textContent = `第 ${camIdx + 1} / ${camFrames.length} 帧`;
+}
+function camStop() { if (camTimer) { clearTimeout(camTimer); camTimer = null; $('camPlay').textContent = '▶ 播放'; } }
+function camPlay() {
+  if (!camFrames.length || camTimer) return camStop();
+  $('camPlay').textContent = '⏸ 暂停';
+  const step = () => { camShow(camIdx + 1); camTimer = setTimeout(step, 66); };  // ~15fps
+  camTimer = setTimeout(step, 66);
+}
+async function camLoad(sid) {
+  camFrames = []; camStop(); $('replayBox').hidden = false; $('camInfo').textContent = '载入相机视频…';
+  let bytes;
+  try {
+    const response = await fetch('/api/camera?sid=' + encodeURIComponent(sid), {cache:'no-store'});
+    if (!response.ok) throw new Error('这个会话没有相机视频');
+    bytes = new Uint8Array(await response.arrayBuffer());
+  } catch (e) { $('camInfo').textContent = e.message; $('camFrame').removeAttribute('src'); return; }
+  for (let i = 0; i + 2 < bytes.length; i++) {
+    if (bytes[i] === 0xFF && bytes[i+1] === 0xD8 && bytes[i+2] === 0xFF) {
+      let j = i + 2;
+      while (j + 1 < bytes.length && !(bytes[j] === 0xFF && bytes[j+1] === 0xD9)) j++;
+      if (j + 1 < bytes.length) { camFrames.push(bytes.subarray(i, j + 2)); i = j + 1; }
+    }
+  }
+  $('camSlider').max = Math.max(0, camFrames.length - 1);
+  $('camInfo').textContent = camFrames.length ? `${camFrames.length} 帧（点 ▶ 播放）` : '这个会话没有相机视频';
+  if (camFrames.length) camShow(0);
+}
+$('camPlay').onclick = camPlay;
+$('camSlider').oninput = () => { camStop(); camShow(Number($('camSlider').value)); };
+function camMaybe(s) {
+  if (s.state !== 'completed' || !s.path) return;
+  const sid = (s.path || '').replace(/[\\/]+$/, '').split(/[\\/]/).pop();
+  if (!sid || sid === camSid) return;
+  camSid = sid; camLoad(sid);
+}
 // ponytail: recursive timeout avoids concurrent status requests on a slow disk.
 async function tick(){ await poll(); setTimeout(tick,700); } tick();
+// 预览刷新与 700ms 状态轮询解耦：/api/preview 是录制线程随帧更新的最新一帧，
+// 100ms 重拉一次即接近相机帧率；浏览器对新 src 会取消上一张未完成的加载，不会堆积。
+setInterval(()=>{ if (previewOn) $('preview').src='/api/preview?t='+Date.now(); }, 100);
 </script></body></html>

@@ -11,6 +11,11 @@ __pycache__/
 *.pcap
 *.db3
 
+# 2026-10-14 项目数据目录：会话/配平/配准数据本体（仓库内 captures/{remote,leveled,registration}
+# 是指向它的目录联接）。数据不是工作区：不清理、不移动、不 git add，删除须先出清单并经用户确认。
+# 见 data/README_数据目录说明.md
+/data/
+
 # ML 训练数据集本体（约 643MB Blender+LiDAR 合成集），适配器见 sidequests/lidata_adapter
 # ML 支线 dormant/historical：只留 README/docs/.gitkeep；数据包、模型权重、训练产物不入库
 /ML/LI-DATA/
@@ -44,6 +49,12 @@ docs/human_fall/evidence/**/experiment_results*.json
 docs/human_fall/evidence/**/*.zip.before
 docs/human_fall/evidence/**/source_review.html
 
+# HF evidence 里打包好的控制台二进制/压缩包同样不入库（可由构建恢复，既肥大又属派生物）
+docs/human_fall/evidence/**/LiDAR_Console.zip
+docs/human_fall/evidence/**/Console.exe
+docs/human_fall/evidence/**/Console.pkg
+docs/human_fall/evidence/**/*.zip
+
 # 2026-10-13: human_capture evidence 派生产物同样 policy（账本 ledger 入库， 大型原始 rerun/截图/打包 不入库）
 # 实测 big bucket: jsonl 5.7G (HFUS-D05 per-frame guard/control rerun 回放)、zip 5.0G、png 27M、svg 45M、exe 308M、csv 151M
 # 这些是 captures/leveled 派生 rerun artifacts, 可用 session SHA 复核——同 HF 上一条
@@ -68,5 +79,56 @@ docs/human_capture/evidence/**/*.npz
 
 # HC-JOINT 本机联合录制产物（exe/zip 由 make_leveling_release.py 重建，不入库）
 /pc_apps/console/dist_leveling/
+
+# 2026-10-14 主线对齐：证据/快照/评审类[可从 captures、leveled、评审会话再生成]派生物不入库
+# （保留者可由源数据+generate 脚本再生；其存在性与 SHA 应登在 returns/审计README）
+docs/**/evidence/**/09_visualization_data.json
+docs/**/evidence/**/GT_SNAPSHOT*.json
+docs/**/evidence/**/AUDIT.json
+docs/**/evidence/**/review_package.jsonl
+docs/**/evidence/**/OPENCODE_SOURCE_*.json
+docs/**/evidence/**/review_bundle.json
+docs/**/evidence/**/0?_topology_point_cases.json
+sidequests/**/results/**/cap_*.jsonl
+sidequests/**/results/**/cap_*.json
+sidequests/**/results/AUDIT.json
 # O 前缀临时导出产物
 "O console_extracted"
+
+# 2026-10-15 清理：证据目录通用重扩展（点云/打包/截图/回放派生物，可由 session SHA 复核再生）
+docs/**/evidence/**/*.npz
+docs/**/evidence/**/*.bin
+docs/**/evidence/**/*.gz
+docs/**/evidence/**/*.zip
+docs/**/evidence/**/*.exe
+docs/**/evidence/**/*.pkg
+docs/**/evidence/**/*.jsonl
+docs/**/evidence/**/*.png
+docs/**/evidence/**/*.jpg
+docs/**/evidence/**/*.mp4
+docs/**/evidence/**/*.svg
+docs/**/evidence/**/*.csv
+# 证据目录里的巨型状态快照（工具重跑即可再生，非稳定账本）
+docs/**/evidence/**/GIT_STATUS_*.txt
+docs/**/evidence/**/BASELINE_BEFORE.json
+docs/**/evidence/**/EXPERIMENT_COMPARISON.json
+docs/**/evidence/**/DIAGNOSIS.json
+
+# 2026-10-15 清理：HFUS 大体量 rerun 输出（npz + 逐帧 json，账本已在 docs/human_capture/returns/）
+docs/human_capture/evidence/2026-10-15_hfus_learn_dev_r1/
+docs/human_capture/evidence/2026-10-15_hfus_learn_dev_r2/
+docs/human_capture/evidence/2026-10-15_hfus_next_dev_r1/
+docs/human_capture/evidence/2026-10-15_hfus_deep_routes_r1/
+
+# 2026-10-15 清理：fusion_lab_next 研究重跑输出 + 运行残留
+/sidequests/human_fusion_lab_next/pointset/r01/action_research_*/
+/sidequests/human_fusion_lab_next/pointset/r01/action_output/
+/sidequests/human_fusion_lab_next/pointset/r01/output/
+/sidequests/human_fusion_lab_next/pointset/r01/server.pid
+
+# 2026-10-15 清理：打包产物
+/pc_apps/console/build.zip
+/sidequests/human_fusion_lab/results/dataset_dual.zip
+
+# 2026-10-15 清理：根目录 Bird识别/ 是 sidequests/plane_track/ 的旧副本，保留在磁盘但不入库
+/Bird识别/

@@ -27,6 +27,12 @@ DEST_ROOT = r"D:\Code\ldiar\captures\remote"
 FETCH = os.path.join(_HERE, "..", "human_replay", "fetch.py")
 RUN_LIMB = os.path.join(_HERE, "run_session_limb.py")
 
+# ponytail: 冻结守卫——本服务用 sys.executable 起 fetch/limb 子进程；打包后
+# sys.executable 是 exe 自身，会在冻结形态静默启动错误进程（2026-10-15 联合录制
+# 同型缺陷复盘）。要做 exe 发布前先改为进程内调用或显式解释器发现，再移除本守卫。
+if getattr(sys, "frozen", False):
+    raise SystemExit("human_limb 仅支持源码运行（python limb_server.py）：冻结形态下 sys.executable 不是解释器")
+
 _sid_re = re.compile(r"^cap_[0-9_]+$")
 _jobs_lock = threading.Lock()
 _jobs = {}  # sid → {stage: fetch|limb|done|error, ts, error}

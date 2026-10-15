@@ -16,6 +16,7 @@ EDGES=[('TOP_REGION','UPPER_TORSO'),('UPPER_TORSO','CHEST'),('CHEST','PELVIS'),(
 
 
 def estimate(points, source_rows, previous_axis=None, previous_lateral=None, dt=.1, reference_age=0.):
+    if dt>.5:previous_axis=previous_lateral=None
     p=np.asarray(points,dtype='f8').reshape(-1,3)
     nodes={k:G.unknown('INSUFFICIENT_SUPPORT') for k in SLOTS}
     if len(p)!=len(source_rows) or len(set(source_rows))!=len(source_rows):raise ValueError('source row binding')
@@ -77,7 +78,7 @@ def estimate(points, source_rows, previous_axis=None, previous_lateral=None, dt=
             'edges':[[a,b] for a,b in EDGES if nodes[a]['valid'] and nodes[b]['valid']]},axis
 
 
-def build():
+def build(target='process.json'):
     sid='cap_20261013_094333';track=json.loads((OUT/(sid+'_tracking.json')).read_text(encoding='utf8'))
     m=json.loads((OUT/(sid+'_foreground.json')).read_text(encoding='utf8'))
     p=np.memmap(OUT/(sid+'_foreground.bin'),dtype='<f4',mode='r').reshape(-1,4)
@@ -97,7 +98,7 @@ def build():
         if not r['observed']:previous=None
         counts.append(sum(n['valid'] for n in r['skeleton']['nodes'].values()))
     track['skeleton_slots']=SLOTS;track['skeleton_contract']='point-supported regions; anatomical joints/arms/left-right not calibrated'
-    with (OUT/'process.json').open('x',encoding='utf8') as f:json.dump(track,f,ensure_ascii=False,allow_nan=False,separators=(',',':'))
+    with (OUT/target).open('x',encoding='utf8') as f:json.dump(track,f,ensure_ascii=False,allow_nan=False,separators=(',',':'))
     print('Skeleton frames',len(counts),'valid node min/max',min(counts),max(counts),'full13',sum(n==13 for n in counts))
 
 

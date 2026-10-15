@@ -230,8 +230,10 @@
             return api("/api/sessions").then(function (remote) {
                 if (version !== refresh_version) return;
                 if (!remote.board_error) render_sessions(remote.sessions || []);
+                // 数据完整性过滤留下的计数：告诉用户「列表变短」不是丢数据，是登记表里的空壳
+                var hid = remote.hidden ? (remote.hidden.purged || 0) + (remote.hidden.missing || 0) : 0;
                 if (els.panelStatus) els.panelStatus.textContent = remote.board_error
-                    ? "离线 · 本地会话" : "";
+                    ? "离线 · 本地会话" : (hid ? "已隐藏 " + hid + " 条无数据登记" : "");
             }).catch(function () {
                 if (version === refresh_version && els.panelStatus)
                     els.panelStatus.textContent = "离线 · 本地会话";

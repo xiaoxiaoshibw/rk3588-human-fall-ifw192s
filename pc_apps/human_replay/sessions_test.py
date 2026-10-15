@@ -41,11 +41,127 @@ class OfflineSessionsTest(unittest.TestCase):
                     self.assertIn("offline", offline["board_error"])
                 with patch.object(H, "_board_get", return_value={"sessions": [
                         {"session_id": sid, "state": "ready"},
-                        {"session_id": "cap_remote", "state": "ready"}]}):
+                        {"session_id": "cap_remote", "state": "ready"}]}), \
+                     patch.object(H, "_board_files_present", return_value=True):
                     merged = json.loads(get("/api/sessions"))
                     self.assertEqual(len(merged["sessions"]), 2)
                     self.assertIsNone(merged["board_error"])
+                    self.assertEqual(merged["hidden"], {"purged": 0, "missing": 0})
                     self.assertTrue(next(s for s in merged["sessions"] if s["sid"] == sid)["local"])
+            finally:
+                server.shutdown()
+                server.server_close()
+
+
+class ManifestTest(unittest.TestCase):
+    """删除前清单（/api/manifest）：本机文件逐个 name+bytes+sha256 + 板端登记行；只读。
+
+    数据纪律：删除要「sid+字节+sha256 清单 + 显式确认」，清单接口本身不删任何东西。
+    """
+
+    @staticmethod
+    def _base(tmp):
+        server = H.ThreadingHTTPServer(("127.0.0.1", 0), H.Handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        return server, "http://127.0.0.1:%d" % server.server_address[1]
+
+    def test_manifest_hashes_local_files_and_is_read_only(self):
+        import hashlib
+        sid = "cap_20261015_150000"
+        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C, "DEST_ROOT", tmp):
+            directory = Path(tmp) / sid
+            directory.mkdir()
+            (directory / "points.bin").write_bytes(b"abc")
+            (directory / "meta.json").write_text("{}", encoding="utf-8")
+            server, base = self._base(tmp)
+            try:
+                with patch.object(H, "_board_get",
+                                  return_value={"session_id": sid, "state": "transferred", "frame_count": 3}):
+                    with urllib.request.urlopen(base + "/api/manifest?sid=" + sid, timeout=3) as response:
+                        out = json.loads(response.read())
+                self.assertTrue(out["local"]["present"])
+                self.assertEqual([f["name"] for f in out["local"]["files"]],
+                                 ["meta.json", "points.bin"], "按文件名排序")
+                self.assertEqual(out["local"]["total_bytes"], 5)
+                self.assertEqual(out["local"]["files"][1]["sha256"],
+                                 hashlib.sha256(b"abc").hexdigest())
+                self.assertEqual(out["board"]["state"], "transferred")
+                self.assertTrue((directory / "points.bin").is_file(), "清单接口只读，不许删")
+            finally:
+                server.shutdown(); server.server_close()
+
+    def test_manifest_guards_sid_and_reports_absent_and_offline_board(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C, "DEST_ROOT", tmp):
+            server, base = self._base(tmp)
+            try:
+                with self.assertRaises(urllib.error.HTTPError) as bad:
+                    urllib.request.urlopen(base + "/api/manifest?sid=../etc", timeout=3)
+                self.assertEqual(bad.exception.code, 400)
+                with patch.object(H, "_board_get",
+                                  side_effect=urllib.error.HTTPError("u", 404, "nf", None, None)):
+                    with urllib.request.urlopen(base + "/api/manifest?sid=cap_absent", timeout=3) as response:
+                        absent = json.loads(response.read())
+                self.assertFalse(absent["local"]["present"], "本机没有就是 present=false")
+                self.assertEqual(absent["local"]["files"], [])
+                self.assertIn("板端无此会话", absent["board"]["error"])
+                with patch.object(H, "_board_get", side_effect=TimeoutError("board down")):
+                    with urllib.request.urlopen(base + "/api/manifest?sid=cap_absent2", timeout=3) as response:
+                        offline = json.loads(response.read())
+                self.assertIn("板端不可达", offline["board"]["error"])
+            finally:
+                server.shutdown(); server.server_close()
+
+
+class IntegrityFilterTest(unittest.TestCase):
+    """数据完整性（2026-10-14 用户要求「只展示 3588 和本机有的会话」）。
+
+    登记表（板端 sessions.json）会留 FIFO 清过文件的墓碑；只按 state 或只按本机有没有
+    都不够，必须实查：板端文件在不在（HEAD）/ 本机 meta+bin 是否完整。
+    """
+
+    @staticmethod
+    def _write_session(root, sid, *, frames=2, bin_bytes=28 * 100, stride=28):
+        directory = Path(root) / sid
+        directory.mkdir(parents=True, exist_ok=True)
+        meta = {"duration_sec": 1.0, "created_iso": "2026-10-13T08:32:54+08:00",
+                "point_layout": {"stride_bytes": stride},
+                "frames": [{"offset_points": 0, "count_points": 50} for _ in range(frames)]}
+        meta["frames"][-1]["offset_points"] = 50
+        (directory / "meta.json").write_text(json.dumps(meta), encoding="utf-8")
+        (directory / "points.bin").write_bytes(bytes(bin_bytes))
+
+    def test_ghost_rows_hidden_intact_sessions_kept(self):
+        sid = "cap_20261013_083254"
+        with tempfile.TemporaryDirectory() as tmp, patch.object(H.C, "DEST_ROOT", tmp):
+            self._write_session(tmp, sid)                 # 本机完好（板端墓碑还在）
+            self._write_session(tmp, "cap_truncated", bin_bytes=28)   # 半写：末帧对不上字节数
+            server = H.ThreadingHTTPServer(("127.0.0.1", 0), H.Handler)
+            threading.Thread(target=server.serve_forever, daemon=True).start()
+            base = "http://127.0.0.1:%d" % server.server_address[1]
+
+            def get(path):
+                with urllib.request.urlopen(base + path, timeout=3) as response:
+                    return json.loads(response.read())
+            try:
+                # 本机侧：截断的会话不进列表
+                local = get("/api/sessions?scope=local")
+                self.assertEqual([s["sid"] for s in local["sessions"]], [sid])
+                board = {"sessions": [
+                    {"session_id": "cap_20261009_113611", "state": "purged"},
+                    {"session_id": "cap_20261013_094333", "state": "transferred"},
+                    {"session_id": "cap_20261014_164522", "state": "transferred"},
+                    {"session_id": sid, "state": "purged"}]}
+                with patch.object(H, "_board_get", return_value=board), \
+                     patch.object(H, "_board_files_present",
+                                  side_effect=lambda s, **kw: s == "cap_20261014_164522"):
+                    merged = get("/api/sessions")
+                self.assertEqual(sorted(s["sid"] for s in merged["sessions"]),
+                                 ["cap_20261013_083254", "cap_20261014_164522"])
+                self.assertEqual(merged["hidden"], {"purged": 1, "missing": 1})
+                purged_local = next(s for s in merged["sessions"] if s["sid"] == sid)
+                self.assertTrue(purged_local["local"], "本机有数据的行照列")
+                self.assertEqual(merged["sessions"][0]["sid"], "cap_20261014_164522",
+                                 "按时间新→旧")
             finally:
                 server.shutdown()
                 server.server_close()

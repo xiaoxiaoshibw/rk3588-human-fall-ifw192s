@@ -1,3 +1,15 @@
+## 2026-10-14 HF-CONSOLE-02 作者提交（非独立复审）
+
+[唯一验收v1](evidence/2026-10-14_hf_console_02_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-14_hf_console_02_r1/FINAL_REPORT.md)/[回传](returns/HF-CONSOLE-02.md)。控制台保留pointset/r01入口并新增真实r04回放；源码与Console.exe、桌面快捷方式目标Console_Pointset.exe、ZIP均已构建和自验。C02-01–06 PASS：动态服务、headless Edge两卡片/iframe、f72告警图像、冻结启动、双EXE和ZIP逐字节绑定。r04 f72仍verified:false；TOP_REGION平滑回退、END_B槽可用下降及目标点删除风险保留。独立复审NOT_RUN，人体/家具/关节GT与泛化BLOCKED，设备/物理NOT_RUN；SUBMITTED，未ACCEPTED。未改源录制/GT/模型/生产、未部署/采集/提交推送。详证据目录FINAL_SHA与浏览器/启动/打包记录。
+
+## 2026-10-14 HF-MAINLINE-POINTS-01 OpenCode只读计划三轮审核
+
+用户明确派审；作者Codex，审者OpenCode CLI（请求opencode-go/deepseek-v4.1-flash，底层权重未独立核验），会话ses_ec70e508effetHHugD31AJrhdh。首次[v1审核](evidence/2026-10-14_hf_mainline_points_plan_r1/OPENCODE_REVIEW_V1.md)为PLAN_REVISE；作者另存v2修订后[v2审核](evidence/2026-10-14_hf_mainline_points_plan_r1/OPENCODE_REVIEW_V2.md)PLAN_PASS；再采纳四项澄清形成[唯一计划v3](HF_MAINLINE_POINT_RETENTION_PLAN_20261014_V3.md)，[最终复核](evidence/2026-10-14_hf_mainline_points_plan_r1/OPENCODE_REVIEW_V3.md)PLAN_PASS。没有实现或工单ACCEPTED/生产晋级。仅read/glob/grep/list工具，事件核验见REVIEW_EXECUTION_AUDIT；保护文件无漂移见READONLY_FINAL_CHECK。首轮技能读取被拒，v2已成功读取ponytail正文；manifest单行截断限制如实保留。原失败/启动中止日志均保留。
+
+## 2026-10-14 HF-CLOSE/DATA/BG 当前非writer独审
+
+一名只读/root/readonly_review，实际已审r04 ST01–ST09、HR-RET-V2 V2-14与新run。见[完整独审](evidence/2026-10-14_hf_real_close_data_bg_r1/INDEPENDENT_REVIEW.md)/[报告](evidence/2026-10-14_hf_real_close_data_bg_r1/FINAL_REPORT.md)。发现self-reference空场上界论证错误、TOP_REGION显示恶化、审阅GET来源漂移和save异步显示绑定；软件漏洞已定向修复，真Edge与契约复验。V2-14 REVIEW_COMPLETE_WITH_FINDINGS，不是全表PASS；无VALID、新registration REJECTED、低位FAIL、GT/原源BLOCKED，原RS04不关闭。r04未完整收口、console仍r02；未ACCEPTED，设备/物理/部署NOT_RUN。作者仅记录实际独审输出，不冒充审查者写文件。
+
 # 工单审查记录
 
 ## 2026-10-13 HF-REAL-03 助手视觉排查三单作者提交
@@ -756,3 +768,27 @@ R2 算法与验收表保持 Codex 提交原文不改。本附记只补本轮外�
 ## 2026-10-12 HF-DEMO-01 / R1 只读独审与处置
 
 指定 opencode-go/deepseek-v4.1-flash，child31512 exit0；[完整意见](evidence/2026-10-12_hf_demo_01_r1/OPENCODE_01.md)。export超时保留FAIL，SQLite mode=ro仅查本次session核验实际模型与REVIEW_COMPLETE为PASS。v1无P0/P1；来源SHA与文案问题已由主控在独立UI v2处置，见[处置记录](evidence/2026-10-12_hf_demo_01_r1/REVIEW_DEFECT_HANDLING.md)。v2作者浏览器复核，不宣称已获独审者二次确认。工程SUBMITTED，真实算法与设备NOT_RUN，GT及生产BLOCKED，不ACCEPTED；[当前交付](evidence/2026-10-12_hf_demo_01_r1/FINAL_REPORT.md)。
+
+## 2026-10-14 HF-MAINLINE-POINTS-01 实施独审02
+
+OpenCode CLI请求opencode-go/deepseek-v4.1-flash、plan只读；会话ses_ec59b559cffezHsGe4yHKhqimZ，退出0。原结论REVIEW_WITH_FINDINGS见evidence/2026-10-14_hf_mainline_points_r1/OPENCODE_REVIEW_02.md，调用工具仅read/grep，无写/执行/代理。01因--file数组吞末尾消息启动失败，原空结论及stderr保留。作者REVIEW_RESPONSE_V2/唯一ACCEPTANCE_V2逐项回应，申请03复核，不代审者关闭结论。原始源当前缺失，复跑BLOCKED。
+
+## 2026-10-14 HFUS-NEXT-PLAN-01 R1 计划审核
+
+用户请求算法借鉴、效果对比与下一阶段计划。当前 [计划v2](../human_capture/evidence/2026-10-14_hfus_next_development_plan_r1/DEVELOPMENT_PLAN_V2.md)/[验收v2](../human_capture/evidence/2026-10-14_hfus_next_development_plan_r1/ACCEPTANCE_V2.md)/[审核记录](../human_capture/evidence/2026-10-14_hfus_next_development_plan_r1/PLAN_REVIEW.md)。cluster_research V1 PLAN_REVISE（候选选择、UNKNOWN分母、单writer）→V2 PLAN_PASS；pose_research V1 PLAN_PASS及建议已入V2，未冒称其独审V2。仅计划SUBMITTED；18原文件预检N01 PASS，算法实现/设备NOT_RUN，独立身份/关节GT BLOCKED，旧131958原字节/CAL BLOCKED。无代码写入/训练/采集/部署/默认晋级/Git提交推送。技能ponytail路径C:/Users/30680/.codex/skills/ponytail/SKILL.md。
+
+
+## 2026-10-15 HFUS-NEXT-DEV-01 独立只读复审
+
+独立OpenCode opencode-go/deepseek-v4.1-flash / agent plan / session ses_ec47eafe3ffe5WigA5EjxxrVC4，edit/bash deny、snapshot=false。R1缺陷原文/返工保留；R2全表和R3定向收口见[证据](../human_capture/evidence/2026-10-15_hfus_next_dev_r1/OPENCODE_REVIEW_R2.md)、[R3](../human_capture/evidence/2026-10-15_hfus_next_dev_r1/OPENCODE_REVIEW_R3.md)、[响应](../human_capture/evidence/2026-10-15_hfus_next_dev_r1/REVIEW_R2_RESOLUTION.md)。审查源码与证据结构，未独立原字节重放/CPU/browser执行，非人类复核；不将同源新状态称独立实现。N01–N07本机契约作者PASS，N08语义BLOCKED、N09完整EXE BLOCKED（源码原页PASS）、N10性能/AI只读复审PASS，N11 NOT_RUN；事件r2后验、旧原空场及物理限制保留。最终SUBMITTED，未作ACCEPTED/默认晋级判定。
+
+
+
+## 2026-10-15 HFUS-DEEP-RD-02 独立AI只读审查
+
+OpenCode opencode-go/deepseek-v4.1-flash plan / ses_ec26ed114ffeIvs4chMChgAxOr，edit/bash deny、snapshot=false；[R1](../human_capture/evidence/2026-10-15_hfus_deep_routes_r1/REVIEW_R1.md)/[R2](../human_capture/evidence/2026-10-15_hfus_deep_routes_r1/REVIEW_R2.md)/[响应](../human_capture/evidence/2026-10-15_hfus_deep_routes_r1/REVIEW_RESPONSE.md)保留。轴深度/径向、共同分母/缺测、稀疏/裁外、代码绑定与方向合成边界集中收口。仅源码与证据结构审查，未独立数值重跑、未读源点大数组、非人审；作者Q01–Q07本机研究契约PASS，语义/高级模型/设备缺口不解除，最终SUBMITTED，不ACCEPTED/不默认晋级。
+
+
+## 2026-10-15 HFUS-LEARN-PLAN-03 OpenCode计划审核
+
+用户明确要求OpenCode审查。独立只读plan进程，opencode-go/deepseek-v4.1-flash，session ses_ec24f08afffe9TTaza6EiWWMIB，edit/bash deny、snapshot=false；原始[R1](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/OPENCODE_REVIEW_R1.md)/[R2](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/OPENCODE_REVIEW_R2.md)/[R3](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/OPENCODE_REVIEW_R3.md)与[最终SHA/指针](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/PLAN_REVIEW.md)保留。R1 PLAN_REVISE（评估角色/资源预算等D1–D7）→V2 PLAN_PASS→V3最终PLAN_PASS；两项非阻断派发文字按R3允许收紧，审前字节/前后SHA留档。仅计划可执行性审查，不是E1许可/开发ACCEPTED，不曾训练/下载/安装/采集部署，最终工单SUBMITTED；L01–L18实施全NOT_RUN。

@@ -1,14 +1,18 @@
-"""PC 错峰联合录制：雷达先全量存板(HC 通道)，相机仅预览；停止后逐段拉回雷达。
+"""PC 错峰联合录制：雷达先全量存板(HC 通道)，相机预览同步落盘；停止后一次性拉回雷达。
 
 CPU 错峰：录制时板上网口只走相机预览流；雷达 rosbag/抽取都在 SD 卡上完成，
-完成后 PC 才按段增量回拉 meta.json/points.bin，再按 frames 行上切片。
+完成后 PC 用官方 fetch.py 一次性回拉 meta.json/points.bin，无逐段切片。
 不重写 HC 状态机；不重写 fetch.py 校验（SHA/布局）；不写板。
+
+本地会话目录名 = 板端 sid：与回页面板的拉回同名同源，同一段录制只有一个身份，
+面板按 sid 直接看到本地副本，不会再拉第二遍。
 """
 import json
 import os
 from pathlib import Path
+import re
+import runpy
 import shutil
-import subprocess
 import sys
 import threading
 import time
@@ -26,8 +30,22 @@ BOARD_START = '/api/v1/record/start'
 BOARD_STOP = '/api/v1/record/stop'
 BOARD_SESSION = '/api/v1/sessions'
 DEFAULT_OUTPUT_ROOT = Path(__file__).resolve().parents[2] / 'captures' / 'remote'
-PC_FETCH_DIR = Path(__file__).resolve().parent.parent / 'human_replay'
-FETCH_SCRIPT = PC_FETCH_DIR / 'fetch.py'
+# 官方 fetch.py 目录缺省：源码运行 = 平级 pc_apps/human_replay；冻结运行 = _MEIPASS 内嵌副本
+# （Console.spec datas）。有 ENV/INI 旁路时由 console_gui 经 fetch_dir 参数传入同一份解析结果。
+_HERE = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent))
+FETCH_DIR = next((d for d in (_HERE / 'human_replay', _HERE.parent / 'human_replay')
+                  if (d / 'fetch.py').is_file()), _HERE / 'human_replay')
+
+
+def load_fetch(fetch_dir=None):
+    """进程内加载官方 fetch.py（唯一权威实现）；pull 与发布探针共用，绝不再起子进程。
+
+    返回 runpy 的模块 globals（含 process_session 与 config 模块 C）。
+    """
+    fetch_dir = Path(fetch_dir) if fetch_dir else FETCH_DIR
+    if str(fetch_dir) not in sys.path:
+        sys.path.insert(0, str(fetch_dir))
+    return runpy.run_path(str(fetch_dir / 'fetch.py'))
 
 
 def _json_request(method, url, body=None, timeout=8):
@@ -115,35 +133,44 @@ class _BoardSession:
 
 
 class _StagedFetch:
-    """一次性 fetch_fetch.py --sid → staging/<sid>/{meta.json,points.bin}；最后整体 move 到会话目录。"""
-    def __init__(self, dest_root):
+    """进程内跑官方 fetch.process_session → staging/<sid>/{meta.json,points.bin}；最后整体 move 到会话目录。
+
+    为什么不再 subprocess 起 `sys.executable -I fetch.py`：冻结版 sys.executable 是
+    Console.exe 本身（子进程只会再开一个控制台，永远拉不到数据）；源码版 py3.11+ 的
+    -I 隐含 -P，脚本目录不进 sys.path（fetch.py 的 `import config` 直接失败）。
+    同进程 runpy 一份官方实现，两种运行方式行为一致；SHA/布局校验仍由 fetch.py 做。
+    """
+    def __init__(self, dest_root, board_url=None, fetch_dir=None):
         self.dest_root = Path(dest_root)
         self.staging = self.dest_root / '.joint_fetch_staging'
+        self.board_url = board_url
+        self.fetch_dir = fetch_dir
         self.log = []
 
     def _staging_dir(self, sid):
         return self.staging / sid
 
     def pull(self, sid):
-        """fetch.py --sid：拉官方实现（SHA/布局校验） → staging；返回 (meta_p, bin_p) 或 (None, None)。"""
+        """拉官方实现 → staging；返回 (meta_p, bin_p) 或 (None, None)（失败原因见 self.log）。"""
         self.staging.mkdir(parents=True, exist_ok=True)
-        cmd = [sys.executable, '-I', str(FETCH_SCRIPT), '--sid', sid, '--dest', str(self.staging)]
+        meta_p, bin_p = self._staging_dir(sid) / 'meta.json', self._staging_dir(sid) / 'points.bin'
         try:
-            out = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
-            self.log.append('fetch %s exit=%d %s' % (sid, out.returncode, (out.stdout or '').strip()[-240:]))
-            meta_p, bin_p = self._staging_dir(sid) / 'meta.json', self._staging_dir(sid) / 'points.bin'
-            if out.returncode != 0 or not meta_p.exists() or not bin_p.exists():
-                self.log.append((out.stderr or '').strip()[-300:])
-                return None, None
-            return meta_p, bin_p
-        except subprocess.TimeoutExpired:
-            self.log.append('fetch %s timeout' % sid)
+            fetch = load_fetch(self.fetch_dir)
+            if self.board_url:
+                fetch['C'].BOARD_URL = self.board_url  # 页面自定义板端地址须传导给官方 fetch
+            ok = fetch['process_session'](sid, str(self.staging), log=self.log.append)
+        except BaseException as exc:
+            self.log.append('fetch %s: %s: %s' % (sid, type(exc).__name__, exc))
             return None, None
+        if not ok or not meta_p.is_file() or not bin_p.is_file():
+            return None, None
+        return meta_p, bin_p
 
 
 class Recorder:
-    def __init__(self, root=None):
+    def __init__(self, root=None, fetch_dir=None):
         self.root = Path(root or os.environ.get('JOINT_OUTPUT_ROOT') or DEFAULT_OUTPUT_ROOT).resolve()
+        self.fetch_dir = fetch_dir  # 官方 fetch.py 目录（console_gui 传入其 _replay_dir 解析结果）
         self.lock = threading.RLock()
         self.thread = None
         self.latest = None
@@ -222,27 +249,41 @@ class Recorder:
             self.data['state'] = 'failed'
         self.stop_event.set()
 
-    def _camera_preview_only(self, url):
-        """During recording: only preview JPEGs, never write; on error surface and end preview."""
-        while not self.stop_event.is_set():
-            try:
-                with urllib.request.urlopen(url, timeout=3) as response:
-                    if 'multipart/' not in response.headers.get('Content-Type', ''):
-                        raise ValueError('camera is not an MJPEG stream')
-                    for jpeg in jpeg_frames(response):
-                        if self.stop_event.is_set():
-                            return
-                        with self.lock:
-                            self.latest = jpeg
-                            self.data['camera_recovering'] = False
-                            self.data['camera_frames'] = 1
-            except Exception as exc:
-                if self.stop_event.is_set():
-                    return
-                with self.lock:
-                    self._camera_error = str(exc)
-                    self.data['camera_recovering'] = True
-                self.stop_event.wait(2)
+    def _camera_preview_only(self, url, mj_path, frames_path):
+        """录制中：预览逐帧写入会话 camera.mjpeg，并把字节位置+主机接收时刻记进
+        camera_frames.jsonl（接收时刻非硬件同步，只作定位索引）。断开重连续写同一文件。
+        """
+        out = open(str(mj_path), 'ab')
+        index = open(str(frames_path), 'a', encoding='utf-8')
+        try:
+            while not self.stop_event.is_set():
+                try:
+                    with urllib.request.urlopen(url, timeout=3) as response:
+                        if 'multipart/' not in response.headers.get('Content-Type', ''):
+                            raise ValueError('camera is not an MJPEG stream')
+                        for jpeg in jpeg_frames(response):
+                            if self.stop_event.is_set():
+                                return
+                            offset = out.tell()
+                            out.write(jpeg)
+                            out.flush()
+                            index.write(json.dumps({'offset': offset, 'length': len(jpeg),
+                                                    'recv_unix_ns': time.time_ns()}) + '\n')
+                            index.flush()
+                            with self.lock:
+                                self.latest = jpeg
+                                self.data['camera_recovering'] = False
+                                self.data['camera_frames'] += 1
+                except Exception as exc:
+                    if self.stop_event.is_set():
+                        return
+                    with self.lock:
+                        self._camera_error = str(exc)
+                        self.data['camera_recovering'] = True
+                    self.stop_event.wait(2)
+        finally:
+            out.close()
+            index.close()
 
     def _run(self, board, duration):
         path = None
@@ -253,32 +294,49 @@ class Recorder:
                 self.t0 = time.monotonic_ns()
                 self.data['session_id'] = session.get('session_id')
                 self.data['path'] = None
-            preview = threading.Thread(target=self._camera_preview_only,
-                                       args=(self.data['camera_url'],), daemon=True)
-            preview.start()
-            self.stop_event.wait(duration)
-            board.stop()
-            with self.lock:
-                self.data['state'] = 'stopping'
-                self.data['stop_host_unix_ns'] = time.time_ns()
             sid = self.data['session_id']
             if not sid:
                 raise OSError('board start did not return session_id')
-            ready = board.wait_ready(sid, deadline=180)
-            # 创建 session 目录、保留空 camera.mjpeg 以便回放器将此会话当 video-only 段
+            # 会话目录名 = 板端 sid（不是 joint_<sid>）：同一段录制只有一个身份。
+            # 否则回页面板按 sid 找本地副本找不到，会把同一份雷达再拉一遍
+            # （现场：cap_20261015_142730 与 joint_cap_20261015_142730 各 237 MB）。
+            # 板端 sid 来自网络响应，只允许回放器白名单字符，不落成路径。
+            if not re.fullmatch(r'[A-Za-z0-9_-]{1,100}', sid):
+                raise ValueError('unexpected board session_id: %r' % sid)
             root = self.root
-            out_dir = root / ('joint_' + sid)
+            out_dir = root / sid
             out_dir.mkdir(parents=True, exist_ok=True)
-            (out_dir / 'camera.mjpeg').write_bytes(b'')
-            (out_dir / 'joint.json').write_text(json.dumps(dict(
+            # 相机预览逐帧写进会话目录（camera.mjpeg + 逐帧索引）；雷达在板上录，
+            # 停板后先关相机文件再继续组装，两者互不影响。
+            camera_path = out_dir / 'camera.mjpeg'
+            camera_frames_path = out_dir / 'camera_frames.jsonl'
+            preview = threading.Thread(target=self._camera_preview_only,
+                                       args=(self.data['camera_url'], camera_path,
+                                             camera_frames_path), daemon=True)
+            preview.start()
+            self.stop_event.wait(duration)
+            board.stop()
+            self.stop_event.set()          # 先停相机线程，等它把已收帧落盘
+            preview.join(timeout=10)
+            if not camera_path.exists():
+                camera_path.write_bytes(b'')   # 相机未上线：空占位，会话仍可回放雷达
+            elif not camera_path.stat().st_size:
+                camera_frames_path.unlink(missing_ok=True)
+            with self.lock:
+                self.data['state'] = 'stopping'
+                self.data['stop_host_unix_ns'] = time.time_ns()
+            ready = board.wait_ready(sid, deadline=180)
+            joint_info = dict(
                 state='assembling', mode='staged_capture', session_id=sid,
                 created_iso=time.strftime('%Y-%m-%dT%H:%M:%S%z'),
-                synchronization=self.data['synchronization']), ensure_ascii=False, indent=2))
+                synchronization=self.data['synchronization'])
+            (out_dir / 'joint.json').write_text(json.dumps(joint_info, ensure_ascii=False, indent=2),
+                                                encoding='utf-8')
             with self.lock:
                 self.path = out_dir
                 self.data['path'] = str(out_dir)
             # 一次性拉回：官方 fetch.py --sid（含 SHA/布局校验） → staging，到位再整体换名到会话目录
-            fetcher = _StagedFetch(root)
+            fetcher = _StagedFetch(root, board.base, self.fetch_dir)
             with self.lock:
                 self.data['state'] = 'saving'
                 self.data['radar_frames'] = int(ready.get('frame_count') or 0)
@@ -302,6 +360,16 @@ class Recorder:
                 if not finish_ok:
                     self.data['error'] = ('fetch 拉回失败；板端会话 %s 仍为 ready，可在回页面板重试。\n%s'
                                           % (sid, '\n'.join(fetcher.log[-3:])))
+                # 落盘工件补终态（排障直接看文件；写失败不影响已完成的会话数据）
+                joint_info.update(state=self.data['state'], finished_iso=time.strftime('%Y-%m-%dT%H:%M:%S%z'),
+                                  radar_frames=self.data['radar_frames'],
+                                  camera_frames=self.data['camera_frames'],
+                                  bytes=self.data['bytes'], error=self.data['error'])
+            try:
+                (out_dir / 'joint.json').write_text(json.dumps(joint_info, ensure_ascii=False, indent=2),
+                                                    encoding='utf-8')
+            except OSError:
+                pass
         except Exception as exc:
             if self.data.get('session_id'):
                 # 板已开始录但 PC 出错；尝试停板以免 bag 持续膨胀
@@ -316,8 +384,8 @@ class Recorder:
     # _fetch_chunk 已不需要：一次性官方 fetch.py --sid 全量落地，sha/meta 校验由官方权威实现做。
 
 
-def start_server(root, html_path):
-    recorder = Recorder(root)
+def start_server(root, html_path, fetch_dir=None):
+    recorder = Recorder(root, fetch_dir)
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_args):
@@ -340,8 +408,25 @@ def start_server(root, html_path):
                 self.reply(200, recorder.status())
             elif route == '/api/preview' and recorder.latest:
                 self.reply(200, recorder.latest, 'image/jpeg')
+            elif route == '/api/camera':
+                self._serve_camera()
             else:
                 self.reply(404, {'error': 'not found'})
+
+        def _serve_camera(self):
+            """GET /api/camera?sid=<会话目录名>：流式发出该会话录下的 camera.mjpeg。"""
+            sid = (urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query).get('sid') or [''])[0]
+            safe = bool(re.fullmatch(r'[A-Za-z0-9_-]{1,100}', sid))
+            path = recorder.root / sid / 'camera.mjpeg' if safe else None
+            if not path or not path.is_file() or not path.stat().st_size:
+                self.reply(404, {'error': '没有这个会话的相机视频'})
+                return
+            self.send_response(200)
+            self.send_header('Content-Type', 'video/x-mjpeg')
+            self.send_header('Content-Length', str(path.stat().st_size))
+            self.end_headers()
+            with open(str(path), 'rb') as fh:
+                shutil.copyfileobj(fh, self.wfile)
 
         def do_POST(self):
             origin = self.headers.get('Origin')

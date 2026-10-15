@@ -1,3 +1,63 @@
+## 2026-10-15 HFUS-LEARN-PLAN-03 学习前端大阶段计划（仅计划，SUBMITTED）
+
+用户要求制定下一大阶段及AI开发提示词并交OpenCode审查。本轮仅计划/18源预检/只读审查，无开发训练。当前[计划V3](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/DEVELOPMENT_PLAN_V3.md)/[唯一拟实施L01–L18验收V3](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/ACCEPTANCE_V3.md)/[开发提示词V3](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/AI_DEVELOPMENT_PROMPT_V3.md)/[最终审查与SHA](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/PLAN_REVIEW.md)/[回传](../human_capture/returns/HFUS-LEARN-PLAN-03.md)。OpenCode R1 PLAN_REVISE→R2/V3最终PLAN_PASS，非ACCEPTED/非训练授权。10工作包含474队列项（282人工+192建议）、三族学习/场景实例/结构与因果时序、36作业上限30h/资源门、全1934+90对照与同应用版本页面。OOF与最终比较分表，旧N/Q/默认R1/GT/模型/数据/用户差异保留；未来须用户实际派发才做E0，E1须另外明确有界训练授权和可信标签门，不自动ML/HR09/下载安装/设备采集部署/Git写。本条不接管其他主线。
+
+## 2026-10-15 HFUS-DEEP-RD-02 学习/距离图新路线研究（SUBMITTED）
+
+用户本轮要求深化聚类/机器学习/二维深度图并尝试。本轮仅新离线研究原型，唯一[Q01–Q07验收v1](../human_capture/evidence/2026-10-15_hfus_deep_routes_r1/ACCEPTANCE_V1.md)/[结果](../human_capture/evidence/2026-10-15_hfus_deep_routes_r1/RESULTS.md)/[报告](../human_capture/evidence/2026-10-15_hfus_deep_routes_r1/FINAL_REPORT.md)/[回传](../human_capture/returns/HFUS-DEEP-RD-02.md)。18原SHA重核；148固定诊断帧、四链592组帧、三类三分辨率投影及轴深度CSR、冻结小模型CPU推理580次核对完成；共同分母/裁外/稀疏性/方向合成边界另表。几何/人体收益未获足够证据，不从窗口晋级；学习语义/实例与3D—距离图互补是待验证方向。源码单writer停写，AI只读两轮审查非独立实验；旧N表/默认R1/模型/原数据/用户差异保留，无新服务/训练/新大模型下载/HR09/设备采集部署/Git写。语义/关节与高级模型推理、板端/物理/泛化NOT_RUN/BLOCKED，不接管其他主线。
+
+## 2026-10-15 HFUS-NEXT-DEV-01 本机离线全量开发交付（SUBMITTED）
+
+当前授权仅用户HFUS-NEXT-DEV-01本机离线范围；唯一[验收v2](../human_capture/evidence/2026-10-14_hfus_next_development_plan_r1/ACCEPTANCE_V2.md)不改。当前[RESULTS](../human_capture/evidence/2026-10-15_hfus_next_dev_r1/RESULTS.md)/[报告](../human_capture/evidence/2026-10-15_hfus_next_dev_r1/FINAL_REPORT.md)/[回传](../human_capture/returns/HFUS-NEXT-DEV-01.md)。1934动作+90新留出全原字节、A/B/B_tau/C/D和时序单因素、原页/源字节/缺源/UNKNOWN已交付；新空场残余-89.83%，动作前景+69.27%，三条件图均非退化FAIL，NO_GEOMETRIC_WINNER。事件r2两受控慢降仅后验几何候选，非真实跌倒TP。独立AI只读全表/定向复审留证，原R1默认/旧输出/用户差异保留；N08语义与关节、旧原空场/CAL、反射证据BLOCKED，N09完整EXE启动real_fall失败且新功能NOT_RUN，N11板端/物理/部署/泛化/默认晋级NOT_RUN。单writer已停源码写入；无数据写/清理、Git写、训练/HR-09、设备采集部署、驱动网络改动，不接管其他工单。
+
+## 2026-10-14 HFUS-NEXT-PLAN-01 算法借鉴与下一阶段计划（仅计划）
+
+用户要求借鉴算法/架构、比较效果并制定下一阶段计划。本轮只读核九会话18原文件SHA/帧数/28B尺寸PASS，八动作1934帧+新空场272帧。当前[计划v2](../human_capture/evidence/2026-10-14_hfus_next_development_plan_r1/DEVELOPMENT_PLAN_V2.md)/[唯一验收v2](../human_capture/evidence/2026-10-14_hfus_next_development_plan_r1/ACCEPTANCE_V2.md)/[计划审核](../human_capture/evidence/2026-10-14_hfus_next_development_plan_r1/PLAN_REVIEW.md)，V1聚类审PLAN_REVISE→V2 PLAN_PASS，历史保留；SUBMITTED非实现ACCEPTED。A/B/B_tau背景因子、C/D条件图、独立因果关联/粗槽/事件、960/974完整会话比较及固定语义U/K/X口径。N01预检PASS，其余实现NOT_RUN、独立GT BLOCKED；旧131958原字节/CAL仍BLOCKED。本条仅新计划，不接管历史工单；无算法写入、模型训练/HR-09、设备/采集/部署、默认晋级或Git写，数据只读。
+
+## 2026-10-14 HFUS-SCENE-SOURCE-EMPTY-03 原始动作恢复与新空场诊断
+
+八段动作原文件1934帧重新回放等价PASS；新空场cap_20261014_221808另建诊断背景，91 FIT/91 CAL/90 HOLDOUT，残余110492→11240点且0新增簇，容差仍约5.5cm。46动作帧候选点保留98.51%–100%，非人体召回；新背景全量因果与语义审核NOT_RUN，不晋级默认。页面原字节恢复状态/真实源行查询及旧空场缺失分支Edge PASS。旧cap131958两份原文件仍缺失；历史输出不覆盖。当前[验收v1](../human_capture/evidence/2026-10-14_hfus_scene_source_empty_r1/ACCEPTANCE_V1.md)/[报告](../human_capture/evidence/2026-10-14_hfus_scene_source_empty_r1/FINAL_REPORT.md)，SUBMITTED。无Git写、训练、采集、部署，后续仅只读原数据。
+
+## 2026-10-14 HFUS-SCENE-STATIC-02 活动区外锚点与全部新增簇
+
+用户要求继续。原同页新增scene_static：活动区外参考锚点、双姿态背景过滤、全视野新增簇/PCA/高度/尺寸/源行、多色同屏与冻结观测；中央候选姿态限定，未知簇不套人体节点。原录制缺失，首次原始诊断失败保留；显式baseline_02 XYZ账本代理1966帧回归，原字节不报PASS、不重造录制。1934动作帧有中央候选，32空场目标/新增簇0；源行互斥、XYZ、背景/新增/小簇守恒及活动区锚点输入0自验PASS，Edge同页/UI返工PASS。当前[唯一v1](../human_capture/evidence/2026-10-14_hfus_scene_static_r4/ACCEPTANCE_V1.md)/[报告](../human_capture/evidence/2026-10-14_hfus_scene_static_r4/FINAL_REPORT.md)，SUBMITTED；18个meta/points字节及新CAL重标BLOCKED，完整人体/家具语义UNKNOWN，物理/独审NOT_RUN，不晋级R1默认。原core/actions/config、GT、模型和历史输出保持。localhost:8954同服务，未停8944等服务；无训练/采集/部署/Git写。实际技能路径见报告，不接管其他主线工单。
+
+## 2026-10-14 HF-MAINLINE-POINTS-01 实施交付（原始源当前缺失，复跑BLOCKED）
+
+用户明确授权计划v3实施、实验、原页面、1966帧回归、返工和OpenCode只读审核，覆盖下方旧“仅计划授权”。Codex单算法writer，加载ponytail与scientific-toolkit-skill。首轮6×1966及护栏2×1966源行/因果前缀验证完成；护栏最大中心偏移0.093991m、无新增轴缺测，但粗槽跳变仍退化，299975点次均UNKNOWN，无可信完整人体/纯度收益，不晋级R1默认。80帧明确REUSED_REGRESSION。最终浏览器检查发现captures/remote为空，18个主链meta/points文件当前缺失，原录制复跑及opaque查询BLOCKED，冻结页面/全量账本仍可用；不归因、不猜测替换。当前[唯一验收v2](evidence/2026-10-14_hf_mainline_points_r1/ACCEPTANCE_V2.md)/[报告](evidence/2026-10-14_hf_mainline_points_r1/FINAL_REPORT_V2.md)/[交付索引](evidence/2026-10-14_hf_mainline_points_r1/CURRENT_DELIVERY_INDEX.md)，SUBMITTED，未ACCEPTED。页面http://[::1]:8944/（IPv4同端口另有PLANE服务，不停止其进程）。无训练、采集、部署、提交推送、旧GT或生产修改；物理/完整人体/晋级BLOCKED，独审结论独立登记。
+
+## 2026-10-14 HFUS-SCENE-CHANGE-01 冻结场景新增点与抖动过滤
+
+用户确认 D:/Code/ldiar 人体融合页，要求提取新进入点集并考虑传感器小幅抖动。原同一 pointset/r01 页面新增 scene_change 对照：局部背景平面、静态锚点小幅刚体补偿、双姿态冻结背景解释、当前三维候选；R1聚类参数保持。1934动作帧全部有目标候选，32空场留帧无目标；前景4945525→4791433，下降3.116%，不冒称家具污染率。1966帧源行/XYZ/粗节点/已匹配背景不因补偿晋升核验PASS，Edge九会话/跳帧/源行/切回旧方案PASS。首轮单姿态背景晋升及浏览器折叠文本读取失败保留。当前[唯一验收v1](../human_capture/evidence/2026-10-14_hfus_scene_change_r2/ACCEPTANCE_V1.md)/[报告](../human_capture/evidence/2026-10-14_hfus_scene_change_r2/FINAL_REPORT.md)，SUBMITTED；人体/家具完整身份UNKNOWN，物理/设备/独审NOT_RUN，不晋级R1默认或接管旧计划门。原核心/GT/录制/模型/历史输出保持，无训练/采集/部署/Git写。实际ponytail及scientific-toolkit-skill路径见报告。
+
+## 2026-10-14 HF-CONSOLE-02 r04真人倒地回放控制台入口
+
+用户明确要求修复小demo并集成总控制台。保留pointset/r01“骨架与倒地检测”，新增real_fall/r04“真人倒地回放”。当前[唯一验收v1](evidence/2026-10-14_hf_console_02_r1/ACCEPTANCE_V1.md)、[报告](evidence/2026-10-14_hf_console_02_r1/FINAL_REPORT.md)、[回传](returns/HF-CONSOLE-02.md)。控制台源码支持两套动态端口；桌面快捷方式目标Console_Pointset.exe按ConsolePointset.spec重建，通用Console.exe也重建，ZIP含两者。源码/两个冻结EXE/headless Edge/ZIP自验C02-01–06 PASS。r04单事件仍verified:false；TOP_REGION显示P95恶化、END_B有效帧减少，身份/关节GT与泛化BLOCKED。C02-07独立复审NOT_RUN、设备/物理NOT_RUN，不报ACCEPTED。无采集、部署、训练/模型切换、生产修改或Git写；实际ponytail路径C:/Users/30680/.codex/skills/ponytail/SKILL.md。完整源码/EXE/ZIP SHA见本轮FINAL_SHA.json。
+
+## 2026-10-14 HF-MAINLINE-POINTS-01 下一阶段计划与OpenCode审核（仅计划授权）
+
+用户明确要求多轮分析制定计划并交OpenCode审核，本轮未授权实现。Codex完成三轮分析，当前唯一[计划v3](HF_MAINLINE_POINT_RETENTION_PLAN_20261014_V3.md)及[上下文留出清单](evidence/2026-10-14_hf_mainline_points_plan_r1/CONTEXT_HOLDOUT_V2.json)；OpenCode CLI请求模型opencode-go/deepseek-v4.1-flash、plan agent、只读审核，v1 PLAN_REVISE → v2 PLAN_PASS → [v3最终PLAN_PASS](evidence/2026-10-14_hf_mainline_points_plan_r1/OPENCODE_REVIEW_V3.md)。原计划/原报告/失败日志保留。方向为上游逐点删点定位→有证据的保留规则→原8944页面固定候选→1934+32全帧回归；JS/Python口径、GT/proxy及家具未知分开。实施验收PR01–10/PR07a–c NOT_RUN，PR11/12 BLOCKED，R1默认保持；未修改算法/GT/源录制/服务/生产，未训练/采集/部署/提交推送/confirmed。实际ponytail路径C:/Users/30680/.codex/skills/ponytail/SKILL.md。首轮外部读取权限受限、启动快照停滞及参数失败如实保留，后续仅本次CLI关闭snapshot并允许外部只读；无全局配置改动。保护范围首尾核验见READONLY_FINAL_CHECK，不冒称整树冻结。本条仅登记计划，不接管旧R3或M3′实施状态。
+
+## 2026-10-14 HF-MAINLINE-LEVELING-01 M3′ 主线实验（与R3隔离的当前入口）
+
+用户在本聊天明确授权开始下一阶段，当前Codex仅写tools/hf_mainline_leveling与[新证据](evidence/2026-10-14_hf_mainline_leveling_r1/FINAL_REPORT.md)，实际加载ponytail、scientific-toolkit-skill。当前唯一[验收v2](evidence/2026-10-14_hf_mainline_leveling_r1/ACCEPTANCE_V2.md)/[交付](evidence/2026-10-14_hf_mainline_leveling_r1/CURRENT_DELIVERY_INDEX.md)/[回传](returns/HF-MAINLINE-LEVELING-01.md)。原各自四区新UUID及同一原门完整重跑，REJECTED精确重现；共享两套四区、公共9格清洁域与FIT-only平面选择均无法得到合格共享leveling。原门/生产/录制/GT/旧产物/8944页面不改，不强制TLS或开启融合。全12,821,136条推荐TLS源成员检查、125保护文件首尾SHA、相关SYNTHETIC契约自验有记录；工程自验与几何FAIL/BLOCKED分开。SUBMITTED未ACCEPTED；独审/设备/物理NOT_RUN，人体新效果NOT_RUN，晋级BLOCKED，无训练/采集/部署/提交推送/confirmed。R3另一会话继续其下方原授权范围，本条不接管或缩减R3；共享权威文档只追加本条，保留其记录。
+
+## 2026-10-14 HFUS-POINTSET-ACTIONS-02 R3 人体点集修复与粗骨架可观测性（当前入口）
+
+用户明确授权完成本机离线研究/实现/1934+32全帧/8944同页浏览器验收，当前SUBMITTED，R3功能自验完成；R301核心保护范围PASS；首次383、后续5418其他路径缺失，用户已确认同期有其他清理/迁移，不宣称整树冻结，非ACCEPTED。Codex唯一writer，实际加载ponytail、scientific-toolkit-skill。A邻接图、B背景风险排除、C过去帧一致性及ABC消融，固定R1锚点与独立反馈tracker分开。R1默认保持，R2保留，新点仅当前FG原ROI、源行XYZ与UNKNOWN，13槽仅当前点支持；符号返工另2×1966帧，翻转9→4但新f124退化保留。身份/解剖精度UNKNOWN、晋级BLOCKED；独审/设备/物理NOT_RUN。原GT/录制/生产/旧输出不改，无采集/部署/训练/提交推送/confirmed。见[唯一v1](../human_capture/evidence/2026-10-14_hfus_pointset_actions_r3/ACCEPTANCE_V1.md)、[实验前诊断](../human_capture/evidence/2026-10-14_hfus_pointset_actions_r3/DIAGNOSIS_BEFORE_EXPERIMENT.md)。[FINAL_REPORT](../human_capture/evidence/2026-10-14_hfus_pointset_actions_r3/FINAL_REPORT.md)。下方历史条目保留，不扩当前范围。
+
+## 2026-10-14 HFUS-POINTSET-ACTIONS-01 R2 点集诊断/局部恢复/因果体轴（当前唯一入口）
+
+用户授权继续本机离线研发，先检查人体完整性/背景混入，再做局部恢复与骨架。Codex唯一writer，实际读取ponytail、scientific-toolkit-skill；原pointset/r01页面，默认R1保持，新增action_research_r2五种实验对照。全1934+32帧重现、6方案11796帧源成员/当前节点支撑核验；轴实验缺测79→38，局部恢复有119/140/232新困难，均不晋级默认。人体完整率/家具污染率/解剖精度UNKNOWN；AI观察单独记录非人工GT，无训练/采集/部署/confirmed/Git写。实际Edge原页/控制台iframe与原EXE启动通过，原EXE/快捷方式不替换。当前[唯一v2](../human_capture/evidence/2026-10-14_hfus_pointset_actions_r2/ACCEPTANCE_V2.md)/[报告](../human_capture/evidence/2026-10-14_hfus_pointset_actions_r2/FINAL_REPORT.md)/[交付](../human_capture/evidence/2026-10-14_hfus_pointset_actions_r2/CURRENT_DELIVERY_INDEX.md)，SUBMITTED非ACCEPTED，独审/设备/物理NOT_RUN。旧v1/原数据/GT/模型/core/输出与历史证据只读保留。下方均历史，不扩本轮范围。
+
+## 2026-10-14 HFUS-POINTSET-ACTIONS-01 当前具体离线集成授权
+
+用户指定pointset/r01、已有空场建模和中央人物，明确无需用户审核阻止研发，要求完成目标/骨架/倒地候选并加入总控制台。当前[唯一v1](../human_capture/evidence/2026-10-14_hfus_pointset_actions_r1/ACCEPTANCE_V1.md)/[报告](../human_capture/evidence/2026-10-14_hfus_pointset_actions_r1/FINAL_REPORT.md)。Codex唯一writer，复用原core不改、隔离新action_output，控制台新EXE/快捷方式；旧GT/模型/原录制/历史证据不改。1934帧目标+32空场留帧0目标、两个受控躺下姿态候选，粗骨架79帧轴歧义，全源点/骨架节点核验PASS；确认跌倒未开启，不把初始躺地赋跌倒。SUBMITTED / 自验完成，独审/设备/物理NOT_RUN，未ACCEPTED，无训练/部署/采集/Git写。此新授权只覆盖本机回放/控制台，旧v2/094333配准REJECTED/S9绑定等结论保留。
+
+## 2026-10-14 HF-REAL第一批闭环修复（本次实际授权/当前记录）
+
+用户明确授权 **HF-CLOSE-01 / HF-DATA-01 / HF-BG-01**，复用r04和pointset r01，不创建重复原型。Codex唯一writer，非writer只读/root/readonly_review已独审，有发现/修复复核。当前[唯一补充v1](evidence/2026-10-14_hf_real_close_data_bg_r1/ACCEPTANCE_V1.md)/[交付](evidence/2026-10-14_hf_real_close_data_bg_r1/CURRENT_DELIVERY_INDEX.md)/[报告](evidence/2026-10-14_hf_real_close_data_bg_r1/FINAL_REPORT.md)。源绑定/审阅工具/同源隔离诊断/新registration真实重算已运行；S8 B55347/57045、C54069/57045，近地180/1163与4/1163失败；新artifact REJECTED，旧4个STALE，无VALID。r04未全收口、console当前仍r02，原RS04不关闭；身份/部位GT及缺原数据分别BLOCKED，S9 INVALID_BINDING、093958 DATA_BAD。SUBMITTED / REVIEWED_WITH_FINDINGS / STOPPED，非ACCEPTED；不正式启v2/confirmed、不进入统一核心集成实施、不训练/采集/部署/Git写。旧证据与生产/模型/原GT/captures只读，首尾核验有记录。实际技能ponytail；下方历史不扩大本次范围。
+
 # 工单开发与验收流程 v2
 
 2026-10-13 用户要求"三项一起做"+"开发啊"利用助手视觉排查r02 f10家具、093958配平、P臂吞人画像：**HF-REAL-03** [唯一v1](evidence/2026-10-13_hf_real_03_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-13_hf_real_03_r1/FINAL_REPORT.md)/[回传](returns/HF-REAL-03.md)。助手writer（claude-fable-5），隔离源码r03，r02证据只读。视觉盒被证伪（404点全落HF-REAL-01人区，v2 target不含家具残留→RS04 FAIL需指定独审决定是否关闭）；093958判DATA_BAD（三法pairwise PASS但f5/f60/f115无地斜带）不投入追踪；215540 P臂吞人按部位量化112,903/115,677=97.6%（legs/torso/shoulders/head 97%+）；215623/215643/233658板端本机均不在DATA_BLOCKED。f47/109/118 axis_ambiguous沿用RS05 BLOCKED。SUBMITTED未ACCEPTED，独审/设备/部署/生产/GT NOT_RUN，不再启动r02源码/生产/模型/GT/captures，不commit/push；板上ssh仅只读列出captures_remote。

@@ -242,5 +242,15 @@
 <script src="replay.js"></script>
 <script src="panel.js"></script>
 <script src="detect_ui.js"></script>
+<script>
+// 联合录制拉回完成 → 总控制台以 ?sid= 打开本页时自动载入该会话（其它入口无 ?sid 不受影响）。
+// ponytail: 自定义保存目录不在本服务目录下时这里会载入失败，回放状态栏会显示原因。
+(function () {
+  var qsid = new URLSearchParams(location.search).get("sid");
+  if (qsid && /^[A-Za-z0-9_-]{1,100}$/.test(qsid) && window.__load_session_sid) {
+    window.__load_session_sid(qsid).catch(function () {});  // 失败态已由回放 status 显示
+  }
+})();
+</script>
 </body>
 </html>

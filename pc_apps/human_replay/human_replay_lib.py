@@ -21,7 +21,6 @@ import hashlib
 import json
 import os
 import shutil
-import subprocess
 import sys
 import threading
 import time
@@ -89,6 +88,15 @@ def _local_sessions(dest):
             size = os.path.getsize(os.path.join(d, "points.bin"))
             if not isinstance(frames, list) or not frames or not size or size % 28:
                 continue  # 两页消费固定 28B/点；空帧表/空文件/未完整写入不预选。
+            # 完整性（2026-10-14 用户要求）：meta 声明了 stride 时，末帧 offset+count 必须
+            # 正好等于文件字节数；半写/被截断的 points.bin 不算「本机有的会话」，不列。
+            stride = (m.get("point_layout") or {}).get("stride_bytes")
+            last = frames[-1]
+            if (stride and isinstance(last, dict)
+                    and isinstance(last.get("offset_points"), int)
+                    and isinstance(last.get("count_points"), int)
+                    and (last["offset_points"] + last["count_points"]) * stride != size):
+                continue
             out[name] = {
                 "duration_sec": m.get("duration_sec"),
                 "total_points": m.get("total_points"),
@@ -101,6 +109,21 @@ def _local_sessions(dest):
         except (OSError, ValueError, TypeError, AttributeError):
             continue  # 元数据不可读不能当作本地可载入会话。
     return out
+
+
+def _dir_manifest(directory):
+    """会话目录内每个文件的 (name, bytes, sha256)，按名字排序；只读，供删除前清单用。"""
+    files = []
+    for name in sorted(os.listdir(directory)):
+        full = os.path.join(directory, name)
+        if not os.path.isfile(full):
+            continue
+        digest = hashlib.sha256()
+        with open(full, "rb") as fh:
+            for block in iter(lambda: fh.read(1 << 20), b""):
+                digest.update(block)
+        files.append({"name": name, "bytes": os.path.getsize(full), "sha256": digest.hexdigest()})
+    return files
 
 
 def _board_get(path, timeout=4.0):
@@ -131,6 +154,27 @@ def _board_delete(sid, timeout=8.0):
                                  method="DELETE")
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return json.loads(resp.read())
+
+
+def _board_files_present(sid, timeout=3.0):
+    """板端还有这个会话的数据吗：HEAD meta.json + points.bin，只读头不下正文。
+
+    登记表（sessions.json）会留 FIFO 清过文件的墓碑行，meta/points 路径照样写着——
+    所以「有没有数据」只能实查文件。板不可达时返回 True：连不上板不能当作数据缺失，
+    列表该照旧显示（否则离线时整屏会话被吞）。
+    """
+    for name in ("meta.json", "points.bin"):
+        req = urllib.request.Request(
+            "%s/api/v1/sessions/%s/files/%s" % (C.BOARD_URL, sid, name), method="HEAD")
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                if resp.status != 200 or int(resp.headers.get("Content-Length") or 0) <= 0:
+                    return False
+        except urllib.error.HTTPError:
+            return False          # 404 file_missing：板端文件已被清理
+        except (OSError, ValueError):
+            return True
+    return True
 
 
 def _sync_failure_note(sid):
@@ -193,6 +237,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._gt("GET")
         if path == "/api/sessions":
             return self._api_sessions()
+        if path == "/api/manifest":
+            return self._api_manifest()
         if path == "/api/board/status":
             return self._board_status()
         if path == "/api/sync_status":
@@ -264,9 +310,20 @@ class Handler(BaseHTTPRequestHandler):
             except BaseException as exc:
                 board_error = "连接板失败: %s" % exc
         out = []
+        hidden = {"purged": 0, "missing": 0}   # 登记表还在、数据已不在任何一端的行
         for s in board_sessions:
             sid = s.get("session_id", "")
             li = local.get(sid)
+            if not li:
+                # 数据完整性（2026-10-14 用户要求「只展示 3588 和本机有的会话」）：
+                # state=purged 是板端 FIFO 已删文件；其余 state 也要实查文件在不在，
+                # 否则点进去只会拉失败。本机有副本的行照列（数据还在本机）。
+                if s.get("state") == "purged":
+                    hidden["purged"] += 1
+                    continue
+                if not _board_files_present(sid):
+                    hidden["missing"] += 1
+                    continue
             out.append({
                 "sid": sid,
                 "state": s.get("state"),
@@ -292,7 +349,7 @@ class Handler(BaseHTTPRequestHandler):
                             "bytes": li.get("bytes"),      # FIX-PERF-R2
                             "name": li.get("name")})
         out.sort(key=lambda o: o.get("created_iso") or "", reverse=True)
-        self._json({"sessions": out, "board_error": board_error})
+        self._json({"sessions": out, "board_error": board_error, "hidden": hidden})
 
     # ---------- 录制控制台（代理板端） ----------
     def _board_status(self):
@@ -445,6 +502,33 @@ class Handler(BaseHTTPRequestHandler):
             return self._json({"error": "GT 工作台插件缺失: " + str(exc)}, 503)
         return gt_server.handle(self, method, C.DEST_ROOT)
 
+    # ---------- 删除前清单（清单接口，只读） ----------
+    def _api_manifest(self):
+        """GET /api/manifest?sid=…：本机会话文件清单（name/bytes/sha256）+ 板端登记行。
+
+        删除纪律（2026-10-14 用户要求）：先出 sid+字节+sha256 清单，再由人显式确认才删；
+        本接口只读，不删任何东西。
+        """
+        from urllib.parse import urlparse, parse_qs
+        sid = (parse_qs(urlparse(self.path).query).get("sid") or [""])[0]
+        if not C.SID_RE.match(sid):
+            return self._json({"ok": False, "error": "sid 非法"}, 400)
+        directory = os.path.join(C.DEST_ROOT, sid)
+        present = os.path.isdir(os.path.realpath(directory))
+        files = _dir_manifest(directory) if present else []
+        out = {"sid": sid,
+               "local": {"present": present, "files": files,
+                         "total_bytes": sum(f["bytes"] for f in files)},
+               "board": None}
+        try:
+            out["board"] = _board_get("/api/v1/sessions/" + sid)
+        except urllib.error.HTTPError as exc:
+            out["board"] = {"error": "板端无此会话" if exc.code == 404 else "板端 HTTP %d" % exc.code}
+        except BaseException as exc:
+            out["board"] = {"error": "板端不可达: %s" % exc}
+        self._json(out)
+
+    # ---------- 修改（POST） ----------
     def _api_delete(self):
         """删会话：scope=local|board|both。board 走 capture_server DELETE（连文件）。"""
         import shutil as _sh

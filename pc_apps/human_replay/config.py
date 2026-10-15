@@ -35,7 +35,8 @@ POLL_INTERVAL_S = 15.0
 HTTP_TIMEOUT_S = 8.0     # 控制面 JSON
 
 # 数据面流式下载的 socket 超时：单次读间隙上限。限速在板端（capture_server
-# download_limit_kbit，默认 70000 Kbit/s ≈ 70Mbit，给 100M 链路实时预览留 30%）；
+# download_limit_kbit，2026-10-14 起 800000 Kbit/s ≈ 100MB/s，旧值 70000 是
+# 百兆/无线时代给实时预览留余量用的）；
 # 正常 256KB/30ms 一来，60s 没有字节才判死。scp 时代的 3600s 是总时长上限，
 # HTTP 流式不需要总时长上限，只防僵死。
 DOWNLOAD_TIMEOUT_S = 60.0

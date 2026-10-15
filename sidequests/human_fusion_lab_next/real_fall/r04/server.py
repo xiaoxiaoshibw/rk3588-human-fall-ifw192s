@@ -44,7 +44,7 @@ class Handler(BaseHTTPRequestHandler):
         if u.path=='/api/info':
             return self.send({'sessions':{sid:{'frames':len(d['track']['rows']),'times':[r['t'] for r in d['track']['rows']],'events':d['track']['events'],'source':d['manifest']['source']} for sid,d in DATA.items()},
                               'background':DATA[SID]['manifest']['background'],'skeleton_slots':DATA[SID]['track']['skeleton_slots'],
-                              'limits':['visual initialization','point-supported regions, anatomical joints unverified','active lying indistinguishable','upright .50m torso-radius refinement may omit extended arms']})
+                              'limits':['visual initialization; frames 0..4 are offline warmup','point-supported regions, anatomical joints unverified','active lying indistinguishable','startup residual outside protected .55m seed may absorb unreviewed human points','empty result is self-reference limited']})
         if u.path in ('/api/frame','/api/support'):
             try:
                 q=parse_qs(u.query,strict_parsing=True)
@@ -67,14 +67,14 @@ class Handler(BaseHTTPRequestHandler):
                 mode=q.get('mode',['fg'])[0]
                 if mode not in ('fg','room'):raise ValueError('mode invalid')
                 if mode=='fg':
-                    return self.send({'sid':sid,'row':display_row,'room':[],'fg':np.round(fg,4).tolist(),'target':np.round(target,4).tolist()})
+                    return self.send({'sid':sid,'row':display_row,'room':[],'fg':np.round(fg.astype('f8'),4).tolist(),'target':np.round(target.astype('f8'),4).tolist()})
                 raw=frame_xyz(d['directory'],d['meta'],i);rt=d['manifest']['transform']
                 lv=raw@np.array(rt['R']).T+np.array(rt['t'])
                 if rt.get('reference_alignment'):
                     a=rt['reference_alignment'];lv=lv@np.array(a['R']).reshape(3,3).T+np.array(a['t'])
                 keep=(lv[:,0]>-.5)&(lv[:,0]<6)&(abs(lv[:,1])<3)&(lv[:,2]>-.1)&(lv[:,2]<2.6)
                 return self.send({'sid':sid,'row':display_row,
-                                  'room':np.round(lv[keep][::3],4).tolist(),'fg':np.round(fg,4).tolist(),'target':np.round(target,4).tolist()})
+                                  'room':np.round(lv[keep][::3],4).tolist(),'fg':np.round(fg.astype('f8'),4).tolist(),'target':np.round(target.astype('f8'),4).tolist()})
             except (ValueError,KeyError) as e:return self.send({'error':str(e)},code=400)
         return self.send({'error':'not found'},code=404)
 
@@ -82,6 +82,6 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8932);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8934);args=parser.parse_args()
     print('Full process http://127.0.0.1:%d/'%args.port,flush=True)
     ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()

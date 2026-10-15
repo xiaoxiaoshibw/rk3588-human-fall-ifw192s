@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """生成发布包 dist/LiDAR_Console.zip（先跑 PyInstaller 产出 dist/Console.exe）。
 
-在本目录运行：
+在本目录运行（桌面“总控制台”目标）：
     python -m PyInstaller --noconfirm Console.spec
     python -B make_release.py
+（2026-10-15 合并：两个总控制台统一为单 Console.exe，不再构建 Console_Pointset 专版）
 """
 import os
 import zipfile
@@ -26,6 +27,8 @@ FILES = {  # zip 内路径 -> 源文件（相对脚本目录）
     "LiDAR_Console/源码/console_html.test.js": "console_html.test.js",
     "LiDAR_Console/源码/make_console_shortcut.py": "make_console_shortcut.py",
     "LiDAR_Console/源码/make_release.py": "make_release.py",
+    # PLANE-01（2026-10-15）：证据页子目录的同步脚本（页面本体已内嵌进 exe，源码副本供重生成）
+    "LiDAR_Console/源码/sync_plane01_pages.py": "sync_plane01_pages.py",
     # B1 新增 (运行时 datas 已在 exe 内嵌 via spec, 源码副本在 ZIP 里参考用)
     "LiDAR_Console/源码/human_replay/human_track.html": "../human_replay/human_track.html",
     "LiDAR_Console/源码/human_replay/human_detect.html": "../human_replay/human_detect.html",

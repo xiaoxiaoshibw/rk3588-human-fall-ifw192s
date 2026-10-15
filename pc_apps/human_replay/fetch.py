@@ -10,8 +10,8 @@
   → PATCH extra.transferred=true + state=transferred 回报板端。
 
 数据面走 capture_server 的 /api/v1/sessions/<sid>/files/<name>（8766）：
-同网段任何 PC 都无需 SSH key；限速在板端（download_limit_kbit，默认 ≈70Mbit，
-给 100M 链路的实时预览留 30%）。
+同网段任何 PC 都无需 SSH key；限速在板端（download_limit_kbit，默认 ≈800Mbit，
+2026-10-14 起；旧值 ≈70Mbit 是百兆链路时代给实时预览留余量用的）。
 
 传输前用 HEAD Content-Length 预判盘余量，防止把时间浪费在注定失败的传输上。
 

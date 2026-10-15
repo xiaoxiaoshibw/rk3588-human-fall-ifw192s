@@ -1,3 +1,87 @@
+## 2026-10-15 HC-JOINT-LOCAL-01 R8 相机预览同步落盘（camera.mjpeg + 逐帧索引）
+
+用户连问「这些数据都看不了吗 / 视频看不了 / 视频文件帮我拉下来」并选择「给联合录制加相机写盘」。只读核对：三个联合会话（`joint_cap_20261015_111738/142227/142730`）`camera.mjpeg` 恒 0B；板端 `http://192.168.31.58:8081` 只有 `/stream`（实时 MJPEG）、`/snapshot`、`/status`，其余路由 404，**无录像/历史** → 那两次录制的相机画面从未被保存（现行错峰模式相机仅预览不写盘）。实现（PC 侧 4 文件，零新依赖）：`Recorder._camera_preview_only` 录制中把预览帧逐条写进会话 `camera.mjpeg` 并记 `camera_frames.jsonl`（offset/length/主机接收时刻，非硬件同步仅作索引）；停板后 `stop_event.set()`+`join` 先关文件再组装；`joint.json` 增 `camera_frames`；新增 `GET /api/camera?sid=`（流式回放，sid 白名单，越权→404）；联合页新增「相机录制回看」逐帧播放/拖动面板，文案与 README 同步。自验：`joint_capture_test` **10 PASS**（+2）、`console_html` **17**、`console_test` **7** 全 exit 0，联合页 JS 语法检查过。NOT_RUN：真机端到端（重打+重启+设备）、`human_replay` 回放器内嵌同屏显示；回看只对最近一次联合会话，相机与雷达无硬件同步。**EXE 未由本轮重打**，但 R7 并行流 14:50/14:57 两次重打已把本改动带入冻结 Console.exe（R7 的 FILE_SHAS/TESTS 早于本改动，已过期，需重生成）。见[唯一v1](evidence/2026-10-15_hc_joint_local_r8/ACCEPTANCE_V1.md)/[证据与限制](evidence/2026-10-15_hc_joint_local_r8/README.md)/[回传](returns/HC-JOINT-LOCAL-01.md)。SUBMITTED未ACCEPTED，独审NOT_RUN；未改板端/驱动/fetch/数据格式/模型/GT/`human_replay`，无 commit/push/部署/采集。技能 ponytail（skill 工具，full）。
+
+## 2026-10-15 CONSOLE-GROUP-DB-01 R2 首页「归档」区（现在用不到的算法页收起）
+
+用户续派「现在用不到的算法可以归档」：口径为**首页收纳**——7 项研究/算法页（算法验证/人体识别/人检锁定/骨架与倒地检测/真人倒地回放/小目标跟踪/逐源标注与学习对照）加 `archived` 标记，收进启动页最下面「归档」区，默认折叠、点标题展开收起，页面/URL/代码/exe 内嵌副本一个不少、零删除；`APPS` 索引与联合录制 `?sid` 契约不变。`console_html` **20**（+1 归档用例，分栏用例改口径）/`console_test` 7/`joint_capture` 10/`sessions` 7 全 exit 0；重打 `Console.exe` 193,818,509B/`6C9C65E4…`、`LiDAR_Console.zip` 151,052,851B/`25ACD3EC…` 并重启，冻结壳页 17,290B 含归档区（`archived:true`×7）。真机点标题与「真归档」（移出 exe/仓库）NOT_RUN；归档默认集合为判断项，增删一处 `archived:true` 即可。见[唯一v1](evidence/2026-10-15_hc_console_groups_db_r2/ACCEPTANCE_V1.md)/[证据](evidence/2026-10-15_hc_console_groups_db_r2/README.md)/[回传](returns/CONSOLE-GROUP-DB-01.md)。SUBMITTED未ACCEPTED；零删除、无 commit/push/部署/采集。
+
+## 2026-10-15 CONSOLE-GROUP-DB-01 总控制台首页分栏归类 + 会话数据库模块（含分级删除）
+
+用户直派「把这些模块收纳归类，再加入一个数据库模块支持删除功能」；两处决定经用户选择：数据库=会话库总表+分级删除，归类=分栏分组标题。`console.html` APPS 加 `group` 并按 `GROUPS`（采集录制/回放与标注/检测与研究/板端与平台/数据管理）分栏渲染 + 新增「会话数据库」卡片（`APPS[0]` 仍是会话回放，联合录制 `?sid` 契约不变）；`human_replay_lib.py` 新增只读 `GET /api/manifest`（本机逐文件 name+bytes+sha256 + 板端登记行，sid 白名单）；新页 `sessions_db.html`（总表+总览+清单/删本机/删板端/删两侧）。删除纪律沿用 2026-10-14：先清单→弹窗写明→人工确认→才 `POST /api/delete`（既有接口未改）。`console_html` 19 / `console_test` 7 / `sessions` 7 / `joint_capture` 10 / `fetch_lib` 13 全 exit 0；真数据+真板只读端到端：数据库页 200、`/api/manifest` 出 points.bin 237,644,764B 且 sha256 与独立计算逐位一致；重打 `Console.exe` 193,819,286B/`33D53CF5…`、`LiDAR_Console.zip` 151,051,879B/`E2D0BD89…` 并重启，冻结壳页含分栏与数据库卡片、冻结回放服务清单接口可用。真机点击与**真实删除**未跑（现场零删除）；不含 `data/leveled|registration|downloads`；独审 NOT_RUN。见[唯一v1](evidence/2026-10-15_hc_console_groups_db_r1/ACCEPTANCE_V1.md)/[证据](evidence/2026-10-15_hc_console_groups_db_r1/README.md)/[回传](returns/CONSOLE-GROUP-DB-01.md)。SUBMITTED未ACCEPTED；未改板端/fetch/joint_capture/模型/GT，无 commit/push/部署/采集。技能 ponytail（skill 工具，full）。
+
+## 2026-10-15 HC-JOINT-LOCAL-01 R7 联合录制雷达被拉两遍（同数据两名）根因修复
+
+用户直派「雷达数据会被拉两遍但是名字不一样」并贴出面板两行（同帧同长）。根因即 R6 记录级 A6：联合拉回落 `output_root/joint_<sid>/`，板端登记与回页面板都按 `local.get(sid)` 找本机副本 → 板端行判「本地无」→ 点行 `/api/sync` 再拉一份 `captures/remote/<sid>/`（现场 142730 两份 237,644,764B、111738 两份 255,522,036B；真板 `download_requested=true` 指认第二份来自面板点击）。修复：会话目录名 = 板端 sid（与面板同键，sync 短路天然命中）+ sid 白名单守卫 + 文案/README/示例同步，`human_replay` 零改动。面板对照（隔离临时根 + 真板只读 GET）改名前两行、改名后一行 `local=true`；`joint_capture_test` 8 / `console_html` 17 / `console_test` 7 全 exit 0。EXE/ZIP 已重打（`Console.exe` 193,812,397B / `LiDAR_Console.zip` 151,042,810B，冻结 `--check-joint-capture` exit 0）并 15:02 重启总控制台：运行中 exe 内 R7+R8 代码行为可观测（`/api/camera` 会话专属 404 vs 通用 `not found`）。真机改后新录一段 NOT_RUN（现场验收）、现场 3 组重名副本 BLOCKED 待用户确认处置。见[唯一v1](evidence/2026-10-15_hc_joint_local_r7/ACCEPTANCE_V1.md)/[根因与限制](evidence/2026-10-15_hc_joint_local_r7/README.md)/[回传](returns/HC-JOINT-LOCAL-01.md)。SUBMITTED未ACCEPTED，独审NOT_RUN；未改板端/驱动/fetch/数据格式/模型/GT，无 commit/push/部署/采集。技能 ponytail（skill 工具，full）。
+
+## 2026-10-15 HFUS-LEARN-PLAN-03 学习前端大阶段计划（仅计划，SUBMITTED）
+
+用户要求制定下一大阶段及AI开发提示词并交OpenCode审查。本轮仅计划/18源预检/只读审查，无开发训练。当前[计划V3](evidence/2026-10-15_hfus_learn_stage_plan_r1/DEVELOPMENT_PLAN_V3.md)/[唯一拟实施L01–L18验收V3](evidence/2026-10-15_hfus_learn_stage_plan_r1/ACCEPTANCE_V3.md)/[开发提示词V3](evidence/2026-10-15_hfus_learn_stage_plan_r1/AI_DEVELOPMENT_PROMPT_V3.md)/[最终审查与SHA](evidence/2026-10-15_hfus_learn_stage_plan_r1/PLAN_REVIEW.md)/[回传](returns/HFUS-LEARN-PLAN-03.md)。OpenCode R1 PLAN_REVISE→R2/V3最终PLAN_PASS，非ACCEPTED/非训练授权。10工作包含474队列项（282人工+192建议）、三族学习/场景实例/结构与因果时序、36作业上限30h/资源门、全1934+90对照与同应用版本页面。OOF与最终比较分表，旧N/Q/默认R1/GT/模型/数据/用户差异保留；未来须用户实际派发才做E0，E1须另外明确有界训练授权和可信标签门，不自动ML/HR09/下载安装/设备采集部署/Git写。本条不接管其他主线。
+
+## 2026-10-15 HFUS-DEEP-RD-02 学习/距离图新路线研究（SUBMITTED）
+
+用户本轮要求深化聚类/机器学习/二维深度图并尝试。本轮仅新离线研究原型，唯一[Q01–Q07验收v1](evidence/2026-10-15_hfus_deep_routes_r1/ACCEPTANCE_V1.md)/[结果](evidence/2026-10-15_hfus_deep_routes_r1/RESULTS.md)/[报告](evidence/2026-10-15_hfus_deep_routes_r1/FINAL_REPORT.md)/[回传](returns/HFUS-DEEP-RD-02.md)。18原SHA重核；148固定诊断帧、四链592组帧、三类三分辨率投影及轴深度CSR、冻结小模型CPU推理580次核对完成；共同分母/裁外/稀疏性/方向合成边界另表。几何/人体收益未获足够证据，不从窗口晋级；学习语义/实例与3D—距离图互补是待验证方向。源码单writer停写，AI只读两轮审查非独立实验；旧N表/默认R1/模型/原数据/用户差异保留，无新服务/训练/新大模型下载/HR09/设备采集部署/Git写。语义/关节与高级模型推理、板端/物理/泛化NOT_RUN/BLOCKED，不接管其他主线。
+
+## 2026-10-15 HFUS-NEXT-DEV-01 本机离线全量开发交付（SUBMITTED）
+
+当前授权仅用户HFUS-NEXT-DEV-01本机离线范围；唯一[验收v2](evidence/2026-10-14_hfus_next_development_plan_r1/ACCEPTANCE_V2.md)不改。当前[RESULTS](evidence/2026-10-15_hfus_next_dev_r1/RESULTS.md)/[报告](evidence/2026-10-15_hfus_next_dev_r1/FINAL_REPORT.md)/[回传](returns/HFUS-NEXT-DEV-01.md)。1934动作+90新留出全原字节、A/B/B_tau/C/D和时序单因素、原页/源字节/缺源/UNKNOWN已交付；新空场残余-89.83%，动作前景+69.27%，三条件图均非退化FAIL，NO_GEOMETRIC_WINNER。事件r2两受控慢降仅后验几何候选，非真实跌倒TP。独立AI只读全表/定向复审留证，原R1默认/旧输出/用户差异保留；N08语义与关节、旧原空场/CAL、反射证据BLOCKED，N09完整EXE启动real_fall失败且新功能NOT_RUN，N11板端/物理/部署/泛化/默认晋级NOT_RUN。单writer已停源码写入；无数据写/清理、Git写、训练/HR-09、设备采集部署、驱动网络改动，不接管其他工单。
+
+## 2026-10-14 HFUS-NEXT-PLAN-01 算法借鉴与下一阶段计划（仅计划）
+
+用户要求借鉴算法/架构、比较效果并制定下一阶段计划。本轮九会话18原文件SHA/帧数/28B尺寸预检PASS，八动作1934帧+新空场272帧，两背景artifact可读。当前[计划v2](evidence/2026-10-14_hfus_next_development_plan_r1/DEVELOPMENT_PLAN_V2.md)/[唯一验收v2](evidence/2026-10-14_hfus_next_development_plan_r1/ACCEPTANCE_V2.md)/[计划审核](evidence/2026-10-14_hfus_next_development_plan_r1/PLAN_REVIEW.md)/[回传](returns/HFUS-NEXT-PLAN-01.md)。V1 PLAN_REVISE→V2 PLAN_PASS，仅设计SUBMITTED；实现NOT_RUN、语义/关节GT BLOCKED。背景A/B/B_tau、条件图C/D、因果骨架/事件、固定960/974会话组和U/K/X语义分母；本工单算法单writer，其他线路只读并行。本条不接管旧工单，不启动实现/训练/HR-09/默认晋级或设备采集部署/Git写，原数据和旧产物只读保留，旧131958仍缺失。
+
+## 2026-10-14 HC-DOWNLOAD-LIMIT-01 板端直下限速 70000→800000
+
+用户口述"改限速"（源于"本机从 3588 拉数据是不是也非常快"）。实测板端 HC 网页直下 374.2 MB 需 42.8 s（8.75 MB/s）而链路裸 TCP 849 Mbps、ssh 86.8 MB/s；根因是 `capture_server.py` 文件路由的 `download_limit_kbit` 限速器——板端 `capture.yaml` 是 2026-10-02 旧版**缺该键**，落回代码默认 `70000`（70 Mbps，百兆时代给实时预览留余量用），数值与实测一字不差。板端加 `download_limit_kbit: 800000`（备份 `capture.yaml.bak-20261014`）并按 `/home/wel/BOOTSTRAP.md` §6 原命令重启容器内服务（PID 3578→26094，日志已备份）；仓库 `src/human_capture/config/capture.yaml` 同步，`pc_apps/human_replay/config.py`/`fetch.py` 仅改注释旧值。结果 3.77 s / 99.6 MB/s（11.4×），落地 sha256 与本机副本一致，45+13 项测试 PASS；取 800000 而非 0 是为给并存实时流（bridge ~93 Mbit + 预览 ~17 Mbit）留 ~200 Mbit 余量（0 实测 118 MB/s）。DL01–DL05 PASS；真实 `fetch.py --sid` 端到端、并发丢帧、实际回滚 NOT_RUN。未改板端源码/会话数据，未 commit/push。见[验收v1](evidence/2026-10-14_hc_download_limit_r1/ACCEPTANCE_V1.md)/[测量](evidence/2026-10-14_hc_download_limit_r1/BENCHMARK.json)/[回传](returns/HC-DOWNLOAD-LIMIT-01.md)。
+
+## 2026-10-14 HFUS-SCENE-SOURCE-EMPTY-03 原始动作恢复与新空场诊断
+
+八段动作原文件1934帧重新回放等价PASS；新空场cap_20261014_221808另建诊断背景，91 FIT/91 CAL/90 HOLDOUT，残余110492→11240点且0新增簇，容差仍约5.5cm。46动作帧候选点保留98.51%–100%，非人体召回；新背景全量因果与语义审核NOT_RUN，不晋级默认。页面原字节恢复状态/真实源行查询及旧空场缺失分支Edge PASS。旧cap131958两份原文件仍缺失；历史输出不覆盖。当前[验收v1](evidence/2026-10-14_hfus_scene_source_empty_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-14_hfus_scene_source_empty_r1/FINAL_REPORT.md)，SUBMITTED。无Git写、训练、采集、部署，后续仅只读原数据。
+
+## 2026-10-14 REPLAY-LIST-INTEGRITY-01 会话回放列表数据完整性
+
+用户直派：把会话回放里消失的数据删掉，以后只展示 3588 和本机真有数据的会话。实测板端 36 行登记里只有 10 行两端有文件（26 行是 FIFO 墓碑：22 行 `purged` + 4 行 `transferred` 但文件也没了）。`human_replay_lib.py` 新增 `_board_files_present`（HEAD meta/points，不下正文；板不可达不判缺失）并在 `/api/sessions` 过滤两端都无数据的行 + 返回 `hidden` 计数，`_local_sessions` 增加 stride 尺寸一致性检查（半写/截断不算本机有）；`panel.js` 状态行显示「已隐藏 N 条无数据登记」。按用户指示用既有 `DELETE /api/v1/sessions/<sid>` 清掉那 26 行墓碑（删前整份行数据+探针证据存 `captures/deleted_board_registry_20261014.json`，每行 `removed: []` 证明未删任何文件），板端登记 36 → 10 行；本机有副本的 8 行墓碑保留。验证：真板列表 10 行 `hidden:{0,0}`、`sessions_test.py` 5 项（含新 `IntegrityFilterTest`）、`panel.test.js`、`human_replay_lib.test.js` 45 项、`console_test.py` 7 项 PASS，全量 92 项仅既有 `leveling_auto_test` 缺旧数据 1 ERROR。未改板端源码/EXE/数据文件；重启总控制台生效（源码旁路）。见[证据](evidence/2026-10-14_replay_list_integrity_r1/README.md)。
+
+## 2026-10-14 DATA-ROOT-JUNCTION-01 数据目录与 AI 工作区分离
+
+用户直派：总控制台引用的数据和下载的数据要放单独的项目数据文件夹，与 AI 搞得数据分开防止误删。数据本体迁至 `D:\Code\ldiar\data\`（`sessions`/`leveled`/`registration`/`downloads`），仓库内 `captures\remote|leveled|registration` 改为指向它的目录联接，代码与 EXE 零改动、对外路径不变；`radar_sessions_8pack_2026-10-13` 8 段（16 文件 2,657,818,909 字节逐文件核对一致）已解压进 `sessions/`，压缩包按用户要求删除并释放 2.29 GB。console 7 项、human_replay sessions 4 项测试 PASS，冻结 EXE `--check-startup` replay/fall 起且 junction 读写实测通过；`真人倒地回放` 仍因原始 `cap_20261013_094333`/`131958` 缺失 NOT_RUN，legacy 九会话原始数据同样缺失（leveled 是配平变换后点云，不能替代）。`.gitignore` 加 `/data/`、AGENTS.md 加数据保护条。见[证据](evidence/2026-10-14_data_root_junction_r1/README.md)/[STATE](evidence/2026-10-14_data_root_junction_r1/STATE.json)，技能ponytail `C:/Users/30680/.config/opencode/skills/ponytail`。无 Git 写、无板端/部署/采集/生产改动。
+
+## 2026-10-14 HFUS-SCENE-STATIC-02 活动区外锚点与全部新增簇
+
+用户要求继续。原同页新增scene_static：活动区外参考锚点、双姿态背景过滤、全视野新增簇/PCA/高度/尺寸/源行、多色同屏与冻结观测；中央候选姿态限定，未知簇不套人体节点。原录制缺失，首次原始诊断失败保留；显式baseline_02 XYZ账本代理1966帧回归，原字节不报PASS、不重造录制。1934动作帧有中央候选，32空场目标/新增簇0；源行互斥、XYZ、背景/新增/小簇守恒及活动区锚点输入0自验PASS，Edge同页/UI返工PASS。当前[唯一v1](evidence/2026-10-14_hfus_scene_static_r4/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-14_hfus_scene_static_r4/FINAL_REPORT.md)，SUBMITTED；18个meta/points字节及新CAL重标BLOCKED，完整人体/家具语义UNKNOWN，物理/独审NOT_RUN，不晋级R1默认。原core/actions/config、GT、模型和历史输出保持。localhost:8954同服务，未停8944等服务；无训练/采集/部署/Git写。实际技能路径见报告，不接管其他主线工单。
+
+## 2026-10-14 HF-MAINLINE-POINTS-01 实施交付（原始源当前缺失，复跑BLOCKED）
+
+用户明确授权计划v3实施、实验、原页面、1966帧回归、返工和OpenCode只读审核，覆盖下方旧“仅计划授权”。Codex单算法writer，加载ponytail与scientific-toolkit-skill。首轮6×1966及护栏2×1966源行/因果前缀验证完成；护栏最大中心偏移0.093991m、无新增轴缺测，但粗槽跳变仍退化，299975点次均UNKNOWN，无可信完整人体/纯度收益，不晋级R1默认。80帧明确REUSED_REGRESSION。最终浏览器检查发现captures/remote为空，18个主链meta/points文件当前缺失，原录制复跑及opaque查询BLOCKED，冻结页面/全量账本仍可用；不归因、不猜测替换。当前[唯一验收v2](../human_fall/evidence/2026-10-14_hf_mainline_points_r1/ACCEPTANCE_V2.md)/[报告](../human_fall/evidence/2026-10-14_hf_mainline_points_r1/FINAL_REPORT_V2.md)/[交付索引](../human_fall/evidence/2026-10-14_hf_mainline_points_r1/CURRENT_DELIVERY_INDEX.md)，SUBMITTED，未ACCEPTED。页面http://[::1]:8944/（IPv4同端口另有PLANE服务，不停止其进程）。无训练、采集、部署、提交推送、旧GT或生产修改；物理/完整人体/晋级BLOCKED，独审结论独立登记。
+
+## 2026-10-14 HFUS-SCENE-CHANGE-01 冻结场景新增点与抖动过滤
+
+用户确认 D:/Code/ldiar 人体融合页，要求提取新进入点集并考虑传感器小幅抖动。原同一 pointset/r01 页面新增 scene_change 对照：局部背景平面、静态锚点小幅刚体补偿、双姿态冻结背景解释、当前三维候选；R1聚类参数保持。1934动作帧全部有目标候选，32空场留帧无目标；前景4945525→4791433，下降3.116%，不冒称家具污染率。1966帧源行/XYZ/粗节点/已匹配背景不因补偿晋升核验PASS，Edge九会话/跳帧/源行/切回旧方案PASS。首轮单姿态背景晋升及浏览器折叠文本读取失败保留。当前[唯一验收v1](evidence/2026-10-14_hfus_scene_change_r2/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-14_hfus_scene_change_r2/FINAL_REPORT.md)，SUBMITTED；人体/家具完整身份UNKNOWN，物理/设备/独审NOT_RUN，不晋级R1默认或接管旧计划门。原核心/GT/录制/模型/历史输出保持，无训练/采集/部署/Git写。实际ponytail及scientific-toolkit-skill路径见报告。
+
+## 2026-10-14 HF-MAINLINE-POINTS-01 下一阶段计划与OpenCode审核（仅计划授权）
+
+用户明确要求多轮分析制定计划并交OpenCode审核，本轮未授权实现。Codex完成三轮分析，当前唯一[计划v3](../human_fall/HF_MAINLINE_POINT_RETENTION_PLAN_20261014_V3.md)及[上下文留出清单](../human_fall/evidence/2026-10-14_hf_mainline_points_plan_r1/CONTEXT_HOLDOUT_V2.json)；OpenCode CLI请求模型opencode-go/deepseek-v4.1-flash、plan agent、只读审核，v1 PLAN_REVISE → v2 PLAN_PASS → [v3最终PLAN_PASS](../human_fall/evidence/2026-10-14_hf_mainline_points_plan_r1/OPENCODE_REVIEW_V3.md)。原计划/原报告/失败日志保留。方向为上游逐点删点定位→有证据的保留规则→原8944页面固定候选→1934+32全帧回归；JS/Python口径、GT/proxy及家具未知分开。实施验收PR01–10/PR07a–c NOT_RUN，PR11/12 BLOCKED，R1默认保持；未修改算法/GT/源录制/服务/生产，未训练/采集/部署/提交推送/confirmed。实际ponytail路径C:/Users/30680/.codex/skills/ponytail/SKILL.md。首轮外部读取权限受限、启动快照停滞及参数失败如实保留，后续仅本次CLI关闭snapshot并允许外部只读；无全局配置改动。保护范围首尾核验见READONLY_FINAL_CHECK，不冒称整树冻结。本条仅登记计划，不接管旧R3或M3′实施状态。
+
+## 2026-10-14 HFUS-POINTSET-ACTIONS-02 R3 人体点集修复与粗骨架可观测性（当前入口）
+
+用户明确授权完成本机离线研究/实现/1934+32全帧/8944同页浏览器验收，当前SUBMITTED，R3功能自验完成；R301核心保护范围PASS；首次383、后续5418其他路径缺失，用户已确认同期有其他清理/迁移，不宣称整树冻结，非ACCEPTED。Codex唯一writer，实际加载ponytail、scientific-toolkit-skill。A邻接图、B背景风险排除、C过去帧一致性及ABC消融，固定R1锚点与独立反馈tracker分开。R1默认保持，R2保留，新点仅当前FG原ROI、源行XYZ与UNKNOWN，13槽仅当前点支持；符号返工另2×1966帧，翻转9→4但新f124退化保留。身份/解剖精度UNKNOWN、晋级BLOCKED；独审/设备/物理NOT_RUN。原GT/录制/生产/旧输出不改，无采集/部署/训练/提交推送/confirmed。见[唯一v1](evidence/2026-10-14_hfus_pointset_actions_r3/ACCEPTANCE_V1.md)、[实验前诊断](evidence/2026-10-14_hfus_pointset_actions_r3/DIAGNOSIS_BEFORE_EXPERIMENT.md)。[FINAL_REPORT](evidence/2026-10-14_hfus_pointset_actions_r3/FINAL_REPORT.md)。下方历史条目保留，不扩当前范围。
+
+## 2026-10-14 HFUS-POINTSET-ACTIONS-01 R2 点集诊断/局部恢复/因果体轴（当前唯一入口）
+
+用户授权继续本机离线研发，先检查人体完整性/背景混入，再做局部恢复与骨架。Codex唯一writer，实际读取ponytail、scientific-toolkit-skill；原pointset/r01页面，默认R1保持，新增action_research_r2五种实验对照。全1934+32帧重现、6方案11796帧源成员/当前节点支撑核验；轴实验缺测79→38，局部恢复有119/140/232新困难，均不晋级默认。人体完整率/家具污染率/解剖精度UNKNOWN；AI观察单独记录非人工GT，无训练/采集/部署/confirmed/Git写。实际Edge原页/控制台iframe与原EXE启动通过，原EXE/快捷方式不替换。当前[唯一v2](evidence/2026-10-14_hfus_pointset_actions_r2/ACCEPTANCE_V2.md)/[报告](evidence/2026-10-14_hfus_pointset_actions_r2/FINAL_REPORT.md)/[交付](evidence/2026-10-14_hfus_pointset_actions_r2/CURRENT_DELIVERY_INDEX.md)，SUBMITTED非ACCEPTED，独审/设备/物理NOT_RUN。旧v1/原数据/GT/模型/core/输出与历史证据只读保留。下方均历史，不扩本轮范围。
+
+## 2026-10-14 HFUS-POINTSET-ACTIONS-01 八段中央人体与控制台（当前用户新授权）
+
+用户指定复用pointset/r01和S1建模，助手自动研究中央人体，无用户审核前置，完成接入总控制台并总结优化。Codex唯一writer；[唯一v1](evidence/2026-10-14_hfus_pointset_actions_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-14_hfus_pointset_actions_r1/FINAL_REPORT.md)/[交付](evidence/2026-10-14_hfus_pointset_actions_r1/CURRENT_DELIVERY_INDEX.md)/[回传](returns/HFUS-POINTSET-ACTIONS-01.md)。旧core/旧output/原GT/模型不改，新增actions.py/config_actions.yaml/action_output；原页双数据集、默认中央候选，控制台新EXE Console_Pointset和桌面快捷方式，旧EXE/运行窗口保持。1934动作帧均有目标，32空场留帧0目标，两受控躺下候选15.135s/17.934s，79帧体轴歧义骨架UNKNOWN；源成员/节点全帧核验PASS。原空场三维距离口径、八段131958独立诊断背景与S1空间ROI区分，数值gate不是物理资格。软件自验/真实浏览器/冻结EXE启动PASS，未人工GT/解剖标定，真实跌倒准确率与物理/独审NOT_RUN，不ACCEPTED。无采集/部署/训练/Git写。下方停止集成为旧范围，本轮由用户具体离线控制台授权覆盖。
+
+## 2026-10-14 HF-DATA-01 关联审阅修复（保留pointset r01）
+
+当前HF-REAL三工单复用已完成pointset r01；8会话BOUND部分标签、S9 INVALID_BINDING、小ROI不扩展。原页增加PROPOSED最小队列/深链/当前选簇与GT上界区分，读/写实际源SHA和保存回调绑定修复。未训练/改旧GT/采集/部署/Git写。见[当前交付](../human_fall/evidence/2026-10-14_hf_real_close_data_bg_r1/CURRENT_DELIVERY_INDEX.md)与[人工队列](../human_fall/evidence/2026-10-14_hf_real_close_data_bg_r1/REVIEW_QUEUE.json)。原8941运行进程未重启，使用当前server.py --port 8942可看修复后入口；同一源码，无pointset r02。SUBMITTED/REVIEWED_WITH_FINDINGS，语义GT/生产BLOCKED，非ACCEPTED。下方既有未提交产物/入口保持。
+
+## 2026-10-13 HFUS-POINTSET-01 S1空场与九会话三维点集合（当前独立入口）
+
+用户明确统一标注/小活动区/冻结空场背景/独立聚类评分/考虑运动粘连/三维点集合/九会话动作框骨架；确认先做现有9段。Codex唯一writer，新隔离源sidequests/human_fusion_lab_next/pointset/r01。2605帧全跑，S1 FIT/CAL/HOLDOUT分开，101留帧0满足门限候选，直接XYZ PointNet+新XYZ-RF影子对照，自动/人工参照分开，部位选点格式与监督训练器。当前[回放8941](http://127.0.0.1:8941/)、[唯一v1](evidence/2026-10-13_hfus_pointset_01_r1/ACCEPTANCE_V1.md)、[报告](evidence/2026-10-13_hfus_pointset_01_r1/FINAL_REPORT.md)、[九会话目录](evidence/2026-10-13_hfus_pointset_01_r1/ACTION_CATALOG.md)、[回传](returns/HFUS-POINTSET-01.md)。SUBMITTED未ACCEPTED；纯人体/部位/关节精度及S9有效GT BLOCKED，小ROI不覆盖S8需核对；软件/浏览器自验PASS不是语义准确率。旧输入/GT/模型/生产只读，未启动原ML/HR-09或接管D05/HF-REAL，无部署采集Git写；独审/设备NOT_RUN。实际技能ponytail与scikit-learn，后续历史授权不扩大本轮范围。
+
 ## 2026-10-13 HC-JOINT-LOCAL-01 R2 相机超时返工（当前独立入口）
 
 用户两次真实录制在4.312/5.219秒报timed out。本轮定位相机最后接收后约3秒触发读超时，新增本机相机有界重连和camera_events.jsonl，短暂断流雷达继续、持续12秒无帧仍报明确相机失败。断段完成状态completed_with_gaps，不当连续录制；初连失败/本机写失败不走网络重试。元数据完成写盘后才发布终态。9项联合测试、7项控制台、12项JS自验PASS；真实30秒899相机帧/139雷达帧未超时，但雷达已收区间缺号126，完整性仍未通过。见[R2验收v1](evidence/2026-10-13_hc_joint_local_r2/ACCEPTANCE_V1.md)、[报告](evidence/2026-10-13_hc_joint_local_r2/REPORT.md)、[回传](returns/HC-JOINT-LOCAL-01.md)。用户已关闭总控制台以替换EXE。板端相机源码/systemd只读检查，无服务配置/部署/驱动变更，旧会话和R1证据不改。SUBMITTED未ACCEPTED，独审NOT_RUN，不提交推送。

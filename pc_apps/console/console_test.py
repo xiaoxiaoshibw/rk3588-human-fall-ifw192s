@@ -24,6 +24,8 @@ class ConsoleStartupTest(unittest.TestCase):
 
     def test_fall_shell_port_and_missing_workspace(self):
         self.assertEqual(G._shell_url(41001,41002),'console.html?replay_port=41001&fall_port=41002')
+        self.assertEqual(G._shell_url(41001,plane_port=41005),
+                         'console.html?replay_port=41001&plane_port=41005')
         with tempfile.TemporaryDirectory() as tmp, patch.object(G,'HERE',tmp):
             self.assertIsNone(G._start_fall_server())
 

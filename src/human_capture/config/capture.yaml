@@ -9,9 +9,10 @@ fifo_keep: 10
 fifo_interval_sec: 30
 disk_floor_mb: 5120
 
-# 网页直下（8766 /files/*）：限速 Kbit/s，同 scp -l 口径（100M 链路留 30%
-# 给实时预览）；0 = 不限速
-download_limit_kbit: 70000
+# 网页直下（8766 /files/*）：限速 Kbit/s，同 scp -l 口径；0 = 不限速
+# 2026-10-14 实测（PC→板 1G 直连，374MB）：70000=8.75MB/s / 800000=99.6MB/s /
+# 0=118MB/s。取 800000 给同时在跑的实时流留 ~200Mbit（桥 93 + 预览 17）。
+download_limit_kbit: 800000
 
 # 录制（HC-02；调现成 record_session.py，D10）
 record_script: /root/catkin_ws/src/human_fall_detection/scripts/record_session.py
