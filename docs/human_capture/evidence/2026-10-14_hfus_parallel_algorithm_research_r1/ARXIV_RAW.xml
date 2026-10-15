@@ -1,0 +1,346 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/2rMREgHUpqhP1rTYSqt6LYvVg7I</id>
+  <title>arXiv Query: search_query=all:lidar AND (all:human OR all:reflection)&amp;id_list=&amp;start=0&amp;max_results=12</title>
+  <updated>2026-10-14T15:14:43Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:lidar+AND+(all:human+OR+all:reflection)&amp;start=0&amp;max_results=12&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>12</opensearch:itemsPerPage>
+  <opensearch:totalResults>860</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2311.11971v2</id>
+    <title>LiDAR-HMR: 3D Human Mesh Recovery from LiDAR</title>
+    <updated>2025-10-02T03:31:44Z</updated>
+    <link href="https://arxiv.org/abs/2311.11971v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2311.11971v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In recent years, point cloud perception tasks have been garnering increasing attention. This paper presents the first attempt to estimate 3D human body mesh from sparse LiDAR point clouds. We found that the major challenge in estimating human pose and mesh from point clouds lies in the sparsity, noise, and incompletion of LiDAR point clouds. Facing these challenges, we propose an effective sparse-to-dense reconstruction scheme to reconstruct 3D human mesh. This involves estimating a sparse representation of a human (3D human pose) and gradually reconstructing the body mesh. To better leverage the 3D structural information of point clouds, we employ a cascaded graph transformer (graphormer) to introduce point cloud features during sparse-to-dense reconstruction. Experimental results on three publicly available databases demonstrate the effectiveness of the proposed approach. Code: https://github.com/soullessrobot/LiDAR-HMR/</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-11-20T17:59:28Z</published>
+    <arxiv:comment>Code is available at: https://github.com/soullessrobot/LiDAR-HMR/</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Bohao Fan</name>
+    </author>
+    <author>
+      <name>Wenzhao Zheng</name>
+    </author>
+    <author>
+      <name>Jianjiang Feng</name>
+    </author>
+    <author>
+      <name>Jie Zhou</name>
+    </author>
+    <arxiv:doi>10.1109/TMM.2025.3590928</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1109/TMM.2025.3590928" title="doi"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2010.08221v1</id>
+    <title>HPERL: 3D Human Pose Estimation from RGB and LiDAR</title>
+    <updated>2020-10-16T08:09:49Z</updated>
+    <link href="https://arxiv.org/abs/2010.08221v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2010.08221v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In-the-wild human pose estimation has a huge potential for various fields, ranging from animation and action recognition to intention recognition and prediction for autonomous driving. The current state-of-the-art is focused only on RGB and RGB-D approaches for predicting the 3D human pose. However, not using precise LiDAR depth information limits the performance and leads to very inaccurate absolute pose estimation. With LiDAR sensors becoming more affordable and common on robots and autonomous vehicle setups, we propose an end-to-end architecture using RGB and LiDAR to predict the absolute 3D human pose with unprecedented precision. Additionally, we introduce a weakly-supervised approach to generate 3D predictions using 2D pose annotations from PedX [1]. This allows for many new opportunities in the field of 3D human pose estimation.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2020-10-16T08:09:49Z</published>
+    <arxiv:comment>7 pages, 6 figures, 4 tables, LiDAR and RGB Fusion</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Michael Fürst</name>
+    </author>
+    <author>
+      <name>Shriya T. P. Gupta</name>
+    </author>
+    <author>
+      <name>René Schuster</name>
+    </author>
+    <author>
+      <name>Oliver Wasenmüller</name>
+    </author>
+    <author>
+      <name>Didier Stricker</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2508.10398v2</id>
+    <title>Super LiDAR Intensity for Robotic Perception</title>
+    <updated>2026-02-26T03:34:43Z</updated>
+    <link href="https://arxiv.org/abs/2508.10398v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2508.10398v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Conventionally, human intuition defines vision as a modality of passive optical sensing, relying on ambient light to perceive the environment. However, active optical sensing, which involves emitting and receiving signals, offers unique advantages by capturing both radiometric and geometric properties of the environment, independent of external illumination conditions. This work focuses on advancing active optical sensing using Light Detection and Ranging (LiDAR), which captures intensity data, enabling the estimation of surface reflectance that remains invariant under varying illumination. Such properties are crucial for robotic perception tasks, including detection, recognition, segmentation, and Simultaneous Localization and Mapping (SLAM). A key challenge with low-cost LiDARs lies in the sparsity of scan data, which limits their broader application. To address this limitation, this work introduces an innovative framework for generating dense LiDAR intensity images from sparse data, leveraging the unique attributes of non-repeating scanning LiDAR (NRS-LiDAR). We tackle critical challenges, including intensity calibration and the transition from static to dynamic scene domains, facilitating the reconstruction of dense intensity images in real-world settings. The key contributions of this work include a comprehensive dataset for LiDAR intensity image densification, a densification network tailored for NRS-LiDAR, and diverse applications such as loop closure and traffic lane detection using the generated dense intensity images. Experimental results validate the efficacy of the proposed approach, which successfully integrates computer vision techniques with LiDAR data processing, enhancing the applicability of low-cost LiDAR systems and establishing a novel paradigm for robotic vision via active optical sensing--LiDAR as a Camera.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-08-14T06:54:47Z</published>
+    <arxiv:comment>IEEE Robotics and Automation Letters (RA-L), 2026 (https://ieeexplore.ieee.org/document/11395610). The dataset and code are available at: (https://github.com/IMRL/Super-LiDAR-Intensity)</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Wei Gao</name>
+    </author>
+    <author>
+      <name>Jie Zhang</name>
+    </author>
+    <author>
+      <name>Mingle Zhao</name>
+    </author>
+    <author>
+      <name>Zhiyuan Zhang</name>
+    </author>
+    <author>
+      <name>Shu Kong</name>
+    </author>
+    <author>
+      <name>Maani Ghaffari</name>
+    </author>
+    <author>
+      <name>Dezhen Song</name>
+    </author>
+    <author>
+      <name>Cheng-Zhong Xu</name>
+    </author>
+    <author>
+      <name>Hui Kong</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2603.04938v1</id>
+    <title>Person Detection and Tracking from an Overhead Crane LiDAR</title>
+    <updated>2026-03-05T08:37:36Z</updated>
+    <link href="https://arxiv.org/abs/2603.04938v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2603.04938v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This paper investigates person detection and tracking in an industrial indoor workspace using a LiDAR mounted on an overhead crane. The overhead viewpoint introduces a strong domain shift from common vehicle-centric LiDAR benchmarks, and limited availability of suitable public training data. Henceforth, we curate a site-specific overhead LiDAR dataset with 3D human bounding-box annotations and adapt selected candidate 3D detectors under a unified training and evaluation protocol. We further integrate lightweight tracking-by-detection using AB3DMOT and SimpleTrack to maintain person identities over time. Detection performance is reported with distance-sliced evaluation to quantify the practical operating envelope of the sensing setup. The best adapted detector configurations achieve average precision (AP) up to 0.84 within a 5.0 m horizontal radius, increasing to 0.97 at 1.0 m, with VoxelNeXt and SECOND emerging as the most reliable backbones across this range. The acquired results contribute in bridging the domain gap between standard driving datasets and overhead sensing for person detection and tracking. We also report latency measurements, highlighting practical real-time feasibility. Finally, we release our dataset and implementations in GitHub to support further research</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-03-05T08:37:36Z</published>
+    <arxiv:comment>8 pages, 7 figures, 4 tables. Submitted to Ubiquitous Robots (UR) 2026. Code: https://github.com/nilushacj/O-LiPeDeT-Overhead-LiDAR-Person-Detection-and-Tracking</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Nilusha Jayawickrama</name>
+    </author>
+    <author>
+      <name>Henrik Toikka</name>
+    </author>
+    <author>
+      <name>Risto Ojala</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2502.17309v1</id>
+    <title>Hybrid Human-Machine Perception via Adaptive LiDAR for Advanced Driver Assistance Systems</title>
+    <updated>2025-02-24T16:44:20Z</updated>
+    <link href="https://arxiv.org/abs/2502.17309v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2502.17309v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Accurate environmental perception is critical for advanced driver assistance systems (ADAS). Light detection and ranging (LiDAR) systems play a crucial role in ADAS; they can reliably detect obstacles and help ensure traffic safety. Existing research on LiDAR sensing has demonstrated that adapting the LiDAR's resolution and range based on environmental characteristics can improve machine perception. However, current adaptive LiDAR approaches for ADAS have not explored the possibility of combining the perception abilities of the vehicle and the human driver, which can potentially further enhance the detection performance. In this paper, we propose a novel system that adapts LiDAR characteristics to human driver's visual perception to enhance LiDAR sensing outside human's field of view. We develop a proof-of-concept prototype of the system in the virtual environment CARLA. Our system integrates real-time data on the driver's gaze to identify regions in the environment that the driver is monitoring. This allows the system to optimize LiDAR resources by dynamically increasing the LiDAR's range and resolution in peripheral areas that the driver may not be attending to. Our simulations show that this gaze-aware LiDAR enhances detection performance compared to a baseline standalone LiDAR, particularly in challenging environmental conditions like fog. Our hybrid human-machine sensing approach potentially offers improved safety and situational awareness in real-time driving scenarios for ADAS applications.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-02-24T16:44:20Z</published>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Federico Scarì</name>
+    </author>
+    <author>
+      <name>Nitin Jonathan Myers</name>
+    </author>
+    <author>
+      <name>Chen Quan</name>
+    </author>
+    <author>
+      <name>Arkady Zgonnikov</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2405.15274v1</id>
+    <title>Talk to Parallel LiDARs: A Human-LiDAR Interaction Method Based on 3D Visual Grounding</title>
+    <updated>2024-05-24T07:00:45Z</updated>
+    <link href="https://arxiv.org/abs/2405.15274v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2405.15274v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>LiDAR sensors play a crucial role in various applications, especially in autonomous driving. Current research primarily focuses on optimizing perceptual models with point cloud data as input, while the exploration of deeper cognitive intelligence remains relatively limited. To address this challenge, parallel LiDARs have emerged as a novel theoretical framework for the next-generation intelligent LiDAR systems, which tightly integrate physical, digital, and social systems. To endow LiDAR systems with cognitive capabilities, we introduce the 3D visual grounding task into parallel LiDARs and present a novel human-computer interaction paradigm for LiDAR systems. We propose Talk2LiDAR, a large-scale benchmark dataset tailored for 3D visual grounding in autonomous driving. Additionally, we present a two-stage baseline approach and an efficient one-stage method named BEVGrounding, which significantly improves grounding accuracy by fusing coarse-grained sentence and fine-grained word embeddings with visual features. Our experiments on Talk2Car-3D and Talk2LiDAR datasets demonstrate the superior performance of BEVGrounding, laying a foundation for further research in this domain.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-05-24T07:00:45Z</published>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Yuhang Liu</name>
+    </author>
+    <author>
+      <name>Boyi Sun</name>
+    </author>
+    <author>
+      <name>Guixu Zheng</name>
+    </author>
+    <author>
+      <name>Yishuo Wang</name>
+    </author>
+    <author>
+      <name>Jing Wang</name>
+    </author>
+    <author>
+      <name>Fei-Yue Wang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/1112.3297v1</id>
+    <title>A solution of LIDAR problem in double scattering approximation</title>
+    <updated>2011-12-14T18:28:56Z</updated>
+    <link href="https://arxiv.org/abs/1112.3297v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1112.3297v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>A problem of monoenergetic particles pulse reflection from half-infinite stratified medium is considered in conditions of elastic scattering with absorbtion account. The theory is based on multiple scattering series solution of Kolmogorov equation for one-particle distribution function. The analytical representation for first two terms are given in compact form for a point impulse source and cylindric symmetrical detector. Reading recent articles on the LIDAR sounding of environment (e.g. Atmospheric and Oceanic Optics (2010) 23: 389-395, Kaul, B. V.; Samokhvalov, I. V. http://www.springerlink.com/content/k3p2p3582674xt21/) one recovers standing interest to the related direct and inverse problems. A development of the result fo the case of n-fold scattering and polarization account as well as correspondent convergence series problem solution of the Kolmogorov equation will be published in nearest future.</summary>
+    <category term="math-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.PR" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="physics.optics" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2011-12-14T18:28:56Z</published>
+    <arxiv:comment>This publication is an authorized translation (by S. Leble) of a bad-published paper from 20.06.1980 (available in its original version: http://www.mif.pg.gda.pl/krrizm/page/leble/publications.html, 140); Lidar Problem Solution in Double-Scattering Approximation VINITI N2536-80dep (1980) 126</arxiv:comment>
+    <arxiv:primary_category term="math-ph"/>
+    <author>
+      <name>Sergey Leble</name>
+    </author>
+    <author>
+      <name>Alexei Buzdin</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2610.10196v1</id>
+    <title>HuLiGen: Human LiDAR Generation from Parametric Body Models</title>
+    <updated>2026-10-07T14:58:19Z</updated>
+    <link href="https://arxiv.org/abs/2610.10196v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2610.10196v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>LiDAR point clouds of humans are extremely expensive to collect and annotate, thus represent a scarce resource that hinders the development of human analysis using this modality. To alleviate this scarcity, prior work relies on simulated human LiDAR, but such samples do not fully reflect the geometry and sensing characteristics of real observations. In contrast, we introduce HuLiGen, a generative model that generates human LiDAR point clouds from a parametric body model, using a point transformer trained with a flow-matching objective. We show that our generated point clouds are closer to the real capture distribution. Using HuLiGen to generate synthetic data, we propose a synthetic-only pretraining scheme for LiDAR-based HPE that achieves state-of-the-art performance, with even larger gains in low-annotation and low-data regimes, where MPJPE is reduced by up to 50%. Code, models and generated samples are available at https://github.com/valeoai/HuLiGen.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-10-07T14:58:19Z</published>
+    <arxiv:comment>12 pages, 5 figures, 7 tables</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Salma Galaaoui</name>
+    </author>
+    <author>
+      <name>Nermin Samet</name>
+    </author>
+    <author>
+      <name>David Picard</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2505.05851v1</id>
+    <title>Collecting Human Motion Data in Large and Occlusion-Prone Environments using Ultra-Wideband Localization</title>
+    <updated>2025-05-09T07:44:57Z</updated>
+    <link href="https://arxiv.org/abs/2505.05851v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2505.05851v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>With robots increasingly integrating into human environments, understanding and predicting human motion is essential for safe and efficient interactions. Modern human motion and activity prediction approaches require high quality and quantity of data for training and evaluation, usually collected from motion capture systems, onboard or stationary sensors. Setting up these systems is challenging due to the intricate setup of hardware components, extensive calibration procedures, occlusions, and substantial costs. These constraints make deploying such systems in new and large environments difficult and limit their usability for in-the-wild measurements. In this paper we investigate the possibility to apply the novel Ultra-Wideband (UWB) localization technology as a scalable alternative for human motion capture in crowded and occlusion-prone environments. We include additional sensing modalities such as eye-tracking, onboard robot LiDAR and radar sensors, and record motion capture data as ground truth for evaluation and comparison. The environment imitates a museum setup, with up to four active participants navigating toward random goals in a natural way, and offers more than 130 minutes of multi-modal data. Our investigation provides a step toward scalable and accurate motion data collection beyond vision-based systems, laying a foundation for evaluating sensing modalities like UWB in larger and complex environments like warehouses, airports, or convention centers.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-05-09T07:44:57Z</published>
+    <arxiv:comment>accepted for presentation at the 7th Workshop on Long-term Human Motion Prediction (LHMP) at International Conference on Robotics and Automation (ICRA) 2025</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Janik Kaden</name>
+    </author>
+    <author>
+      <name>Maximilian Hilger</name>
+    </author>
+    <author>
+      <name>Tim Schreiter</name>
+    </author>
+    <author>
+      <name>Marius Schaab</name>
+    </author>
+    <author>
+      <name>Thomas Graichen</name>
+    </author>
+    <author>
+      <name>Andrey Rudenko</name>
+    </author>
+    <author>
+      <name>Ulrich Heinkel</name>
+    </author>
+    <author>
+      <name>Achim J. Lilienthal</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2403.06538v1</id>
+    <title>3DRef: 3D Dataset and Benchmark for Reflection Detection in RGB and Lidar Data</title>
+    <updated>2024-03-11T09:29:44Z</updated>
+    <link href="https://arxiv.org/abs/2403.06538v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2403.06538v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Reflective surfaces present a persistent challenge for reliable 3D mapping and perception in robotics and autonomous systems. However, existing reflection datasets and benchmarks remain limited to sparse 2D data. This paper introduces the first large-scale 3D reflection detection dataset containing more than 50,000 aligned samples of multi-return Lidar, RGB images, and 2D/3D semantic labels across diverse indoor environments with various reflections. Textured 3D ground truth meshes enable automatic point cloud labeling to provide precise ground truth annotations. Detailed benchmarks evaluate three Lidar point cloud segmentation methods, as well as current state-of-the-art image segmentation networks for glass and mirror detection. The proposed dataset advances reflection detection by providing a comprehensive testbed with precise global alignment, multi-modal data, and diverse reflective objects and materials. It will drive future research towards reliable reflection detection. The dataset is publicly available at http://3dref.github.io</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="eess.IV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-03-11T09:29:44Z</published>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Xiting Zhao</name>
+    </author>
+    <author>
+      <name>Sören Schwertfeger</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2509.23255v1</id>
+    <title>LiDAR-based Human Activity Recognition through Laplacian Spectral Analysis</title>
+    <updated>2025-09-27T11:16:53Z</updated>
+    <link href="https://arxiv.org/abs/2509.23255v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2509.23255v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Human Activity Recognition supports applications in healthcare, manufacturing, and human-machine interaction. LiDAR point clouds offer a privacy-preserving alternative to cameras and are robust to illumination. We propose a HAR method based on graph spectral analysis. Each LiDAR frame is mapped to a proximity graph (epsilon-graph) and the Laplacian spectrum is computed. Eigenvalues and statistics of eigenvectors form pose descriptors, and temporal statistics over sliding windows yield fixed vectors for classification with support vector machines and random forests. On the MM-Fi dataset with 40 subjects and 27 activities, under a strict subject-independent protocol, the method reaches 94.4% accuracy on a 13-class rehabilitation set and 90.3% on all 27 activities. It also surpasses the skeleton-based baselines reported for MM-Fi. The contribution is a compact and interpretable feature set derived directly from point cloud geometry that provides an accurate and efficient alternative to end-to-end deep learning.</summary>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.HC" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-09-27T11:16:53Z</published>
+    <arxiv:comment>9 pages, 5 figures, 4 tables, 22 references, conference; Code available at https://github.com/Arritmic/oulu-pointcloud-har</arxiv:comment>
+    <arxiv:primary_category term="cs.CV"/>
+    <author>
+      <name>Sasan Sharifipour</name>
+    </author>
+    <author>
+      <name>Constantino Álvarez Casado</name>
+    </author>
+    <author>
+      <name>Le Nguyen</name>
+    </author>
+    <author>
+      <name>Tharindu Ekanayake</name>
+    </author>
+    <author>
+      <name>Manuel Lage Cañellas</name>
+    </author>
+    <author>
+      <name>Nhi Nguyen</name>
+    </author>
+    <author>
+      <name>Miguel Bordallo López</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2304.08908v1</id>
+    <title>Event Camera and LiDAR based Human Tracking for Adverse Lighting Conditions in Subterranean Environments</title>
+    <updated>2023-04-18T11:27:41Z</updated>
+    <link href="https://arxiv.org/abs/2304.08908v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2304.08908v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this article, we propose a novel LiDAR and event camera fusion modality for subterranean (SubT) environments for fast and precise object and human detection in a wide variety of adverse lighting conditions, such as low or no light, high-contrast zones and in the presence of blinding light sources. In the proposed approach, information from the event camera and LiDAR are fused to localize a human or an object-of-interest in a robot's local frame. The local detection is then transformed into the inertial frame and used to set references for a Nonlinear Model Predictive Controller (NMPC) for reactive tracking of humans or objects in SubT environments. The proposed novel fusion uses intensity filtering and K-means clustering on the LiDAR point cloud and frequency filtering and connectivity clustering on the events induced in an event camera by the returning LiDAR beams. The centroids of the clusters in the event camera and LiDAR streams are then paired to localize reflective markers present on safety vests and signs in SubT environments. The efficacy of the proposed scheme has been experimentally validated in a real SubT environment (a mine) with a Pioneer 3AT mobile robot. The experimental results show real-time performance for human detection and the NMPC-based controller allows for reactive tracking of a human or object of interest, even in complete darkness.</summary>
+    <category term="cs.RO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-04-18T11:27:41Z</published>
+    <arxiv:comment>Accepted at IFAC World Congress 2023</arxiv:comment>
+    <arxiv:primary_category term="cs.RO"/>
+    <author>
+      <name>Mario A. V. Saucedo</name>
+    </author>
+    <author>
+      <name>Akash Patel</name>
+    </author>
+    <author>
+      <name>Rucha Sawlekar</name>
+    </author>
+    <author>
+      <name>Akshit Saradagi</name>
+    </author>
+    <author>
+      <name>Christoforos Kanellakis</name>
+    </author>
+    <author>
+      <name>Ali-Akbar Agha-Mohammadi</name>
+    </author>
+    <author>
+      <name>George Nikolakopoulos</name>
+    </author>
+  </entry>
+</feed>
+

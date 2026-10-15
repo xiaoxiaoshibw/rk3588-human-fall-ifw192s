@@ -1,0 +1,81 @@
+{
+  "environment": "WINDOWS_LOCAL_OFFLINE",
+  "runs": [
+    {
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "tools/hf_mainline_leveling/test_run.py"
+      ],
+      "cwd": "D:/Code/ldiar",
+      "exit_code": 0,
+      "type": "SYNTHETIC",
+      "tests": 3,
+      "result": "PASS"
+    },
+    {
+      "command": [
+        "node",
+        "registration.test.js"
+      ],
+      "cwd": "D:/Code/ldiar/pc_apps/human_replay",
+      "exit_code": 0,
+      "type": "SYNTHETIC",
+      "checks": 23,
+      "result": "PASS",
+      "includes": [
+        "profile bounds",
+        "fit_holdout_guard",
+        "loader integrity",
+        "non-VALID fail-closed",
+        "default flag disabled"
+      ]
+    },
+    {
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "-m",
+        "unittest",
+        "leveling_test"
+      ],
+      "cwd": "D:/Code/ldiar/pc_apps/human_replay",
+      "exit_code": 0,
+      "type": "SYNTHETIC",
+      "tests": 4,
+      "result": "PASS",
+      "includes": [
+        "immutable export",
+        "provenance",
+        "real localhost HTTP"
+      ]
+    },
+    {
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "-B",
+        "-W",
+        "error",
+        "tools/hf_mainline_leveling/test_run.py"
+      ],
+      "cwd": "D:\\Code\\ldiar",
+      "exit_code": 0,
+      "tests": 4,
+      "type": "SYNTHETIC",
+      "result": "PASS",
+      "log": "TEST_LOCAL.log",
+      "note": "Final helper changes; initial 3-check run retained above"
+    }
+  ],
+  "raw_output_location": "Codex tool execution transcript; counts recorded from actual runs"
+}

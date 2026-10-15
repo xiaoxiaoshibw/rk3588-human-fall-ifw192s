@@ -1,0 +1,36 @@
+{
+  "command": [
+    "C:\\Users\\30680\\AppData\\Roaming\\npm\\opencode.cmd",
+    "run",
+    "--pure",
+    "--agent",
+    "plan",
+    "--model",
+    "opencode-go/deepseek-v4.1-flash",
+    "--format",
+    "json",
+    "--dir",
+    "D:\\Code\\ldiar",
+    "--title",
+    "HF-MAINLINE-POINTS-01 read-only review 02",
+    "--file",
+    "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-14_hf_mainline_points_r1\\REVIEW_PROMPT_02.md",
+    "--",
+    "请完整只读审核所附任务。最终审核结论直接输出，禁止写文件、运行命令或调用其他代理。"
+  ],
+  "exit": 0,
+  "requested_model": "opencode-go/deepseek-v4.1-flash",
+  "snapshot": false,
+  "permission": {
+    "*": "deny",
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "external_directory": {
+      "D:/Code/radar/**": "allow",
+      "D:\\Code\\radar\\**": "allow",
+      "C:/Users/30680/.codex/skills/ponytail/**": "allow",
+      "C:\\Users\\30680\\.codex\\skills\\ponytail\\**": "allow"
+    }
+  }
+}

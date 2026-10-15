@@ -1,0 +1,12 @@
+运行中的冻结 Console.exe 行为探针（不是字符串搜索）
+exe: D:\Code\ldiar\pc_apps\console\dist\Console.exe  193812397B  sha256=2E275737E3398A9CCBF7D8A5DE6D0983EDDCBF95946C7CB14CF342D5E5EB4082
+console pids: [35868, 43916]
+joint service port = 56067
+  /api/status = {"state": "idle", "output_root": "D:\\Code\\ldiar\\data\\sessions", "camera_url": "http://192.168.31.58:8081/stream", "radar_board_url": "http://192.168.31.58:8766", "radar_frames": 0, "camera_frames": 0, "bytes": 0, "error": null, "session_id": null, "path": null}
+GET /api/camera?sid=cap_20261015_142730 -> 404 {"error": "没有这个会话的相机视频"}
+GET /api/camera?sid=../etc -> 404 {"error": "没有这个会话的相机视频"}
+GET /api/camera?sid= -> 404 {"error": "没有这个会话的相机视频"}
+GET /api/bogus（通用 404 对照）-> 404 {"error": "not found"}
+page contains R7 文案(“不会再拉第二遍”) = True
+page contains R8 文案(“camera_frames.jsonl”) = True
+结论：/api/camera 路由存在在运行中的冻结 exe 内（通用未命中路由回 not found）

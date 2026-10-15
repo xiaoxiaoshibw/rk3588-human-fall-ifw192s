@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>会话数据库 · LiDAR Workspace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="ui.css">
+<style>
+  body { background: var(--bg-app); color: var(--text-primary); margin: 0;
+         font: 13px/1.5 var(--font-ui, "Segoe UI", system-ui, sans-serif); }
+  header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+           padding: 18px 22px 10px; }
+  h1 { font-size: 16px; margin: 0; font-weight: 600; }
+  #summary { color: var(--text-muted); font-size: 12px; margin: 0; flex: 1; }
+  button { font: 12.5px var(--font-ui); color: var(--text-primary); background: var(--bg-elevated);
+           border: 1px solid var(--border-strong); border-radius: var(--r-ctl); padding: 5px 10px;
+           cursor: pointer; }
+  button:hover { border-color: #3f434b; background: #2b2d34; }
+  button.danger { color: #f0b3ae; border-color: #5a3a37; }
+  button.danger:hover { background: #3a2624; }
+  button:disabled { opacity: .45; cursor: default; }
+  #note { padding: 0 22px 8px; font-size: 12px; color: var(--warning); min-height: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border-subtle); }
+  th { color: var(--text-muted); font-weight: 500; position: sticky; top: 0; background: var(--bg-app); }
+  tr:hover td { background: var(--bg-panel); }
+  td.num { text-align: right; font-family: var(--font-mono, Consolas, monospace); }
+  td.ok { color: var(--success); }
+  td.dim { color: var(--text-muted); }
+  .acts { display: flex; gap: 4px; flex-wrap: wrap; }
+  .wrap-scroll { padding: 0 22px 40px; overflow-x: auto; }
+  .panel { margin: 0 22px 24px; padding: 12px 14px; background: var(--bg-panel);
+           border: 1px solid var(--border-subtle); border-radius: var(--r-panel); }
+  .panel h2 { font-size: 13px; margin: 0 0 8px; }
+  .panel code { font-family: var(--font-mono, Consolas, monospace); font-size: 11.5px;
+                color: var(--text-secondary); }
+  .panel table { font-size: 11.5px; }
+  #manifest[hidden] { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>会话数据库</h1>
+  <p id="summary">加载中…</p>
+  <button id="refresh">刷新</button>
+</header>
+<div id="note"></div>
+<div class="wrap-scroll">
+  <table>
+    <thead><tr>
+      <th>会话</th><th>时间</th><th>时长</th><th>帧</th><th>大小</th>
+      <th>板端</th><th>本机</th><th>操作</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+<div id="manifest" class="panel" hidden></div>
+
+<script>
+'use strict';
+// 会话数据库：板端登记 + 本机副本总表；删除前必须先取「sid+字节+sha256」清单再人工确认
+// （仓库数据纪律：不放行无清单删除）。清单只读：本机文件逐个 sha256 + 板端登记行。
+const $ = s => document.querySelector(s);
+let manifests = {};   // sid -> 最近一次清单（切换/刷新即失效）
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function size(bytes) {
+  if (bytes == null) return '—';
+  const u = ['B', 'KB', 'MB', 'GB', 'TB'];
+  let v = bytes, i = 0;
+  while (v >= 1024 && i < u.length - 1) { v /= 1024; i++; }
+  return (i ? v.toFixed(1) : v) + ' ' + u[i];
+}
+function note(msg, kind) {
+  const el = $('#note');
+  el.textContent = msg || '';
+  el.style.color = kind === 'err' ? 'var(--danger)' : 'var(--warning)';
+}
+async function api(path, body) {
+  const opt = body === undefined
+    ? { cache: 'no-store' }
+    : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+  const r = await fetch(path, opt);
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+  return data;
+}
+
+async function show_manifest(sid) {
+  note('读取清单 ' + sid + ' …');
+  const m = await api('/api/manifest?sid=' + encodeURIComponent(sid));
+  manifests[sid] = m;
+  const local = m.local || {}, board = m.board || {};
+  const rows = (local.files || []).map(f =>
+    '<tr><td>' + esc(f.name) + '</td><td class="num">' + size(f.bytes) + '</td><td><code>' +
+    esc(f.sha256.slice(0, 24)) + '…</code></td></tr>').join('');
+  $('#manifest').innerHTML =
+    '<h2>清单 ' + esc(sid) + '</h2>' +
+    '<p>本机：' + (local.present ? (local.files || []).length + ' 个文件 / ' + size(local.total_bytes) : '无本机副本') +
+    '　板端：' + (board.error ? esc(board.error)
+      : esc((board.state || '—') + (board.frame_count != null ? ' · ' + board.frame_count + ' 帧' : '') +
+            (board.size_bytes != null ? ' · ' + size(board.size_bytes) : ''))) + '</p>' +
+    (rows ? '<table><thead><tr><th>文件</th><th>字节</th><th>sha256</th></tr></thead><tbody>' + rows +
+            '</tbody></table>' : '');
+  $('#manifest').hidden = false;
+  note('清单已取出；删除需在弹窗里再次确认。');
+  return m;
+}
+
+function confirm_delete(sid, scope, m) {
+  const local = m.local || {}, files = local.files || [];
+  const big = files.find(f => f.name === 'points.bin') || files[0];
+  const where = scope === 'local' ? '本机' : (scope === 'board' ? '板端' : '本机 + 板端');
+  const head = '删除 ' + where + ' 会话 ' + sid + '？';
+  const body = local.present
+    ? '\n清单：' + files.length + ' 个文件 / ' + size(local.total_bytes) +
+      (big ? '\n主文件 ' + big.name + ' ' + size(big.bytes) + ' sha256 ' + big.sha256.slice(0, 16) : '')
+    : '\n本机无副本';
+  return window.confirm(head + body + '\n\n确认该会话没有正在录制/拉回，再点确定。');
+}
+
+async function del(sid, scope) {
+  try {
+    const m = manifests[sid] || await show_manifest(sid);
+    if (!confirm_delete(sid, scope, m)) { note('已取消（未删任何数据）'); return; }
+    note('删除中 ' + sid + ' (' + scope + ') …');
+    const r = await api('/api/delete', { sid: sid, scope: scope });
+    delete manifests[sid];
+    const board = r.board && (r.board.removed ? '板端已删 ' + r.board.removed.length + ' 项'
+                                              : (r.board.skipped || r.board.error || '板端未动'));
+    note('已删除 ' + sid + ' [本地:' + (r.local || '-') + '  ' + (board || '') + ']');
+    load();
+  } catch (e) {
+    note('删除失败: ' + e.message, 'err');
+  }
+}
+
+async function load() {
+  try {
+    const r = await api('/api/sessions');
+    const list = r.sessions || [];
+    const local = list.filter(s => s.local);
+    const total = local.reduce((a, s) => a + (s.bytes || 0), 0);
+    let sum = '共 ' + list.length + ' 行 · 本机 ' + local.length + ' 个 / ' + size(total) +
+              ' · 板端 ' + (r.board_error ? '离线（只列本机）' : '在线');
+    const hid = r.hidden ? (r.hidden.purged || 0) + (r.hidden.missing || 0) : 0;
+    if (hid) sum += ' · 已隐藏 ' + hid + ' 条无数据登记';
+    $('#summary').textContent = sum;
+    if (r.board_error) note('板端不可达：' + esc(r.board_error) + '（本机副本仍可管理）');
+    manifests = {};
+    $('#rows').innerHTML = list.map(s => {
+      const remote = s.transferred ? '✓已传'
+        : (s.state === 'transferring' ? '下载中'
+        : (s.download_requested ? '待拉' : (s.state === 'local-only' ? '—' : (s.state || '—'))));
+      return '<tr>' +
+        '<td title="' + esc(s.sid) + '">' + esc(s.name || s.sid) +
+          (s.name ? ' <code>' + esc(s.sid) + '</code>' : '') + '</td>' +
+        '<td>' + esc((s.created_iso || '').replace('T', ' ').slice(5, 19) || '—') + '</td>' +
+        '<td class="num">' + (s.duration_sec != null ? s.duration_sec.toFixed(1) + 's' : '—') + '</td>' +
+        '<td class="num">' + (s.frames != null ? s.frames : '—') + '</td>' +
+        '<td class="num">' + size(s.bytes != null ? s.bytes : s.size_bytes) + '</td>' +
+        '<td class="' + (s.transferred ? 'ok' : 'dim') + '">' + remote + '</td>' +
+        '<td class="' + (s.local ? 'ok' : 'dim') + '">' + (s.local ? '✓' : '—') + '</td>' +
+        '<td><div class="acts">' +
+          '<button data-act="manifest" data-sid="' + esc(s.sid) + '">清单</button>' +
+          '<button class="danger" data-act="local" data-sid="' + esc(s.sid) + '"' + (s.local ? '' : ' disabled') + '>删本机</button>' +
+          '<button class="danger" data-act="board" data-sid="' + esc(s.sid) + '"' + (s.state === 'local-only' ? ' disabled' : '') + '>删板端</button>' +
+          '<button class="danger" data-act="both" data-sid="' + esc(s.sid) + '"' + (s.local || s.state !== 'local-only' ? '' : ' disabled') + '>删两侧</button>' +
+        '</div></td></tr>';
+    }).join('');
+  } catch (e) {
+    $('#summary').textContent = '列表失败';
+    note('列表失败: ' + e.message, 'err');
+  }
+}
+
+$('#rows').addEventListener('click', ev => {
+  const b = ev.target.closest('button[data-act]');
+  if (!b) return;
+  const sid = b.dataset.sid, act = b.dataset.act;
+  if (act === 'manifest') show_manifest(sid).catch(e => note('清单失败: ' + e.message, 'err'));
+  else del(sid, act);
+});
+$('#refresh').addEventListener('click', load);
+load();
+</script>
+</body>
+</html>

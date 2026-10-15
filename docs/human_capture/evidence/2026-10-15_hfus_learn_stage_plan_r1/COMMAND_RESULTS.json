@@ -1,0 +1,46 @@
+{
+  "basis": "Actual tool process results recorded after completion; plan only",
+  "results": [
+    {
+      "command": "plan raw18 SHA/28B/offset/device-time recheck and manifests",
+      "exit_code": 0
+    },
+    {
+      "command": "check_plan.py -B -W error",
+      "exit_code": 0,
+      "log": "PLAN_CHECK.log"
+    },
+    {
+      "command": "V2 draft generation helper first",
+      "exit_code": 1,
+      "reason": "default GBK decoding JSON; repaired explicit UTF8; all planned artifacts then completed"
+    },
+    {
+      "command": "check_plan_v2.py -B -W error",
+      "exit_code": 0,
+      "logs": [
+        "PLAN_CHECK_V2.log",
+        "PLAN_CHECK_FINAL.log"
+      ]
+    },
+    {
+      "command": "OpenCode readonly R1",
+      "session": 7715,
+      "exit_code": 0,
+      "content_decision": "PLAN_REVISE"
+    },
+    {
+      "command": "OpenCode readonly R2",
+      "session": 93611,
+      "exit_code": 0,
+      "content_decision": "PLAN_PASS"
+    },
+    {
+      "command": "OpenCode readonly R3",
+      "session": 60048,
+      "exit_code": 0,
+      "content_decision": "PLAN_PASS"
+    }
+  ],
+  "implementation_training_download_install_capture_deploy": "NOT_RUN"
+}

@@ -1,0 +1,491 @@
+{
+  "note": "规则打分（阈值均有出处）；训练接口 logistic_fit 已就位，但当前 1 正样本 + 少量负样本不足以训练，未训练、未宣称准确率",
+  "rules": {
+    "length_m": {
+      "range": [
+        0.15,
+        0.35
+      ],
+      "source": "25 号：纸飞机量级 0.2–0.3 m"
+    },
+    "thickness_m": {
+      "range": [
+        0.05,
+        0.15
+      ],
+      "source": "25 号：扁平"
+    },
+    "speed_m_s": {
+      "range": [
+        1.0,
+        8.0
+      ],
+      "source": "本段实测 1.34–3.07；文献：无人机/鸟典型 5–25"
+    },
+    "accel_over_g": {
+      "range": [
+        0.0,
+        0.6
+      ],
+      "source": "滑翔/带升力：本段 2.75/9.8=0.28；自由落体≈1.0"
+    },
+    "glide_ratio": {
+      "range": [
+        0.5,
+        8.0
+      ],
+      "source": "滑翔比；本段 1.29"
+    }
+  },
+  "tracks": [
+    {
+      "track_id": 1,
+      "label": "unlabeled_moving",
+      "rule_score": 0.2,
+      "features": {
+        "hits": 3,
+        "displacement_m": 0.36,
+        "mean_speed_m_s": 1.164,
+        "speed_m_s": 1.164,
+        "moving": true,
+        "confirmed": false
+      },
+      "rules": {
+        "length_m": {
+          "value": null,
+          "range": [
+            0.15,
+            0.35
+          ],
+          "pass": false,
+          "source": "25 号：纸飞机量级 0.2–0.3 m"
+        },
+        "thickness_m": {
+          "value": null,
+          "range": [
+            0.05,
+            0.15
+          ],
+          "pass": false,
+          "source": "25 号：扁平"
+        },
+        "speed_m_s": {
+          "value": 1.164,
+          "range": [
+            1.0,
+            8.0
+          ],
+          "pass": true,
+          "source": "本段实测 1.34–3.07；文献：无人机/鸟典型 5–25"
+        },
+        "accel_over_g": {
+          "value": null,
+          "range": [
+            0.0,
+            0.6
+          ],
+          "pass": false,
+          "source": "滑翔/带升力：本段 2.75/9.8=0.28；自由落体≈1.0"
+        },
+        "glide_ratio": {
+          "value": null,
+          "range": [
+            0.5,
+            8.0
+          ],
+          "pass": false,
+          "source": "滑翔比；本段 1.29"
+        }
+      }
+    },
+    {
+      "track_id": 6,
+      "label": "static_leak",
+      "rule_score": 0.0,
+      "features": {
+        "hits": 1,
+        "displacement_m": 0.0,
+        "mean_speed_m_s": 0.0,
+        "speed_m_s": 0.0,
+        "moving": false,
+        "confirmed": false
+      },
+      "rules": {
+        "length_m": {
+          "value": null,
+          "range": [
+            0.15,
+            0.35
+          ],
+          "pass": false,
+          "source": "25 号：纸飞机量级 0.2–0.3 m"
+        },
+        "thickness_m": {
+          "value": null,
+          "range": [
+            0.05,
+            0.15
+          ],
+          "pass": false,
+          "source": "25 号：扁平"
+        },
+        "speed_m_s": {
+          "value": 0.0,
+          "range": [
+            1.0,
+            8.0
+          ],
+          "pass": false,
+          "source": "本段实测 1.34–3.07；文献：无人机/鸟典型 5–25"
+        },
+        "accel_over_g": {
+          "value": null,
+          "range": [
+            0.0,
+            0.6
+          ],
+          "pass": false,
+          "source": "滑翔/带升力：本段 2.75/9.8=0.28；自由落体≈1.0"
+        },
+        "glide_ratio": {
+          "value": null,
+          "range": [
+            0.5,
+            8.0
+          ],
+          "pass": false,
+          "source": "滑翔比；本段 1.29"
+        }
+      }
+    },
+    {
+      "track_id": 4,
+      "label": "paper_plane(user_labeled)",
+      "rule_score": 1.0,
+      "features": {
+        "hits": 7,
+        "displacement_m": 1.678,
+        "mean_speed_m_s": 2.715,
+        "speed_m_s": 2.6644285714285716,
+        "moving": true,
+        "confirmed": true,
+        "accel_over_g": 0.2803199869476325,
+        "glide_ratio": 1.288,
+        "terminal_speed_m_s": 2.406,
+        "length_m": 0.246,
+        "width_m": 0.2,
+        "thickness_m": 0.092,
+        "planform_hull_area_m2": 0.0645
+      },
+      "rules": {
+        "length_m": {
+          "value": 0.246,
+          "range": [
+            0.15,
+            0.35
+          ],
+          "pass": true,
+          "source": "25 号：纸飞机量级 0.2–0.3 m"
+        },
+        "thickness_m": {
+          "value": 0.092,
+          "range": [
+            0.05,
+            0.15
+          ],
+          "pass": true,
+          "source": "25 号：扁平"
+        },
+        "speed_m_s": {
+          "value": 2.6644285714285716,
+          "range": [
+            1.0,
+            8.0
+          ],
+          "pass": true,
+          "source": "本段实测 1.34–3.07；文献：无人机/鸟典型 5–25"
+        },
+        "accel_over_g": {
+          "value": 0.2803199869476325,
+          "range": [
+            0.0,
+            0.6
+          ],
+          "pass": true,
+          "source": "滑翔/带升力：本段 2.75/9.8=0.28；自由落体≈1.0"
+        },
+        "glide_ratio": {
+          "value": 1.288,
+          "range": [
+            0.5,
+            8.0
+          ],
+          "pass": true,
+          "source": "滑翔比；本段 1.29"
+        }
+      }
+    },
+    {
+      "track_id": 2,
+      "label": "static_leak",
+      "rule_score": 0.0,
+      "features": {
+        "hits": 26,
+        "displacement_m": 0.051,
+        "mean_speed_m_s": 0.02,
+        "speed_m_s": 0.02,
+        "moving": false,
+        "confirmed": true
+      },
+      "rules": {
+        "length_m": {
+          "value": null,
+          "range": [
+            0.15,
+            0.35
+          ],
+          "pass": false,
+          "source": "25 号：纸飞机量级 0.2–0.3 m"
+        },
+        "thickness_m": {
+          "value": null,
+          "range": [
+            0.05,
+            0.15
+          ],
+          "pass": false,
+          "source": "25 号：扁平"
+        },
+        "speed_m_s": {
+          "value": 0.02,
+          "range": [
+            1.0,
+            8.0
+          ],
+          "pass": false,
+          "source": "本段实测 1.34–3.07；文献：无人机/鸟典型 5–25"
+        },
+        "accel_over_g": {
+          "value": null,
+          "range": [
+            0.0,
+            0.6
+          ],
+          "pass": false,
+          "source": "滑翔/带升力：本段 2.75/9.8=0.28；自由落体≈1.0"
+        },
+        "glide_ratio": {
+          "value": null,
+          "range": [
+            0.5,
+            8.0
+          ],
+          "pass": false,
+          "source": "滑翔比；本段 1.29"
+        }
+      }
+    },
+    {
+      "track_id": 3,
+      "label": "static_leak",
+      "rule_score": 0.0,
+      "features": {
+        "hits": 9,
+        "displacement_m": 0.82,
+        "mean_speed_m_s": 0.884,
+        "speed_m_s": 0.884,
+        "moving": true,
+        "confirmed": true
+      },
+      "rules": {
+        "length_m": {
+          "value": null,
+          "range": [
+            0.15,
+            0.35
+          ],
+          "pass": false,
+          "source": "25 号：纸飞机量级 0.2–0.3 m"
+        },
+        "thickness_m": {
+          "value": null,
+          "range": [
+            0.05,
+            0.15
+          ],
+          "pass": false,
+          "source": "25 号：扁平"
+        },
+        "speed_m_s": {
+          "value": 0.884,
+          "range": [
+            1.0,
+            8.0
+          ],
+          "pass": false,
+          "source": "本段实测 1.34–3.07；文献：无人机/鸟典型 5–25"
+        },
+        "accel_over_g": {
+          "value": null,
+          "range": [
+            0.0,
+            0.6
+          ],
+          "pass": false,
+          "source": "滑翔/带升力：本段 2.75/9.8=0.28；自由落体≈1.0"
+        },
+        "glide_ratio": {
+          "value": null,
+          "range": [
+            0.5,
+            8.0
+          ],
+          "pass": false,
+          "source": "滑翔比；本段 1.29"
+        }
+      }
+    },
+    {
+      "track_id": 5,
+      "label": "static_leak",
+      "rule_score": 0.0,
+      "features": {
+        "hits": 6,
+        "displacement_m": 0.289,
+        "mean_speed_m_s": 0.187,
+        "speed_m_s": 0.187,
+        "moving": false,
+        "confirmed": true
+      },
+      "rules": {
+        "length_m": {
+          "value": null,
+          "range": [
+            0.15,
+            0.35
+          ],
+          "pass": false,
+          "source": "25 号：纸飞机量级 0.2–0.3 m"
+        },
+        "thickness_m": {
+          "value": null,
+          "range": [
+            0.05,
+            0.15
+          ],
+          "pass": false,
+          "source": "25 号：扁平"
+        },
+        "speed_m_s": {
+          "value": 0.187,
+          "range": [
+            1.0,
+            8.0
+          ],
+          "pass": false,
+          "source": "本段实测 1.34–3.07；文献：无人机/鸟典型 5–25"
+        },
+        "accel_over_g": {
+          "value": null,
+          "range": [
+            0.0,
+            0.6
+          ],
+          "pass": false,
+          "source": "滑翔/带升力：本段 2.75/9.8=0.28；自由落体≈1.0"
+        },
+        "glide_ratio": {
+          "value": null,
+          "range": [
+            0.5,
+            8.0
+          ],
+          "pass": false,
+          "source": "滑翔比；本段 1.29"
+        }
+      }
+    },
+    {
+      "track_id": 7,
+      "label": "static_leak",
+      "rule_score": 0.0,
+      "features": {
+        "hits": 1,
+        "displacement_m": 0.0,
+        "mean_speed_m_s": 0.0,
+        "speed_m_s": 0.0,
+        "moving": false,
+        "confirmed": false
+      },
+      "rules": {
+        "length_m": {
+          "value": null,
+          "range": [
+            0.15,
+            0.35
+          ],
+          "pass": false,
+          "source": "25 号：纸飞机量级 0.2–0.3 m"
+        },
+        "thickness_m": {
+          "value": null,
+          "range": [
+            0.05,
+            0.15
+          ],
+          "pass": false,
+          "source": "25 号：扁平"
+        },
+        "speed_m_s": {
+          "value": 0.0,
+          "range": [
+            1.0,
+            8.0
+          ],
+          "pass": false,
+          "source": "本段实测 1.34–3.07；文献：无人机/鸟典型 5–25"
+        },
+        "accel_over_g": {
+          "value": null,
+          "range": [
+            0.0,
+            0.6
+          ],
+          "pass": false,
+          "source": "滑翔/带升力：本段 2.75/9.8=0.28；自由落体≈1.0"
+        },
+        "glide_ratio": {
+          "value": null,
+          "range": [
+            0.5,
+            8.0
+          ],
+          "pass": false,
+          "source": "滑翔比；本段 1.29"
+        }
+      }
+    }
+  ],
+  "kinematics_source": {
+    "speed_m_s": [
+      1.342,
+      2.114,
+      2.608,
+      2.755,
+      3.403,
+      3.355,
+      3.074
+    ],
+    "acceleration_m_s2": 2.749,
+    "horizontal_travel_m": 1.325,
+    "vertical_drop_m": 1.029,
+    "glide_ratio": 1.288,
+    "duration_s": 0.63
+  },
+  "trainable": false,
+  "trainable_reason": "positive=1 (paper_plane), negatives=永久泄漏簇/未确认轨；需新采集与人工标签",
+  "training_rows_endpoint": {
+    "build": "track_features(track, shape, sensors) → dict",
+    "fit": "logistic_fit(standardized_rows, labels) → (w, b)"
+  }
+}

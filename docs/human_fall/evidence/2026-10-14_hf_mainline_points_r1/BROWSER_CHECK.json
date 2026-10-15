@@ -1,0 +1,60 @@
+{
+  "passed": false,
+  "ui_features_passed": true,
+  "original_source_query_and_current_rerun": "BLOCKED: captures/remote empty at final check",
+  "browser": "Codex IAB native CUA",
+  "url": "http://[::1]:8944/?sid=cap_20261013_082623&fi=119&variant=ret_combined",
+  "observed_final_cases": [
+    {
+      "case": "082623 / f124 · R3_HARD_OR_REMAINING_AXIS",
+      "status": "受控躺下_正向 · 帧 124/294 · 12.96 s · 1 个自动候选 · 自动定位 · 坐/蹲低姿态",
+      "metrics": "原始 49125 点\n背景匹配删除 37385 点\n前景 2092 点\n小区前景 1438 点\n姿态 坐/蹲低姿态\n高度P90 0.76 m\n倒地候选 无 · 非确认跌倒\n当前对象 1434 点\n区内比例 99.9%\n几何独立性 79.94/100\n邻近背景 5.4%\n使用原三维聚类\n几何定位 · 模型未参与\n几何分离较好\n旧目标 1434 / 当前 1434 点\n方案 护栏候选v2：背景保留 · UNKNOWN\nFROZEN_GUARDED_V2; REUSED_REGRESSION; HUMAN_BENEFIT_UNVERIFIED; NOT_DEFAULT\n上游背景恢复（UNKNOWN） +0 / -0\n粗节点 0/13 · 人体精度/家具污染率 UNKNOWN\n方向 CURRENT_GEOMETRY_ONLY · 当前点支撑，无预测关节"
+    },
+    {
+      "case": "082623 / f231 · R3_HARD_OR_REMAINING_AXIS",
+      "status": "受控躺下_正向 · 帧 231/294 · 24.05 s · 1 个自动候选 · 自动定位 · 坐/蹲低姿态",
+      "metrics": "原始 49132 点\n背景匹配删除 37067 点\n前景 2402 点\n小区前景 1753 点\n姿态 坐/蹲低姿态\n高度P90 0.79 m\n倒地候选 无 · 非确认跌倒\n当前对象 1732 点\n区内比例 100.0%\n几何独立性 81.98/100\n邻近背景 3.5%\n使用原三维聚类\n几何定位 · 模型未参与\n几何分离较好\n旧目标 1732 / 当前 1732 点\n方案 护栏候选v2：背景保留 · UNKNOWN\nFROZEN_GUARDED_V2; REUSED_REGRESSION; HUMAN_BENEFIT_UNVERIFIED; NOT_DEFAULT\n上游背景恢复（UNKNOWN） +0 / -0\n粗节点 0/13 · 人体精度/家具污染率 UNKNOWN\n方向 CURRENT_GEOMETRY_ONLY · 当前点支撑，无预测关节\n当前图显示 1500/1732 点（采样）；全量源行见JSON"
+    },
+    {
+      "case": "082717 / f263 · R3_HARD_OR_REMAINING_AXIS",
+      "status": "受控躺下_侧向 · 帧 263/326 · 27.26 s · 1 个自动候选 · 自动定位 · 坐/蹲低姿态",
+      "metrics": "原始 49132 点\n背景匹配删除 36608 点\n前景 2865 点\n小区前景 2208 点\n姿态 坐/蹲低姿态\n高度P90 0.90 m\n倒地候选 无 · 非确认跌倒\n当前对象 2493 点\n区内比例 99.4%\n几何独立性 77.7/100\n邻近背景 15.9%\n使用原三维聚类\n几何定位 · 模型未参与\n几何分离较好\n旧目标 2211 / 当前 2493 点\n方案 护栏候选v2：背景保留 · UNKNOWN\nFROZEN_GUARDED_V2; REUSED_REGRESSION; HUMAN_BENEFIT_UNVERIFIED; NOT_DEFAULT\n上游背景恢复（UNKNOWN） +282 / -0\n粗节点 0/13 · 人体精度/家具污染率 UNKNOWN\n方向 CURRENT_GEOMETRY_ONLY · 当前点支撑，无预测关节\n当前图显示 1500/2493 点（采样）；全量源行见JSON"
+    },
+    {
+      "case": "082906 / f94 · R3_HARD_OR_REMAINING_AXIS",
+      "status": "初始躺地_侧卧 · 帧 94/174 · 9.74 s · 1 个自动候选 · 自动定位 · 坐/蹲低姿态",
+      "metrics": "原始 49124 点\n背景匹配删除 36784 点\n前景 2689 点\n小区前景 2078 点\n姿态 坐/蹲低姿态\n高度P90 0.89 m\n倒地候选 无 · 非确认跌倒\n当前对象 2329 点\n区内比例 99.8%\n几何独立性 72.44/100\n邻近背景 15.8%\n使用原三维聚类\n几何定位 · 模型未参与\n几何分离较好\n旧目标 2066 / 当前 2329 点\n方案 护栏候选v2：背景保留 · UNKNOWN\nFROZEN_GUARDED_V2; REUSED_REGRESSION; HUMAN_BENEFIT_UNVERIFIED; NOT_DEFAULT\n上游背景恢复（UNKNOWN） +263 / -0\n粗节点 0/13 · 人体精度/家具污染率 UNKNOWN\n方向 CURRENT_GEOMETRY_ONLY · 当前点支撑，无预测关节\n当前图显示 1500/2329 点（采样）；全量源行见JSON"
+    }
+  ],
+  "observations": [
+    {
+      "action": "082623 / f192 端部恢复",
+      "status": "读取 cap_20261013_082623 / f192…"
+    },
+    {
+      "action": "082623 / f232 临界体轴",
+      "status": "读取 cap_20261013_082623 / f232…"
+    },
+    {
+      "action": "082717 / f140 新歧义",
+      "status": "读取 cap_20261013_082717 / f0…"
+    },
+    {
+      "frame": 232,
+      "status": "受控躺下_正向 · 帧 232/294 · 24.15 s · 1 个自动候选 · 自动定位 · 坐/蹲低姿态",
+      "metrics": "原始 49126 点\n背景匹配删除 37074 点\n前景 2397 点\n小区前景 1747 点\n姿态 坐/蹲低姿态\n高度P90 0.80 m\n倒地候选 无 · 非确认跌倒\n当前对象 1938 点\n区内比例 100.0%\n几何独立性 74.38/100\n邻近背景 14.6%\n使用原三维聚类\n几何定位 · 模型未参与\n几何分离较好\n旧目标 1702 / 当前 1938 点\n方案 护栏候选v2：背景保留 · UNKNOWN\nFROZEN_GUARDED_V2; REUSED_REGRESSION; HUMAN_BENEFIT_UNVERIFIED; NOT_DEFAULT\n上游背景恢复（UNKNOWN） +236 / -0\n粗节点 13/13 · 人体精度/家具污染率 UNKNOWN\n方向 CURRENT_GEOMETRY_ONLY · 当前点支撑，无预测关节\n当前图显示 1500/1938 点（采样）；全量源行见JSON"
+    }
+  ],
+  "full_download": "C:\\Users\\30680\\Downloads\\retention-members",
+  "download_complete_records": 49130,
+  "views": [
+    "front",
+    "top",
+    "3d"
+  ],
+  "prior_continuous_playback": "083254 f93 through224 observed auto stop",
+  "empty_final_playback": "131958 f95 playback auto stopped and play button visible",
+  "source_query": "final frozen ledger with explicit MISSING_ORIGINAL_SOURCE, opaque null; prior actual opaque query evidence in API_CHECK_FINAL",
+  "visual_identity": "AI_INFERRED_ONLY; no human/furniture GT",
+  "default": "R1_BASELINE observed reload before candidate selection"
+}

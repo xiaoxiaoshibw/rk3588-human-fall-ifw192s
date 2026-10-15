@@ -1,0 +1,55 @@
+diff --git a/pc_apps/console/joint_capture.html b/pc_apps/console/joint_capture.html
+index 3f9e7d2..78d0a2c 100644
+--- a/pc_apps/console/joint_capture.html
++++ b/pc_apps/console/joint_capture.html
+@@ -12,12 +12,12 @@
+ <label>雷达板端服务（HC 控制面）<input id="radar" value="http://192.168.31.58:8766"></label>
+ <p>录制时网口只走相机流；雷达落袋在板上 SD 卡，停止后按 HC 协议完整回拉（由 <code>fetch.py</code> 权威实现：SHA/布局校验、状态机推进、.part 断点）。</p></details>
+ <button id="start" disabled title="板端空闲才可开始">开始录制</button><button id="stop" disabled>停止并保存</button><button id="folder">打开保存目录</button>
+-<div class="panel" role="status" aria-live="polite"><b id="state">正在连接本机录制服务…</b><div class="counts"><span id="camCount">相机：预览中</span><span id="radarCount">雷达：板端录制</span><span id="elapsed">0 秒</span><span id="size">0 MB</span></div><div id="path"></div><div id="quality"></div><div id="error"></div></div>
++<div class="panel" role="status" aria-live="polite"><b id="state">正在连接本机录制服务…</b><div class="counts"><span id="camCount">相机：预览中</span><span id="radarCount">雷达：板端录制</span><span id="elapsed">0 秒</span><span id="size">0 MB</span></div><div id="path"></div><div id="error"></div></div>
+ <div class="panel"><img id="preview" alt="联合录制的相机画面" hidden><p id="previewNote">开始录制后显示相机实时画面。</p></div>
+-<p>保存内容：radar = meta.json + points.bin（HC 格式、可被 human_replay 直接回放），camera = 空 camera.mjpeg 占位；相机若预览中断不影响雷达（雷达在板上持续录制）。</p>
++<p>保存内容：每次录制独立保存为一个会话目录 —— meta.json + points.bin（HC 格式，可被 human_replay 直接回放）与空 camera.mjpeg 占位；相机预览中断不影响板端录制，停止后从板端拉回本机，拉回未完成可在会话回放中重试。</p>
+ </main><script>
+ const $ = id => document.getElementById(id);
+-const names = {idle:'等待录制',starting:'正在启动板端录制…',recording:'正在录制（雷达在板上）',stopping:'正在停止板端…',saving:'正在从板端拉回雷达数据…（需要几十秒）',completed:'已保存到本机（可回放）',completed_with_gaps:'已保存到本机（相机预览曾中断）',failed:'录制失败'};
++const names = {idle:'等待录制',starting:'正在启动板端录制…',recording:'正在录制（雷达在板上）',stopping:'正在停止板端…',saving:'正在从板端拉回雷达数据…（需要几十秒）',completed:'已保存到本机（可回放）',failed:'录制失败'};
+ let busy = false, initialized = false;
+ async function api(path, body) {
+   const response = await fetch(path, body === undefined ? {cache:'no-store'} : {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+@@ -34,7 +34,6 @@ function render(s) {
+   $('elapsed').textContent=`${s.elapsed_sec || s.duration_sec || 0} 秒`;
+   $('size').textContent=`${(s.bytes/1e6).toFixed(1)} MB`;
+   $('path').textContent=s.path || s.output_root;
+-  $('quality').textContent = s.state==='completed_with_gaps' ? '说明：相机预览曾中断，但板上雷达未中断；两路各自独立，不视为文件级连续视频。' : '';
+   $('error').textContent=s.error ? `${s.error}` : '';
+   $('start').disabled=busy; $('stop').disabled=!busy || (s.state!=='recording' && s.state!=='starting');
+   for(const id of ['root','duration','camera','radar']) $(id).disabled=busy;
+diff --git a/pc_apps/console/joint_capture.py b/pc_apps/console/joint_capture.py
+index aa64bb7..6b1ec12 100644
+--- a/pc_apps/console/joint_capture.py
++++ b/pc_apps/console/joint_capture.py
+@@ -1,7 +1,7 @@
+-"""PC 错峰联合录制：雷达先全量存板(HC 通道)，相机仅预览；停止后逐段拉回雷达。
++"""PC 错峰联合录制：雷达先全量存板(HC 通道)，相机仅预览；停止后一次性拉回雷达。
+ 
+ CPU 错峰：录制时板上网口只走相机预览流；雷达 rosbag/抽取都在 SD 卡上完成，
+-完成后 PC 才按段增量回拉 meta.json/points.bin，再按 frames 行上切片。
++完成后 PC 用官方 fetch.py 一次性回拉 meta.json/points.bin，无逐段切片。
+ 不重写 HC 状态机；不重写 fetch.py 校验（SHA/布局）；不写板。
+ """
+ import json
+diff --git a/pc_apps/console/joint_capture_test.py b/pc_apps/console/joint_capture_test.py
+index 6b1ba96..c18a6ea 100644
+--- a/pc_apps/console/joint_capture_test.py
++++ b/pc_apps/console/joint_capture_test.py
+@@ -84,7 +84,7 @@ class BoardOrchestratorTest(unittest.TestCase):
+                     radar_board_url='http://192.168.31.58:8766')      # 不参与真实请求（mock 了 _BoardSession）
+ 
+     def test_camera_preview_failure_still_allows_board_record_and_marked_gaps(self):
+-        """相机预览一直失败：录制照常完成，最终 completed_with_gaps（板端雷达数据完整）。"""
++        """相机预览一直失败：录制照常完成，最终 completed（板端雷达数据完整）。"""
+         with tempfile.TemporaryDirectory() as tmp, \
+              mock.patch.object(J, '_BoardSession', _FakeBoard), \
+              mock.patch.object(J, '_StagedFetch', _FakeFetch):

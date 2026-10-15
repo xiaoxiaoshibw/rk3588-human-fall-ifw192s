@@ -1,0 +1,46 @@
+{
+  "item": "HC-DOWNLOAD-LIMIT-01",
+  "date": "2026-10-14",
+  "user_authorization": "用户口述: 改限速 (接在 3588->本机拉取实测 8.75MB/s 的讨论之后)",
+  "git": {
+    "branch": "master",
+    "head": "c21c443b0befe559e08283edb0efc2af02dcc6b8",
+    "note": "start-of-session snapshot 起工作树已有多处未提交改动(console/joint_capture 等), 本单只改下面列出的 3 个文件"
+  },
+  "config_files": {
+    "board": {
+      "path_host": "/home/wel/slam_localization_wuhan/src/human_capture/config/capture.yaml",
+      "path_container": "/root/catkin_ws/src/human_capture/config/capture.yaml",
+      "sha256_before": "035638c1a1e3c14f52ed1506995444f86960b6524a0f3753a1fd8b75080fd2a2",
+      "key_before": "不存在 download_limit_kbit 键(板端 yaml 是 2026-10-02 旧版)",
+      "value_before_effective": 70000,
+      "value_before_source": "src/human_capture/scripts/capture_server.py:42 代码默认值(板端 yaml 缺键时落回)",
+      "sha256_after": "7a757b951cafb76d201fd21e3bbc2ed6649d97c4087433ca8303bb5b9e092c9a",
+      "value_after": 800000,
+      "backup": "/home/wel/slam_localization_wuhan/src/human_capture/config/capture.yaml.bak-20261014"
+    },
+    "repo": {
+      "path": "src/human_capture/config/capture.yaml",
+      "sha256_before": "729d46a562c1c84aa89e5732cc4d60255e8713342fb4c78da8201888f191e628",
+      "sha256_after": "18a6b3617229014e5c700e2918c70ef1cc4f5bd96554f91c79e70210236867bd"
+    },
+    "comments_only": [
+      {"path": "pc_apps/human_replay/config.py", "sha256_before_unknown": true, "sha256_after": "9b37f744ce4651345a93d0dc549958e5a56ba5321c58a5c2190edcde8b4863ff", "change": "注释里 70000/100M 链路 改为 800000/2026-10-14"},
+      {"path": "pc_apps/human_replay/fetch.py", "sha256_after": "f855cf97c173dd24a84188eb1c5180b53d294ca83d85efc719258631489820a1", "change": "同上"}
+    ]
+  },
+  "board_service": {
+    "container": "slam-localization",
+    "cmd": "python3 -u scripts/capture_server.py --config config/capture.yaml",
+    "cwd": "/root/catkin_ws/src/human_capture",
+    "launch_reference": "/home/wel/BOOTSTRAP.md 第 6 节 (docker exec -d + source ROS + nohup)",
+    "log": "/var/log/capture_server.log (容器内)",
+    "log_backup": "/var/log/capture_server.log.20261014",
+    "pid_before": 3578,
+    "started_before": "2026-10-07 20:06:05",
+    "pid_after": 26094,
+    "restart_script": "/tmp/restart_capture_server.sh (板端, 幂等: 备份日志 -> 精确匹配 scripts/capture_server.py --config 停 -> 按 BOOTSTRAP 同命令起)",
+    "no_systemd_unit": true,
+    "state_at_change": {"recording": false, "ros": "up", "sessions_total": 10}
+  }
+}

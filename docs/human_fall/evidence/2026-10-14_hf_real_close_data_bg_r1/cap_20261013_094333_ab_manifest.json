@@ -1,0 +1,386 @@
+{
+  "sid": "cap_20261013_094333",
+  "reference": "cap_20261013_131958",
+  "split": {
+    "FIT": [
+      0,
+      3,
+      6,
+      9,
+      12,
+      15,
+      18,
+      21,
+      24,
+      27,
+      30,
+      33,
+      36,
+      39,
+      42,
+      45,
+      48,
+      51,
+      54,
+      57,
+      60,
+      63,
+      66,
+      69,
+      72,
+      75,
+      78,
+      81,
+      84,
+      87,
+      90,
+      93,
+      96
+    ],
+    "CALIBRATION": [
+      1,
+      4,
+      7,
+      10,
+      13,
+      16,
+      19,
+      22,
+      25,
+      28,
+      31,
+      34,
+      37,
+      40,
+      43,
+      46,
+      49,
+      52,
+      55,
+      58,
+      61,
+      64,
+      67,
+      70,
+      73,
+      76,
+      79,
+      82,
+      85,
+      88,
+      91,
+      94
+    ],
+    "HOLDOUT": [
+      2,
+      5,
+      8,
+      11,
+      14,
+      17,
+      20,
+      23,
+      26,
+      29,
+      32,
+      35,
+      38,
+      41,
+      44,
+      47,
+      50,
+      53,
+      56,
+      59,
+      62,
+      65,
+      68,
+      71,
+      74,
+      77,
+      80,
+      83,
+      86,
+      89,
+      92,
+      95
+    ]
+  },
+  "reference_keys": 3274,
+  "frames": 164,
+  "R": [
+    [
+      0.8992068377901148,
+      0,
+      0.4375237854922886
+    ],
+    [
+      0.009952588893271433,
+      0.9997412412816739,
+      -0.02045474162387306
+    ],
+    [
+      -0.43741057239831743,
+      0.022747537901449354,
+      0.8989741601812581
+    ]
+  ],
+  "t": [
+    0,
+    0,
+    1.147882542663829
+  ],
+  "refR": [
+    [
+      0.8905792877996809,
+      0,
+      0.4548280247986191
+    ],
+    [
+      -0.012383310247002823,
+      0.9996292940265908,
+      0.02424722976395571
+    ],
+    [
+      -0.4546594173329524,
+      -0.02722635715441169,
+      0.8902491447378991
+    ]
+  ],
+  "refT": [
+    0,
+    0,
+    1.3566335069482636
+  ],
+  "alignment": {
+    "R": [
+      0.9996325399363626,
+      0.026210976499595418,
+      -0.006911570828216117,
+      -0.026357164003640375,
+      0.9994108244702313,
+      -0.02198417242972368,
+      0.006331272072893491,
+      0.022158263530165787,
+      0.9997344279113666
+    ],
+    "t": [
+      -0.14732132187606983,
+      0.10910571704016953,
+      -0.1316512784648038
+    ]
+  },
+  "coordinate_frame": "COMMON_SOURCE_LEVELED",
+  "units": "m",
+  "source": {
+    "sid": "cap_20261013_094333",
+    "meta_sha256": "171b28a6877ce9e853cce2fd97ada9c4fb4ffed6b5be3b7dd379ba75ff4b7ba6",
+    "bin_sha256": "a047a0ccc8bf1c57683ae79c7eb1cf90972716802f44bb156311130bbcfbc7f6"
+  },
+  "reference_source": {
+    "sid": "cap_20261013_131958",
+    "meta_sha256": "ae72aea0ece652ae20c7a109833b40f5630db613e1fb9c43303b7a779e22d1e0",
+    "bin_sha256": "bed95a43946845f95308a5f4393077e8a9de99518bbaf1fd84214dd0d53cd4f0"
+  },
+  "PIPE": {
+    "range_min_m": 0.35,
+    "range_max_m": 25,
+    "voxel_m": 0.15,
+    "ground_keep_below_m": -0.25,
+    "z_max_m": 2.5,
+    "bg_voxel_xy": 0.15,
+    "bg_voxel_z": 0.12,
+    "bg_hit_min_pts": 2,
+    "bg_occ_strong": 0.85,
+    "bg_occ_supported": 0.65,
+    "bg_jitter_max": 0.05,
+    "bg_neighbor_min": 2,
+    "bg_match_radius": 0.12,
+    "bg_ref_hit_min_pts": 1,
+    "bg_ref_occ_min": 0.5,
+    "cluster_min_voxels": 3,
+    "cluster_neighbor_hops": 1,
+    "human_n_min": 60,
+    "human_height_min": 0.9,
+    "human_height_max": 2.3,
+    "human_width_max": 0.7,
+    "human_radius_max": 0.45,
+    "human_upcos_min": 0.5,
+    "band_edges": [
+      0,
+      0.3,
+      0.6,
+      0.9,
+      1.2,
+      1.5,
+      1.8,
+      2.2,
+      3
+    ],
+    "ev_band_min_pts_abs": 15,
+    "ev_band_min_pts_frac": 0.04,
+    "ev_bands_min": 3,
+    "ev_spread_cv_person": 0.18,
+    "ev_spread_cv_box": 0.15,
+    "ev_aniso_box": 4,
+    "ev_aniso_box_soft": 2.5,
+    "ev_aniso_person": 3,
+    "human_confirm_window": 5,
+    "human_confirm_votes": 3,
+    "human_confirm_min_age": 3,
+    "track_gate_xy_m": 0.75,
+    "track_lost_max": 8,
+    "ema_alpha": 0.35,
+    "fall_upcos_max": 0.45,
+    "fall_height_max": 0.9,
+    "fall_sustain_frames": 10,
+    "fall_recover_frames": 5
+  },
+  "roi_status": "USER_APPROXIMATION_PENDING_COORDINATE_REVIEW; no expansion",
+  "A_context": "existing extract_foreground; causal ephemeral previous <=10 frames; NOT identical to production whole-recording map",
+  "B_context": "empty FIT-only immutable reference; threshold existing 0.12 m; HOLDOUT unused in map or tuning",
+  "C_context": "existing extract_foreground_fused; DIAGNOSTIC_ONLY; fusionKeys gate not bypassed in any official consumer",
+  "causality": "No future action frames; reference recording is offline calibration. No action permanently self-modeled.",
+  "empty_holdout": [
+    {
+      "frame": 2,
+      "fg": 18
+    },
+    {
+      "frame": 5,
+      "fg": 28
+    },
+    {
+      "frame": 8,
+      "fg": 25
+    },
+    {
+      "frame": 11,
+      "fg": 23
+    },
+    {
+      "frame": 14,
+      "fg": 15
+    },
+    {
+      "frame": 17,
+      "fg": 26
+    },
+    {
+      "frame": 20,
+      "fg": 25
+    },
+    {
+      "frame": 23,
+      "fg": 24
+    },
+    {
+      "frame": 26,
+      "fg": 29
+    },
+    {
+      "frame": 29,
+      "fg": 25
+    },
+    {
+      "frame": 32,
+      "fg": 21
+    },
+    {
+      "frame": 35,
+      "fg": 22
+    },
+    {
+      "frame": 38,
+      "fg": 24
+    },
+    {
+      "frame": 41,
+      "fg": 30
+    },
+    {
+      "frame": 44,
+      "fg": 23
+    },
+    {
+      "frame": 47,
+      "fg": 26
+    },
+    {
+      "frame": 50,
+      "fg": 29
+    },
+    {
+      "frame": 53,
+      "fg": 30
+    },
+    {
+      "frame": 56,
+      "fg": 31
+    },
+    {
+      "frame": 59,
+      "fg": 21
+    },
+    {
+      "frame": 62,
+      "fg": 23
+    },
+    {
+      "frame": 65,
+      "fg": 28
+    },
+    {
+      "frame": 68,
+      "fg": 32
+    },
+    {
+      "frame": 71,
+      "fg": 17
+    },
+    {
+      "frame": 74,
+      "fg": 23
+    },
+    {
+      "frame": 77,
+      "fg": 31
+    },
+    {
+      "frame": 80,
+      "fg": 27
+    },
+    {
+      "frame": 83,
+      "fg": 19
+    },
+    {
+      "frame": 86,
+      "fg": 29
+    },
+    {
+      "frame": 89,
+      "fg": 26
+    },
+    {
+      "frame": 92,
+      "fg": 27
+    },
+    {
+      "frame": 95,
+      "fg": 45
+    }
+  ],
+  "registration_note": "historical static overlap .9477; physical/registration gate separate, provisional reference->source alignment",
+  "physical_scene_review": "BLOCKED",
+  "input_sha_binding": {
+    "files": {
+      "pc_apps/human_replay/human_pipe_lib.js": "8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176",
+      "pc_apps/human_replay/human_replay_lib.js": "69d8975a0176760713708ca26f7b45a4ba166d4be1f4a5162fcc6e04627fd623",
+      "pc_apps/human_replay/registration_method.js": "958f646ff41adbca7840a0a09ae6ba2ed87db7254b2d16f5365b64625caac141",
+      "pc_apps/human_replay/registration.js": "965c6c49e164969d07c399a0a14e4621a1aa3f797b20f8bb220fb6a5dffc85c0"
+    },
+    "code_id": "0fcb6c9bab1a58519400ff7f713f859a7c805c2f0b3b42b5b09e552f4d05b88c"
+  },
+  "ground_rule": "Common diagnostic -0.25m workspace for all arms; no z<0.1m blanket crop. Thin-ground identity UNKNOWN."
+}

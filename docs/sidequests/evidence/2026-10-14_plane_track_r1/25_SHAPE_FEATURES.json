@@ -1,0 +1,177 @@
+{
+  "object": "tracked moving target (user: paper plane), cap_20261014_164522",
+  "de_skew": {
+    "model": "p' = p - v*(t - t_ref), t from per-point timestamp",
+    "note": "时间戳 1 ms 量化；本段拖影 ≤5.5 cm"
+  },
+  "frames": [
+    {
+      "frame": 9,
+      "points": 11,
+      "time_span_s": 0.00098,
+      "deskew_max_shift_m": 0.00131,
+      "velocity_m_s": [
+        1.153,
+        -0.527,
+        -0.439
+      ],
+      "core_points": 11,
+      "ring_range": [
+        146,
+        149
+      ]
+    },
+    {
+      "frame": 10,
+      "points": 64,
+      "time_span_s": 0.00098,
+      "deskew_max_shift_m": 0.00206,
+      "velocity_m_s": [
+        1.63,
+        -1.104,
+        -0.769
+      ],
+      "core_points": 64,
+      "ring_range": [
+        144,
+        150
+      ]
+    },
+    {
+      "frame": 11,
+      "points": 64,
+      "time_span_s": 0.00391,
+      "deskew_max_shift_m": 0.01019,
+      "velocity_m_s": [
+        1.737,
+        -1.502,
+        -1.235
+      ],
+      "core_points": 64,
+      "ring_range": [
+        142,
+        148
+      ]
+    },
+    {
+      "frame": 12,
+      "points": 58,
+      "time_span_s": 0.00098,
+      "deskew_max_shift_m": 0.00269,
+      "velocity_m_s": [
+        1.519,
+        -1.61,
+        -1.64
+      ],
+      "core_points": 55,
+      "ring_range": [
+        137,
+        143
+      ]
+    },
+    {
+      "frame": 13,
+      "points": 41,
+      "time_span_s": 0.00098,
+      "deskew_max_shift_m": 0.00332,
+      "velocity_m_s": [
+        1.841,
+        -1.777,
+        -2.243
+      ],
+      "core_points": 39,
+      "ring_range": [
+        129,
+        134
+      ]
+    },
+    {
+      "frame": 14,
+      "points": 19,
+      "time_span_s": 0.0,
+      "deskew_max_shift_m": 0.0,
+      "velocity_m_s": [
+        1.604,
+        -1.574,
+        -2.491
+      ],
+      "core_points": 19,
+      "ring_range": [
+        120,
+        124
+      ]
+    },
+    {
+      "frame": 15,
+      "points": 18,
+      "time_span_s": 0.00488,
+      "deskew_max_shift_m": 0.01201,
+      "velocity_m_s": [
+        1.196,
+        -1.492,
+        -2.406
+      ],
+      "core_points": 17,
+      "ring_range": [
+        110,
+        114
+      ]
+    }
+  ],
+  "core_shape": {
+    "point_count": 269,
+    "extent_robust_m": [
+      0.237,
+      0.209,
+      0.095
+    ],
+    "extent_full_m": [
+      0.285,
+      0.265,
+      0.127
+    ],
+    "thickness_over_length": 0.4,
+    "width_over_length": 0.882,
+    "projected_hull_area_m2": 0.0592,
+    "occupied_cells_2cm": 201,
+    "occupied_cells_area_m2": 0.0804
+  },
+  "all_points_shape": {
+    "point_count": 310,
+    "extent_robust_m": [
+      2.785,
+      0.446,
+      0.212
+    ],
+    "extent_full_m": [
+      2.941,
+      0.802,
+      0.412
+    ],
+    "projected_hull_area_m2": 1.4635,
+    "note": "含此前被剔的‘同伴点’（同 tick 同 ring、离核心 0.6–0.7 m），归属 UNKNOWN，单列"
+  },
+  "kinematics": {
+    "speed_m_s": [
+      1.342,
+      2.114,
+      2.608,
+      2.755,
+      3.403,
+      3.355,
+      3.074
+    ],
+    "acceleration_m_s2": 2.749,
+    "horizontal_travel_m": 1.325,
+    "vertical_drop_m": 1.029,
+    "glide_ratio": 1.288,
+    "duration_s": 0.63
+  },
+  "paper_plane_checklist": {
+    "length_0.15_0.35m": true,
+    "thin_0.05_0.15m": true,
+    "flat_ratio_below_0.5": true,
+    "no_flapping_periodicity": "NOT_RUN（7 帧/0.63 s，不足一个扑翼周期统计）",
+    "no_propeller_harmonics": "NOT_RUN（本传感器无微多普勒）"
+  }
+}

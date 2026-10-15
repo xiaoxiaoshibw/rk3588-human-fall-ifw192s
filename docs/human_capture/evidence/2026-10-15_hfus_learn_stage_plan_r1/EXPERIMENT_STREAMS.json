@@ -1,0 +1,42 @@
+{
+  "learning_streams": [
+    "L3D_seed19",
+    "L3D_seed43",
+    "L3D_seed97",
+    "L2D_seed19",
+    "L2D_seed43",
+    "L2D_seed97",
+    "LFUSION_seed19",
+    "LFUSION_seed43",
+    "LFUSION_seed97",
+    "MAIN_no_bg_risk_seed43",
+    "MAIN_hard_bg_seed43",
+    "MAIN_causal_GRU_seed43"
+  ],
+  "geometry_streams": [
+    "R1_legacy",
+    "A_frozen_old_background",
+    "G0_B_frozen_new_background",
+    "G1_HDBSCAN_on_B_foreground"
+  ],
+  "inference_pressure_streams": [
+    "MAIN_query_off_XYZ_cluster",
+    "MAIN_2D_branch_masked",
+    "MAIN_GRU_state_cleared"
+  ],
+  "primary_reproduction": "validation-selected MAIN family / fixed seed43 / current source / actual1934+90 fresh-directory rerun",
+  "MAIN_resolution": "chosen once by eligible OOF validation only; never by974 orseed",
+  "applicability": {
+    "MAIN_2D_branch_masked": "ONLY MAIN=LFUSION; MAIN=L3D or L2D -> NOT_APPLICABLE, no copy/fake ablation",
+    "MAIN_GRU_state_cleared": "requires actual trained causal-GRU variant; otherwise NOT_RUN",
+    "MAIN_query_off_XYZ_cluster": "requires actual trustworthy instance head; otherwise interface-only/NOT_RUN",
+    "training_ablations": "no main eligible or unauthorized/labels missing -> NOT_RUN/BLOCKED; allocations upper bounds"
+  },
+  "all_primary_weights_semantic": "OOF dev96 separate from final comparison96+empty90; TRAIN_FIT_VISUAL_ONLY not evaluation",
+  "budget_counts": {
+    "learning": 12,
+    "geometry": 4,
+    "inference_pressure_max": 3,
+    "fresh_reproduction": 1
+  }
+}

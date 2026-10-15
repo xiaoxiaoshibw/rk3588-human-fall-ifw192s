@@ -1,0 +1,38 @@
+--- zip console_gui (build-frozen)
++++ tree console_gui (13:17:52+)
+@@ -319,6 +319,35 @@
+             server.server_close()
+         sys.exit(0 if (report['page_ok'] and report['joint_fetch_ok']
+                        and all(report['page_version'].values())) else 1)
++
++    # Scoped candidate-EXE check: no camera, recorder, board or legacy real-fall service.
++    if "--check-learn" in sys.argv:
++        import urllib.request
++        report = {"scope": "HFUS_E0_LEARN_SURFACE_ONLY", "GUI": "NOT_RUN", "capture": "NOT_RUN"}
++        try:
++            port = _start_fall_server()
++            if not port or not LEARN_RUN_ID:
++                raise ValueError("No frozen learning run registered")
++            base = "http://127.0.0.1:%d/learn/%s/" % (port, LEARN_RUN_ID)
++            def fetch_json(suffix):
++                with urllib.request.urlopen(base + suffix) as response:
++                    return json.load(response)
++            catalog = fetch_json("catalog")
++            sid = next(iter(catalog["sources"]))
++            frame = fetch_json("frame?sid=%s&fi=0&group=G0" % sid)
++            source = fetch_json("source?sid=%s&fi=0&row=%d" % (sid, frame["rows"][0]))
++            with urllib.request.urlopen(base) as response:
++                page_ok = "HFUS" in response.read().decode("utf8")
++            report.update(port=port, run_id=LEARN_RUN_ID, manifest_sha256=catalog["manifest_sha256"],
++                          viewer_sha256=catalog["viewer_sha256"], U=len(frame["rows"]),
++                          actual_fit_count=catalog["models"]["actual_fit_count"],
++                          original_bytes_status=source["status"], page_ok=page_ok,
++                          shell_url=_shell_url(8901, fall_port=port),
++                          ok=page_ok and source["status"] == "ORIGINAL_BYTES_SHA_VERIFIED")
++        except Exception as exc:
++            report.update(ok=False, error=str(exc))
++        _write_check_report(sys.argv[sys.argv.index("--check-learn") + 1], report)
++        sys.exit(0 if report["ok"] else 1)
+ 
+     # Headless release check exercises the frozen servers without opening a GUI.
+     if "--check-startup" in sys.argv:

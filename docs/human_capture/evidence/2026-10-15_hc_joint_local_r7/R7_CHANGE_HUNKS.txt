@@ -1,0 +1,36 @@
+R7 本轮改动片段（对 HEAD 之外的联合录制文件；若被并行写入覆盖，按此回填）
+
+1) pc_apps/console/joint_capture.py — 模块 docstring 追加：
+   本地会话目录名 = 板端 sid：与回页面板的拉回同名同源，同一段录制只有一个身份，
+   面板按 sid 直接看到本地副本，不会再拉第二遍。
+
+2) pc_apps/console/joint_capture.py — import 区新增：
+   import re
+
+3) pc_apps/console/joint_capture.py — Recorder._run，wait_ready 之后：
+            ready = board.wait_ready(sid, deadline=180)
+            # 会话目录名 = 板端 sid（不是 joint_<sid>）：同一段录制只有一个身份。
+            # 否则回页面板按 sid 找本地副本找不到，会把同一份雷达再拉一遍
+            # （现场：cap_20261015_142730 与 joint_cap_20261015_142730 各 237 MB）。
+            # 板端 sid 来自网络响应，只允许回放器白名单字符，不落成路径。
+            if not re.fullmatch(r'[A-Za-z0-9_-]{1,100}', sid):
+                raise ValueError('unexpected board session_id: %r' % sid)
+            # 保留空 camera.mjpeg 以便回放器将此会话当 video-only 段
+            root = self.root
+            out_dir = root / sid        # 原：out_dir = root / ('joint_' + sid)
+
+4) pc_apps/console/joint_capture.html — notify_completed：
+   const sid = (s.path || s.session_id || '').replace(/[\\/]+$/, '').split(/[\\/]/).pop();
+   （原：s.path || ('joint_' + (s.session_id || ''))）
+   同文件 <p> 保存内容说明：目录名 = 板端会话号，拉回后该行直接显示本地 ✓，不会再拉第二遍。
+
+5) pc_apps/console/joint_capture_test.py — 正常路径断言：
+   assertEqual(out.name, 'hc_mock_001')
+   assertEqual(out, Path(tmp) / 'hc_mock_001')
+   assertFalse(list(Path(tmp).glob('joint_*')), '不得再产生 joint_* 第二身份目录')
+   新增 test_unexpected_board_sid_is_rejected_without_writing。
+
+6) pc_apps/console/README.txt — 「captures\remote\<板端会话号>\」+ 一句「拉回后该行直接显示本地 ✓，
+   不会重复拉取」。
+
+7) pc_apps/console/console_html.test.js — 联合完成消息示例 sid：joint_cap_* → cap_*。

@@ -1,0 +1,30 @@
+{
+  "note": "R6 端到端复核：修复版 Recorder（板端控制词打桩）+ 真实 fetch（只读复制分支）→ 临时目录，跑完清理。以下为运行 stdout 原文。",
+  "run": {
+    "state": "completed",
+    "session_id": "cap_20261015_111738",
+    "path": "C:\\Users\\30680\\AppData\\Local\\Temp\\opencode\\r6_e2e\\joint_cap_20261015_111738",
+    "bytes": 255566544,
+    "error": null,
+    "fetch_dir_used": "D:\\Code\\ldiar\\pc_apps\\human_replay",
+    "joint_json": {
+      "state": "completed",
+      "mode": "staged_capture",
+      "session_id": "cap_20261015_111738",
+      "created_iso": "2026-10-15T12:58:44+0800",
+      "synchronization": "BOARD_MASTER_CLOCK_pc_camera_host_receipt",
+      "finished_iso": "2026-10-15T12:58:47+0800",
+      "radar_frames": 186,
+      "bytes": 255566544,
+      "error": null
+    },
+    "meta_summary": {
+      "session_id": "cap_20261015_111738",
+      "frames": 186,
+      "total_points": 9125787,
+      "joint_recording": {"mode": "staged_capture", "board_session_id": "cap_20261015_111738"}
+    },
+    "files": {"camera.mjpeg": 0, "joint.json": 322, "meta.json": 44508, "points.bin": 255522036}
+  },
+  "verdict": "E2E OK (exit 0)：joint.json 已含 completed 终态；points.bin 255,522,036B 整；板端会话 transferred 未被动状态机（只读复制）。"
+}

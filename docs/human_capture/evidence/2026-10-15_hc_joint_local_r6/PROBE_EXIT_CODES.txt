@@ -1,0 +1,9 @@
+== 最终（stage2，返工重打后）==
+dist/Console.exe --check-joint-capture  exit=0  page_ok=true page_version 3/3 joint_fetch_ok=true
+dist/Console.exe --check-startup        exit=1  ok=false error=real fall replay did not start
+  （既有缺 captures/remote/cap_20261013_094333，R4/R5 同因，非本轮）
+== stage1（首次重打；构建窗口内 console_gui.py 被并行工作流修改，判定返工；探针结果见 *_stage1.json）==
+dist/Console.exe --check-joint-capture  exit=0  page_ok=true joint_fetch_ok=true
+== 源码 ==
+source console_gui.py --check-joint-capture  exit=0  page_ok=true joint_fetch_ok=true
+重复指向已存在报告文件（A8）               exit=2  "check report already exists, not overwritten"

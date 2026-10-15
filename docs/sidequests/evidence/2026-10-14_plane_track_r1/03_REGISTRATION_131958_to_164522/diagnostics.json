@@ -1,0 +1,551 @@
+{
+  "kind": "registration_diagnostics",
+  "schema": 1,
+  "protocol": {
+    "id": "r3.6_fine_static_v1",
+    "fit_set": "curFinestrong(0.06m rebin) -> refFine(occ>=0.9, 0.06m rebin)",
+    "normals": "refFine PCA 0.10m, min-eigvec",
+    "residual": "point-to-plane |n·(Rs+t-q)|",
+    "holdout": "even/odd half-split refit (fit-half -> eval-other)"
+  },
+  "support": {
+    "n_static_source": 11064,
+    "n_static_target": 12705,
+    "n_correspondence": 6190,
+    "inlier_ratio": 0.559472161966739,
+    "coverage_xy": 0.8461538461538461,
+    "azimuth_sectors": [
+      0,
+      0,
+      321,
+      2295,
+      2570,
+      1004,
+      0,
+      0
+    ],
+    "max_sector_share": 0.41518578352180935
+  },
+  "geometry": {
+    "jtj_eigvals": [
+      35096.56427283914,
+      15188.427715457668,
+      3971.0193964897207,
+      1803.587717360017,
+      659.6080973820343,
+      258.21052388719386
+    ],
+    "eig_ratio": 0.007357145328524942,
+    "condition_number": 135.92228443861572
+  },
+  "residual": {
+    "fit": {
+      "n": 10649,
+      "p50": 0.00914443501921374,
+      "p90": 0.031636277293943874
+    },
+    "holdout": {
+      "n": 10655,
+      "p50": 0.008667353603478624,
+      "p90": 0.03088003641502325
+    },
+    "holdout_fit_ratio_p50": 0.9478282239708959,
+    "half_split": [
+      {
+        "R": [
+          0.9997170918835322,
+          0.0013292373162966384,
+          0.023748038320885408,
+          -0.0018380911216329383,
+          0.9997689137073378,
+          0.021418230680345682,
+          -0.023714080563282423,
+          -0.02145582234743982,
+          0.9994885142263689
+        ],
+        "t": [
+          -0.036476169584165864,
+          -0.02844718916340296,
+          0.03280156559600611
+        ],
+        "eu": {
+          "roll": -1.2297682932097294,
+          "pitch": 1.3588441109972806,
+          "yaw": -0.10534454778587171
+        },
+        "iters": 86
+      },
+      {
+        "R": [
+          0.9997364702904299,
+          0.0015935151595424504,
+          0.022900888206977835,
+          -0.0020893974008344292,
+          0.9997635185275056,
+          0.021645818071889977,
+          -0.022860979631975007,
+          -0.02168796281203665,
+          0.9995033806242631
+        ],
+        "t": [
+          -0.03547406811233116,
+          -0.02712683616605492,
+          0.03105133681895332
+        ],
+        "eu": {
+          "roll": -1.2430510892211184,
+          "pitch": 1.3099517674709786,
+          "yaw": -0.11974503486971243
+        },
+        "iters": 77
+      }
+    ]
+  },
+  "basins": {
+    "solutions": [
+      {
+        "init": "identity",
+        "R": [
+          0.9997208045621481,
+          0.0014437651106358202,
+          0.023584496346467688,
+          -0.0019514728432714285,
+          0.9997665484843343,
+          0.021518370883097975,
+          -0.02354792303693051,
+          -0.021558387556259734,
+          0.9994902356934863
+        ],
+        "t": [
+          -0.03648078779443142,
+          -0.02785904607700541,
+          0.03212755281065811
+        ],
+        "iters": 94,
+        "half_split": [
+          {
+            "R": [
+              0.9997170918835315,
+              0.0013292373162969858,
+              0.023748038320885602,
+              -0.001838091121633214,
+              0.9997689137073381,
+              0.021418230680345762,
+              -0.02371408056328272,
+              -0.021455822347439736,
+              0.9994885142263688
+            ],
+            "t": [
+              -0.03647616958416458,
+              -0.028447189163402484,
+              0.03280156559600667
+            ],
+            "eu": {
+              "roll": -1.2297682932097247,
+              "pitch": 1.3588441109972975,
+              "yaw": -0.10534454778588757
+            },
+            "iters": 88
+          },
+          {
+            "R": [
+              0.9997364702904297,
+              0.0015935151595425658,
+              0.02290088820697797,
+              -0.0020893974008342367,
+              0.9997635185275053,
+              0.02164581807188988,
+              -0.02286097963197517,
+              -0.021687962812036603,
+              0.9995033806242632
+            ],
+            "t": [
+              -0.03547406811233094,
+              -0.027126836166055067,
+              0.031051336818953515
+            ],
+            "eu": {
+              "roll": -1.2430510892211153,
+              "pitch": 1.309951767470988,
+              "yaw": -0.11974503486970142
+            },
+            "iters": 95
+          }
+        ],
+        "self_rot": 0.05258668192922946,
+        "self_t": 0.0024105684328557127,
+        "holdout_p50": 0.008667353603478842
+      },
+      {
+        "init": "tls",
+        "R": [
+          0.9997208045621485,
+          0.0014437651106356457,
+          0.023584496346467452,
+          -0.0019514728432714478,
+          0.9997665484843343,
+          0.021518370883098027,
+          -0.02354792303693037,
+          -0.021558387556259797,
+          0.9994902356934863
+        ],
+        "t": [
+          -0.03648078779443213,
+          -0.027859046077005473,
+          0.03212755281065788
+        ],
+        "iters": 90,
+        "half_split": [
+          {
+            "R": [
+              0.9997170918835324,
+              0.0013292373162964658,
+              0.023748038320885335,
+              -0.0018380911216324888,
+              0.9997689137073376,
+              0.021418230680345623,
+              -0.02371408056328239,
+              -0.02145582234743964,
+              0.9994885142263685
+            ],
+            "t": [
+              -0.03647616958416619,
+              -0.02844718916340388,
+              0.03280156559600624
+            ],
+            "eu": {
+              "roll": -1.2297682932097196,
+              "pitch": 1.3588441109972786,
+              "yaw": -0.10534454778584593
+            },
+            "iters": 91
+          },
+          {
+            "R": [
+              0.9997364702904303,
+              0.00159351515954255,
+              0.022900888206977364,
+              -0.0020893974008342744,
+              0.9997635185275059,
+              0.0216458180718898,
+              -0.02286097963197456,
+              -0.021687962812036412,
+              0.9995033806242626
+            ],
+            "t": [
+              -0.03547406811233198,
+              -0.027126836166055622,
+              0.031051336818952897
+            ],
+            "eu": {
+              "roll": -1.2430510892211053,
+              "pitch": 1.3099517674709529,
+              "yaw": -0.11974503486970349
+            },
+            "iters": 81
+          }
+        ],
+        "self_rot": 0.05258668191536798,
+        "self_t": 0.002410568432856545,
+        "holdout_p50": 0.008667353603478504
+      }
+    ],
+    "cross_method_notes": "identity/tls ppICP diagnostic family only; fixed B is never selected/replaced by C; see R3.6",
+    "resolution": {
+      "resolved": true,
+      "by": "single_basin"
+    }
+  },
+  "sanity": {
+    "roll_deg": {
+      "observed": -1.0448869513538346,
+      "limit": 6,
+      "band": "pass"
+    },
+    "pitch_deg": {
+      "observed": 1.4376801288360588,
+      "limit": 3,
+      "band": "pass"
+    },
+    "yaw_deg": {
+      "observed": -0.18730046042105095,
+      "limit": 5,
+      "band": "pass"
+    },
+    "theta_deg": {
+      "observed": 1.7857277252461097,
+      "limit": 7,
+      "band": "pass"
+    },
+    "translation": {
+      "observed": 0.05756917620500547,
+      "limit": 0.2,
+      "band": "pass"
+    },
+    "t_z": {
+      "observed": 0.03756164535290251,
+      "limit": 0.15,
+      "band": "pass"
+    }
+  },
+  "direction_check": {
+    "forward_p50": 0.00914443501921374,
+    "inverse_p50": 0.033561519920484756,
+    "n": 10649,
+    "protocol": "same forward-correspondence set; inverse R and -R^T t"
+  },
+  "gate": {
+    "profile_id": "reg_gate_v1",
+    "thresholds": {
+      "profile_id": "reg_gate_v1",
+      "bands": {
+        "fit_p50": [
+          "max",
+          0.02,
+          0.03,
+          "RESIDUAL_HIGH"
+        ],
+        "fit_p90": [
+          "max",
+          0.08,
+          0.1,
+          "RESIDUAL_HIGH"
+        ],
+        "holdout_p50": [
+          "max",
+          0.02,
+          0.03,
+          "HOLDOUT_MISMATCH"
+        ],
+        "holdout_fit_ratio_p50": [
+          "max",
+          1.5,
+          2,
+          "HOLDOUT_MISMATCH"
+        ],
+        "n_static_source": [
+          "min",
+          5000,
+          2000,
+          "WEAK_SUPPORT"
+        ],
+        "n_static_target": [
+          "min",
+          5000,
+          2000,
+          "WEAK_SUPPORT"
+        ],
+        "n_correspondence": [
+          "min",
+          500,
+          200,
+          "SPARSE_CORRESPONDENCE"
+        ],
+        "inlier_ratio": [
+          "min",
+          0.5,
+          0.3,
+          "SPARSE_CORRESPONDENCE"
+        ],
+        "coverage_xy": [
+          "min",
+          0.5,
+          0.3,
+          "LOW_COVERAGE"
+        ],
+        "max_sector_share": [
+          "max",
+          0.6,
+          0.75,
+          "WALL_CONCENTRATION"
+        ],
+        "condition_number": [
+          "max",
+          10000,
+          100000,
+          "ILL_CONDITIONED"
+        ],
+        "eig_ratio": [
+          "min",
+          0.0001,
+          0.00001,
+          "ILL_CONDITIONED"
+        ]
+      },
+      "sanity": {
+        "roll_deg": 6,
+        "pitch_deg": 3,
+        "yaw_deg": 5,
+        "theta_deg": 7,
+        "translation": 0.2,
+        "t_z": 0.15
+      },
+      "self_rot": 0.25,
+      "self_t": 0.01,
+      "compete_rot": 0.02,
+      "compete_t": 0.01,
+      "advantage": 0.95,
+      "provisional": [
+        "n_correspondence",
+        "inlier_ratio",
+        "coverage_xy",
+        "max_sector_share",
+        "condition_number",
+        "eig_ratio"
+      ]
+    },
+    "checks": [
+      {
+        "id": "fit_p50",
+        "metric": 0.00914443501921374,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "fit_p90",
+        "metric": 0.031636277293943874,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "holdout_p50",
+        "metric": 0.008667353603478624,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "holdout_fit_ratio_p50",
+        "metric": 0.9478282239708959,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "n_static_source",
+        "metric": 11064,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "n_static_target",
+        "metric": 12705,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "n_correspondence",
+        "metric": 6190,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "inlier_ratio",
+        "metric": 0.559472161966739,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "coverage_xy",
+        "metric": 0.8461538461538461,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "max_sector_share",
+        "metric": 0.41518578352180935,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "condition_number",
+        "metric": 135.92228443861572,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "eig_ratio",
+        "metric": 0.007357145328524942,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "roll_deg",
+        "metric": -1.0448869513538346,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "pitch_deg",
+        "metric": 1.4376801288360588,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "yaw_deg",
+        "metric": -0.18730046042105095,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "theta_deg",
+        "metric": 1.7857277252461097,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "translation",
+        "metric": 0.05756917620500547,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "t_z",
+        "metric": 0.03756164535290251,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "basins",
+        "metric": null,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      },
+      {
+        "id": "direction",
+        "metric": 0.00914443501921374,
+        "band": "pass",
+        "verdict": true,
+        "reason": null
+      }
+    ],
+    "status": "PASS",
+    "reasons": [],
+    "basin_resolution": {
+      "resolved": true,
+      "by": "single_basin"
+    }
+  },
+  "pair": {
+    "source": "cap_20261013_131958",
+    "reference": "cap_20261014_164522"
+  },
+  "created_utc": "2026-10-14T09:06:25.534Z"
+}

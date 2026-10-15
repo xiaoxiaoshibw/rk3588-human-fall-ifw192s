@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "node",
+    "-e",
+    "\nconst fs=require('fs'),path=require('path'),REG=require(process.argv[1]);\nconst [root,sj,rj,out]=process.argv.slice(2);\nconst result=REG.writeJob({root,source:'cap_20261013_094333',reference:'cap_20261013_131958',\n    sourceJob:sj,referenceJob:rj,outdir:out});\nconst a=REG.load(out,{root});\nconst summary={...result,loader_state:a.state,loader_reasons:a.reasons,\n    full_gate:a.diagnostics.gate, residual:a.diagnostics.residual,\n    support:a.diagnostics.support, sanity:a.diagnostics.sanity,\n    rotation:a.registration.euler_deg_zyx,translation:a.registration.translation_m,\n    fusion_default_closed:REG.fusionKeys(false,a,{root})===null,\n    fusion_explicit_enabled:REG.fusionKeys(true,a,{root})!==null};\nfs.writeFileSync(path.join(out,'EXPERIMENT_SUMMARY.json'),JSON.stringify(summary,null,2)+'\\n',{flag:'wx'});\nconsole.log(JSON.stringify({loader_state:a.state,quality:result.quality}));\n",
+    "D:\\Code\\ldiar\\pc_apps\\human_replay\\registration.js",
+    "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-14_hf_mainline_leveling_r1\\run_02\\workspace",
+    "d59fd9d11d6f4586b54a549254792477",
+    "8f449991793c41a8b8bda8b36e451937",
+    "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-14_hf_mainline_leveling_r1\\run_02\\original_patches\\registration"
+  ],
+  "exit_code": 0
+}

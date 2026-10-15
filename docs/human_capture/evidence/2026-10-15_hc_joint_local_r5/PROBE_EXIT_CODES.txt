@@ -1,0 +1,4 @@
+dist/Console.exe --check-joint-capture <path>  exit=0  page_ok=true page_version 3/3 true
+dist/Console.exe --check-startup <path>       exit=1  ok=false error=real fall replay did not start
+  （real fall 未起 = 既有缺 captures/remote/cap_20261013_094333 数据，R4 已记录，非本轮）
+source console_gui.py --check-joint-capture   exit=0  page_ok=true page_version 3/3 true

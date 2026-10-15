@@ -1,0 +1,560 @@
+{
+  "arms": {
+    "original_patches": {
+      "preflight": {
+        "cap_20261013_094333": {
+          "recommended": "tls",
+          "consensus": "GOOD",
+          "fit_points": 116754,
+          "fit_frames": 161,
+          "holdout_ordinals": [
+            54,
+            108,
+            163
+          ],
+          "fit_holdout_disjoint": true,
+          "roll_deg": 1.3034503443866372,
+          "pitch_deg": 25.945995329742104,
+          "offset_source_m": 1.147882542663829
+        },
+        "cap_20261013_131958": {
+          "recommended": "tls",
+          "consensus": "GOOD",
+          "fit_points": 50583,
+          "fit_frames": 94,
+          "holdout_ordinals": [
+            32,
+            64,
+            96
+          ],
+          "fit_holdout_disjoint": true,
+          "roll_deg": -1.5601481466409257,
+          "pitch_deg": 27.05386958883873,
+          "offset_source_m": 1.3566335069482636
+        }
+      },
+      "jobs": {
+        "cap_20261013_094333": {
+          "job_id": "d59fd9d11d6f4586b54a549254792477",
+          "export_check": {
+            "status": "PASS",
+            "rows": 8055529,
+            "invalid_preserved": 1233506,
+            "opaque_bytes_preserved": true,
+            "float32_max_abs_error_m": 9.406957808266725e-07
+          },
+          "transform": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-14_hf_mainline_leveling_r1\\run_02\\workspace\\captures\\leveled\\d59fd9d11d6f4586b54a549254792477\\tls\\transform.json"
+        },
+        "cap_20261013_131958": {
+          "job_id": "8f449991793c41a8b8bda8b36e451937",
+          "export_check": {
+            "status": "PASS",
+            "rows": 4765607,
+            "invalid_preserved": 724299,
+            "opaque_bytes_preserved": true,
+            "float32_max_abs_error_m": 9.531708116128357e-07
+          },
+          "transform": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-14_hf_mainline_leveling_r1\\run_02\\workspace\\captures\\leveled\\8f449991793c41a8b8bda8b36e451937\\tls\\transform.json"
+        }
+      },
+      "registration": {
+        "artifact_id": "9e60edafd9da04a498cdd27c67aaf5814f608078ab28f568e55dde34d84e6d62",
+        "quality": {
+          "status": "REJECT",
+          "gate_profile": "reg_gate_v1",
+          "reasons": [
+            "RESIDUAL_HIGH",
+            "HOLDOUT_MISMATCH",
+            "SPARSE_CORRESPONDENCE"
+          ]
+        },
+        "outdir": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-14_hf_mainline_leveling_r1\\run_02\\original_patches\\registration",
+        "loader_state": "REJECTED",
+        "loader_reasons": [
+          "RESIDUAL_HIGH",
+          "HOLDOUT_MISMATCH",
+          "SPARSE_CORRESPONDENCE"
+        ],
+        "full_gate": {
+          "profile_id": "reg_gate_v1",
+          "thresholds": {
+            "profile_id": "reg_gate_v1",
+            "bands": {
+              "fit_p50": [
+                "max",
+                0.02,
+                0.03,
+                "RESIDUAL_HIGH"
+              ],
+              "fit_p90": [
+                "max",
+                0.08,
+                0.1,
+                "RESIDUAL_HIGH"
+              ],
+              "holdout_p50": [
+                "max",
+                0.02,
+                0.03,
+                "HOLDOUT_MISMATCH"
+              ],
+              "holdout_fit_ratio_p50": [
+                "max",
+                1.5,
+                2,
+                "HOLDOUT_MISMATCH"
+              ],
+              "n_static_source": [
+                "min",
+                5000,
+                2000,
+                "WEAK_SUPPORT"
+              ],
+              "n_static_target": [
+                "min",
+                5000,
+                2000,
+                "WEAK_SUPPORT"
+              ],
+              "n_correspondence": [
+                "min",
+                500,
+                200,
+                "SPARSE_CORRESPONDENCE"
+              ],
+              "inlier_ratio": [
+                "min",
+                0.5,
+                0.3,
+                "SPARSE_CORRESPONDENCE"
+              ],
+              "coverage_xy": [
+                "min",
+                0.5,
+                0.3,
+                "LOW_COVERAGE"
+              ],
+              "max_sector_share": [
+                "max",
+                0.6,
+                0.75,
+                "WALL_CONCENTRATION"
+              ],
+              "condition_number": [
+                "max",
+                10000,
+                100000,
+                "ILL_CONDITIONED"
+              ],
+              "eig_ratio": [
+                "min",
+                0.0001,
+                1e-05,
+                "ILL_CONDITIONED"
+              ]
+            },
+            "sanity": {
+              "roll_deg": 6,
+              "pitch_deg": 3,
+              "yaw_deg": 5,
+              "theta_deg": 7,
+              "translation": 0.2,
+              "t_z": 0.15
+            },
+            "self_rot": 0.25,
+            "self_t": 0.01,
+            "compete_rot": 0.02,
+            "compete_t": 0.01,
+            "advantage": 0.95,
+            "provisional": [
+              "n_correspondence",
+              "inlier_ratio",
+              "coverage_xy",
+              "max_sector_share",
+              "condition_number",
+              "eig_ratio"
+            ]
+          },
+          "checks": [
+            {
+              "id": "fit_p50",
+              "metric": 0.029690836690552065,
+              "band": "warn",
+              "verdict": false,
+              "reason": "RESIDUAL_HIGH"
+            },
+            {
+              "id": "fit_p90",
+              "metric": 0.10573127981859906,
+              "band": "reject",
+              "verdict": false,
+              "reason": "RESIDUAL_HIGH"
+            },
+            {
+              "id": "holdout_p50",
+              "metric": 0.024671209480896704,
+              "band": "warn",
+              "verdict": false,
+              "reason": "HOLDOUT_MISMATCH"
+            },
+            {
+              "id": "holdout_fit_ratio_p50",
+              "metric": 0.8309368219571711,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "n_static_source",
+              "metric": 8452,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "n_static_target",
+              "metric": 13330,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "n_correspondence",
+              "metric": 3817,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "inlier_ratio",
+              "metric": 0.4516090866067203,
+              "band": "warn",
+              "verdict": false,
+              "reason": "SPARSE_CORRESPONDENCE"
+            },
+            {
+              "id": "coverage_xy",
+              "metric": 0.8006993006993007,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "max_sector_share",
+              "metric": 0.5192559601781503,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "condition_number",
+              "metric": 106.6172040214076,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "eig_ratio",
+              "metric": 0.009379349319638982,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "roll_deg",
+              "metric": -2.214653892685949,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "pitch_deg",
+              "metric": 0.9989057836597381,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "yaw_deg",
+              "metric": -0.13580791590467575,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "theta_deg",
+              "metric": 2.4321960817403485,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "translation",
+              "metric": 0.18625377292952894,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "t_z",
+              "metric": 0.13168805440482695,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "basins",
+              "metric": null,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            },
+            {
+              "id": "direction",
+              "metric": 0.029690836690552065,
+              "band": "pass",
+              "verdict": true,
+              "reason": null
+            }
+          ],
+          "status": "REJECT",
+          "reasons": [
+            "RESIDUAL_HIGH",
+            "HOLDOUT_MISMATCH",
+            "SPARSE_CORRESPONDENCE"
+          ],
+          "basin_resolution": {
+            "resolved": true,
+            "by": "single_basin"
+          }
+        },
+        "residual": {
+          "fit": {
+            "n": 8337,
+            "p50": 0.029690836690552065,
+            "p90": 0.10573127981859906
+          },
+          "holdout": {
+            "n": 8334,
+            "p50": 0.024671209480896704,
+            "p90": 0.1199985352966343
+          },
+          "holdout_fit_ratio_p50": 0.8309368219571711,
+          "half_split": [
+            {
+              "R": [
+                0.9999969444981799,
+                -0.0008607536190781539,
+                0.002317347084067853,
+                0.0007466368050784806,
+                0.99880815057181,
+                0.04880287783318833,
+                -0.0023565924089875693,
+                -0.04880099849928295,
+                0.9988057413820199
+              ],
+              "t": [
+                0.18324351207817188,
+                -0.027584044697634043,
+                0.13277776630054708
+              ],
+              "eu": {
+                "roll": -2.797210047173063,
+                "pitch": 0.13502292404334526,
+                "yaw": 0.04277926052287899
+              },
+              "iters": 117
+            },
+            {
+              "R": [
+                0.9999894706140429,
+                -0.0007999079039018102,
+                0.0045187175603421705,
+                0.0005885042016136644,
+                0.9989137787930539,
+                0.04659309176460293,
+                -0.004551079415869651,
+                -0.0465899418836865,
+                0.9989037315935037
+              ],
+              "t": [
+                0.17887432934126393,
+                -0.02107572012096654,
+                0.13175920725346976
+              ],
+              "eu": {
+                "roll": -2.6704013700768985,
+                "pitch": 0.26075854291604217,
+                "yaw": 0.03371915812743562
+              },
+              "iters": 105
+            }
+          ]
+        },
+        "support": {
+          "n_static_source": 8452,
+          "n_static_target": 13330,
+          "n_correspondence": 3817,
+          "inlier_ratio": 0.4516090866067203,
+          "coverage_xy": 0.8006993006993007,
+          "azimuth_sectors": [
+            0,
+            0,
+            169,
+            1242,
+            1982,
+            424,
+            0,
+            0
+          ],
+          "max_sector_share": 0.5192559601781503
+        },
+        "sanity": {
+          "roll_deg": {
+            "observed": -2.214653892685949,
+            "limit": 6,
+            "band": "pass"
+          },
+          "pitch_deg": {
+            "observed": 0.9989057836597381,
+            "limit": 3,
+            "band": "pass"
+          },
+          "yaw_deg": {
+            "observed": -0.13580791590467575,
+            "limit": 5,
+            "band": "pass"
+          },
+          "theta_deg": {
+            "observed": 2.4321960817403485,
+            "limit": 7,
+            "band": "pass"
+          },
+          "translation": {
+            "observed": 0.18625377292952894,
+            "limit": 0.2,
+            "band": "pass"
+          },
+          "t_z": {
+            "observed": 0.13168805440482695,
+            "limit": 0.15,
+            "band": "pass"
+          }
+        },
+        "rotation": {
+          "roll": -2.214653892685949,
+          "pitch": 0.9989057836597381,
+          "yaw": -0.13580791590467575
+        },
+        "translation": [
+          0.12982502451737787,
+          -0.022230323133461332,
+          0.13168805440482695
+        ],
+        "fusion_default_closed": true,
+        "fusion_explicit_enabled": false
+      },
+      "status": "REJECTED"
+    },
+    "shared_source_patches": {
+      "preflight": {
+        "cap_20261013_094333": {
+          "recommended": "tls",
+          "consensus": "GOOD",
+          "fit_points": 116754,
+          "fit_frames": 161,
+          "holdout_ordinals": [
+            54,
+            108,
+            163
+          ],
+          "fit_holdout_disjoint": true,
+          "roll_deg": 1.3034503443866372,
+          "pitch_deg": 25.945995329742104,
+          "offset_source_m": 1.147882542663829
+        },
+        "cap_20261013_131958": {
+          "recommended": null,
+          "consensus": "NO_RECOMMENDATION",
+          "fit_points": 69328,
+          "fit_frames": 94,
+          "holdout_ordinals": [
+            32,
+            64,
+            96
+          ],
+          "fit_holdout_disjoint": true,
+          "roll_deg": -2.5365220036967284,
+          "pitch_deg": 26.069222165748887,
+          "offset_source_m": 1.3715921185828657
+        }
+      },
+      "status": "BLOCKED_LEVELING_QUALITY"
+    },
+    "shared_reference_patches": {
+      "preflight": {
+        "cap_20261013_094333": {
+          "recommended": null,
+          "consensus": "NO_RECOMMENDATION",
+          "fit_points": 95379,
+          "fit_frames": 161,
+          "holdout_ordinals": [
+            54,
+            108,
+            163
+          ],
+          "fit_holdout_disjoint": true,
+          "roll_deg": 7.06864666650541,
+          "pitch_deg": 40.30287056954886,
+          "offset_source_m": 1.1296323283190732
+        },
+        "cap_20261013_131958": {
+          "recommended": "tls",
+          "consensus": "GOOD",
+          "fit_points": 50583,
+          "fit_frames": 94,
+          "holdout_ordinals": [
+            32,
+            64,
+            96
+          ],
+          "fit_holdout_disjoint": true,
+          "roll_deg": -1.5601481466409257,
+          "pitch_deg": 27.05386958883873,
+          "offset_source_m": 1.3566335069482636
+        }
+      },
+      "status": "BLOCKED_LEVELING_QUALITY"
+    }
+  },
+  "jobs": {
+    "original_patches": {
+      "cap_20261013_094333": {
+        "job_id": "d59fd9d11d6f4586b54a549254792477",
+        "export_check": {
+          "status": "PASS",
+          "rows": 8055529,
+          "invalid_preserved": 1233506,
+          "opaque_bytes_preserved": true,
+          "float32_max_abs_error_m": 9.406957808266725e-07
+        },
+        "transform": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-14_hf_mainline_leveling_r1\\run_02\\workspace\\captures\\leveled\\d59fd9d11d6f4586b54a549254792477\\tls\\transform.json"
+      },
+      "cap_20261013_131958": {
+        "job_id": "8f449991793c41a8b8bda8b36e451937",
+        "export_check": {
+          "status": "PASS",
+          "rows": 4765607,
+          "invalid_preserved": 724299,
+          "opaque_bytes_preserved": true,
+          "float32_max_abs_error_m": 9.531708116128357e-07
+        },
+        "transform": "D:\\Code\\ldiar\\docs\\human_fall\\evidence\\2026-10-14_hf_mainline_leveling_r1\\run_02\\workspace\\captures\\leveled\\8f449991793c41a8b8bda8b36e451937\\tls\\transform.json"
+      }
+    }
+  },
+  "protected_changed": [],
+  "elapsed_s": 117.625,
+  "physical_truth": "UNKNOWN",
+  "production_promotion": "BLOCKED"
+}

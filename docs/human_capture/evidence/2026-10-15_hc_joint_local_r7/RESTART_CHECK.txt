@@ -1,0 +1,14 @@
+﻿总控制台重启核对（R7-11）
+exe: pc_apps/console/dist/Console.exe 193812397B sha256 2E275737E3398A9CCBF7D8A5DE6D0983EDDCBF95946C7CB14CF342D5E5EB4082（built 2026-10-15 14:57:19；完整发布信息见 BUILD.json / RUNNING_EXE_PROBE.txt）
+
+第一次重启 2026-10-15 14:59:14/14:59:16  桌面快捷方式 总控制台.lnk -> dist/Console.exe
+  pid 8792(父)/41648(应用)  8901 监听  本机联合录制服务 /api/status: state=idle output_root=D:\Code\ldiar\data\sessions camera_url=http://192.168.31.58:8081/stream radar_board_url=http://192.168.31.58:8766
+  该实例在 15:00 前退出（原因未知，可能被并行工作流或用户关闭），未取到它的 /api/camera 探针。
+
+第二次重启 2026-10-15 15:02:29/15:02:31  dist/Console.exe 直接启动（同 exe）
+  pid 35868(父)/43916(应用)  端口 56067/56066/56065/42904 + 8901
+  联合录制服务 port 56067: state=idle output_root=D:\Code\ldiar\data\sessions（= captures\remote 联结目标，与回页面板 C.DEST_ROOT 同一物理目录）
+  行为探针见 RUNNING_EXE_PROBE.txt：/api/camera 路由存在、页面含 R7+R8 文案。
+
+注：output_root 之所以显示 data\sessions 而非 captures\remote，是 Recorder 对输出根做了 resolve()，
+captures\remote 是指向 data\sessions 的目录联接（2026-10-14 DATA-ROOT-JUNCTION-01），两者同一目录。

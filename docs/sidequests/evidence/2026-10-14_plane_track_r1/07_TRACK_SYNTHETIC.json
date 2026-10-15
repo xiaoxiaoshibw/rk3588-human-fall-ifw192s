@@ -1,0 +1,103 @@
+{
+  "sid": "synthetic",
+  "settings": {
+    "range_min_m": 1.0,
+    "range_max_m": 10.0,
+    "height_min_m": -0.5,
+    "height_max_m": 4.5,
+    "cluster_cell_m": 0.3,
+    "min_cluster_points": 5,
+    "preferred_cluster_points": 8,
+    "pca_min_points": 5,
+    "pca_axis_ratio": 2.5,
+    "denoise_enabled": false,
+    "denoise_radius_m": 0.12,
+    "denoise_min_neighbors": 2,
+    "max_points": 200000
+  },
+  "area_m2": 0.0117,
+  "range_m": 6.0,
+  "frame_period_s": 0.103,
+  "speed_cases": {
+    "speed_0_m_s": {
+      "true_speed_m_s": 0.0,
+      "expected_streak_m": 0.0,
+      "summary": {
+        "frames": 30,
+        "detected_frames": 30,
+        "lost_frames": 0,
+        "lost_runs": 0,
+        "id_switches": 0,
+        "reinit_count": 1,
+        "max_step_speed_m_s": 0.0,
+        "max_step_m": 0.0,
+        "gate_m": 0.35,
+        "adaptive_gate": true,
+        "detection_rate": 1.0
+      },
+      "cluster_frames_near_target": 30,
+      "streak_m_median": 0.0,
+      "measured_max_step_speed_m_s": 0.0
+    },
+    "speed_3_m_s": {
+      "true_speed_m_s": 3.0,
+      "expected_streak_m": 0.309,
+      "summary": {
+        "frames": 30,
+        "detected_frames": 26,
+        "lost_frames": 4,
+        "lost_runs": 3,
+        "id_switches": 0,
+        "reinit_count": 1,
+        "max_step_speed_m_s": 3.0000000000000067,
+        "max_step_m": 0.30900000000000105,
+        "gate_m": 0.35,
+        "adaptive_gate": true,
+        "detection_rate": 0.8666666666666667
+      },
+      "cluster_frames_near_target": 26,
+      "streak_m_median": 0.30900000000000016,
+      "measured_max_step_speed_m_s": 3.0000000000000067
+    },
+    "speed_5_m_s": {
+      "true_speed_m_s": 5.0,
+      "expected_streak_m": 0.515,
+      "summary": {
+        "frames": 30,
+        "detected_frames": 16,
+        "lost_frames": 14,
+        "lost_runs": 13,
+        "id_switches": 0,
+        "reinit_count": 1,
+        "max_step_speed_m_s": 5.000000000000006,
+        "max_step_m": 0.5150000000000006,
+        "gate_m": 0.35,
+        "adaptive_gate": true,
+        "detection_rate": 0.5333333333333333
+      },
+      "cluster_frames_near_target": 16,
+      "streak_m_median": 0.515,
+      "measured_max_step_speed_m_s": 5.000000000000006
+    },
+    "speed_10_m_s": {
+      "true_speed_m_s": 10.0,
+      "expected_streak_m": 1.03,
+      "summary": {
+        "frames": 30,
+        "detected_frames": 8,
+        "lost_frames": 22,
+        "lost_runs": 21,
+        "id_switches": 0,
+        "reinit_count": 1,
+        "max_step_speed_m_s": 10.000000000000004,
+        "max_step_m": 1.0300000000000007,
+        "gate_m": 0.35,
+        "adaptive_gate": true,
+        "detection_rate": 0.26666666666666666
+      },
+      "cluster_frames_near_target": 8,
+      "streak_m_median": 1.0300000000000002,
+      "measured_max_step_speed_m_s": 10.000000000000004
+    }
+  }
+}

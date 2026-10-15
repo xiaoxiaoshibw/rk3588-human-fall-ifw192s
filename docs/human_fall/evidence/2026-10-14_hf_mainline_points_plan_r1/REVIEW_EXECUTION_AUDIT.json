@@ -1,0 +1,95 @@
+{
+  "requested_model": "opencode-go/deepseek-v4.1-flash",
+  "agent": "plan",
+  "snapshot": false,
+  "pure": true,
+  "writes_commands_algorithms_tests": "DENIED_AND_NOT_OBSERVED",
+  "sessions": [
+    {
+      "log": "OPENCODE_REVIEW_V1_NOSNAPSHOT.jsonl",
+      "session_ids": [
+        "ses_ec70e508effetHHugD31AJrhdh"
+      ],
+      "tool_counts": {
+        "read": 22,
+        "glob": 5,
+        "grep": 4
+      },
+      "failed_tools": [
+        {
+          "tool": "read",
+          "input": {
+            "filePath": "C:\\Users\\30680\\.codex\\skills\\ponytail\\SKILL.md"
+          },
+          "error": "The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{\"permission\":\"*\",\"action\":\"allow\",\"pattern\":\"*\"},{\"permission\":\"external_directory\",\"pattern\":\"*\",\"action\":\"ask\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\tool-output\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\opencode\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.claude\\\\skills\\\\ponytail\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\skills\\\\ponytail\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\plans\\\\*\",\"action\":\"allow\"},{\"permission\":\"*\",\"action\":\"deny\",\"pattern\":\"*\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\tool-output\\\\*\",\"action\":\"allow\"}]"
+        },
+        {
+          "tool": "read",
+          "input": {
+            "filePath": "C:\\Users\\30680\\.config\\opencode\\skills\\ponytail\\SKILL.md"
+          },
+          "error": "The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{\"permission\":\"*\",\"action\":\"allow\",\"pattern\":\"*\"},{\"permission\":\"external_directory\",\"pattern\":\"*\",\"action\":\"ask\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\tool-output\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\opencode\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.claude\\\\skills\\\\ponytail\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\skills\\\\ponytail\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\plans\\\\*\",\"action\":\"allow\"},{\"permission\":\"*\",\"action\":\"deny\",\"pattern\":\"*\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\tool-output\\\\*\",\"action\":\"allow\"}]"
+        },
+        {
+          "tool": "read",
+          "input": {
+            "filePath": "C:\\Users\\30680\\.claude\\skills\\ponytail\\SKILL.md"
+          },
+          "error": "The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{\"permission\":\"*\",\"action\":\"allow\",\"pattern\":\"*\"},{\"permission\":\"external_directory\",\"pattern\":\"*\",\"action\":\"ask\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\tool-output\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\opencode\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.claude\\\\skills\\\\ponytail\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\skills\\\\ponytail\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\plans\\\\*\",\"action\":\"allow\"},{\"permission\":\"*\",\"action\":\"deny\",\"pattern\":\"*\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\tool-output\\\\*\",\"action\":\"allow\"}]"
+        },
+        {
+          "tool": "read",
+          "input": {
+            "filePath": "D:\\Code\\radar"
+          },
+          "error": "The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{\"permission\":\"*\",\"action\":\"allow\",\"pattern\":\"*\"},{\"permission\":\"external_directory\",\"pattern\":\"*\",\"action\":\"ask\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\tool-output\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\AppData\\\\Local\\\\Temp\\\\opencode\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.claude\\\\skills\\\\ponytail\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.config\\\\opencode\\\\skills\\\\ponytail\\\\*\",\"action\":\"allow\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\plans\\\\*\",\"action\":\"allow\"},{\"permission\":\"*\",\"action\":\"deny\",\"pattern\":\"*\"},{\"permission\":\"external_directory\",\"pattern\":\"C:\\\\Users\\\\30680\\\\.local\\\\share\\\\opencode\\\\tool-output\\\\*\",\"action\":\"allow\"}]"
+        },
+        {
+          "tool": "grep",
+          "input": {
+            "pattern": "\"reference\"|\"background\"|\"sessions\"",
+            "path": "D:\\Code\\ldiar\\sidequests\\human_fusion_lab_next\\pointset\\r01\\action_output\\catalog.json"
+          },
+          "error": "Ripgrep JSON record exceeded 65536 bytes"
+        },
+        {
+          "tool": "grep",
+          "input": {
+            "pattern": "check_r3_browser|--signed|localhost|8944",
+            "path": "D:\\Code\\ldiar\\sidequests\\human_fusion_lab_next\\pointset\\r01\\check_r3_browser.py"
+          },
+          "error": "Ripgrep JSON record exceeded 65536 bytes"
+        },
+        {
+          "tool": "grep",
+          "input": {
+            "pattern": "background|reference|175227|131958",
+            "path": "D:\\Code\\ldiar\\sidequests\\human_fusion_lab_next\\pointset\\r01\\action_output\\action_catalog.json"
+          },
+          "error": "Ripgrep JSON record exceeded 65536 bytes"
+        }
+      ]
+    },
+    {
+      "log": "OPENCODE_REVIEW_V2.jsonl",
+      "session_ids": [
+        "ses_ec70e508effetHHugD31AJrhdh"
+      ],
+      "tool_counts": {
+        "read": 8,
+        "glob": 4
+      },
+      "failed_tools": []
+    },
+    {
+      "log": "OPENCODE_REVIEW_V3.jsonl",
+      "session_ids": [
+        "ses_ec70e508effetHHugD31AJrhdh"
+      ],
+      "tool_counts": {
+        "read": 1
+      },
+      "failed_tools": []
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>ldiar 仓库 · 系统架构图</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#161a22; --panel2:#1c2130; --line:#3a4256;
+    --prod:#3b82f6;      /* 生产 */
+    --offline:#f59e0b;   /* 离线/GT */
+    --side:#a78bfa;      /* sidequests */
+    --gray:#6b7280;      /* 未上线 / 阻塞 */
+    --txt:#e6e9f0; --txt2:#9aa4b8;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.5 "Segoe UI", "Microsoft YaHei", sans-serif}
+  header{padding:18px 22px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+  header h1{margin:0;font-size:18px;font-weight:600}
+  header .sub{color:var(--txt2);font-size:12px;margin-top:4px}
+  header .legend{display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--txt2);flex-wrap:wrap}
+  .tag{display:inline-flex;align-items:center;gap:6px}
+  .swatch{width:12px;height:12px;border-radius:3px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+
+  main{display:grid;grid-template-columns: 1.05fr 1.05fr 1fr;gap:14px;padding:18px 22px}
+  .lane{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .lane .lane-title{padding:10px 14px;font-weight:600;background:var(--panel2);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .lane .lane-title small{font-weight:400;color:var(--txt2)}
+  .lane .content{padding:14px}
+
+  .layer{margin-bottom:14px}
+  .layer h4{margin:0 0 8px 0;font-size:12px;color:var(--txt2);letter-spacing:1px;text-transform:uppercase}
+  .node{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:13px}
+  .node small{color:var(--txt2);display:block;font-size:11px;margin-top:2px}
+  .node.prod{border-left:3px solid var(--prod)}
+  .node.offline{border-left:3px solid var(--offline)}
+  .node.side{border-left:3px solid var(--side)}
+  .node.gray{border-left:3px solid var(--gray)}
+
+  .flow{margin:6px 0;padding:8px 10px;border:1px dashed var(--line);border-radius:6px;font-size:12px;color:var(--txt2)}
+  .flow strong{color:var(--txt)}
+
+  .crossband{margin:0 0 10px 0;padding:10px;border-radius:8px;font-size:12px;line-height:1.6}
+  .crossband.prod{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.35)}
+  .crossband.offline{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35)}
+
+  .sidebar{grid-row:1 / span 2;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .sidebar h3{margin:0 0 12px 0;font-size:13px;color:var(--txt2);letter-spacing:1px;text-transform:uppercase}
+  .milestone{padding:10px;border-radius:6px;margin-bottom:8px;background:var(--panel2);border-left:3px solid var(--prod);font-size:12px}
+  .milestone.offline{border-left-color:var(--offline)}
+  .milestone.side{border-left-color:var(--side)}
+  .milestone .who{color:var(--txt2);font-size:11px;margin-top:2px}
+  .milestone.blocked{border-left-color:var(--gray);opacity:.75}
+
+  footer{padding:14px 22px;color:var(--txt2);font-size:11px;border-top:1px solid var(--line);margin-top:10px}
+  code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>ldiar 仓库 · 系统架构（2026-10-13 视图）</h1>
+  <div class="sub">三列 = 三种运行时 · 四层 = 传感器→ROS→服务→UI · 不同颜色 = 上线/离线/Sidequests/未上线</div>
+  <div class="legend">
+    <span class="tag"><span class="swatch" style="background:var(--prod)"></span>生产服务</span>
+    <span class="tag"><span class="swatch" style="background:var(--offline)"></span>离线 / GT 标注</span>
+    <span class="tag"><span class="swatch" style="background:var(--side)"></span>sidequests / 实验支线</span>
+    <span class="tag"><span class="swatch" style="background:var(--gray)"></span>阻塞 / NOT_RUN</span>
+  </div>
+</header>
+
+<main>
+  <!-- ============ 列 1: RK3588 板 ============ -->
+  <section class="lane">
+    <div class="lane-title">RK3588 板 (aarch64)<small>slam-localization 容器 · ROS Noetic</small></div>
+    <div class="content">
+
+      <div class="layer">
+        <h4>① 传感器</h4>
+        <div class="node prod"><strong>InnoLight IFW192S LiDAR</strong><small>192-line 240°H scan, UDP→PCAP</small></div>
+        <div class="node prod"><strong>USB 摄像头 (icSpring 32e6:9221)</strong><small>8081 MJPEG systemd cam-mjpeg, lidar-stack 6/6 自启</small></div>
+      </div>
+
+      <div class="layer">
+        <h4>② ROS 驱动</h4>
+        <div class="node prod"><strong>inno_lidar_ros</strong> (C++14 / SDK 包装)<small>msg_source: 1 lidar | 2 pcap replay · publishes /innolidar_points, /inno_imu, /device_status</small></div>
+        <div class="node prod"><strong>inno_lidar_msg</strong><small>DeviceStatus.msg only</small></div>
+      </div>
+
+      <div class="layer">
+        <h4>③ 后端节点（ROS1 Python）</h4>
+        <div class="node prod"><strong>human_fall_detection</strong><small>摔倒候选/告警， 板端 production config <code>human_fall_prod.yaml</code>， 主&nbsp;<code>scripts/human_fall_node.py</code>+ bounded queue</small></div>
+        <div class="node prod"><strong>human_capture</strong><small>板 REST :8766 → 会话 bag → <code>core/bag2session.py</code> 输出 meta.json + points.bin</small></div>
+        <div class="node prod"><strong>human_follow_calibration</strong><small>只读 <code>/human_follow/state</code> 发布</small></div>
+        <div class="node offline"><strong>HF-REAL-01..04 实验现场</strong><small>10-13 已 SUBMITTED 未 ACCEPTED · /innolidar_points 输入</small></div>
+      </div>
+
+      <div class="layer">
+        <h4>④ 板端 HTTP / Docker 服务</h4>
+        <div class="node prod"><strong>:8090 webui</strong><small>slam-localization 容器静态托管, 只读视图下发到 PC/Browser</small></div>
+        <div class="node prod"><strong>:8766 human_capture REST</strong><small>开始/停止会话, 返回 session_id</small></div>
+        <div class="node prod"><strong>:8088 GT 标注台板端部署</strong><small>BOARD_MODE + 下载路由 + pull 工具</small></div>
+        <div class="flow"><strong>deploy_human_fall.sh</strong>：release symlink + rollback， 不 pkill / 不改 driver/old homepage</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 列 2: Windows PC ============ -->
+  <section class="lane">
+    <div class="lane-title">Windows PC (x64)<small>开发 / 打包 / 回放 / 训练主机 · Node + Python 3.12</small></div>
+    <div class="content">
+
+      <div class="layer">
+        <h4>① 总控制台 / EXE</h4>
+        <div class="node prod"><strong>pc_apps/console/ Console.exe</strong><small>Packaged by PyInstaller onefile · 端口 8901 防双绑 · webview hook 自动重启覆盖 · dist 4 份同步铁律</small></div>
+        <div class="node prod"><strong>console.html / console_gui.py</strong><small>首页·骨架与倒地检测·点云回放·联合录制·配平发布链</small></div>
+        <div class="node prod"><strong>joint_capture.{py,html,test}</strong><small>10-13 入库 · 板端 8081 MJPEG + lidar REST 同帧封装</small></div>
+      </div>
+
+      <div class="layer">
+        <h4>② 离线引擎（统一核心）</h4>
+        <div class="node prod"><strong>pc_apps/human_core/ engine.js</strong><small>UnifiedEngine: BASE_A / BASE_B / U1-U3 / U6 / FUSION · 12 套测试 (run_all_tests.js)</small></div>
+        <div class="node prod"><strong>fusion.js + 审计 3 件</strong><small>audit_fusion_candidates / evaluate_fusion_gt / evaluate_track_recall / perf_profile_fusion</small></div>
+        <div class="node offline"><strong>leveling.js + schema.js</strong><small>gf+gt 封闭 schema, 用户 leveled settings 持久化</small></div>
+      </div>
+
+      <div class="layer">
+        <h4>③ 回放 / 标注</h4>
+        <div class="node prod"><strong>pc_apps/human_replay/</strong><small>replay.js + human_detect.js + detect_overlay.js · v1 RF 生产B2a 已锁定</small></div>
+        <div class="node offline"><strong>gt_annotator.html + gt_server.py</strong><small>2D 标注工作台, 8901 ?sid= URL, expected_sha 鸡同鸭讲 · 10-10 板端 8088 上线</small></div>
+        <div class="node offline"><strong>gt_store/ 566M 本地 store</strong><small>generated by gt_server.py · 跨机器唯一权威备份在 captures/leveled/gt_store_backup/</small></div>
+      </div>
+
+      <div class="layer">
+        <h4>④ 训练 / 分析</h4>
+        <div class="node side"><strong>pc_apps/human_ml/</strong><small>train_person_rf_v1 ✓(线上) · v2/v3 written 未替换 · frozen_gt.py + spike_cluster/ + gt_workbench_export.py</small></div>
+        <div class="node gray"><strong>U4 / U5 fusion</strong><small>代码里显式 throw 'BLOCKED — 无推理artifact' — 等 GPU deployment</small></div>
+        <div class="node gray"><strong>ML/ (LI-DATA)</strong><small>dormant reserved area, 用户显式禁止激活</small></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 列 3: 浏览器 ============ -->
+  <section class="lane">
+    <div class="lane-title">浏览器 (Board :8090 / PC localhost)<small>Three.js view · 只读渲染, 校验在板/PC 后端</small></div>
+    <div class="content">
+
+      <div class="layer">
+        <h4>① 板端 webui/:8090</h4>
+        <div class="node prod"><strong>webui/human_fall/ (生产)</strong><small>live 跌倒视图, slam-localization 容器直出</small></div>
+        <div class="node prod"><strong>webui/human_fall_preview/</strong><small>回放预览</small></div>
+        <div class="node prod"><strong>webui/human_capture/</strong><small>record console 面板</small></div>
+        <div class="node prod"><strong>webui/dist/webui-minimal/</strong><small>外部 bundle (Console dist 也算兄弟)</small></div>
+      </div>
+
+      <div class="layer">
+        <h4>② 桌面 / 调试</h4>
+        <div class="node offline"><strong>pc_apps/human_replay/human_detect.html / human_track.html / validation.html</strong><small>PC 本地 localhost:8901, 回放/跟踪/验证三视图</small></div>
+        <div class="node offline"><strong>tools/open_webui.bat + open_demo_d04.bat</strong><small>一键打开板/PC 本地视图</small></div>
+      </div>
+
+      <div class="layer">
+        <h4>③ 与后端的协议</h4>
+        <div class="flow">Browser → Board <code>:8766</code> REST (selection / record / baseline) <br>→ Board ack → Browser render</div>
+        <div class="flow">Browser → PC <code>localhost:8901</code> REST (gt annotation) <br>→ gt_server.py → gt_store/ 落盘</div>
+        <div class="flow">Console.exe <code>:8901</code> → webview hook 如果端口冲突自动起独立 socket</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 列 4: 侧栏 (占两行) ============ -->
+  <aside class="sidebar">
+    <h3>关键里程碑 / 档案账本</h3>
+
+    <div class="milestone"><strong>HFUS-D01..D05 / INTEGRATION</strong><br>融合检测路线· 5 工单 SUBMITTED 未 ACCEPTED<div class="who">docs/human_capture/returns/HFUS-D0{1..5}.md</div></div>
+    <div class="milestone"><strong>HF-REAL-01..04 + HF-CONSOLE-01 + HF-DEMO-01</strong><br>2026-10-13 板端实况骨架/倒地 · 部分 RS DATA_BLOCKED<div class="who">docs/human_fall/returns/HF-REAL-*.md</div></div>
+    <div class="milestone offline"><strong>HR-09 首批 12 段站立采集 + RF v1 上线</strong><div class="who">2026-10-09 pa_apps/human_ml/train_person_rf_v1</div></div>
+    <div class="milestone offline"><strong>HUMAN-UNIFY-R1 / FUSION-R1 R2</strong><br>统一核心 pc_apps/human_core/ · BASE_A/B/U1/U2/U3<div class="who">v2/v3 model 仍是 'never replace v1'</div></div>
+    <div class="milestone offline"><strong>CAM-HOT (USB 摄像头 → MJPEG)</strong><br>板端 8081 systemd cam-mjpeg<div class="who">docs/human_capture/returns/CAM-HOT.md</div></div>
+    <div class="milestone offline"><strong>GT 标注工作台 R1 板端部署</strong><br>:8088 + BOARD_MODE + pull 工具<div class="who">docs/human_capture/returns/*gt_annotator*</div></div>
+    <div class="milestone side"><strong>sidequests/HFUS-RD-01/02</strong><br>融合检测研究 (C4 100% 召回可用 / RandLA-Net DATA_BLOCKED)<div class="who">docs/sidequests/</div></div>
+    <div class="milestone side"><strong>sidequests/human_detectors/</strong><br>DET-01~07 全家桶 (PointPillars CPU...) 已归档关闭<div class="who">DET-07 草案从未执行</div></div>
+    <div class="milestone blocked"><strong>DET / LIMB / HR-08 (lidar ML 跨域)</strong><br>永久关闭 — 跨供应商 LiDAR 训练无效<div class="who">别开新坑</div></div>
+  </aside>
+
+</main>
+
+<footer>
+  <div>生成： docs/architecture_map.html · 2026-10-13 · 数据来自 <code>CLAUDE.md</code> / <code>docs/human_fall/WORKFLOW.md</code> / <code>docs/human_capture/README.md</code> / 本日 git 工作树</div>
+  <div>颜色编码：<span style="color:var(--prod)">●</span> 生产 · <span style="color:var(--offline)">●</span> 离线/GT · <span style="color:var(--side)">●</span> Sidequest · <span style="color:#6b7280">●</span> 阻塞/未启用</div>
+  <div>注： <code>capture/</code> 原始 PCAP 为只读输入, 不入 git · <code>ML/</code> dormant · <code>文档收集（人工）/</code> 参考料不入对象库</div>
+</footer>
+</body>
+</html>

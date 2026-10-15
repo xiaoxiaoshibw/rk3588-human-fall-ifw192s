@@ -1,0 +1,13 @@
+{
+  "schema_version": "pointset-annotation/1",
+  "coordinate_frame": "leveled-IFW192S",
+  "units": "m",
+  "source_index_domain": "frame-local raw 28-byte record (not display-sample index, not compact-valid index)",
+  "frame_key": ["session_id", "frame_index", "source_sha256"],
+  "object": {"object_id": "string", "object_scope": "reference|roi_3d|full_3d|full_2d; required identity namespace", "source_indices": "unique integers", "bbox": "derived XYZ min/max", "kind": "AUTOMATIC_CANDIDATE|EXISTING_MANUAL_REFERENCE"},
+  "action": {"name": "string or UNKNOWN", "provenance": "SESSION_DESCRIPTION|HUMAN_REVIEW|ALGORITHM", "interval": "optional start/end device-relative seconds"},
+  "point_parts": {"classes": ["UNKNOWN", "HEAD", "TORSO", "LEFT_ARM", "RIGHT_ARM", "LEFT_LEG", "RIGHT_LEG"], "provenance": "HUMAN_REVIEW required for supervised labels", "reviewer": "user-supplied nonempty string"},
+  "skeleton": {"kind": "UNVERIFIED_POINT_SUPPORTED_BODY_REGIONS|HUMAN_JOINT_ANNOTATION", "unsupported_nodes": "xyz=null; valid=false", "support_source_indices": "actual source point indices"},
+  "separation": {"geometric_score": "diagnostic, not a human probability or semantic purity", "unannotated_points": "UNKNOWN; cannot be counted as furniture negatives"},
+  "evaluation": "GT-bound overlap metrics are reference diagnostics; reviewed body-part/joint labels are required for anatomical accuracy; S9 stale binding excluded"
+}

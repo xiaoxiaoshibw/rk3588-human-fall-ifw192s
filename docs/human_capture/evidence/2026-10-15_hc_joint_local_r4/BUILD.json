@@ -1,0 +1,50 @@
+{
+  "item": "HC-JOINT-LOCAL-01",
+  "round": "R4",
+  "date": "2026-10-15",
+  "head": "c21c443b0befe559e08283edb0efc2af02dcc6b8",
+  "behavior": "joint capture pull completed -> console auto-opens replay with ?sid=<local joint dir>",
+  "exes": {
+    "pc_apps/console/dist/Console.exe": {
+      "bytes": 63068261,
+      "sha256": "03E424FBBFE7FEE17564C237F05ADFB4EF0472A2C2397891C9B66C0C96B9B424",
+      "built_iso": "2026-10-15T00:32:52+08:00",
+      "backup": "Console.exe.bak-20261015 (63064416)"
+    },
+    "pc_apps/console/dist/Console_Pointset.exe": {
+      "bytes": 63067883,
+      "sha256": "7479107B9FFD82F276EA18FADE0DE6D2ECB57BDF547720DA3C8D31CC67CC298C",
+      "built_iso": "2026-10-15T00:35:01+08:00",
+      "backup": "Console_Pointset.exe.bak-20261015 (63063441)"
+    }
+  },
+  "zip": {
+    "pc_apps/console/dist/LiDAR_Console.zip": {
+      "bytes": 125861355,
+      "sha256": "C4F00572276E6C02B350971E5034C38B5E7AA4D1255759AB314A94B21F116234",
+      "built_iso": "2026-10-15T00:38:29+08:00",
+      "note": "旧 292MB 包的是 UPX 前 189MB 旧 exe；本次与 dist 对齐"
+    }
+  },
+  "probes": {
+    "joint_capture_source": {"exit": 0, "page_ok": true, "page_version": {"joint_page": true, "console_shell": true, "replay_page": true}},
+    "joint_capture_frozen": {"exit": 0, "page_ok": true, "page_version": {"joint_page": true, "console_shell": true, "replay_page": true}},
+    "startup_frozen": {"exit": 1, "replay_port": 8901, "fall_port": 64889, "real_fall_port": null, "error": "real fall replay did not start", "note": "既有缺数据 cap_20261013_094333/131958；源码同测复现，非本轮回归"}
+  },
+  "tests": {
+    "console_html.test.js": "15 PASS (12 old + 3 new)",
+    "joint_capture_test.py": "4 PASS",
+    "console_test.py": "7 PASS",
+    "human_replay_lib.test.js": "45 PASS",
+    "panel.test.js": "1 PASS (O1/O5)",
+    "human_detect_lib.test.js": "11 PASS",
+    "human_pipe_lib.test.js": "38 PASS",
+    "human_track_static.test.js": "7 PASS",
+    "sessions_test+fetch_lib_test": "18 PASS"
+  },
+  "limits": [
+    "custom output root outside replay DEST_ROOT -> auto-open fails (status shows error)",
+    "auto-open = switch inside console (pywebview swallows window.open), not a new window",
+    "real end-to-end capture NOT_RUN"
+  ]
+}

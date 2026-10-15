@@ -1,0 +1,17 @@
+{
+  "status": "FROZEN_BEFORE_EXPERIMENT_NOT_DEFAULT",
+  "fragment_max_points": 300,
+  "fragment_min_roi_fraction": 0.9,
+  "fragment_max_p90_distance_m": 0.85,
+  "fragment_z_min_m": 0.04,
+  "axis_reference_max_age_s": 0.5,
+  "axis_max_angle_degrees": 30.0,
+  "axis_min_variance_fraction": 0.85,
+  "variants": {
+    "point12": {"gap_m": 0.12, "whole_component": false, "z_min_m": 0.04},
+    "point20": {"gap_m": 0.20, "whole_component": false, "z_min_m": 0.04},
+    "component20": {"gap_m": 0.20, "whole_component": true, "z_min_m": 0.04},
+    "low20": {"gap_m": 0.20, "whole_component": false, "z_min_m": -0.25}
+  },
+  "policy": "Only current foreground, original ROI; single attachment to baseline target, no cascade; no HOLDOUT tuning. Proximity never proves identity."
+}

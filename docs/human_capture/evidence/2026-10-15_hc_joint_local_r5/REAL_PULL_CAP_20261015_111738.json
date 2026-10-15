@@ -1,0 +1,57 @@
+{
+  "sid": "cap_20261015_111738",
+  "why": "2026-10-15 11:17 用户错峰联合录制拉回失败的板端会话；此前因 fetch 子进程 bug 从未能拉回",
+  "board_before": {
+    "state": "ready",
+    "frame_count": 186,
+    "duration_sec": 19.171602,
+    "size_bytes": 255522036,
+    "source_bag_sha256": "85d655fa6cf57e5017dc718b7fc3cdc78256014d0f885994256bc28d91f70a16",
+    "created_iso": "2026-10-15T11:17:38+08:00"
+  },
+  "pull_run": {
+    "tool": "joint_capture.Recorder（修复版，板端控制词打桩，fetch 走真网络）",
+    "result": {
+      "state": "completed",
+      "session_id": "cap_20261015_111738",
+      "path": "D:\\Code\\ldiar\\data\\sessions\\joint_cap_20261015_111738",
+      "bytes": 255566544,
+      "radar_frames": 186,
+      "error": null
+    },
+    "staging_leftover": "root .joint_fetch_staging 空目录（sid 子目录已清理）"
+  },
+  "local_files": {
+    "meta.json": {
+      "bytes": 44508,
+      "sha256": "9B5C9178D000D595BAA97713BE6B91C210496A4FC71B5F22C5BFC9B1626E5093"
+    },
+    "points.bin": {
+      "bytes": 255522036,
+      "sha256": "BB43DD01CCD04269E8D374100F2FEA268CD59A9F9D841B4A0ECAD7594730751F"
+    },
+    "camera.mjpeg": {
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    "joint.json": {
+      "bytes": 211,
+      "sha256": "52623CD92D893F40115DBE2CBC3D2F719C92878D3C505C1F73277ED7D1925BA1"
+    }
+  },
+  "local_meta_summary": {
+    "session_id": "cap_20261015_111738",
+    "frames": 186,
+    "total_points": 9125787,
+    "point_stride_bytes": 28,
+    "joint_recording": {
+      "mode": "staged_capture",
+      "board_session_id": "cap_20261015_111738"
+    }
+  },
+  "board_after": {
+    "state": "transferred",
+    "frame_count": 186,
+    "size_bytes": 255522036
+  }
+}

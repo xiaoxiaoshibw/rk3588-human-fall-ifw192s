@@ -1,0 +1,1635 @@
+{
+  "target": {
+    "sid": "cap_20261014_164522",
+    "job_id": "363473a9e2e64649994dca11b2b26929",
+    "frames": 27
+  },
+  "empty": {
+    "sid": "cap_20261013_131958",
+    "job_id": "61cb6976b0f8479394641850d9a7c6ca",
+    "frames": 97,
+    "registration": {
+      "artifact_id": null,
+      "quality": {
+        "status": "PASS",
+        "gate_profile": "reg_gate_v1",
+        "reasons": []
+      },
+      "transform_R": [
+        0.9996798644405767,
+        0.0028109358311903063,
+        0.02514492536920638,
+        -0.003267974839588818,
+        0.9998298690122676,
+        0.018153604913596556,
+        -0.02508961881969995,
+        -0.018229966282582007,
+        0.999518973985396
+      ],
+      "transform_t": [
+        -0.038356054172579694,
+        -0.020788120540728962,
+        0.03756164535290251
+      ]
+    }
+  },
+  "older_empty": {
+    "sid": "cap_20261010_175227",
+    "job_id": "6d5809d5a87b462cad4023520868b9e6",
+    "frames": 304,
+    "points_subsampled_stride": 4,
+    "gate_refusal": "registration.js exit 1 LEVELING_SHA_MISMATCH at line 104 (report.recommended!=='tls'): 10-10 配平跨方法 offset 差 0.033 m > 0.03 m 门 → 既有配准管线拒绝该空场"
+  },
+  "criterion": "leak = no empty-scene cell within +/-1 cell (Chebyshev <= cell_m)",
+  "cluster_cell_m": 0.25,
+  "min_cluster_points": 5,
+  "reports": {
+    "registered_131958_to_164522": {
+      "tag": "registered",
+      "cell_m": 0.05,
+      "empty_cells": 4765607,
+      "leak_points_median": 343.0,
+      "leak_points_p10_p90": [
+        337.0,
+        386.0
+      ],
+      "leak_fraction_median": 0.006983183354371107,
+      "largest_cluster_median": 224.0,
+      "largest_cluster_max": 232,
+      "persistent_cells_ge80pct_frames": 106,
+      "frames": [
+        {
+          "frame": 0,
+          "stamp_s": 1791967523.238449,
+          "points": 49121,
+          "leak_points": 337,
+          "leak_fraction": 0.006860609515278598,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 224,
+          "largest_cluster_center": [
+            3.916,
+            2.8178,
+            0.1618
+          ],
+          "largest_cluster_bbox_m": [
+            1.9544,
+            1.9067,
+            1.2239
+          ]
+        },
+        {
+          "frame": 1,
+          "stamp_s": 1791967523.331696,
+          "points": 49131,
+          "leak_points": 349,
+          "leak_fraction": 0.007103458101809448,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 232,
+          "largest_cluster_center": [
+            3.8887,
+            2.9575,
+            0.1654
+          ],
+          "largest_cluster_bbox_m": [
+            1.9585,
+            1.9851,
+            1.3504
+          ]
+        },
+        {
+          "frame": 2,
+          "stamp_s": 1791967523.435539,
+          "points": 49134,
+          "leak_points": 340,
+          "leak_fraction": 0.006919851833760736,
+          "clusters_ge5": 5,
+          "largest_cluster_points": 223,
+          "largest_cluster_center": [
+            3.9053,
+            2.8804,
+            0.1645
+          ],
+          "largest_cluster_bbox_m": [
+            1.5471,
+            1.726,
+            1.3485
+          ]
+        },
+        {
+          "frame": 3,
+          "stamp_s": 1791967523.544985,
+          "points": 49130,
+          "leak_points": 347,
+          "leak_fraction": 0.007062894361897008,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 227,
+          "largest_cluster_center": [
+            3.9026,
+            2.814,
+            0.1807
+          ],
+          "largest_cluster_bbox_m": [
+            1.9706,
+            1.9477,
+            1.2005
+          ]
+        },
+        {
+          "frame": 4,
+          "stamp_s": 1791967523.637527,
+          "points": 49120,
+          "leak_points": 341,
+          "leak_fraction": 0.006942182410423453,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 226,
+          "largest_cluster_center": [
+            3.9104,
+            2.8591,
+            0.1787
+          ],
+          "largest_cluster_bbox_m": [
+            2.0362,
+            1.9302,
+            1.1935
+          ]
+        },
+        {
+          "frame": 5,
+          "stamp_s": 1791967523.743668,
+          "points": 49127,
+          "leak_points": 345,
+          "leak_fraction": 0.007022614855374845,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 230,
+          "largest_cluster_center": [
+            3.9108,
+            2.7633,
+            0.1847
+          ],
+          "largest_cluster_bbox_m": [
+            1.9743,
+            1.9397,
+            1.3257
+          ]
+        },
+        {
+          "frame": 6,
+          "stamp_s": 1791967523.847003,
+          "points": 49125,
+          "leak_points": 337,
+          "leak_fraction": 0.006860050890585241,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 219,
+          "largest_cluster_center": [
+            3.9009,
+            2.869,
+            0.1729
+          ],
+          "largest_cluster_bbox_m": [
+            1.9711,
+            1.9369,
+            1.3482
+          ]
+        },
+        {
+          "frame": 7,
+          "stamp_s": 1791967523.942253,
+          "points": 49133,
+          "leak_points": 337,
+          "leak_fraction": 0.006858933914069974,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 222,
+          "largest_cluster_center": [
+            3.9102,
+            2.8177,
+            0.1878
+          ],
+          "largest_cluster_bbox_m": [
+            2.0506,
+            1.9201,
+            1.3532
+          ]
+        },
+        {
+          "frame": 8,
+          "stamp_s": 1791967524.046611,
+          "points": 49128,
+          "leak_points": 343,
+          "leak_fraction": 0.006981761928024752,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 231,
+          "largest_cluster_center": [
+            3.9066,
+            2.8784,
+            0.1575
+          ],
+          "largest_cluster_bbox_m": [
+            2.0616,
+            1.9213,
+            1.3514
+          ]
+        },
+        {
+          "frame": 9,
+          "stamp_s": 1791967524.152374,
+          "points": 49123,
+          "leak_points": 356,
+          "leak_fraction": 0.0072471143863363395,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 227,
+          "largest_cluster_center": [
+            3.9098,
+            2.8854,
+            0.1635
+          ],
+          "largest_cluster_bbox_m": [
+            1.9449,
+            1.928,
+            1.2061
+          ]
+        },
+        {
+          "frame": 10,
+          "stamp_s": 1791967524.259362,
+          "points": 49129,
+          "leak_points": 410,
+          "leak_fraction": 0.008345376457896557,
+          "clusters_ge5": 5,
+          "largest_cluster_points": 225,
+          "largest_cluster_center": [
+            3.8895,
+            2.8252,
+            0.1656
+          ],
+          "largest_cluster_bbox_m": [
+            2.0348,
+            1.9447,
+            1.1995
+          ]
+        },
+        {
+          "frame": 11,
+          "stamp_s": 1791967524.352297,
+          "points": 49128,
+          "leak_points": 397,
+          "leak_fraction": 0.008080931444390165,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 218,
+          "largest_cluster_center": [
+            3.9155,
+            2.8528,
+            0.1549
+          ],
+          "largest_cluster_bbox_m": [
+            1.543,
+            1.7703,
+            1.3681
+          ]
+        },
+        {
+          "frame": 12,
+          "stamp_s": 1791967524.469161,
+          "points": 49135,
+          "leak_points": 392,
+          "leak_fraction": 0.007978019741528442,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 224,
+          "largest_cluster_center": [
+            3.8963,
+            2.7798,
+            0.1789
+          ],
+          "largest_cluster_bbox_m": [
+            1.9683,
+            1.9165,
+            1.2119
+          ]
+        },
+        {
+          "frame": 13,
+          "stamp_s": 1791967524.571357,
+          "points": 49128,
+          "leak_points": 382,
+          "leak_fraction": 0.007775606578733106,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 222,
+          "largest_cluster_center": [
+            3.9042,
+            2.8006,
+            0.1779
+          ],
+          "largest_cluster_bbox_m": [
+            1.983,
+            1.9181,
+            1.3577
+          ]
+        },
+        {
+          "frame": 14,
+          "stamp_s": 1791967524.667613,
+          "points": 49124,
+          "leak_points": 372,
+          "leak_fraction": 0.007572673235078577,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 222,
+          "largest_cluster_center": [
+            3.9071,
+            2.8185,
+            0.1627
+          ],
+          "largest_cluster_bbox_m": [
+            1.9296,
+            1.934,
+            1.2042
+          ]
+        },
+        {
+          "frame": 15,
+          "stamp_s": 1791967524.782305,
+          "points": 49125,
+          "leak_points": 371,
+          "leak_fraction": 0.007552162849872773,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 229,
+          "largest_cluster_center": [
+            3.9236,
+            2.939,
+            0.1773
+          ],
+          "largest_cluster_bbox_m": [
+            2.0052,
+            1.9142,
+            1.3574
+          ]
+        },
+        {
+          "frame": 16,
+          "stamp_s": 1791967524.877507,
+          "points": 49122,
+          "leak_points": 335,
+          "leak_fraction": 0.006819754895973291,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 214,
+          "largest_cluster_center": [
+            3.9142,
+            2.8027,
+            0.1836
+          ],
+          "largest_cluster_bbox_m": [
+            1.7029,
+            1.9382,
+            1.3564
+          ]
+        },
+        {
+          "frame": 17,
+          "stamp_s": 1791967524.992583,
+          "points": 49126,
+          "leak_points": 348,
+          "leak_fraction": 0.0070838252656434475,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 226,
+          "largest_cluster_center": [
+            3.9072,
+            2.955,
+            0.1578
+          ],
+          "largest_cluster_bbox_m": [
+            1.6568,
+            1.761,
+            1.1571
+          ]
+        },
+        {
+          "frame": 18,
+          "stamp_s": 1791967525.088866,
+          "points": 49129,
+          "leak_points": 341,
+          "leak_fraction": 0.006940910663762747,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 225,
+          "largest_cluster_center": [
+            3.8986,
+            2.8843,
+            0.1581
+          ],
+          "largest_cluster_bbox_m": [
+            1.5906,
+            1.7916,
+            1.2113
+          ]
+        },
+        {
+          "frame": 19,
+          "stamp_s": 1791967525.192565,
+          "points": 49124,
+          "leak_points": 340,
+          "leak_fraction": 0.006921260483673968,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 224,
+          "largest_cluster_center": [
+            3.9032,
+            2.8016,
+            0.1683
+          ],
+          "largest_cluster_bbox_m": [
+            2.0359,
+            1.9065,
+            1.2014
+          ]
+        },
+        {
+          "frame": 20,
+          "stamp_s": 1791967525.295477,
+          "points": 49118,
+          "leak_points": 343,
+          "leak_fraction": 0.006983183354371107,
+          "clusters_ge5": 4,
+          "largest_cluster_points": 224,
+          "largest_cluster_center": [
+            3.911,
+            2.9582,
+            0.1552
+          ],
+          "largest_cluster_bbox_m": [
+            1.6176,
+            1.7594,
+            1.352
+          ]
+        },
+        {
+          "frame": 21,
+          "stamp_s": 1791967525.401473,
+          "points": 49131,
+          "leak_points": 353,
+          "leak_fraction": 0.00718487309438033,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 230,
+          "largest_cluster_center": [
+            3.9167,
+            2.9694,
+            0.1533
+          ],
+          "largest_cluster_bbox_m": [
+            1.8813,
+            1.7579,
+            1.1558
+          ]
+        },
+        {
+          "frame": 22,
+          "stamp_s": 1791967525.508397,
+          "points": 49121,
+          "leak_points": 345,
+          "leak_fraction": 0.007023472649172452,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 222,
+          "largest_cluster_center": [
+            3.899,
+            2.813,
+            0.1665
+          ],
+          "largest_cluster_bbox_m": [
+            1.9775,
+            1.938,
+            1.3577
+          ]
+        },
+        {
+          "frame": 23,
+          "stamp_s": 1791967525.601264,
+          "points": 49126,
+          "leak_points": 338,
+          "leak_fraction": 0.006880267068354842,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 223,
+          "largest_cluster_center": [
+            3.9098,
+            2.8959,
+            0.1638
+          ],
+          "largest_cluster_bbox_m": [
+            1.6707,
+            1.9379,
+            1.3586
+          ]
+        },
+        {
+          "frame": 24,
+          "stamp_s": 1791967525.717835,
+          "points": 49128,
+          "leak_points": 340,
+          "leak_fraction": 0.00692069695489334,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 223,
+          "largest_cluster_center": [
+            3.9121,
+            2.8734,
+            0.1568
+          ],
+          "largest_cluster_bbox_m": [
+            1.5806,
+            1.7992,
+            1.1556
+          ]
+        },
+        {
+          "frame": 25,
+          "stamp_s": 1791967525.821034,
+          "points": 49130,
+          "leak_points": 341,
+          "leak_fraction": 0.006940769387339711,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 219,
+          "largest_cluster_center": [
+            3.8977,
+            2.7102,
+            0.167
+          ],
+          "largest_cluster_bbox_m": [
+            1.8971,
+            1.9145,
+            1.1968
+          ]
+        },
+        {
+          "frame": 26,
+          "stamp_s": 1791967525.928267,
+          "points": 49128,
+          "leak_points": 330,
+          "leak_fraction": 0.0067171470444553,
+          "clusters_ge5": 3,
+          "largest_cluster_points": 223,
+          "largest_cluster_center": [
+            3.9006,
+            2.7958,
+            0.1686
+          ],
+          "largest_cluster_bbox_m": [
+            1.9578,
+            1.9343,
+            1.3647
+          ]
+        }
+      ]
+    },
+    "unregistered_131958": {
+      "tag": "unregistered",
+      "cell_m": 0.05,
+      "empty_cells": 4765607,
+      "leak_points_median": 3004.0,
+      "leak_points_p10_p90": [
+        2994.0,
+        3032.2
+      ],
+      "leak_fraction_median": 0.061147637755205896,
+      "largest_cluster_median": 2373.0,
+      "largest_cluster_max": 2386,
+      "persistent_cells_ge80pct_frames": 784,
+      "frames": [
+        {
+          "frame": 0,
+          "stamp_s": 1791967523.238449,
+          "points": 49121,
+          "leak_points": 3001,
+          "leak_fraction": 0.06109403310193196,
+          "clusters_ge5": 8,
+          "largest_cluster_points": 2011,
+          "largest_cluster_center": [
+            5.2012,
+            3.88,
+            2.7733
+          ],
+          "largest_cluster_bbox_m": [
+            7.3328,
+            8.1756,
+            3.0727
+          ]
+        },
+        {
+          "frame": 1,
+          "stamp_s": 1791967523.331696,
+          "points": 49131,
+          "leak_points": 2999,
+          "leak_fraction": 0.06104089068001872,
+          "clusters_ge5": 6,
+          "largest_cluster_points": 2381,
+          "largest_cluster_center": [
+            5.6154,
+            4.3526,
+            2.7082
+          ],
+          "largest_cluster_bbox_m": [
+            7.3181,
+            8.8154,
+            3.1523
+          ]
+        },
+        {
+          "frame": 2,
+          "stamp_s": 1791967523.435539,
+          "points": 49134,
+          "leak_points": 3002,
+          "leak_fraction": 0.06109822119102862,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 2373,
+          "largest_cluster_center": [
+            5.6195,
+            4.3516,
+            2.7079
+          ],
+          "largest_cluster_bbox_m": [
+            7.2355,
+            8.7911,
+            3.075
+          ]
+        },
+        {
+          "frame": 3,
+          "stamp_s": 1791967523.544985,
+          "points": 49130,
+          "leak_points": 2998,
+          "leak_fraction": 0.06102177895379605,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2383,
+          "largest_cluster_center": [
+            5.6271,
+            4.3465,
+            2.7082
+          ],
+          "largest_cluster_bbox_m": [
+            7.3285,
+            8.8696,
+            3.1466
+          ]
+        },
+        {
+          "frame": 4,
+          "stamp_s": 1791967523.637527,
+          "points": 49120,
+          "leak_points": 2994,
+          "leak_fraction": 0.06095276872964169,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2382,
+          "largest_cluster_center": [
+            5.6115,
+            4.3355,
+            2.7081
+          ],
+          "largest_cluster_bbox_m": [
+            7.2335,
+            8.873,
+            3.0753
+          ]
+        },
+        {
+          "frame": 5,
+          "stamp_s": 1791967523.743668,
+          "points": 49127,
+          "leak_points": 3004,
+          "leak_fraction": 0.061147637755205896,
+          "clusters_ge5": 6,
+          "largest_cluster_points": 2378,
+          "largest_cluster_center": [
+            5.6052,
+            4.3419,
+            2.7095
+          ],
+          "largest_cluster_bbox_m": [
+            7.2335,
+            8.781,
+            3.1431
+          ]
+        },
+        {
+          "frame": 6,
+          "stamp_s": 1791967523.847003,
+          "points": 49125,
+          "leak_points": 3004,
+          "leak_fraction": 0.061150127226463104,
+          "clusters_ge5": 8,
+          "largest_cluster_points": 2006,
+          "largest_cluster_center": [
+            5.1952,
+            3.883,
+            2.7752
+          ],
+          "largest_cluster_bbox_m": [
+            6.9795,
+            8.1948,
+            3.1483
+          ]
+        },
+        {
+          "frame": 7,
+          "stamp_s": 1791967523.942253,
+          "points": 49133,
+          "leak_points": 2994,
+          "leak_fraction": 0.06093664136120326,
+          "clusters_ge5": 5,
+          "largest_cluster_points": 2377,
+          "largest_cluster_center": [
+            5.6066,
+            4.3338,
+            2.7101
+          ],
+          "largest_cluster_bbox_m": [
+            7.2333,
+            8.789,
+            3.1476
+          ]
+        },
+        {
+          "frame": 8,
+          "stamp_s": 1791967524.046611,
+          "points": 49128,
+          "leak_points": 3007,
+          "leak_fraction": 0.06120745806871845,
+          "clusters_ge5": 8,
+          "largest_cluster_points": 2008,
+          "largest_cluster_center": [
+            5.1939,
+            3.8779,
+            2.7737
+          ],
+          "largest_cluster_bbox_m": [
+            7.3429,
+            8.2717,
+            3.0707
+          ]
+        },
+        {
+          "frame": 9,
+          "stamp_s": 1791967524.152374,
+          "points": 49123,
+          "leak_points": 3008,
+          "leak_fraction": 0.061234045151965476,
+          "clusters_ge5": 8,
+          "largest_cluster_points": 2009,
+          "largest_cluster_center": [
+            5.2052,
+            3.8964,
+            2.7704
+          ],
+          "largest_cluster_bbox_m": [
+            7.3324,
+            7.9364,
+            3.1457
+          ]
+        },
+        {
+          "frame": 10,
+          "stamp_s": 1791967524.259362,
+          "points": 49129,
+          "leak_points": 3068,
+          "leak_fraction": 0.062447841397138146,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2369,
+          "largest_cluster_center": [
+            5.6212,
+            4.3629,
+            2.7076
+          ],
+          "largest_cluster_bbox_m": [
+            7.2815,
+            8.7828,
+            3.1515
+          ]
+        },
+        {
+          "frame": 11,
+          "stamp_s": 1791967524.352297,
+          "points": 49128,
+          "leak_points": 3048,
+          "leak_fraction": 0.06204201270151441,
+          "clusters_ge5": 10,
+          "largest_cluster_points": 2008,
+          "largest_cluster_center": [
+            5.2027,
+            3.889,
+            2.7714
+          ],
+          "largest_cluster_bbox_m": [
+            7.1612,
+            8.2736,
+            3.1522
+          ]
+        },
+        {
+          "frame": 12,
+          "stamp_s": 1791967524.469161,
+          "points": 49135,
+          "leak_points": 3037,
+          "leak_fraction": 0.06180930090566806,
+          "clusters_ge5": 6,
+          "largest_cluster_points": 2348,
+          "largest_cluster_center": [
+            5.5718,
+            4.3018,
+            2.7163
+          ],
+          "largest_cluster_bbox_m": [
+            7.3194,
+            8.7853,
+            3.0708
+          ]
+        },
+        {
+          "frame": 13,
+          "stamp_s": 1791967524.571357,
+          "points": 49128,
+          "leak_points": 3028,
+          "leak_fraction": 0.06163491288063833,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2375,
+          "largest_cluster_center": [
+            5.5985,
+            4.3272,
+            2.7102
+          ],
+          "largest_cluster_bbox_m": [
+            7.3325,
+            8.7934,
+            3.1523
+          ]
+        },
+        {
+          "frame": 14,
+          "stamp_s": 1791967524.667613,
+          "points": 49124,
+          "leak_points": 3029,
+          "leak_fraction": 0.0616602882501425,
+          "clusters_ge5": 8,
+          "largest_cluster_points": 2001,
+          "largest_cluster_center": [
+            5.1965,
+            3.8925,
+            2.7719
+          ],
+          "largest_cluster_bbox_m": [
+            6.9554,
+            7.9659,
+            3.141
+          ]
+        },
+        {
+          "frame": 15,
+          "stamp_s": 1791967524.782305,
+          "points": 49125,
+          "leak_points": 3017,
+          "leak_fraction": 0.0614147582697201,
+          "clusters_ge5": 6,
+          "largest_cluster_points": 2375,
+          "largest_cluster_center": [
+            5.6165,
+            4.3504,
+            2.708
+          ],
+          "largest_cluster_bbox_m": [
+            7.2398,
+            8.7931,
+            3.1418
+          ]
+        },
+        {
+          "frame": 16,
+          "stamp_s": 1791967524.877507,
+          "points": 49122,
+          "leak_points": 2999,
+          "leak_fraction": 0.06105207442693701,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 2015,
+          "largest_cluster_center": [
+            5.2037,
+            3.8933,
+            2.772
+          ],
+          "largest_cluster_bbox_m": [
+            7.318,
+            8.1885,
+            3.0724
+          ]
+        },
+        {
+          "frame": 17,
+          "stamp_s": 1791967524.992583,
+          "points": 49126,
+          "leak_points": 3017,
+          "leak_fraction": 0.06141350812197207,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2386,
+          "largest_cluster_center": [
+            5.6214,
+            4.3459,
+            2.709
+          ],
+          "largest_cluster_bbox_m": [
+            7.2383,
+            8.7951,
+            3.1459
+          ]
+        },
+        {
+          "frame": 18,
+          "stamp_s": 1791967525.088866,
+          "points": 49129,
+          "leak_points": 2994,
+          "leak_fraction": 0.06094160271937145,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2373,
+          "largest_cluster_center": [
+            5.5991,
+            4.3305,
+            2.7107
+          ],
+          "largest_cluster_bbox_m": [
+            7.3375,
+            8.7877,
+            3.1505
+          ]
+        },
+        {
+          "frame": 19,
+          "stamp_s": 1791967525.192565,
+          "points": 49124,
+          "leak_points": 2997,
+          "leak_fraction": 0.06100887549873789,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2017,
+          "largest_cluster_center": [
+            5.217,
+            3.895,
+            2.7698
+          ],
+          "largest_cluster_bbox_m": [
+            7.3245,
+            8.2828,
+            3.1414
+          ]
+        },
+        {
+          "frame": 20,
+          "stamp_s": 1791967525.295477,
+          "points": 49118,
+          "leak_points": 3016,
+          "leak_fraction": 0.061403151594120284,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2373,
+          "largest_cluster_center": [
+            5.5985,
+            4.3369,
+            2.7095
+          ],
+          "largest_cluster_bbox_m": [
+            7.225,
+            8.7899,
+            3.1469
+          ]
+        },
+        {
+          "frame": 21,
+          "stamp_s": 1791967525.401473,
+          "points": 49131,
+          "leak_points": 2990,
+          "leak_fraction": 0.060857706946734244,
+          "clusters_ge5": 8,
+          "largest_cluster_points": 2010,
+          "largest_cluster_center": [
+            5.2075,
+            3.8883,
+            2.7727
+          ],
+          "largest_cluster_bbox_m": [
+            6.9651,
+            8.1917,
+            3.1476
+          ]
+        },
+        {
+          "frame": 22,
+          "stamp_s": 1791967525.508397,
+          "points": 49121,
+          "leak_points": 2996,
+          "leak_fraction": 0.0609922436432483,
+          "clusters_ge5": 6,
+          "largest_cluster_points": 2379,
+          "largest_cluster_center": [
+            5.615,
+            4.3608,
+            2.7087
+          ],
+          "largest_cluster_bbox_m": [
+            7.2557,
+            8.7878,
+            3.1504
+          ]
+        },
+        {
+          "frame": 23,
+          "stamp_s": 1791967525.601264,
+          "points": 49126,
+          "leak_points": 2998,
+          "leak_fraction": 0.06102674754712372,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2015,
+          "largest_cluster_center": [
+            5.2113,
+            3.8905,
+            2.7715
+          ],
+          "largest_cluster_bbox_m": [
+            7.3215,
+            8.2849,
+            3.0778
+          ]
+        },
+        {
+          "frame": 24,
+          "stamp_s": 1791967525.717835,
+          "points": 49128,
+          "leak_points": 3017,
+          "leak_fraction": 0.06141100797915649,
+          "clusters_ge5": 6,
+          "largest_cluster_points": 2379,
+          "largest_cluster_center": [
+            5.6062,
+            4.3496,
+            2.7099
+          ],
+          "largest_cluster_bbox_m": [
+            7.325,
+            8.79,
+            3.1369
+          ]
+        },
+        {
+          "frame": 25,
+          "stamp_s": 1791967525.821034,
+          "points": 49130,
+          "leak_points": 3001,
+          "leak_fraction": 0.061082841441074696,
+          "clusters_ge5": 6,
+          "largest_cluster_points": 2380,
+          "largest_cluster_center": [
+            5.6175,
+            4.3517,
+            2.709
+          ],
+          "largest_cluster_bbox_m": [
+            7.2509,
+            8.8728,
+            3.1529
+          ]
+        },
+        {
+          "frame": 26,
+          "stamp_s": 1791967525.928267,
+          "points": 49128,
+          "leak_points": 3016,
+          "leak_fraction": 0.061390652988112686,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 2018,
+          "largest_cluster_center": [
+            5.21,
+            3.8834,
+            2.7716
+          ],
+          "largest_cluster_bbox_m": [
+            7.3633,
+            8.2963,
+            3.0755
+          ]
+        }
+      ]
+    },
+    "unregistered_175227": {
+      "tag": "unregistered_older",
+      "cell_m": 0.05,
+      "empty_cells": 3732919,
+      "leak_points_median": 15146.0,
+      "leak_points_p10_p90": [
+        15122.2,
+        15161.8
+      ],
+      "leak_fraction_median": 0.3082778693696444,
+      "largest_cluster_median": 11885.0,
+      "largest_cluster_max": 11916,
+      "persistent_cells_ge80pct_frames": 999,
+      "frames": [
+        {
+          "frame": 0,
+          "stamp_s": 1791967523.238449,
+          "points": 49121,
+          "leak_points": 15123,
+          "leak_fraction": 0.30787239673459416,
+          "clusters_ge5": 11,
+          "largest_cluster_points": 11883,
+          "largest_cluster_center": [
+            0.6483,
+            -0.5377,
+            0.8152
+          ],
+          "largest_cluster_bbox_m": [
+            2.4285,
+            1.6123,
+            1.9336
+          ]
+        },
+        {
+          "frame": 1,
+          "stamp_s": 1791967523.331696,
+          "points": 49131,
+          "leak_points": 15146,
+          "leak_fraction": 0.3082778693696444,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11890,
+          "largest_cluster_center": [
+            0.6478,
+            -0.5386,
+            0.8157
+          ],
+          "largest_cluster_bbox_m": [
+            2.4325,
+            1.6437,
+            1.9252
+          ]
+        },
+        {
+          "frame": 2,
+          "stamp_s": 1791967523.435539,
+          "points": 49134,
+          "leak_points": 15146,
+          "leak_fraction": 0.3082590466886474,
+          "clusters_ge5": 11,
+          "largest_cluster_points": 11894,
+          "largest_cluster_center": [
+            0.6472,
+            -0.5374,
+            0.8159
+          ],
+          "largest_cluster_bbox_m": [
+            2.439,
+            1.8147,
+            1.9324
+          ]
+        },
+        {
+          "frame": 3,
+          "stamp_s": 1791967523.544985,
+          "points": 49130,
+          "leak_points": 15141,
+          "leak_fraction": 0.3081823732953389,
+          "clusters_ge5": 11,
+          "largest_cluster_points": 11891,
+          "largest_cluster_center": [
+            0.6477,
+            -0.5383,
+            0.8157
+          ],
+          "largest_cluster_bbox_m": [
+            2.4319,
+            1.6212,
+            1.9221
+          ]
+        },
+        {
+          "frame": 4,
+          "stamp_s": 1791967523.637527,
+          "points": 49120,
+          "leak_points": 15138,
+          "leak_fraction": 0.3081840390879479,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11882,
+          "largest_cluster_center": [
+            0.6466,
+            -0.5377,
+            0.8154
+          ],
+          "largest_cluster_bbox_m": [
+            2.4405,
+            1.7096,
+            1.9319
+          ]
+        },
+        {
+          "frame": 5,
+          "stamp_s": 1791967523.743668,
+          "points": 49127,
+          "leak_points": 15153,
+          "leak_fraction": 0.30844545769128995,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11893,
+          "largest_cluster_center": [
+            0.6486,
+            -0.5394,
+            0.816
+          ],
+          "largest_cluster_bbox_m": [
+            2.4353,
+            1.8319,
+            1.9396
+          ]
+        },
+        {
+          "frame": 6,
+          "stamp_s": 1791967523.847003,
+          "points": 49125,
+          "leak_points": 15139,
+          "leak_fraction": 0.3081730279898219,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11886,
+          "largest_cluster_center": [
+            0.6474,
+            -0.5382,
+            0.8162
+          ],
+          "largest_cluster_bbox_m": [
+            2.4331,
+            1.6129,
+            1.9353
+          ]
+        },
+        {
+          "frame": 7,
+          "stamp_s": 1791967523.942253,
+          "points": 49133,
+          "leak_points": 15130,
+          "leak_fraction": 0.30793967394622757,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11883,
+          "largest_cluster_center": [
+            0.6479,
+            -0.5385,
+            0.8156
+          ],
+          "largest_cluster_bbox_m": [
+            2.4249,
+            1.5912,
+            1.9249
+          ]
+        },
+        {
+          "frame": 8,
+          "stamp_s": 1791967524.046611,
+          "points": 49128,
+          "leak_points": 15141,
+          "leak_fraction": 0.3081949193942355,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11886,
+          "largest_cluster_center": [
+            0.6485,
+            -0.5373,
+            0.8163
+          ],
+          "largest_cluster_bbox_m": [
+            2.4443,
+            1.5954,
+            1.9304
+          ]
+        },
+        {
+          "frame": 9,
+          "stamp_s": 1791967524.152374,
+          "points": 49123,
+          "leak_points": 15119,
+          "leak_fraction": 0.3077784337275818,
+          "clusters_ge5": 10,
+          "largest_cluster_points": 11878,
+          "largest_cluster_center": [
+            0.648,
+            -0.5385,
+            0.8158
+          ],
+          "largest_cluster_bbox_m": [
+            2.427,
+            1.6101,
+            1.9413
+          ]
+        },
+        {
+          "frame": 10,
+          "stamp_s": 1791967524.259362,
+          "points": 49129,
+          "leak_points": 15181,
+          "leak_fraction": 0.309002829286165,
+          "clusters_ge5": 11,
+          "largest_cluster_points": 11874,
+          "largest_cluster_center": [
+            0.6461,
+            -0.5382,
+            0.8154
+          ],
+          "largest_cluster_bbox_m": [
+            2.4215,
+            1.6224,
+            1.9474
+          ]
+        },
+        {
+          "frame": 11,
+          "stamp_s": 1791967524.352297,
+          "points": 49128,
+          "leak_points": 15159,
+          "leak_fraction": 0.30856130923302394,
+          "clusters_ge5": 10,
+          "largest_cluster_points": 11889,
+          "largest_cluster_center": [
+            0.6461,
+            -0.5383,
+            0.8159
+          ],
+          "largest_cluster_bbox_m": [
+            2.4329,
+            1.7069,
+            1.9352
+          ]
+        },
+        {
+          "frame": 12,
+          "stamp_s": 1791967524.469161,
+          "points": 49135,
+          "leak_points": 15195,
+          "leak_fraction": 0.309250025440114,
+          "clusters_ge5": 10,
+          "largest_cluster_points": 11889,
+          "largest_cluster_center": [
+            0.648,
+            -0.5384,
+            0.8159
+          ],
+          "largest_cluster_bbox_m": [
+            2.4338,
+            1.7265,
+            1.9334
+          ]
+        },
+        {
+          "frame": 13,
+          "stamp_s": 1791967524.571357,
+          "points": 49128,
+          "leak_points": 15156,
+          "leak_fraction": 0.30850024425989253,
+          "clusters_ge5": 11,
+          "largest_cluster_points": 11885,
+          "largest_cluster_center": [
+            0.648,
+            -0.5385,
+            0.816
+          ],
+          "largest_cluster_bbox_m": [
+            2.4353,
+            1.6501,
+            1.9377
+          ]
+        },
+        {
+          "frame": 14,
+          "stamp_s": 1791967524.667613,
+          "points": 49124,
+          "leak_points": 15157,
+          "leak_fraction": 0.30854572103248923,
+          "clusters_ge5": 11,
+          "largest_cluster_points": 11898,
+          "largest_cluster_center": [
+            0.6478,
+            -0.5381,
+            0.8162
+          ],
+          "largest_cluster_bbox_m": [
+            2.4423,
+            1.5728,
+            1.9337
+          ]
+        },
+        {
+          "frame": 15,
+          "stamp_s": 1791967524.782305,
+          "points": 49125,
+          "leak_points": 15166,
+          "leak_fraction": 0.30872264631043256,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11894,
+          "largest_cluster_center": [
+            0.6477,
+            -0.5386,
+            0.8162
+          ],
+          "largest_cluster_bbox_m": [
+            2.4423,
+            1.7054,
+            1.937
+          ]
+        },
+        {
+          "frame": 16,
+          "stamp_s": 1791967524.877507,
+          "points": 49122,
+          "leak_points": 15157,
+          "leak_fraction": 0.30855828345751396,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11883,
+          "largest_cluster_center": [
+            0.6469,
+            -0.538,
+            0.8163
+          ],
+          "largest_cluster_bbox_m": [
+            2.4293,
+            1.7121,
+            1.9369
+          ]
+        },
+        {
+          "frame": 17,
+          "stamp_s": 1791967524.992583,
+          "points": 49126,
+          "leak_points": 15149,
+          "leak_fraction": 0.30837031307250745,
+          "clusters_ge5": 10,
+          "largest_cluster_points": 11881,
+          "largest_cluster_center": [
+            0.6488,
+            -0.5381,
+            0.8158
+          ],
+          "largest_cluster_bbox_m": [
+            2.4491,
+            1.6029,
+            1.9311
+          ]
+        },
+        {
+          "frame": 18,
+          "stamp_s": 1791967525.088866,
+          "points": 49129,
+          "leak_points": 15135,
+          "leak_fraction": 0.30806651875674246,
+          "clusters_ge5": 7,
+          "largest_cluster_points": 11916,
+          "largest_cluster_center": [
+            0.6464,
+            -0.5372,
+            0.8159
+          ],
+          "largest_cluster_bbox_m": [
+            2.4525,
+            2.8655,
+            1.9383
+          ]
+        },
+        {
+          "frame": 19,
+          "stamp_s": 1791967525.192565,
+          "points": 49124,
+          "leak_points": 15156,
+          "leak_fraction": 0.3085253643840078,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11893,
+          "largest_cluster_center": [
+            0.6479,
+            -0.5388,
+            0.8159
+          ],
+          "largest_cluster_bbox_m": [
+            2.4365,
+            1.7371,
+            1.9242
+          ]
+        },
+        {
+          "frame": 20,
+          "stamp_s": 1791967525.295477,
+          "points": 49118,
+          "leak_points": 15121,
+          "leak_fraction": 0.30785048251150293,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11874,
+          "largest_cluster_center": [
+            0.647,
+            -0.5375,
+            0.8159
+          ],
+          "largest_cluster_bbox_m": [
+            2.4494,
+            1.6222,
+            1.9274
+          ]
+        },
+        {
+          "frame": 21,
+          "stamp_s": 1791967525.401473,
+          "points": 49131,
+          "leak_points": 15136,
+          "leak_fraction": 0.3080743318882172,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11884,
+          "largest_cluster_center": [
+            0.6473,
+            -0.5382,
+            0.8156
+          ],
+          "largest_cluster_bbox_m": [
+            2.4222,
+            1.7219,
+            1.9412
+          ]
+        },
+        {
+          "frame": 22,
+          "stamp_s": 1791967525.508397,
+          "points": 49121,
+          "leak_points": 15139,
+          "leak_fraction": 0.30819812300238186,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11885,
+          "largest_cluster_center": [
+            0.6477,
+            -0.5379,
+            0.8154
+          ],
+          "largest_cluster_bbox_m": [
+            2.4568,
+            1.7133,
+            1.9277
+          ]
+        },
+        {
+          "frame": 23,
+          "stamp_s": 1791967525.601264,
+          "points": 49126,
+          "leak_points": 15146,
+          "leak_fraction": 0.30830924561332085,
+          "clusters_ge5": 10,
+          "largest_cluster_points": 11889,
+          "largest_cluster_center": [
+            0.649,
+            -0.5392,
+            0.8158
+          ],
+          "largest_cluster_bbox_m": [
+            2.4409,
+            1.5996,
+            1.9439
+          ]
+        },
+        {
+          "frame": 24,
+          "stamp_s": 1791967525.717835,
+          "points": 49128,
+          "leak_points": 15154,
+          "leak_fraction": 0.3084595342778049,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11883,
+          "largest_cluster_center": [
+            0.648,
+            -0.5383,
+            0.8156
+          ],
+          "largest_cluster_bbox_m": [
+            2.435,
+            1.5644,
+            1.9324
+          ]
+        },
+        {
+          "frame": 25,
+          "stamp_s": 1791967525.821034,
+          "points": 49130,
+          "leak_points": 15121,
+          "leak_fraction": 0.3077752900468146,
+          "clusters_ge5": 8,
+          "largest_cluster_points": 11880,
+          "largest_cluster_center": [
+            0.647,
+            -0.5386,
+            0.8157
+          ],
+          "largest_cluster_bbox_m": [
+            2.4329,
+            1.7028,
+            1.9343
+          ]
+        },
+        {
+          "frame": 26,
+          "stamp_s": 1791967525.928267,
+          "points": 49128,
+          "leak_points": 15157,
+          "leak_fraction": 0.30852059925093633,
+          "clusters_ge5": 9,
+          "largest_cluster_points": 11885,
+          "largest_cluster_center": [
+            0.6469,
+            -0.5386,
+            0.8159
+          ],
+          "largest_cluster_bbox_m": [
+            2.4334,
+            1.5968,
+            1.9288
+          ]
+        }
+      ]
+    }
+  }
+}

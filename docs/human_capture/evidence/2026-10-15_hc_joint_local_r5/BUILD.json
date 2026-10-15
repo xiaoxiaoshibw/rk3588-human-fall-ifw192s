@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-15",
+  "host": "Windows 11",
+  "python": "3.12.10",
+  "pyinstaller": "6.21.0",
+  "build_command": "python -m PyInstaller --noconfirm Console.spec（cwd=pc_apps/console，就地构建）",
+  "build_log_note": "PyInstaller 日志: 'Building because D:\\Code\\ldiar\\pc_apps\\console\\joint_capture.py changed' → 新代码已入 PYZ",
+  "artifacts": {
+    "dist/Console.exe": {
+      "bytes": 193806359,
+      "sha256": "DDC5501AEA5D6D31B6E3D080E1CF1B758D8B67F6DAE708149D2D05A9F567FB4C",
+      "mtime": "2026-10-15 11:33:33"
+    },
+    "dist/LiDAR_Console.zip": {
+      "bytes": 151031729,
+      "sha256": "06D79D0EFBEB902781765BE5F2441F687E0D1A50E4BCF584BBC8104699639AF7",
+      "mtime": "2026-10-15 11:34:52"
+    },
+    "dist/Console.exe.bak-20261015_before_jointfetch": {
+      "bytes": 193805996,
+      "sha256": "0BA4AAE4FC41A864D2A870FF4A50D00DFB94238CC224B58DE5045E0FD6D294CE",
+      "mtime": "2026-10-15 11:07:13",
+      "note": "11:07 版（含本缺陷）备份"
+    }
+  },
+  "inputs": {
+    "pc_apps/console/joint_capture.py": "71B7ADB81D7C91E2DB8BBC76C4A7777784272B214F76616FF8C9B8CB107C484B",
+    "pc_apps/console/joint_capture_test.py": "F8F8B74ED31FE87659E8BA3E7D4FC0A3A2FFF6C7DDE4A00F4931886A4F839B00",
+    "zip_source_copy_matches_repo": true
+  },
+  "bundle_check": "pyi-archive_viewer -l dist/Console.exe 可见条目 human_replay\\fetch.py（datas）→ 冻结运行 _MEIPASS/human_replay 解析成立",
+  "probes": {
+    "--check-joint-capture": {
+      "exit": 0,
+      "file": "JOINT_PROBE_FROZEN.json"
+    },
+    "--check-startup": {
+      "exit": 1,
+      "file": "STARTUP_PROBE_FROZEN.json",
+      "error": "real fall replay did not start（既有缺数据）"
+    }
+  }
+}

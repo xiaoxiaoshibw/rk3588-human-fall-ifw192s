@@ -1,0 +1,75 @@
+{
+  "kind": "registration_provenance",
+  "schema": 1,
+  "source_session": {
+    "sid": "cap_20261014_164522",
+    "meta_sha256": "8e268c919285d074dc435d98b7c61239cb759df25b42016c5acec5cf54772686",
+    "bin_sha256": "1e76c4e97e8212ef279ffafa1c6749b2822aa0465d228ae583b986ed2a0d0441"
+  },
+  "reference_session": {
+    "sid": "cap_20261014_221808",
+    "meta_sha256": "01e9c5915f5a98d73914c64033ee804b63598fe1e6a576a91be07dca5072862c",
+    "bin_sha256": "e1c2509653c7b0dadd1ef45df0392cbefcb6df18a012b3b550a4b861fdc42eaf"
+  },
+  "source_leveling": {
+    "job_id": "363473a9e2e64649994dca11b2b26929",
+    "method": "tls",
+    "transform_id": "3d6bbaffecc1fac6184348aa4e43f44db69774c244ab22329357010d4a228120",
+    "transform_sha256": "131406f65f6ef49da757ed6811023bbd952926b9b279bc8951115fb61c224110",
+    "report_sha256": "d464f350f4f690e8c1c2f57eea8d0deed3a621e34540c7cb96c2b628a8818940",
+    "manifest_sha256": "be821e14e3029b6c6ba0f657f0c58ebbe3b1c827f9a383d5f39b001238a7cdbf"
+  },
+  "reference_leveling": {
+    "job_id": "ce77481751a9421b8e0f7cd77886cb05",
+    "method": "tls",
+    "transform_id": "b57f3b3dd0c02a90cc6c1cb4cf0ce19019b49d9b79b82075fb00c4c06d0f0a28",
+    "transform_sha256": "b7b09c130aafb4cab17d3eb860a23c469197eb94a5f3fa321c39494943d0ddf7",
+    "report_sha256": "8f0448e2f4cabc125f579e1a4c658ac12f18c2621726bba213dd03d8616269a0",
+    "manifest_sha256": "d43d14f5231e115c954cc16a84e6b7158856bc6c634f1d351e30a044fba600a1"
+  },
+  "background_reference": {
+    "builder": "build_reference_map",
+    "code_id": "ed8987258819f3469fbadb2658743fb97c0c227764b578aad63aa98761223bc0",
+    "params": {
+      "bg_ref_hit_min_pts": 1,
+      "bg_ref_occ_min": 0.5,
+      "bg_voxel_xy": 0.15,
+      "bg_voxel_z": 0.12,
+      "ground_keep_below_m": 0.1,
+      "z_max_m": 2.5
+    },
+    "nframes": 272,
+    "ref_voxels_total": 4139,
+    "universe_count": 2788,
+    "digest": {
+      "algo": "refmap_digest_v1",
+      "value": "e27c7b69efbb8fc154be7ce63f6be1432f71493a75fe9fe335e7b073cf1f09ad"
+    }
+  },
+  "code": {
+    "files": {
+      "pc_apps/human_replay/human_pipe_lib.js": "8b50a221dc96aaf2cd75e566f8d75140075cc60651950dbef7c4f6b287b4a176",
+      "pc_apps/human_replay/human_replay_lib.js": "69d8975a0176760713708ca26f7b45a4ba166d4be1f4a5162fcc6e04627fd623",
+      "pc_apps/human_replay/registration_method.js": "958f646ff41adbca7840a0a09ae6ba2ed87db7254b2d16f5365b64625caac141",
+      "pc_apps/human_replay/registration.js": "965c6c49e164969d07c399a0a14e4621a1aa3f797b20f8bb220fb6a5dffc85c0"
+    },
+    "code_id": "0fcb6c9bab1a58519400ff7f713f859a7c805c2f0b3b42b5b09e552f4d05b88c"
+  },
+  "verified": [
+    {
+      "check": "session_sha",
+      "pass": true
+    },
+    {
+      "check": "leveling_sha",
+      "pass": true
+    }
+  ],
+  "writer": {
+    "tool": "registration.js",
+    "version": "1",
+    "runtime": "v24.14.0"
+  },
+  "created_utc": "2026-10-14T17:51:50.297Z",
+  "artifact_id": "7f909a197e8c467f65c8b597b9d3a0daa9bf2456cb57b7c23c3e1519c413180d"
+}

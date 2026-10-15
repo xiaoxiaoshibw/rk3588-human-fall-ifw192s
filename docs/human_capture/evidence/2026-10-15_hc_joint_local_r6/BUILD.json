@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-15",
+  "python": "3.12.10",
+  "pyinstaller": "6.21.0",
+  "stage": "R6 终稿：stage2 exe（最终）+ 13:15 重生成 zip；stage3 PyInstaller 空转（缓存命中，未产生新 exe）",
+  "build_command": "python -m PyInstaller --noconfirm Console.spec（cwd=pc_apps/console，就地）+ python -B make_release.py",
+  "rework_reason": "stage1 构建窗口内 console_gui.py 被并行工作流修改（learn 扩展 handler 参数），stage1 产物哈希不可复现 → 备份 stage1 后重打 stage2（本轮日志 Building because ... console_gui.py changed）",
+  "artifacts": {
+    "dist/Console.exe": {
+      "bytes": 193807707,
+      "sha256": "B245763581D688BD73B27E6C66233BB013561E87E5594B0028A287AA942041BF",
+      "mtime": "2026-10-15 13:11:09"
+    },
+    "dist/LiDAR_Console.zip": {
+      "bytes": 151034726,
+      "sha256": "495B8901E604202BC37946FBB4A8CE43A01450C48B158E95A6DCFD1185D232CB",
+      "mtime": "2026-10-15 13:15:17",
+      "note": "13:15:17 重生成（stage3 make_release，源码条目与 13:11:18 版相同；zip 元数据变化致外哈希不同）"
+    },
+    "dist/Console.exe.bak-20261015_r6_stage1": {
+      "bytes": 193805296,
+      "sha256": "F5BD3D534A56EC9CD7E6F2FF83A559684698E9BBD6F607C8E37A10182CA89792",
+      "mtime": "2026-10-15 13:02:42",
+      "note": "R6 首次重打（构建窗口竞态，弃用）"
+    },
+    "dist/Console.exe.bak-20261015_before_r6": {
+      "bytes": 193806359,
+      "sha256": "DDC5501AEA5D6D31B6E3D080E1CF1B758D8B67F6DAE708149D2D05A9F567FB4C",
+      "mtime": "2026-10-15 11:33:33",
+      "note": "R5 版（11:33）"
+    }
+  },
+  "inputs": {
+    "pc_apps\\console\\joint_capture.py": {
+      "bytes": 19146,
+      "sha256": "7B4EE53A6E26A40A9926F22CAD83C1FC4B08D6B7973FAD65AE3E962838DD8851"
+    },
+    "pc_apps\\console\\joint_capture_test.py": {
+      "bytes": 10674,
+      "sha256": "863005010932491C2BB90B5293B6FAE902170CA60BD417A9407F504FE1442058"
+    },
+    "pc_apps\\console\\console_gui.py": {
+      "bytes": 20752,
+      "sha256": "D42315EA54826A3B9A882AAA05EAC6F5E27A89DA9C7DF08E449005D8F888749E"
+    },
+    "pc_apps\\human_replay\\human_replay_lib.py": {
+      "bytes": 42508,
+      "sha256": "0E70FD1C7D93E9EA7959EFD1DBC67EB9D3BFDE93D1FDED0234F5488C774D61C1"
+    },
+    "pc_apps\\human_limb\\limb_server.py": {
+      "bytes": 12475,
+      "sha256": "47F9ED3482D5FF90D1AA24F74DDBF608FF46B9BA50ACE37E62B6234D5EEDFD41"
+    }
+  },
+  "zip_source_copy_matches_repo": {
+    "joint_capture.py": true,
+    "console_gui.py（按构建冻结版 13:07:57，非 13:17:52 树头）": true
+  },
+  "probes": {
+    "--check-joint-capture": {
+      "exit": 0,
+      "joint_fetch_ok": true,
+      "file": "JOINT_PROBE_FROZEN.json",
+      "ran_against": "exe B2457635…（= 终态 exe，13:11:09）"
+    },
+    "--check-startup": {
+      "exit": 1,
+      "error": "real fall replay did not start（既有缺数据）",
+      "file": "STARTUP_PROBE_FROZEN.json"
+    }
+  },
+  "parallel_writer_timeline": {
+    "13:00:25": "console_gui 并行写 #1（19682E84，learn 扩展 manifest/index 参数）",
+    "13:07:57": "并行写 #2（D42315EA，LEARN_RUN_ID/learn_run/4 参 handler）——PKG 阶段读取（13:09-13:11），已随 stage2 exe 与 zip 冻结",
+    "13:17:52": "并行写 #3（E3FAC7D9，22533B）——未入本轮任何产物；属该工作流自管打包范围",
+    "note": "并行 learn 扩展由 learn/r01/CURRENT.json 存在性门控；当前不存在 → 停用态。R6 三处 hunk（fetch_dir/joint_fetch_ok/_write_check_report）在全部版本中保持；冻结探针行为验证（joint_fetch_ok=true）。"
+  },
+  "zip_vs_tree_note": "zip 内 console_gui 与当前树差异 = 13:17:52 并行迭代，差异归档 PARALLEL_CONSOLE_GUI_ZIP_vs_TREE.diff（38 行）"
+}

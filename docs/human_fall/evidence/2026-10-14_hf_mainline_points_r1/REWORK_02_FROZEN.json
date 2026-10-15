@@ -1,0 +1,34 @@
+{
+  "config": {
+    "attachment_m": 0.12,
+    "minimum_anchor_neighbors": 4,
+    "maximum_fit_coverage": 33,
+    "past_radius_m": 0.12,
+    "past_age_s": 0.4,
+    "past_frames": 4,
+    "max_gap_s": 0.5,
+    "variants": [
+      "combined",
+      "feedback"
+    ],
+    "validation_status": "REUSED_REGRESSION_HISTORICALLY_SEEN_CONTEXT_HOLDOUT",
+    "selection_reason": "Existing .12m diagnosis neighborhood; >=4 current anchor neighbors from original graph density; lowest FIT-coverage diagnosis decile risk; past .4s/4 frames bounded original precedent; no labels",
+    "identity": "UNKNOWN",
+    "reference_normals": "MISSING",
+    "production_thresholds_unchanged": true,
+    "guard_anchor_fraction_min": 0.85,
+    "guard_center_max_m": 0.12,
+    "guard_axis_change_max_deg": 30.0,
+    "guard_source_sha": "840504f2948023f823a07822c7e5f358b2690a8956d927400753be6ebcab728e",
+    "rework_reason": "run01 current background-neighbor recovery caused .355695m median-center displacement; reference FIT coverage cannot discriminate; bound current-anchor perturbation, identity remains UNKNOWN"
+  },
+  "parameter_provenance": {
+    "center": ".12m original attachment radius, not registration tolerance",
+    "anchor_fraction": ".85 original R3 current-anchor local-axis fraction",
+    "axis_change": "30deg original R2 axis-change limit"
+  },
+  "original_run": "run_01",
+  "all_original_outputs_preserved": true,
+  "holdout_status": "REUSED_REGRESSION",
+  "labels_in_inference": false
+}

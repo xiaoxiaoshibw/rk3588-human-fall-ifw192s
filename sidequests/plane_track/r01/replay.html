@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>PLANE-01 10 Hz 准实时回放</title>
+<style>
+  body{font-family:Consolas,monospace;background:#101418;color:#dfe6ee;margin:0;padding:12px}
+  canvas{background:#0b0e12;border:1px solid #2a3541}
+  #hud{white-space:pre;font-size:13px;line-height:1.45;margin-top:8px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .note{color:#8ba1b7;font-size:12px;margin-top:6px}
+</style>
+</head>
+<body>
+<h3>PLANE-01 准实时回放（10 Hz，本机，只读 captures）</h3>
+<div class="row">
+  <canvas id="top" width="560" height="440"></canvas>
+  <canvas id="side" width="560" height="440"></canvas>
+</div>
+<div id="hud">等待回放线程发布帧…</div>
+<div class="note" id="note"></div>
+<script>
+"use strict";
+let lastIndex = -1, received = 0, skips = 0, latencies = [], lastCount = null;
+const state = {frames_total: null};
+
+async function poll(){
+  try{
+    const res = await fetch('/api/state', {cache:'no-store'});
+    const data = await res.json();
+    state.frames_total = data.frames_total;
+    if(data.current !== lastIndex && data.current >= 0){
+      if(lastIndex >= 0 && data.current > lastIndex + 1) skips += data.current - lastIndex - 1;
+      lastIndex = data.current; received++;
+      await draw(data.current);
+    }
+    renderHud(data);
+    if(data.frames_total && data.current >= data.frames_total - 1){
+      const report = {received, skips, latencies, finished_at: Date.now(), frames_total: data.frames_total};
+      await fetch('/api/client', {method:'POST', headers:{'Content-Type':'application/json'},
+                                  body: JSON.stringify(report)});
+      document.getElementById('note').textContent = '回放结束，已回传客户端指标。';
+      return;
+    }
+  }catch(e){ /* 服务未就绪或已关闭 */ }
+  setTimeout(poll, 40);
+}
+
+async function draw(index){
+  const t0 = performance.now();
+  const res = await fetch('/api/points?i='+index, {cache:'no-store'});
+  const buffer = await res.arrayBuffer();
+  const tPublish = parseFloat(res.headers.get('X-Frame-T-Publish') || '0');
+  const view = new DataView(buffer);
+  const count = view.getUint32(0, true);
+  lastCount = count;
+  const xyz = new Float32Array(buffer, 4, count*3);
+  const flags = new Uint8Array(buffer, 4 + count*12, count);
+  drawCloud(document.getElementById('top'), xyz, flags, 0, 1);
+  drawCloud(document.getElementById('side'), xyz, flags, 0, 2);
+  latencies.push({frame: index, send_to_parse_ms: performance.now()-t0,
+                  since_publish_ms: -1});
+  if(latencies.length > 200) latencies.shift();
+}
+
+function drawCloud(canvas, xyz, flags, i, j){
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const lo = [ -1, -3, -0.5 ], hi = [ 10, 5, 3.5 ];
+  const spanX = hi[i]-lo[i], spanY = hi[j]-lo[j];
+  ctx.fillStyle = '#7f8c9b';
+  for(let k=0;k<flags.length;k++){
+    const x = xyz[k*3+i], y = xyz[k*3+j];
+    if(x < lo[i] || x > hi[i] || y < lo[j] || y > hi[j]) continue;
+    const px = (x-lo[i])/spanX*W, py = H - (y-lo[j])/spanY*H;
+    if(flags[k]) continue;
+    ctx.fillRect(px, py, 2, 2);
+  }
+  ctx.fillStyle = '#ff4444';
+  for(let k=0;k<flags.length;k++){
+    if(!flags[k]) continue;
+    const x = xyz[k*3+i], y = xyz[k*3+j];
+    const px = (x-lo[i])/spanX*W, py = H - (y-lo[j])/spanY*H;
+    ctx.fillRect(px-3, py-3, 6, 6);
+  }
+}
+
+function renderHud(data){
+  const rows = data.rows || [];
+  const row = rows[rows.length-1] || {};
+  const hud = [
+    `frame ${data.current} / ${data.frames_total}    published ${data.frames_published}    detected ${data.detected_frames}`,
+    `compute_ms median/p95/max: ${fmt(data.compute_ms.median)} / ${fmt(data.compute_ms.p95)} / ${fmt(data.compute_ms.max)}`,
+    `publish_delay_ms median/p95/max: ${fmt(data.publish_delay_ms.median)} / ${fmt(data.publish_delay_ms.p95)} / ${fmt(data.publish_delay_ms.max)}`,
+    `late_start(掉帧) ${data.dropped_schedule}    client received ${received} skips ${skips}`,
+    `本帧: candidates ${row.candidates ?? '-'} detected ${row.detected ?? '-'} points ${row.point_count ?? '-'} range ${fmt(row.range_median_m)} m streak ${fmt(row.streak_m)} m gate ${fmt(row.gate_m)} m`,
+  ].join('\n');
+  document.getElementById('hud').textContent = hud;
+}
+function fmt(v){ return (v === null || v === undefined) ? '-' : Number(v).toFixed(2); }
+poll();
+</script>
+</body>
+</html>

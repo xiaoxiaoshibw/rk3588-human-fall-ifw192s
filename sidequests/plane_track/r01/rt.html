@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><title>PLANE-01 准实时跟踪（10 Hz，P1 在线段）</title>
+<style>
+ body{font-family:Consolas,monospace;background:#0a0e13;color:#e6edf3;margin:0;padding:12px}
+ canvas{background:#06090d;border:1px solid #26343f;margin:2px}
+ #hud{white-space:pre;font-size:13.5px;line-height:1.5;margin-top:8px}
+ .note{color:#8ba1b7;font-size:12px;margin-top:6px;max-width:1250px}
+ .lg{display:inline-block;width:10px;height:10px;margin:0 4px 0 12px;border-radius:2px;vertical-align:middle}
+</style></head><body>
+<h3>PLANE-01 准实时跟踪（P1：≥1 点候选 → KF/M-N → TBD 声明；10 Hz）</h3>
+<div>
+  <canvas id="cTop" width="560" height="430"></canvas>
+  <canvas id="cSide" width="560" height="430"></canvas>
+</div>
+<div>
+  <span class="lg" style="background:#6b7c8d"></span>候选（自由空间，≥1 点）
+  <span class="lg" style="background:#ff3b30"></span>确认运动轨迹关联点
+  <span class="lg" style="background:#f2c14e"></span>轨迹与到地面垂线
+</div>
+<div id="hud">等待在线段开始…</div>
+<div class="note">上游（前景/候选）在启动时已离线预计算并记录耗时；本页与 /api/state 只反映**在线段**（关联→KF→TBD→发布）。
+轨迹为 6 维匀速 KF + M/N 确认（8 帧 4 命中）+ coast 8 帧；判定"运动"=位移>0.3 m 且均速>0.5 m/s。</div>
+<script>
+"use strict";
+const BOUNDS = {top:[[-1,10],[-3,5]], side:[[-1,10],[-0.5,3.6]]};
+let lastIndex = -1, received = 0, skips = 0, timer = null;
+
+async function poll(){
+  let data = null;
+  try { data = await (await fetch('/api/state', {cache:'no-store'})).json(); } catch(e) { timer = setTimeout(poll, 120); return; }
+  if(data.current !== lastIndex && data.current >= 0){
+    if(lastIndex >= 0 && data.current > lastIndex + 1) skips += data.current - lastIndex - 1;
+    lastIndex = data.current; received++;
+    await draw(data.current);
+  }
+  renderHud(data);
+  if(data.frames_total && data.current >= data.frames_total - 1){
+    await fetch('/api/client', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({received, skips, finished_at: Date.now(), frames_total: data.frames_total})});
+    document.getElementById('hud').textContent += "\n（回放结束，客户端指标已回传）";
+    return;
+  }
+  timer = setTimeout(poll, 40);
+}
+async function draw(index){
+  const res = await fetch('/api/points?i='+index, {cache:'no-store'});
+  const buf = await res.arrayBuffer();
+  const view = new DataView(buf);
+  const count = view.getUint32(0, true);
+  const xyz = new Float32Array(buf, 4, count*3);
+  const flags = new Uint8Array(buf, 4 + count*12, count);
+  for(const [id, i, j, key] of [['cTop',0,1,'top'], ['cSide',0,2,'side']]){
+    const canvas = document.getElementById(id), ctx = canvas.getContext('2d');
+    const [loI,hiI] = BOUNDS[key][0], [loJ,hiJ] = BOUNDS[key][1];
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let k=0;k<count;k++){
+      const p = [xyz[k*3],xyz[k*3+1],xyz[k*3+2]];
+      const a=p[i], b=p[j];
+      if(a<loI||a>hiI||b<loJ||b>hiJ) continue;
+      const px=(a-loI)/(hiI-loI)*canvas.width, py=canvas.height-(b-loJ)/(hiJ-loJ)*canvas.height;
+      ctx.fillStyle = flags[k] ? '#ff3b30' : '#6b7c8d';
+      const size = flags[k] ? 8 : 4;
+      ctx.fillRect(px-size/2, py-size/2, size, size);
+    }
+    ctx.fillStyle='#5b6b7a'; ctx.font='12px Consolas';
+    ctx.fillText(key==='top' ? '俯视 x-y' : '侧视 x-z', 8, 16);
+  }
+}
+function renderHud(data){
+  const rows = data.rows || [];
+  const row = rows[rows.length-1] || {};
+  const tbd = data.tbd || {};
+  document.getElementById('hud').textContent = [
+    `帧 ${data.current} / ${data.frames_total}   候选 ${row.candidates ?? '-'}   确认轨 ${row.confirmed_tracks ?? '-'}   目标轨 ${row.target_id ?? '-'}${row.target_speed_m_s ? '  ' + row.target_speed_m_s.toFixed(2) + ' m/s' : ''}`,
+    `在线段 compute 中位/p95/max: ${fmt(data.compute_ms.median)} / ${fmt(data.compute_ms.p95)} / ${fmt(data.compute_ms.max)} ms   发布延迟 max ${fmt(data.publish_delay_ms.max)} ms   晚启动(掉帧) ${data.late_start}`,
+    `上游(离线预计算) 每帧中位 ${fmt(data.upstream_ms_per_frame && data.upstream_ms_per_frame.median)} ms    TBD 声明帧 ${tbd.declared_first_frame ?? '-'}    客户端 received ${received} skips ${skips}`,
+  ].join('\n');
+}
+function fmt(v){ return (v === null || v === undefined) ? '-' : Number(v).toFixed(1); }
+poll();
+</script></body></html>

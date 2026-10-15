@@ -1,0 +1,42 @@
+diff --git a/pc_apps/console/console.html b/pc_apps/console/console.html
+index b1848bb..043101c 100644
+--- a/pc_apps/console/console.html
++++ b/pc_apps/console/console.html
+@@ -3,7 +3,7 @@
+ <head>
+ <meta charset="utf-8">
+ <title>LiDAR Workspace</title>
+-<link rel="icon" href="console_icon.png" type="image/png">
++<link rel="icon" href="console_icon.ico" type="image/x-icon">
+ <style>
+   /* 设计 token 与 human_replay/ui.css 保持同值；本页因 PyInstaller 单文件打包必须内联 */
+   :root{
+@@ -97,6 +97,8 @@ const requestedPort = Number(new URLSearchParams(location.search).get("replay_po
+ const replayBase = "http://127.0.0.1:" + (Number.isInteger(requestedPort) && requestedPort > 0 && requestedPort <= 65535 ? requestedPort : 8901);
+ const fallPort = Number(new URLSearchParams(location.search).get("fall_port"));
+ const fallBase = Number.isInteger(fallPort) && fallPort > 0 && fallPort <= 65535 ? "http://127.0.0.1:" + fallPort : null;
++const realFallPort = Number(new URLSearchParams(location.search).get("real_fall_port"));
++const realFallBase = Number.isInteger(realFallPort) && realFallPort > 0 && realFallPort <= 65535 ? "http://127.0.0.1:" + realFallPort : null;
+ const capturePort = Number(new URLSearchParams(location.search).get("capture_port"));
+ const captureBase = Number.isInteger(capturePort) && capturePort > 0 && capturePort <= 65535 ? "http://127.0.0.1:" + capturePort : null;
+ // 线性 SVG 图标（Lucide 风格内嵌，不引外部资源）
+@@ -105,14 +107,16 @@ const APPS = [
+   {name:"会话回放",  desc:"replay · 本地服务",      icon:svg('<path d="m6 4 14 8-14 8Z"/>'), url:replayBase + "/"},
+   {name:"板端 WebUI", desc:"RK3588 · 192.168.31.58:8090", icon:svg('<rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>'), url:"http://192.168.31.58:8090/",
+    fail:"当前不在内网，无法连接板端 WebUI"},
+-  {name:"USB 摄像头", desc:"RK3588 · 192.168.31.58:8081 MJPEG", icon:svg('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:"http://192.168.31.58:8081/stream", mode:"tab"},
++  {name:"USB 摄像头", desc:"RK3588 · 192.168.31.58:8081 MJPEG", icon:svg('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:"http://192.168.31.58:8081/stream"},  // 2026-10-14 去掉 mode:"tab"：iframe 内嵌预览。pywebview 吞顶层 window.open 是"卡片点不开"的根因
+   {name:"算法验证", desc:"四区评估 · TLS / SVD / RANSAC", icon:svg('<path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>'), url:replayBase + "/validation.html"},
+   {name:"人体识别", desc:"纯几何 · pin ROI 辅助判别人/家具 · 不跑模型", icon:svg('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'), url:replayBase + "/human_detect.html"},
+   {name:"人检锁定", desc:"B2a RandomForest 51维人/非人 · rf_person_v1 · 实时跟踪", icon:svg('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/>'), url:replayBase + "/human_track.html"},
+   {name:"GT 标注", desc:"2D 点云人工 GT 工作台 · 跨帧 track · 冻结版本", icon:svg('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>'), url:replayBase + "/gt_annotator.html"},
+-  {name:"骨架与倒地检测", desc:"真人回放 · 人体锁定 / 骨架 / 告警全过程", icon:svg('<circle cx="12" cy="4" r="2"/><path d="M12 6v8m-6-5 6 2 6-2m-6 5-5 7m5-7 5 7"/>'), url:fallBase ? fallBase + "/" : "about:blank",
++  {name:"骨架与倒地检测", desc:"八段动作 · 中央人体 / 点支撑骨架 / 倒地姿态候选", icon:svg('<circle cx="12" cy="4" r="2"/><path d="M12 6v8m-6-5 6 2 6-2m-6 5-5 7m5-7 5 7"/>'), url:fallBase ? fallBase + "/" : "about:blank",
+    unavailable:fallBase ? null : "当前工作区的真人回放数据未就绪，请在原工作区重新打开总控制台"},
+-  {name:"USB＋雷达联合录制", desc:"同时录制 · 数据直接保存到本机", icon:svg('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>'), url:captureBase ? captureBase + "/" : "about:blank",
++  {name:"真人倒地回放", desc:"真实录制 · 点支撑粗部位 / 未确认原型告警", icon:svg('<circle cx="12" cy="4" r="2"/><path d="M12 6v8m-6-5 6 2 6-2m-6 5-5 7m5-7 5 7"/>'), url:realFallBase ? realFallBase + "/" : "about:blank",
++   unavailable:realFallBase ? null : "真实倒地回放数据未就绪，请从原工作区重新打开总控制台"},
++  {name:"USB＋雷达联合录制", desc:"板端先存 · 录制结束后拉回本机", icon:svg('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>'), url:captureBase ? captureBase + "/" : "about:blank",
+    unavailable:captureBase ? null : "请重新打开总控制台以启动本机联合录制服务"},
+ ];
+ // ============================================================

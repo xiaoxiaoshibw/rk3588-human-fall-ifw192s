@@ -1,0 +1,40 @@
+R8 本轮改动片段（相机预览同步落盘；若被并行写入覆盖，按此回填）
+
+1) pc_apps/console/joint_capture.py — 模块 docstring 第 1 行：
+   「相机仅预览」→「相机预览同步落盘」。
+
+2) pc_apps/console/joint_capture.py — Recorder._camera_preview_only 重写为
+   _camera_preview_only(self, url, mj_path, frames_path)：
+   - 进入即 open(mj_path,'ab') 与 open(frames_path,'a')，跨断流重连续写；
+   - 每帧：offset=out.tell(); out.write(jpeg); 追加 json 行
+     {"offset","length","recv_unix_ns"}；self.data['camera_frames'] += 1（原恒 =1）；
+   - 末尾 finally 关闭两个句柄。
+
+3) pc_apps/console/joint_capture.py — Recorder._run 头部调整：
+   - sid 校验（R7 的 re.fullmatch 白名单）与 out_dir = root / sid 上移到 board.start() 之后；
+   - out_dir.mkdir 后立即起相机线程，参数 (camera_url, out_dir/'camera.mjpeg', out_dir/'camera_frames.jsonl')；
+   - 停板后：self.stop_event.set(); preview.join(timeout=10)；
+     若 camera.mjpeg 不存在则写空占位；若为 0 字节则删掉空的 camera_frames.jsonl；
+   - 删除原「(out_dir/'camera.mjpeg').write_bytes(b'')」占位行。
+
+4) pc_apps/console/joint_capture.py — joint_info.update(...) 增 camera_frames=self.data['camera_frames']。
+
+5) pc_apps/console/joint_capture.py — Handler.do_GET 增 elif route == '/api/camera': self._serve_camera()；
+   新增 Handler._serve_camera：sid = query['sid']；re.fullmatch(r'[A-Za-z0-9_-]{1,100}') 守卫；
+   recorder.root/<sid>/camera.mjpeg 存在且非空才 200 + Content-Type video/x-mjpeg 流式发出，
+   否则 404 {'error':'没有这个会话的相机视频'}。
+
+6) pc_apps/console/joint_capture.html — 文案（第 7 行顶部说明、保存内容说明、camCount、previewNote）
+   改为「相机同步录像/camera.mjpeg/camera_frames.jsonl」；新增 <div id="replayBox"> 回看面板
+   （#camPlay / #camInfo / #camSlider / #camFrame）；render() 末尾调用 camMaybe(s)；
+   新增 camShow/camStop/camPlay/camLoad/camMaybe：fetch /api/camera?sid= → 按 FF D8 FF / FF D9
+   切帧 → Blob URL 逐帧显示，~15fps 播放 + 拖动。
+
+7) pc_apps/console/README.txt — 「录制时相机只做实时预览（视频不入库）」改为
+   「录制时相机画面同步录像到本机会话目录（camera.mjpeg + 逐帧索引 camera_frames.jsonl）」；
+   保存内容行补 camera.mjpeg / camera_frames.jsonl 与「可在联合录制页回看」。
+
+8) pc_apps/console/joint_capture_test.py — 新增 import urllib.error；
+   新增 _FakeCameraStream / _fake_camera_opener 辅助；
+   新增 test_camera_preview_is_written_to_session、test_camera_route_serves_saved_video_and_rejects_unsafe_sid；
+   文件头合同列表加第 5 条。

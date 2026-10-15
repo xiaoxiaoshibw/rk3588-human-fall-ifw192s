@@ -1,0 +1,324 @@
+{
+  "config": {
+    "schema_version": "pointset-episode/1",
+    "seed": 42,
+    "background_session": "cap_20261010_175227",
+    "voxel_m": 0.05,
+    "background_min_frame_fraction": 0.3,
+    "background_calibration_quantile": 0.95,
+    "background_tolerance_cap_m": 0.12,
+    "range_min_m": 0.2,
+    "range_max_m": 15.0,
+    "z_min_m": -0.25,
+    "z_max_m": 2.6,
+    "cluster_eps_m": 0.17,
+    "cluster_min_voxels": 4,
+    "cluster_min_points": 25,
+    "independence_probe_eps_fraction": 0.65,
+    "separation_normalizer_m": 0.35,
+    "near_background_factor": 2.0,
+    "model_probability_threshold": 0.55,
+    "display_sample_points": 1500,
+    "part_min_points": 12,
+    "axis_eigen_ratio_min": 1.8,
+    "body_axis_min_span_m": 0.35,
+    "branch_offset_m": 0.08,
+    "outer_branch_offset_m": 0.2,
+    "branch_min_separation_m": 0.1,
+    "body_bands": [
+      [
+        0.88,
+        1.03
+      ],
+      [
+        0.7,
+        0.88
+      ],
+      [
+        0.52,
+        0.7
+      ],
+      [
+        0.33,
+        0.52
+      ],
+      [
+        -0.03,
+        0.33
+      ]
+    ],
+    "roi_status": "USER_SCREENSHOT_APPROXIMATION_PENDING_COORDINATE_REVIEW",
+    "roi_xy": [
+      [
+        0.45,
+        0.45
+      ],
+      [
+        1.3,
+        -0.35
+      ],
+      [
+        2.75,
+        1.25
+      ],
+      [
+        1.9,
+        2.1
+      ]
+    ]
+  },
+  "assets_sha256": {
+    "D:\\Code\\ldiar\\sidequests\\human_fusion_lab\\models\\pointnet_shadow.onnx": "639fe3244953f4b62fe2afe8af25163f7ad776485274172328fc74c0ce5f21ba",
+    "D:\\Code\\ldiar\\sidequests\\human_fusion_lab\\results\\AUDIT.json": "8272ea653efe1ec228e0ff6c97ec2a6dd8740caea5b787c4fb17fcd6711f9da4",
+    "D:\\Code\\ldiar\\sidequests\\human_fusion_lab\\core\\leveling.js": "4a3a854f62c0edd0c287ed0fc1dcd9bd3358d4e8b3c2825687d046e289317f45"
+  },
+  "sessions": [
+    {
+      "session_id": "cap_20261010_175227",
+      "activity": "S1-empty-with-furniture",
+      "frame_count": 304,
+      "duration_sec": 31.417239,
+      "source_sha256": {
+        "meta": "2f3139a4cd9aa2ef665a26bfe157224e3fe93ffc3db60dcc6be8275d39661610",
+        "points": "7ee30e01878205f37463d79d95983321780f6c66a14d2a1ac7c4a5d48e61a5d8"
+      },
+      "reference_status": "BOUND_EXISTING_REVIEWED_LABELS",
+      "reference_gt_level": "UNKNOWN",
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 25.874769500002003
+    },
+    {
+      "session_id": "cap_20261010_175429",
+      "activity": "S3-walk-x-near",
+      "frame_count": 258,
+      "duration_sec": 26.638434,
+      "source_sha256": {
+        "meta": "4ee0d149864139f4ac3f55610ab28bf248da5283b03f1ba12edc3ace824e7278",
+        "points": "6e5874b41c92ba178e154c55d4b49c01aa7e1457b8c59bb0658973de3da7f809"
+      },
+      "reference_status": "BOUND_EXISTING_REVIEWED_LABELS",
+      "reference_gt_level": "UNKNOWN",
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 27.670147400000133
+    },
+    {
+      "session_id": "cap_20261010_175553",
+      "activity": "S3-walk-y-far",
+      "frame_count": 464,
+      "duration_sec": 47.998005,
+      "source_sha256": {
+        "meta": "733574b15d341644991e935740bb7a238999afd170d5ab6a794be46209fc9f5d",
+        "points": "b25119b16fe8ed9975bcf6bd08dbb4f324c96e9641af88276253d9772e9fff4d"
+      },
+      "reference_status": "BOUND_EXISTING_REVIEWED_LABELS",
+      "reference_gt_level": "UNKNOWN",
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 73.19760049999968
+    },
+    {
+      "session_id": "cap_20261010_175804",
+      "activity": "S4-walk-stop-walk",
+      "frame_count": 239,
+      "duration_sec": 24.66957,
+      "source_sha256": {
+        "meta": "da30db1b6e6f4384a1a7f7c05b4b02746b58b77f125b7f1ac8ccdd91d7be1f81",
+        "points": "a8dab04aefb495372f10c252f611341c168ceab9fb8e35f6c3a7f3c9f7f34653"
+      },
+      "reference_status": "BOUND_EXISTING_REVIEWED_LABELS",
+      "reference_gt_level": "UNKNOWN",
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 25.769246200001362
+    },
+    {
+      "session_id": "cap_20261010_175943",
+      "activity": "S5-turn-in-place",
+      "frame_count": 202,
+      "duration_sec": 20.828735,
+      "source_sha256": {
+        "meta": "b7c4ccffb5143a5c5552479e160114546a1c6bebcb9b80a96117e78ecea7c7bc",
+        "points": "fa4b0e00b84780385fb30a28c8417b51b6ea321fc4572bb45b6fef3c74fac087"
+      },
+      "reference_status": "BOUND_EXISTING_REVIEWED_LABELS",
+      "reference_gt_level": "UNKNOWN",
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 25.730588100002933
+    },
+    {
+      "session_id": "cap_20261010_180235",
+      "activity": "S6-occlusion",
+      "frame_count": 238,
+      "duration_sec": 24.566344,
+      "source_sha256": {
+        "meta": "d3127d67cdc1c3ab4e2eadddd11d8a100fb8cb9ab489d588ea9f48684f5f7b48",
+        "points": "0eb22d564361a730a38adbcf72d31b4b907d1f38b32c5908da55d58d341b0173"
+      },
+      "reference_status": "BOUND_EXISTING_REVIEWED_LABELS",
+      "reference_gt_level": "UNKNOWN",
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 23.984032899999875
+    },
+    {
+      "session_id": "cap_20261010_180337",
+      "activity": "S7-far-5m",
+      "frame_count": 251,
+      "duration_sec": 25.901763,
+      "source_sha256": {
+        "meta": "af6173fb5c365589730e25427b740e40a403c5b31e7d25d4a77726c17c086b35",
+        "points": "8b7dfa1d67ea28176ff4aba3338a681d4eb90061ff91f19c92b84cd198065797"
+      },
+      "reference_status": "BOUND_EXISTING_REVIEWED_LABELS",
+      "reference_gt_level": "UNKNOWN",
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 30.153903500002343
+    },
+    {
+      "session_id": "cap_20261010_180557",
+      "activity": "S8-still-retention-long",
+      "frame_count": 523,
+      "duration_sec": 54.117878,
+      "source_sha256": {
+        "meta": "4295ffc95e12ffe9ebf651a9866c21b16875c43725615045530a7c140b75db1e",
+        "points": "59ee17bf4af762a28785f8d8ceca7b06bc564fa5e42b17c22f9c9bf74fd1bcb9"
+      },
+      "reference_status": "BOUND_EXISTING_REVIEWED_LABELS",
+      "reference_gt_level": "UNKNOWN",
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 48.298483799997484
+    },
+    {
+      "session_id": "cap_20261010_180751",
+      "activity": "S9-two-person-cross",
+      "frame_count": 126,
+      "duration_sec": 12.952789,
+      "source_sha256": {
+        "meta": "60ddb3d5bc5b2cf078a66a84a7f69f8d71ce9df0a0ff5cf106d42ee87be5b323",
+        "points": "7d978a67336459f702c91a9eb77f69bee2fef6f444889ee1a0e15eb106726dbd"
+      },
+      "reference_status": "BLOCKED_INVALID_BINDING",
+      "reference_gt_level": null,
+      "scope_note": "Action is recording description, not per-frame action truth",
+      "elapsed_sec": 22.27850539999781
+    }
+  ],
+  "versions": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "numpy": "1.26.4",
+    "onnxruntime": "1.24.4"
+  },
+  "command": [
+    "D:/Code/ldiar/sidequests/human_fusion_lab_next/pointset/r01/run.py"
+  ],
+  "parts_accuracy": "BLOCKED_NO_ANATOMICAL_LABELS",
+  "device": "WINDOWS_LOCAL_OFFLINE",
+  "final_config": {
+    "schema_version": "pointset-episode/1",
+    "seed": 42,
+    "background_session": "cap_20261010_175227",
+    "voxel_m": 0.05,
+    "background_min_frame_fraction": 0.3,
+    "background_calibration_quantile": 0.95,
+    "background_tolerance_cap_m": 0.12,
+    "range_min_m": 0.2,
+    "range_max_m": 15.0,
+    "z_min_m": -0.25,
+    "z_max_m": 2.6,
+    "cluster_eps_m": 0.17,
+    "cluster_min_voxels": 4,
+    "cluster_min_points": 25,
+    "independence_probe_eps_fraction": 0.65,
+    "separation_normalizer_m": 0.35,
+    "near_background_factor": 2.0,
+    "independence_weights": [
+      0.4,
+      0.3,
+      0.3
+    ],
+    "background_contact_warning_fraction": 0.5,
+    "independence_strong_core_fraction": 0.75,
+    "independence_max_near_background_fraction": 0.25,
+    "independence_min_other_cluster_gap_m": 0.2,
+    "model_probability_threshold": 0.55,
+    "rf_trees": 100,
+    "rf_max_depth": 10,
+    "rf_min_samples_leaf": 3,
+    "display_sample_points": 1500,
+    "part_min_points": 12,
+    "axis_eigen_ratio_min": 1.8,
+    "upright_min_span_m": 1.0,
+    "lateral_axis_min_norm": 0.1,
+    "body_axis_min_span_m": 0.35,
+    "part_train_epochs": 20,
+    "part_train_lr": 0.001,
+    "part_train_max_points": 2048,
+    "branch_offset_m": 0.08,
+    "outer_branch_offset_m": 0.2,
+    "branch_min_separation_m": 0.1,
+    "body_bands": [
+      [
+        0.88,
+        1.03
+      ],
+      [
+        0.7,
+        0.88
+      ],
+      [
+        0.52,
+        0.7
+      ],
+      [
+        0.33,
+        0.52
+      ],
+      [
+        -0.03,
+        0.33
+      ]
+    ],
+    "branch_bands": {
+      "upper": [
+        0.52,
+        0.88
+      ],
+      "outer": [
+        0.33,
+        0.88
+      ],
+      "lower": [
+        0.12,
+        0.33
+      ],
+      "end": [
+        -0.03,
+        0.12
+      ]
+    },
+    "roi_status": "USER_SCREENSHOT_APPROXIMATION_PENDING_COORDINATE_REVIEW",
+    "roi_xy": [
+      [
+        0.45,
+        0.45
+      ],
+      [
+        1.3,
+        -0.35
+      ],
+      [
+        2.75,
+        1.25
+      ],
+      [
+        1.9,
+        2.1
+      ]
+    ]
+  },
+  "final_config_sha256": "08ae39d3104c10b4ea2a7b22a581bd24e1e2a0a18e094daffba3f50a914b35c0",
+  "postprocessing_commands": [
+    "summarize.py",
+    "train_parts.py (BLOCKED: no labels)",
+    "make_gallery.py"
+  ],
+  "thresholds_finalization": "Added names for unchanged numerical defaults; no changed geometry thresholds"
+}

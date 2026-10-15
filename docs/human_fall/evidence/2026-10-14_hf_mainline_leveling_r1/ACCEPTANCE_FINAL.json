@@ -1,0 +1,70 @@
+{
+  "status": "SUBMITTED_NOT_ACCEPTED",
+  "acceptance": "ACCEPTANCE_V2.md",
+  "acceptance_sha256": "31d4f3a40cc683f993d46df2d019859d1637603d91f64e78cd96582cf12a2f53",
+  "checks": [
+    {
+      "id": "ML01",
+      "status": "PASS",
+      "evidence": [
+        "run_02/IMMUTABILITY.json",
+        "run_03/IMMUTABILITY.json"
+      ]
+    },
+    {
+      "id": "ML02",
+      "status": "PASS",
+      "evidence": [
+        "run_02/FROZEN_CONFIG.json",
+        "run_03/FIT_DISCOVERY.json",
+        "fit_planar_selection_02/FIT_SELECTION.json"
+      ]
+    },
+    {
+      "id": "ML03",
+      "status": "FAIL",
+      "engineering": "PASS baseline full TLS export checks; shared-leveling quality FAIL",
+      "evidence": [
+        "run_02/RESULTS.json",
+        "run_03/shared_clean_fit_only/PREFLIGHT.json"
+      ]
+    },
+    {
+      "id": "ML04",
+      "status": "BLOCKED",
+      "engineering": "Original gate and actual loader rerun PASS; shared candidates blocked at leveling, no forced artifact",
+      "evidence": [
+        "run_02/original_patches/registration/EXPERIMENT_SUMMARY.json"
+      ]
+    },
+    {
+      "id": "ML05",
+      "status": "PASS",
+      "evidence": [
+        "TEST_RUNS_FINAL.json",
+        "TEST_LOCAL.log"
+      ]
+    },
+    {
+      "id": "ML06",
+      "status": "PASS",
+      "evidence": [
+        "FINAL_REPORT.md"
+      ]
+    },
+    {
+      "id": "ML07",
+      "status": "BLOCKED",
+      "reason": "No independent floor identity/gravity/physical displacement measurement"
+    },
+    {
+      "id": "ML08",
+      "status": "NOT_RUN",
+      "reason": "No new human-retention/pollution/skeleton experiment; no production promotion"
+    }
+  ],
+  "independent_review": "NOT_RUN",
+  "device": "NOT_RUN",
+  "physical": "BLOCKED",
+  "promotion": "BLOCKED"
+}

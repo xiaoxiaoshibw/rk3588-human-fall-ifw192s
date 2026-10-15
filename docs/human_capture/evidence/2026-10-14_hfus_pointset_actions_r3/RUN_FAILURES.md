@@ -1,0 +1,9 @@
+# 保留的失败与修正
+
+- 初次apply_patch在同一补丁对experiment_r3.py重复目标，被工具拒绝、无写入；合并为一次操作后完成。
+- 三件套字节备份核对发现index.html LF与原CRLF不符。恢复原CRLF后*.startbytes与R2最终SHA精确一致；原录制/GT/算法未触碰。全树扫描非原子，授权页以独立匹配原字节绑定。
+- 首次真实headed Edge批量浏览器在f263上下文出现TargetClosedError，窗口关闭原因UNKNOWN。BROWSER_RUN.log与browser/全部图片保留，不报该次全流程PASS；重试使用browser_attempt_02/、BROWSER_RUN_02.log，逐帧新renderer并逐案例保存进度。
+- 第二次已查看75案例全部三视角，但导出检查使用相对URL调用未设base_url的Playwright APIRequestContext，检查脚本报Invalid URL。原页面链接可正常点击，这是测试地址拼接错误；改为绝对localhost地址，第三次browser_attempt_03与BROWSER_RUN_03完整通过，0 pageerror。
+- 全树尾检发现383既有文件缺失（captures/remote36、captures/leveled347），本轮使用9段源及旧输出/生产/GT均哈希保持。原因未明，保留原FAIL与全部缺失路径PRESERVATION_ATTEMPT_01，不能把SCOPED_PRESERVATION的PASS伪装为全树PASS。已询问用户其他清理/迁移背景，不作为R3研发启动或剩余工程验证前置，不擅自恢复/删除文件。
+
+全帧算法输出未覆盖或删除，参数在全帧前冻结，HOLDOUT未反调。单因素和点集组合造成的新轴歧义按实际回归保留，不用最终轴fallback遮盖点集全局PCA失败。

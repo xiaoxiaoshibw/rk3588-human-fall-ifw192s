@@ -1,0 +1,38 @@
+{
+  "item": "HC-DOWNLOAD-LIMIT-01",
+  "date": "2026-10-14",
+  "file": "cap_20261014_221808",
+  "url": "http://192.168.31.58:8766/api/v1/sessions/cap_20261014_221808/files/points.bin",
+  "bytes": 374212300,
+  "client": "PC 192.168.31.111 (以太网 2, Realtek USB GbE, 1000Mbps full) -> board eth3 192.168.31.58 (1000Mbps full)",
+  "tool": "curl -o <local file on D:> -w '%{time_total} %{speed_download}'",
+  "runs": [
+    {"download_limit_kbit": 70000, "note": "改前实际生效值(板端 yaml 缺该键, 落回代码默认)", "time_total_s": 42.776061, "speed_Bps": 8748171, "speed_MBps": 8.75},
+    {"download_limit_kbit": 700000, "time_total_s": 4.284675, "speed_Bps": 87337382, "speed_MBps": 87.3, "http": 200},
+    {"download_limit_kbit": 700000, "time_total_s": 4.304306, "speed_Bps": 86939055, "speed_MBps": 86.9, "http": 200},
+    {"download_limit_kbit": 0, "note": "不限速, 取板端天花板用", "time_total_s": 3.164299, "speed_Bps": 118260726, "speed_MBps": 118.3, "http": 200},
+    {"download_limit_kbit": 0, "time_total_s": 3.197406, "speed_Bps": 117036216, "speed_MBps": 117.0, "http": 200},
+    {"download_limit_kbit": 800000, "note": "最终采用值", "time_total_s": 3.772861, "speed_Bps": 99185286, "speed_MBps": 99.2, "http": 200},
+    {"download_limit_kbit": 800000, "time_total_s": 3.750248, "speed_Bps": 99783347, "speed_MBps": 99.8, "http": 200}
+  ],
+  "reference_link_measurements": {
+    "raw_tcp_board_to_pc_python": {"Mbps": 849, "note": "PC 侧用户态 Python 发送/接收, 客户端受限, 非链路天花板"},
+    "ssh_channel_cat_to_local_file": {"seconds": 4.31, "MBps": 86.8, "Mbps": 694}
+  },
+  "integrity": {
+    "method": "curl 全量下载到临时文件后 sha256sum, 与本机已有副本比对",
+    "remote_points_bin_sha256": "e1c2509653c7b0dadd1ef45df0392cbefcb6df18a012b3b550a4b861fdc42eaf",
+    "local_copy_sha256": "e1c2509653c7b0dadd1ef45df0392cbefcb6df18a012b3b550a4b861fdc42eaf",
+    "match": true
+  },
+  "tests": {
+    "src/human_capture/tests": "Ran 45 tests, OK",
+    "pc_apps/human_replay/fetch_lib_test.py": "Ran 13 tests, OK"
+  },
+  "board_registry_spot_check": {
+    "method": "HEAD /api/v1/sessions/<sid>/files/points.bin for all 10 registered rows",
+    "sessions_with_files": ["cap_20261014_221808", "cap_20261014_164522"],
+    "sessions_404": ["cap_20261013_083254", "cap_20261013_083218", "cap_20261013_083120", "cap_20261013_083044", "cap_20261013_082906", "cap_20261013_082829", "cap_20261013_082717", "cap_20261013_082623"],
+    "note": "8 行登记仍在(其中 6 行 state=transferred)但板端文件已不存在, 拉不回来; 这 8 段本机 data/sessions 已有副本"
+  }
+}

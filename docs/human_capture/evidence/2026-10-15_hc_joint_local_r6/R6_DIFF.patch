@@ -1,0 +1,629 @@
+diff --git a/pc_apps/console/console_gui.py b/pc_apps/console/console_gui.py
+index da148be..fd1ca5b 100644
+--- a/pc_apps/console/console_gui.py
++++ b/pc_apps/console/console_gui.py
+@@ -12,7 +12,9 @@ pywebview 一行起窗口；UI 复用 console.html 单文件，零重复维护
+ """
+ import configparser
+ import errno
++import functools
+ import http.server
++import json
+ import os
+ import runpy
+ import socket
+@@ -26,7 +28,7 @@ import joint_capture
+ HERE = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
+ 
+ 
+-def _shell_url(port, fall_port=None, capture_port=None):
++def _shell_url(port, fall_port=None, capture_port=None, real_fall_port=None, plane_port=None):
+     """壳页 URL：相对路径由 pywebview 内置本地 http 服务供给 WebView2。
+ 
+     不能用 file:// + 查询串：WebView2 会把 '?' 百分号编码进文件名去找，
+@@ -34,26 +36,56 @@ def _shell_url(port, fall_port=None, capture_port=None):
+     """
+     url = "console.html?replay_port=%d" % port
+     url += "&fall_port=%d" % fall_port if fall_port else ""
+-    return url + ("&capture_port=%d" % capture_port if capture_port else "")
++    url += "&capture_port=%d" % capture_port if capture_port else ""
++    url += "&real_fall_port=%d" % real_fall_port if real_fall_port else ""
++    return url + ("&plane_port=%d" % plane_port if plane_port else "")
++
++
++def _start_plane_pages_server():
++    """PLANE-01 证据页面（只读静态子目录 `plane01_pages/`）；缺目录时返回 None，不影响其他入口。"""
++    directory = os.path.join(HERE, "plane01_pages")
++    if not os.path.isdir(directory):
++        return None
++    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=directory)
++    try:
++        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
++    except (OSError, ValueError) as exc:
++        print("plane pages unavailable: %s" % exc)
++        return None
++    threading.Thread(target=server.serve_forever, daemon=True).start()
++    return server.server_address[1]
+ 
+ 
+ def _start_joint_capture_server():
+     root = (_frozen_capture_root() if getattr(sys, "frozen", False)
+             else os.path.join(os.path.dirname(os.path.dirname(HERE)), "captures", "remote"))
+     root = os.environ.get("HR_DEST_ROOT") or root
+-    return joint_capture.start_server(root, os.path.join(HERE, "joint_capture.html"))
++    # 拉回用的官方 fetch.py 与回放页取同一份解析结果（ENV/INI 旁路优先，否则打包内嵌）：
++    # joint_capture 不再自行猜目录（R6/A2），也保证 SOURCE_BYPASS 下拉回用仓库副本。
++    replay_dir, _origin = _replay_dir()
++    return joint_capture.start_server(root, os.path.join(HERE, "joint_capture.html"),
++                                      fetch_dir=replay_dir)
+ 
+ 
+ def _start_fall_server():
+     """仓内真人离线原型同进程独立端口；缺数据时保留其他控制台功能。"""
+     root = (os.path.dirname(os.path.dirname(_frozen_capture_root()))
+             if getattr(sys, "frozen", False) else os.path.dirname(os.path.dirname(HERE)))
+-    source_dir = os.path.join(root, "sidequests", "human_fusion_lab_next", "real_fall", "r02")
++    source_dir = os.path.join(root, "sidequests", "human_fusion_lab_next", "pointset", "r01")
+     if not os.path.isfile(os.path.join(source_dir, "server.py")):
+         return None
+     sys.path.insert(0, source_dir)
+     try:
+         module = runpy.run_path(os.path.join(source_dir, "server.py"))
++        # Versioned extension shares the original handler and old root assets.
++        learn_dir = os.path.join(root, "sidequests", "human_fusion_lab_next", "learn", "r01")
++        learn_pointer = os.path.join(learn_dir, "CURRENT.json")
++        if os.path.isfile(learn_pointer):
++            with open(learn_pointer, encoding="utf8") as stream:
++                learn_run = json.load(stream)
++            sys.path.insert(0, learn_dir)
++            extension = runpy.run_path(os.path.join(learn_dir, "server.py"))
++            module["Handler"] = extension["handler"](learn_run["evidence"])
+         server = module["ThreadingHTTPServer"](("127.0.0.1", 0), module["Handler"])
+     except (OSError, ValueError, ImportError, KeyError) as exc:
+         print("fall replay unavailable: %s" % exc)
+@@ -62,6 +94,24 @@ def _start_fall_server():
+     return server.server_address[1]
+ 
+ 
++def _start_real_fall_server():
++    """启动真实录制 r04 离线回放；缺少数据时不影响其他控制台入口。"""
++    root = (os.path.dirname(os.path.dirname(_frozen_capture_root()))
++            if getattr(sys, "frozen", False) else os.path.dirname(os.path.dirname(HERE)))
++    source_dir = os.path.join(root, "sidequests", "human_fusion_lab_next", "real_fall", "r04")
++    if not os.path.isfile(os.path.join(source_dir, "server.py")):
++        return None
++    sys.path.insert(0, source_dir)
++    try:
++        module = runpy.run_path(os.path.join(source_dir, "server.py"))
++        server = module["ThreadingHTTPServer"](("127.0.0.1", 0), module["Handler"])
++    except (OSError, ValueError, ImportError, KeyError) as exc:
++        print("real fall replay unavailable: %s" % exc)
++        return None
++    threading.Thread(target=server.serve_forever, daemon=True).start()
++    return server.server_address[1]
++
++
+ def _is_valid_source_dir(d):
+     """源码目录最小校验：目录存在 + 至少含 human_replay_lib.py 与 human_detect.py。"""
+     if not d or not os.path.isdir(d):
+@@ -203,6 +253,20 @@ def _suppress_edge_save_bubble():
+         pass
+ 
+ 
++def _write_check_report(destination, report):
++    """检查报告独占创建（证据不覆盖纪律）；已存在时给可读提示并以 exit 2 退出。
++
++    历史：直接 open(…, 'x') 抛 FileExistsError traceback，重跑检查会被当成崩溃（R6/A8）。
++    """
++    import json
++    try:
++        with open(destination, "x", encoding="utf-8") as stream:
++            json.dump(report, stream, ensure_ascii=False, indent=2)
++    except FileExistsError:
++        print("check report already exists, not overwritten: %s" % destination)
++        sys.exit(2)
++
++
+ if __name__ == "__main__":
+     # 冻结后 multiprocessing/线程在 Windows 需显式支持（pyinstaller 约定）
+     if getattr(sys, "frozen", False):
+@@ -217,16 +281,37 @@ if __name__ == "__main__":
+             with urllib.request.urlopen("http://127.0.0.1:%d/api/status" % server.server_port) as response:
+                 report = json.load(response)
+             with urllib.request.urlopen("http://127.0.0.1:%d/" % server.server_port) as response:
+-                report['page_ok'] = 'USB 摄像头＋雷达联合录制' in response.read().decode('utf-8')
++                page = response.read().decode('utf-8')
++            report['page_ok'] = 'USB 摄像头＋雷达联合录制' in page
++            replay_dir, _origin = _replay_dir()
++
++            def embedded(*parts):
++                with open(os.path.join(*parts), encoding='utf-8') as stream:
++                    return stream.read()
++
++            # 内嵌副本必须含“拉回完成 → 自动打开回放”接线：联合页发消息 / 壳页监听 / 回放页读 ?sid
++            report['page_version'] = {
++                'joint_page': "'joint-completed'" in page,
++                'console_shell': '"joint-completed"' in embedded(HERE, 'console.html'),
++                'replay_page': '__load_session_sid(qsid)' in embedded(replay_dir, 'index.html'),
++            }
++            # R6/A4：拉回集成点必须可加载——验证 fetch.py 存在且同进程可调用 process_session
++            # （不触网；R5 教训：这条路径此前无任何发布级探针，子进程 bug 直达用户）。
++            report['joint_fetch_ok'] = False
++            try:
++                report['joint_fetch_ok'] = callable(
++                    joint_capture.load_fetch(replay_dir).get('process_session'))
++            except BaseException as exc:
++                report['joint_fetch_error'] = '%s: %s' % (type(exc).__name__, exc)
+             report['shell_url'] = _shell_url(8901, capture_port=server.server_port)
+             destination = sys.argv[sys.argv.index("--check-joint-capture") + 1]
+-            with open(destination, 'x', encoding='utf-8') as stream:
+-                json.dump(report, stream, ensure_ascii=False, indent=2)
++            _write_check_report(destination, report)
+         finally:
+             recorder.close()
+             server.shutdown()
+             server.server_close()
+-        sys.exit(0 if report['page_ok'] else 1)
++        sys.exit(0 if (report['page_ok'] and report['joint_fetch_ok']
++                       and all(report['page_version'].values())) else 1)
+ 
+     # Headless release check exercises the frozen servers without opening a GUI.
+     if "--check-startup" in sys.argv:
+@@ -236,23 +321,71 @@ if __name__ == "__main__":
+         try:
+             report["replay_port"] = _start_replay_server()
+             report["fall_port"] = _start_fall_server()
++            report["real_fall_port"] = _start_real_fall_server()
+             if not report["fall_port"]:
+-                raise ValueError("fall replay did not start")
++                raise ValueError("pointset replay did not start")
++            if not report["real_fall_port"]:
++                raise ValueError("real fall replay did not start")
+             with urllib.request.urlopen("http://127.0.0.1:%d/api/info" % report["fall_port"]) as response:
+                 info = json.load(response)
+             report["sessions"] = info["sessions"]
+-            with urllib.request.urlopen("http://127.0.0.1:%d/api/frame?sid=cap_20261013_094333&i=72" % report["fall_port"]) as response:
++            sid = report['sessions'][0]['session_id']
++            with urllib.request.urlopen("http://127.0.0.1:%d/api/frame?sid=%s&fi=0&dataset=actions" % (report["fall_port"],sid)) as response:
+                 frame = json.load(response)
+-            report["alarm_frame"] = frame["row"]["frame"]
+-            report["alert_active"] = frame["row"]["alert_active"]
+-            report["skeleton_nodes"] = len(frame["row"]["skeleton"]["nodes"])
+-            report["shell_url"] = _shell_url(report["replay_port"], report["fall_port"])
+-            report["ok"] = report["alert_active"] and report["skeleton_nodes"] == 13
++            report['dataset'] = info['dataset']
++            report["alarm_frame"] = frame['frame_index']
++            report['target_points'] = frame['body_3d'][0]['point_count']
++            report["skeleton_nodes"] = len(frame['body_3d'][0]['skeleton']['nodes'])
++            report['confirmed_fall'] = frame['posture']['confirmed']
++            real_url = "http://127.0.0.1:%d" % report["real_fall_port"]
++            with urllib.request.urlopen(real_url + "/api/info") as response:
++                real_info = json.load(response)
++            real_sid = "cap_20261013_094333"
++            empty_sid = "cap_20261013_131958"
++            with urllib.request.urlopen(real_url + "/api/frame?sid=%s&i=72" % real_sid) as response:
++                real_frame = json.load(response)
++            with urllib.request.urlopen(real_url + "/api/frame?sid=%s&i=0" % empty_sid) as response:
++                empty_frame = json.load(response)
++            events = real_info["sessions"][real_sid]["events"]
++            nodes = real_frame["row"]["skeleton"]["nodes"]
++            report["real_fall"] = {
++                "frames": real_info["sessions"][real_sid]["frames"],
++                "frame": real_frame["row"]["frame"],
++                "target_points": len(real_frame["target"]),
++                "valid_nodes": sum(1 for node in nodes.values() if node.get("valid")),
++                "alert_active": real_frame["row"]["alert_active"],
++                "event_count": len(events),
++                "event_verified": events[0].get("verified") if events else None,
++                "empty_observed": empty_frame["row"]["observed"],
++                "empty_events": len(real_info["sessions"][empty_sid]["events"]),
++            }
++            report["shell_url"] = _shell_url(
++                report["replay_port"], report["fall_port"],
++                real_fall_port=report["real_fall_port"],
++            )
++            report["plane_port"] = _start_plane_pages_server()
++            plane_ok = False
++            if report["plane_port"]:
++                with urllib.request.urlopen("http://127.0.0.1:%d/index.html" % report["plane_port"]) as response:
++                    plane_ok = "PLANE-01" in response.read().decode("utf8")
++            report["plane_pages_ok"] = plane_ok
++            report["ok"] = (
++                report['dataset'] == 'actions' and report['target_points'] > 0
++                and report["skeleton_nodes"] == 13 and not report['confirmed_fall']
++                and report["real_fall"]["frames"] == 164
++                and report["real_fall"]["frame"] == 72
++                and report["real_fall"]["valid_nodes"] == 13
++                and report["real_fall"]["alert_active"]
++                and report["real_fall"]["event_count"] == 1
++                and report["real_fall"]["event_verified"] is False
++                and not report["real_fall"]["empty_observed"]
++                and report["real_fall"]["empty_events"] == 0
++                and report["plane_pages_ok"]
++            )
+         except Exception as exc:
+             report.update(ok=False, error=str(exc))
+         destination = sys.argv[sys.argv.index("--check-startup") + 1]
+-        with open(destination, "x", encoding="utf-8") as stream:
+-            json.dump(report, stream, ensure_ascii=False, indent=2)
++        _write_check_report(destination, report)
+         sys.exit(0 if report["ok"] else 1)
+ 
+     replay_dir, origin = _replay_dir()
+@@ -262,11 +395,14 @@ if __name__ == "__main__":
+     print("mode=%s" % mode)
+     replay_port = _start_replay_server()
+     fall_port = _start_fall_server()
++    real_fall_port = _start_real_fall_server()
++    plane_port = _start_plane_pages_server()
+     capture_server, recorder = _start_joint_capture_server()
+     _suppress_edge_save_bubble()
+     webview.create_window(
+         "总控制台",
+-        _shell_url(replay_port, fall_port, capture_server.server_port),
++        _shell_url(replay_port, fall_port, capture_server.server_port,
++                   real_fall_port=real_fall_port, plane_port=plane_port),
+         width=1440, height=900,
+         min_size=(900, 600),
+     )
+diff --git a/pc_apps/console/joint_capture.py b/pc_apps/console/joint_capture.py
+index aa64bb7..d82e729 100644
+--- a/pc_apps/console/joint_capture.py
++++ b/pc_apps/console/joint_capture.py
+@@ -1,14 +1,14 @@
+-"""PC 错峰联合录制：雷达先全量存板(HC 通道)，相机仅预览；停止后逐段拉回雷达。
++"""PC 错峰联合录制：雷达先全量存板(HC 通道)，相机仅预览；停止后一次性拉回雷达。
+ 
+ CPU 错峰：录制时板上网口只走相机预览流；雷达 rosbag/抽取都在 SD 卡上完成，
+-完成后 PC 才按段增量回拉 meta.json/points.bin，再按 frames 行上切片。
++完成后 PC 用官方 fetch.py 一次性回拉 meta.json/points.bin，无逐段切片。
+ 不重写 HC 状态机；不重写 fetch.py 校验（SHA/布局）；不写板。
+ """
+ import json
+ import os
+ from pathlib import Path
++import runpy
+ import shutil
+-import subprocess
+ import sys
+ import threading
+ import time
+@@ -26,8 +26,22 @@ BOARD_START = '/api/v1/record/start'
+ BOARD_STOP = '/api/v1/record/stop'
+ BOARD_SESSION = '/api/v1/sessions'
+ DEFAULT_OUTPUT_ROOT = Path(__file__).resolve().parents[2] / 'captures' / 'remote'
+-PC_FETCH_DIR = Path(__file__).resolve().parent.parent / 'human_replay'
+-FETCH_SCRIPT = PC_FETCH_DIR / 'fetch.py'
++# 官方 fetch.py 目录缺省：源码运行 = 平级 pc_apps/human_replay；冻结运行 = _MEIPASS 内嵌副本
++# （Console.spec datas）。有 ENV/INI 旁路时由 console_gui 经 fetch_dir 参数传入同一份解析结果。
++_HERE = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent))
++FETCH_DIR = next((d for d in (_HERE / 'human_replay', _HERE.parent / 'human_replay')
++                  if (d / 'fetch.py').is_file()), _HERE / 'human_replay')
++
++
++def load_fetch(fetch_dir=None):
++    """进程内加载官方 fetch.py（唯一权威实现）；pull 与发布探针共用，绝不再起子进程。
++
++    返回 runpy 的模块 globals（含 process_session 与 config 模块 C）。
++    """
++    fetch_dir = Path(fetch_dir) if fetch_dir else FETCH_DIR
++    if str(fetch_dir) not in sys.path:
++        sys.path.insert(0, str(fetch_dir))
++    return runpy.run_path(str(fetch_dir / 'fetch.py'))
+ 
+ 
+ def _json_request(method, url, body=None, timeout=8):
+@@ -115,35 +129,44 @@ class _BoardSession:
+ 
+ 
+ class _StagedFetch:
+-    """一次性 fetch_fetch.py --sid → staging/<sid>/{meta.json,points.bin}；最后整体 move 到会话目录。"""
+-    def __init__(self, dest_root):
++    """进程内跑官方 fetch.process_session → staging/<sid>/{meta.json,points.bin}；最后整体 move 到会话目录。
++
++    为什么不再 subprocess 起 `sys.executable -I fetch.py`：冻结版 sys.executable 是
++    Console.exe 本身（子进程只会再开一个控制台，永远拉不到数据）；源码版 py3.11+ 的
++    -I 隐含 -P，脚本目录不进 sys.path（fetch.py 的 `import config` 直接失败）。
++    同进程 runpy 一份官方实现，两种运行方式行为一致；SHA/布局校验仍由 fetch.py 做。
++    """
++    def __init__(self, dest_root, board_url=None, fetch_dir=None):
+         self.dest_root = Path(dest_root)
+         self.staging = self.dest_root / '.joint_fetch_staging'
++        self.board_url = board_url
++        self.fetch_dir = fetch_dir
+         self.log = []
+ 
+     def _staging_dir(self, sid):
+         return self.staging / sid
+ 
+     def pull(self, sid):
+-        """fetch.py --sid：拉官方实现（SHA/布局校验） → staging；返回 (meta_p, bin_p) 或 (None, None)。"""
++        """拉官方实现 → staging；返回 (meta_p, bin_p) 或 (None, None)（失败原因见 self.log）。"""
+         self.staging.mkdir(parents=True, exist_ok=True)
+-        cmd = [sys.executable, '-I', str(FETCH_SCRIPT), '--sid', sid, '--dest', str(self.staging)]
++        meta_p, bin_p = self._staging_dir(sid) / 'meta.json', self._staging_dir(sid) / 'points.bin'
+         try:
+-            out = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+-            self.log.append('fetch %s exit=%d %s' % (sid, out.returncode, (out.stdout or '').strip()[-240:]))
+-            meta_p, bin_p = self._staging_dir(sid) / 'meta.json', self._staging_dir(sid) / 'points.bin'
+-            if out.returncode != 0 or not meta_p.exists() or not bin_p.exists():
+-                self.log.append((out.stderr or '').strip()[-300:])
+-                return None, None
+-            return meta_p, bin_p
+-        except subprocess.TimeoutExpired:
+-            self.log.append('fetch %s timeout' % sid)
++            fetch = load_fetch(self.fetch_dir)
++            if self.board_url:
++                fetch['C'].BOARD_URL = self.board_url  # 页面自定义板端地址须传导给官方 fetch
++            ok = fetch['process_session'](sid, str(self.staging), log=self.log.append)
++        except BaseException as exc:
++            self.log.append('fetch %s: %s: %s' % (sid, type(exc).__name__, exc))
+             return None, None
++        if not ok or not meta_p.is_file() or not bin_p.is_file():
++            return None, None
++        return meta_p, bin_p
+ 
+ 
+ class Recorder:
+-    def __init__(self, root=None):
++    def __init__(self, root=None, fetch_dir=None):
+         self.root = Path(root or os.environ.get('JOINT_OUTPUT_ROOT') or DEFAULT_OUTPUT_ROOT).resolve()
++        self.fetch_dir = fetch_dir  # 官方 fetch.py 目录（console_gui 传入其 _replay_dir 解析结果）
+         self.lock = threading.RLock()
+         self.thread = None
+         self.latest = None
+@@ -270,15 +293,17 @@ class Recorder:
+             out_dir = root / ('joint_' + sid)
+             out_dir.mkdir(parents=True, exist_ok=True)
+             (out_dir / 'camera.mjpeg').write_bytes(b'')
+-            (out_dir / 'joint.json').write_text(json.dumps(dict(
++            joint_info = dict(
+                 state='assembling', mode='staged_capture', session_id=sid,
+                 created_iso=time.strftime('%Y-%m-%dT%H:%M:%S%z'),
+-                synchronization=self.data['synchronization']), ensure_ascii=False, indent=2))
++                synchronization=self.data['synchronization'])
++            (out_dir / 'joint.json').write_text(json.dumps(joint_info, ensure_ascii=False, indent=2),
++                                                encoding='utf-8')
+             with self.lock:
+                 self.path = out_dir
+                 self.data['path'] = str(out_dir)
+             # 一次性拉回：官方 fetch.py --sid（含 SHA/布局校验） → staging，到位再整体换名到会话目录
+-            fetcher = _StagedFetch(root)
++            fetcher = _StagedFetch(root, board.base, self.fetch_dir)
+             with self.lock:
+                 self.data['state'] = 'saving'
+                 self.data['radar_frames'] = int(ready.get('frame_count') or 0)
+@@ -302,6 +327,15 @@ class Recorder:
+                 if not finish_ok:
+                     self.data['error'] = ('fetch 拉回失败；板端会话 %s 仍为 ready，可在回页面板重试。\n%s'
+                                           % (sid, '\n'.join(fetcher.log[-3:])))
++                # 落盘工件补终态（排障直接看文件；写失败不影响已完成的会话数据）
++                joint_info.update(state=self.data['state'], finished_iso=time.strftime('%Y-%m-%dT%H:%M:%S%z'),
++                                  radar_frames=self.data['radar_frames'], bytes=self.data['bytes'],
++                                  error=self.data['error'])
++            try:
++                (out_dir / 'joint.json').write_text(json.dumps(joint_info, ensure_ascii=False, indent=2),
++                                                    encoding='utf-8')
++            except OSError:
++                pass
+         except Exception as exc:
+             if self.data.get('session_id'):
+                 # 板已开始录但 PC 出错；尝试停板以免 bag 持续膨胀
+@@ -316,8 +350,8 @@ class Recorder:
+     # _fetch_chunk 已不需要：一次性官方 fetch.py --sid 全量落地，sha/meta 校验由官方权威实现做。
+ 
+ 
+-def start_server(root, html_path):
+-    recorder = Recorder(root)
++def start_server(root, html_path, fetch_dir=None):
++    recorder = Recorder(root, fetch_dir)
+ 
+     class Handler(BaseHTTPRequestHandler):
+         def log_message(self, *_args):
+diff --git a/pc_apps/console/joint_capture_test.py b/pc_apps/console/joint_capture_test.py
+index 6b1ba96..6cccb78 100644
+--- a/pc_apps/console/joint_capture_test.py
++++ b/pc_apps/console/joint_capture_test.py
+@@ -53,7 +53,7 @@ class _FakeBoard:
+ class _FakeFetch:
+     """跳过官方 fetch.py 网络/SHA，直接给一份合法 staging。"""
+     calls = []
+-    def __init__(self, dest_root):
++    def __init__(self, dest_root, board_url=None, fetch_dir=None):
+         self.dest_root = Path(dest_root)
+         self.staging = self.dest_root / '.joint_fetch_staging'
+     def _staging_dir(self, sid):
+@@ -84,7 +84,7 @@ class BoardOrchestratorTest(unittest.TestCase):
+                     radar_board_url='http://192.168.31.58:8766')      # 不参与真实请求（mock 了 _BoardSession）
+ 
+     def test_camera_preview_failure_still_allows_board_record_and_marked_gaps(self):
+-        """相机预览一直失败：录制照常完成，最终 completed_with_gaps（板端雷达数据完整）。"""
++        """相机预览一直失败：录制照常完成，最终 completed（板端雷达数据完整）。"""
+         with tempfile.TemporaryDirectory() as tmp, \
+              mock.patch.object(J, '_BoardSession', _FakeBoard), \
+              mock.patch.object(J, '_StagedFetch', _FakeFetch):
+@@ -104,6 +104,12 @@ class BoardOrchestratorTest(unittest.TestCase):
+             self.assertEqual(meta['total_points'], 5)
+             self.assertEqual((out / 'camera.mjpeg').read_bytes(), b'')
+             self.assertEqual((out / 'points.bin').stat().st_size, 5 * 28)
++            # R6/A3：落盘工件 joint.json 必须补终态（排障直接看文件）
++            joint = json.loads((out / 'joint.json').read_text(encoding='utf-8'))
++            self.assertEqual(joint['state'], 'completed')
++            self.assertEqual(joint['radar_frames'], 1)
++            self.assertEqual(joint['bytes'], (out / 'meta.json').stat().st_size + 5 * 28)
++            self.assertIsNone(joint['error'])
+ 
+     def test_board_stop_exception_still_marks_failed(self):
+         """board wait_ready 超时/抽取失败 → 报 failed；start 调用后总补 stop。"""
+@@ -136,6 +142,10 @@ class BoardOrchestratorTest(unittest.TestCase):
+             result = _wait_for(recorder, lambda s: s['state'] == 'failed')
+             self.assertIn('hc_mock_001', result['error'])
+             self.assertIn('ready', result['error'])
++            # R6/A3：失败落盘工件也要体现终态与原因
++            joint = json.loads((Path(result['path']) / 'joint.json').read_text(encoding='utf-8'))
++            self.assertEqual(joint['state'], 'failed')
++            self.assertIn('hc_mock_001', joint['error'])
+ 
+     def test_same_origin_guard_still_enforced(self):
+         """外部 Origin 一律 403（在 Joint V2 仍然成立；不改变安全姿态）。"""
+@@ -154,5 +164,57 @@ class BoardOrchestratorTest(unittest.TestCase):
+                 recorder.close(); server.shutdown(); server.server_close()
+ 
+ 
++class StagedFetchTest(unittest.TestCase):
++    """_StagedFetch.pull 必须在本进程跑官方 fetch.py。
++
++    历史 bug：subprocess 起 `sys.executable -I fetch.py` —— 冻结版 sys.executable 是
++    Console.exe（子进程只会再开一个控制台）、源码版 py3.11+ 的 -I 隐含 -P（脚本目录
++    不进 sys.path，import config 直接失败）。两种方式都永远拉不到数据。
++    """
++
++    def _fake_fetch_dir(self, tmp, ok):
++        fake = Path(tmp) / 'human_replay'
++        fake.mkdir()
++        (fake / 'fetch.py').write_text(
++            'import os\n'
++            'OK = %s\n'
++            'def process_session(sid, dest_root=None, log=print):\n'
++            "    log('called ' + sid)\n"
++            '    if not OK:\n'
++            '        return False\n'
++            '    out = os.path.join(dest_root, sid)\n'
++            '    os.makedirs(out, exist_ok=True)\n'
++            '    with open(os.path.join(out, "meta.json"), "w") as fh:\n'
++            '        fh.write("{}")\n'
++            '    with open(os.path.join(out, "points.bin"), "wb") as fh:\n'
++            '        fh.write(b"xx")\n'
++            '    return True\n' % ok, encoding='utf-8')
++        return fake
++
++    def test_pull_runs_official_fetch_in_process(self):
++        """显式 fetch_dir（console_gui 传入的解析结果）优先于缺省 FETCH_DIR。"""
++        with tempfile.TemporaryDirectory() as tmp:
++            fake = self._fake_fetch_dir(tmp, ok=True)
++            fetcher = J._StagedFetch(Path(tmp) / 'out', fetch_dir=fake)
++            meta_p, bin_p = fetcher.pull('hc_mock_001')
++            self.assertTrue(meta_p and bin_p)
++            self.assertTrue(Path(meta_p).is_file() and Path(bin_p).is_file())
++            self.assertTrue(any('called hc_mock_001' in line for line in fetcher.log))
++
++    def test_pull_failure_returns_none_and_keeps_log(self):
++        """缺省路径（FETCH_DIR 缺省解析）也要能加载并正确上报失败。"""
++        with tempfile.TemporaryDirectory() as tmp:
++            fetcher = J._StagedFetch(Path(tmp) / 'out')
++            with mock.patch.object(J, 'FETCH_DIR', self._fake_fetch_dir(tmp, ok=False)):
++                self.assertEqual(fetcher.pull('hc_mock_001'), (None, None))
++            self.assertTrue(any('called hc_mock_001' in line for line in fetcher.log))
++
++    def test_load_fetch_explicit_dir(self):
++        """load_fetch 是 pull 与发布探针共用的唯一加载器（R6/A4）。"""
++        with tempfile.TemporaryDirectory() as tmp:
++            module = J.load_fetch(self._fake_fetch_dir(tmp, ok=True))
++        self.assertTrue(callable(module.get('process_session')))
++
++
+ if __name__ == '__main__':
+     unittest.main()
+diff --git a/pc_apps/human_limb/limb_server.py b/pc_apps/human_limb/limb_server.py
+index eb9884c..536c7b8 100644
+--- a/pc_apps/human_limb/limb_server.py
++++ b/pc_apps/human_limb/limb_server.py
+@@ -27,6 +27,12 @@ DEST_ROOT = r"D:\Code\ldiar\captures\remote"
+ FETCH = os.path.join(_HERE, "..", "human_replay", "fetch.py")
+ RUN_LIMB = os.path.join(_HERE, "run_session_limb.py")
+ 
++# ponytail: 冻结守卫——本服务用 sys.executable 起 fetch/limb 子进程；打包后
++# sys.executable 是 exe 自身，会在冻结形态静默启动错误进程（2026-10-15 联合录制
++# 同型缺陷复盘）。要做 exe 发布前先改为进程内调用或显式解释器发现，再移除本守卫。
++if getattr(sys, "frozen", False):
++    raise SystemExit("human_limb 仅支持源码运行（python limb_server.py）：冻结形态下 sys.executable 不是解释器")
++
+ _sid_re = re.compile(r"^cap_[0-9_]+$")
+ _jobs_lock = threading.Lock()
+ _jobs = {}  # sid → {stage: fetch|limb|done|error, ts, error}
+diff --git a/pc_apps/human_replay/human_replay_lib.py b/pc_apps/human_replay/human_replay_lib.py
+index 3e739e6..a08c3d5 100644
+--- a/pc_apps/human_replay/human_replay_lib.py
++++ b/pc_apps/human_replay/human_replay_lib.py
+@@ -21,7 +21,6 @@ import hashlib
+ import json
+ import os
+ import shutil
+-import subprocess
+ import sys
+ import threading
+ import time
+@@ -89,6 +88,15 @@ def _local_sessions(dest):
+             size = os.path.getsize(os.path.join(d, "points.bin"))
+             if not isinstance(frames, list) or not frames or not size or size % 28:
+                 continue  # 两页消费固定 28B/点；空帧表/空文件/未完整写入不预选。
++            # 完整性（2026-10-14 用户要求）：meta 声明了 stride 时，末帧 offset+count 必须
++            # 正好等于文件字节数；半写/被截断的 points.bin 不算「本机有的会话」，不列。
++            stride = (m.get("point_layout") or {}).get("stride_bytes")
++            last = frames[-1]
++            if (stride and isinstance(last, dict)
++                    and isinstance(last.get("offset_points"), int)
++                    and isinstance(last.get("count_points"), int)
++                    and (last["offset_points"] + last["count_points"]) * stride != size):
++                continue
+             out[name] = {
+                 "duration_sec": m.get("duration_sec"),
+                 "total_points": m.get("total_points"),
+@@ -133,6 +141,27 @@ def _board_delete(sid, timeout=8.0):
+         return json.loads(resp.read())
+ 
+ 
++def _board_files_present(sid, timeout=3.0):
++    """板端还有这个会话的数据吗：HEAD meta.json + points.bin，只读头不下正文。
++
++    登记表（sessions.json）会留 FIFO 清过文件的墓碑行，meta/points 路径照样写着——
++    所以「有没有数据」只能实查文件。板不可达时返回 True：连不上板不能当作数据缺失，
++    列表该照旧显示（否则离线时整屏会话被吞）。
++    """
++    for name in ("meta.json", "points.bin"):
++        req = urllib.request.Request(
++            "%s/api/v1/sessions/%s/files/%s" % (C.BOARD_URL, sid, name), method="HEAD")
++        try:
++            with urllib.request.urlopen(req, timeout=timeout) as resp:
++                if resp.status != 200 or int(resp.headers.get("Content-Length") or 0) <= 0:
++                    return False
++        except urllib.error.HTTPError:
++            return False          # 404 file_missing：板端文件已被清理
++        except (OSError, ValueError):
++            return True
++    return True
++
++
+ def _sync_failure_note(sid):
+     """同步失败后实查板端，给面板可读的失败说明与能否人工退回。
+ 
+@@ -264,9 +293,20 @@ class Handler(BaseHTTPRequestHandler):
+             except BaseException as exc:
+                 board_error = "连接板失败: %s" % exc
+         out = []
++        hidden = {"purged": 0, "missing": 0}   # 登记表还在、数据已不在任何一端的行
+         for s in board_sessions:
+             sid = s.get("session_id", "")
+             li = local.get(sid)
++            if not li:
++                # 数据完整性（2026-10-14 用户要求「只展示 3588 和本机有的会话」）：
++                # state=purged 是板端 FIFO 已删文件；其余 state 也要实查文件在不在，
++                # 否则点进去只会拉失败。本机有副本的行照列（数据还在本机）。
++                if s.get("state") == "purged":
++                    hidden["purged"] += 1
++                    continue
++                if not _board_files_present(sid):
++                    hidden["missing"] += 1
++                    continue
+             out.append({
+                 "sid": sid,
+                 "state": s.get("state"),
+@@ -292,7 +332,7 @@ class Handler(BaseHTTPRequestHandler):
+                             "bytes": li.get("bytes"),      # FIX-PERF-R2
+                             "name": li.get("name")})
+         out.sort(key=lambda o: o.get("created_iso") or "", reverse=True)
+-        self._json({"sessions": out, "board_error": board_error})
++        self._json({"sessions": out, "board_error": board_error, "hidden": hidden})
+ 
+     # ---------- 录制控制台（代理板端） ----------
+     def _board_status(self):

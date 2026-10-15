@@ -1,0 +1,169 @@
+diff --git a/pc_apps/console/joint_capture.py b/pc_apps/console/joint_capture.py
+index aa64bb7..7edc908 100644
+--- a/pc_apps/console/joint_capture.py
++++ b/pc_apps/console/joint_capture.py
+@@ -1,14 +1,14 @@
+-"""PC 错峰联合录制：雷达先全量存板(HC 通道)，相机仅预览；停止后逐段拉回雷达。
++"""PC 错峰联合录制：雷达先全量存板(HC 通道)，相机仅预览；停止后一次性拉回雷达。
+ 
+ CPU 错峰：录制时板上网口只走相机预览流；雷达 rosbag/抽取都在 SD 卡上完成，
+-完成后 PC 才按段增量回拉 meta.json/points.bin，再按 frames 行上切片。
++完成后 PC 用官方 fetch.py 一次性回拉 meta.json/points.bin，无逐段切片。
+ 不重写 HC 状态机；不重写 fetch.py 校验（SHA/布局）；不写板。
+ """
+ import json
+ import os
+ from pathlib import Path
++import runpy
+ import shutil
+-import subprocess
+ import sys
+ import threading
+ import time
+@@ -26,8 +26,10 @@ BOARD_START = '/api/v1/record/start'
+ BOARD_STOP = '/api/v1/record/stop'
+ BOARD_SESSION = '/api/v1/sessions'
+ DEFAULT_OUTPUT_ROOT = Path(__file__).resolve().parents[2] / 'captures' / 'remote'
+-PC_FETCH_DIR = Path(__file__).resolve().parent.parent / 'human_replay'
+-FETCH_SCRIPT = PC_FETCH_DIR / 'fetch.py'
++# 官方 fetch.py 目录：源码运行 = 平级 pc_apps/human_replay；冻结运行 = _MEIPASS 内嵌副本（Console.spec datas）。
++_HERE = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent))
++FETCH_DIR = next((d for d in (_HERE / 'human_replay', _HERE.parent / 'human_replay')
++                  if (d / 'fetch.py').is_file()), _HERE / 'human_replay')
+ 
+ 
+ def _json_request(method, url, body=None, timeout=8):
+@@ -115,30 +117,39 @@ class _BoardSession:
+ 
+ 
+ class _StagedFetch:
+-    """一次性 fetch_fetch.py --sid → staging/<sid>/{meta.json,points.bin}；最后整体 move 到会话目录。"""
+-    def __init__(self, dest_root):
++    """进程内跑官方 fetch.process_session → staging/<sid>/{meta.json,points.bin}；最后整体 move 到会话目录。
++
++    为什么不再 subprocess 起 `sys.executable -I fetch.py`：冻结版 sys.executable 是
++    Console.exe 本身（子进程只会再开一个控制台，永远拉不到数据）；源码版 py3.11+ 的
++    -I 隐含 -P，脚本目录不进 sys.path（fetch.py 的 `import config` 直接失败）。
++    同进程 runpy 一份官方实现，两种运行方式行为一致；SHA/布局校验仍由 fetch.py 做。
++    """
++    def __init__(self, dest_root, board_url=None):
+         self.dest_root = Path(dest_root)
+         self.staging = self.dest_root / '.joint_fetch_staging'
++        self.board_url = board_url
+         self.log = []
+ 
+     def _staging_dir(self, sid):
+         return self.staging / sid
+ 
+     def pull(self, sid):
+-        """fetch.py --sid：拉官方实现（SHA/布局校验） → staging；返回 (meta_p, bin_p) 或 (None, None)。"""
++        """拉官方实现 → staging；返回 (meta_p, bin_p) 或 (None, None)（失败原因见 self.log）。"""
+         self.staging.mkdir(parents=True, exist_ok=True)
+-        cmd = [sys.executable, '-I', str(FETCH_SCRIPT), '--sid', sid, '--dest', str(self.staging)]
++        meta_p, bin_p = self._staging_dir(sid) / 'meta.json', self._staging_dir(sid) / 'points.bin'
+         try:
+-            out = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+-            self.log.append('fetch %s exit=%d %s' % (sid, out.returncode, (out.stdout or '').strip()[-240:]))
+-            meta_p, bin_p = self._staging_dir(sid) / 'meta.json', self._staging_dir(sid) / 'points.bin'
+-            if out.returncode != 0 or not meta_p.exists() or not bin_p.exists():
+-                self.log.append((out.stderr or '').strip()[-300:])
+-                return None, None
+-            return meta_p, bin_p
+-        except subprocess.TimeoutExpired:
+-            self.log.append('fetch %s timeout' % sid)
++            if str(FETCH_DIR) not in sys.path:
++                sys.path.insert(0, str(FETCH_DIR))
++            fetch = runpy.run_path(str(FETCH_DIR / 'fetch.py'))
++            if self.board_url:
++                fetch['C'].BOARD_URL = self.board_url  # 页面自定义板端地址须传导给官方 fetch
++            ok = fetch['process_session'](sid, str(self.staging), log=self.log.append)
++        except BaseException as exc:
++            self.log.append('fetch %s: %s: %s' % (sid, type(exc).__name__, exc))
+             return None, None
++        if not ok or not meta_p.is_file() or not bin_p.is_file():
++            return None, None
++        return meta_p, bin_p
+ 
+ 
+ class Recorder:
+@@ -278,7 +289,7 @@ class Recorder:
+                 self.path = out_dir
+                 self.data['path'] = str(out_dir)
+             # 一次性拉回：官方 fetch.py --sid（含 SHA/布局校验） → staging，到位再整体换名到会话目录
+-            fetcher = _StagedFetch(root)
++            fetcher = _StagedFetch(root, board.base)
+             with self.lock:
+                 self.data['state'] = 'saving'
+                 self.data['radar_frames'] = int(ready.get('frame_count') or 0)
+diff --git a/pc_apps/console/joint_capture_test.py b/pc_apps/console/joint_capture_test.py
+index 6b1ba96..f90a244 100644
+--- a/pc_apps/console/joint_capture_test.py
++++ b/pc_apps/console/joint_capture_test.py
+@@ -53,7 +53,7 @@ class _FakeBoard:
+ class _FakeFetch:
+     """跳过官方 fetch.py 网络/SHA，直接给一份合法 staging。"""
+     calls = []
+-    def __init__(self, dest_root):
++    def __init__(self, dest_root, board_url=None):
+         self.dest_root = Path(dest_root)
+         self.staging = self.dest_root / '.joint_fetch_staging'
+     def _staging_dir(self, sid):
+@@ -84,7 +84,7 @@ class BoardOrchestratorTest(unittest.TestCase):
+                     radar_board_url='http://192.168.31.58:8766')      # 不参与真实请求（mock 了 _BoardSession）
+ 
+     def test_camera_preview_failure_still_allows_board_record_and_marked_gaps(self):
+-        """相机预览一直失败：录制照常完成，最终 completed_with_gaps（板端雷达数据完整）。"""
++        """相机预览一直失败：录制照常完成，最终 completed（板端雷达数据完整）。"""
+         with tempfile.TemporaryDirectory() as tmp, \
+              mock.patch.object(J, '_BoardSession', _FakeBoard), \
+              mock.patch.object(J, '_StagedFetch', _FakeFetch):
+@@ -154,5 +154,49 @@ class BoardOrchestratorTest(unittest.TestCase):
+                 recorder.close(); server.shutdown(); server.server_close()
+ 
+ 
++class StagedFetchTest(unittest.TestCase):
++    """_StagedFetch.pull 必须在本进程跑官方 fetch.py。
++
++    历史 bug：subprocess 起 `sys.executable -I fetch.py` —— 冻结版 sys.executable 是
++    Console.exe（子进程只会再开一个控制台）、源码版 py3.11+ 的 -I 隐含 -P（脚本目录
++    不进 sys.path，import config 直接失败）。两种方式都永远拉不到数据。
++    """
++
++    def _fake_fetch_dir(self, tmp, ok):
++        fake = Path(tmp) / 'human_replay'
++        fake.mkdir()
++        (fake / 'fetch.py').write_text(
++            'import os\n'
++            'OK = %s\n'
++            'def process_session(sid, dest_root=None, log=print):\n'
++            "    log('called ' + sid)\n"
++            '    if not OK:\n'
++            '        return False\n'
++            '    out = os.path.join(dest_root, sid)\n'
++            '    os.makedirs(out, exist_ok=True)\n'
++            '    with open(os.path.join(out, "meta.json"), "w") as fh:\n'
++            '        fh.write("{}")\n'
++            '    with open(os.path.join(out, "points.bin"), "wb") as fh:\n'
++            '        fh.write(b"xx")\n'
++            '    return True\n' % ok, encoding='utf-8')
++        return fake
++
++    def test_pull_runs_official_fetch_in_process(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            fetcher = J._StagedFetch(Path(tmp) / 'out')
++            with mock.patch.object(J, 'FETCH_DIR', self._fake_fetch_dir(tmp, ok=True)):
++                meta_p, bin_p = fetcher.pull('hc_mock_001')
++            self.assertTrue(meta_p and bin_p)
++            self.assertTrue(Path(meta_p).is_file() and Path(bin_p).is_file())
++            self.assertTrue(any('called hc_mock_001' in line for line in fetcher.log))
++
++    def test_pull_failure_returns_none_and_keeps_log(self):
++        with tempfile.TemporaryDirectory() as tmp:
++            fetcher = J._StagedFetch(Path(tmp) / 'out')
++            with mock.patch.object(J, 'FETCH_DIR', self._fake_fetch_dir(tmp, ok=False)):
++                self.assertEqual(fetcher.pull('hc_mock_001'), (None, None))
++            self.assertTrue(any('called hc_mock_001' in line for line in fetcher.log))
++
++
+ if __name__ == '__main__':
+     unittest.main()
