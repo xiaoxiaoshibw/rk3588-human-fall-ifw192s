@@ -1,1 +1,0 @@
-Pilot base/175804 exited 1 after complete ledger write, without SUMMARY. Source inventory had a late-loaded fusion.js module, not changed content. Kept incomplete output in runs/base; never FINAL. Saved pilot sources; eagerly load fusion.js before freeze in repaired trace. Next outputs use runs/full/*, not reuse pilot. Pilot p95 instrumentation126.30ms is diagnostic only.

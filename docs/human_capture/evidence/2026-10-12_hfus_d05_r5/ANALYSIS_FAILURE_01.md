@@ -1,7 +1,0 @@
-# 银行审计v1退出1，保留并用v2重算双方
-
-BANK_CONTROL_AUDIT实际PID7160退出1；原log/EXIT及BANK_EVENT_CASES_control不覆盖。原因是审计器将来源枚举字面量误写为大写FG，而实际schema.CAND_SRC.FG的值是小写fg。第一帧原成员与计数无误，断言字面量不匹配。算法hook直接使用schema常量，没有该错误。
-
-新analyze_bank_events_v2.py只纠正来源枚举，并写全新BANK_EVENT_CASES_v2_*/BANK_EVENT_SUMMARY_v2_*；control/anchor双方同一新银行审计口径。原precision评分与model输入不变，不改旧计分账。原v1不进入FINAL。
-
-CONTROL_PARITY另实际PID10556退出0，九会话合计2605帧相对R04所有真实成员/候选/模型调用/确认/跟踪/strict/legacy精确一致。银行原before/after另由v2核查，不从parity文件名推断。

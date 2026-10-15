@@ -1,6 +1,0 @@
-补审02实际PID22712/child0/export0/146.678s、指定实际模型/完整brief与ponytail/只读/REVIEW_COMPLETE核验PASS，P1闭合、工程材料可审PASS，算法FAIL/GT生产BLOCKED，不ACCEPTED。
-P3-a：新BOUNDARY_AND_PERFORMANCE_SUPPLEMENT_V2只引用落盘快照两个PID23768/32080，30468曾屏幕读回但不作为该快照事实，原Supplement保留。
-P3-b：PARITY_SUMMARY_V2由主控Python stdlib读取原JSON、增加字段parity及非byte声明产生，原fields未动；补正文件实际SHA在结束增量与FINAL_ARTIFACT_SHA。它是证据声明不是推理源码，故另证据SHA而非混入工具源码清单。
-P3-c：输入格式历史文档漂移只加当前入口说明，当前9会话实际28字节点记录由meta及原loader确定，冻结capture不改；不重写历史格式约定或本轮源。
-P3-d：收口源finalize_records_v2显式引用PARITY_SUMMARY_V2/REVIEW_DEFECT_HANDLING/本补充，旧finalizer不改。新增ToolingV5登记新收口源；仅材料不入推理。
-R06 before真实产物确在docs/human_capture/evidence/2026-10-12_hfus_d05_r6/BASELINE_BEFORE.json，不在尚未建立的sidequests/.../r06源目录；实际全扫描15635文件/errors/drift空、统一exec95347退出0。补审02未定位此文件属于只读审核范围限制，不把未定位当无产物，也不说R06已经实跑。

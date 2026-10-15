@@ -1,1 +1,0 @@
-首次内联诊断脚本read_text未显式指定UTF-8，Windows默认GBK读取中文路径基线失败，exit1。未创建消费清单，未更改实验或GT。第二次显式UTF-8后exit0并保存CONSUMED_ASSETS_BASELINE_BINDING.json，后验全树SHA补证继续核对。

@@ -1,1 +1,0 @@
-真实浏览器从S9切near后立即输入220，最终落f0，见V1操作记录。V1 session核验结束时初始化show0覆盖用户show请求/旧max。新增demo_v2，readySid空时禁用帧控制/版本/快捷跳转，session核验完成再打开，show另检查readySid。会话下拉保持开放，旧请求token守卫保留。只修改新UI消费者，不改已跑算法/ledger；V1原源码和TOOLING_V1保留。当前端口8915。
