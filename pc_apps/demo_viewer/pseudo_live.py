@@ -89,11 +89,14 @@ class Replay:
             # White highlights exactly the measured target pixels in this same frame.
             rgb[target]=[255,255,255]
             entry['depth']='data:image/png;base64,'+base64.b64encode(png(rgb[::-1,::-1])).decode('ascii')
-            points=sc.to_display(frame.xyz[frame.source_rows[valid]],self.basis,self.ground['offset_m'])
-            picked=sc.voxel_pick(points, .05, 2200, 'scene:%d'%i)
-            target_xyz=sc.to_display(frame.xyz[np.asarray(rows,dtype=np.int64)],self.basis,self.ground['offset_m']) if rows else np.empty((0,3))
-            target_xyz=sc.voxel_pick(target_xyz,.03,1800,'target:%d'%i)
-            entry['scene']=sc.quantize(picked); entry['target']=sc.quantize(target_xyz)
+            scene_rows=frame.source_rows[valid]
+            if len(scene_rows)>2200: scene_rows=scene_rows[np.linspace(0,len(scene_rows)-1,2200,dtype=np.int64)]
+            target_rows=np.asarray(rows,dtype=np.int64)
+            if len(target_rows)>1800: target_rows=target_rows[np.linspace(0,len(target_rows)-1,1800,dtype=np.int64)]
+            # Display sampling only; inference and pixel ownership retain every measured row.
+            scene_xyz=sc.to_display(frame.xyz[scene_rows],self.basis,self.ground['offset_m'])
+            target_xyz=sc.to_display(frame.xyz[target_rows],self.basis,self.ground['offset_m'])
+            entry['scene']=sc.quantize(scene_xyz); entry['target']=sc.quantize(target_xyz)
         entry['processing_ms']=(time.perf_counter()-start)*1000
         self.index+=1
         return entry

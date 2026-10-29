@@ -1400,3 +1400,20 @@
 - 板端即时状态：背景 ready、地面 bound/current_patch_support，输入 receiving，订阅连接 1，处理 149 帧；实时状态已声明 `horizontal_low_posture_v1`，空场无目标时 demoFallCandidate unavailable、confirmed 关闭。当前平面 normal [-0.463888, -0.032116, 0.885311]、offset 1.366635 m，几何质量门通过但物理地面与人体/跌倒 GT UNKNOWN；没有做真人跌倒或可靠性验证。启动参数已自动进行空场背景和一次拟合，进程内背景不能跨进程恢复；本次手动启动并未证明设备重启后自动启动。
 - 证据 `docs/evidence/2026-10-29_board_demo_deploy/health.json` 与安装包；未改驱动、网络、数据目录。既有现场资源保护与识别服务单独回滚适用。
 
+
+## 2026-10-29 四会话本机伪实时动作观察
+
+- 新增 `pc_apps/demo_viewer/pseudo_live.py` / `pseudo_live.html`：同轨实测的既有姿态、下降/恢复/疑似和 `DemoAlert` 合并为因果几何观察标签；低位水平观察/1.5s/3s 与原疑似分别保留，缺测、换轨、代际/绑定变化、跳帧、时间异常及观测缺口中断持续计时，不把低位当已确认跌倒。生产规则和阈值未更改；这是本机组合分类，不是学习模型或人体身份识别。
+- 四会话 905 帧全部离线运行，对 `2026-10-29_demo_method` 逐帧目标 ID、原状态、低位等级零差异；新增标签中前倒旧状态 unknown 的 84 帧得到几何描述，不表示描述正确率提高。后倒/前倒/慢倒第 83/159/120 帧首次低位提示（8.708/16.483/12.543 s），弯腰段无；全部为同源开发集，无逐帧 GT，准确率/召回率 UNKNOWN。
+- 本机 localhost 逐帧实际调用同一 runtime，源时间近似节拍，2D 为同帧 192×256 径向距离图，白色为同帧目标像素；3D 显示有限抽样点、可拖动旋转。后倒 169 帧无节拍包括 2D PNG/3D 生成 P50/P95 41.6/87.0 ms，最大 101.9 ms；不含浏览器和传输，非板端性能。浏览器核对逐帧显示/疑似与深度、点云；源码/输入 SHA、逐帧结果、比对、计时、截图位于 `docs/evidence/2026-10-29_pseudolive_actions/`。
+- 新增组合分类测试 5 项、姿态 6 项、低位规则 2 项、演示规则 2 项和旧页面 JS 四会话检查通过。初次对照脚本在回放完成前执行报缺文件，待完整输出后复跑通过；基线 HEAD `c9c4ee421cb0c8a3e4590b8f5730828b093c759a`，git 可见跟踪/非忽略未跟踪文件非原子 SHA 清单 10399 文件、0 错（不含 data/captures、本轮证据及被忽略文件），不宣称全树原子基线。
+- 四段无已声明空场前缀：运行前使用整段非因果背景和离线地面；目标身份、物理地面与真实跌倒仍 UNKNOWN，碎片/遮挡/主动躺下可能误判。未部署、采集、训练、下载模型或修改 data/junction。
+
+## 2026-10-29 GitHub 仓库同步（未推送历史清理 + 首次推送）
+
+- 盘点：本地 `master` 领先 `origin/master` 30 个提交（末次提交 2026-10-15），工作区另有 101 个已跟踪改动、838 个未跟踪源码/文档（约 9.4 MB）。未推送提交内新增 blob 合计 4.6 GB，其中 6 个文件 ≥100 MB（最大 `docs/human_capture/evidence/2026-10-07_hrw03_r39_closeout/09_visualization_data.json` 500 MB），直接 push 会被 GitHub 单文件 100 MB 上限拒绝，另有 4.6 GB 远超单次推送 2 GB 上限。
+- `.gitignore` 补齐：`*.log`、`/.dsh_tmp/`、`/node_modules/`、`/dist/`、`/damage.txt`、`/pc_apps/demo_viewer/*.mp4`（318 MB 演示视频）、`/docs/evidence/` 与 `docs/{human_fall,human_capture,sidequests}/evidence/`（新增批量证据不入库，已有跟踪账本仍由 `git add -u` 维护）、`/sidequests/**/results|work/`。
+- 工作区提交 926 个路径 / 10.6 MB（`src/`、`webui/`、`pc_apps/`、`console_v2/`、`sidequests/`、`ML/`、`tools/`、`docs/` 的源码与文档），不含 `data/`、`captures/`、evidence 批量产物、日志、演示视频、`node_modules`。该提交同时包含 12:44–12:49 另一会话写入的 `pseudo_live.*` 与 PROGRESS/PROJECT_STATE 改动（按当时快照入库，未逐条复核其结论）。
+- 历史重写：用 Python 走 plumbing（`cat-file commit` → 过滤 `ls-tree -r` → `update-index --index-info` → `write-tree` → `hash-object -w -t commit`）重放 `origin/master..master` 共 31 个提交，剔除 1908 个路径：全部 `*.log`、evidence 下 >256 KB、`sidequests/**/results|work/`、任意 >5 MB 文件；作者/提交者/时间/消息原样保留，工作树不动。备份分支 `backup/pre-sync-20261029` 保留原 31 个提交（`c9c4ee4` 链），旧 `master` 可用它恢复。
+- 推送：新链 tip `a60c62c`，远端 `master` `d8efaba..a60c62c` fast-forward；传输 6324 个对象、压缩后约 31.8 MiB（本地估算未压缩新增 blob 109 MB，最大单文件 2.4 MB）。本地 `master` 用 `git reset --mixed` 对齐新链，磁盘文件（含全部 evidence、`data/`、junction）一个未删。
+- 校验：`git diff master-backup sync/20261029` 只有删除、无新增或内容修改；重写后 `git status` 仅剩并发改动与被剔除的 sidequests 输出，随后补 `.gitignore` 收口。未改 `data/`、junction、驱动/网络，未部署/采集/训练。语义边界：GitHub 上现在没有 2026-10-10 至 10-15 的 evidence 大件与 runner 日志，它们仍在本机；需要时按会话 SHA 重跑再生。

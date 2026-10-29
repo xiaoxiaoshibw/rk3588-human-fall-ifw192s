@@ -24,6 +24,10 @@ class ActivityTests(unittest.TestCase):
             for i in range(20): classifier.update(rule(),obs(i),('source',))
             result=classifier.update(rule(),replacement,('source',))
             self.assertEqual(result['level'],0)
+    def test_observation_gap_breaks_low_duration(self):
+        classifier=Activity()
+        for i in range(20): classifier.update(rule(),obs(i),('source',))
+        self.assertEqual(classifier.update(rule(observation_gap=True),obs(20),('source',))['level'],0)
     def test_descent_and_fall_suspected_remain_distinct(self):
         classifier=Activity()
         self.assertEqual(classifier.update(rule(state='descending'),obs(0),('source',))['label'],'descending')
