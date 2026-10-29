@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LiDAR 点云 → 跟踪开始 · 完整数据流</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --card:#ffffff; --ink:#111827; --muted:#6b7280;
+    --line:#d5dbe3; --blue:#2563eb; --green:#047857; --amber:#b45309;
+    --red:#b91c1c; --violet:#6d28d9; --slate:#475569;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:
+      radial-gradient(1200px 500px at 50% -100px, #e8efff 0%, transparent 70%),
+      var(--bg);
+    color:var(--ink);
+    font:15px/1.62 "Segoe UI", system-ui, -apple-system, "Microsoft YaHei", sans-serif;
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:44px 24px 96px}
+
+  header h1{font-size:27px; line-height:1.3; margin:0 0 10px; letter-spacing:.2px}
+  header h1 small{display:block; font-size:14px; font-weight:500; color:var(--muted); margin-top:6px}
+  .route{
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+    margin:16px 0 0; font:12.5px ui-monospace, Consolas, monospace; color:#334155;
+  }
+  .route b{font-weight:600; background:#fff; border:1px solid var(--line);
+    border-radius:6px; padding:3px 8px}
+  .route i{font-style:normal; color:#94a3b8}
+
+  .legend{display:flex; flex-wrap:wrap; gap:18px; margin:22px 0 34px; font-size:13px; color:var(--muted)}
+  .legend span{display:flex; align-items:center; gap:7px}
+  .swatch{width:11px; height:11px; border-radius:3px}
+
+  .flow{position:relative}
+  .stage{display:grid; grid-template-columns:58px minmax(0,1fr); gap:14px; align-items:start}
+  .num{
+    width:36px; height:36px; margin:14px auto 0; border-radius:50%;
+    background:#e6ebf3; color:#334155; border:1px solid #cfd8e3;
+    display:flex; align-items:center; justify-content:center;
+    font:600 12.5px ui-monospace, Consolas, monospace;
+  }
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:13px;
+    padding:17px 20px 16px; box-shadow:0 1px 2px rgba(15,23,42,.04);
+    border-left:4px solid var(--blue);
+  }
+  .card.io{border-left-color:var(--blue)}
+  .card.gate{border-left-color:var(--amber)}
+  .card.reject{border-left-color:var(--red)}
+  .card.data{border-left-color:var(--violet)}
+  .card.start{border-left-color:var(--green); box-shadow:0 4px 18px rgba(4,120,87,.12)}
+
+  .card h2{
+    font-size:16.5px; margin:0; display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:8px; line-height:1.45;
+  }
+  .card h2 .ref{
+    font:12px ui-monospace, Consolas, monospace; font-weight:500;
+    color:var(--muted); letter-spacing:0;
+  }
+  .tag{
+    font-size:11px; font-weight:600; padding:1.5px 8px; border-radius:999px;
+    background:#f1f5f9; color:#475569; white-space:nowrap;
+  }
+  .tag.gate{background:#fef3c7; color:#92400e}
+  .tag.reject{background:#fee2e2; color:#991b1b}
+  .tag.data{background:#ede9fe; color:#5b21b6}
+  .tag.ok{background:#d1fae5; color:#065f46}
+
+  .card p{margin:8px 0 0}
+  .card ul{margin:9px 0 0; padding-left:19px}
+  .card li{margin:4px 0}
+  .card ol{margin:9px 0 0; padding-left:21px}
+  .card ol li{margin:4px 0}
+  .card code{
+    font:12.5px ui-monospace, Consolas, monospace;
+    background:#f1f5f9; border-radius:4px; padding:1px 5px; color:#0f172a;
+  }
+  .shape{
+    display:inline-block; margin-top:11px;
+    font:12px ui-monospace, Consolas, monospace;
+    background:#eef2ff; color:#3730a3; border-radius:6px; padding:3px 9px;
+  }
+  .shape.gray{background:#f1f5f9; color:#475569}
+  .shape.green{background:#ecfdf5; color:#065f46}
+
+  .arrow{height:30px; margin-left:28px; position:relative}
+  .arrow::before{
+    content:""; position:absolute; left:0; top:4px; bottom:10px; width:2px;
+    background:var(--line);
+  }
+  .arrow::after{
+    content:""; position:absolute; left:-4px; bottom:0;
+    border:5px solid transparent; border-top:8px solid var(--line);
+  }
+
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:13px}
+  .branch{border:1px dashed var(--line); border-radius:10px; padding:11px 13px; background:#fafbfd}
+  .branch h3{margin:0 0 6px; font-size:14px; display:flex; gap:7px; align-items:baseline; flex-wrap:wrap}
+  .branch ul{margin:6px 0 0; padding-left:17px}
+  .branch li{margin:3px 0; font-size:14px}
+  .branch .shape{margin-top:8px}
+
+  .note{
+    margin-top:12px; padding:9px 12px; border-radius:8px;
+    background:#f8fafc; border-left:3px solid #94a3b8;
+    font-size:13.5px; color:#334155;
+  }
+  .note b{color:#0f172a}
+  .note.warn{background:#fffbeb; border-left-color:var(--amber)}
+  .note.bad{background:#fef2f2; border-left-color:var(--red)}
+
+  .ladder{
+    margin:44px 0 0; padding:16px 18px; background:#fff; border:1px solid var(--line);
+    border-radius:12px; font:12.5px ui-monospace, Consolas, monospace; color:#334155;
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  }
+  .ladder b{font-weight:600; background:#f1f5f9; border-radius:5px; padding:2px 7px}
+  .ladder i{font-style:normal; color:#94a3b8}
+
+  footer{margin-top:28px; font-size:13px; color:var(--muted); line-height:1.8}
+  footer b{color:#334155}
+
+  @media (max-width:760px){
+    .wrap{padding:28px 14px 64px}
+    .stage{grid-template-columns:36px minmax(0,1fr); gap:10px}
+    .num{width:30px; height:30px; font-size:11.5px}
+    .arrow{margin-left:17px}
+    .split{grid-template-columns:1fr}
+    .card{padding:14px 15px}
+  }
+  @media print{
+    body{background:#fff}
+    .card{box-shadow:none; break-inside:avoid}
+    .stage{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>LiDAR 点云 → 跟踪开始
+    <small>从 ROS /innolidar_points 输出开始，到 TargetTracker.select / update 为止的完整链路</small>
+  </h1>
+  <div class="route">
+    <b>ROS 点云</b><i>→</i><b>解码</b><i>→</i><b>时间基</b><i>→</i><b>前置六级门</b><i>→</i>
+    <b>聚类</b><i>→</i><b>候选</b><i>→</i><b>snapshot</b><i>→</i><b>获取器</b><i>→</i><b>跟踪开始</b>
+  </div>
+</header>
+
+<div class="legend">
+  <span><i class="swatch" style="background:#2563eb"></i>数据入口 / 输出</span>
+  <span><i class="swatch" style="background:#b45309"></i>门禁 / 可能丢弃</span>
+  <span><i class="swatch" style="background:#b91c1c"></i>故障 / 拒绝</span>
+  <span><i class="swatch" style="background:#6d28d9"></i>数据结构</span>
+  <span><i class="swatch" style="background:#047857"></i>跟踪开始</span>
+</div>
+
+<div class="flow">
+
+  <!-- 01 -->
+  <div class="stage">
+    <div class="num">01</div>
+    <div class="card io">
+      <h2>ROS 点云输出 <span class="tag">入口</span>
+        <span class="ref">publish_manager.cpp:102, 270</span></h2>
+      <ul>
+        <li><code>/innolidar_points</code> → <code>sensor_msgs/PointCloud2</code>，<code>height=1, width=N</code>，<code>is_dense</code> 透传。</li>
+        <li>字段编译期固定（<code>POINT_TYPE XYZI_TIME</code>）：<code>x,y,z</code> FLOAT32、<code>intensity</code> FLOAT32、<code>ring</code> UINT16、<code>timestamp</code> FLOAT64。</li>
+        <li><code>header.stamp</code> 来自设备时间（按秒消费、非法归零、纳秒进位）；<code>header.seq</code> 抄设备 seq；<code>frame_id=innolidar</code>。</li>
+        <li>同一次发布还发 <code>/device_status</code>；IMU 走独立线程与队列发 <code>/inno_imu</code>。</li>
+      </ul>
+      <div class="shape">形状：N × point_step 字节</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 02 -->
+  <div class="stage">
+    <div class="num">02</div>
+    <div class="card io">
+      <h2>订阅与入队 <span class="tag">回调零计算</span>
+        <span class="ref">human_fall_node.py:430, 550</span></h2>
+      <ul>
+        <li><code>queue_size=1</code>（ROS 层只留最新一帧），<code>buff_size=2^24</code>（16 MiB）。</li>
+        <li>回调里只做 <code>queue.put((monotonic, msg, perf))</code>：不解码、不算几何、不发布。</li>
+        <li>旁路 <code>on_imu</code> / <code>on_device</code> 只做时间基与质量记账，不参与几何门禁。</li>
+      </ul>
+      <div class="shape">形状：消息引用 + 接收时刻</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 03 -->
+  <div class="stage">
+    <div class="num">03</div>
+    <div class="card gate">
+      <h2>最新帧队列 <span class="tag gate">丢旧不排队</span>
+        <span class="ref">node_runtime.py:230-281</span></h2>
+      <ul>
+        <li><code>deque(maxlen=1)</code>：计算慢时旧帧被覆盖，<code>dropped += 1</code>。</li>
+        <li>被覆盖帧的 <code>seq / stamp / frame_id / receive_s</code> 记入 <code>overwritten</code>（≤128 条，溢出单独计数）。</li>
+        <li><code>take()</code> 从右端取，<b>永远是最新帧</b>；队列长度不会增长。</li>
+      </ul>
+      <div class="shape">形状：(receive_s, PointCloud2) × 1</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 04 -->
+  <div class="stage">
+    <div class="num">04</div>
+    <div class="card gate">
+      <h2>陈旧门 <span class="tag gate">0.6 s</span>
+        <span class="ref">human_fall_node.py:578-585, 622-650</span></h2>
+      <ul>
+        <li><code>now − receive_s &gt; cloud_stale_s (0.6 s)</code> → 丢弃，只发状态，不产生候选/事件。</li>
+        <li>计算结束后再查一次：慢计算不能把旧帧当新结果；此时候选、事件、位置全部抑制。</li>
+        <li>原则：宁可丢帧，也不让延迟沿链路累积。</li>
+      </ul>
+      <div class="shape gray">形状：丢弃 / 继续</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 05 -->
+  <div class="stage">
+    <div class="num">05</div>
+    <div class="card">
+      <h2>解码为 (N,3) <span class="tag data">行号保留</span>
+        <span class="ref">calibrate_human_follow.py:26 · human_fall_node.py:588</span></h2>
+      <ul>
+        <li>零拷贝 <code>np.dtype</code> 视图 + <code>strides=(row_step, point_step)</code>，支持 organized 布局与行填充。</li>
+        <li><code>preserve_rows=True</code>：非有限点置 <code>NaN</code> 但保留行，返回 <code>(height·width, 3)</code>。</li>
+        <li>校验维度、步长、字段类型、offset 越界；失败 → <code>points=None</code>，核心仍产出无效帧诊断。</li>
+        <li>这里传 <code>min_range_m=0</code>：距离门（0.8 m）在 snapshot 里统一做。</li>
+      </ul>
+      <div class="shape">形状：(H·W, 3) float64，含 NaN 洞</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 06 -->
+  <div class="stage">
+    <div class="num">06</div>
+    <div class="card gate">
+      <h2>时间基 <span class="tag gate">epoch / freshness</span>
+        <span class="ref">timebase.py:160-196, 230-246, 294-320</span></h2>
+      <ul>
+        <li>每帧时间戳分类：<code>first / ok / repeated / regressed / forward_jump / invalid</code>。</li>
+        <li><code>repeated / regressed / forward_jump(&gt;30 s)</code> → <code>time_epoch += 1</code>，清空其它流时间历史。</li>
+        <li><code>invalid</code> <b>不</b>重建 epoch，保留上一个合法比较基线；<code>source_stamp_s = None</code>。</li>
+        <li><code>freshness</code> 只看当前帧接收时间：本帧 receive 非法就是 stale，不借上一帧装新鲜。</li>
+        <li>后续所有历史都绑定 <code>(session, epoch, calibration, frame, ground_sha)</code>。</li>
+      </ul>
+      <div class="shape gray">形状：stamp_status + time_epoch + source_stamp_s</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 07 -->
+  <div class="stage">
+    <div class="num">07</div>
+    <div class="card gate">
+      <h2>有效帧判定 <span class="tag gate">frame_valid</span>
+        <span class="ref">node_runtime.py:755-780</span></h2>
+      <ul>
+        <li><code>frame_valid = points is not None and stamp_status != "invalid"</code>。</li>
+        <li>有解码结果但时间戳非法：<b>仍</b>调用 <code>build_snapshot</code>（诊断/页面可见），但不登记快照、候选不进跟踪历史。</li>
+        <li>解码失败（<code>points=None</code>）：没有 snapshot，只累加 <code>invalid_frames</code>。</li>
+        <li>有效帧 → <code>selection.register_snapshot(snapshot, receive)</code>，供人工选择绑定 <code>snapshot_id + epoch + calibration</code>。</li>
+      </ul>
+      <div class="shape">形状：snapshot 或 None</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 08 -->
+  <div class="stage">
+    <div class="num">08</div>
+    <div class="card">
+      <h2>前置过滤：六级门 <span class="tag">build_snapshot</span>
+        <span class="ref">lidar_candidates.py:834-900</span></h2>
+      <ol>
+        <li><b>有限性</b>：<code>isfinite</code>，同时记录 <code>original_indices</code>。</li>
+        <li><b>上限抽样</b>：<code>max_points=60000</code>，等步长 stride，行号一起抽。</li>
+        <li><b>距离门</b>：传感器原点欧氏距离 <code>[0.8, 8.0] m</code>。</li>
+        <li><b>去噪</b>：<code>0.1 m / 2</code>（自身 + 26 邻域计数），刻意放在地面门之前。</li>
+        <li><b>地面源帧校验 + 高度门</b>：<code>[−0.3, 2.5] m</code>（默认）/ <code>[0.08, 2.5] m</code>（现场）；源帧不匹配则不借用地平面。</li>
+        <li><b>冻结背景减除</b>：<code>0.1 m</code> 体素占据表，只读，<b>不在线学习</b>。</li>
+      </ol>
+      <div class="note warn"><b>无有效地面时</b>：跳过高度门，坐标标记 <code>raw_xy_uncalibrated</code>，高度字段全部 <code>null</code>——绝不假设 z=0 是地面。</div>
+      <div class="shape">形状：(M, 3) + original_indices (M,)</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 09 -->
+  <div class="stage">
+    <div class="num">09</div>
+    <div class="card data">
+      <h2>★ 聚类入口 <span class="tag data">栅格连通</span>
+        <span class="ref">lidar_candidates.py:897-900</span></h2>
+      <div class="split">
+        <div class="branch">
+          <h3>horizontal <span class="tag">默认 0.25 m</span></h3>
+          <ul>
+            <li>投到地面切平面 <code>(u,v)</code>，无地面用原始 XY。</li>
+            <li><code>floor(/0.25)</code> 落格，8 邻域 DFS。</li>
+            <li>竖直叠着的头/肩/腿自然合成一簇。</li>
+          </ul>
+        </div>
+        <div class="branch">
+          <h3>spatial_3d <span class="tag">现场 0.05 m</span></h3>
+          <ul>
+            <li><code>floor(/0.05)</code> 三维落格，26 邻域连通。</li>
+            <li>≥1024 点走 2×2×2 块 + 8 位掩码优化，结果与逐格等价。</li>
+            <li>能把紧贴的人/家具在高度上分开。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note"><b>是“格元连通”，不是“距离球”</b>：实际可连通距离取决于落格相位（水平最坏约 0.7 m，3D 最坏约 0.17 m）。参数含义是格子边长，不是聚类半径。</div>
+      <div class="shape">形状：list[ndarray[int64]]（过滤后数组下标）</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 10 -->
+  <div class="stage">
+    <div class="num">10</div>
+    <div class="card data">
+      <h2>单簇 → 候选 <span class="tag data">semantic = unknown</span>
+        <span class="ref">lidar_candidates.py:918-935</span></h2>
+      <ul>
+        <li><code>&lt; min_cluster_points (25 / 现场 30)</code> → <code>rejected_clusters</code>，保留 <code>evidence_indices</code>，不算特征。</li>
+        <li>特征：中位中心、AABB、距离、高度分位、水平稳健跨度、PCA 轴（含退化标记）。</li>
+        <li>排序后编号 <code>c0000...</code>：<b>本帧局部</b>，跨帧同名不代表同一目标。</li>
+        <li>中心用中位数（抗离群），不用均值。</li>
+      </ul>
+      <div class="shape">形状：candidates[] + rejected_clusters[]</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 11 -->
+  <div class="stage">
+    <div class="num">11</div>
+    <div class="card data">
+      <h2>一帧 → 自描述 snapshot <span class="tag data">可对账</span>
+        <span class="ref">lidar_candidates.py:916-1002</span></h2>
+      <ul>
+        <li>顶层：<code>session / time_epoch / snapshot_id / source / coordinate / calibration / ground / settings / quality</code>。</li>
+        <li><code>snapshot_id = seq:&lt;n&gt;</code> 或 <code>recv:&lt;t&gt;</code>；<code>source</code> 保留 seq、秒、纳秒、<code>source_stamp_s</code>、frame。</li>
+        <li><code>foreground_indices</code> 与每个候选的 <code>evidence_indices</code> 都是源行号，但<b>数组域不同</b>。</li>
+        <li>发布前 <code>project_snapshot_for_ros</code> 剥掉这三个大数组，算法缓存不被修改（node_runtime.py:138）。</li>
+      </ul>
+      <div class="shape">形状：dict（含候选 + 行号账本 + 坐标/标定身份）</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 12 -->
+  <div class="stage">
+    <div class="num">12</div>
+    <div class="card gate">
+      <h2>节点门禁 <span class="tag gate">地面上下文 + 新鲜度</span>
+        <span class="ref">node_runtime.py:782-821, 939-963</span></h2>
+      <ul>
+        <li>地面监控：<code>degraded / recalibration_required / unknown</code>，或源帧与地平面不匹配 → <code>candidates = []</code>。</li>
+        <li><code>valid = frame_valid and not ground_context_unavailable and freshness(now)=="fresh"</code>。</li>
+        <li>自动模式 <code>valid=False</code> → 获取器按 <code>input_unavailable</code> 重置并释放目标。</li>
+      </ul>
+      <div class="note"><b>manual 分支</b>：跳过 13–16，空候选直接喂 <code>tracker.update</code>，目标自然老化到 <code>occluded</code>。本图主线是自动模式。</div>
+      <div class="shape">形状：candidates[]（可能被清空）+ valid: bool</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 13 -->
+  <div class="stage">
+    <div class="num">13</div>
+    <div class="card reject">
+      <h2>获取器：绑定与故障门 <span class="tag reject">reset</span>
+        <span class="ref">target_acquisition.py:192-215</span></h2>
+      <ul>
+        <li><code>binding = (session, epoch, calibration_id, frame_id, ground_sha256)</code>。</li>
+        <li>故障：<code>input_unavailable / invalid_time / binding_changed / nonincreasing_time</code>。</li>
+        <li>任一故障 → <code>reset()</code>：清 pending、入口窗口、非目标记忆、恢复状态，并 <code>tracker.release()</code>。</li>
+        <li><code>gap = stamp − last_time</code>，供后续持久性窗口判断连续性。</li>
+      </ul>
+      <div class="shape gray">形状：fault → 提前返回；否则继续</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 14 -->
+  <div class="stage">
+    <div class="num">14</div>
+    <div class="card data">
+      <h2>因果历史 CandidateHistory <span class="tag data">只留上一帧</span>
+        <span class="ref">candidate_history.py:82-109, 111-159, 161-254</span></h2>
+      <ul>
+        <li>用真实点重算中心（<code>median</code>），支撑体素 <code>0.1 m</code>；元数据自己漂不能伪造运动。</li>
+        <li>关联：支撑重叠 ≥10%；重叠不足且中心距 ≤0.1 m 时允许邻格容差；无支撑退回 0.5 m 中心门。</li>
+        <li>唯一继承：<b>1 前驱 + 1 后继 + 中心位移 ≤0.5 m</b> → 沿用 <code>history_id</code>；否则新建 <code>h...</code>。</li>
+        <li>多前驱/多后继 → <code>support_conflict</code>，不猜；谱系 ≤64，超出只标 <code>lineage_truncated</code>。</li>
+        <li>断流 &gt; <code>max_gap_s (0.3)</code> → 重置；成员增删对<b>所有前驱并集</b>比较。</li>
+      </ul>
+      <div class="shape">形状：history ledger（history_id / source_rows / 支撑体素 / 谱系）</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 15 -->
+  <div class="stage">
+    <div class="num">15</div>
+    <div class="card reject">
+      <h2>质量门 <span class="tag reject">原因码</span>
+        <span class="ref">target_acquisition.py:94-117, 230-235</span></h2>
+      <ul>
+        <li><code>invalid_position</code> / <code>ground_unavailable</code> / <code>invalid_geometry</code></li>
+        <li><code>insufficient_support</code>（&lt;30 点）</li>
+        <li><code>extent_out_of_range</code>（水平跨度不在 [0.1, 2.5] m）</li>
+        <li><code>height_out_of_range</code>（顶部 &gt;2.7 或底部 &lt;−0.3 m）</li>
+        <li><code>insufficient_height_span</code>（p90 − p10 &lt; 0.15 m）</li>
+        <li>历史测量失败 → <code>invalid_source_support</code></li>
+      </ul>
+      <div class="note bad">每个候选都会得到 <code>rejected[candidate_id] = reason</code>；后续状态里能逐帧回答“为什么没选它”。</div>
+      <div class="shape gray">形状：rejected 映射</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 16 -->
+  <div class="stage">
+    <div class="num">16</div>
+    <div class="card gate">
+      <h2>两条分支：持有 vs 获取 <span class="tag gate">不猜</span>
+        <span class="ref">target_acquisition.py:238-347 / 119-190, 348-423</span></h2>
+      <div class="split">
+        <div class="branch">
+          <h3>已经在跟 <span class="tag">locked / occluded</span></h3>
+          <ul>
+            <li>跳过入口身高/运动门，用关联保持。</li>
+            <li>拒绝：已知非目标历史、0.5 m / 3 s 空间记忆、点数 &gt;3× 且跨度 &gt;2× 的合并。</li>
+            <li>恢复：0.5–3.0 s 缺口、残差 ≤gate、连续 3 帧/0.2 s → <b>新身份 select</b>。</li>
+            <li>否则 <code>tracker.update</code> ★</li>
+          </ul>
+        </div>
+        <div class="branch">
+          <h3>还没锁 <span class="tag">searching / acquiring</span></h3>
+          <ul>
+            <li>高度 p90 ∈ [0.8, 2.2] m；必须有历史且谱系未截断。</li>
+            <li>运动窗 1.2 s / ≥5 帧；端点中位位移 ≥0.3 m。</li>
+            <li>可见性反证：原样残差 ≤0.1 m 或平移后不改善 → 拒。</li>
+            <li>唯一候选；多个 → <code>ambiguous</code>，不按距离挑。</li>
+            <li>持久 0.6 s / 5 帧 → <code>tracker.select</code> ★</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note"><b>可见性反证</b>专门对付“固定物体只改可见成员”：中位中心动了，不等于物体真的动了。</div>
+      <div class="shape">形状：state = {status, reason, rejected, entry_gate, candidate_history}</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 17 -->
+  <div class="stage">
+    <div class="num">17</div>
+    <div class="card start">
+      <h2>★ 跟踪开始 <span class="tag ok">TargetTracker</span>
+        <span class="ref">tracking.py:162, 236-288</span></h2>
+      <ul>
+        <li>首次：<code>select('t0001', selection_source='automatic_acquisition')</code>。</li>
+        <li>恢复：<code>select(..., 'verified_geometry_new_identity')</code>，旧基线不继承。</li>
+        <li>之后每帧：<code>update(candidates, ...)</code>。</li>
+        <li>关联门 <code>0.8 + 2.5·dt</code>；近等距 &lt;0.2 m → <code>ambiguous</code>；&gt;3.0 s → <code>lost</code>；时钟回退 → <code>lost</code>。</li>
+        <li><code>dt</code> 来自锁定那一刻固定的时钟域，中途不切换。</li>
+      </ul>
+      <div class="note"><b>从这里往下</b>：基线采集 → 特征 → 跌倒状态机（不在本图范围）。只有 <code>locked &amp;&amp; !position_predicted</code> 的候选才算“实测”。</div>
+      <div class="shape green">形状：track_state = {track_id, track_status, position_m, position_predicted, ...}</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="ladder">
+  <b>PointCloud2 字节</b><i>→</i>
+  <b>(H·W,3) 含 NaN</b><i>→</i>
+  <b>(M,3) + 行号</b><i>→</i>
+  <b>clusters</b><i>→</i>
+  <b>candidates</b><i>→</i>
+  <b>snapshot</b><i>→</i>
+  <b>history + quality</b><i>→</i>
+  <b>track_state</b>
+</div>
+
+<footer>
+  <b>读数口径：</b>本图是自动模式（<code>target_mode=automatic</code>）主线；manual 模式在 12 之后直接进 <code>tracker.update</code>。
+  参数来自 <code>perception.yaml</code> 的 <code>candidates / acquisition / tracking</code> 段，现场变体为 <code>perception_single_target_v1/v2.yaml</code>。
+  所有 <code>candidate_id / history_id / track_id</code> 都带 <code>semantic=unknown</code>：几何连续不等于人体身份。
+</footer>
+
+</div>
+</body>
+</html>

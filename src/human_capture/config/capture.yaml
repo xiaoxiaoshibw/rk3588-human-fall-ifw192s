@@ -15,6 +15,9 @@ disk_floor_mb: 5120
 download_limit_kbit: 800000
 
 # 录制（HC-02；调现成 record_session.py，D10）
+# 注意：这是“模板/本地开发”值。正式现场由 deploy_human_fall.sh 用
+# release_config.py capture 生成 effective_capture.yaml，把 record_script 改写为
+# 当前 release 内的绝对路径（不可变、随 rollback 一起切换），不再读可变工作树。
 record_script: /root/catkin_ws/src/human_fall_detection/scripts/record_session.py
 record_config:                      # 可选；默认走 record_session 自带 DEFAULT_TOPICS
 max_duration_sec: 300

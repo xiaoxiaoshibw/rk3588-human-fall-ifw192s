@@ -30,6 +30,10 @@ import urllib.request
 
 import config as C
 
+# 板端是设备直连通道。系统代理/IDM 会接管 .bin 并返回 204，导致文件落到
+# 下载器目录而本进程收到空响应；仅此模块绕过代理，不改系统网络设置。
+_BOARD_HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
 # ---- HTTP（控制面，KB 级） -------------------------------------------------
 
 
@@ -40,7 +44,7 @@ def _http_json(method, path, body=None, timeout=None):
     if body is not None:
         data = json.dumps(body).encode("utf-8")
         req.add_header("Content-Type", "application/json")
-    with urllib.request.urlopen(req, data=data, timeout=timeout) as resp:
+    with _BOARD_HTTP.open(req, data=data, timeout=timeout) as resp:
         payload = resp.read()
         return json.loads(payload) if payload else {}
 
@@ -65,25 +69,32 @@ def _http_size(sid, name):
     """HEAD 拿远端文件字节数；失败/无长度返回 0（调用方据此放弃本轮）。"""
     req = urllib.request.Request(_file_url(sid, name), method="HEAD")
     try:
-        with urllib.request.urlopen(req, timeout=C.HTTP_TIMEOUT_S) as resp:
+        with _BOARD_HTTP.open(req, timeout=C.HTTP_TIMEOUT_S) as resp:
             return int(resp.headers.get("Content-Length") or 0)
     except (urllib.error.URLError, OSError, ValueError):
         return 0
 
 
-def _http_download(sid, name, local_path):
+def _http_download(sid, name, local_path, log=print):
     """流式下载单文件到 local_path（.part）；落盘字节数与 Content-Length 不符也算失败。"""
     try:
-        with urllib.request.urlopen(_file_url(sid, name),
-                                    timeout=C.DOWNLOAD_TIMEOUT_S) as resp:
+        with _BOARD_HTTP.open(_file_url(sid, name),
+                              timeout=C.DOWNLOAD_TIMEOUT_S) as resp:
+            if resp.status != 200:
+                log("HTTP %s %s: status=%s（需要 200 文件响应）" % (sid, name, resp.status))
+                return False
             expect = int(resp.headers.get("Content-Length") or 0)
             with open(local_path, "wb") as fh:
                 shutil.copyfileobj(resp, fh, 1 << 20)
                 fh.flush()
                 os.fsync(fh.fileno())
                 written = fh.tell()
-            return written > 0 and written == expect
-    except (urllib.error.URLError, OSError, ValueError):
+            if written > 0 and written == expect:
+                return True
+            log("HTTP %s %s: 字节数 %d != Content-Length %d" % (sid, name, written, expect))
+            return False
+    except (urllib.error.URLError, OSError, ValueError) as exc:
+        log("HTTP %s %s: %s: %s" % (sid, name, type(exc).__name__, exc))
         return False
 
 
@@ -355,7 +366,8 @@ def process_session(sid, dest_root=None, log=print):
     except BaseException as exc:
         log("FAIL %s: 取会话失败: %s" % (sid, exc))
         return False
-    return transfer_one(sess, _http_json, _http_size, _http_download,
+    return transfer_one(sess, _http_json, _http_size,
+                        lambda s, n, p: _http_download(s, n, p, log=log),
                         dest_root or C.DEST_ROOT, log)
 
 
@@ -379,7 +391,8 @@ def run(args):
                 break
             time.sleep(args.interval)
             continue
-        ok = transfer_one(job, _http_json, _http_size, _http_download,
+        ok = transfer_one(job, _http_json, _http_size,
+                          lambda s, n, p: _http_download(s, n, p, log=log),
                           dest_root, log)
         transferred += 1 if ok else 0
         if args.once:

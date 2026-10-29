@@ -1,0 +1,23 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>本地室内 LiDAR · 阶段一</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101823;color:#e4edf6;font:14px system-ui}header{padding:18px 24px;background:#182535;border-bottom:1px solid #37516b}h1{margin:0 0 8px;font-size:23px}.muted{color:#9cb0c5}button,select,input,textarea{background:#24374c;color:#edf5ff;border:1px solid #55708b;border-radius:4px;padding:6px}button{cursor:pointer}button:hover{background:#36526f}nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}#status{padding:10px 24px;color:#ffd084;background:#263141}main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px}.pane{background:#162231;border:1px solid #30485f;border-radius:6px;overflow:hidden}.pane h2{font-size:16px;margin:12px}.view{height:410px;position:relative}.view canvas{width:100%;height:100%}.caption{padding:10px;min-height:70px;color:#a9c1d8;font-size:12px;word-break:break-all}#binding{padding:10px 24px;word-break:break-all;white-space:pre-wrap;font:12px monospace}section{margin:12px;padding:16px;background:#182535;border:1px solid #30485f;border-radius:6px}#candidateInfo{white-space:pre-wrap;font:12px monospace}form{display:flex;gap:9px;flex-wrap:wrap;align-items:center}textarea{width:100%;height:65px}label{display:inline-flex;align-items:center;gap:4px}#reviewMessage{color:#ffce80}a{color:#87caff}#queue{max-width:480px}summary{cursor:pointer}.badge{color:#ffd084}table{border-collapse:collapse}td,th{border:1px solid #425b72;padding:5px}#counts{display:flex;gap:25px;flex-wrap:wrap}.active{background:#437863}@media(max-width:950px){main{grid-template-columns:1fr}.view{height:320px}}
+</style>
+<header><h1>本地室内 LiDAR / 完整性诊断</h1><div class="muted">IFW192S 真实房间 · R1 冻结基线 · 所有候选身份 UNKNOWN · 本阶段不训练</div>
+<nav>会话 <select id="sid"></select> 帧 <select id="fi"></select><button id="prev">上一帧</button><button id="next">下一帧</button><button id="play">播放</button><button id="reload">重新加载</button><button id="home">相机归位</button>
+<label><input id="full" type="checkbox">全点</label><label><input id="room" type="checkbox" checked>候选栏房间底图</label><label><input id="boxes" type="checkbox" checked>包围框</label>
+算法 <select id="mode"><option value="R1">R1 原候选</option><option value="RF">旧RF：契约未合格</option></select></nav>
+<nav>人工审核队列 <select id="queue"></select><button id="jumpQueue">跳转待审</button>几何疑点 <select id="cases"></select><button id="jumpCase">跳转疑点</button></nav></header>
+<div id="status">正在核对冻结输入…</div>
+<main><div class="pane"><h2>01 / 原始完整点云</h2><div class="view" id="v0"></div><div class="caption" id="c0"></div></div>
+<div class="pane"><h2>02 / 本轮审核与可信状态</h2><div class="view" id="v1"></div><div class="caption" id="c1">人工审核0；历史标签不自动晋升GT</div></div>
+<div class="pane"><h2>03 / 实际算法候选</h2><div class="view" id="v2"></div><div class="caption" id="c2"></div></div></main>
+<div id="binding"></div><section><div id="counts"></div><p class="muted">左拖旋转、滚轮缩放、右拖平移；三栏同步相机。统一名义坐标，z向上；原始栏包含ROI/量程/背景剔除前的全部有限源点。</p>
+候选 <select id="candidate"></select> <button id="focusCandidate">聚焦当前候选</button> <a id="members" target="_blank">完整成员源行 / 坐标 JSON</a><pre id="candidateInfo">尚无候选</pre></section>
+<section><h2>由真实人员提交审核</h2><p>先选一个候选，在第三栏核对其成员与房间关系，再填写依据。候选级记录不会自动变成逐点人体GT；审核质量、独立组和训练资格仍需另审。不要把整帧“都看过”当作标全。</p>
+<form id="review"><label>审核者 <input id="reviewer" required placeholder="你的名字或稳定代号"></label><label>日期 <input id="date" type="date" required></label>
+<label>候选结论 <select id="cls"><option>UNKNOWN</option><option value="HUMAN_PRESENT">含人体，完整/纯度未知</option><option value="HUMAN_ONLY">完整且仅人体</option><option value="NONHUMAN">确认非人体</option><option value="MIXED">人体与家具/多人混合</option><option value="FRAGMENT">人体碎片</option></select></label>
+<label><input id="occlusion" type="checkbox">遮挡</label><label><input id="ambiguity" type="checkbox" checked>歧义</label><label><input id="missing" type="checkbox" checked>可能漏标</label><label><input id="complete" type="checkbox">全帧已标完</label>
+<textarea id="basis" required placeholder="确认依据、人数/姿态/距离、候选是否完整、哪些部分看不清；全帧标全需要说明覆盖范围"></textarea>
+<input id="scope" required size="65" placeholder="适用范围，例如：仅当前候选；未确认其他候选或漏人">
+<label><input id="attest" type="checkbox" required>我是真实审核者，已亲自查看本帧并提交上述判断</label><button type="submit">追加本帧审核</button></form><p id="reviewMessage">未提交；不会由AI代填人审。</p></section>
+<script src="three.min.js"></script><script src="OrbitControls.js"></script><script src="state.js"></script><script src="app.js"></script></html>

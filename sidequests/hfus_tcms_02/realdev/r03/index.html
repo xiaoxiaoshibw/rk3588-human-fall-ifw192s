@@ -1,0 +1,31 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S2 地面审核与求解 · 距离图/3D 联动</title><style>
+*{box-sizing:border-box}body{margin:0;background:#0f1620;color:#dbe6f0;font:14px system-ui,sans-serif}
+header{padding:14px 20px;background:#182636;border-bottom:1px solid #3d5068}h1{font-size:20px;margin:0 0 5px}
+.warn{color:#ffcf85;font-weight:600}.sub{color:#9fb3c8;font-size:12px}
+.toolbar{padding:9px 20px;border-bottom:1px solid #26374a}button,input,select{background:#24384d;color:#eef5fb;border:1px solid #5b7088;padding:5px;border-radius:5px}
+button{cursor:pointer}input[type=number]{width:80px}.views{display:grid;grid-template-columns:1fr 1.2fr;gap:1px;background:#3d5068}
+.pane{background:#0b131d;padding:8px}.pane h2{font-size:14px;margin:2px 6px 6px;color:#b9cde0}
+canvas{display:block;width:100%;height:480px;cursor:crosshair;background:#080d13}
+#status{margin:6px 20px;color:#8fe3cf;font:12px ui-monospace,monospace}
+.bottom{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 20px}
+pre{margin:4px 0;background:#16222f;padding:10px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto;font-size:12px}
+.legend{margin:6px 20px;color:#a9bccf;font-size:12px}label{margin-right:10px}
+.sw{display:inline-block;width:10px;height:10px;margin:0 4px 0 10px;vertical-align:middle}
+</style>
+<header><h1>S2 地面审核与求解 · 球面距离图 ↔ 3D 同帧</h1>
+<div class="warn">候选平面预览（CANDIDATE_PLANE_PREVIEW / OFFLINE_REVIEW）——地面身份未确认，本段几何未晋级</div>
+<div class="sub">audit domains 为先验条件选择（非独立真值）；FIT/VAL 空间分离；点选可反查原始28B、双XYZ、source_row 与变换版本。</div></header>
+<div class="toolbar"><label>帧 <input id="fi" type="number" min="0" max="779" value="0"></label>
+<button id="load">加载</button><button id="prev">上一帧</button><button id="next">下一帧</button>
+<label>相机 <select id="camera"><option value="oblique">斜视</option><option value="side">u-h 侧视</option><option value="front">v-h 正视</option><option value="top">u-v 俯视</option></select></label>
+<label>缩放 <input id="zoom" type="range" min="15" max="160" value="70"></label>
+<label><input id="showOld" type="checkbox"> 旧TLS平面</label><label><input id="showCand" type="checkbox" checked> 候选平面</label></div>
+<div id="status" role="status">加载中…</div>
+<div class="views"><section class="pane"><h2 id="imgTitle">球面距离图（最近距离，空洞=UNKNOWN）</h2><canvas id="img" aria-label="距离图，点击反查角bin"></canvas></section>
+<section class="pane"><h2 id="p3Title">3D 点云（历史候选局部系 u,v,h）</h2><canvas id="p3" aria-label="3D点云，点击反查源行"></canvas></section></div>
+<div class="legend" id="legend">灰：场景点　彩色：FIT/VAL 审核片　蓝网格：h=0　橙网格：候选平面　绿：选中点</div>
+<div class="bottom"><section><h2 style="font-size:14px">点选反查（原始28B / RAW XYZ / 配平XYZ）</h2><pre id="point">点击右侧 3D 点，或输入 source_row 查询。</pre></section>
+<section><h2 style="font-size:14px">角 bin 反查（距离图）</h2><pre id="bin">点击左侧距离图像素。</pre></section></div>
+<details open><summary>候选与旧先验</summary><pre id="cand"></pre></details>
+<script src="/app.js"></script></html>

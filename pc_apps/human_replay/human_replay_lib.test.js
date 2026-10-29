@@ -322,6 +322,11 @@ t("measure_dist / measure_format: 欧氏距离 + 格式化", () => {
     assert.strictEqual(L.measure_format(0.003), "<0.01m");
     assert.strictEqual(L.measure_format(1.234), "1.23m");
 });
+t("measure_point_from: 点云点优先，无点云退地面，都无→null", () => {
+    assert.deepStrictEqual(L.measure_point_from({ x: 1, y: 2, z: 1.7 }, [9, 9, 0]), [1, 2, 1.7]);
+    assert.deepStrictEqual(L.measure_point_from(null, [9, 9, 0]), [9, 9, 0]);
+    assert.strictEqual(L.measure_point_from(null, null), null);
+});
 t("ray_ground_intersect: 射线打地", () => {
     // 自空中 (2,3,5) 垂直向下
     const p = L.ray_ground_intersect([2, 3, 5], [0, 0, -1]);

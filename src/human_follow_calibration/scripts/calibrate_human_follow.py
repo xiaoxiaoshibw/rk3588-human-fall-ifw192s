@@ -23,7 +23,7 @@ def positive_float(value):
     return number
 
 
-def xyz_from_cloud(msg, min_range_m):
+def xyz_from_cloud(msg, min_range_m, preserve_rows=False):
     """Read x/y/z from organized or flat PointCloud2, including padded rows."""
     width, height = int(msg.width), int(msg.height)
     point_step, row_step = int(msg.point_step), int(msg.row_step)
@@ -64,7 +64,17 @@ def xyz_from_cloud(msg, min_range_m):
                                cloud["z"].ravel())).astype(np.float64, copy=False)
     except (ValueError, TypeError) as exc:
         raise CalibrationError("cannot decode PointCloud2 xyz: " + str(exc)) from exc
-    xyz = xyz[np.isfinite(xyz).all(axis=1)]
+    finite = np.isfinite(xyz).all(axis=1)
+    if preserve_rows:
+        # Keep organized flattened indices, including holes. The candidate core
+        # filters NaNs while retaining these original PointCloud2 source rows.
+        if min_range_m > 0:
+            ids = np.flatnonzero(finite)
+            distance = np.hypot(np.hypot(xyz[ids, 0], xyz[ids, 1]), xyz[ids, 2])
+            finite[ids[distance < min_range_m]] = False
+        xyz[~finite] = np.nan
+        return xyz
+    xyz = xyz[finite]
     distance = np.hypot(np.hypot(xyz[:, 0], xyz[:, 1]), xyz[:, 2])
     return xyz[distance >= min_range_m]
 

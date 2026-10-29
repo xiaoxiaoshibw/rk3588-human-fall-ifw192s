@@ -124,7 +124,9 @@ class _BoardSession:
                 if session.get('state') == 'ready' and session.get('frame_count'):
                     return session
                 if session.get('state') == 'failed':
-                    raise OSError('board extraction failed: %s' % (session.get('extra') or {}).get('error'))
+                    # 板端 GET 返回扁平登记记录（extra 由 PATCH 合并进顶层），error 在顶层
+                    raise OSError('board extraction failed: %s'
+                                  % (session.get('error') or 'no error detail'))
             except urllib.error.HTTPError as exc:
                 if exc.code not in (404,):
                     raise
@@ -174,13 +176,25 @@ class Recorder:
         self.lock = threading.RLock()
         self.thread = None
         self.latest = None
+        self.preview_sequence = 0
+        self.preview_received_s = None
         self.t0 = None
         self.stop_event = threading.Event()
         self.data = dict(state='idle', output_root=str(self.root), camera_url='http://192.168.31.58:8081/stream',
                          radar_board_url='http://192.168.31.58:8766', radar_frames=0, camera_frames=0,
-                         bytes=0, error=None, session_id=None, path=None)
+                         bytes=0, error=None, session_id=None, path=None,
+                         preview_state='off', preview_error=None)
         self.path = None
         self._camera_error = None
+        # 空闲预览泵：只有 UI 持续请求 /api/preview 才连板端相机流（触屏即连、不碰即断）。
+        # camera_stream_lock 与录制相机线程互斥，结构上保证任何时刻最多一条相机连接
+        # （错峰红线：录制中板端网口只允许录制那一条相机流）。
+        self.camera_stream_lock = threading.Lock()
+        self.preview_until = 0.0
+        self.preview_generation = 0
+        self.closed = False
+        self._pump = threading.Thread(target=self._preview_pump, daemon=True)
+        self._pump.start()
 
     def status(self):
         with self.lock:
@@ -188,6 +202,103 @@ class Recorder:
             if result['state'] == 'recording' and self.t0 is not None:
                 result['elapsed_sec'] = round((time.monotonic_ns() - self.t0) / 1e9, 2)
             return result
+
+    def touch_preview(self):
+        """UI 每拉一次预览帧续约 5 秒；停止请求后泵自动断开相机（空闲零设备访问）。"""
+        self.preview_until = time.monotonic() + 5.0
+
+    def configure_preview(self, options):
+        camera = options.get('camera_url', '')
+        parsed = urllib.parse.urlsplit(camera)
+        if parsed.scheme not in ('http', 'https') or not parsed.hostname or parsed.username or parsed.password:
+            raise ValueError('invalid camera URL')
+        with self.lock:
+            if self.thread and self.thread.is_alive():
+                raise ValueError('cannot change camera while recording')
+            self.preview_generation += 1
+            self.preview_until = 0.0
+            self.latest = None
+            self.preview_received_s = None
+            self.data.update(camera_url=camera, preview_state='off', preview_error=None)
+            return dict(self.data)
+
+    def _set_latest(self, jpeg):
+        # Caller holds self.lock; recording and idle preview share this counter.
+        self.latest = jpeg
+        self.preview_sequence += 1
+        self.preview_received_s = time.monotonic()
+
+    def preview_snapshot(self):
+        with self.lock:
+            age_ms = None if self.preview_received_s is None else max(
+                0, (time.monotonic() - self.preview_received_s) * 1000)
+            return self.latest, self.preview_sequence, age_ms
+
+    def _preview_pump(self):
+        """空闲预览泵：把相机流最新一帧刷进 self.latest 供 /api/preview 使用。
+
+        与录制互斥由 camera_stream_lock 保证：录制相机线程全程持锁，泵抢不到锁就保持
+        断开；泵持锁中若开始录制，泵在一帧内退出并归还锁。请求停止 5 秒后断流并清
+        latest（/api/preview 回到 404，不提供陈旧帧）。
+        """
+        stream = None
+        while not self.closed:
+            recording = bool(self.thread and self.thread.is_alive())
+            if recording or time.monotonic() >= self.preview_until:
+                if stream is not None:
+                    try:
+                        stream.close()
+                    except OSError:
+                        pass
+                    stream = None
+                with self.lock:
+                    if not recording:
+                        self.latest = None
+                        self.data['preview_state'] = 'off'
+                        self.data['preview_error'] = None
+                time.sleep(.2)
+                continue
+            if not self.camera_stream_lock.acquire(timeout=.5):
+                continue  # 录制持锁中，下一轮重评估
+            try:
+                if stream is None:
+                    with self.lock:
+                        generation = self.preview_generation
+                        camera_url = self.data.get('camera_url') or ''
+                        self.data['preview_state'] = 'connecting'
+                        self.data['preview_error'] = None
+                    response = urllib.request.urlopen(str(camera_url), timeout=3)
+                    if 'multipart/' not in response.headers.get('Content-Type', ''):
+                        response.close()
+                        raise ValueError('camera is not an MJPEG stream')
+                    stream = response
+                for jpeg in jpeg_frames(stream):
+                    with self.lock:
+                        if generation != self.preview_generation:
+                            break
+                        self._set_latest(jpeg)
+                        self.data['preview_state'] = 'live'
+                    if self.closed or time.monotonic() >= self.preview_until \
+                            or (self.thread and self.thread.is_alive()):
+                        break
+            except Exception as exc:
+                with self.lock:
+                    self.data['preview_state'] = 'error'
+                    self.data['preview_error'] = str(exc)
+                for _ in range(10):  # 退避 2s，期间随时响应退出
+                    if self.closed:
+                        break
+                    time.sleep(.2)
+            finally:
+                # 锁必须覆盖连接的整个生命周期：带着未关闭的流释放锁，
+                # 录制侧会在泵旧流仍连着时开出第二条连接（并发=2 根因）。
+                if stream is not None:
+                    try:
+                        stream.close()
+                    except OSError:
+                        pass
+                    stream = None
+                self.camera_stream_lock.release()
 
     def start(self, options):
         camera = options.get('camera_url', 'http://192.168.31.58:8081/stream')
@@ -221,12 +332,13 @@ class Recorder:
                 raise OSError('board is already recording: %s' % (status.get('session_id') or 'unknown'))
             current = board.current_recording()
             if current and current.get('session_id'):
-                board.stop()
+                raise OSError('board has an active/pending recording: %s' % current['session_id'])
             self.root = root
             self.data = dict(state='starting', output_root=str(root), camera_url=camera, radar_board_url=board_base,
                              radar_frames=0, camera_frames=0, bytes=0, error=None,
                              session_id=None, path=None, camera_recovering=False,
-                             synchronization='BOARD_MASTER_CLOCK_pc_camera_host_receipt')
+                             synchronization='BOARD_MASTER_CLOCK_pc_camera_host_receipt',
+                             preview_state='off', preview_error=None)
             self.thread = threading.Thread(target=self._run, args=(board, duration), daemon=True)
             self.thread.start()
         return self.status()
@@ -239,9 +351,13 @@ class Recorder:
         return self.status()
 
     def close(self):
+        self.closed = True
+        self.preview_until = 0.0
         self.stop()
         if self.thread:
             self.thread.join(timeout=15)
+        if self._pump.is_alive():
+            self._pump.join(timeout=5)
 
     def _fail(self, message):
         with self.lock:
@@ -255,38 +371,46 @@ class Recorder:
         """
         out = open(str(mj_path), 'ab')
         index = open(str(frames_path), 'a', encoding='utf-8')
-        try:
-            while not self.stop_event.is_set():
-                try:
-                    with urllib.request.urlopen(url, timeout=3) as response:
-                        if 'multipart/' not in response.headers.get('Content-Type', ''):
-                            raise ValueError('camera is not an MJPEG stream')
-                        for jpeg in jpeg_frames(response):
-                            if self.stop_event.is_set():
-                                return
-                            offset = out.tell()
-                            out.write(jpeg)
-                            out.flush()
-                            index.write(json.dumps({'offset': offset, 'length': len(jpeg),
-                                                    'recv_unix_ns': time.time_ns()}) + '\n')
-                            index.flush()
-                            with self.lock:
-                                self.latest = jpeg
-                                self.data['camera_recovering'] = False
-                                self.data['camera_frames'] += 1
-                except Exception as exc:
-                    if self.stop_event.is_set():
-                        return
-                    with self.lock:
-                        self._camera_error = str(exc)
-                        self.data['camera_recovering'] = True
-                    self.stop_event.wait(2)
-        finally:
-            out.close()
-            index.close()
+        with self.camera_stream_lock:  # 与空闲预览泵互斥：板端相机流同时只允许一条连接
+            with self.lock:
+                self.data['preview_state'] = 'off'
+                self.data['preview_error'] = None
+            try:
+                while not self.stop_event.is_set():
+                    try:
+                        with urllib.request.urlopen(url, timeout=3) as response:
+                            if 'multipart/' not in response.headers.get('Content-Type', ''):
+                                raise ValueError('camera is not an MJPEG stream')
+                            for jpeg in jpeg_frames(response):
+                                if self.stop_event.is_set():
+                                    return
+                                offset = out.tell()
+                                out.write(jpeg)
+                                out.flush()
+                                index.write(json.dumps({'offset': offset, 'length': len(jpeg),
+                                                        'recv_unix_ns': time.time_ns()}) + '\n')
+                                index.flush()
+                                with self.lock:
+                                    self._set_latest(jpeg)
+                                    self.data['preview_state'] = 'live'
+                                    self.data['preview_error'] = None
+                                    self.data['camera_recovering'] = False
+                                    self.data['camera_frames'] += 1
+                    except Exception as exc:
+                        if self.stop_event.is_set():
+                            return
+                        with self.lock:
+                            self._camera_error = str(exc)
+                            self.data['preview_state'] = 'error'
+                            self.data['preview_error'] = str(exc)
+                            self.data['camera_recovering'] = True
+                        self.stop_event.wait(2)
+            finally:
+                out.close()
+                index.close()
 
     def _run(self, board, duration):
-        path = None
+        out_dir = None
         try:
             session = board.start()
             with self.lock:
@@ -304,8 +428,9 @@ class Recorder:
             if not re.fullmatch(r'[A-Za-z0-9_-]{1,100}', sid):
                 raise ValueError('unexpected board session_id: %r' % sid)
             root = self.root
-            out_dir = root / sid
-            out_dir.mkdir(parents=True, exist_ok=True)
+            candidate = root / sid
+            candidate.mkdir(parents=True, exist_ok=False)
+            out_dir = candidate  # only an exclusively created directory belongs to this recorder
             # 相机预览逐帧写进会话目录（camera.mjpeg + 逐帧索引）；雷达在板上录，
             # 停板后先关相机文件再继续组装，两者互不影响。
             camera_path = out_dir / 'camera.mjpeg'
@@ -378,6 +503,18 @@ class Recorder:
                 except Exception:
                     pass
             self._fail('recorder: %s' % exc)
+            if out_dir is not None:
+                # 会话目录里也要留因：失败早于 joint.json 的正常落点时（如板端抽取失败），
+                # 以前本地目录一个字的失败原因都没有，只能去 curl 板端 sessions.json。
+                try:
+                    (out_dir / 'joint.json').write_text(json.dumps(
+                        dict(state='failed', mode='staged_capture',
+                             session_id=self.data.get('session_id'),
+                             created_iso=time.strftime('%Y-%m-%dT%H:%M:%S%z'),
+                             error=self.data.get('error')),
+                        ensure_ascii=False, indent=2), encoding='utf-8')
+                except OSError:
+                    pass
         finally:
             self.stop_event.set()
 
@@ -391,12 +528,14 @@ def start_server(root, html_path, fetch_dir=None):
         def log_message(self, *_args):
             pass
 
-        def reply(self, status, data, kind='application/json; charset=utf-8'):
+        def reply(self, status, data, kind='application/json; charset=utf-8', headers=None):
             body = json.dumps(data, ensure_ascii=False).encode('utf-8') if isinstance(data, dict) else data
             self.send_response(status)
             self.send_header('Content-Type', kind)
             self.send_header('Content-Length', str(len(body)))
             self.send_header('Cache-Control', 'no-store')
+            for name, value in (headers or {}).items():
+                self.send_header(name, str(value))
             self.end_headers()
             self.wfile.write(body)
 
@@ -406,8 +545,20 @@ def start_server(root, html_path, fetch_dir=None):
                 self.reply(200, Path(html_path).read_bytes(), 'text/html; charset=utf-8')
             elif route == '/api/status':
                 self.reply(200, recorder.status())
-            elif route == '/api/preview' and recorder.latest:
-                self.reply(200, recorder.latest, 'image/jpeg')
+            elif route == '/api/preview':
+                recorder.touch_preview()
+                jpeg, seq, age_ms = recorder.preview_snapshot()
+                if jpeg:
+                    headers = {'X-Preview-Sequence': seq,
+                               'X-Preview-Age-Ms': round(age_ms or 0, 3)}
+                    after = (urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
+                             .get('after') or [''])[0]
+                    if after == str(seq):
+                        self.reply(204, b'', 'image/jpeg', headers)
+                    else:
+                        self.reply(200, jpeg, 'image/jpeg', headers)
+                else:
+                    self.reply(404, {'error': 'no preview frame yet'})
             elif route == '/api/camera':
                 self._serve_camera()
             else:
@@ -442,6 +593,8 @@ def start_server(root, html_path, fetch_dir=None):
                     raise ValueError('JSON object required')
                 if self.path == '/api/start':
                     result = recorder.start(options)
+                elif self.path == '/api/preview-config':
+                    result = recorder.configure_preview(options)
                 elif self.path == '/api/stop':
                     result = recorder.stop()
                 elif self.path == '/api/open-folder':

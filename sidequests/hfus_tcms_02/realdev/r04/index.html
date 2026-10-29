@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S3 本段几何配平 · 同帧 RAW/配平 · z=0 · M0 因果</title><style>
+*{box-sizing:border-box}body{margin:0;background:#0f1620;color:#dbe6f0;font:14px system-ui,sans-serif}
+header{padding:14px 20px;background:#182636;border-bottom:1px solid #3d5068}h1{font-size:19px;margin:0 0 5px}
+.warn{color:#ffcf85;font-weight:600}.sub{color:#9fb3c8;font-size:12px}
+.toolbar{padding:9px 20px;border-bottom:1px solid #26374a}button,input,select{background:#24384d;color:#eef5fb;border:1px solid #5b7088;padding:5px;border-radius:5px}
+button{cursor:pointer}input[type=number]{width:80px}
+.views{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#3d5068}
+.pane{background:#0b131d;padding:8px}.pane h2{font-size:13px;margin:2px 6px 6px;color:#b9cde0}
+canvas{display:block;width:100%;height:430px;cursor:crosshair;background:#080d13}
+#status{margin:6px 20px;color:#8fe3cf;font:12px ui-monospace,monospace}
+.bottom{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;margin:10px 20px}
+pre{margin:4px 0;background:#16222f;padding:10px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto;font-size:12px}
+.legend{margin:6px 20px;color:#a9bccf;font-size:12px}
+table{border-collapse:collapse;font-size:12px}td,th{border:1px solid #2c4054;padding:2px 6px}
+</style>
+<header><h1>S3 本段几何配平 · 同帧 RAW（左）/ 配平 S3_LOCAL（右）</h1>
+<div class="warn" id="stateLine">state: 加载中…</div>
+<div class="sub" id="transformLine">transform: -</div>
+<div class="sub">同帧双视图共用同一相机参数；右图 z=0 = 候选平面。点选任一侧 3D 点可反查原始 28B / RAW XYZ / 配平 XYZ / source_row / 源 SHA / transform_id。地面身份、物理高度、独立 D 仍未确认。</div></header>
+<div class="toolbar"><label>帧 <input id="fi" type="number" min="0" max="779" value="0"></label>
+<button id="load">加载</button><button id="prev">上一帧</button><button id="next">下一帧</button>
+<label>相机 <select id="camera"><option value="oblique">斜视</option><option value="side">侧视</option><option value="front">正视</option><option value="top">俯视</option></select></label>
+<label>缩放 <input id="zoom" type="range" min="15" max="160" value="70"></label>
+<button id="pickbad">查本帧首个无效行</button></div>
+<div id="status" role="status">加载中…</div>
+<div class="views">
+ <section class="pane"><h2 id="rawTitle">RAW 坐标（innolidar，未配平）</h2><canvas id="praw" aria-label="RAW 点云，点击反查"></canvas></section>
+ <section class="pane"><h2 id="locTitle">配平坐标 S3_LOCAL（z=0 = 候选平面）</h2><canvas id="ploc" aria-label="配平点云，点击反查"></canvas></section></div>
+<div class="legend" id="legend">灰：场景点　彩色：S3 验证片 S3V_H/I/J　蓝网格：RAW 视图零位参考　橙网格：配平 z=0 平面　绿：选中点</div>
+<div class="bottom"><section><h2 style="font-size:13px">点选反查（原始 28B / RAW XYZ / 配平 XYZ）</h2><pre id="point">点击任一侧 3D 点，或按“查本帧首个无效行”。</pre></section>
+<section><h2 style="font-size:13px">帧状态与验证</h2><pre id="state"></pre></section></div>
+<details open><summary>变换 / 候选 / 验证门</summary><pre id="cand"></pre></details>
+<script src="/app.js"></script></html>

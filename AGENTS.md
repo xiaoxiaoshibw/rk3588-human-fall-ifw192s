@@ -1,19 +1,19 @@
 # Repository Guidelines
 
-## Work-item workflow (read first)
+## How we work (read first)
 
-Two independent milestone systems, each with its own authoritative docs. Don't cross them:
+One project, continuous development. Read [PROJECT_WORKFLOW.md](docs/PROJECT_WORKFLOW.md) (rules), [PROJECT_STATE.md](docs/PROJECT_STATE.md) (current state) and [PROGRESS.md](docs/PROGRESS.md) (recent work) before changing anything.
 
-- **HF/GL** (fall detection): `docs/human_fall/WORKFLOW.md` (v2) is the entry point. Read it before any HF/GL implementation or review. Only the topmost dated entry there plus the user's explicit instruction is a current authorization; everything below is history and cannot authorize a new milestone, deployment, capture, network/driver change, or model switch.
-- **HC/HR** (capture/replay/annotation): `docs/human_capture/README.md` before touching `src/human_capture/`, `webui/human_capture/`, or `pc_apps/human_replay/`.
+- 用户说做什么就连续做完：读代码 → 改 → 测 → 记录。没有工单、验收表、回传、复审环节，也不要求人工确认 / 标注 / 复核。
+- 每轮结束：跑相关测试 + 一次离线回放或端到端，把结果追加到 `docs/PROGRESS.md`，机器产物放 `docs/evidence/<date>_<topic>/`。
+- 旧工单、验收表、回传、`tickets/`、`returns/`、历史 evidence 全部只读；历史流程归档在 `docs/archive/` 与 `*_HISTORY.md`。
+- 红线：`data/` 与 `captures/remote|leveled|registration` junction 不删、不移、不改名；不 commit / push / reset / checkout / clean；不部署 / 采集 / 训练 / 下模型 / 改驱动网络 / 开 HR-09，除非用户明确要求。
+- 唯一写入者：本会话 agent；子代理只做只读分析或独立计算。
+- 语义诚实：没有 GT 的效果指标写 UNKNOWN；几何 / 软件通过不等于人体 / 物理有效。
 
-Rules that hold in both:
+Data root `data/` (git-ignored; `captures/remote`, `captures/leveled`, `captures/registration` are junctions pointing into it) holds the session/leveling/registration data the console and pages consume. It is data, not workspace. Deleting a session or artifact requires a sid/bytes/sha256 manifest plus explicit user confirmation first. See `data/README_数据目录说明.md`.
 
-- Each item has exactly one current versioned acceptance table, linked from that item's entry above. Report `PASS/FAIL/NOT_RUN/BLOCKED` against its IDs; test totals are records, not completion. Device/physics/deploy/capture conclusions default to `NOT_RUN/BLOCKED` until a current instruction explicitly authorizes them.
-- One production-code writer per item. Codex may dispatch in-scope rework to OpenCode CLI `opencode-go/deepseek-v4.1-flash` and reviews read-only. Any writer must load the `ponytail` skill first and record its usage path in the return; returns without it are rejected.
-- Records: evidence → `docs/<track>/evidence/<date>_<item>_r<N>/`; return → append to `docs/<track>/returns/<ID>.md` per `docs/human_fall/RETURN_TEMPLATE.md`; HF/GL reviews → `docs/human_fall/REVIEW_LOG.md`. Never overwrite older evidence or backfill past records.
-- Data root `data/` (git-ignored; `captures/remote`, `captures/leveled`, `captures/registration` are junctions pointing into it) holds the session/leveling/registration data the console and pages consume. It is data, not workspace: never delete, clean, move, rename, or `git add` anything under it. Deleting a session or artifact requires a sid/bytes/sha256 manifest plus explicit user confirmation first. See `data/README_数据目录说明.md`.
-- The tree is deliberately dirty and mixes untracked production source (all of `src/human_fall_detection/`, `tools/`, parts of `docs/human_capture/`) with a pending relocation (tracked root `build_ros*.sh` / `open_webui.bat` / `rk.txt` show deleted; untracked copies live in `tools/`; `文档/` was renamed to `文档收集（人工）/`). Baseline branch/HEAD/SHA over all files including untracked. Never `reset`/`checkout`/`clean`, commit, push, deploy, or capture unless explicitly asked.
+The tree is deliberately dirty and mixes untracked production source with a pending relocation (tracked root `build_ros*.sh` / `open_webui.bat` / `rk.txt` show deleted; untracked copies live in `tools/`; `文档/` was renamed to `文档收集（人工）/`). Baseline branch/HEAD/SHA over all files including untracked.
 
 ## Repository
 
@@ -21,11 +21,11 @@ Linux ROS workspace (InnoLight/InnoSense IFW192S LiDAR) plus PC/browser tooling.
 
 - `inno_lidar_ros/` — C++ driver; `node/inno_lidar_node.cpp` → `src/manager/` → `src/source/` (SDK wrapper + publisher). Publishes `/innolidar_points`, `/inno_imu`, `/device_status`. `third_party/inno_driver/` holds closed-source headers and prebuilt x86_64/aarch64 `.so`.
 - `inno_lidar_msg/` — `DeviceStatus.msg` only.
-- `human_fall_detection/` — ROS1 Python fall detection (HF/GL). Pure algorithms in `core/` (no ROS imports); `scripts/human_fall_node.py` is the ROS wrapper. Work is milestone-gated; `docs/human_fall/` is the authoritative doc tree.
+- `human_fall_detection/` — ROS1 Python fall detection (HF/GL). Pure algorithms in `core/` (no ROS imports); `scripts/human_fall_node.py` is the ROS wrapper. `docs/` holds the project docs and history.
 - `human_capture/` — ROS1 Python capture server (HC): board REST on `:8766`, reuses `human_fall_detection/scripts/record_session.py` for bags, `core/bag2session.py` converts `.bag` → `meta.json` + `points.bin`. Format contract in `docs/human_capture/README.md` §2.
 - `human_follow_calibration/` — ROS1 Python calibration + read-only monitor publishing `/human_follow/state` (detail in its `README.md`).
 
-Elsewhere: `webui/` = board-served Three.js pages (`human_fall/` production, `human_fall_preview/` replay preview, `human_capture/` record console, `dist/webui-minimal/` external bundle); the browser only renders and sends selection/record requests. `pc_apps/` = Windows-side apps (`console/` packaged Console.exe + root `open_console.bat`, `human_replay/` replay/trim/annotation, `human_pcl/`, `human_limb/`, `human_ml/`). `captures/` = original PCAPs/session data, treat as read-only input — its `remote/`, `leveled/`, `registration/` subdirs are junctions into the git-ignored data root `data/` (see the rule above). `tools/open_webui.bat` opens the board page and starts board-side `python3 -m http.server 8090` if it is down. `ML/` is dormant until the explicit activation phrase "开工 HR-09"; `文档收集（人工）/` holds vendor manuals/literature. `CLAUDE.md` has a fuller architecture write-up. `sidequests/` holds standalone side branches (e.g. `lidata_adapter/` synthetic-dataset adaptation, with its own README; explicitly not a main-line HF/GL/HC/HR artifact) and `tmp_gl_diag/` is scratch diagnostic output.
+Elsewhere: `webui/` = board-served Three.js pages (`human_fall/` production, `human_fall_preview/` replay preview, `human_capture/` record console, `dist/webui-minimal/` external bundle); the browser only renders and sends selection/record requests. `pc_apps/` = Windows-side apps (`console/` now only the joint-recording backend `joint_capture.*` used by `console_v2` — the old web-shell Console.exe was deleted 2026-10-25, replaced by the Qt app `console_v2/`; `human_replay/` replay/trim/annotation, `human_pcl/`, `human_limb/`, `human_ml/`). `captures/` = original PCAPs/session data, treat as read-only input — its `remote/`, `leveled/`, `registration/` subdirs are junctions into the git-ignored data root `data/` (see the rule above). `tools/open_webui.bat` opens the board page and starts board-side `python3 -m http.server 8090` if it is down. `ML/` is dormant until the explicit activation phrase "开工 HR-09"; `文档收集（人工）/` holds vendor manuals/literature. `CLAUDE.md` has a fuller architecture write-up. `sidequests/` holds standalone side branches (e.g. `lidata_adapter/` synthetic-dataset adaptation, with its own README; explicitly not a main-line HF/GL/HC/HR artifact) and `tmp_gl_diag/` is scratch diagnostic output.
 
 ## Build & Run (Linux only; native Windows cannot build)
 
@@ -41,11 +41,11 @@ Elsewhere: `webui/` = board-served Three.js pages (`human_fall/` production, `hu
 
 Fast and headless; no CI or root runner — run suites individually. `-W error` is required (warnings fail). Python suites from the repo root (`python` on Windows, `python3` on Linux):
 
-- `python3 -B -W error -m unittest discover -s src/human_fall_detection/tests` (files map to milestones: `test_hf*.py`, `test_gl*.py`, `test_gli*.py`).
+- `python3 -B -W error -m unittest discover -s src/human_fall_detection/tests`.
 - `python3 -B -W error -m unittest discover -s src/human_capture/tests`.
 - `python3 -B -W error -m unittest discover -s src/human_follow_calibration/tests`.
 
-JS/console suites, run from each directory: `node human_fall_lib.test.js` (`webui/human_fall`, `webui/human_fall_preview`), `node capture_lib.test.js` (`webui/human_capture`), `node human_replay_lib.test.js`, `node panel.test.js`, `node human_detect_lib.test.js`, and `node human_pipe_lib.test.js` (`pc_apps/human_replay`), `node console_html.test.js` and `python console_test.py` (`pc_apps/console`).
+JS/console suites, run from each directory: `node human_fall_lib.test.js` (`webui/human_fall`, `webui/human_fall_preview`), `node capture_lib.test.js` (`webui/human_capture`), `node human_replay_lib.test.js`, `node panel.test.js`, `node human_detect_lib.test.js`, and `node human_pipe_lib.test.js` (`pc_apps/human_replay`), `python joint_capture_test.py` (`pc_apps/console`, joint-recording backend only).
 
 Board runtime is Python 3.8.10 / NumPy 1.17.4 (the Windows dev box runs 3.12) — keep board code 3.8-compatible and stdlib + NumPy only (no OpenCV/RKNN). Add regression cases for decoding, invalid data, ambiguity, and calibration changes. Driver changes need a ROS build plus live/PCAP publishing checks.
 
@@ -56,4 +56,4 @@ Board runtime is Python 3.8.10 / NumPy 1.17.4 (the Windows dev box runs 3.12) �
 - One source tree builds both ROS1 and ROS2 via `ROS_FOUND` (`#if ROS_FOUND==1/2`); keep both branches compiling. `POINT_TYPE` in `inno_lidar_ros/CMakeLists.txt` selects the struct in `src/msg/cloud_types.hpp`.
 - `imu_types.hpp` comments device stamps as nanoseconds, but the publisher consumes them as seconds; this contradiction is unresolved — don't change the unit from the header comment (`deviceStampToRos` in `publish_manager.cpp`).
 - Calibration and fall-detection nodes are strictly read-only: never publish vehicle/robot control commands.
-- Fall config layering (`src/human_fall_detection/config/`): `default.yaml` + `geometry.yaml` are frozen; `geometry_constrained*.yaml` are immutable named variants (constrained scripts take `--constrained-config`); `human_fall.yaml` is node runtime (topics/timeouts/output); `human_fall_prod.yaml` is the board production config; `perception.yaml` holds per-`core/`-module thresholds. GL work treats the driver, `webui/`, `captures/`, and historical evidence as read-only unless the current item says otherwise; new variants get new files/IDs, not edits.
+- Fall config layering (`src/human_fall_detection/config/`): `default.yaml` + `geometry.yaml` are frozen; `geometry_constrained*.yaml` are immutable named variants (constrained scripts take `--constrained-config`); `human_fall.yaml` is node runtime (topics/timeouts/output); `human_fall_prod.yaml` is the board production config; `perception.yaml` holds per-`core/`-module thresholds. Driver, `webui/`, `captures/` and historical evidence stay read-only unless the task needs them; new variants get new files, not edits.

@@ -22,6 +22,57 @@
   function isTriple(v) { return Array.isArray(v) && v.length === 3 && v.every(isNum); }
   function isEnum(value, list) { return list.indexOf(value) >= 0; }
 
+  // Optional display transform. It is bound to a live algorithm calibration,
+  // but cannot assert a physical calibration or change algorithm coordinates.
+  function validDisplayGround(g) {
+    if (!g || g.schema_version !== 1 || g.kind !== "display_ground_candidate" ||
+        g.units !== "m" || g.to_frame !== "ground_local" ||
+        typeof g.source_frame !== "string" || !g.source_frame ||
+        typeof g.calibration_id !== "string" || !g.calibration_id ||
+        !/^[a-f0-9]{64}$/.test(g.ground_sha256 || "") ||
+        g.physical_verified !== false || g.runtime_eligible !== false ||
+        !isTriple(g.t) || !Array.isArray(g.R) || g.R.length !== 3 ||
+        !g.R.every(isTriple)) return false;
+    var r = g.R;
+    for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) {
+      var dot = 0;
+      for (var k = 0; k < 3; k++) dot += r[i][k] * r[j][k];
+      if (Math.abs(dot - (i === j ? 1 : 0)) > 1e-6) return false;
+    }
+    var det = r[0][0]*(r[1][1]*r[2][2]-r[1][2]*r[2][1]) -
+      r[0][1]*(r[1][0]*r[2][2]-r[1][2]*r[2][0]) +
+      r[0][2]*(r[1][0]*r[2][1]-r[1][1]*r[2][0]);
+    return Math.abs(det - 1) <= 1e-6;
+  }
+  function displayGroundMatches(g, state, frame) {
+    return validDisplayGround(g) && !!state && !!state.calibration &&
+      state.calibration.calibration_id === g.calibration_id &&
+      state.calibration.ground_status === "valid" &&
+      state.source && state.source.frame_id === g.source_frame && frame === g.source_frame &&
+      !!state.ground && state.ground.status === "valid" && state.ground.frame === g.source_frame &&
+      isTriple(state.ground.normal) && isNum(state.ground.offset_m) &&
+      g.R[2].every(function(v,i) {return Math.abs(v-state.ground.normal[i]) <= 1e-6;}) &&
+      Math.abs(g.t[2]-state.ground.offset_m) <= 1e-6 &&
+      Math.abs(g.t[0]) <= 1e-6 && Math.abs(g.t[1]) <= 1e-6;
+  }
+
+  function regionsForState(s) {
+    var r = s && s.regions;
+    if (!r || r.kind !== "target_regions" || r.schema_version !== 1 || !r.observed ||
+        s.track_status !== "locked" || s.position_predicted || s.observability === "invalid" ||
+        r.coordinate !== "source" || r.session_id !== s.session_id || r.time_epoch !== s.time_epoch ||
+        r.action_generation !== s.action_generation || !s.calibration ||
+        r.calibration_id !== s.calibration.calibration_id || sourceKey(r.source) !== sourceKey(s.source) ||
+        sourceKey(r.source) === null || !r.nodes || !Array.isArray(r.edges)) return null;
+    var rows = new Set(s.target_source_rows || []);
+    for (var k in r.nodes) {
+      var n = r.nodes[k];
+      if (!n || (n.valid && (!isTriple(n.xyz) || !Array.isArray(n.support_rows) ||
+          !n.support_rows.length || !n.support_rows.every(function(row) {return rows.has(row);})))) return null;
+    }
+    return r;
+  }
+
   // A source frame is only usable for alignment when it carries a real seq and
   // both stamp seconds and nanoseconds (a bare seq would let a reboot or a
   // repeated seq overlay a wrong frame).
@@ -255,9 +306,27 @@
     return null;
   }
 
+  function showCandidateBoxes(diagnostic, selecting) {
+    return diagnostic === true || selecting === true;
+  }
+
   return {
+    geometryShadowText: function (s) {
+      if (!s || s.enabled !== true) return "未启用";
+      if (s.mode !== "shadow" || s.confirmed_enabled !== false) return "UNKNOWN · 影子状态无效";
+      var names = {upright:"直立参照",transition:"姿态过渡",orientation_unknown:"方向未知",low_hold_pending:"低位保持中",low_without_descent:"低位但缺下降证据",fall_candidate_active:"几何候选（不报警）",unknown:"UNKNOWN"};
+      var text = "影子 · " + (names[s.state] || "UNKNOWN");
+      var e = s.evidence || {};
+      if (isNum(e.centroid_height_m)) text += " · h " + e.centroid_height_m.toFixed(2) + " m";
+      if (isNum(e.inclination_deg)) text += " · θ " + e.inclination_deg.toFixed(1) + "°";
+      if (isNum(e.vertical_velocity_m_s)) text += " · v " + e.vertical_velocity_m_s.toFixed(2) + " m/s";
+      return text + " · 仅观察，不确认";
+    },
+    showCandidateBoxes: showCandidateBoxes,
     FALL: FALL, TRACK: TRACK, OBS: OBS, HARD_FALL: HARD_FALL,
     isNum: isNum, isInt: isInt, isTriple: isTriple, isEnum: isEnum,
+    validDisplayGround: validDisplayGround, displayGroundMatches: displayGroundMatches,
+    regionsForState: regionsForState,
     frameKey: frameKey, sourceKey: sourceKey, presentedKey: presentedKey,
     headerFromPayload: headerFromPayload, parseRos1String: parseRos1String,
     packClientMessage: packClientMessage,

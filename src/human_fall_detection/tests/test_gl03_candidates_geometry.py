@@ -871,6 +871,28 @@ class NodeCoordinateTest(unittest.TestCase):
         receive = (latest.get("time_received_s") or 1.0) + 0.01
         return core.handle_request(request, receive)
 
+    def test_node_fall_evidence_expires_on_long_observation_gap(self):
+        core = self._trusted_core()
+        first = self._process(core, gl02_scene(), 1.0, seq=1, frame_id=FROM_FRAME, source_s=100.0)
+        self.assertTrue(self._select(core, first)['accepted'])
+        self._process(core, gl02_scene(), 1.1, seq=2, frame_id=FROM_FRAME, source_s=100.1)
+        self._process(core, gl02_scene(), 1.2, seq=3, frame_id=FROM_FRAME, source_s=100.2)
+        self.assertIsNotNone(core.fall._last_locked_s)
+        core.fall._descent_seen = True
+        self._process(core, gl02_scene(), 3.0, seq=4, frame_id=FROM_FRAME, source_s=102.0)
+        self.assertFalse(core.fall._descent_seen)
+
+    def test_node_fall_evidence_cleared_when_ground_is_lost(self):
+        core = self._trusted_core()
+        first = self._frame(core, gl02_scene(), 1.0)
+        self.assertTrue(self._select(core, first)['accepted'])
+        self._frame(core, gl02_scene(), 1.3, seq=2)
+        core.fall._descent_seen = True
+        core.ground = None
+        self._frame(core, gl02_scene(), 1.6, seq=3)
+        self.assertFalse(core.fall._descent_seen)
+        self.assertEqual(core.fall.history_reset_reason, 'ground_unavailable')
+
     def test_observed_state_ground_equals_candidate(self):
         core = self._trusted_core()
         first = self._frame(core, gl02_scene(), 1.0)

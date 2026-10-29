@@ -195,7 +195,7 @@ def _sync_failure_note(sid):
     state = sess.get("state")
     if state == "transferring":
         return "板端卡在传输中（上次同步中断）：点「退回重试」退回就绪后重新拉取。", True
-    err = (sess.get("extra") or {}).get("error")
+    err = sess.get("error")  # 板端 GET 是扁平登记记录，error 在顶层
     if err:
         return "fetch 失败：%s" % err, False
     return "fetch 返回 False（板端状态 %s，无错误详情）" % (state or "未知"), False

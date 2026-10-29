@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>HFUS-HUMAN-SKELETON-02 calibration viewer</title>
+<style>
+:root{color-scheme:dark}
+body{margin:0;background:#0b1016;color:#d8e2ea;font:13px/1.4 system-ui,Segoe UI,sans-serif}
+header{padding:10px 14px;background:#111a24;border-bottom:1px solid #263746}
+header b{color:#7ee0b8}
+#stateLine,#transformLine{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:#9db0c1;margin-top:3px}
+main{display:grid;grid-template-columns:minmax(620px,1fr) 420px;gap:10px;padding:10px}
+#view{width:100%;height:690px;background:#05080c;border:1px solid #263746;display:block;cursor:crosshair}
+aside{min-width:0}
+.panel{background:#111a24;border:1px solid #263746;margin-bottom:10px;padding:9px}
+.panel h3{margin:0 0 7px;font-size:13px;color:#9dd7f2}
+button,select,input[type=range]{background:#1a2837;color:#d8e2ea;border:1px solid #385068;border-radius:3px;padding:3px 8px}
+button{cursor:pointer}
+.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
+#calibration table{width:100%;border-collapse:collapse;font-family:ui-monospace,Consolas,monospace;font-size:11px}
+#calibration th,#calibration td{padding:2px 3px;border-bottom:1px solid #1d2b39;text-align:right}
+#calibration th:first-child,#calibration td:first-child{text-align:left}
+.state{font-weight:700}.CALIBRATED{color:#63e6a2}.CALIBRATING{color:#ffd166}.COLLECTING{color:#9db0c1}.DRIFT_RESET{color:#ff6b6b}
+#point{white-space:pre-wrap;word-break:break-all;font:11px/1.35 ui-monospace,Consolas,monospace;color:#c9f7dc;min-height:70px;background:#070c11;padding:6px;border:1px solid #1d2b39}
+#trackLine{color:#ffd166;font-family:ui-monospace,Consolas,monospace;font-size:11px}
+small{color:#8ea2b3}
+</style>
+</head>
+<body>
+<header>
+  <b>HFUS-HUMAN-SKELETON-02</b> &nbsp; point-supported regions + persistent edge calibration
+  <div id="stateLine">loading...</div>
+  <div id="transformLine"></div>
+</header>
+<main>
+  <section>
+    <canvas id="view" width="1000" height="690"></canvas>
+    <div class="row" style="margin-top:8px">
+      <label>Frame <input id="frame" type="range" min="0" max="779" value="0" style="width:260px"></label>
+      <input id="frameNo" type="number" min="0" max="779" value="0" style="width:65px">
+      <button id="prev">Prev</button><button id="next">Next</button>
+      <select id="camera"><option value="top">Top XY</option><option value="side">Side XZ</option><option value="oblique">Oblique</option></select>
+      <button id="pickbad">Pick invalid row</button>
+    </div>
+    <small>Camera is display-only. Click a point to query raw 28-byte row + source XYZ + S3_LOCAL XYZ + source_row.</small>
+  </section>
+  <aside>
+    <div class="panel">
+      <h3>Frame / track</h3>
+      <div id="trackLine">no track</div>
+      <div id="semantic"><small>Anatomy, left/right, physical height and human identity: UNKNOWN.</small></div>
+    </div>
+    <div class="panel" id="calibration">
+      <h3>12 region-edge calibration panel</h3>
+      <table><thead><tr><th>edge</th><th>state</th><th>mean m</th><th>sigma m</th><th>n</th></tr></thead><tbody id="calRows"></tbody></table>
+    </div>
+    <div class="panel">
+      <h3>Point lookup</h3>
+      <div id="point">click a point</div>
+    </div>
+  </aside>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>

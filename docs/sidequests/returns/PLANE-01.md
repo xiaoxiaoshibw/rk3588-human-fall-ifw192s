@@ -110,3 +110,35 @@
 - 源码差异与 SHA 证据：`sidequests/plane_track/r01/`（全量 SHA 见"本轮信息"）；未改任何既有源码/配置。
 - 原始日志索引：`02_LEVELING_STDOUT.log`、`12_reg_*.log`、`12_REGRESSION_SUMMARY.json`；板端只读 API 响应在 `01_INVENTORY_v2.json`。
 - 当前工单下一步：若用户授权，按"未闭合"里的最小录制清单补录空场/小飞机长段；A07 已按用户确认执行完毕，无待批动作。
+
+## R2（2026-10-15）参考算法跑两段新会话 + 上传总控制台「小目标跟踪」
+
+- 用户授权（两轮直派）：①贴 `20261015_142511 3.2s 32 ✓已传 ✓` +「把这个参考算法也是识别一下，上传到小目标跟踪」
+  （附 `Bird识别`）；②贴 `20261015_142416 12.5s 122 ✓已传 ✓` +「这个第100帧开始也识别一下」。
+- 做了什么：用 `Bird识别/`（PLANE-01 链路运行副本）跑 `cap_20261015_142511`（整段 32 帧）与
+  `cap_20261015_142416`（**第 100 帧起**）；去背景空场用 `cap_20261015_111738`（自参考探针 0/186 帧有前景，
+  `registration.js` 对两段目标均 PASS；PLANE-01 的 10-14 空场 221808 被既有门拒用，未降门）；
+  新增 5 个 `captures/leveled` job；结果页经扩展后的 `sync_plane01_pages.py` 上传进总控制台
+  `plane01_pages/`（两个会话子目录 + index 两节 + MANIFEST 源 SHA）。
+- 参考算法副本 2 处最小修复（原件 `sidequests/plane_track/r01/` 零改动，已记差异）：`plane_fg2.py`
+  孤立命中帧 KeyError → 修；`plane_fg2.py`/`tbd_track.py` 加 `--start-frame`（用户"第100帧"口径）与
+  `--target-sid/--sid`；补丁行为中性（142511 前后 `20_TRACK_V2.json` 同 SHA）。
+- 识别结论（不美化）：142416 第 100 帧起 TBD 宣告帧 = 100、KF 运动轨迹 #3（帧 100–109，0.76 m，0.82 m/s），
+  目标只在帧 100–104（半径 0.13–0.20 m、≤2.38 m/s）；142511 TBD 宣告帧 11、运动轨迹 #5/#9（1.75 / 3.35 m/s）。
+  **规则分类给运动轨迹的是 `unlabeled_moving_confirmed`（0.0/0.2），拿满分 `paper_plane` 的反而是不动残留簇** ——
+  识别仍是纸飞机口径规则打分（1 正样本、未训练），本轮不声称识别正确；目标语义 UNKNOWN。
+- 自验：`Bird识别` 12 OK、`console_html` 21 passed/0 failed、`console_test` exit 0；模块 index + 两个会话页
+  在真实浏览器加载 200、无 console error。
+- 追加（用户问"有没有视频展示运动过程"）：出两支 MP4（`cap_*/23_TRACK_VIDEO.mp4`：三视图 + 去背景点 +
+  检测层中心轨迹 + KF 运动轨迹，目标段 0.5 倍慢放；142511 = 22.4 s / 2.83 MB，142416 帧 100–121 = 6.4 s / 0.60 MB），
+  已上传进模块（`plane01_pages/<sid>/23_TRACK_VIDEO.mp4`，重跑 `sync_plane01_pages.py` → 37 文件 / 13.45 MB）。
+- 状态：**SUBMITTED 未 ACCEPTED**，独审 / 真机点击 NOT_RUN；冻结 EXE 已按用户选定重打（`Console.exe` 195,208,334 B /
+  `96FB4837…`、`LiDAR_Console.zip` 152,443,538 B / `8B47907C…`）并用探针证明新页逐字节在 exe 内，但 17:32
+  另一路 preview/review 工作流用其 staging 副本重打并重启，当前运行实例已换成那一版（旧 `plane01_pages`），
+  本轮 exe 留存 `dist/Console.exe.bak-20261015_before_reviewfix`。冗余 leveled job 已按用户直派删除：
+  142353（289,936,812 B）与 142730（1,433,450,662 B），共 18+18 文件、文件系统释放 **1,723,461,632 B**，
+  清单/复核/执行见 `DELETE_CANDIDATES_leveled_r2.json`、`DELETE_VERIFY_BEFORE.json`、`DELETE_EXECUTED_leveled_r2.json`
+  （保留 111738/142511/142416 三个 job；`captures/remote`、`data/` 未动）。
+  见[唯一 v1](../evidence/2026-10-15_plane_track_r2/ACCEPTANCE_V1.md)/
+  [根因与限制](../evidence/2026-10-15_plane_track_r2/README.md)/[SHA](../evidence/2026-10-15_plane_track_r2/FILE_SHAS.json)。
+  无 commit/push/部署/采集；技能 `C:/Users/30680/.config/opencode/skills/ponytail`（skill 工具加载，full）。

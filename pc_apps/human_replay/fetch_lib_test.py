@@ -21,6 +21,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from unittest import mock
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
@@ -167,8 +168,13 @@ class TestTransferOneReverts(unittest.TestCase):
 class _LoopbackHandler(http.server.BaseHTTPRequestHandler):
     files = {}
     lie_extra = 0
+    status = 200
 
     def _respond(self, head_only):
+        if self.status == 204:
+            self.send_response(204)
+            self.end_headers()
+            return
         data = self.files.get(self.path.rsplit("/", 1)[-1])
         if data is None:
             self.send_response(404)
@@ -221,6 +227,15 @@ class TestHttpDataPlaneLoopback(unittest.TestCase):
             p = os.path.join(d, "points.bin.part")
             self.assertFalse(fetch._http_download("cap_x", "points.bin", p))
 
+    def test_empty_204_is_diagnosed_without_creating_file(self):
+        self._serve({"points.bin": b"unused"})
+        with mock.patch.object(_LoopbackHandler, 'status', 204), tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, 'points.bin.part')
+            logs = []
+            self.assertFalse(fetch._http_download('cap_x', 'points.bin', path, log=logs.append))
+            self.assertFalse(os.path.exists(path))
+            self.assertIn('status=204', logs[0])
+
 
 class TestAgainstCaptureServer(unittest.TestCase):
     """与真实 capture_server（本机环回）对拉：端到端 ready→transferred。"""
@@ -260,6 +275,21 @@ class TestAgainstCaptureServer(unittest.TestCase):
             st = srv.store.get(sid)
             self.assertEqual(st["state"], "transferred")
             self.assertTrue(st.get("transferred"))
+
+    def test_system_downloader_proxy_cannot_intercept_board_transfer(self):
+        """模拟 IDM 全局代理返回 204；控制面/HEAD/文件下载必须全部直连。"""
+        handler = type('DownloaderProxy', (_LoopbackHandler,), {'status': 204})
+        proxy = http.server.ThreadingHTTPServer(('127.0.0.1', 0), handler)
+        threading.Thread(target=proxy.serve_forever, daemon=True).start()
+        self.addCleanup(proxy.server_close)
+        self.addCleanup(proxy.shutdown)
+        opener = fetch.urllib.request.build_opener(fetch.urllib.request.ProxyHandler(
+            {'http': 'http://127.0.0.1:%d' % proxy.server_port}))
+        with mock.patch.object(fetch.urllib.request, '_opener', opener), \
+             mock.patch.object(fetch.urllib.request, 'proxy_bypass', return_value=False):
+            with fetch.urllib.request.urlopen('http://device.invalid/points.bin') as resp:
+                self.assertEqual(resp.status, 204)
+            self.test_process_session_end_to_end()
 
     def test_fail_reverts_to_ready_not_stuck(self):
         # 已登记 ready 但文件不存在：HEAD 拿不到大小 → 退回 ready + hr01 错误

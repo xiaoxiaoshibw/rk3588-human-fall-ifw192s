@@ -67,6 +67,8 @@ def main(argv=None):
     parser.add_argument("--auto-select", action="store_true",
                         help="TEST FIXTURE ONLY: auto-lock the largest first-frame candidate")
     parser.add_argument("--output", default=None)
+    parser.add_argument('--target-mode', choices=['manual','automatic'], default='automatic',
+                        help='automatic geometric acquisition; manual preserves explicit selection')
     args = parser.parse_args(argv)
 
     settings = load_config(args.config) if args.config else {}
@@ -77,13 +79,14 @@ def main(argv=None):
     frames, times = _load_frames(args.frames)
     pipeline = ReplayPipeline(args.session_id, settings, baseline=baseline,
                               auto_select=args.auto_select,
-                              initial_candidate_id=args.select_candidate)
+                              initial_candidate_id=args.select_candidate,
+                              target_mode='manual' if args.auto_select or args.select_candidate else args.target_mode)
     pipeline.ground = _load_ground(args.ground)
     outputs = pipeline.run(frames, times, args.epoch)
     report = {"kind": KIND, "schema_version": SCHEMA_VERSION,
               "session_id": args.session_id, "frame_count": int(len(frames)),
               "ground_available": pipeline.ground is not None,
-              "selection_source": pipeline.initial_selection_source,
+              "selection_source": 'automatic_acquisition' if pipeline.target_mode == 'automatic' else pipeline.initial_selection_source,
               "outputs": outputs}
     text = dumps_strict(report)
     if args.output:

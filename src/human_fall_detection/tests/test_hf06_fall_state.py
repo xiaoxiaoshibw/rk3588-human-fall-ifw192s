@@ -2,6 +2,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 import numpy as np
@@ -42,8 +43,14 @@ def observation(source_stamp_s, candidate_value=None, predicted=False, epoch=0,
 
 
 def features(height, rate=None, drop=None, observable=True, reason=None,
-             reset_reason=None, epoch=0, track_id="t0001"):
+             reset_reason=None, epoch=0, track_id="t0001", extent=None, top=None):
+    # Posture geometry travels with every real feature block: the low measured
+    # surface top and the horizontal extent. A plain falling fixture defaults to
+    # a low top (a body ending on the ground); pass ``extent``/``top`` to model a
+    # crouch or a missing geometry instead.
     return {"observable": observable, "reason": reason, "height_median_m": height,
+            "height_m": {"median": height, "max": height + 0.1 if top is None else top},
+            "horizontal_extent_m": extent,
             "height_drop_m": drop, "descent_rate_m_s": rate,
             "history_reset_reason": reset_reason, "time_epoch": epoch,
             "track_id": track_id}
@@ -65,6 +72,73 @@ def fall_observation(source_stamp_s, epoch=0, generation=1, track_id="t0001",
 
 
 class FeatureExtractorTest(unittest.TestCase):
+    def test_invalid_height_breaks_continuity_without_poisoning_history(self):
+        for height in (np.nan, np.inf, -np.inf, 'invalid', [0.4]):
+            with self.subTest(height=height):
+                extractor = FeatureExtractor('hf06')
+                extractor.update(observation(0., candidate(.4)))
+                bad_candidate = candidate(.4)
+                bad_candidate['height_m']['median'] = height
+                invalid = extractor.update(observation(.1, bad_candidate))
+                self.assertFalse(invalid['observable'])
+                self.assertEqual(invalid['reason'], 'invalid_height')
+                self.assertEqual(len(extractor.history), 1)
+                dumps_strict(invalid)
+                resumed = extractor.update(observation(.2, candidate(.4)))
+                self.assertTrue(resumed['observation_gap'])
+                self.assertIsNone(resumed['descent_rate_m_s'])
+                self.assertEqual(resumed['near_ground_duration_s'], 0.)
+
+    def test_unobserved_frames_break_temporal_segment_without_deleting_history(self):
+        for kind in ('prediction', 'candidate', 'ground', 'height'):
+            with self.subTest(kind=kind):
+                extractor = FeatureExtractor('hf06')
+                extractor.update(observation(0, candidate(.4)))
+                extractor.update(observation(.1, candidate(.4)))
+                missing = observation(.2, candidate(.4), predicted=kind == 'prediction')
+                if kind == 'candidate':missing['candidate'] = None
+                if kind == 'ground':missing['candidate']['ground_relative_available'] = False
+                if kind == 'height':missing['candidate']['height_m']['median'] = None
+                self.assertFalse(extractor.update(missing)['observable'])
+                self.assertEqual(len(extractor.history), 2)
+                resumed = extractor.update(observation(.3, candidate(.4)))
+                self.assertTrue(resumed['observation_gap'])
+                self.assertFalse(resumed['reset_now'])
+                self.assertEqual(resumed['near_ground_duration_s'], 0.)
+                self.assertIsNone(resumed['descent_rate_m_s'])
+
+    def test_gap_boundary_and_bounded_history(self):
+        for dt, gap in ((.3, False), (.3 + .5e-9, False), (.3 + 2e-9, True)):
+            extractor = FeatureExtractor('hf06')
+            extractor.update(observation(.1, candidate(.4)))
+            result = extractor.update(observation(.1 + dt, candidate(.4)))
+            self.assertEqual(result.get('observation_gap', False), gap)
+        extractor = FeatureExtractor('hf06', dict(max_history=2))
+        for t in (0, .1, 2., 2.1):result = extractor.update(observation(t, candidate(.4)))
+        self.assertEqual(len(extractor.history), 2)
+        self.assertAlmostEqual(result['near_ground_duration_s'], .1)
+        for value in (0, -1, np.nan, np.inf):
+            with self.assertRaises(ValueError):FeatureExtractor('hf06', dict(max_gap_s=value))
+
+    def test_invalid_or_reverse_time_never_appends_temporal_evidence(self):
+        for stamp in (None, np.nan, np.inf, 'invalid', .1, 0.):
+            extractor = FeatureExtractor('hf06')
+            initial = observation(.1, candidate(.4))
+            machine = FallStateMachine('hf06')
+            machine.update(extractor.update(initial), initial)
+            bad_observation = observation(stamp, candidate(.4))
+            invalid = extractor.update(bad_observation)
+            self.assertFalse(invalid['observable'])
+            self.assertEqual(len(extractor.history), 1)
+            dumps_strict(invalid)
+            refused = machine.update(invalid, bad_observation)
+            self.assertEqual(refused['fall_status'], STATE_UNKNOWN)
+            self.assertIsNone(refused['new_event'])
+            dumps_strict(refused)
+            result = extractor.update(observation(.2, candidate(.4)))
+            self.assertTrue(result['observation_gap'])
+            self.assertEqual(result['near_ground_duration_s'], 0.)
+
     def test_prediction_does_not_advance_history(self):
         extractor = FeatureExtractor("hf06")
         extractor.update(observation(1.0, candidate(1.6)), baseline())
@@ -109,6 +183,69 @@ class FeatureExtractorTest(unittest.TestCase):
 
 
 class FallStateMachineTest(unittest.TestCase):
+    def test_nonfinite_geometry_cannot_supply_lying_support(self):
+        for extent, top in ((np.inf, .95), (.2, -np.inf), (np.nan, np.nan)):
+            with self.subTest(extent=extent, top=top):
+                result = self._descent(self._machine(), dict(extent=extent, top=top))
+                self.assertEqual(result['fall_status'], STATE_LOW)
+                self.assertEqual(result['event_count'], 0)
+
+    def test_lying_support_checks_each_alternative_independently(self):
+        for extent in ('invalid', np.inf, np.nan):
+            with self.subTest(extent=extent):
+                result = self._descent(self._machine(), dict(extent=extent, top=.45))
+                self.assertEqual(result['fall_status'], STATE_SUSPECTED)
+
+    def test_implicit_gap_cannot_manufacture_sustained_low_evidence(self):
+        extractor = FeatureExtractor('hf06');machine = FallStateMachine('hf06')
+        for t,h in ((0,1.6),(.1,1.2),(.2,.4),(2.,.4)):
+            obs = observation(t,candidate(h))
+            f = extractor.update(obs,baseline())
+            result = machine.update(f,obs,baseline())
+        self.assertEqual(result['fall_status'], STATE_LOW)
+        self.assertEqual(f['near_ground_duration_s'], 0.)
+        self.assertIsNone(f['descent_rate_m_s'])
+        for i in range(1,18):
+            obs = observation(2. + i*.1,candidate(.4))
+            result = machine.update(extractor.update(obs,baseline()),obs,baseline())
+        self.assertEqual(result['fall_status'], STATE_LOW)
+        self.assertNotIn('measured_descent', result['reason_codes'])
+
+    def test_real_feature_gaps_keep_confirmed_episode_deduplicated(self):
+        for kind in ('prediction', 'implicit', 'no_time'):
+            with self.subTest(kind=kind):
+                extractor = FeatureExtractor('hf06')
+                machine = FallStateMachine('hf06', dict(mode_verified=True,allow_confirmed=True,
+                    low_min_duration_s=.2,confirmed_min_low_duration_s=.4))
+                sequence = [(0,1.6),(.1,1.2)] + [(i*.1,.4) for i in range(2,11)]
+                for t,h in sequence:
+                    obs = observation(t,candidate(h))
+                    result = machine.update(extractor.update(obs,baseline()),obs,baseline())
+                self.assertEqual(result['event_count'], 1)
+                if kind != 'implicit':
+                    obs = observation(None if kind == 'no_time' else 1.1,candidate(.4),
+                                      predicted=kind == 'prediction')
+                    result = machine.update(extractor.update(obs,baseline()),obs,baseline())
+                    dumps_strict(result)
+                start = 2. if kind == 'implicit' else 1.2
+                for i in range(8):
+                    obs = observation(start+i*.1,candidate(.4))
+                    result = machine.update(extractor.update(obs,baseline()),obs,baseline())
+                    self.assertEqual(result['event_count'], 1)
+                    self.assertIsNone(result['new_event'])
+                self.assertEqual(result['fall_status'], STATE_CONFIRMED)
+
+    def test_recovery_duration_restarts_after_dipping_below_recovery_height(self):
+        machine = self._machine()
+        for t,h,rate in ((0,1.65,0),(.1,1.2,4),(.2,.4,5)):
+            self._feed(machine,t,h,rate=rate)
+        for i in range(3,19):self._feed(machine,i*.1,.4,rate=0)
+        self._feed(machine,2.,1.1,rate=0)
+        for i in range(21,30):self._feed(machine,i*.1,.8,rate=0)
+        self.assertEqual(self._feed(machine,3.,1.1,rate=0)['fall_status'],STATE_RECOVERING)
+        self.assertEqual(self._feed(machine,3.9,1.1,rate=0)['fall_status'],STATE_RECOVERING)
+        self.assertEqual(self._feed(machine,4.1,1.1,rate=0)['fall_status'],STATE_UPRIGHT)
+
     def _machine(self, **settings):
         return FallStateMachine("hf06", settings)
 
@@ -134,6 +271,64 @@ class FallStateMachineTest(unittest.TestCase):
             result = self._feed(machine, step * 0.5, 0.5)
         self.assertEqual(result["fall_status"], STATE_LOW)
         self.assertNotIn(STATE_SUSPECTED, result["fall_status"])
+
+    def _descent(self, machine, geometry, start=0.0, hold_s=3.2):
+        """Sustained low posture after a measured descent, with given geometry."""
+        result = None
+        for source_s, height, rate, drop in ((start, 1.65, 0.0, 0.0),
+                                             (start + 0.2, 1.2, 1.5, 0.45),
+                                             (start + 0.4, 0.55, 1.5, 1.1)):
+            result = machine.update(features(height, rate=rate, drop=drop, **geometry),
+                                    fall_observation(source_s))
+        step = 0
+        while source_s + 0.8 * (step + 1) <= start + hold_s:
+            step += 1
+            result = machine.update(features(0.55, rate=0.0, drop=1.1, **geometry),
+                                    fall_observation(source_s + 0.8 * step))
+        return result
+
+    def test_sustained_crouch_geometry_is_not_suspected(self):
+        # Measured descent into a deep crouch: low height but neither long on
+        # the ground nor low-topped, so it is not called a fall.
+        result = self._descent(self._machine(), dict(extent=0.2, top=0.95))
+        self.assertEqual(result["fall_status"], STATE_LOW)
+        self.assertIn("low_posture_without_lying_pose", result["reason_codes"])
+        self.assertNotIn(STATE_SUSPECTED, result["fall_status"])
+        self.assertEqual(result["event_count"], 0)
+
+    def test_lying_geometry_is_required_and_sufficient_for_suspected(self):
+        for geometry in (dict(extent=0.9, top=1.1),   # long on the ground
+                         dict(extent=0.2, top=0.45),  # flat and low-topped
+                         dict(extent=None, top=0.45)):
+            with self.subTest(geometry=geometry):
+                result = self._descent(self._machine(), geometry)
+                self.assertEqual(result["fall_status"], STATE_SUSPECTED)
+
+    def test_missing_posture_geometry_never_counts_as_lying(self):
+        machine = self._machine()
+        result = None
+        for source_s, height, rate, drop in ((0.0, 1.65, 0.0, 0.0),
+                                             (0.2, 1.2, 1.5, 0.45),
+                                             (0.4, 0.55, 1.5, 1.1),
+                                             (1.6, 0.55, 0.0, 1.1),
+                                             (3.0, 0.55, 0.0, 1.1)):
+            data = features(height, rate=rate, drop=drop)
+            data.pop("height_m")
+            result = machine.update(data, fall_observation(source_s))
+        self.assertEqual(result["fall_status"], STATE_LOW)
+        self.assertIn("low_posture_without_lying_pose", result["reason_codes"])
+
+    def test_confirmed_without_lying_pose_is_not_emitted(self):
+        machine = self._machine(mode_verified=True, allow_confirmed=True)
+        crouch = dict(extent=0.2, top=0.95)
+        result = self._descent(machine, crouch, hold_s=4.0)
+        self.assertEqual(result["fall_status"], STATE_LOW)
+        self.assertEqual(result["event_count"], 0)
+        result = machine.update(features(0.55, rate=0.0, drop=1.1, extent=0.9, top=1.1),
+                                fall_observation(4.4), baseline())
+        self.assertEqual(result["fall_status"], STATE_CONFIRMED)
+        self.assertEqual(result["event_count"], 1)
+        self.assertIn("lying_pose_supported", result["new_event"]["reason_codes"])
 
     def test_default_mode_tops_out_at_suspected(self):
         machine = self._machine()
@@ -311,6 +506,21 @@ def _person(height, seed=13):
 
 
 class ReplayPipelineTest(unittest.TestCase):
+    def test_ready_baseline_binding_is_passed_to_both_consumers(self):
+        c = candidate(1.6)
+        c.update(candidate_id='c0000',center_source_m=[0,0,1.6],evidence_indices=[0])
+        for wrong in (None, 'selection_version', 'calibration_version'):
+            bound = baseline()
+            if wrong is not None:bound[wrong] = 'other'
+            pipeline = ReplayPipeline('hf06',baseline=bound)
+            pipeline.tracker.select('t0001',0,candidate=c,calibration_version='cal1',
+                selection_version=1,source_stamp_s=0,receive_s=0)
+            with patch('core.pipeline.build_snapshot',return_value=dict(snapshot_id='one',candidates=[c])):
+                result = pipeline.step([[0,0,1.6]],.1,0,seq=1)
+            self.assertEqual(result['features']['baseline_bound'],wrong is None)
+            self.assertEqual(result['fall']['baseline_version'],1 if wrong is None else None)
+            if wrong is None:self.assertEqual(result['fall']['fall_status'],STATE_UPRIGHT)
+
     def _scene(self):
         ground_points = _plane_points()
         ground = fit_ground_plane(ground_points, settings={"range_min_m": 0.0},

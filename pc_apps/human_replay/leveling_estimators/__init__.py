@@ -1,6 +1,6 @@
-"""P02 classical estimators, local offline adapters (no ROS or file access)."""
-from .tls import estimate as tls
-from .svd import estimate as svd
-from .ransac import estimate as ransac
-
-ESTIMATORS = {"tls": tls, "svd": svd, "ransac": ransac}
+"""Compatibility import; canonical implementation is shared with ROS."""
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[3]/"src/human_fall_detection"))
+import core.ground_fit.leveling_estimators as _shared
+globals().update({k:v for k,v in vars(_shared).items() if not k.startswith("__")})

@@ -14,7 +14,7 @@ from core.ground import STATUS_VALID, fit_ground_plane
 from core.lidar_candidates import (build_background, build_snapshot,
                                    candidates_from_cloud, foreground_mask,
                                    ground_coverage, ground_plane_basis,
-                                   resolve_settings, scene_change_fraction,
+                                   resolve_settings, scene_change_fraction, prepare_background,
                                    validate_snapshot)
 from sensor_health import dumps_strict
 
@@ -180,6 +180,56 @@ class MultiTargetAndMergeTest(unittest.TestCase):
 
 
 class BackgroundTest(unittest.TestCase):
+    def test_prepared_lookup_matches_cells_at_negative_boundaries_and_extremes(self):
+        rng = np.random.RandomState(51)
+        for cell_m,z_cell_m in ((.1,.1),(.3,.07)):
+            cells=rng.randint(-10,11,(100,3)).tolist()
+            raw=dict(cells=cells,cell_m=cell_m,z_cell_m=z_cell_m)
+            prepared=prepare_background(raw)
+            points=rng.uniform(-4.,4.,(400,3))
+            edges=np.asarray(cells)*(cell_m,cell_m,z_cell_m)
+            points=np.vstack((points,edges,np.nextafter(edges,-np.inf),np.nextafter(edges,np.inf),
+                [[-1e12,0.,0.],[1e12,0.,0.]]))
+            np.testing.assert_array_equal(foreground_mask(points,raw),foreground_mask(points,prepared))
+            np.testing.assert_array_equal(foreground_mask(np.empty((0,3)),raw),foreground_mask(np.empty((0,3)),prepared))
+            prepared['cell_m']=.2
+            np.testing.assert_array_equal(foreground_mask(points,dict(raw,cell_m=.2)),foreground_mask(points,prepared))
+
+    def test_prepared_large_sparse_or_unbounded_cells_keep_exact_fallback(self):
+        for cells in ([],[[-10**12,0,0],[10**12,0,0]],[[10**30,0,0]],
+                      [[-2**63,0,0],[2**63-1,0,0]]):
+            raw=dict(cells=cells,cell_m=1.,z_cell_m=1.)
+            prepared=prepare_background(raw)
+            points=np.asarray([[0.,0.,0.],[-1e12,0.,0.],[1e12,0.,0.]])
+            np.testing.assert_array_equal(foreground_mask(points,raw),foreground_mask(points,prepared))
+        for value in (np.nan,np.inf,1e100):
+            raw=dict(cells=[[0,0,0]],cell_m=.1,z_cell_m=.1)
+            outcomes=[]
+            for background in (raw,prepare_background(raw)):
+                try:
+                    outcome=('mask',foreground_mask([[value,0.,0.]],background).tolist())
+                except (RuntimeWarning,ValueError,OverflowError) as exc:
+                    outcome=('error',type(exc),str(exc))
+                outcomes.append(outcome)
+            self.assertEqual(*outcomes)
+
+    def test_prepared_background_is_detached_and_preserves_mutable_raw_api(self):
+        points = np.array([[.01, .01, .01], [.21, .01, .01]])
+        raw = dict(cells=[[0, 0, 0]], cell_m=.1, z_cell_m=.1)
+        frozen = prepare_background(raw)
+        np.testing.assert_array_equal(foreground_mask(points, raw), foreground_mask(points, frozen))
+        raw['cells'].append([2, 0, 0])
+        self.assertEqual(foreground_mask(points, raw).tolist(), [False, False])
+        self.assertEqual(foreground_mask(points, frozen).tolist(), [False, True])
+        self.assertIsNone(prepare_background(None))
+        self.assertEqual(prepare_background({}), {})
+        self.assertIsNone(scene_change_fraction(points, prepare_background({})))
+        # 任意外部 frozenset 仍走原有 int 规范化，不被误认为预编译内容。
+        external = dict(raw, cells=frozenset({('0', '0', '0', 'ignored')}))
+        self.assertEqual(foreground_mask(points, prepare_background(external)).tolist(), [False, True])
+        frozen['cells'] = [[2, 0, 0]]
+        self.assertEqual(foreground_mask(points, frozen).tolist(), [True, False])
+
     def test_frozen_background_never_learns_a_still_person(self):
         rng = np.random.RandomState(31)
         empty = rng.normal((3.0, 0.0, 0.0), (0.5, 0.5, 0.05), (2000, 3))

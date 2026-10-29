@@ -1,0 +1,9 @@
+<launch>
+  <!-- Recognition only. Does not launch/stop the driver, capture, page or Foxglove. -->
+  <arg name="config" default="$(find human_fall_detection)/config/range_service_v1.json"/>
+  <arg name="release_id" default="development"/>
+  <arg name="initialization_args" default=""/>
+  <node name="range_recognition_service" pkg="human_fall_detection" type="range_service_node.py"
+        output="screen" required="true"
+        args="--config $(arg config) --release-id $(arg release_id) --azimuth-table $(find inno_lidar_ros)/config/ifw192s/ifw192s_azimuth_192x256.csv --elevation-table $(find inno_lidar_ros)/config/ifw192s/ifw192s_elevation_192x256.csv $(arg initialization_args)"/>
+</launch>

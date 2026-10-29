@@ -23,7 +23,7 @@
 </main><script>
 const $ = id => document.getElementById(id);
 const names = {idle:'等待录制',starting:'正在启动板端录制…',recording:'正在录制（雷达在板上）',stopping:'正在停止板端…',saving:'正在从板端拉回雷达数据…（需要几十秒）',completed:'已保存到本机（可回放）',failed:'录制失败'};
-let busy = false, initialized = false, previewOn = false;
+let busy = false, initialized = false, previewOn = false, previewMode = 'direct', directUrl = '';
 let lastState = null;  // 上一次状态；只在刚刚进入 completed 的那一刻通知壳页一次
 async function api(path, body) {
   const response = await fetch(path, body === undefined ? {cache:'no-store'} : {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
@@ -50,9 +50,28 @@ function render(s) {
   $('error').textContent=s.error ? `${s.error}` : '';
   $('start').disabled=busy; $('stop').disabled=!busy || (s.state!=='recording' && s.state!=='starting');
   for(const id of ['root','duration','camera','radar']) $(id).disabled=busy;
-  previewOn = busy || s.camera_frames>0;
-  if(previewOn) $('preview').hidden=false;
-  $('previewNote').textContent=s.state==='recording'||s.state==='saving' ? '当前实时预览（同时写入会话 camera.mjpeg）；停止后雷达数据从板端回拉，约需几十秒。' : '录制结束后保留最后一帧；本次画面已存入会话 camera.mjpeg。';
+  // 未录制=直连板端 MJPEG 预监（浏览器原生渲染，零本机负载）；录制中=切回 /api/preview
+  // 最新帧通道。板端 cam_mjpeg_server 为多客户端 fan-out（docs/human_capture/README.md CAM-HOT），
+  // 首帧前断开直连不为独占，只是别在录制期间白拉一路。
+  // camera_frames>0 ⟹ 服务端 latest 已有帧，ticker 不触发 404。
+  const camUrl = $('camera').value;
+  if (busy) {
+    previewMode = 'local';
+    previewOn = s.camera_frames>0;
+    if (!previewOn && $('preview').getAttribute('src')) $('preview').removeAttribute('src');
+  } else {
+    if ((previewMode==='local' || camUrl!==directUrl) && camUrl) { directUrl=camUrl; $('preview').src=camUrl; }
+    previewMode = 'direct'; previewOn = false;
+  }
+  $('preview').hidden = !busy && !camUrl;  // 空闲且地址留空：藏面板而不是挂碎图
+  $('previewNote').textContent = busy
+    ? !previewOn ? '正在等待相机首帧…'
+      : s.state==='stopping' ? '已停止录制，预览停在最后一帧；等板端封袋。'
+      : s.state==='saving' ? '正在从板端回拉雷达数据（约几十秒），预览停在最后一帧。'
+      : '录制流预览（同时写入会话 camera.mjpeg）。'
+    : !camUrl ? '在上方输入框填写摄像头流地址即可直连预监。'
+    : s.state==='completed' ? '本次画面已存入会话 camera.mjpeg；已回到直连预监（未录制）。'
+    : '直连预监（未开始录制，不落盘；开始录制后自动切换为录制流预览）。';
   if (s.state === 'completed' && lastState && lastState !== 'completed') notify_completed(s);
   lastState = s.state;
   camMaybe(s);

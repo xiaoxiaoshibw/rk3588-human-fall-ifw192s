@@ -43,6 +43,7 @@ DEFAULT_SETTINGS = {
     "height_max_m": 2.5,
     "voxel_size_m": 0.08,
     "cluster_cell_m": 0.25,
+    "cluster_mode": "horizontal",
     "max_points": 60000,
     "min_cluster_points": 25,
     "preferred_cluster_points": 80,
@@ -76,6 +77,8 @@ def resolve_settings(settings=None):
     resolved["min_cluster_points"] = int(resolved["min_cluster_points"])
     resolved["preferred_cluster_points"] = int(resolved["preferred_cluster_points"])
     resolved["pca_min_points"] = int(resolved["pca_min_points"])
+    if resolved['cluster_mode'] not in ('horizontal','spatial_3d'):
+        raise ValueError('cluster_mode must be horizontal or spatial_3d')
     if not isinstance(resolved["denoise_enabled"], bool):
         raise ValueError("denoise_enabled must be true or false")
     if isinstance(resolved["denoise_min_neighbors"], bool) \
@@ -188,7 +191,44 @@ def build_background(empty_frames, settings=None, frame_id=None, note=None):
     }
 
 
+class _BackgroundCells(frozenset):
+    """已规范化的冻结体素；有界占据表只在显式准备时构造。"""
+
+    def __new__(cls, cells):
+        frozen = super().__new__(cls, cells)
+        frozen.dense = None
+        if not frozen:
+            return frozen
+        try:
+            values = np.asarray(list(frozen), dtype=np.int64)
+        except (OverflowError, ValueError, TypeError):
+            return frozen
+        low, high = values.min(axis=0), values.max(axis=0)
+        shape = tuple(int(b) - int(a) + 1 for a, b in zip(low, high))
+        volume = shape[0] * shape[1] * shape[2]
+        # Limit the prepared lookup to 8MB; sparse large extents use the set.
+        if volume > 8000000:
+            return frozen
+        local = values - low
+        ids = (local[:, 0] * shape[1] + local[:, 1]) * shape[2] + local[:, 2]
+        occupied = np.zeros(volume, dtype=bool)
+        occupied[ids] = True
+        for array in (low, high, occupied):
+            array.flags.writeable = False
+        frozen.dense = low, high, shape, occupied
+        return frozen
+
+
+def prepare_background(background):
+    """Prepare a detached frozen runtime copy; serialized artifacts stay unchanged."""
+    if not background:
+        return background
+    return dict(background, cells=_BackgroundCells(_background_cell_set(background)))
+
+
 def _background_cell_set(background):
+    if isinstance(background.get('cells'), _BackgroundCells):
+        return background['cells']
     cells = set()
     for cell in background.get("cells", []):
         cells.add((int(cell[0]), int(cell[1]), int(cell[2])))
@@ -206,6 +246,15 @@ def foreground_mask(points, background):
     z_cell_m = float(background.get("z_cell_m", DEFAULT_SETTINGS["background_z_cell_m"]))
     cells = _background_cell_set(background)
     grid = _voxel_cells(array, cell_m, z_cell_m)
+    if isinstance(cells, _BackgroundCells) and cells.dense is not None:
+        low, high, shape, occupied = cells.dense
+        inside = (grid >= low).all(axis=1) & (grid <= high).all(axis=1)
+        mask = np.ones(len(grid), dtype=bool)
+        # Subtract only in-range cells to avoid overflow on extreme queries.
+        local = grid[inside] - low
+        ids = (local[:, 0] * shape[1] + local[:, 1]) * shape[2] + local[:, 2]
+        mask[inside] = ~occupied[ids]
+        return mask
     mask = np.array([tuple(cell) not in cells for cell in grid.tolist()], dtype=bool)
     return mask
 
@@ -384,6 +433,103 @@ def _connected_clusters(horizontal, cell_m):
     return clusters
 
 
+def _spatial_block_components(grid, low, base):
+    """将必连通的 2x2x2 体素块合并遍历；8 位掩码保留精确边界连接。"""
+    digits = grid.astype(np.int64) - low + 1
+    fine = (digits[:, 0] * base + digits[:, 1]) * base + digits[:, 2]
+    coarse = grid // 2
+    coarse_low = coarse.min(axis=0)
+    coarse_base = int((coarse.max(axis=0) - coarse_low).max()) + 3
+    digits = coarse - coarse_low + 1
+    keys = (digits[:, 0] * coarse_base + digits[:, 1]) * coarse_base + digits[:, 2]
+    unique, inverse = np.unique(keys, return_inverse=True)
+    count = len(unique)
+    bits = np.left_shift(1, (grid[:, 0] & 1) * 4 + (grid[:, 1] & 1) * 2 + (grid[:, 2] & 1)).astype(np.uint8)
+    masks = np.zeros(count, dtype=np.uint8)
+    np.bitwise_or.at(masks, inverse, bits)
+    minimum = np.full(count, np.iinfo(np.int64).max, dtype=np.int64)
+    np.minimum.at(minimum, inverse, fine)
+    masks = masks.tolist()
+    remaining = dict(zip(unique.tolist(), range(count)))
+    get = remaining.get
+    x_masks, y_masks, z_masks = (0x0f, 0xff, 0xf0), (0x33, 0xff, 0xcc), (0x55, 0xff, 0xaa)
+    neighbours = [(dx * coarse_base * coarse_base + dy * coarse_base + dz,
+                   x_masks[dx + 1] & y_masks[dy + 1] & z_masks[dz + 1],
+                   x_masks[1 - dx] & y_masks[1 - dy] & z_masks[1 - dz])
+                  for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+                  for dz in (-1, 0, 1) if dx or dy or dz]
+    allowed = {mask: [(offset, other) for offset, face, other in neighbours if mask & face]
+               for mask in set(masks)}
+    labels = np.empty(count, dtype=int)
+    groups = 0
+    for seed in unique[np.argsort(minimum)].tolist():
+        index = remaining.pop(seed, None)
+        if index is None:
+            continue
+        labels[index] = groups
+        stack = [(seed, masks[index])]
+        while stack:
+            key, mask = stack.pop()
+            for offset, opposite in allowed[mask]:
+                neighbour = key + offset
+                index = get(neighbour)
+                if index is not None and masks[index] & opposite:
+                    del remaining[neighbour]
+                    labels[index] = groups
+                    stack.append((neighbour, masks[index]))
+        groups += 1
+    labels = labels[inverse]
+    order = np.argsort(labels, kind='mergesort')
+    return [rows.tolist() for rows in np.split(order, np.flatnonzero(np.diff(labels[order])) + 1)]
+
+
+def spatial_components(points, cell_m=0.05):
+    """RAW 26-neighbour voxel components, deterministic original row indices."""
+    cells = {}
+    # Batch the same quantization and use Python integer keys in the graph walk.
+    # Preserve the input dtype, including float32 voxel-boundary behaviour.
+    grid = np.floor(np.asarray(points) / cell_m).astype(int)
+    if not len(grid):
+        return []
+    low = [int(value) for value in grid.min(axis=0)]
+    # Padded digits prevent an outside neighbour from borrowing into another
+    # occupied coordinate. Python integers keep large coordinates exact.
+    base = max(int(value) - low[axis]
+               for axis, value in enumerate(grid.max(axis=0))) + 3
+    # 仅选择遍历实现，不改变原体素量化或 26 邻接；超大键保留 Python 整数路径。
+    if len(grid) >= 1024 and base ** 3 <= np.iinfo(np.int64).max:
+        return _spatial_block_components(grid, low, base)
+    stride_x = base * base
+    neighbours = [dx * stride_x + dy * base + dz
+                  for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+                  for dz in (-1, 0, 1) if dx or dy or dz]
+    if base ** 3 <= np.iinfo(np.int64).max:
+        digits = grid.astype(np.int64) - low + 1
+        keys = ((digits[:, 0] * base + digits[:, 1]) * base + digits[:, 2]).tolist()
+    else:
+        keys = [((cell[0]-low[0]+1)*base+cell[1]-low[1]+1)*base+cell[2]-low[2]+1
+                for cell in grid.tolist()]
+    for index, key in enumerate(keys):
+        cells.setdefault(key, []).append(index)
+    remaining = set(cells)
+    groups = []
+    for seed in sorted(cells):
+        if seed not in remaining:
+            continue
+        remaining.remove(seed)
+        stack, members = [seed], []
+        while stack:
+            key = stack.pop()
+            members.extend(cells[key])
+            for offset in neighbours:
+                neighbour = key + offset
+                if neighbour in remaining:
+                    remaining.remove(neighbour)
+                    stack.append(neighbour)
+        groups.append(sorted(members))
+    return groups
+
+
 def _principal_axis(cluster):
     """PCA principal axis with an explicit degeneracy flag (source frame)."""
     count = len(cluster)
@@ -426,7 +572,7 @@ def _point_features(cluster, basis, ground, settings, source_indices):
     ranges = np.linalg.norm(cluster, axis=1)
     features = {
         "point_count": count,
-        "evidence_indices": [int(index) for index in source_indices],
+        "evidence_indices": source_indices.tolist(),
         "_points": cluster,
         "center_source_m": [float(value) for value in center],
         "bbox_source_min_m": [float(value) for value in bbox_min],
@@ -451,8 +597,7 @@ def _point_features(cluster, basis, ground, settings, source_indices):
             "p90": float(np.percentile(heights, 90.0)),
             "max": float(heights.max()),
         }
-        features["height_span_m"] = float(np.percentile(heights, 90.0)
-                                          - np.percentile(heights, 10.0))
+        features["height_span_m"] = features["height_m"]["p90"] - features["height_m"]["p10"]
         u = cluster @ basis[1]
         v = cluster @ basis[2]
         span_u = _robust_span(u)
@@ -655,26 +800,119 @@ def _coordinate_ground_projection(ground_derived, calibration):
     }
 
 
+def _candidate_geometry(cluster, indices, resolved, basis, ground, reference, derived):
+    features = _point_features(cluster, basis, ground, resolved, indices)
+    features.update(_reference_block(features, reference))
+    features.update(_ground_geometry_block(cluster, derived))
+    features.pop('_points', None)
+    features['semantic'] = 'unknown'
+    return features
+
+
+def rebuild_candidate(points, evidence_indices, settings=None, *, ground=None,
+                      calibration=None, transform=None, frame_id="innolidar"):
+    """Rebuild every coordinate/feature from explicit local rows in this array.
+
+    No filtering or re-clustering: callers may only pass already accepted rows.
+    Session rows must be mapped to this array by the caller, never guessed here.
+    """
+    p = np.asarray(points, dtype=np.float64)
+    ids = np.asarray(evidence_indices)
+    if p.ndim != 2 or p.shape[1] != 3 or ids.ndim != 1 or not len(ids):
+        raise ValueError('invalid candidate support shape')
+    if ids.dtype.kind not in 'iu' or len(np.unique(ids)) != len(ids):
+        raise ValueError('invalid candidate support rows')
+    if ids.min() < 0 or ids.max() >= len(p) or not np.isfinite(p[ids]).all():
+        raise ValueError('candidate support outside finite frame')
+    resolved = resolve_settings(settings)
+    basis = ground_plane_basis(ground) if ground_frame_eligible(ground, frame_id) else None
+    reference, _ = _resolve_reference_transform(calibration, transform, frame_id)
+    derived, _ = _validated_ground_derived(calibration, frame_id=frame_id, ground=ground)
+    return _candidate_geometry(p[ids], ids, resolved, basis, ground, reference, derived)
+
+
 def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id,
                    seq=None, stamp_secs=None, stamp_nsecs=None,
                    source_stamp_s=None, frame_id="innolidar", ground=None,
-                   calibration=None, transform=None, background=None, note=None):
+                   calibration=None, transform=None, background=None, note=None,
+                   roi=None, timings=None):
     """Build a versioned candidate snapshot from a decoded (N,3) point array.
 
     The snapshot is self-describing: session/time_epoch/snapshot_id, the raw
     source seq/sec/nsec it came from, frame and coordinate definitions, the
     calibration version, per-candidate geometry and the evidence indices. IDs
     are only unique inside this snapshot and never claim a tracked person.
+
+    ``roi`` is an optional decision from :class:`core.roi.RoiController`; it only
+    filters rows after the full-frame stride/distance gates and before denoise, so
+    the sampling density and every row index stay unchanged. ``timings`` (a dict)
+    receives the mask/stage seconds only when the caller asks for them; with both
+    ``roi=None`` and ``timings=None`` the output and the code path are unchanged.
     """
+    span = None
+    if timings is not None:
+        span = _Span(timings, "snapshot_s")
+    try:
+        return _build_snapshot(points, settings, session_id=session_id,
+                               time_epoch=time_epoch, snapshot_id=snapshot_id,
+                               seq=seq, stamp_secs=stamp_secs, stamp_nsecs=stamp_nsecs,
+                               source_stamp_s=source_stamp_s, frame_id=frame_id,
+                               ground=ground, calibration=calibration, transform=transform,
+                               background=background, note=note, roi=roi,
+                               timings=timings)
+    finally:
+        if span is not None:
+            span.close()
+
+
+class _Span:
+    """Accumulate one named stage into the caller's timings dict."""
+
+    __slots__ = ("timings", "key", "started")
+
+    def __init__(self, timings, key):
+        import time
+        self.timings, self.key = timings, key
+        self.started = time.perf_counter()
+
+    def close(self):
+        import time
+        self.timings[self.key] = float(self.timings.get(self.key, 0.0)) \
+            + (time.perf_counter() - self.started)
+
+
+def _build_snapshot(points, settings, *, session_id, time_epoch, snapshot_id,
+                    seq=None, stamp_secs=None, stamp_nsecs=None,
+                    source_stamp_s=None, frame_id="innolidar", ground=None,
+                    calibration=None, transform=None, background=None, note=None,
+                    roi=None, timings=None):
+    from core.roi import resolve_settings as resolve_roi
+    from core.roi import roi_mask
     resolved = resolve_settings(settings)
+    roi_resolved = resolve_roi(roi.get("settings")) if roi is not None else None
+    if timings is not None and roi is not None:
+        # The ROI stage is always accounted for, even when this frame falls back
+        # to the full view (zero mask cost, no hidden work).
+        timings.setdefault("roi_mask_s", 0.0)
     array = np.asarray(points, dtype=np.float64)
     if array.ndim != 2 or array.shape[1] != 3:
         raise ValueError("points must be an (N,3) array")
     finite = np.all(np.isfinite(array), axis=1)
     array = array[finite]
     original_indices = np.nonzero(finite)[0]
+    # The original stride is always derived from the full finite frame, never from
+    # a ROI-reduced one, so the sampling density cannot change because of the ROI.
+    stride = 1
     if len(array) > resolved["max_points"]:
         stride = int(np.ceil(len(array) / resolved["max_points"]))
+    roi_before = None
+    if roi is not None and roi_resolved is not None \
+            and roi_resolved["before_stride"] and roi.get("apply"):
+        mask, roi_before = roi_mask(array, roi, ground, frame_id,
+                                    settings=roi_resolved, timings=timings)
+        array = array[mask]
+        original_indices = original_indices[mask]
+    if stride > 1:
         array = array[::stride]
         original_indices = original_indices[::stride]
 
@@ -682,6 +920,39 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
     keep = (ranges >= resolved["range_min_m"]) & (ranges <= resolved["range_max_m"])
     array = array[keep]
     original_indices = original_indices[keep]
+
+    roi_block = None
+    if roi is not None and roi_resolved is not None:
+        if roi_resolved["before_stride"]:
+            mask_diagnostics = roi_before or {}
+        elif roi.get("apply"):
+            mask, mask_diagnostics = roi_mask(array, roi, ground, frame_id,
+                                              settings=roi_resolved, timings=timings)
+            array = array[mask]
+            original_indices = original_indices[mask]
+        else:
+            mask_diagnostics = dict(applied=False, reason=roi.get("reason"),
+                                    state=roi.get("state"), input_points=int(len(array)),
+                                    kept_points=int(len(array)), dropped_points=0,
+                                    boundary_shell_points=0,
+                                    radius_m=roi.get("radius_m"),
+                                    margin_m=roi_resolved["margin_m"],
+                                    height_band_m=list(roi_resolved["height_band_m"]),
+                                    center_m=roi.get("center_m"),
+                                    predicted=bool(roi.get("predicted")))
+        roi_block = dict(
+            state=roi.get("state"), predicted=bool(roi.get("predicted")),
+            center_m=roi.get("center_m"), radius_m=mask_diagnostics.get("radius_m"),
+            margin_m=roi_resolved["margin_m"],
+            height_band_m=list(roi_resolved["height_band_m"]),
+            sigma_m=roi.get("sigma_m"), age_s=roi.get("age_s"),
+            before_stride=bool(roi_resolved["before_stride"]),
+            applied=bool(mask_diagnostics.get("applied")),
+            reason=mask_diagnostics.get("reason"),
+            input_points=int(mask_diagnostics.get("input_points", 0)),
+            kept_points=int(mask_diagnostics.get("kept_points", 0)),
+            dropped_points=int(mask_diagnostics.get("dropped_points", 0)),
+            boundary_shell_points=int(mask_diagnostics.get("boundary_shell_points", 0)))
 
     # Pre-level denoise: it runs before the ground-dependent height gate and
     # before the frozen background so neighbour support never depends on ground
@@ -718,8 +989,10 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
         array = array[fg]
         original_indices = original_indices[fg]
 
-    horizontal = _horizontal_coords(array, basis) if len(array) else np.zeros((0, 2))
-    clusters = _connected_clusters(horizontal, resolved["cluster_cell_m"]) if len(array) else []
+    clusters = (spatial_components(array, resolved['cluster_cell_m'])
+                if resolved['cluster_mode']=='spatial_3d' else
+                _connected_clusters(_horizontal_coords(array, basis),
+                                    resolved["cluster_cell_m"])) if len(array) else []
 
     # GL-02/GL-03 binding: only a strictly validated embedded ground-derived block
     # may drive the ground geometry and the published ``ground_derived_id``.
@@ -736,16 +1009,18 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
         calibration, transform, frame_id)
 
     candidates = []
+    rejected_clusters = []
     for members in clusters:
         cluster_points = array[members]
         cluster_indices = original_indices[members]
-        features = _point_features(cluster_points, basis, ground, resolved, cluster_indices)
-        if not features["quality"]["sufficient_points"]:
+        # Rejected small components publish rows only; do not compute their PCA
+        # and percentiles (most components in a real frame can be small residue).
+        if len(members) < resolved["min_cluster_points"]:
+            rejected_clusters.append(dict(evidence_indices=cluster_indices.tolist(),
+                                          reason='insufficient_points'))
             continue
-        features.update(_reference_block(features, reference))
-        features.update(_ground_geometry_block(cluster_points, ground_derived))
-        features.pop("_points", None)
-        features["semantic"] = "unknown"
+        features = _candidate_geometry(cluster_points, cluster_indices, resolved,
+            basis, ground, reference, ground_derived)
         candidates.append(features)
     candidates.sort(key=lambda item: (round(item["center_source_m"][0], 6),
                                       round(item["center_source_m"][1], 6),
@@ -788,7 +1063,7 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
          "inside_count": 0, "point_count": 0},
         "reasons": [] if basis is not None else ["ground_unavailable"],
     }
-    return {
+    snapshot = {
         "kind": KIND,
         "schema_version": SCHEMA_VERSION,
         "session_id": session_id,
@@ -816,8 +1091,13 @@ def build_snapshot(points, settings=None, *, session_id, time_epoch, snapshot_id
         "settings": resolved,
         "quality": quality,
         "candidates": candidates,
+        "foreground_indices": original_indices.tolist(),
+        "rejected_clusters": rejected_clusters,
         "note": note,
     }
+    if roi_block is not None:
+        snapshot["roi"] = roi_block
+    return snapshot
 
 
 def decode_cloud(msg, min_range_m=0.0):

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>IFW192S 人体·跌倒检测 — 算法试错谱系（2026-09-30 → 10-18）</title>
+<style>
+:root{--bg:#05080c;--panel:#0b1220;--line:#1e2a3a;--tx:#cfe0ef;--dim:#7d93aa;--acc:#4fa3e3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.6 "Microsoft YaHei",ui-monospace,Consolas,monospace}
+header{padding:18px 22px 10px;border-bottom:1px solid var(--line)}
+h1{margin:0 0 4px;font-size:20px}
+.sub{color:var(--dim);font-size:12px}
+.warn{display:inline-block;margin-top:8px;padding:4px 10px;border:1px solid #6b5320;border-radius:6px;color:#e6c07a;font-size:12px}
+#stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#stats span{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:12px;color:var(--dim)}
+#stats b{color:var(--tx)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 22px 0}
+.chip{cursor:pointer;border:1px solid var(--line);border-radius:14px;padding:2px 12px;font-size:12px;color:var(--dim);background:var(--panel);user-select:none}
+.chip.on{border-color:var(--acc);color:var(--acc)}
+#bar{margin-left:auto;display:flex;gap:6px}
+#bar .chip{cursor:pointer}
+main{padding:14px 22px 60px}
+/* 树 */
+.root{border:1px solid var(--acc);border-radius:8px;padding:10px 14px;background:#0a1322;margin-bottom:0;font-weight:bold}
+.root small{color:var(--dim);font-weight:normal;display:block}
+ul.tree,ul.items{list-style:none;margin:0;padding-left:22px;position:relative}
+ul.tree{padding-left:12px}
+.step{margin:8px 0;position:relative}
+.step::before,.item::before{content:"";position:absolute;left:-12px;top:-6px;border-left:1px solid var(--line)}
+.step:last-child::before,.item:last-child::before{height:calc(50% + 6px)}
+.step::before{height:100%}
+.step>.head,.item>.head{position:relative}
+.step>.head::before,.item>.head::before{content:"";position:absolute;left:-12px;top:16px;border-top:1px solid var(--line);width:12px}
+.step>.head{cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.step>.head:hover{border-color:var(--acc)}
+.step .no{color:var(--acc);font-weight:bold}
+.step .ttl{font-weight:bold;font-size:15px}
+.step .concl{color:var(--dim);font-size:12px;flex-basis:100%;padding-left:2px}
+.step .n{margin-left:auto;color:var(--dim);font-size:12px;white-space:nowrap}
+.arrow{transition:transform .15s;color:var(--dim)}
+.open>.head .arrow,.items.open .arrow{transform:rotate(90deg)}
+ul.items{display:none;margin:6px 0 10px}
+.open ul.items{display:block}
+/* 方法卡片 */
+.item{margin:5px 0}
+.item>.head{background:#0d1626;border:1px solid var(--line);border-left:3px solid var(--line);border-radius:6px;padding:6px 12px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;cursor:pointer}
+.item>.head:hover{border-color:var(--acc)}
+.item.open>.head{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.item .nm{font-weight:bold}
+.item .t{color:var(--dim);font-size:12px}
+.badge{font-size:11px;border-radius:4px;padding:1px 8px;border:1px solid;white-space:nowrap}
+.sc{font-size:12px;font-weight:bold;border-radius:4px;padding:1px 7px;white-space:nowrap}
+.det{display:none;border:1px solid var(--line);border-top:none;border-radius:0 0 6px 6px;padding:8px 14px;background:#0a101c;font-size:13px}
+.item.open .det{display:block}
+.det .k{color:var(--dim);margin-right:6px}
+.det p{margin:4px 0}
+/* 状态配色 */
+.s-use{color:#57d38b;border-color:#1d4a30;background:#0d1f14}.s-use>.head{border-left-color:#57d38b}
+.s-cand{color:#5fb4ef;border-color:#1d3a55;background:#0d1826}.s-cand>.head{border-left-color:#5fb4ef}
+.s-diag{color:#b48ef0;border-color:#33245a;background:#150f24}.s-diag>.head{border-left-color:#b48ef0}
+.s-sup{color:#8fa3b8;border-color:#2a3644;background:#111820}.s-sup>.head{border-left-color:#8fa3b8}
+.s-rej{color:#ef9a5f;border-color:#553a1d;background:#26170d}.s-rej>.head{border-left-color:#ef9a5f}
+.s-closed{color:#ef5f6e;border-color:#551d27;background:#260d12}.s-closed>.head{border-left-color:#ef5f6e}
+.s-blk{color:#e6c465;border-color:#55451d;background:#241d0d}.s-blk>.head{border-left-color:#e6c465}
+.s-nr{color:#6f8296;border-color:#26313d;background:#0f151c;border-style:dashed}.s-nr>.head{border-left-color:#6f8296;border-left-style:dashed}
+.s-sealed{color:#9aa5b1;border-color:#2f3a46;background:#12181f}.s-sealed>.head{border-left-color:#9aa5b1}
+footer{padding:10px 22px 40px;color:var(--dim);font-size:12px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+</style>
+</head>
+<body>
+<header>
+<h1>IFW192S 人体·跌倒检测 — 算法试错谱系</h1>
+<div class="sub">2026-09-30 → 2026-10-18 · HF/GL 主线 + HC/HR/HFUS 支线 + sidequests · 由三份文档树只读调查合并生成</div>
+<div class="warn">本页是会话回顾汇总产物（非里程碑工件、非验收表）。评分为按档案结论对"本仓库 IFW192S 场景内实际效果"的主观归纳（含失败的诊断价值），正式结论一律以 docs/human_fall、docs/human_capture 权威文档为准。</div>
+<div id="stats"></div>
+</header>
+<div class="chips" id="chips"></div>
+<main>
+<div class="root">IFW192S 点云 · 纯几何起步 → 多路线反复切换<small>点击步骤展开；点击方法行看根因 / 量化证据 / 出处</small></div>
+<ul class="tree" id="tree"></ul>
+</main>
+<div class="chips"><b style="font-size:12px;color:var(--dim)">评分口径：</b>
+<span class="sc" style="color:#57d38b">7–10 在用/被采纳的当前主力</span>
+<span class="sc" style="color:#e6c465">5–6 候选/离线达标，生产 BLOCKED</span>
+<span class="sc" style="color:#ef9a5f">3–4 被替代或仅诊断价值</span>
+<span class="sc" style="color:#ef5f6e">1–2 证据否决/未跑成（换法重灾区）</span>
+<span class="sc" style="color:#6f8296">— 从未执行</span>
+</div>
+<footer>生成：Claude Code · 2026-10-18 · 事实源：docs/human_fall（WORKFLOW/REVIEW_LOG/returns/evidence）、docs/human_capture（README/returns/evidence）、sidequests/{hfus_tcms,hfus_tcms_02,human_detectors,human_fusion_lab,human_fusion_lab_next,lidata_adapter}、pc_apps/{human_core,human_replay,human_limb,human_ml}、ML/docs</footer>
+<script>
+const STAT={use:'在用',cand:'候选/离线',diag:'诊断结论',sup:'已被替代',rej:'否决',closed:'支线关闭',blk:'BLOCKED',nr:'未执行',sealed:'封存'};
+// [名称, 时间, 状态, 分, 根因/一句话, 量化证据+出处]
+const S=[
+{id:1,title:'数据采集 · 回传 · 落格式',concl:'一次换轨（scp→HTTP 直下），其余一次到位；全链最稳的一步',items:[
+['HF-00 传感器盘点（含双目/相机设想）','09-30','diag',6,'用户确认无相机 → 定调"纯点云几何、无学习模型"路线','IMU 226.8Hz/902 条、39 帧点云；docs/human_fall'],
+['HF-01 契约录制/健康工具（26B 点, rosbag）','09-30','use',8,'R1 七缺陷→R2 全闭合，契约 HF01-20260930-R2 冻结','13→25 项测试双端过'],
+['D3 决策：弃 bag/MCAP，自定 meta.json+points.bin','10-02','use',7,'numpy 切片 1.69s 即读','28B/点 [x,y,z,i,ring,ts]；docs/human_capture/README §2'],
+['HC-01..04 板端录制服务（REST 状态机+FIFO 自停+bag2session）','10-02','use',8,'复用现成 record_session.py 不重造','42+28 单测；recording→…→purged 状态机上线'],
+['HR-01 回传（scp 限速 70Mbit）','10-02','sup',3,'别人电脑拉不动：ssh 别名只在本机','10-07 换 HTTP files 直下；evidence/2026-10-07_files_download_deploy'],
+['HTTP 直下提速 70000→800000 kbit','10-14','use',8,'HC-DOWNLOAD-LIMIT-01 一步到位','374.2MB: 42.8s→3.77s（11.4×）；58 测试 PASS'],
+['HC-JOINT-LOCAL-01 USB 相机+雷达双流联合录制','10-13..15','cand',6,'R8 补预览写盘修相机 0B；R7 修同数据两名重复拉取','10 项 joint 测试；SUBMITTED'],
+['点布局 26B→28B，尾 16B 保持 opaque','全程','use',7,'新会话 28B；未解释字节不猜不喂算法','零回波≈15.8%'],
+['HR-06 python-pcl 环境预热（pybind11+PCL）','10-02','closed',1,'未实施即关：conda 装失败+limb/ML 支线同日拍板关闭，不再需要 PCL','tickets/HR-06.md']]},
+{id:2,title:'地面检测 · 配平（换法最密集 ①）',concl:'18 个方案、四条大路线（拟合→名义→自找→距离图），旧 TLS 在本段门下被否；现行=C3D_03 局部几何配平，地面身份仍全线 BLOCKED',items:[
+['HF-03 全场景 RANSAC（min_holdout_support=0.5）','10-01','sup',4,'支持率 0.242<0.5 必拒；后被归因"有墙/家具场景门物理不可达"（不是平面是假的）','legacy 保留不回填；全场景 RMS 1.439m'],
+['方法调研 GROUND_LEVELING_METHOD_REVIEW','10-01','diag',7,'否决直接降门槛："先改采样/验证设计再谈阈值"；Patchwork++ 仅备选','推荐 ROI+先验 RANSAC+SVD+独立验证'],
+['GL-01 constrained RANSAC（up_axis+高度先验+ROI）','10-01','use',6,'与旧路径完全分离的显式 opt-in；物理 BLOCKED（1.1m/1.4m 名义值无实测）','236→244 回归'],
+['GL-C01 联合反解（单 FIT 平面闭式 pitch/roll/tz）','10-04','rej',3,'验证 P95 0.0508/0.0575m 超 0.05 门 FAIL 保留；"roll 与地面坡度不可辨"','458 回归+5 新测试'],
+['GL-N01 名义配平（固定 26°/1.1m 申报参数）','10-04','use',7,'采纳："旧参数仅存证据未数值应用"；注释明言 never a ground fit','独审 PASS；标量误差 3.55e-15m'],
+['P02 离线四区 TLS/SVD/RANSAC','10-04','diag',5,'R3 判型 C：单平面不成立（6 对互预测全 FAIL），分区模型 RMS 0.0134 优于单平面 0.0189','392,196 行联合；留一区 3 片 FAIL'],
+['AGL 自适应配平 A–E（core/adaptive_ground）','10-04/05','cand',5,'canonical_plane offset 一行真 bug；F–I 未实施，实时 shadow 从未启动','458→488 回归；软件 PASS 不报 ACCEPTED'],
+['GL-W01 离线配平工作台（静态三法+人工四区）','10-05','cand',5,'真实跑通但独审 probe 55.5s 超时 BLOCKED；自限"不承诺自动识别任意物理地面"','91 帧三法 valid；TLS pitch 26.6234°/RMS 1.894cm'],
+['P03 回放自动配平（auto 选区）','10-05','rej',2,'终审发现 dist/Console.exe 已内嵌 P03 源码，越"不重打包"边界 → REWORK','16 项清单/exe SHA 不变；Codex 审'],
+['GL-V01 floor_detector（三维最低连通面+格障碍）','10-05','sup',6,'用户撤回"数值 PASS 即地面"："要算法自己找"；不读人工 ROI','自动 vs 手选差 1.586°/0.005m；evidence/gl_v01_r2'],
+['GL-S01 lowest_floor_sheet_v2（身份/支撑解耦）','10-05','sup',4,'v1 用一个连通组件承担两个概念=根因；223757 仍 INSUFFICIENT（clean_cells=6）','33 项回归'],
+['GL-S02 v3_fine_roi（15cm 细 ROI+rms 字典序优选）','10-05','use',7,'用户点破"算法选错了"：穷举 C(34,4) 证可行组合存在，推翻上版"真实非平面"结论','223757 三法全 valid，tls 0.0146–0.0171m；39 用例'],
+['HFUS-GROUND-OBS-RD 归因复盘','10-17','diag',8,'地面带仅占 FIT 有效行 26.35% → 0.5 门物理不可达；旧 RANSAC 其实选中过地面；页面坐标断链从未真配平','4/4 例 ground_holdout_failed；采纳为 TCMS-02 重规划根因'],
+['S02 球面距离图 range image 1024×512 + 纯度选片 v4','10-17','cand',7,'洞=UNKNOWN 不插值；审核片 v1–v3 连败（混墙/家具），v4 薄层±0.15m+纯度>0.9 冻结','七片纯度 91.9–99.7%；洞 92.81%；evidence/…_s02_r1'],
+['S02 提案族 C3D：0.25m 体素矩 PCA+RANSAC','10-17','cand',8,'现行最优候选：C3D_03 过全部空间门','FIT 4/4+VAL 3/3（VAL RMS 1.0/0.8/2.5cm）；CANDIDATE_PLANE_PREVIEW'],
+['S02 提案族 DIMG：距离图 bin 代表点+RANSAC','10-17','cand',6,'与 C3D 互差仅 0.84°/2.77cm，不触发跨族冲突','DIMG_01 FIT 3/4+VAL 3/3'],
+['OLD_TLS 历史变换平面（不重估）','10-17','rej',3,'本段 3cm/5cm 门下 VAL 1/3：RMS 3.89/3.90cm、差 1.82°/1.95cm——"接近但不达标"，不判旧标定整体失效','evidence/…_s02_r1 VALIDATION'],
+['S03 S3_LOCAL 几何配平（由 C3D_03 唯一构造 R/t）','10-17','use',7,'780 帧 0 reset 行守恒；成为 TCMS 全线统一局部系；identity/physical 仍 false','GEOMETRY_VALIDATED_LOCAL；RᵀR 偏差 2.2e-16'],
+['S06 envelope_foreground 近地保留变体','10-18','rej',2,'近地门 A PASS 但全段重跑标定边 10→0："不能当效果改善"；预注册救回事后调参','候选 19/35→32/35 但六节点 64.7%→45.7%；CLOSEOUT']]},
+{id:3,title:'前景 / 背景 / 聚类（换法最密集 ②）',concl:'"背景硬删吞人"是全项目最大结构性病灶（静立吞 97–98%、贴地带 99.8% 判背景）；所有补丁/替换方案均未晋级，现行=冻结背景差分的已知缺陷态',items:[
+['旧静止人体尺寸门（站高/窄宽深）','HF-04 前','rej',2,'明确废弃："old stationary-person size gate is NOT the entry condition"','姿态无关低姿保留仅标 low_points'],
+['HF-04 体素/水平连通簇候选 build_snapshot','10-01','use',8,'当前前景入口；已知局限近地/家具/多人合并拆分','16 项回归起，链累计 146→158'],
+['冻结背景减除 build_background（显式空场、无在线更新）','10-01','use',5,'"不学习静止人体"仍被量化吞人：人区 97.6% 被删、contact 带 99.83% 判背景——带病在用','215540 P 臂 112,903/115,677 点按部位 97%+；S04'],
+['HR-W03 背景建模前先点级剔地面','10-05','use',7,'反复踩的坑：地板占满背景图→人连柱被吞（"空地的人没框"）；改点级剔+缺省 true','human_pipe_lib.test.js 14/14'],
+['HF-12 体素邻域计数降噪（0.1m/2）','10-05','use',8,'v1 盒进位缺陷+127ms 超预算→v2 稠密可分离盒 7ms','504 回归；板上基线 p50 75.6ms'],
+['W03 R3.2 跨会话参考层 ICP 对齐','10-06','diag',5,'判为重要：WD01 原始漏匹配消 ~94%','0.854→0.991'],
+['W03 R3.3 AABB 占用盒','10-06','cand',4,'独立于 ICP 的增益；纯 containment 弱；生产 NOT AUTHORIZED','known-static Δ+0.032、干净人体保留 ≥97.7%'],
+['融合 v2（背景∪参考 优先级规则）','10-08','cand',6,'端到端 11/11 PASS 但"接入另单"','人保留 99.9–100%、确认 2/3 段'],
+['HR-RET-V2 生产接入（旗标+state 门 fail-closed）','10-08','blk',2,'现网 artifact 全 STALE（REFMAP_DRIFT），开旗标端到端未演示','inc1 37/37+45/45；独审 NOT_RUN'],
+['语义层 S-A 冻结原型 + SEM-SHADOW 旁路','10-08','blk',2,'ROI 外成员致整簇退化；真数据 HUMAN 证据仅 13/244=5.33% 上界','SEM-05~08/10 BLOCKED'],
+['TCMS-01 RAW 时空支撑 B1/B2/B3（Dice+26±1 体素平移拟合）','10-16','rej',3,'"低假激活不能替代召回"——不证明人体恢复','13,236 记录；B3 仅 26/286 帧激活'],
+['FRESH-MOTS-01 fresh map（A1 邻域方差 / A2 log-odds）','10-15','rej',2,'固定参数下候选范围显著扩大；A2 反损原几何 cohort 留存','无人工身份 GT 不可解释为召回'],
+['spike_cluster 距离自适应聚类半径','10-10','rej',2,'"人簇碎"假设在评估数据上不存在','差异帧 0/2874；FINAL_REPORT'],
+['SCENE-CHANGE/STATIC 双姿态冻结背景+全视野新增簇','10-14','cand',5,'采纳为对照研究不晋级 R1 默认；"未知簇不套人体节点"','前景 −3.116%；新空场残余 110,492→11,240'],
+['HF-MAINLINE-POINTS-01 R3 点保留（邻接图+背景风险+过去帧一致性）','10-14','rej',2,'护栏后粗槽跳变仍退化、无纯度收益；18 个主链原始源文件已缺失无法复跑','6×1966+护栏；PR11/12 BLOCKED'],
+['S04 M0 吸收根因诊断（消融+contact/near 带标签）','10-17','diag',8,'尾段 12/35 帧零候选根因=背景吸收（不是关联/范围/生长）；关 M0 同帧立现 4–10 候选','contact 行 99.83% 判背景；分解恒等式 587/587 配平']]},
+{id:4,title:'人体识别路线（换法最密集 ③：六次换道）',concl:'纯几何→跨域 ML→预训练检测器→自采 RF→提案层重建→优化重审，六条道五条撞墙；唯一活下来的主力=HR-09 自采 RF（ROI 内、只站立类）',items:[
+['纯几何簇+人工选人（无相机、无学习模型）','09-30','use',7,'用户定调交互形态"人工选人+自动跟踪框"；semantic 恒 unknown 直到确认','真实三方 67 帧配对 0 错误'],
+['HR-07 limb 纯几何四肢 v1→v6（密度峰/z-spread/三段带/pin 锁/bg 减/振荡 pin）','10-03','closed',1,'传感器分辨率天花板：人与沙发/高柜几何同形，"不是调参能解决"；21 个假弯腰全落家具切换；最终闸：目标会话实为空场','6 代 1 天全败；docs HR-07 + returns；沉淀 torso_pca/lock_seed hint 等 4 件可复用'],
+['vd_limb_pose_pilot 移植（chan-dynamic+PCA）','10-03','closed',1,'第二条独立几何路线，同一天花板','76 帧假弯/10 假事件；1211ms/帧'],
+['HR-08 LI-DATA（Blender 合成）RF 51 维 fall/nofall','10-03','rej',2,'域内 acc 98.6%（65,487 帧 5-fold）→ 跨域推 IFW192S 100% 判 fall；坐标系/z 语义不同，swap 轴/归一全救不了','复测 6 段 590/590 fall；与数据规模无关；returns/HR-08'],
+['HR-08 v2 PointNet/torch 升级','10-03','nr',null,'教训明文："连 RandomForest 都跨域失败，神经网络不会更好"——未启动','—'],
+['DET-01..06 预训练 PointPillars（KITTI 权重+去背景+z_rank32 采样）','10-10','closed',3,'"人-家具判别仍未解决"：空场人形固定物 0.35–0.54 仍响应；τ>0.55 压空场时 recall 仅 ~21% → 2026-10-11 归档','z_rank32 recall 58.3–100% vs first32 4.2–25%；KITTI 正控制 0.774 证管线能跑'],
+['CenterPoint（MMDet3D）','10-10','nr',null,'MMCV/Py3.12 无可用包，从未跑成','DET-07 草案从未执行，随支线封存'],
+['HR-09 自采数据+AI 判读+RF person/noperson v1','10-09','use',8,'当前人检主力（离线）；模型语义=ROI 内立式人体检测器，整帧喂 P≈0 属定义；只覆盖 stand 缺 5 类姿态','12 段 1770 帧；LOSO 12 折 acc=1.000；空场 0/113+0/102+0/203 不爆；i_std 改 log10 一行修根因'],
+['RF-OPTIMIZATION-R1（簇级重提/嵌套分组/RF-v2v3/GBDT）','10-10','blk',4,'FP 基线 140→RF 128→GBDT 12 但 1239 标签全 UNVERIFIED，弱标签不构成跨人跨景证据','RFO-03/04/06/08/09 BLOCKED'],
+['C1/C1.5 生产准入审计（复用 rf_person_v1 探针不重训）','10-10','diag',7,'确证硬门 n_pts≥500 误杀动态/少点人；"人零回归"仅静态成立不能外推；RF 动态 prob 0.82–0.85 < 家具 0.89–0.95','动态 confirmed recall 0.349→硬门下 0；72.9% 真人簇 n<500'],
+['RD-01 C4 RAW 提案层（RAW∪FG 3D 欧氏 r=0.35/min15 跳 BG）','10-12','rej',4,'"reviewed 对象 100% 召回"名噪一时→RD-02 揭穿：92% 打在 ≥2000 点房间级大团（生产该类接受率 0/258）；且 130ms/帧超板端','对象覆盖 0.839→1.0（后修正）'],
+['RD-01 消融：软化身份硬门 V0–V3','10-12','rej',2,'召回完全相同，只升 FP——"不是硬门的问题"','D1_FUSION_ABLATION'],
+['RD-01 消融：更保守 BG（C5_CONS_BG 扣 UNKNOWN）','10-12','rej',2,'方向反向：UNKNOWN 支撑点实质是人体合法点','GT 覆盖 0.813→0.532'],
+['RD-02 C4AH 优化提案层','10-12','cand',6,'速度救活但校准不可跨场景（0.9666 阈值 S8 拒 100%/S6 拒 94.5%）；人工负例 0/125 → 分类器收益 BLOCKED','P95 88.7→13.2ms（6.7×）；7 会话召回 1.000'],
+['RD-02 对 RD-01 的审计推翻','10-12','diag',8,'抓到 rf_extract 复刻与生产打分不一致（生产抽特征前先采样 [5018,10]）→ §3 归因全废；判别力真存在，缺陷=阈值未校准','sidequests/HFUS-RD-02'],
+['传统聚类全链+换表征尝试（HDBSCAN/学习连边/距离图）','10-10~15','diag',5,'三条换路线全不晋级：HDBSCAN 流召回 0.30、学习连边剔除最差帧、距离图槽跳 P95+43%；定性"结构性天花板非调参"；结论：只剩逐点学习式语义+实例路线值得继续','单人固定区覆盖 97–99.9%、空场 0 误报；遮挡混入 25%、过渡态轴跳 ~1m；evidence/traditional_cluster_ml_effect_r1'],
+['PLANE-01 小型飞行目标检测试验','10-07','rej',2,'跟踪 27/27 帧"成功"但目标实为离地 3m 吊装物非飞行物——"检测不得依赖背景（目标在空场会被减掉）"','泄漏 343 点/帧=0.70%；docs/sidequests/returns/PLANE-01']]},
+{id:5,title:'深度学习 / 时序 / 融合实验（封存区）',concl:'fusion lab 与室内数据线的全部结果停在候选级或被否；2026-10-16 用户拍板深度学习路线封存',items:[
+['human_fusion_lab：RF51/69 vs XGB69 vs PointNet shadow','10-11','cand',7,'lab 内默认 XGB69："生产不推广"；真实识别语义（家具/陌生人/新场景/S9 双人）无 GT','XGB69 近 258/258 远 99/99 遮 65/71；S1 空场 RF FP 604→XGB 0；P95 27.1ms；PointNet shadow 不采纳'],
+['HUMAN-UNIFY-R1/R2（human_core BASE_A/B+U1–U6 统一引擎）','10-10','blk',4,'软件条件 PASS；U3 空场误报 203（rf 在 transient 家具）；PERF 53.4ms>50ms 门；MODEL_PROMOTION BLOCKED','96 测试、9 会话 1196 帧对拍；动态 154007 confirmed A=1/B=6/U3=25'],
+['Q01 fusion_lab_next 独立审查','10-11','cand',4,'geometry(post) 与 track 错位 6520/6520=P0 修到候选级（detector 层同步重写）；研究版 CONDITIONALLY ACCEPTED、生产持续 BLOCKED','opencode 独审+浏览器 E2E；evidence/2026-10-11_q01_review_r1'],
+['HFUS-D01 契约工程 + PointNet parity','10-11','use',8,'工程线标杆：数值一致性满通过','859 固定候选 maxdiff=0；ONNX logit 2.9e-6；九会话复跑与 baseline 完全一致'],
+['HFUS-D03 BG-B / D04 五单因素 / D05 R02–R06','10-11/12','rej',2,'算法 gate 无一晋级：S1 FP 347、near FP 625、降 n_min 恶化、bank 修正 220–224 五连 TP→FN 拒','D03-06 六项 5 FAIL；far32/occl61 FN 未解'],
+['HFUS-MARKOV 时序平滑（Forward/Viterbi/HMM/HSMM-Weibull/EMA/投票/滞回）','10-15','rej',2,'"概率时间平滑不会自动纠正家具持续误判"：真实 RF 二值 0 次切换、HSMM 候选 0','姿态单帧 53→Forward 26/Viterbi 30（仅描述性）；evidence/…_markov_r01'],
+['HFUS-NEXT-DEV-01（背景 A/B/B_tau + 条件图 C/D）','10-15','rej',2,'NO_GEOMETRIC_WINNER：三条件图均退化','新空场残余 −89.83% 但动作前景 +69.27%'],
+['HFUS-DEEP-RD-02（二维距离图/小模型）','10-15','rej',2,'几何/人体收益证据不足，不晋级','148 帧×4 链；CPU 推理 580 次'],
+['HFUS-POINTSET-01（直接 XYZ PointNet+XYZ-RF 影子+粗骨架）','10-13/14','cand',3,'SUBMITTED 不晋级：身份/解剖精度 UNKNOWN、S9 INVALID_BINDING','2605 帧；轴缺测 79→38；符号翻转 9→4'],
+['O-LiPeDeT 室内公开数据 qual（ND02）','10-15','diag',5,'GT 末列定为 yaw（526 框 PCA+相邻帧互证，撤回"实例 ID"误读）；但可信独立采集组=0 → 训练资格 BLOCKED','逐点 GT 分母 0；ND04 BLOCKED'],
+['HFUS-INDOOR-TRAIN-AI01（AI 标签域 RF vs PointNet 真训练）','10-16','blk',3,'RF B0 域内 P=0.955/R=0.724（Wilson 0.543–0.853，独立组 0）；PointNet 确证 FAIL：P=0.05/R=0.96 近似全正分类器','pos_weight≈526+浅特征+CPU 步数是天花板，非实现 bug'],
+['HFUS-DL-OPT-01（CV 协议修复）','10-16','blk',4,'修 3 协议缺陷（跨折模型复用/pos_weight 失真/伪 OOF，随机标签虚增 +0.053F1）；真实三 ZIP 全盘搜无副本 → 重评 BLOCKED','合成自验 OOF P=R=F1=1.0；污染对照 [0,32,32,32]'],
+['HFUS-RF-EVAL 计划 EV01–EV14','10-16','nr',null,'仅计划未开工；EV01 BLOCKED（原训练工件不可读）','evidence/…_rf_eval_plan_r1'],
+['深度学习路线封存决议','10-16','sealed',null,'用户拍板"算了先暂停深度学习"；恢复条件=口令+三 ZIP 回 ML/data 或下载授权','docs/human_capture/README 10-16 条目']]},
+{id:6,title:'骨架 / 关节（可辨识性之墙）',concl:'四条从零纯几何路线全 BLOCKED（根因=单视角~1k 点关节不可辨识）；换"逐边持续标定"后达候选级，但 ROI 抖动诊断又揭区域标签不稳',items:[
+['real_fall r01/r02 粗骨架 13 槽位','10-13','use',6,'r02 RS04 完整纯人体 FAIL（f10 家具残留）；"视觉盒"证伪；r04 estimate() 成为 SK02 复用底座','45 帧全 13 槽有点 ≠ 关节精度'],
+['pointset/r01 DBSCAN+13 槽 A–D 变体','10-14','sup',4,'960 组调参网格全不过非退化门 NO_GEOMETRIC_WINNER；最差帧槽跳变 ~1.01–1.03m','R1 默认保持，R2–R4 不晋级'],
+['SKELETON-01 v1 参数化 16 段+关节位置交替最小二乘','10-17','rej',2,'K03 合成门未过即封（四条路线整体 BLOCKED，从未进真实数据）','—'],
+['SKELETON-01 v2 可辨识 9 段+2 宽','10-17','blk',null,'未达真实数据；同上封存','—'],
+['SKELETON-01 v3 0.03m 栅格+Zhang-Suen 细化+DT 脊线','10-17','blk',null,'未达真实数据；同上封存','—'],
+['SKELETON-01 v4 时序跟踪+在线标定状态机','10-17','rej',3,'四路线最好 5/11（门槛 9/11）；根因可辨识性：单视角 0.5–1.2k 点无关节 GT 禁训练时同肢两段关节不可辨识','可辨识量上反而准：躯干 6mm、上臂 9–13mm、宽 16mm'],
+['SKELETON-02 计划 A：逐边在线持续标定（复用 r04 节点+association）','10-18','cand',7,'当前骨架路线；定调"方法选错不是方向错——昂贵且已验证的节点提取应当复用"；解剖关节/左右身份/物理高度一律 UNKNOWN','合成 47/47 边容差内、46/47 CALIBRATED；真实 317/383=82.77% ACTION 帧 ≥6 节点；163 DRIFT_RESET'],
+['HFUS-POSE-JITTER-01 固定 RAW ROI 抖动诊断','10-18','diag',6,'节点 std 300.9mm/邻帧跳 1069mm 而同 ROI 质心仅移 6.24mm → "区域标签未稳定跟随同一空间部位"，不是雷达噪声；ROI 还含背景（空场 f50 326 点）','胸/骨盆 151 帧全 CONFLICTING_SPATIAL_SUPPORT（内禀跨度 1.812m>0.8m 门）']]},
+{id:7,title:'跌倒判定 / 跟踪 / 上线部署',concl:'这一步反而最稳：HF-06 七状态规则机是唯一判定层且从未被换；代价=confirmed 线上默认永不自动发',items:[
+['HF-06 七状态规则机（upright/descending/low_posture_unclassified/suspected/confirmed/recovering…）','10-01','use',8,'采用为唯一判定层："不训练时序大模型、不加依赖"；R1 审出"基线高度差≠下降证据"等缺陷 R2/R3 闭合；主动躺下与跌倒可能几何不可区分写入 limitations','mode_verified=false→线上最高 suspected，confirmed 默认永不自动发；146→158 回归双端'],
+['特征集（地面相对高度分位数/水平跨度/PCA 垂直度/下降速率/近地持续时长）','10-01','use',7,'时间一律设备源秒；历史按 epoch/目标/标定版本重置','—'],
+['HF-09 watchdog/stale/_mask_unobservable','10-01','use',7,'过期帧只发 stale；修"断开后旧绿色状态残留"','独立 watchdog 首跑 3/5→5/5'],
+['失锁/歧义门控（绝不静默换人）','10-01','use',7,'真缺陷复现修复：candidate_id 逐帧复用在失锁时误投影另一簇；预测帧不进历史','真实三方 67 帧配对 0 错误'],
+['IMU 融合判跌倒','09-30','sealed',2,'厂商无单位/轴向/偏置证据→永久不参与跌倒链（IMU 仅设备健康监测）；"模长+时间相近"证据两次被点驳','HF-02 R1–R3 软件 PASS 但整单未 ACCEPTED；门控本身=正确边界'],
+['real_fall prototype 告警链（不重复事件）','10-13','use',6,'"明确未验证 prototype 告警"通过；"164/164 候选关联不等于真实召回"','f72/7.46s 一次告警后起身撤销'],
+['HF-DEMO-01 合成场景规则演示','10-12','sup',4,'用户口径"demo 没必要那么准确"；合成显式标注','真实跌倒准确率 NOT_RUN'],
+['HF-08 可复现评测器（±1s 边界/一对一最大基数/零分母 null）','10-01','use',6,'采用；"无真实 P/R 不虚标 100%"——真实 precision/recall/FP per hour 至今 null（板上无标注 events）','合成 fixture 2/2/0；两次输出 SHA 一致'],
+['HF-09 板端部署（deploy_human_fall.sh 不可变 bundle+symlink 回滚）','10-01','use',8,'R1"release 未存 core"→R2 不可变 bundle+PYTHONPATH 校验；无 pkill、driver 全程未变','30min：input 9.647Hz/p50 75.6ms/RSS 86.8MB/CPU≈103% 单核如实记'],
+['HUMAN-R4 候选归因（GT compact→raw 映射审计）','10-10','blk',3,'停写：S6 未标 167 帧 UNKNOWN，推广 BLOCKED','3 会话×9 次全帧 2400 tick']]},
+{id:8,title:'标注 / GT 体系',concl:'3D 标注→2D 工作台一次换轨；机制层"AI 永不冒充人工"全保住了，但人工 GT 存量至今≈0，卡住所有语义门',items:[
+['HR-05 3D 标注（gizmo W/R/T+顶视画框+undo）','10-02','sup',4,'软件 20/20 完成，后被 2D GT 工作台路线取代成为历史','lib 37 tests；服务端幂等/409/400/404'],
+['GT 标注工作台 R1（2D BEV gt_annotator + gt_server + SHA 冻结）','10-10','use',8,'当前标注主力；板端 :8088 上线多人协同靠 expected_sha','49/49 测试；OpenCode 两轮独审抓 3 高危（二次保存必 409/reviewed 失真/索引错位）全修'],
+['"AI 预标永不冒充人工"机制（model 不可 reviewed、propagated 需人确认）','10-10','use',8,'validate_doc 硬拒；成为全项目语义纪律','9 会话 474 队列=282 人工+192 建议'],
+['GT 邻帧静态克隆传播','10-10','rej',3,'自认缺陷：副本共享同一 polygon 不是独立样本；后患=S1 1818/1824 propagated 却全 reviewed 失真','gt 传播 TRAIN_REPORT §C4'],
+['GT 字段契约 compact 域确证','10-12','diag',6,'raw_point_indices 字段名误导，实为 leveled-compact 域；直接用=2.13m 伪残差','映射后 median 0.133m；RD-01/DATA_AUDIT'],
+['AI 视觉判读入账（reviewer_kind=AI，不冒充人名）','10-16','cand',5,'2026-10-16 用户拍板：AI 判读可入账开训练，但显式标注+域内结论分表披露；R2 审查把效果结论降级','AI 24 帧 53 框哈希链；dev r1 消费 XY 离线 41/41、FN06/07 维持 BLOCKED'],
+['人工审核队列 qual_r01','10-16','blk',1,'真实人审 0 条；可信独立采集组 0 → 语义门保持 BLOCKED','24 帧冻结队列+追加式账本'],
+['GT 渲染带刻度修复（render_axis）','10-10','use',6,'"多标注员数格互斥"根因=无坐标轴数字，坐标级 GT 曾不可用','C1.5 发现→已修']]},
+{id:9,title:'可视化 / 回放 / 工具',concl:'工具线基本一步到位持续在用；带宽抽样是早期最硬核的性能修复',items:[
+['HR-02 Three.js r127 离线点云回放（纯 vendor 零外网）','10-02','use',8,'当前回放底座；OFFLINE 本机优先修复','lib 测试 22→29；9 会话离线列出'],
+['带宽方案：/human_fall/display_points 抽样显示流（stride4/≤12000）','10-01','use',8,'真链路 IAB：49k 点 7.8Hz+9.4MB/s+Send buffer 每 3s 炸 → 抽样流复测 8.2–8.8Hz drop 0；算法仍吃全量','候选消息 34,424→5,296B（−84.6%）；rospy 重写 seq 后做真实 wire 映射'],
+['GL-04 webui 配平预览','10-02','cand',5,'R1–R7 七轮（单位混显/unknown 仍显示绿色 upright）R7 无代码 FAIL，但正式页未获审不并入','独立 90/92/95/97+54 lib'],
+['HR-03 剪辑=CLI 字节级切片（浏览器只生成命令）','10-02','use',7,'byte-identical 锚定；bat GBK 乱码返工','29→8 帧切片 SHA 锚'],
+['HR-04 导航层（4 视图预设/P 快照/M 标尺/参照物）','10-02','use',6,'R1 修 front 视角方向反了等 3 项','29+24 测试'],
+['REPLAY-MEASURE-01 光标投地面→点云真点 3D 测距','10-15','use',6,'复用 M 三态不新造','46 passed'],
+['REPLAY-FRESH-01 人物高亮（背景渐黑+认领+低姿续接，f0 重建时序）','10-16','use',7,'从 f0 重建保证时序一致','291/295 帧认领、低姿续接 140 帧、换会话 0 认领'],
+['S2 审核页：球面距离图 ↔ 3D 同帧 + CSR 全 bin 反查','10-17','use',7,'即本次截图页；每 bin 保留全部观测行索引供平面回查','server:8797；probe 512×256 全帧 49k 行'],
+['Console 集成（总控制台单 exe + GT 卡片）','10-10..15','use',6,'双 exe 合并为单 Console.exe；clean worktree 打包法','桌面只留总控制台.lnk'],
+['Foxglove 桌面版查看链','09-30','sup',3,'六阶段计划起步后主线回归仓库内 Three.js 自研页','memory/lidar-foxglove-plan']]},
+];
+const $=q=>document.querySelector(q),esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function scChip(v){if(v==null)return '<span class="sc" style="color:#6f8296">—</span>';
+const c=v>=7?'#57d38b':v>=5?'#e6c465':v>=3?'#ef9a5f':'#ef5f6e';return '<span class="sc" style="color:'+c+';border:1px solid '+c+'33">'+v+'</span>';}
+let filter='all';
+function render(){const tree=$('#tree');tree.innerHTML='';
+for(const st of S){const li=document.createElement('li');li.className='step open';
+li.innerHTML='<div class="head"><span class="arrow">▶</span><span class="no">S'+st.id+'</span><span class="ttl">'+esc(st.title)+'</span>'+scChip(best(st))+'<span class="n">'+st.items.length+' 个方案</span><div class="concl">'+esc(st.concl)+'</div></div>';
+const ul=document.createElement('ul');ul.className='items open';
+for(const it of st.items){const [n,t,s,v,y,e]=it;
+if(filter!=='all'&&filter!==s)continue;
+const mi=document.createElement('li');mi.className='item s-'+s;
+mi.innerHTML='<div class="head"><span class="arrow">▶</span><span class="nm">'+esc(n)+'</span><span class="t">'+esc(t)+'</span><span class="badge">'+STAT[s]+'</span>'+scChip(v)+'</div><div class="det"><p><span class="k">根因/结论</span>'+esc(y)+'</p>'+(e&&e!=='—'?'<p><span class="k">量化/出处</span>'+esc(e)+'</p>':'')+'</div>';
+mi.querySelector('.head').onclick=()=>mi.classList.toggle('open');ul.appendChild(mi);}
+li.appendChild(ul);
+li.querySelector('.head').onclick=()=>{li.classList.toggle('open');ul.classList.toggle('open')};
+tree.appendChild(li);}
+function best(st){const vs=st.items.map(x=>x[3]).filter(v=>v!=null);return vs.length?Math.max(...vs):null;}}
+function stats(){const all=S.flatMap(x=>x.items);const cnt={};for(const it of all)cnt[it[2]]=(cnt[it[2]]||0)+1;
+let h='<span>步骤 <b>'+S.length+'</b></span><span>尝试过的方案 <b>'+all.length+'</b></span>';
+for(const k in STAT)if(cnt[k])h+='<span>'+STAT[k]+' <b>'+cnt[k]+'</b></span>';
+$('#stats').innerHTML=h;
+let c='<span class="chip on" data-f="all">全部</span>';
+for(const k in STAT)if(cnt[k])c+='<span class="chip" data-f="'+k+'">'+STAT[k]+' '+cnt[k]+'</span>';
+c+='<span id="bar"><span class="chip" id="ea">全部展开</span><span class="chip" id="ca">全部收起</span></span>';
+$('#chips').innerHTML=c;
+$('#chips').querySelectorAll('[data-f]').forEach(el=>el.onclick=()=>{filter=el.dataset.f;
+$('#chips').querySelectorAll('[data-f]').forEach(x=>x.classList.toggle('on',x===el));render();});
+$('#ea').onclick=()=>document.querySelectorAll('.item,.step').forEach(x=>x.classList.add('open'));
+$('#ca').onclick=()=>document.querySelectorAll('.item').forEach(x=>x.classList.remove('open'));}
+stats();render();
+</script>
+</body>
+</html>

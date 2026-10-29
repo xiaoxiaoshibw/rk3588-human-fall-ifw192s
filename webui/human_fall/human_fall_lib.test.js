@@ -9,6 +9,42 @@ function test(name, fn) {
   catch (err) { console.error("FAIL " + name + ": " + err.message); process.exitCode = 1; }
 }
 
+test("display leveling rejects scale, reflection, claims and wrong live binding", () => {
+  const g = {schema_version:1, kind:"display_ground_candidate", source_frame:"innolidar",units:"m",to_frame:"ground_local",
+    calibration_id:"g1", ground_sha256:"a".repeat(64), physical_verified:false,
+    runtime_eligible:false, R:[[0,0,1],[0,1,0],[-1,0,0]], t:[0,0,1.3]};
+  const state = {source:{frame_id:"innolidar"}, calibration:{calibration_id:"g1",ground_status:"valid"},
+    ground:{status:"valid",frame:"innolidar",normal:[-1,0,0],offset_m:1.3}};
+  assert(HF.displayGroundMatches(g,state,"innolidar"));
+  assert(!HF.displayGroundMatches(g,state,"other"));
+  assert(!HF.displayGroundMatches(g,{...state,calibration:{...state.calibration,calibration_id:"g2"}},"innolidar"));
+  assert(!HF.displayGroundMatches(g,{...state,calibration:{...state.calibration,ground_status:"unknown"}},"innolidar"));
+  assert(!HF.validDisplayGround({...g,R:[[2,0,0],[0,1,0],[0,0,1]]}));
+  assert(!HF.validDisplayGround({...g,R:[[-1,0,0],[0,1,0],[0,0,1]]}));
+  assert(!HF.validDisplayGround({...g,physical_verified:true}));
+  assert(!HF.validDisplayGround({...g,t:[0,NaN,1]}));
+  assert(!HF.validDisplayGround({...g,units:"mm"}));
+  assert(!HF.validDisplayGround({...g,to_frame:"world"}));
+  assert(!HF.displayGroundMatches({...g,R:[[1,0,0],[0,1,0],[0,0,1]]},state,"innolidar"));
+  assert(!HF.displayGroundMatches({...g,t:[1000,0,1.3]},state,"innolidar"));
+  assert(!HF.displayGroundMatches({...g,t:[0,0,2]},state,"innolidar"));
+});
+
+test("regions require same measured target, source frame and actual support rows", () => {
+  const source={seq:1,stamp_secs:12,stamp_nsecs:1};
+  const s={session_id:'s',time_epoch:0,action_generation:2,source,
+    track_status:'locked',position_predicted:false,observability:'valid',
+    calibration:{calibration_id:'g'},target_source_rows:[1,2,3]};
+  const r={kind:'target_regions',schema_version:1,observed:true,coordinate:'source',
+    session_id:'s',time_epoch:0,action_generation:2,calibration_id:'g',source,
+    nodes:{A:{valid:true,xyz:[1,2,3],support_rows:[1,2]}},edges:[]};
+  s.regions=r; assert.strictEqual(HF.regionsForState(s),r);
+  assert.strictEqual(HF.regionsForState({...s,position_predicted:true}),null);
+  assert.strictEqual(HF.regionsForState({...s,target_source_rows:[3]}),null);
+  assert.strictEqual(HF.regionsForState({...s,source:{...source,seq:2}}),null);
+  assert.strictEqual(HF.regionsForState({...s,action_generation:3}),null);
+});
+
 test("packClientMessage has opcode+channel+uint32 string length+utf8", () => {
   const text = '{"a":1}';
   const buf = HF.packClientMessage(1, text);
@@ -196,5 +232,22 @@ test("raw ROS header frame rejects invalid ranges and fractions", () => {
   assert.strictEqual(HF.frameKey(1, 1.5, 0), null);
   assert.strictEqual(HF.frameKey(1, 1, 1000000000), null);
   assert.strictEqual(HF.frameKey(1, 0, 1), "1@0.1");
+});
+test("candidate diagnostic visibility never changes selection inputs", () => {
+  const candidates = [{candidate_id: "c0001"}];
+  const before = JSON.stringify(candidates);
+  assert.strictEqual(HF.showCandidateBoxes(false, false), false);
+  assert.strictEqual(HF.showCandidateBoxes(true, false), true);
+  assert.strictEqual(HF.showCandidateBoxes(false, true), true);
+  assert.strictEqual(JSON.stringify(candidates), before);
+});
+test("geometry shadow is diagnostic and missing measurements stay unknown", () => {
+  assert.strictEqual(HF.geometryShadowText(null), "未启用");
+  const s={enabled:true,mode:"shadow",confirmed_enabled:false,state:"upright",evidence:{centroid_height_m:1.2,inclination_deg:null,vertical_velocity_m_s:NaN}};
+  const text=HF.geometryShadowText(s);
+  assert(text.includes("直立参照") && text.includes("1.20 m") && text.includes("不确认"));
+  assert(!text.includes("NaN") && !text.includes("θ") && !text.includes("v "));
+  assert(HF.geometryShadowText({...s,confirmed_enabled:true}).includes("UNKNOWN"));
+  assert(HF.geometryShadowText({...s,state:"<img onerror=evil()>"}).includes("UNKNOWN"));
 });
 console.log("HF lib checks: " + passed + " passed");

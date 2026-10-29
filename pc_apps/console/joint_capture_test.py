@@ -10,6 +10,7 @@
 """
 import io
 import json
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
 import tempfile
@@ -109,6 +110,39 @@ def _wait_for(recorder, predicate, timeout=10):
 
 
 class BoardOrchestratorTest(unittest.TestCase):
+    def test_pending_recording_is_not_stopped_or_replaced(self):
+        class PendingBoard(_FakeBoard):
+            def current_recording(self):return {'session_id':'prior_session'}
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(J,'_BoardSession',PendingBoard):
+            recorder=J.Recorder(tmp)
+            with self.assertRaisesRegex(OSError,'pending recording'):recorder.start(self._opts(tmp))
+            board=PendingBoard.instances[-1]
+            self.assertFalse(board.started);self.assertFalse(board.stopped)
+
+    def test_existing_session_bytes_remain_unchanged_on_directory_collision(self):
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(J,'_BoardSession',_FakeBoard):
+            directory=Path(tmp)/'hc_mock_001';directory.mkdir()
+            (directory/'joint.json').write_bytes(b'original-joint')
+            (directory/'points.bin').write_bytes(b'original-points')
+            recorder=J.Recorder(tmp);self.addCleanup(recorder.close)
+            recorder.start(self._opts(tmp))
+            result=_wait_for(recorder,lambda s:s['state']=='failed')
+            self.assertIn('recorder:',result['error'])
+            self.assertEqual((directory/'joint.json').read_bytes(),b'original-joint')
+            self.assertEqual((directory/'points.bin').read_bytes(),b'original-points')
+
+    def test_local_service_start_and_status_do_not_access_device_or_create_output(self):
+        with tempfile.TemporaryDirectory() as tmp, \
+             mock.patch.object(J,'_BoardSession',side_effect=AssertionError('no board access')), \
+             mock.patch.object(J.urllib.request,'urlopen',wraps=urllib.request.urlopen):
+            root=Path(tmp)/'not_created'
+            server,recorder=J.start_server(root,Path(__file__).with_name('joint_capture.html'))
+            try:
+                with urllib.request.urlopen('http://127.0.0.1:%d/api/status'%server.server_port) as response:
+                    self.assertEqual(json.load(response)['state'],'idle')
+                self.assertFalse(root.exists())
+            finally:recorder.close();server.shutdown();server.server_close()
+
     def _opts(self, tmp, dur=1):
         return dict(output_root=str(tmp), duration_sec=dur,
                     camera_url='http://127.0.0.1:1/stream',           # 相机从未上线 → 预览安静失败
@@ -221,6 +255,23 @@ class BoardOrchestratorTest(unittest.TestCase):
             self.assertIn('SIGSEGV', result['error'])
             self.assertEqual(BadBoard.instances[-1].stopped, True)
             self.assertIsNone(result['path'])
+            # 失败也要在会话目录留因（此前只有内存状态 + 板端 sessions.json 有原因）
+            joint = json.loads((Path(tmp) / 'hc_mock_001' / 'joint.json').read_text(encoding='utf-8'))
+            self.assertEqual(joint['state'], 'failed')
+            self.assertIn('SIGSEGV', joint['error'])
+
+    def test_wait_ready_surfaces_flat_board_error(self):
+        """板端 GET 是扁平登记记录：error 在顶层，wait_ready 必须把它带出来（不能显示 None）。
+
+        历史 bug：读 session['extra']['error']（板端从不返回该结构）→ 任何抽取失败都只报 None。
+        """
+        board = J._BoardSession('http://127.0.0.1:1')
+        failed = {"session_id": "cap_20261015_220834", "state": "failed", "stop_reason": "manual",
+                  "size_bytes": 4117, "error": "extract: bag 中没有 PointCloud2 话题"}
+        with mock.patch.object(J, '_json_request', return_value=failed):
+            with self.assertRaises(OSError) as ctx:
+                board.wait_ready("cap_20261015_220834", deadline=5)
+        self.assertIn('PointCloud2', str(ctx.exception))
 
     def test_fetch_failure_leaves_board_session_ready_for_retry(self):
         """fetch 拉不动 → state=failed，错误信息里要带 sid 便于人工在回页面板重试。"""
@@ -257,6 +308,175 @@ class BoardOrchestratorTest(unittest.TestCase):
                 ctx.exception.close()
             finally:
                 recorder.close(); server.shutdown(); server.server_close()
+
+
+class _FakeCameraServer:
+    """本地假板端相机：MJPEG 流式吐 JPEG；统计并发连接数（错峰：任何时刻只许 1 条）。"""
+    active = 0
+    max_active = 0
+    stop_serving = False
+    frame = b'\xff\xd8\xff\xe0data\xff\xd9'
+
+    def __init__(self):
+        self.server = ThreadingHTTPServer(('127.0.0.1', 0), self._Handler)
+        threading.Thread(target=self.server.serve_forever, daemon=True).start()
+
+    @property
+    def url(self):
+        return 'http://127.0.0.1:%d/stream' % self.server.server_port
+
+    def close(self):
+        self.stop_serving = True
+        self.server.shutdown()
+        self.server.server_close()
+
+    class _Handler(BaseHTTPRequestHandler):
+        def log_message(self, *_args):
+            pass
+
+        def do_GET(self):
+            _FakeCameraServer.active += 1
+            _FakeCameraServer.max_active = max(_FakeCameraServer.max_active, _FakeCameraServer.active)
+            try:
+                if self.path != '/stream':
+                    self.send_error(404)
+                    return
+                self.send_response(200)
+                self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=f')
+                self.end_headers()
+                while not _FakeCameraServer.stop_serving:
+                    self.wfile.write(_FakeCameraServer.frame)
+                    self.wfile.flush()
+                    time.sleep(.05)
+            except OSError:
+                pass
+            finally:
+                _FakeCameraServer.active -= 1
+
+
+class IdlePreviewTest(unittest.TestCase):
+    """空闲预览泵合同：UI 请求才连相机、无请求即断、录制中让流（错峰）。"""
+
+    def setUp(self):
+        _FakeCameraServer.active = 0
+        _FakeCameraServer.max_active = 0
+        _FakeCameraServer.stop_serving = False
+
+    def test_preview_off_by_default_and_no_device_access_without_requests(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            server, recorder = J.start_server(Path(tmp) / 'never_created',
+                                              Path(J.__file__).with_name('joint_capture.html'))
+            try:
+                recorder.data['camera_url'] = 'http://127.0.0.1:1/stream'  # 不可达本机地址，绝不碰真板
+                base = 'http://127.0.0.1:%d' % server.server_port
+                with self.assertRaises(urllib.error.HTTPError) as ctx:
+                    urllib.request.urlopen(base + '/api/preview')
+                self.assertEqual(ctx.exception.code, 404)
+                ctx.exception.close()
+                recorder.preview_until = time.monotonic()  # 请求窗口立即到期
+                _wait_for(recorder, lambda s: s['preview_state'] == 'off')
+                self.assertEqual(_FakeCameraServer.active, 0)
+                self.assertFalse((Path(tmp) / 'never_created').exists())
+            finally:
+                recorder.close()
+                server.shutdown()
+                server.server_close()
+
+    def test_idle_pump_serves_fresh_frames_only_while_requested(self):
+        camera = _FakeCameraServer()
+        self.addCleanup(camera.close)
+        with tempfile.TemporaryDirectory() as tmp:
+            server, recorder = J.start_server(Path(tmp) / 'out',
+                                              Path(J.__file__).with_name('joint_capture.html'))
+            try:
+                recorder.data['camera_url'] = camera.url
+                base = 'http://127.0.0.1:%d' % server.server_port
+                with self.assertRaises(urllib.error.HTTPError) as ctx:
+                    urllib.request.urlopen(base + '/api/preview')   # 首次：泵刚被唤醒，还没有帧
+                self.assertEqual(ctx.exception.code, 404)
+                ctx.exception.close()
+
+                def preview_ready():
+                    try:
+                        with urllib.request.urlopen(base + '/api/preview', timeout=3) as r:
+                            return r.read() == camera.frame
+                    except urllib.error.HTTPError:
+                        return False
+                deadline = time.monotonic() + 10
+                while time.monotonic() < deadline and not preview_ready():
+                    time.sleep(.1)
+                self.assertTrue(preview_ready(), '泵未在窗口内产出预览帧')
+                self.assertEqual(recorder.status()['preview_state'], 'live')
+
+                recorder.preview_until = time.monotonic()       # 停止请求：泵断流、latest 清空
+                _wait_for(recorder, lambda s: s['preview_state'] == 'off')
+                self.assertIsNone(recorder.latest)
+                deadline = time.monotonic() + 3                 # 服务器侧感知断开有写入周期滞后
+                while time.monotonic() < deadline and _FakeCameraServer.active:
+                    time.sleep(.05)
+                self.assertEqual(_FakeCameraServer.active, 0)
+                with self.assertRaises(urllib.error.HTTPError) as ctx:
+                    urllib.request.urlopen(base + '/api/preview')
+                self.assertEqual(ctx.exception.code, 404)
+                ctx.exception.close()
+            finally:
+                recorder.close()
+                server.shutdown()
+                server.server_close()
+
+    def test_pump_yields_camera_stream_during_recording(self):
+        """错峰红线：录制相机线程与空闲预览泵共用一条流锁。
+
+        PC 客户端同时打开的相机流数不得超过 1。在客户端侧计量（包装 urlopen 为计数
+        代理，close() 减计数）；服务器侧只能异步感知 FIN（下一轮 write 才报错），
+        计数会短暂虚高，不能作为确定性断言。
+        """
+        camera = _FakeCameraServer()
+        self.addCleanup(camera.close)
+        open_streams = [0]
+        max_open = [0]
+        real_open = J.urllib.request.urlopen
+
+        class _CountingResponse:
+            def __init__(self, inner):
+                self._inner = inner
+                open_streams[0] += 1
+                max_open[0] = max(max_open[0], open_streams[0])
+            @property
+            def headers(self):
+                return self._inner.headers
+            def read1(self, size):
+                return self._inner.read1(size)
+            def close(self):
+                if self._inner is not None:
+                    inner, self._inner = self._inner, None
+                    inner.close()
+                    open_streams[0] -= 1
+            def __enter__(self):
+                return self
+            def __exit__(self, *exc):
+                self.close()
+                return False
+
+        def counting_open(url, timeout=None):
+            if str(url) == camera.url:
+                return _CountingResponse(real_open(url, timeout=timeout))
+            return real_open(url, timeout=timeout)
+
+        with tempfile.TemporaryDirectory() as tmp, \
+             mock.patch.object(J, '_BoardSession', _FakeBoard), \
+             mock.patch.object(J, '_StagedFetch', _FakeFetch), \
+             mock.patch.object(J.urllib.request, 'urlopen', counting_open):
+            recorder = J.Recorder(Path(tmp) / 'out')
+            self.addCleanup(recorder.close)
+            recorder.data['camera_url'] = camera.url
+            recorder.touch_preview()
+            time.sleep(.4)  # 让泵先连上流
+            recorder.start(dict(output_root=str(Path(tmp) / 'out'), duration_sec=1,
+                                camera_url=camera.url, radar_board_url='http://192.168.31.58:8766'))
+            result = _wait_for(recorder, lambda s: s['state'] == 'completed')
+            self.assertGreater(result['camera_frames'], 0)
+            self.assertLessEqual(max_open[0], 1, '录制期间出现第二条客户端相机流')
 
 
 class StagedFetchTest(unittest.TestCase):

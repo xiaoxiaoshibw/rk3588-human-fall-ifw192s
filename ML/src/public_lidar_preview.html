@@ -1,0 +1,124 @@
+<div id="lidar-preview">
+  <style>
+    #lidar-preview .stage {width:100%;height:380px;touch-action:none;display:block}
+    #lidar-preview .spaced {margin-block:12px}
+    #lidar-preview .probs {display:grid;gap:8px;margin-block:12px}
+    #lidar-preview .prob-label {display:flex;justify-content:space-between;gap:12px}
+    #lidar-preview .point-probe {color:var(--viz-series-1);display:none}
+    #lidar-preview .axis-probe {color:var(--muted-foreground);display:none}
+    #lidar-preview .frame-range {flex:1;min-width:130px}
+  </style>
+  <h2>公开 LiDAR · 点云与30帧动作预测</h2>
+  <div class="viz-controls spaced">
+    <label class="form-label">对照样例<select class="form-select" data-role="sample" aria-label="选择环境和预测样例"></select></label>
+  </div>
+  <div data-role="summary" class="spaced" aria-live="polite"></div>
+  <canvas class="stage" role="img" aria-label="真实采样点云。拖动旋转，滚轮缩放；原始X、Y、Z轴标在左下。">真实LiDAR点云与动作预测</canvas>
+  <div class="viz-row text-small text-muted">拖动旋转 · 滚轮缩放 · 原始Z向上显示</div>
+  <div class="spaced tabular-nums" data-role="frame-label"></div>
+  <div class="viz-row">
+    <button class="btn btn-primary" type="button" data-role="play">播放</button>
+    <input class="form-range frame-range" data-role="frame" type="range" min="0" max="30" value="15" aria-label="浏览点云帧">
+  </div>
+  <div class="text-small text-muted spaced">每10原始帧显示1帧 · 演示速度5显示帧/秒（非采集帧率）</div>
+  <div class="spaced" data-role="prediction"></div>
+  <div class="probs" data-role="probabilities" aria-label="最近30帧窗口的前三类RF概率"></div>
+  <div class="text-small text-muted">RF概率未校准 · 动作标签继承整段，非逐帧GT · 同动作正确/错误选样，非总体比例</div>
+  <span class="point-probe" aria-hidden="true"></span><span class="axis-probe" aria-hidden="true"></span>
+  <script type="application/json" data-role="data"><!--PAYLOAD--></script>
+  <script>
+  (() => {
+    const root=document.getElementById('lidar-preview');
+    const data=JSON.parse(root.querySelector('[data-role="data"]').textContent);
+    const get=name=>root.querySelector('[data-role="'+name+'"]');
+    const canvas=root.querySelector('canvas'),ctx=canvas.getContext('2d');
+    const chooser=get('sample'),slider=get('frame'),button=get('play');
+    const names=['','伸展放松','水平扩胸','垂直扩胸','向左转体','向右转体','原地踏步','左侧肢体伸展','右侧肢体伸展','左前弓步','右前弓步','双侧肢体伸展','深蹲','左手举起','右手举起','左侧弓步','右侧弓步','左手挥动','右手挥动','捡东西','向左投掷','向右投掷','向左踢腿','向右踢腿','左侧身体伸展','右侧身体伸展','向上跳跃','鞠躬'];
+    const label=id=>'A'+String(id).padStart(2,'0')+' '+names[id];
+    const number=p=>(100*p).toFixed(1)+'%';
+    let sampleIndex=0,frameIndex=15,yaw=.28,pitch=.10,zoom=1,playing=false,last=0;
+    const decoded=new Map();
+    data.samples.forEach((s,i)=>{
+      const option=document.createElement('option');option.value=String(i);
+      option.textContent=s.sequence+' · 整段聚合'+(s.truth===s.aggregate_prediction?'正确':'错误');chooser.appendChild(option);
+    });
+    function restore(value){
+      const s=value?.privateContent||value;
+      if(!s||typeof s!=='object')return;
+      if(Number.isInteger(s.sample)&&s.sample>=0&&s.sample<data.samples.length)sampleIndex=s.sample;
+      if(Number.isInteger(s.frame))frameIndex=Math.max(0,Math.min(30,s.frame));
+      for(const [k,v] of Object.entries(s)){if(!Number.isFinite(v))continue;
+        if(k==='yaw')yaw=v;if(k==='pitch')pitch=Math.max(-1.3,Math.min(1.3,v));if(k==='zoom')zoom=Math.max(.7,Math.min(4,v));}
+    }
+    function save(){
+      if(window.openai?.setWidgetState)window.openai.setWidgetState({
+        modelContent:{sequence:data.samples[sampleIndex].sequence,displayed_source_frame:data.samples[sampleIndex].frames[frameIndex].source_frame},
+        privateContent:{sample:sampleIndex,frame:frameIndex,yaw,pitch,zoom}
+      }).catch(()=>{});
+    }
+    function points(frame){
+      if(!decoded.has(frame)){
+        const raw=atob(frame.xyz),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
+        const view=new DataView(bytes.buffer),array=new Float64Array(bytes.length/2);
+        for(let i=0;i<array.length;i++)array[i]=view.getInt16(i*2,true)*data.quantization_scale;
+        decoded.set(frame,array);
+      }
+      return decoded.get(frame);
+    }
+    function rotation(p){
+      const a=Math.cos(yaw)*p[0]+Math.sin(yaw)*p[2],c=-Math.sin(yaw)*p[0]+Math.cos(yaw)*p[2];
+      return [a,Math.cos(pitch)*p[1]-Math.sin(pitch)*c,Math.sin(pitch)*p[1]+Math.cos(pitch)*c];
+    }
+    function draw(){
+      const w=canvas.clientWidth,h=canvas.clientHeight,dpr=window.devicePixelRatio||1;
+      if(w<1)return;
+      canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+      const s=data.samples[sampleIndex],frame=s.frames[frameIndex],p=points(frame);
+      const center=s.lower.map((x,i)=>(x+s.upper[i])/2),span=Math.hypot(...s.lower.map((x,i)=>s.upper[i]-x));
+      const scale=Math.min(w,h)*.88/Math.max(span,.1)*zoom;
+      const cloud=[];
+      for(let i=0;i<p.length;i+=3){const q=rotation([p[i+1]-center[1],p[i+2]-center[2],p[i]-center[0]]);cloud.push(q);}
+      cloud.sort((a,b)=>a[2]-b[2]);
+      ctx.fillStyle=getComputedStyle(root.querySelector('.point-probe')).color;
+      for(const q of cloud){ctx.globalAlpha=.85;ctx.beginPath();ctx.arc(w/2+q[0]*scale,h/2-q[1]*scale,1.8,0,Math.PI*2);ctx.fill();}
+      ctx.globalAlpha=1;
+      ctx.strokeStyle=getComputedStyle(root.querySelector('.axis-probe')).color;ctx.fillStyle=ctx.strokeStyle;
+      ctx.lineWidth=1;ctx.font=getComputedStyle(root).font;
+      for(const [axis,v] of [['X',[0,0,1]],['Y',[1,0,0]],['Z',[0,1,0]]]){
+        const q=rotation(v),x=53+q[0]*29,y=h-44-q[1]*29;
+        ctx.beginPath();ctx.moveTo(53,h-44);ctx.lineTo(x,y);ctx.stroke();ctx.fillText(axis,x+4,y-3);
+      }
+    }
+    function render(){
+      const s=data.samples[sampleIndex],f=s.frames[frameIndex];chooser.value=String(sampleIndex);slider.value=String(frameIndex);
+      get('summary').textContent='序列标签：'+label(s.truth)+' ｜ 整段聚合预测：'+label(s.aggregate_prediction);
+      get('frame-label').textContent='原始帧 '+f.source_frame+' / '+s.frames_total+' · 显示 '+f.visible_points+' / 原始 '+f.original_points+' 点';
+      const available=s.windows.filter(w=>w.end_index_exclusive<=f.index+1),latest=available[available.length-1];
+      const panel=get('probabilities');panel.replaceChildren();
+      if(!latest)get('prediction').textContent='窗口暖机中：尚未满30帧';
+      else{
+        get('prediction').textContent='最近30帧预测：'+label(latest.prediction)+' ｜ 截至原始帧 '+latest.end_index_exclusive;
+        latest.probabilities.map((p,i)=>({p,id:i+1})).sort((a,b)=>b.p-a.p).slice(0,3).forEach(r=>{
+          const row=document.createElement('div'),caption=document.createElement('div');caption.className='prob-label';
+          const name=document.createElement('span'),value=document.createElement('span');name.textContent=label(r.id);value.textContent=number(r.p);value.className='tabular-nums';
+          caption.append(name,value);const track=document.createElement('div');track.className='progress';track.setAttribute('role','progressbar');track.setAttribute('aria-label',label(r.id));track.setAttribute('aria-valuenow',(r.p*100).toFixed(1));track.setAttribute('aria-valuemin','0');track.setAttribute('aria-valuemax','100');
+          const bar=document.createElement('div');bar.className='progress-bar';bar.style.width=(r.p*100)+'%';bar.style.background='var(--viz-series-1)';track.appendChild(bar);row.append(caption,track);panel.append(row);
+        });
+      }
+      button.textContent=playing?'暂停':'播放';draw();
+    }
+    chooser.addEventListener('change',()=>{sampleIndex=Number(chooser.value);playing=false;render();save();});
+    slider.addEventListener('input',()=>{frameIndex=Number(slider.value);playing=false;render();});slider.addEventListener('change',save);
+    button.addEventListener('click',()=>{playing=!playing;if(playing&&frameIndex===30)frameIndex=0;last=performance.now();render();save();});
+    let drag=null;
+    canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch};canvas.setPointerCapture(e.pointerId);});
+    canvas.addEventListener('pointermove',e=>{if(!drag)return;yaw=drag.yaw+(e.clientX-drag.x)*.008;pitch=Math.max(-1.3,Math.min(1.3,drag.pitch+(e.clientY-drag.y)*.008));draw();});
+    canvas.addEventListener('pointerup',()=>{drag=null;save();});canvas.addEventListener('pointercancel',()=>{drag=null;});
+    canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.7,Math.min(4,zoom*Math.exp(-e.deltaY*.001)));draw();save();},{passive:false});
+    function tick(now){if(playing&&now-last>=200){last=now;if(frameIndex<30){frameIndex++;render();}else{playing=false;render();save();}}requestAnimationFrame(tick);}
+    restore(window.openai?.widgetState);render();new ResizeObserver(draw).observe(canvas);requestAnimationFrame(tick);
+    window.addEventListener('openai:set_globals',e=>{if(e.detail?.globals?.widgetState){restore(e.detail.globals.widgetState);render();}});
+    new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['class','style','data-theme']});
+  })();
+  </script>
+</div>

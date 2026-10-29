@@ -792,3 +792,182 @@ OpenCode opencode-go/deepseek-v4.1-flash plan / ses_ec26ed114ffeIvs4chMChgAxOr�
 ## 2026-10-15 HFUS-LEARN-PLAN-03 OpenCode计划审核
 
 用户明确要求OpenCode审查。独立只读plan进程，opencode-go/deepseek-v4.1-flash，session ses_ec24f08afffe9TTaza6EiWWMIB，edit/bash deny、snapshot=false；原始[R1](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/OPENCODE_REVIEW_R1.md)/[R2](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/OPENCODE_REVIEW_R2.md)/[R3](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/OPENCODE_REVIEW_R3.md)与[最终SHA/指针](../human_capture/evidence/2026-10-15_hfus_learn_stage_plan_r1/PLAN_REVIEW.md)保留。R1 PLAN_REVISE（评估角色/资源预算等D1–D7）→V2 PLAN_PASS→V3最终PLAN_PASS；两项非阻断派发文字按R3允许收紧，审前字节/前后SHA留档。仅计划可执行性审查，不是E1许可/开发ACCEPTED，不曾训练/下载/安装/采集部署，最终工单SUBMITTED；L01–L18实施全NOT_RUN。
+
+
+## 2026-10-15 HFUS-LEARN-DEV-03 最终AI只读审查
+
+OpenCode CLI opencode-go/deepseek-v4.1-flash，plan，snapshot=false，edit/bash/task deny。R1 READONLY_REVISE→R2/最终R3 READONLY_NO_NEW_DEFECT，R3 session ses_ec14efee9ffetp6snOLcBAEK3L、exit0。[最终意见](../human_capture/evidence/2026-10-15_hfus_learn_dev_r2/OPENCODE_REVIEW_R3.md)/[返工](../human_capture/evidence/2026-10-15_hfus_learn_dev_r2/REWORK_FINAL.md)/[逐L结果](../human_capture/evidence/2026-10-15_hfus_learn_dev_r2/RESULTS.md)。仅源码/记录只读审核，未独立原始数值重跑/人工标注，不能替代66第二人。E0完整几何复算与页面证据由作者执行，学习/E1/GT仍BLOCKED，完整console启动FAIL，交互EXE/设备NOT_RUN。正式回传/入口据实追加，SUBMITTED非ACCEPTED，无默认晋级。
+
+
+## 2026-10-16 HFUS-INDOOR-TRAIN-AI01 R2 效果只读核验
+
+用户要求核实效果，Codex审查现存工件与源码，发现候选P/N口径不能当全检测效果，以及PointNet模型/优化器跨折复用(P1)。T05/T06/T07/T08 FAIL，T03 BLOCKED，其余本轮未全复算；RF计数算术PASS，3最小测试exit0。新证据：[REVIEW](../human_capture/evidence/2026-10-16_hfus_indoor_train_ai01_r2/REVIEW.md)。未改源码或数据、未新训练采集部署；非ACCEPTED，不自动派工。
+
+
+## 2026-10-16 HFUS-TCMS-01 r1 作者自验记录（非独立复审）
+
+Codex唯一writer自验：边界测试、9源/6配置账本、全部831区域/24499成员回查与1672帧因果前缀验证通过；TC08语义效果BLOCKED、TC10设备/物理/独立复审NOT_RUN。作者检查发现并修复验证器将结果固定写父目录导致新run重复验证无法落盘的问题，最终结果改为run内独占文件，首轮父目录证据保留；执行算法SHA不变。见[唯一v1](evidence/2026-10-16_hfus_tcms_01_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-16_hfus_tcms_01_r1/REPORT.md)/[回传](returns/HFUS-TCMS-01.md)。本条不是独立审核通过，不宣布ACCEPTED，不晋级生产。
+
+
+## 2026-10-16 HFUS-TCMS-02-PLAN 只读设计复核
+
+主作者三轮设计+三只读助手源码/可见性/骨架时序审查，初稿的遮挡源行混账、近背景与free种子混推断、角域歧义优先级及严格free能力门已修正；定向复核两账本问题闭合。当前[PLAN](evidence/2026-10-16_hfus_tcms_02_plan_r1/PLAN.md)/[记录](evidence/2026-10-16_hfus_tcms_02_plan_r1/DESIGN_REVIEW.md)/[唯一TP表](evidence/2026-10-16_hfus_tcms_02_plan_r1/ACCEPTANCE_V1.md)。规划SUBMITTED，非新软件/感知/设备独立验收，V0–V5未实现，效果BLOCKED；无算法或数据修改，无训练/采集/部署。
+
+
+## 2026-10-17 HFUS-TCMS-02-PLAN 补充方案增量分析
+
+用户要求分析已贴录制/地面联合方案，两路助手只读复核设计反例与复用入口，主作者交叉核查。见[分析](evidence/2026-10-16_hfus_tcms_02_analysis_r1/ANALYSIS.md)/[意见](evidence/2026-10-16_hfus_tcms_02_analysis_r1/READONLY_REVIEWS.md)。总体路线成立，现有边界不重复报遗漏；补充背景与目标冲突裁决、局部家具移位、实测停止/缺测预测、人工确认与自动语义分层及统一计分。普通地面入口先取最大支持平面、build_snapshot先删背景，不能原样串联代替新双路逻辑。TP02/04/05/06/08增量设计自验PASS，TP01/03/07未重做整项验收NOT_RUN；唯一v1及旧判定不改。SUBMITTED非ACCEPTED；新实现/地面实测/设备/采集/部署NOT_RUN，人体效果BLOCKED。仅新证据与流程追加，无算法/GT/数据/模型/Git写，不启动新里程碑。
+
+
+## 2026-10-17 HFUS-TCMS-02-PRESTART-PROMPT OpenCode二轮只读审查
+
+用户明确要求提示词并交OpenCode审查；本轮仅文档。指定opencode-go/deepseek-v4.1-flash、plan，session ses_eba68d10dffeHwgGWWgY51cr6D；首轮exit0 PLAN_REVISE → v2 exit0 PLAN_PASS，export exit0。授权原话、源码路径、PD03–08软件可复算判据、旧回归开发留痕/D隔离闭合。仅read/glob/grep/list，无算法/数据/设备操作。见[最终提示词](evidence/2026-10-17_hfus_tcms_02_prestart_prompt_r1/AI_PRESTART_PROMPT_V2.md)、[最终意见](evidence/2026-10-17_hfus_tcms_02_prestart_prompt_r1/OPENCODE_REVIEW_V2.md)、[修订处置](evidence/2026-10-17_hfus_tcms_02_prestart_prompt_r1/REVISION_NOTES.md)、[唯一PP表](evidence/2026-10-17_hfus_tcms_02_prestart_prompt_r1/ACCEPTANCE_V1.md)/[报告](evidence/2026-10-17_hfus_tcms_02_prestart_prompt_r1/REPORT.md)。PP01–PP06提示词交付自验PASS，非ACCEPTED或算法有效；新实施/设备/物理NOT_RUN，A–D效果BLOCKED。
+
+
+## 2026-10-17 HFUS-TCMS-02-PREDEV r01 软件交付只读复审
+
+本聊天用户实际派发V0–V2录制前软件，Codex唯一writer。唯一[PD01–PD09验收v1](evidence/2026-10-17_hfus_tcms_02_predev_r1/ACCEPTANCE_V1.md)、[REPORT](evidence/2026-10-17_hfus_tcms_02_predev_r1/REPORT.md)、[回传](returns/HFUS-TCMS-02-PREDEV.md)。三只读助手审计真实读取/地面/表面/回放入口并以纯内存反例复核；实际技能路径见回传。
+
+OpenCode实际CLI v2.0.29，opencode-go/deepseek-v4.1-flash，standalone/plan，只读权限；三轮均exit0，[R1](evidence/2026-10-17_hfus_tcms_02_predev_r1/OPENCODE_R1.md)8条→返修，[R2](evidence/2026-10-17_hfus_tcms_02_predev_r1/OPENCODE_R2.md)证据绑定/指纹/口径/守卫→返修，[R3](evidence/2026-10-17_hfus_tcms_02_predev_r1/OPENCODE_R3.md)F1–F5闭合、READONLY_NO_NEW_DEFECT。R3读到浏览器证据尚未落盘，未冒称其核验了最终交互；Codex随后真实浏览器BROWSER_FINAL_R2绑定当前49695端口。AI只读源码审核，不是独立经验实验、人审或真实效果通过。
+
+当前源码与synthetic_r7/reused_r5执行镜像/环境SHA一致；tests_r8 25项exit0、12因果前缀一致、11 HTTP契约与实际浏览器案例/图层/源查询通过；保护SHA不变，范围外差异0。逐PD软件自验PASS仍SUBMITTED，非ACCEPTED；真实A–D/地面/人体效果BLOCKED，设备/物理NOT_RUN。没有生产/数据/模型/GT写入、部署采集、训练/HR09、驱动网络或Git写，不接管其他项。
+
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-PROMPT 新录制提示词三轮只读审核
+
+用户仅要求下一步开发AI提示词，确认cap_20261017_113516前30s无人、其余走动、最后几秒躺下、用于开发。本轮显式源meta/28B/时间/尺寸/字节SHA检查，无动作XYZ查看/算法运行。Codex唯一文档writer，助手只读；技能实际路径见回传。
+
+OpenCode opencode-go/deepseek-v4.1-flash、standalone/plan、只读权限，三轮exit0：R1 PLAN_REVISE→v2，R2 PLAN_REVISE→v3，R3 PLAN_PASS（最终措辞闭合）。规模/指纹、模式与source kind、候选图资格、因果初始化、可扩展参考、旧B2/B3适配、缺件消融/测试命令补清。请求/jsonl/stderr/exit与全部版本保留；非人体效果证明。R3非阻塞观察把NP/PD视为简称不采纳：NP本轮、PD旧软件、RD未来实施，三表不混用。
+
+见[最终提示词v3](evidence/2026-10-17_hfus_tcms_02_realdev_prompt_r1/AI_DEVELOPMENT_PROMPT_V3.md)、[R3意见](evidence/2026-10-17_hfus_tcms_02_realdev_prompt_r1/OPENCODE_REVIEW_R3.md)、[REPORT逐NP](evidence/2026-10-17_hfus_tcms_02_realdev_prompt_r1/REPORT.md)、[回传](returns/HFUS-TCMS-02-REALDEV-PROMPT.md)。NP01–NP05文档自验PASS，SUBMITTED非ACCEPTED；新算法/设备/物理NOT_RUN，人体/C/D独立效果BLOCKED。受保护文件/原始源SHA不变，无生产代码/数据/GT/模型/Git写或新实施。
+
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-01 最终AI只读复审
+
+Codex唯一writer，两个助手只读审计；当前[唯一RD01–RD10 v1](evidence/2026-10-17_hfus_tcms_02_realdev_r1/ACCEPTANCE_V1.md)/[REPORT](evidence/2026-10-17_hfus_tcms_02_realdev_r1/REPORT.md)/[回传](returns/HFUS-TCMS-02-REALDEV-01.md)。OpenCode CLI v2.0.29，实际模型opencode-go/deepseek-v4.1-flash，standalone/plan，snapshot=false，仅read/glob/grep/list，其他deny。最终[R1原意见](evidence/2026-10-17_hfus_tcms_02_realdev_r1/OPENCODE_R1.md)/[状态](evidence/2026-10-17_hfus_tcms_02_realdev_r1/OPENCODE_R1_STATUS.json)，exit0/305.290s、READONLY_NO_NEW_DEFECT。
+
+审查未执行算法、未读points.bin、未独立重算SHA；不是人工身份/GT或真实效果复现。非阻断观察（信封验证入口依赖、当前相等的.08信息字段、消融并集措辞、PC Python3.12接口）在最终报告明列，无审后代码修改。最终源码及提交审查证据逐SHA一致；报告/流程文档是审后新写。作者42契约、1560方案帧行账、浏览器实际交互与源查询有独立记录；不以总数代替逐RD。
+
+真实失败保持：AI视觉条件续接f439起LOST，尾段零候选，旧地面新段残差FAIL。用户委托AI不伪造成HUMAN_CONFIRMATION，human_confirmation=false；C/独立D/GT/正式评分BLOCKED，设备/物理NOT_RUN。SUBMITTED非ACCEPTED，不晋级生产/默认。全部旧失败/旧版本保留，原始源及基线保护无范围外内容变更。
+
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-02-PLAN 作者设计反例复核
+
+本轮仅计划，Codex本人检查源码/元数据/原始方法来源，未调用代理或外部模型审核。当前[计划v2](evidence/2026-10-17_hfus_tcms_02_replan_r1/PLAN_V2.md)/[唯一RP计划表](evidence/2026-10-17_hfus_tcms_02_replan_r1/PLAN_ACCEPTANCE_V1.md)/[检查](evidence/2026-10-17_hfus_tcms_02_replan_r1/PLAN_CHECK.md)。[DR01–04](evidence/2026-10-17_hfus_tcms_02_replan_r1/DESIGN_REVIEW_R1.md)闭合：FIT-only mask必须早于投影建模和候选提案；跨家族冲突禁止自动推荐；新配平M0未就绪不得硬写fi271已生效；真实artifact不能默认synthetic。v1/v2原文均保留。
+
+RP01–10仅计划覆盖自验PASS；G01–12实现及外部OpenCode/独立复审NOT_RUN，人体/地面身份/独立效果BLOCKED，设备/物理NOT_RUN。没有点云算法运行或新的调平应用，不借旧42测试/旧只读审查当新方案有效。SUBMITTED非ACCEPTED；旧REALDEV-01的11源码/49封存证据逐SHA一致，无源数据/生产/模型/GT写入，无采集部署训练或Git写。
+
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-02-S01 作者自验与开发期只读检查
+
+Codex唯一实现writer，RESEARCH测量+ENGINEERING坐标。measurement_audit发现OB07/公式/分母、mask符号及结论越界；coordinate_check发现输出绑定、迟到响应与源反查版本歧义，writer逐项修复并定向复查。17新Python/旧25+17/旧测量5、JS、HTTP15+6、真实IAB15帧和全部源行/对象数值检查通过。仅作者自验/只读助手检查；正式Codex独立复审NOT_RUN，不能称独审PASS。见[逐ID报告](evidence/2026-10-17_hfus_tcms_02_s01_r1/REPORT.md)、[只读检查](evidence/2026-10-17_hfus_tcms_02_s01_r1/READONLY_ASSISTANT_CHECKS.md)、[交接](evidence/2026-10-17_hfus_tcms_02_s01_r1/HANDOFF.md)。SUBMITTED/源码停写/非ACCEPTED；不自动S2/S3/人体/第二批/设备。
+
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-02-S02 作者自验
+本会话为唯一实现 writer，尚无正式独立复审（NOT_RUN）。S2 只做地面审核与求解：FIT/VAL 冻结、距离图、C/D 提案、预登记门。作者自验 G01–G04、G10–G12 PASS（G03/G04 附“审核片先验条件选择、VAL 非独立真值”限制）；r03 9/9 合成契约、r02 14 项坐标与 handler 契约 exit 0；真实 Edge 6 帧点选/反查/相机不变。C3D_03 4/4 FIT+3/3 VAL，DIMG_01 3/4+3/3，旧TLS 2/4+1/3；78/78 VAL 帧、19/19 前缀帧稳定。S3/S4、人体、独立D、设备/未跑项保留 BLOCKED/NOT_RUN；正式独审由 fresh 会话只读进行。见[报告](evidence/2026-10-17_hfus_tcms_02_s02_r1/REPORT.md)、[交接](evidence/2026-10-17_hfus_tcms_02_s02_r1/HANDOFF.md)。
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-02-S03-PLAN 计划自检
+仅文档轮。S3 计划 P01–P10 自验 PASS；输入为 S2 封存 740342ec…e1d、C3D_03 参数、历史 R/t 与源 SHA。计划固定 C3D_03、FIT-only 重建 M0、271 因果解锁、新域验证与失败包；S2 VAL 已曝光、新域先验条件选择已披露，不称独立。S3 实施/正式独审 NOT_RUN。见[计划](evidence/2026-10-17_hfus_tcms_02_s03_plan_r1/S3_PLAN_V1.md)、[验收](evidence/2026-10-17_hfus_tcms_02_s03_plan_r1/PLAN_ACCEPTANCE_V1.md)、[自检](evidence/2026-10-17_hfus_tcms_02_s03_plan_r1/PLAN_CHECK.md)。
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-02-S03-PROMPT 提示词自检
+仅文档轮。S3 开发提示词 PR01–PR08 自验 PASS；内容覆盖读入/范围/输入 SHA/候选冻结/T0–T8/验收/防作弊/停止，并明确 S2 VAL 已曝光、新域先验条件选择、3cm 门接近噪声等限制。S3 实施与正式独审 NOT_RUN。未改源码/数据/旧证据，无 Git 写。见[提示词](evidence/2026-10-17_hfus_tcms_02_s03_prompt_r1/AI_DEVELOPMENT_PROMPT_V1.md)、[验收](evidence/2026-10-17_hfus_tcms_02_s03_prompt_r1/PROMPT_ACCEPTANCE_V1.md)、[自检](evidence/2026-10-17_hfus_tcms_02_s03_prompt_r1/PROMPT_CHECK.md)。
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-02-S03 本段几何配平（作者自验 SUBMITTED）
+
+- 状态：SUBMITTED；作者自验 G05/G06/G07/G10/G11/G12 PASS，G08/G09 NOT_RUN；**正式独立复审 NOT_RUN**，不自行 ACCEPTED，不进入 S4。
+- 证据根：`docs/human_fall/evidence/2026-10-17_hfus_tcms_02_s03_r1/`，哈希链 `FINAL_SEAL.sha256` → `FINAL_SEAL.json` → `MANIFEST.json` → 各文件；回传 `docs/human_fall/returns/HFUS-TCMS-02-REALDEV-02-S03.md`。
+- 关键事实：transform `f0533fd84b9c7e1f0ec22bfcf3f7f433fb071fa73327ca9c9c881cc4aef4ab8d`（R/t 由 C3D_03 唯一确定，未重拟合/未平均）；新域 S3V_H/I/J 与 S2 七片零共享源行；M0 支持行 7,181,833 = FIT 有效行，应用链内重建指纹一致；780 帧 0 reset、行守恒；qualified 首次为真恰在 fi=271。
+- 保留失败：`RUN_BUG1/`（时间门按片汇总的错误实现）、`OBJECTS_CHECK_FAIL1.json`（CSR 语义错误）、`BROWSER_RESULTS_ATTEMPT1–4`。
+- 复审重点见 `evidence/2026-10-17_hfus_tcms_02_s03_r1/HANDOFF.md`：候选未被重拟合；v1→v2 只改域选择约束且发生在域冻结前；第三片纯度 0.8950 的真实原因（S2 占满 >0.9 核心）；前缀降级路径本轮无实例；`geometric_validated_local=true` 但 identity/physical/runtime 仍 false，不得被页面冒充地面身份或物理高度。
+- S4/S5、人体返工、独立 D、设备/采集/部署/训练/HR09、Git 写均未授权。
+
+## 2026-10-17 HFUS-TCMS-02-REALDEV-02-S03 澶嶅 + S04 灏炬璇婃柇锛堜綔鑰呰嚜楠?SUBMITTED锛?
+- S3 鐙珛 AI 鍙澶嶅锛坄opencode-go/deepseek-v4.1-flash`锛宲lan锛宔xit 0锛?82.9 s锛夛細鏃犳敼鍒ょ己闄凤紱D1鈥揇4 瑙?`docs/human_fall/evidence/2026-10-17_hfus_tcms_02_s03_review_r1/REVIEW_SUMMARY.json`銆?*涓嶆槸** Codex 姝ｅ紡楠屾敹銆?- S3 r2锛坄2026-10-17_hfus_tcms_02_s03_r2/`锛屽皝瀛?`c82ea013鈥?4e`锛夛細D1 娴忚鍣ㄧ増鏈唴宓屻€丏2 S2 鍘熷 n/d provenance锛埼?2.22e-16锛夈€丏3/D4 鍕樿锛況1 灏佸瓨 `601a7a24鈥?27b` 鏈姩銆?- S4锛坄2026-10-17_hfus_tcms_02_s04_r1/`锛孒01鈥揌08 鑷獙 PASS锛夛細**灏炬闆跺€欓€?= M0 鑳屾櫙鍚告敹**锛?2 甯ч浂鍊欓€夈€乧ontact 甯?99.8% 鍒よ儗鏅€佺瀛?8鈥?5 琛屼负 鈮? 鐐瑰皬缁勶級锛汚锛堟棤 M0锛夊悓甯?4鈥?0 鍊欓€夊弽璇侊紱f430鈥?49 鏃犻浂鍊欓€夈€傛帴瑙﹀甫浠呮爣绛捐鏁帮紱鍒嗚В鎭掔瓑寮?587/587 甯ф垚绔嬨€?93 涓?MAP_BUILDING 甯т笉閫傜敤銆?- 淇濈暀澶辫触锛歚FAILED_RUN_V1/`锛坆g 涓?members 閲嶅鐩稿噺锛夈€乣RUN_FAIL1/`锛團rozenMap 璺緞锛夈€乣RUN_FAIL2/`锛圡0 鎸囩汗锛夈€?- 澶嶅閲嶇偣锛氭帴瑙﹀甫鏄惁瓒婄晫鎴愨€滃垹鐐?鐗╃悊楂樺害鈥濓紱鍒嗚В鎭掔瓑寮忔槸鍚﹁浜嬪悗鏀归棬锛涙棤韬唤鏄惁琚璇绘垚杞ㄨ抗缁撹銆?- 涓嬩竴姝ワ細S5 涓庘€滀汉浣?楠ㄦ灦鎸佺画鏍囧畾鈥濋噷绋嬬鍙﹁娲惧彂锛涗笉鑷 ACCEPTED銆?
+## 2026-10-17 HFUS-TCMS-02-REALDEV-02-S05 全段交付索引（仅文档，SUBMITTED）
+
+- 交付索引把 REALDEV-01、S01、S02、S03、S03-REVIEW-R1、S03-r2、S04 七项封存与六份回传逐项哈希绑定；已交付 7 条、阻塞 8 条分列。
+- S3 独立 AI 只读复审：无改判缺陷，D1–D4 已由 S3 r2 收尾；Codex 正式复审仍 NOT_RUN。
+- 未关闭：地面身份、物理安装高度、独立 D、人体效果/GT、身份与轨迹、贴地前景保留、人体+骨架持续标定、设备/采集/部署/训练。
+
+## 2026-10-17 HFUS-HUMAN-SKELETON-01 人体 + 骨架持续标定（作者自验 BLOCKED）
+
+- 四条纯几何路线（v1 交替最小二乘 / v2 可辨识测量 / v3 像素骨架化+DT 脊线 / v4 时序跟踪+在线标定）在理想合成胶囊数据上均未达到预登记门 K03；v4 最好 5/11（门槛 9/11），未收敛。
+- 根因：可辨识性限制（同肢两段关节位置在单视角稀疏点云下不可辨识），不是调参问题；v4 只在可测的量上准确。
+- 保留：PILOT_R1/PILOT_V2/PILOT_V4、协议 v1/v2、STATUS 的可辨识性分析；未进真实数据与浏览器；未降低任何门。
+- 解除条件：用户/物理输入（一帧种子 / 关节标注 / 多视角或高密度采集 / 外部模型或训练授权）。
+- 复审重点：四条路线是否公平实现；门是否被降；若复审认为仍有未试的可行纯几何路线，应指出并重新派发。
+
+## 2026-10-18 HFUS-HUMAN-SKELETON-02 计划 A 交接（仅文档）
+
+- 交接：`evidence/2026-10-18_hfus_human_skeleton_02_plan_r1/HANDOFF_NEXT_SESSION.md`；结论为"复用现有骨架/肢体/关联模块，只新写持续标定层"。
+- 依据：SKELETON-01 封存 `d0c4e0c0…`（四轮纯几何全失败，根因可辨识性）；已核实 `real_fall/r04/skeleton.py` 的 `estimate()`/`SLOTS`/`EDGES`、`core/association.associate_tracks`、`limb_lib` 部件均存在且可只读 import。
+- 口径：标定对象是 12 条**区域边**边长；解剖关节/左右身份/物理高度保持 UNKNOWN/BLOCKED；门 A03=12 边中 ≥70% 在 max(4cm,8%)、≥3/4 场景 60 帧内 ≥60% 边 CALIBRATED。
+- 状态：仅交接，未实施、未封存；新会话需先登记协议与唯一验收（先写后跑）。
+
+## 2026-10-18 HFUS-HUMAN-SKELETON-02 提交独立复验（作者自验 PASS，正式复验 NOT_RUN）
+
+- 当前唯一验收：docs/human_fall/evidence/2026-10-18_hfus_human_skeleton_02_r1/ACCEPTANCE_V2.md；协议最终冻结 PROTOCOL_V3.json；最终运行 RUN_R4/。
+- 作者自验 A01-A08 PASS，状态 SUBMITTED，不是 ACCEPTED。重点复核 A04 的可测分母（317/383=82.77%；全 ACTION 317/490=64.69%，107 帧无候选）、A05 四态/163 次 drift、A06 五类显式字段、A07 Edge 8 帧与失败保留。
+- 证据入口：FINAL_SEAL.sha256 → FINAL_SEAL.json → MANIFEST.json → REPORT.md/HANDOFF.md。
+
+## 2026-10-18 HFUS-TCMS-02-REALDEV-02-S06 计划（仅计划，SUBMITTED）
+
+- 计划：`evidence/2026-10-18_hfus_tcms_02_s06_plan_r1/PLAN_V1.md`（P01–P09 自验 PASS，S06 未实施）。
+- 依据 SKELETON-02（`799c8a06…`）暴露的三处缺口：尾段 21 帧无骨架、107/490 ACTION 帧无候选且其中 ~86 帧当前不可查询、2 条边从未 CALIBRATED + 163 次 DRIFT_RESET 无分类 + 两份 max std（0.012365 / 0.019529）不一致。
+- 计划要点：近地前景变体只改一处匹配语义并带两道自检；全段重跑禁预测填充；漂移分类必须合计=163；空帧重建先补字段；统一五项复审入口。
+- 状态：仅计划、未实施、未封存；S06 实施须另行派发；不自动进入 S07；五项 Codex 正式复审仍 NOT_RUN。
+
+## 2026-10-18 HFUS-TCMS-02-REALDEV-02-S06 / OpenCode只读审核收口
+
+唯一验收 evidence/2026-10-18_hfus_tcms_02_s06_r1/ACCEPTANCE_V2.md；最终逐ID evidence/2026-10-18_hfus_tcms_02_s06_r2/FINAL_RESULTS.json；审核原文 evidence/2026-10-18_hfus_tcms_02_s06_review_r1/OPENCODE_REVIEW.md。Codex唯一writer，RESEARCH+ENGINEERING，实际读取 C:/Users/30680/.codex/skills/ponytail/SKILL.md 与 scientific-toolkit-skill/SKILL.md。
+
+指定opencode-go/deepseek-v4.1-flash/default DB；fresh probe9.599s/exit0，实际model核验；审核436.217s/exit0/stop，session ses_eb325db04ffen6faiD1w6L8kpf；101次工具仅read/glob/grep，派工与技能完整读取可核，源码首尾SHA不变。独立执行NOT_RUN，未把作者测试当独立复验。
+
+SUBMITTED，不可ACCEPTED：04 FAIL（节点317→224、标定10→0、歧义候选测量57/71）；06机械重建PASS/因果BLOCKED（近地谓词结构性无区分力）；01/02/03/05/07记录审查PASS；08范围/预算证据PASS；09在原审核时未闭合，现实际日志与回传登记完成，派审流程PASS。
+
+M1状态快照、M2复用RUN标签/r10来源、L1参数差异断言、L2索引时间、L3中位数口径、L4flags索引、L5当前入口/回传在新r2补录，r1封存/r10源码不动。补录为Codex自验、OpenCode未复审补录；M3分类保持BLOCKED。关联修复/D新协议/S07未实施；五历史项Codex正式复审NOT_RUN。无Git/设备/部署/采集/训练/网络写。
+
+## 2026-10-18 HFUS-POSE-JITTER-01 作者离线诊断（非独立复审）
+
+用户新录cap_20261018_110029及帧标记，承接本聊天原始ROI节点稳定性检查。唯一验收 evidence/2026-10-18_hfus_pose_jitter_01_r1/ACCEPTANCE_V1.md；当前协议v2只合并事前用户静止段澄清。作者Codex/RESEARCH，复用旧r04无历史/无display。J01/J02/J03/J05 PASS，J04原始统计完成、相对胸部/关节抖动BLOCKED，独审NOT_RUN；SUBMITTED未ACCEPTED。
+
+151帧张开保持：中线节点被原0.8m跨度门拒绝，OUTER_A std300.92mm、最大连续跳1069.09mm，ROI中位点同帧仅6.24mm。ROI背景残留与选点不稳定未拆分，不宣称雷达噪声或关节精度。统计自验、386账本/2361节点反查通过，最大坐标误差4.44e-16m；图V2修缺测断线/N-A标记，原图保留。来源/报告/RESULTS/VERIFICATION/SCOPE_CHECK均在上述新证据目录；原始数据/旧源/旧证据零写，无部署采集训练Git，不进入S07。
+
+## 2026-10-18 HFUS-TCMS-02-ADAPTIVE-LEVELING-PLAN 自适应配平设计与计划（仅文档，SUBMITTED）
+
+- 设计：`evidence/2026-10-18_hfus_tcms_02_adaptive_leveling_plan_r1/DESIGN_V1.md`；计划：同目录 `PLAN_V1.md`；唯一验收 AL-P01–P13 作者自验 PASS（`PLAN_CHECK.md`）；输入基线 14 件 SHA 见 `INPUT_BASELINE.json`。
+- 设计要点：三触发（新会话重建 T1 / 锚点失配恢复 T2 / 慢漂移 T3）→ 锚层 AnchorSet（M0 静态表面，与前景账本零关联）→ 估计层（地面重拟合 TLS/SVD/RANSAC + 对锚稳健 point-to-plane，只吃 bg_match 行）→ 决策层（六态状态机 + median/EMA + 速率限幅 + M0 v(n)/T(n)/epoch 版本化，只对新帧生效、可回退）；距离图=可选提案器默认关闭（预登记对照门）。
+- 与既有关系：AGLF/GL-A～I 只引用不合并；S3 为前身、S07 无重叠；L0–L5 实施全部 NOT_RUN，须另行派发。
+- 状态：仅文档；未跑数据、未改源码/配置/模型/GT，data 与旧证据只读，无 Git 写。
+
+
+## 2026-10-18 HFUS-TCMS-02-REALDEV-02-S07 OpenCode只读审核
+
+实际模型['opencode-go/deepseek-v4.1-flash']；exit 0；独立执行NOT_RUN。完整[审核](evidence/2026-10-18_hfus_tcms_02_s07_r1/OPENCODE_REVIEW.md)、[处置](evidence/2026-10-18_hfus_tcms_02_s07_r1/REVIEW_DISPOSITION.json)、[逐ID](evidence/2026-10-18_hfus_tcms_02_s07_r1/RESULTS_FINAL.json)。作者效果FAIL；停止推广，非ACCEPTED。
+
+
+## 2026-10-18 HFUS-TCMS-02-REALDEV-02-S07F 作者提交与OpenCode只读审核
+
+用户本聊天派发"新修复项：OUTER_A 双支撑群"；唯一 writer 为本会话（OpenCode 客户端）。唯一语义变化：OUTER 支撑带与 UPPER 同带 [0.52,0.88)。当前[验收v1](evidence/2026-10-18_hfus_tcms_02_s07f_r1/ACCEPTANCE_V1.md)、[审核](evidence/2026-10-18_hfus_tcms_02_s07f_r1/OPENCODE_REVIEW.md)、[处置](evidence/2026-10-18_hfus_tcms_02_s07f_r1/REVIEW_DISPOSITION.json)、[逐ID](evidence/2026-10-18_hfus_tcms_02_s07f_r1/RESULTS_FINAL.json)。
+
+OpenCode opencode-go/deepseek-v4.1-flash（实际 model 经 session export 复核），exit 0，338.4s，仅 read/glob/grep，92 次工具调用，证据/源码首尾 SHA 不变；独立执行 NOT_RUN；无阻断问题，非阻断 6 项已处置。修复专项 PASS（85.0mm/145/6）；冻结门 8/10（残余共同回归与 6 边）NO_PROMOTION；非 ACCEPTED。
+
+## 2026-10-18 HFUS-GT-PROTOCOL-01 AI-GT 正式证据类别（仅协议文档，SUBMITTED）
+
+用户本聊天决定「`AI_GT_FROZEN`（盲标 + 交叉验证 + 协议约束下的模型标注）定为正式证据类别」；本会话唯一文档 writer 落盘[协议v1](evidence/2026-10-18_hfus_gt_protocol_01_r1/AI_GT_PROTOCOL_V1.md)、[唯一验收GP01–GP12](evidence/2026-10-18_hfus_gt_protocol_01_r1/ACCEPTANCE_V1.md)、[自检](evidence/2026-10-18_hfus_gt_protocol_01_r1/CHECK.md)、[输入基线](evidence/2026-10-18_hfus_gt_protocol_01_r1/INPUT_BASELINE.json)、[回传](returns/HFUS-GT-PROTOCOL-01.md)。四道保障（盲标/冻结溯源/交叉模型/自动一致性）+ 物理锚点（坐标类真值不由 AI-GT 承担）+ 允许声明矩阵（mm 级禁用）；旧记录不升格不回填。工具与首批应用 NOT_RUN；独立复审 NOT_RUN；非 ACCEPTED。未改 policy 正文/数据/GT/代码/旧证据；无 Git 写。
+
+## 2026-10-18 HFUS-AI-GT-TOOL-01 工具交付与合成自检（作者自验，非独立复审）
+
+用户派发协议 A（四模式工具 + 合成自检）。工具 `tools/ai_gt/`（label/selfcheck/crosscheck/audit）11 单测 `-B -W error` exit 0；自检 12 例盲标（本会话模型；先标后评）TP10/FN0/FP0/TN2，px P50 8.20/P95 59.38/max 72.11，lateral P50 5.6cm/max 27.4cm；[验收 T01–T12](evidence/2026-10-18_hfus_ai_gt_tool_01_r1/ACCEPTANCE_V1.md) 作者自验全 PASS（T09/T10 真实运行 NOT_RUN）/[报告](evidence/2026-10-18_hfus_ai_gt_tool_01_r1/REPORT.md)/[包络](evidence/2026-10-18_hfus_ai_gt_tool_01_r1/ENVELOPE.json)/[回传](returns/HFUS-AI-GT-TOOL-01.md)。发现：近场 v 偏差（视觉中点≠投影质心），修正方向入协议 v2 候选。label 真实会话/交叉模型一致/独立复审 NOT_RUN；非 ACCEPTED。
+
+## 2026-10-18 HFUS-AI-GT-PROTOCOL-02 开发与OpenCode只读审核（SUBMITTED；范围BLOCKED）
+
+当前唯一[验收v1](evidence/2026-10-18_hfus_ai_gt_protocol_v2_r1/ACCEPTANCE_V1.md)及[逐ID](evidence/2026-10-18_hfus_ai_gt_protocol_v2_r1/RESULTS.json)。Codex唯一writer，ENGINEERING；实际技能路径C:/Users/30680/.codex/skills/ponytail/SKILL.md。
+新v2入口只做合成render/score，源行等权mean(project)区别旧project(mean)，25px中性网格/刻度/固定光心十字，按档误差/分母/空档null及不外推规则。v2 8项、v1 11项exit0；非盲oracle18TP/6TN、max0px，注入5px回读5px；24图独立CLI进程字节一致，独立相机坐标解析核验通过。
+[OpenCode正式静态审核](evidence/2026-10-18_hfus_ai_gt_protocol_v2_r1/OPENCODE_REVIEW.md) exit0、实际opencode-go/deepseek-v4.1-flash，71次read/glob/grep，指令/ponytail读取、源码SHA不变与session导出均核验；0阻断/0FAIL，独立执行NOT_RUN；9项非阻断观察[逐项处置](evidence/2026-10-18_hfus_ai_gt_protocol_v2_r1/REVIEW_DISPOSITION.json)，不改生产源码。
+最终全树库存0读取错误，但[范围发现](evidence/2026-10-18_hfus_ai_gt_protocol_v2_r1/SCOPE_DRIFT.json)：tmp_gl_diag/457路径在较早快照有、较晚扫描和当前无；本轮无删除/移动，原因待用户核实，不恢复、不回滚。V2-01/V2-10范围BLOCKED，V2-02–09作者PASS；不得将OpenCode静态结论当零范围差异或ACCEPTED。v1清单31件SHA/旧索引/HEAD核验通过，无其它范围外差异。真实盲标/保留集/跨模型/真实会话/正式GT/设备物理NOT_RUN；无Git写/数据GT旧证据写/采集部署训练/主线推进。
+
+## 2026-10-18 HFUS-AI-GT-PROTOCOL-02 r2 用户确认并行清理（范围阻塞解除）
+
+用户直接答复“是，已知的并行清理”，仅解释457件tmp_gl_diag变化来源，见[确认记录](evidence/2026-10-18_hfus_ai_gt_protocol_v2_r2/SCOPE_RESOLUTION.json)。V2-01/V2-10来源未明阻塞解除；[当前逐ID结果](evidence/2026-10-18_hfus_ai_gt_protocol_v2_r2/RESULTS.json) V2-01–10作者PASS，唯一验收仍r1 ACCEPTANCE_V1、判据/SHA不变。实际差异数457仍保留，未解释差异0；不重写原pass=false或BLOCKED记录，不恢复文件。
+r1的145件不可变条目SHA复核通过，源码、冻结协议、既有测试/OpenCode审核不变；本轮仅ENGINEERING文档来源与状态收口。原测试与静态审核继续适用，不新增数值验证；OpenCode独立执行和模型盲标/保留集/跨模型/真实会话/正式GT/设备物理均NOT_RUN。SUBMITTED、非ACCEPTED，无Git写/数据GT旧证据写/采集部署训练或下一阶段授权。[收口报告](evidence/2026-10-18_hfus_ai_gt_protocol_v2_r2/REPORT.md)。

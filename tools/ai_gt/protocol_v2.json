@@ -1,0 +1,70 @@
+{
+  "schema": "ai_gt_protocol_v2",
+  "item": "HFUS-AI-GT-PROTOCOL-02",
+  "frozen_before_run": true,
+  "development_seed": 20261019,
+  "reserved_holdout_seed": 20261020,
+  "holdout_status": "NOT_RUN; unused seed, not independent physical evidence",
+  "n_cases": 24,
+  "n_person": 18,
+  "n_empty": 6,
+  "n_adjacent": 6,
+  "range_bins_m": [
+    [
+      4.0,
+      5.5
+    ],
+    [
+      5.5,
+      7.0
+    ],
+    [
+      7.0,
+      8.5
+    ]
+  ],
+  "range_assignment": "Euclidean distance camera to 3D target source-row mean; half-open bins",
+  "camera": {
+    "W": 1280,
+    "H": 720,
+    "vfov_deg": 40,
+    "pitch_down_deg": 8,
+    "height_m": 1.6
+  },
+  "render": {
+    "grid_px": 25,
+    "major_grid_px": 100,
+    "fixed_optical_center_cross": true,
+    "point_radius_px": 2,
+    "neutral": true,
+    "no_target_overlay": true
+  },
+  "task": "标出人形簇全部有效且投影落在画面内的源点的等权二维投影质心；每条源点计一次，包括投影重叠的源点；不是视觉外接框中点、不是三维均值再投影；排除家具和地面。网格和画面中心十字只辅助读像素，绝不指向目标。无人物时 u/v 均为 null。",
+  "truth_formula": "mean_i(project(X_i)), finite source rows with depth>1e-9 and 0<=u<W,0<=v<H; no occlusion culling",
+  "v1_difference": "v1 project(mean(X_i)) retained unchanged; metrics not directly comparable",
+  "score": {
+    "px": "Euclidean distance to mean projected source points",
+    "lateral_m": "range_m * tan(angle(pick_ray, ray_through_truth_px)); diagnostic proxy only",
+    "range_reference": "range to 3D source-row mean, not physical range GT",
+    "oracle_px_max": 1e-06,
+    "injected_noise_px": 5,
+    "missing_or_duplicate_or_unknown_pick": "reject, never silently count FN"
+  },
+  "usage": {
+    "per_bin": "n_person/n_tp and px/lateral min,p50,p95,max; FN/FP separately",
+    "empty_bin": "null statistics; no interpolation or pooled replacement",
+    "v1_30cm": "observed maximum rounded from 12 development synthetic samples; not an upper bound",
+    "transfer": "no transfer across protocols, prompts, camera, renderer, source sampling or annotators",
+    "guarantee": false,
+    "confidence_interval": false,
+    "formal_gt_eligibility": false
+  },
+  "order": [
+    "freeze protocol/acceptance",
+    "render development suite",
+    "oracle and injected-contract tests explicitly nonblind",
+    "read-only OpenCode review",
+    "model blind selfcheck, holdout, cross-model and real sessions NOT_RUN"
+  ],
+  "dependencies": "v1 module retained and hashed together with v2 source and this protocol"
+}

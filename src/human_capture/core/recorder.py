@@ -51,6 +51,9 @@ class Recorder(object):
         self._lock = threading.RLock()
         self._current = None              # _Recording 或 None
         self._watcher = None
+        self._closed = False
+        self._starting = False
+        self._watch_error = None
 
     # ---------- 公开 ----------
 
@@ -63,8 +66,51 @@ class Recorder(object):
             return self._current.session_id if self._current else None
 
     def start(self, session_id):
-        """起录。返回 session_id；已在录抛 RecordError。"""
         with self._lock:
+            if self._closed:
+                raise RecordError('recorder_closed')
+            if self._current is not None or self._starting:
+                raise RecordError('already_recording')
+            self._starting = True
+            self._watch_error = None
+            started = threading.Event()
+            result = {}
+            self._watcher = threading.Thread(target=self._record_and_watch,
+                args=(session_id, started, result), daemon=True, name='recorder-watcher')
+            self._watcher.start()
+        started.wait()
+        if 'error' in result:
+            raise result['error']
+        return session_id
+
+    def _record_and_watch(self, session_id, started, result):
+        try:
+            # A single thread owns the guard before spawn until finalization;
+            # there is no unlocked hand-off from request thread to watcher.
+            with self._store.session_guard(session_id):
+                if self._store.get(session_id) is not None:
+                    raise RecordError('session_already_exists')
+                rec = self._start(session_id)
+                with self._lock:
+                    self._starting = False
+                started.set()
+                self._watch_owned(rec)
+        except Exception as exc:
+            if not started.is_set():
+                result['error'] = exc
+            else:
+                self._watch_error = exc
+                self._log('recorder watcher failed: %r' % exc)
+        finally:
+            with self._lock:
+                self._starting = False
+            started.set()
+
+    def _start(self, session_id):
+        """在当前看护线程内起录并返回句柄；已在录抛 RecordError。"""
+        with self._lock:
+            if self._closed:
+                raise RecordError('recorder_closed')
             if self._current is not None:
                 raise RecordError("already_recording")
             rec = _Recording(session_id, self._cfg["staging_dir"])
@@ -75,7 +121,7 @@ class Recorder(object):
                 "state": "recording",
                 "created_iso": now_iso,
                 "bag_path": rec.bag_path,
-            })
+            }, create_only=True)
 
             # 若 rosbag 不在 PATH（capture_server 自己不是从 source 过的 shell 起），
             # 用 bash -c 包一层 source 再 exec，子进程就能找得到 rosbag。
@@ -97,18 +143,18 @@ class Recorder(object):
                     cmd += ["--config", self._cfg["record_config"]]
 
             self._log("起录: %s" % " ".join(cmd))
-            rec.proc = subprocess.Popen(
-                cmd,
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                start_new_session=True,   # 进程组独立，SIGINT 只打它不打 server
-            )
+            try:
+                rec.proc = subprocess.Popen(
+                    cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL, start_new_session=True)
+            except OSError as exc:
+                self._store.transition(session_id, 'failed',
+                                       {'error': 'spawn_failed: %s' % exc})
+                raise RecordError('spawn_failed: %s' % exc) from exc
             rec.started_monotonic = time.monotonic()
-            rec.thread = threading.Thread(target=self._watch, args=(rec,), daemon=True)
-            rec.thread.start()
+            rec.thread = threading.current_thread()
             self._current = rec
-            return session_id
+            return rec
 
     def stop(self, reason="manual", timeout=None):
         """停录（含自动停）。返回停止的 session_id；没在录返回 None。
@@ -118,12 +164,30 @@ class Recorder(object):
             if rec is None:
                 return None
             if rec.stop_reason is None:
-                self._send_sigint_locked(rec)
+                self._send_sigint_locked(rec, reason=reason)
             return rec.session_id
+
+    def close(self):
+        """Stop and reap the active recorder before the HTTP server closes."""
+        with self._lock:
+            self._closed = True
+            rec = self._current
+            watcher = self._watcher
+            if watcher is None:
+                return
+            if rec is not None:
+                self.stop(reason='server_close')
+        wait = (float(self._cfg.get('sigint_grace_sec', 15))
+                + float(self._cfg.get('sigterm_kill_sec', 5)) + 2)
+        watcher.join(timeout=wait)
+        if watcher.is_alive():
+            raise RecordError('recorder_shutdown_timeout')
+        if self._watch_error is not None:
+            raise RecordError('recorder_watcher_failed: %r' % self._watch_error) from self._watch_error
 
     # ---------- 看护 ----------
 
-    def _watch(self, rec):
+    def _watch_owned(self, rec):
         grace = float(self._cfg.get("sigint_grace_sec", 15))
         timeout = float(self._cfg.get("sigterm_kill_sec", 5))
         escalated = False
@@ -154,7 +218,7 @@ class Recorder(object):
                         escalated = True
                     elif escalated and waited > grace + timeout:
                         try:
-                            _kill_pg(rec.proc, signal.SIGKILL)
+                            _kill_pg(rec.proc, getattr(signal, 'SIGKILL', signal.SIGTERM))
                             self._log("SIGKILL (grace+term 超时)")
                         except (ProcessLookupError, PermissionError):
                             pass

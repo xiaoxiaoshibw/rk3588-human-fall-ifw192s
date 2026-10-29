@@ -8,6 +8,7 @@ catkin_python_setup()
 
 catkin_install_python(PROGRAMS scripts/sensor_health.py scripts/record_session.py
   scripts/calibrate_sensors.py scripts/fall_replay.py scripts/human_fall_node.py
+  scripts/range_image_node.py scripts/range_service_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY config

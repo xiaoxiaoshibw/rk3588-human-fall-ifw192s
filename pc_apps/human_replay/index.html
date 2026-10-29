@@ -39,6 +39,25 @@
   #toolbar .sep { width: 1px; height: 16px; background: var(--border-strong); margin: 0 2px; }
   #toolbar a { color: var(--text-secondary); font-size: 11.5px; padding: 0 6px; }
   #toolbar a:hover { color: var(--text-primary); text-decoration: none; }
+  #toolbar { flex-wrap: wrap; max-width: 72vw; justify-content: flex-end; }
+  #highlightSwitch { appearance: none; width: 30px; height: 18px; margin: 0;
+    border: 1px solid var(--border-strong); border-radius: 10px; background: var(--bg-inset); cursor: pointer; }
+  #highlightSwitch::before { content: ""; display: block; width: 12px; height: 12px; margin: 2px;
+    border-radius: 50%; background: var(--text-muted); }
+  #highlightSwitch:checked { background: #3278b6; border-color: #69baff; }
+  #highlightSwitch:checked::before { transform: translateX(12px); background: white; }
+  #highlightSwitch:focus-visible { outline: 2px solid #69baff; outline-offset: 3px; }
+  #detectBtn[hidden], #freshHud[hidden], #freshControls[hidden] { display: none; }
+  #freshControls { display: flex; gap: 7px; align-items: center; }
+  #perceptionDetails { position:absolute;right:10px;bottom:78px;max-width:310px;max-height:40vh;overflow:auto;
+    background:rgba(26,27,31,.92);border:1px solid var(--border-subtle);border-radius:var(--r-ctl);
+    padding:6px 10px;font:12px/1.6 var(--font-ui);z-index:7;color:var(--text-secondary); }
+  #perceptionDetails[hidden] { display:none; }
+  #perceptionDetails summary { cursor:pointer; }
+  #perceptionEvents { white-space:pre-line; }
+  #freshHud { position: absolute; left: 10px; bottom: 78px; max-width: calc(100vw - 40px);
+    padding: 5px 9px; color: #c9d9ec; background: rgba(26,27,31,.92); border: 1px solid var(--border-subtle);
+    border-radius: var(--r-ctl); font: 11.5px var(--font-ui); pointer-events: none; z-index: 5; }
 
   /* —— 底部时间轴 —— */
   #bottom { position: absolute; left: 0; right: 0; bottom: 0; height: 30px; padding: 0 12px;
@@ -125,6 +144,12 @@
 <div id="flyHud">飞行模式 — WASD 移动 · 空格/Shift 升降 · 滚轮调速 · 鼠标视角 · R=复位 T=正视 · F/ESC 退出</div>
 <div id="frameInfo"></div>
 <div id="status">点「会话」载入 captures\remote\&lt;sid&gt;</div>
+<div id="freshHud" hidden aria-live="polite"></div>
+<details id="perceptionDetails" hidden>
+  <summary>姿态与事件</summary>
+  <div id="perceptionEvents">等待会话</div>
+  <div>倒地姿态与疑似跌倒分开记录，事件尚未核实。</div>
+</details>
 
 <div id="trimBox">
   <b>剪辑 (HR-03)</b>
@@ -154,6 +179,7 @@
   <button id="topBtn" title="7 键：顶视正交">顶视</button>
   <button id="sideBtn" title="3 键：侧视正交">侧视</button>
   <button id="perspBtn" title="0 键：复位透视">透视</button>
+  <button id="measureBtn" title="测点距离：点两个点显示 3D 距离（M 键同，再点关闭）">测距:关</button>
   <span class="sep"></span>
   <label>着色 <select id="lutSel">
     <option value="lut">亮→白</option>
@@ -163,6 +189,20 @@
   <button id="auxBtn" title="辅助显示开关">显示</button>
   <button id="refBtn" title="参照物">参照</button>
   <span class="sep"></span>
+  <label title="背景渐黑、人物高亮、低姿保持；切换后从头播放。旧有误认领仍可能出现。">
+    <input id="highlightSwitch" type="checkbox" role="switch">人物高亮
+  </label>
+  <span id="freshControls" hidden>
+    <label>方案 <select id="perceptionMode" title="切换方案后从头播放，同一会话可比较">
+          <option value="xy">传统v2 · XY（推荐）</option>
+          <option value="metric3d">传统v2 · 3D对照</option>
+          <option value="legacy">原版高亮·同参考</option>
+    </select></label>
+    <label>空场 <select id="freshReference" title="须选择无人、设备位置匹配的原始空场；更换后从头播放">
+      <option value="cap_20261014_221808">10-14 空场</option>
+      <option value="cap_20261015_111738">10-15 空场</option>
+    </select></label>
+  </span>
   <button id="detectBtn" title="HR-09 B1 实时人体锁定">人检:关</button>
 </div>
 
@@ -192,7 +232,7 @@
 <div id="bottom">
   <span>时间轴</span>
   <input id="slider" type="range" min="0" max="0" value="0">
-  <span><kbd>空格</kbd> 播/停 · <kbd>←</kbd><kbd>→</kbd> 帧 · <kbd>Shift</kbd> ×10 · <kbd>F</kbd> 飞行 · <kbd>R</kbd> 复位 · <kbd>T</kbd> 正视</span>
+  <span><kbd>空格</kbd> 播/停 · <kbd>←</kbd><kbd>→</kbd> 帧 · <kbd>Shift</kbd> ×10 · <kbd>F</kbd> 飞行 · <kbd>R</kbd> 复位 · <kbd>T</kbd> 正视 · <kbd>M</kbd> 测距</span>
 </div>
 
 <div id="panel">
@@ -238,7 +278,12 @@
 <script src="vendor/OrbitControls.js"></script>
 <script src="vendor/TransformControls.js"></script>
 <script src="human_replay_lib.js"></script>
+<script src="human_pipe_lib.js"></script>
+<script src="fresh_map_lib.js"></script>
+<script src="traditional_perception.js"></script>
+<script src="fresh_overlay.js"></script>
 <script src="detect_overlay.js"></script>
+<script src="fresh_view.js"></script>
 <script src="replay.js"></script>
 <script src="panel.js"></script>
 <script src="detect_ui.js"></script>
@@ -248,7 +293,9 @@
 (function () {
   var qsid = new URLSearchParams(location.search).get("sid");
   if (qsid && /^[A-Za-z0-9_-]{1,100}$/.test(qsid) && window.__load_session_sid) {
-    window.__load_session_sid(qsid).catch(function () {});  // 失败态已由回放 status 显示
+    Promise.resolve(window.FRESH_VIEW_READY).then(function () {
+      return window.__load_session_sid(qsid);
+    }).catch(function () {});  // 失败态已由回放 status 显示
   }
 })();
 </script>

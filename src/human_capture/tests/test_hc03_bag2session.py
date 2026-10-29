@@ -53,7 +53,8 @@ class TestExtractSkippedWhenModuleMissing(unittest.TestCase):
             self.skipTest("本机有 rosbag，跳过此路径")
         with tempfile.TemporaryDirectory() as tmp:
             src = os.path.join(tmp, "x.bag")
-            open(src, "wb").write(b"#ROSBAG V2.0\n")
+            with open(src, "wb") as handle:
+                handle.write(b"#ROSBAG V2.0\n")
             with self.assertRaises(ExtractError) as ctx:
                 extract(src, os.path.join(tmp, "dest"), "cap_x")
             self.assertIn("rosbag", str(ctx.exception).lower())

@@ -175,6 +175,15 @@ function measure_format(d) {
     return d.toFixed(2) + "m";
 }
 
+/* 测距取点：优先用射线命中的点云点（真 3D 距离，可量身高/任意两点），
+ * 射线 0.5m 内没有点云点时退回地面 z=0 交点（量地面距离用）。
+ * pick 来自 pick_point_on_ray、ground 来自 ray_ground_intersect；都缺 → null。 */
+function measure_point_from(pick, ground) {
+    if (pick) return [pick.x, pick.y, pick.z];
+    if (ground) return [ground[0], ground[1], 0];
+    return null;
+}
+
 /* 射线与平面 z=0 的交点：ray origin + t*dir，dir_z≠0 → t=-origin_z/dir_z
  * 返回 [x,y,0]；dir_z≈0 时返回 null（视线与地面平行，打不到点）。*/
 function ray_ground_intersect(origin, dir) {
@@ -528,6 +537,7 @@ var _api = {
     view_preset: view_preset,
     measure_dist: measure_dist,
     measure_format: measure_format,
+    measure_point_from: measure_point_from,
     ray_ground_intersect: ray_ground_intersect,
     find_nearest_xy: find_nearest_xy,
     LS_PREFIX: LS_PREFIX,

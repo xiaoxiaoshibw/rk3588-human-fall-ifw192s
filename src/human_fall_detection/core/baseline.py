@@ -18,6 +18,7 @@ another target can never inherit it.
 import math
 
 import numpy as np
+from core.features import DEFAULT_SETTINGS as FEATURE_SETTINGS
 
 STATE_IDLE = "idle"
 STATE_PENDING = "pending"
@@ -28,6 +29,8 @@ BASELINE_KIND = "target_stance_baseline"
 SCHEMA_VERSION = 1
 
 DEFAULT_SETTINGS = {
+    # Same source-time continuity limit as the measured action feature history.
+    "max_gap_s": FEATURE_SETTINGS['max_gap_s'],
     "require_seconds": 3.0,
     "max_duration_s": 10.0,
     "min_samples": 15,
@@ -47,7 +50,7 @@ def resolve_settings(settings=None):
         if key not in resolved:
             raise ValueError("unknown baseline setting: " + str(key))
         resolved[key] = value
-    for key in ("require_seconds", "max_duration_s", "max_position_spread_m",
+    for key in ("require_seconds", "max_duration_s", "max_gap_s", "max_position_spread_m",
                 "height_min_m", "height_max_m", "min_stance_upper_m",
                 "min_stance_span_m", "max_height_std_m"):
         resolved[key] = float(resolved[key])
@@ -121,13 +124,63 @@ class StanceBaselineCollector:
         self.baseline = None
         return self.snapshot()
 
+    def feed_automatic(self, candidate, track, source_stamp_s):
+        """Shared automatic policy for live core, PC current and replay.
+
+        A ready stance stays usable for low/stationary measurements of the same
+        binding. Only pending collection requires consecutive stance samples.
+        """
+        binding = (track.get('track_id'), track.get('time_epoch'),
+                   track.get('selection_version'), track.get('action_generation'),
+                   track.get('calibration_version'))
+        own = (self.track_id, self.time_epoch, self.selection_version,
+               self.action_generation, self.calibration_version)
+        if self.status in (STATE_PENDING, STATE_READY) and binding != own:
+            self.invalidate('automatic_target_binding_changed')
+        try:
+            stamp = float(source_stamp_s)
+        except (TypeError, ValueError, OverflowError):
+            stamp = float('nan')
+        if not math.isfinite(stamp):
+            return self.invalidate('automatic_baseline_invalid_time')
+        if self.status == STATE_PENDING and self.samples:
+            delta = stamp - self.samples[-1]['source_stamp_s']
+            if delta <= 0:
+                return self.invalidate('automatic_baseline_nonincreasing_time')
+            if delta > self.settings['max_gap_s']:
+                # Current measured frame is the first sample of a fresh segment.
+                self.invalidate('automatic_baseline_observation_gap')
+        measured = (candidate is not None and track.get('track_status') == 'locked'
+                    and not track.get('position_predicted'))
+        if not measured:
+            if self.status == STATE_PENDING:
+                self.invalidate('automatic_baseline_observation_gap')
+            return self.snapshot()
+        height = candidate.get('height_m') or {}
+        if self.status not in (STATE_PENDING, STATE_READY):
+            if (height.get('max', 0) < self.settings['min_stance_upper_m']
+                    or height.get('p90', 0)-height.get('p10', 0) < self.settings['min_stance_span_m']):
+                return self.snapshot()
+            self.start(binding[0], binding[4], start_source_s=source_stamp_s,
+                       time_epoch=binding[1], selection_version=binding[2],
+                       action_generation=binding[3])
+        if self.status == STATE_PENDING:
+            return self.feed(dict(track_id=binding[0], calibration_version=binding[4],
+                ground_relative=candidate.get('ground_relative_available'),
+                point_count=candidate.get('point_count'), height_m=height,
+                position_m=(candidate.get('center_source_m') or candidate.get('center_reference_m'))),
+                source_stamp_s=source_stamp_s)
+        return self.snapshot()
+
     def feed(self, observation, source_stamp_s=None, predicted=False, occluded=False):
         if self.status != STATE_PENDING:
             return self.snapshot()
         if observation.get("track_id") != self.track_id:
             return self._fail("target_changed")
         if predicted or occluded:
-            self.reason = "observation_not_measured"
+            self.samples = []
+            self.start_source_s = None
+            self.reason = 'observation_not_measured'
             return self.snapshot()
         if observation.get("calibration_version") != self.calibration_version:
             return self._fail("calibration_version_changed")
@@ -142,10 +195,22 @@ class StanceBaselineCollector:
         if height is None or position is None:
             return self._fail("missing_geometry")
         height = float(height)
+        if (not math.isfinite(height) or np.asarray(position).shape != (3,)
+                or not np.isfinite(position).all() or source_stamp_s is None
+                or not math.isfinite(float(source_stamp_s))):
+            return self._fail('invalid_geometry_or_time')
+        stamp = float(source_stamp_s)
+        if self.samples:
+            delta = stamp - self.samples[-1]['source_stamp_s']
+            if delta <= 0 or delta > self.settings['max_gap_s']:
+                return self._fail('nonincreasing_time' if delta <= 0 else 'observation_gap')
         upper = height_block.get("max")
         if upper is None:
             upper = height_block.get("p90")
         upper = float(upper) if upper is not None else height
+        if not math.isfinite(upper) or any(v is not None and not math.isfinite(float(v))
+                                        for v in (height_block.get('p10'), height_block.get('p90'))):
+            return self._fail('invalid_geometry_or_time')
         p10 = height_block.get("p10")
         p90 = height_block.get("p90")
         if not self.samples and upper < self.settings["min_stance_upper_m"]:
@@ -157,6 +222,9 @@ class StanceBaselineCollector:
             return self._fail("insufficient_stance_span")
         if height > self.settings["height_max_m"]:
             return self._fail("height_out_of_range")
+        if not self.samples:
+            self.start_source_s = stamp
+        self.reason = None
         self.samples.append({
             "source_stamp_s": None if source_stamp_s is None else float(source_stamp_s),
             "point_count": int(point_count),
@@ -221,7 +289,7 @@ class StanceBaselineCollector:
             "point_count_median": float(np.median(
                 [sample["point_count"] for sample in self.samples])),
             "thresholds": {key: self.settings[key] for key in (
-                "require_seconds", "min_samples", "min_point_count",
+                "require_seconds", "max_gap_s", "min_samples", "min_point_count",
                 "max_position_spread_m", "height_min_m", "height_max_m",
                 "min_stance_upper_m", "min_stance_span_m", "max_height_std_m")},
             "units": {"length": "m", "time": "s"},

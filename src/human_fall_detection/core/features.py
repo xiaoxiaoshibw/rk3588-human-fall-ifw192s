@@ -30,6 +30,7 @@ SCHEMA_VERSION = 1
 
 DEFAULT_SETTINGS = {
     "window_s": 1.2,
+    "max_gap_s": 0.3,
     "max_history": 64,
     "low_height_m": 0.7,
     "near_ground_tolerance_m": 0.05,
@@ -47,10 +48,12 @@ def resolve_settings(settings=None):
         if key not in resolved:
             raise ValueError("unknown feature setting: " + str(key))
         resolved[key] = value
-    for key in ("window_s", "low_height_m", "near_ground_tolerance_m"):
+    for key in ("window_s", "max_gap_s", "low_height_m", "near_ground_tolerance_m"):
         resolved[key] = float(resolved[key])
         if not np.isfinite(resolved[key]) or resolved[key] < 0.0:
             raise ValueError(key + " must be a finite non-negative number")
+    if resolved["max_gap_s"] <= 0:
+        raise ValueError("max_gap_s must be positive")
     resolved["max_history"] = int(resolved["max_history"])
     if resolved["max_history"] <= 0:
         raise ValueError("max_history must be positive")
@@ -85,6 +88,8 @@ class FeatureExtractor:
         self.session_id = session_id
         self.settings = resolve_settings(settings)
         self.history = []
+        self._segment_id = 0
+        self._gap_pending = False
         self.history_reset_reason = None
         self._last_epoch = None
         self._last_generation = None
@@ -93,7 +98,14 @@ class FeatureExtractor:
 
     def _reset(self, reason):
         self.history = []
+        self._segment_id = 0
+        self._gap_pending = False
         self.history_reset_reason = reason
+
+    def _note_gap(self):
+        # 保留实测历史供诊断，但下一次观测不能跨缺口拟合或计时。
+        if self.history:
+            self._gap_pending = True
 
     def _check_context(self, observation):
         epoch = observation.get("time_epoch")
@@ -119,13 +131,19 @@ class FeatureExtractor:
         return reason
 
     def _base(self, observation, reset_now):
+        try:
+            source_s = float(observation.get("source_stamp_s"))
+            if not np.isfinite(source_s):
+                source_s = None
+        except (TypeError, ValueError, OverflowError):
+            source_s = None
         return {
             "kind": KIND,
             "schema_version": SCHEMA_VERSION,
             "session_id": self.session_id,
             "time_epoch": observation.get("time_epoch"),
             "track_id": observation.get("track_id"),
-            "source_stamp_s": observation.get("source_stamp_s"),
+            "source_stamp_s": source_s,
             "observable": False,
             "reason": None,
             "reset_now": bool(reset_now),
@@ -152,15 +170,40 @@ class FeatureExtractor:
         candidate = observation.get("candidate")
         if observation.get("position_predicted"):
             features["reason"] = "prediction_not_observation"
+            self._note_gap()
             return features
         if candidate is None or not candidate.get("ground_relative_available"):
             features["reason"] = "no_ground_or_candidate"
+            self._note_gap()
             return features
         height = (candidate.get("height_m") or {}).get("median")
         if height is None:
             features["reason"] = "no_height"
+            self._note_gap()
             return features
-        source_stamp_s = observation.get("source_stamp_s")
+        try:
+            height = float(height)
+        except (TypeError, ValueError, OverflowError):
+            height = None
+        if height is None or not np.isfinite(height):
+            features["reason"] = "invalid_height"
+            self._note_gap()
+            return features
+        source_stamp_s = features["source_stamp_s"]
+        if source_stamp_s is None:
+            features["reason"] = "invalid_source_time"
+            self._note_gap()
+            return features
+        last_s = self.history[-1]["source_stamp_s"] if self.history else None
+        if last_s is not None and source_stamp_s <= last_s:
+            features["reason"] = "nonincreasing_source_time"
+            self._note_gap()
+            return features
+        if self._gap_pending or (last_s is not None and
+                source_stamp_s - last_s > self.settings["max_gap_s"] + 1e-9):
+            self._segment_id += 1
+            features["observation_gap"] = True
+        self._gap_pending = False
         features["observable"] = True
         features["ground_relative"] = True
         features["height_m"] = candidate.get("height_m")
@@ -182,7 +225,7 @@ class FeatureExtractor:
 
         if source_stamp_s is not None:
             self.history.append({"source_stamp_s": float(source_stamp_s),
-                                 "height_m": float(height)})
+                                 "height_m": float(height), "segment_id": self._segment_id})
             if len(self.history) > self.settings["max_history"]:
                 self.history = self.history[-self.settings["max_history"]:]
         features["descent_rate_m_s"] = self._descent_rate()
@@ -194,8 +237,10 @@ class FeatureExtractor:
         if len(self.history) < 2:
             return None
         current = self.history[-1]["source_stamp_s"]
+        segment = self.history[-1]["segment_id"]
         window = [sample for sample in self.history
-                  if current - sample["source_stamp_s"] <= self.settings["window_s"]]
+                  if sample["segment_id"] == segment and
+                  current - sample["source_stamp_s"] <= self.settings["window_s"]]
         if len(window) < 2:
             return None
         fit = linear_fit([sample["source_stamp_s"] for sample in window],
@@ -211,7 +256,10 @@ class FeatureExtractor:
         if self.history[-1]["height_m"] > threshold:
             return 0.0
         start = self.history[-1]["source_stamp_s"]
+        segment = self.history[-1]["segment_id"]
         for sample in reversed(self.history):
+            if sample["segment_id"] != segment:
+                break
             if sample["height_m"] <= threshold:
                 start = sample["source_stamp_s"]
             else:

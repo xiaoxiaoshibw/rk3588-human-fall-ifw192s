@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>IFW192S 浴室 Demo - 距离图 / 跟踪 / 跌倒状态</title>
+<style>
+:root{--bg:#0b0e13;--panel:#141922;--line:#2a3240;--ink:#e6ecf5;--muted:#8e9aab;--red:#ff4b4b;--green:#50dc78;--blue:#4b8dff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:22px;margin:0 0 6px}h2{font-size:17px;margin:22px 0 8px}
+.muted{color:var(--muted)}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+img{width:100%;display:block;border-radius:8px;background:#000}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+button{background:#1d2634;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--blue)}input[type=range]{flex:1;min-width:180px}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+code{background:#0d1219;padding:1px 5px;border-radius:4px;color:#c9d7ff}
+.warn{border-left:3px solid #b8860b;background:#1b170d;padding:10px 12px;border-radius:8px}
+</style></head><body><div class="wrap">
+<h1>IFW192S 浴室 Demo</h1>
+<p class="muted">距离图 → 逐射线背景残差 → 深度连续分量 → 跟踪 → 高度/跨度规则 + 5 状态 HMM。
+本地离线页面，直接双击打开；不含 ROS，不写设备。</p>
+<div class="warn"><b>边界：</b>真实会话没有跌倒，展示的是锁定/直立/低位支撑；跌倒事件来自 <b>合成胶囊体</b>（算法测试），不是人体、不是采集效果。没有浴室真实数据时，浴室召回/误报仍是 UNKNOWN。</div>
+
+<h2>1. 真实会话：386 帧，2 m 左右，单人（无跌倒）</h2>
+<div class="card"><img id="real-img" alt="real"><div class="row">
+<button id="real-play">播放 / 暂停</button><input id="real-slider" type="range" min="0" max="$real_max" value="0">
+<span id="real-label" class="muted"></span></div>
+<div id="real-stats" class="muted" style="margin-top:8px"></div></div>
+
+<h2>2. 合成跌倒：真实空场 + 胶囊体刚性下跌（算法测试）</h2>
+<div class="card"><img id="synth-img" alt="synth"><div class="row">
+<button id="synth-play">播放 / 暂停</button><input id="synth-slider" type="range" min="0" max="$synth_max" value="0">
+<span id="synth-label" class="muted"></span></div>
+<div id="synth-stats" class="muted" style="margin-top:8px"></div></div>
+
+<h2>指标</h2>
+<div class="card"><table><tr><th>项</th><th>真实会话</th><th>合成跌倒</th></tr>
+<tr><td>帧数</td><td>$frames_real</td><td>$frames_synth</td></tr>
+<tr><td>有目标帧 / 占比</td><td>$target_real / $ratio_real</td><td>$target_synth / $ratio_synth</td></tr>
+<tr><td>目标点数中位</td><td>$points_real</td><td>$points_synth</td></tr>
+<tr><td>目标距离中位</td><td>$range_real</td><td>$range_synth</td></tr>
+<tr><td>目标高度中位</td><td>$height_real</td><td>$height_synth</td></tr>
+<tr><td>状态计数（规则）</td><td><code>$states_real</code></td><td><code>$states_synth</code></td></tr>
+<tr><td>HMM 状态计数</td><td><code>$hmm_states_real</code></td><td><code>$hmm_states_synth</code></td></tr>
+<tr><td>HMM 新跌倒 / 长躺帧</td><td>$hmm_fall_real / $hmm_long_real</td><td>$hmm_fall_synth / $hmm_long_synth</td></tr>
+<tr><td>ID 切换</td><td>$id_real</td><td>$id_synth</td></tr>
+</table></div>
+
+<h2>怎么读</h2>
+<ul>
+<li><b>左图</b>：192×240 距离图；灰=前景残差，红=锁定目标；红框=目标像素包围盒。</li>
+<li><b>右图</b>：俯视 BEV；灰=前景点，红=目标点，蓝=轨迹尾迹，青=传感器。</li>
+<li><b>状态</b>：规则层 upright / transition / descending / fall_suspected / long_lie_suspected / low_support；
+HMM 层 upright / sitting / descending / lying / recovering。两路都输出候选，<code>fall_suspected</code> 不是 confirmed，页面不写事件、不发命令。</li>
+<li>合成跌倒约第 35 帧进入 HMM fall_suspected，约第 85 帧进入 long_lie_suspected（demo 的 long_lie=5 s；生产协议是 30 s）。</li>
+</ul>
+
+<h2>复现</h2>
+<pre><code>python -B pc_apps/bathroom_demo/make_demo.py --session data/sessions/cap_20261018_110029 --transform docs/human_fall/evidence/2026-10-18_hfus_project_dev_r1/leveling_02/TRANSFORM.json --out docs/evidence/2026-10-23_bathroom_demo</code></pre>
+<p class="muted">实现：<code>pc_apps/bathroom_demo/range_pipeline.py</code> 与 <code>fall_hmm.py</code>（纯 NumPy，3.8 兼容）。测试：<code>python -B -W error -m unittest discover -s pc_apps/bathroom_demo -p "test_*.py"</code>。</p>
+</div>
+<script>
+const REAL = $real_json;
+const SYNTH = $synth_json;
+function setup(name, data, maxIndex, fps) {
+  const img = document.getElementById(name + '-img');
+  const slider = document.getElementById(name + '-slider');
+  const label = document.getElementById(name + '-label');
+  const stats = document.getElementById(name + '-stats');
+  const btn = document.getElementById(name + '-play');
+  let index = 0, timer = null;
+  function show(i) {
+    index = Math.max(0, Math.min(maxIndex, i));
+    slider.value = index;
+    img.src = 'frames/' + name + '/f' + String(index).padStart(3, '0') + '.png';
+    const r = data[index];
+    label.textContent = 'frame ' + r.index + ' / ' + maxIndex + '  t=' + r.stamp.toFixed(2) + 's';
+    const t = r.target;
+    stats.textContent = t ? ('rule=' + r.state + '  hmm=' + r.hmm_state + '  pL=' + r.hmm_p_lying.toFixed(2) +
+      '  track=' + t.id + '  pts=' + t.count +
+      '  range=' + t.range_m.toFixed(2) + 'm  h90=' + t.height_p90.toFixed(2) +
+      'm  span=' + t.height_span.toFixed(2) + 'm') : ('rule=' + r.state + '  hmm=' + r.hmm_state + '  no target  fg=' + r.n_fg);
+  }
+  slider.max = maxIndex; slider.oninput = e => show(parseInt(e.target.value, 10));
+  btn.onclick = () => {
+    if (timer) { clearInterval(timer); timer = null; return; }
+    timer = setInterval(() => { show(index >= maxIndex ? 0 : index + 1); }, 1000 / fps);
+  };
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') show(index - 1);
+    if (e.key === 'ArrowRight') show(index + 1);
+  });
+  show(0);
+}
+setup('real', REAL, REAL.length - 1, 10);
+setup('synth', SYNTH, SYNTH.length - 1, 10);
+</script></body></html>

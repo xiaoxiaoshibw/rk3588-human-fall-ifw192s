@@ -135,6 +135,42 @@ class FallNodeCoreTest(unittest.TestCase):
         _strict_json(state)
         _strict_json(result["snapshot"])
 
+    def test_live_clock_sampled_under_lock_after_auxiliary_update(self):
+        core = self._core()
+        core.note_imu(100.02, (10, 0), "innolidar", True)
+        core.note_device(100.02, (10, 0), "innolidar")
+
+        def clock():
+            self.assertTrue(core._lock._is_owned())
+            return 100.03
+
+        state = core.process(np.empty((0, 3)), 100.0, seq=1,
+            stamp_secs=10, stamp_nsecs=0, frame_id="innolidar",
+            now=100.01, now_fn=clock)["state"]
+        for label in ("imu", "device"):
+            self.assertEqual(state["sensor_quality"][label]["status"], "fresh")
+            self.assertAlmostEqual(state["sensor_quality"][label]["age_s"], .01)
+        self.assertEqual(state["time_received_s"], 100.03)
+        refreshed = core.status_state(100.01, now_fn=clock)
+        self.assertEqual(refreshed["sensor_quality"]["imu"]["status"], "fresh")
+
+    def test_watchdog_replaces_auxiliary_freshness_reasons(self):
+        core = self._core()
+        self._frame(core, 100.0, 1, (10, 0))
+        self.assertIn("imu_no_data", core.status_state(100.01)["reason_codes"])
+        core.note_imu(100.02, (10, 0), "innolidar", True)
+        core.note_device(100.02, (10, 0), "innolidar")
+        # Explicit replay times keep the negative-age rejection contract.
+        state = core.process(np.empty((0, 3)), 100.0, seq=2,
+            stamp_secs=10, stamp_nsecs=100000000, frame_id="innolidar", now=100.01)["state"]
+        self.assertEqual(state["sensor_quality"]["imu"]["status"], "stale")
+        self.assertIn("imu_stale", state["reason_codes"])
+        refreshed = core.status_state(100.03)
+        for label in ("imu", "device"):
+            self.assertEqual(refreshed["sensor_quality"][label]["status"], "fresh")
+            self.assertNotIn(label + "_stale", refreshed["reason_codes"])
+            self.assertNotIn(label + "_no_data", refreshed["reason_codes"])
+
     def test_no_ground_degrades_and_stays_unknown(self):
         core = self._core(ground=None)
         result = self._frame(core, 1.0, 1, (100, 0))

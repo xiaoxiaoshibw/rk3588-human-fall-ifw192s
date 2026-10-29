@@ -15,20 +15,59 @@ import json
 import os
 import tempfile
 import threading
+from contextlib import contextmanager
 
 try:
     import fcntl  # POSIX；板上容器可用，Windows 单测走另一分支
 except ImportError:  # pragma: no cover - windows
     fcntl = None
+    import msvcrt
+
+_LOCKS = {}
+_LOCKS_GUARD = threading.Lock()
+_HELD = threading.local()
+
+
+@contextmanager
+def _path_lock(path):
+    """One lock order on every platform; nested calls reuse the OS lock."""
+    key = os.path.normcase(os.path.abspath(path))
+    with _LOCKS_GUARD:
+        mutex = _LOCKS.setdefault(key, threading.RLock())
+    with mutex:
+        held = getattr(_HELD, 'paths', set())
+        if key in held:
+            yield
+            return
+        os.makedirs(os.path.dirname(key) or '.', exist_ok=True)
+        with open(key, 'a+b') as fh:
+            if fcntl is not None:
+                fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+            else:  # Windows local server / multiple store instances
+                if os.fstat(fh.fileno()).st_size == 0:
+                    fh.write(b'\0')
+                    fh.flush()
+                fh.seek(0)
+                msvcrt.locking(fh.fileno(), msvcrt.LK_LOCK, 1)
+            _HELD.paths = held | {key}
+            try:
+                yield
+            finally:
+                _HELD.paths = held
+                if fcntl is not None:
+                    fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+                else:
+                    fh.seek(0)
+                    msvcrt.locking(fh.fileno(), msvcrt.LK_UNLCK, 1)
 
 SCHEMA_VERSION = 1
-SERVICE_VERSION = "0.1.0"
+SERVICE_VERSION = "0.2.0"
 
 # README §8 状态机：recording → extracting → ready → transferring → transferred → purged
 # 异常支：任何状态可进 failed；failed 可被重新置 extracting（人工重试抽取）。
 LEGAL_TRANSITIONS = {
-    "recording": {"extracting", "failed", "purged"},
-    "extracting": {"ready", "failed", "purged"},
+    "recording": {"extracting", "failed"},
+    "extracting": {"ready", "failed"},
     "ready": {"transferring", "purged", "extracting"},
     "transferring": {"transferred", "failed", "ready"},  # 下载中断可退回 ready
     "transferred": {"purged"},
@@ -45,7 +84,7 @@ def validate_session_id(session_id):
     """会话 id 只允许安全字符，杜绝 PATCH/文件路径拼接被注入。"""
     if not isinstance(session_id, str) or not session_id:
         return False
-    return len(session_id) <= 128 and set(session_id) <= SESSION_ID_CHARS
+    return session_id not in ('.', '..') and len(session_id) <= 128 and set(session_id) <= SESSION_ID_CHARS
 
 
 def _now_dict():
@@ -99,36 +138,39 @@ class SessionStore(object):
             raise
 
     def _with_file_lock(self, fn):
-        """POSIX 下用 fcntl 给 db 文件加排他锁包住 读-改-写；无 fcntl 时退化为进程内锁。"""
-        if fcntl is None:  # pragma: no cover - windows
+        with _path_lock(self._db_path + '.lock'):
             return fn()
-        lock_path = self._db_path + ".lock"
-        os.makedirs(os.path.dirname(lock_path) or ".", exist_ok=True)
-        with open(lock_path, "a+") as lock_fh:
-            fcntl.flock(lock_fh.fileno(), fcntl.LOCK_EX)
-            try:
-                return fn()
-            finally:
-                fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
+
+    def session_guard(self, session_id):
+        """Hold across actual I/O and state writes; session lock precedes DB lock.
+
+        Extraction, recording watcher and file serving use this same lock as
+        cleanup. No DB lock is held during their long-running I/O.
+        """
+        if not validate_session_id(session_id):
+            raise ValueError('session_id 非法')
+        return _path_lock(self._db_path + '.session.' + session_id + '.lock')
 
     # ---------- 查询 ----------
 
     def list_sessions(self):
-        with self._lock:
-            return copy.deepcopy(self._db["sessions"])
+        def read():
+            with self._lock:
+                self._db = self._load_or_init()
+                return copy.deepcopy(self._db['sessions'])
+        return self._with_file_lock(read)
 
     def get(self, session_id):
         if not validate_session_id(session_id):
             return None
-        with self._lock:
-            for s in self._db["sessions"]:
-                if s["session_id"] == session_id:
-                    return copy.deepcopy(s)
+        for s in self.list_sessions():
+            if s['session_id'] == session_id:
+                return s
         return None
 
     # ---------- 变更 ----------
 
-    def upsert(self, meta):
+    def upsert(self, meta, create_only=False):
         """登记或整体替换一个会话（录入器用）。meta 至少带 REQUIRED_FIELDS。"""
         missing = [k for k in REQUIRED_FIELDS if k not in meta]
         if missing:
@@ -143,6 +185,10 @@ class SessionStore(object):
                 self._db = self._load_or_init()  # 跨进程场景下先吸收他人写入
                 for i, s in enumerate(self._db["sessions"]):
                     if s["session_id"] == meta["session_id"]:
+                        if create_only:
+                            raise ValueError('session_already_exists')
+                        if s.get('cleanup_pending') or s['state'] == 'purged':
+                            raise ValueError('会话已清理或清理待重试')
                         self._db["sessions"][i] = copy.deepcopy(meta)
                         break
                 else:
@@ -151,7 +197,8 @@ class SessionStore(object):
                 self._db["sessions"].sort(key=lambda s: s.get("created_iso", ""), reverse=True)
                 self._persist_locked()
 
-        self._with_file_lock(_op)
+        with self.session_guard(meta['session_id']):
+            self._with_file_lock(_op)
 
     def transition(self, session_id, new_state, extra=None):
         """状态机迁移。返回 (ok, reason)。extra 合并进会话（如 error、download_requested）。"""
@@ -168,6 +215,9 @@ class SessionStore(object):
                 for s in self._db["sessions"]:
                     if s["session_id"] == session_id:
                         current = s["state"]
+                        if s.get('cleanup_pending'):
+                            result['err'] = '清理待重试'
+                            return
                         if new_state not in LEGAL_TRANSITIONS.get(current, set()):
                             result["err"] = "非法迁移 %s -> %s" % (current, new_state)
                             return
@@ -179,7 +229,8 @@ class SessionStore(object):
                         return
                 result["err"] = "会话不存在"
 
-        self._with_file_lock(_op)
+        with self.session_guard(session_id):
+            self._with_file_lock(_op)
         if result.get("ok"):
             return True, ""
         return False, result.get("err", "unknown")
@@ -201,12 +252,50 @@ class SessionStore(object):
                 if removed:
                     self._persist_locked()
 
-        self._with_file_lock(_op)
+        with self.session_guard(session_id):
+            self._with_file_lock(_op)
         return bool(removed)
+
+    def cleanup(self, session_id, remove_artifacts, reason, delete_record=False):
+        """Atomic ownership -> whitelist removal -> durable final state.
+
+        Persist intent first: a crash/partial deletion remains registered and
+        retryable only by cleanup, never eligible for extraction/transfer.
+        """
+        # Avoid queuing a destructive request behind a long-running worker.
+        # This is advisory only: op() rechecks while owning both locks.
+        current = self.get(session_id)
+        if current is not None and current['state'] in ('recording', 'extracting', 'transferring'):
+            return False, 'busy', []
+        def op():
+            with self._lock:
+                self._db = self._load_or_init()
+                row = next((s for s in self._db['sessions'] if s['session_id'] == session_id), None)
+                if row is None:
+                    return False, '会话不存在', []
+                if row['state'] not in ('ready', 'failed', 'transferred', 'purged'):
+                    return False, 'busy', []
+                if row['state'] == 'purged' and not delete_record and not row.get('cleanup_pending'):
+                    return False, 'already_purged', []
+                row['cleanup_pending'] = True
+                self._persist_locked()
+                try:
+                    removed = remove_artifacts()
+                except Exception as exc:
+                    row['cleanup_error'] = repr(exc)
+                    self._persist_locked()
+                    raise
+                row.update(state='purged', purged_reason=reason, cleanup_pending=False)
+                row.pop('cleanup_error', None)
+                if delete_record:
+                    self._db['sessions'].remove(row)
+                self._persist_locked()
+                return True, '', removed
+        with self.session_guard(session_id):
+            return self._with_file_lock(op)
 
     # ---------- 供 FIFO/状态接口用的聚合 ----------
 
     def summary_counts(self):
-        with self._lock:
-            recording = any(s["state"] == "recording" for s in self._db["sessions"])
-            return {"sessions_total": len(self._db["sessions"]), "recording": recording}
+        sessions = self.list_sessions()
+        return {'sessions_total': len(sessions), 'recording': any(s['state'] == 'recording' for s in sessions)}

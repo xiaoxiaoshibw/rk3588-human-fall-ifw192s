@@ -29,8 +29,9 @@
         view_name: "persp",        // 当前视图预设名（7/1/3/0/home 同步）
         cam_persp: null,           // 备用 persp camera（视图切换保留视野）
         mouse_xy_ground: null,     // 鼠标在地面 z=0 上的投影 [x,y]
+        mouse_client: null,        // 鼠标最近一次的屏幕坐标 [clientX, clientY]（测距取点用）
         snap_pt: null,             // P 键拾取快照 {x,y,z,i,seq}
-        measure: { p1: null, line: null },  // M 标尺状态
+        measure: { on: false, p1: null, line: null },  // 测距标尺状态（on=点击测量模式）
         refs: {},                  // 参照物 Group map
         drag_person: null,         // 拖拽中状态
         aux_state: {},             // checkbox 状态（localStorage 持久化）
@@ -41,7 +42,7 @@
     ["pickBtn", "dirInput", "status", "hud", "playBtn", "speedSel", "loopChk",
      "slider", "frameInfo", "metaBox", "lutSel", "flyHud",
      "trimBox", "trimInfo", "trimCmd", "metaToggle", "trimToggle",
-     "resetBtn", "frontBtn", "topBtn", "sideBtn", "perspBtn",
+     "resetBtn", "frontBtn", "topBtn", "sideBtn", "perspBtn", "measureBtn",
      "auxBtn", "refBtn", "auxMenu", "refMenu", "coordHud",
      "auxGrid", "auxGridFine", "auxAxes", "auxOrigin",
      "refPersonStand", "refPersonLying", "refDoor21", "refDoor17",
@@ -183,19 +184,21 @@
         load(metaF, binF);
     });
 
-    function load(metaFile, binFile) {
+    function load(metaFile, binFile, origin) {
         status("载入 meta…");
         return metaFile.text().then(function (txt) {
             /* B2-A-FIX-R1 FIX-3: 单点接管会话生命周期 — 任何 load 入口(下拉/目录/
              * ?sid=/panel.load_by_sid) 都先 bump 会话代际并重置 overlay 状态.
              * 旧会话的异步/rAF/滑块残留因 gen 不符在 on_frame 被忽略 (见 detect_overlay). */
             S.meta = JSON.parse(txt);
+            S.load_source = origin || "manual";
             if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY) {
                 S.session_gen = HUMAN_DETECT_OVERLAY.notify_session();
                 HUMAN_DETECT_OVERLAY.reset();
             }
             S.tracker_last_idx = -1;   /* frame identity 守卫: 见 set_idx */
             trim_clear();
+            measure_clear();           /* 换会话：旧标尺坐标对新点云没意义 */
             return binFile.arrayBuffer();
         }).then(function (buf) {
             status("解析点云…");
@@ -254,6 +257,8 @@
                         tr = { R: d.R, t: d.t, est: "default-113611 " + d.est };
                     }
                     apply_Rt_inplace(tr.R, tr.t);
+                    if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY &&
+                        HUMAN_DETECT_OVERLAY.set_transform) HUMAN_DETECT_OVERLAY.set_transform(tr.R, tr.t);
                     status("已应用配平 transform（" + tr.est + "）");
                     /* human_track overlay: 现在 buf_f32 是 leveled 的了, 不必每帧再乘 R/T */
                     if (typeof HUMAN_DETECT_OVERLAY !== "undefined" && HUMAN_DETECT_OVERLAY) {
@@ -273,7 +278,8 @@
     window.__load_session_sid = function (sid) {
         return load(
             { name: "meta.json",   text: function () { return fetch("/api/file?sid=" + encodeURIComponent(sid) + "&name=meta.json").then(function (r) { if (!r.ok) throw new Error("meta HTTP " + r.status); return r.text(); }); } },
-            { name: "points.bin",  arrayBuffer: function () { return fetch("/api/file?sid=" + encodeURIComponent(sid) + "&name=points.bin").then(function (r) { if (!r.ok) throw new Error("bin HTTP " + r.status); return r.arrayBuffer(); }); } }
+            { name: "points.bin",  arrayBuffer: function () { return fetch("/api/file?sid=" + encodeURIComponent(sid) + "&name=points.bin").then(function (r) { if (!r.ok) throw new Error("bin HTTP " + r.status); return r.arrayBuffer(); }); } },
+            "server"
         );
     };
 
@@ -564,6 +570,12 @@
     if (els.topBtn) els.topBtn.addEventListener("click", function () { apply_view_preset("top"); });
     if (els.sideBtn) els.sideBtn.addEventListener("click", function () { apply_view_preset("side"); });
     if (els.perspBtn) els.perspBtn.addEventListener("click", function () { apply_view_preset("persp"); });
+    if (els.measureBtn) els.measureBtn.addEventListener("click", function () {
+        S.measure.on = !S.measure.on;
+        if (!S.measure.on) measure_clear();
+        els.measureBtn.textContent = S.measure.on ? "测距:开" : "测距:关";
+        status(S.measure.on ? "测距：在点云上点两个点出距离（M 键同；再点按钮关闭）" : "测距已关", false);
+    });
 
     /* ---- HR-04 aux/refs 菜单 + localStorage ---- */
     function ls_get(k, def) {
@@ -680,12 +692,28 @@
         els.auxMenu.classList.remove("open");
     });
 
+    /* 拖着转视角不算测距：按下→抬起位移 ≤4px 且测距开着，才算一次取点 */
+    function bind_measure_click() {
+        if (!S.renderer) return;
+        var down = null;
+        S.renderer.domElement.addEventListener("mousedown", function (ev) {
+            if (ev.button === 0) down = [ev.clientX, ev.clientY];
+        });
+        S.renderer.domElement.addEventListener("mouseup", function (ev) {
+            var d0 = down; down = null;
+            if (!d0 || ev.button !== 0 || !S.measure.on) return;
+            if (Math.hypot(ev.clientX - d0[0], ev.clientY - d0[1]) > 4) return;
+            measure_step(ev.clientX, ev.clientY);
+        });
+    }
+
     /* 人形拖拽：standing person 被点击且左键保持，沿地面拖 */
     var _drag_raycaster = new THREE.Raycaster();
     function bind_person_drag() {
         if (!S.renderer) return;
         S.renderer.domElement.addEventListener("mousedown", function (ev) {
             if (ev.button !== 0 || !S.refs.ref_person_stand) return;
+            if (S.measure.on) return;   /* 测距模式：这次点击是取点，不是拖人形 */
             var ndc = new THREE.Vector2(
                 (ev.clientX / window.innerWidth) * 2 - 1,
                 -(ev.clientY / window.innerHeight) * 2 + 1
@@ -741,7 +769,7 @@
         else if (ev.code === "Digit0") { apply_view_preset("persp"); ev.preventDefault(); }
         else if (ev.code === "Home") { reset_cam(); ev.preventDefault(); }
         else if (ev.code === "KeyP") { snap_nearest_at_cursor(); ev.preventDefault(); }
-        else if (ev.code === "KeyM") { measure_step(); ev.preventDefault(); }
+        else if (ev.code === "KeyM") { measure_step_at_cursor(); ev.preventDefault(); }
     });
 
     /* ---- HR-04 坐标读数 + P/M 逻辑 ---- */
@@ -761,6 +789,7 @@
 
     window.addEventListener("mousemove", function (ev) {
         if (!S.camera) return;
+        S.mouse_client = [ev.clientX, ev.clientY];
         var g = cursor_ground_xy(ev);
         S.mouse_xy_ground = g;
         if (els.coordHud) {
@@ -797,31 +826,60 @@
         S._snap_marker.visible = true;
     }
 
-    /* M 键：标尺 三态（无尺→起首尺→出尺→清尺） */
-    function measure_step() {
+    /* ---- 测点距离（HR-04 标尺升级：取点云真点，不再是地面投影两点） --------------------------
+     * 取点优先级：光标射线 0.5m 内的点云点（3D，能量身高/任意两点）→ 地面 z=0 交点。
+     * 三态：起点 → 出尺 → 清除；M 键与「测距」按钮点击同一套逻辑。 */
+    var MEASURE_PICK_R = 0.5;      /* 同 human_detect 的准星挑点半径 */
+
+    function measure_pick(cx, cy) {
+        if (!S.frames || !S.buf_f32) return null;
+        var ndc = new THREE.Vector2(
+            (cx / window.innerWidth) * 2 - 1,
+            -(cy / window.innerHeight) * 2 + 1
+        );
+        _raycaster.setFromCamera(ndc, S.camera);
+        var o = _raycaster.ray.origin, d = _raycaster.ray.direction;
+        var f = S.frames[S.idx];
+        var slice = L.strided_f32_copy(S.buf_f32, f.start_pts, f.count, L.STRIDE_F32);
+        return L.measure_point_from(
+            L.pick_point_on_ray([o.x, o.y, o.z], [d.x, d.y, d.z], slice, MEASURE_PICK_R),
+            L.ray_ground_intersect([o.x, o.y, o.z], [d.x, d.y, d.z]));
+    }
+
+    function measure_step(cx, cy) {
         /* 第三态：已出线，清 */
         if (S.measure.line) {
             measure_clear();
             status("标尺已清除", false);
             return;
         }
+        var p = (cx != null) ? measure_pick(cx, cy)
+            : (S.mouse_xy_ground ? [S.mouse_xy_ground[0], S.mouse_xy_ground[1], 0] : null);
+        if (!p) { status("没取到点：把光标移到点云上（没有云点则落地面）", true); return; }
         /* 第二态：有 p1，出尺 */
-        if (S.measure.p1 && S.mouse_xy_ground) {
-            var p1 = S.measure.p1.slice(), p2 = S.mouse_xy_ground.slice();
-            p1[2] = 0; p2[2] = 0;
-            var d = L.measure_dist(p1, p2);
-            measure_render(p1, p2, d);
+        if (S.measure.p1) {
+            var p1 = S.measure.p1, d = L.measure_dist(p1, p);
+            measure_render(p1, p, d);
             status("距离 " + L.measure_format(d) +
-                "  (p1=" + p1[0].toFixed(2) + "," + p1[1].toFixed(2) +
-                "  p2=" + p2[0].toFixed(2) + "," + p2[1].toFixed(2) + ")", false);
+                "  (水平 " + L.measure_format(Math.hypot(p[0] - p1[0], p[1] - p1[1])) +
+                " / 高差 " + L.measure_format(Math.abs(p[2] - p1[2])) + ")" +
+                "  p1=(" + measure_fmt_pt(p1) + ")  p2=(" + measure_fmt_pt(p) + ")", false);
             S.measure.p1 = null;
             return;
         }
         /* 第一态：起首尺 */
-        if (!S.mouse_xy_ground) { status("先移动鼠标到地面", true); return; }
-        S.measure.p1 = S.mouse_xy_ground.slice();
-        status("标尺: 起点 (" + S.measure.p1[0].toFixed(2) + ", " + S.measure.p1[1].toFixed(2) +
-            ")，移动鼠标后按 M 定终点", false);
+        S.measure.p1 = p;
+        status("测距: 起点 (" + measure_fmt_pt(p) + ")，移到第二点再按 M / 再点一下", false);
+    }
+
+    /* M 键入口：优先用光标位置取点（能吃到云点），没有鼠标位置记录才退到地面读数 */
+    function measure_step_at_cursor() {
+        var m = S.mouse_client;
+        measure_step(m ? m[0] : null, m ? m[1] : null);
+    }
+
+    function measure_fmt_pt(p) {
+        return p[0].toFixed(2) + "," + p[1].toFixed(2) + "," + p[2].toFixed(2);
     }
 
     function measure_render(p1, p2, d) {
@@ -840,9 +898,9 @@
             ball.position.set(p[0], p[1], p[2]);
             g.add(ball);
         });
-        /* 距离标签：Sprite 文字（canvas 转 texture） */
+        /* 距离标签：Sprite 文字（canvas 转 texture），挂在两端中点（3D 量高时也贴在线中间） */
         var label = make_text_sprite(L.measure_format(d));
-        label.position.set((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2, 0.5);
+        label.position.set((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2, (p1[2] + p2[2]) / 2);
         g.add(label);
         S.scene.add(g);
         S.measure.line = g;
@@ -956,6 +1014,7 @@
     refs_init_from_ls();
     /* 绑定在 setup_scene 之后执行（S.renderer 才有值） */
     bind_person_drag();
+    bind_measure_click();
 
     /* HR-09 B1 实时检测钩子需要拿 S + set_idx: 显式导出 (不影响内部封装) */
     window.replay_internal = { S: S, set_idx: set_idx };

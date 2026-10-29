@@ -57,6 +57,37 @@ def _get(url):
         return resp.status, json.loads(resp.read().decode("utf-8"))
 
 
+class TestConfigParsing(unittest.TestCase):
+    """The flat config reader must not turn YAML null into the string 'null'."""
+
+    def _write(self, text):
+        handle = tempfile.NamedTemporaryFile("w", suffix=".yaml", delete=False,
+                                             encoding="utf-8")
+        handle.write(text)
+        handle.close()
+        self.addCleanup(os.unlink, handle.name)
+        return handle.name
+
+    def test_yaml_null_stays_none(self):
+        path = self._write("record_config: null\nrecord_script: /x/record.py\n")
+        cfg = capture_server._load_config(path)
+        self.assertIsNone(cfg["record_config"])
+        self.assertEqual(cfg["record_script"], "/x/record.py")
+
+    def test_tilde_and_none_spellings(self):
+        path = self._write("record_config: ~\nrecord_script: None\n")
+        cfg = capture_server._load_config(path)
+        self.assertIsNone(cfg["record_config"])
+        self.assertIsNone(cfg["record_script"])
+
+    def test_real_values_are_kept(self):
+        path = self._write('port: 8766\nrecord_config: "cfg.yaml"\nrecord_topics: ["/a", "/b"]\n')
+        cfg = capture_server._load_config(path)
+        self.assertEqual(cfg["port"], 8766)
+        self.assertEqual(cfg["record_config"], "cfg.yaml")
+        self.assertEqual(cfg["record_topics"], ["/a", "/b"])
+
+
 class TestHealth(unittest.TestCase):
     def test_healthz(self):
         with _ServerCtx() as base:

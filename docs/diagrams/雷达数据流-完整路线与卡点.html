@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>雷达 → 实时跌倒识别 · 路线、分支与卡点</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --card:#ffffff; --ink:#111827; --muted:#6b7280;
+    --line:#d5dbe3; --blue:#2563eb; --green:#047857; --amber:#b45309;
+    --red:#b91c1c; --violet:#6d28d9; --slate:#475569;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:
+      radial-gradient(1200px 500px at 50% -100px, #e8efff 0%, transparent 70%),
+      var(--bg);
+    color:var(--ink);
+    font:15px/1.62 "Segoe UI", system-ui, -apple-system, "Microsoft YaHei", sans-serif;
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:44px 24px 96px}
+
+  header h1{font-size:27px; line-height:1.3; margin:0 0 10px; letter-spacing:.2px}
+  header h1 small{display:block; font-size:14px; font-weight:500; color:var(--muted); margin-top:6px}
+  .route{
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+    margin:16px 0 0; font:12.5px ui-monospace, Consolas, monospace; color:#334155;
+  }
+  .route b{font-weight:600; background:#fff; border:1px solid var(--line);
+    border-radius:6px; padding:3px 8px}
+  .route i{font-style:normal; color:#94a3b8}
+
+  .legend{display:flex; flex-wrap:wrap; gap:18px; margin:22px 0 34px; font-size:13px; color:var(--muted)}
+  .legend span{display:flex; align-items:center; gap:7px}
+  .swatch{width:11px; height:11px; border-radius:3px}
+
+  .flow{position:relative}
+  .stage{display:grid; grid-template-columns:58px minmax(0,1fr); gap:14px; align-items:start}
+  .num{
+    width:36px; height:36px; margin:14px auto 0; border-radius:50%;
+    background:#e6ebf3; color:#334155; border:1px solid #cfd8e3;
+    display:flex; align-items:center; justify-content:center;
+    font:600 12.5px ui-monospace, Consolas, monospace;
+  }
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:13px;
+    padding:17px 20px 16px; box-shadow:0 1px 2px rgba(15,23,42,.04);
+    border-left:4px solid var(--blue);
+  }
+  .card.io{border-left-color:var(--blue)}
+  .card.gate{border-left-color:var(--amber)}
+  .card.reject{border-left-color:var(--red)}
+  .card.data{border-left-color:var(--violet)}
+  .card.start{border-left-color:var(--green); box-shadow:0 4px 18px rgba(4,120,87,.12)}
+
+  .card h2{
+    font-size:16.5px; margin:0; display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:8px; line-height:1.45;
+  }
+  .card h2 .ref{
+    font:12px ui-monospace, Consolas, monospace; font-weight:500;
+    color:var(--muted); letter-spacing:0;
+  }
+  .tag{
+    font-size:11px; font-weight:600; padding:1.5px 8px; border-radius:999px;
+    background:#f1f5f9; color:#475569; white-space:nowrap;
+  }
+  .tag.gate{background:#fef3c7; color:#92400e}
+  .tag.reject{background:#fee2e2; color:#991b1b}
+  .tag.data{background:#ede9fe; color:#5b21b6}
+  .tag.ok{background:#d1fae5; color:#065f46}
+
+  .card p{margin:8px 0 0}
+  .card ul{margin:9px 0 0; padding-left:19px}
+  .card li{margin:4px 0}
+  .card ol{margin:9px 0 0; padding-left:21px}
+  .card ol li{margin:4px 0}
+  .card code{
+    font:12.5px ui-monospace, Consolas, monospace;
+    background:#f1f5f9; border-radius:4px; padding:1px 5px; color:#0f172a;
+  }
+  .shape{
+    display:inline-block; margin-top:11px;
+    font:12px ui-monospace, Consolas, monospace;
+    background:#eef2ff; color:#3730a3; border-radius:6px; padding:3px 9px;
+  }
+  .shape.gray{background:#f1f5f9; color:#475569}
+  .shape.green{background:#ecfdf5; color:#065f46}
+
+  .arrow{height:30px; margin-left:28px; position:relative}
+  .arrow::before{
+    content:""; position:absolute; left:0; top:4px; bottom:10px; width:2px;
+    background:var(--line);
+  }
+  .arrow::after{
+    content:""; position:absolute; left:-4px; bottom:0;
+    border:5px solid transparent; border-top:8px solid var(--line);
+  }
+
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:13px}
+  .branch{border:1px dashed var(--line); border-radius:10px; padding:11px 13px; background:#fafbfd}
+  .branch h3{margin:0 0 6px; font-size:14px; display:flex; gap:7px; align-items:baseline; flex-wrap:wrap}
+  .branch ul{margin:6px 0 0; padding-left:17px}
+  .branch li{margin:3px 0; font-size:14px}
+  .branch .shape{margin-top:8px}
+
+  .note{
+    margin-top:12px; padding:9px 12px; border-radius:8px;
+    background:#f8fafc; border-left:3px solid #94a3b8;
+    font-size:13.5px; color:#334155;
+  }
+  .note b{color:#0f172a}
+  .note.warn{background:#fffbeb; border-left-color:var(--amber)}
+  .note.bad{background:#fef2f2; border-left-color:var(--red)}
+
+  .ladder{
+    margin:44px 0 0; padding:16px 18px; background:#fff; border:1px solid var(--line);
+    border-radius:12px; font:12.5px ui-monospace, Consolas, monospace; color:#334155;
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  }
+  .ladder b{font-weight:600; background:#f1f5f9; border-radius:5px; padding:2px 7px}
+  .ladder i{font-style:normal; color:#94a3b8}
+
+  footer{margin-top:28px; font-size:13px; color:var(--muted); line-height:1.8}
+  footer b{color:#334155}
+
+  @media (max-width:760px){
+    .wrap{padding:28px 14px 64px}
+    .stage{grid-template-columns:36px minmax(0,1fr); gap:10px}
+    .num{width:30px; height:30px; font-size:11.5px}
+    .arrow{margin-left:17px}
+    .split{grid-template-columns:1fr}
+    .card{padding:14px 15px}
+  }
+  @media print{
+    body{background:#fff}
+    .card{box-shadow:none; break-inside:avoid}
+    .stage{break-inside:avoid}
+  }
+
+.overview{margin:24px 0 32px}.overview h2{font-size:21px}.overview h3{font-size:16px}
+.summary{background:#fff1f2;border:1px solid #fecdd3;border-left:5px solid #be123c;padding:18px;border-radius:12px}
+.tree{border-left:2px solid #cbd5e1;margin:18px 0 24px 10px;padding-left:22px}
+.tree details{margin:12px 0;background:white;border:1px solid #d5dbe3;border-radius:10px;padding:12px 16px}
+summary{cursor:pointer;font-weight:650}summary:focus-visible,button:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.tree .twig{margin:12px 0 8px 10px;padding:10px 14px;border-left:3px solid #b45309;background:#fffbeb}
+.tree .twig.bad{border-color:#b91c1c;background:#fff1f2}.tree .twig.ok{border-color:#047857;background:#ecfdf5}
+.tree p{margin:8px 0}.tree a{color:#1d4ed8}.status{font-size:12px;color:#475569;font-weight:500}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{background:#fff;border:1px solid #d5dbe3;border-radius:12px;padding:18px;margin:16px 0}
+label{display:block;font-weight:600;margin:10px 0 5px}input,select,textarea,button{font:inherit;border:1px solid #cbd5e1;border-radius:6px;padding:8px}
+input,select,textarea{width:100%;background:#fff;color:#111827}textarea{min-height:85px;resize:vertical}button{cursor:pointer;background:#eef2ff;color:#1e3a8a;margin:8px 6px 0 0}
+.idea{margin:12px 0;padding:12px;border-left:3px solid #6d28d9;background:#f5f3ff;white-space:pre-wrap;overflow-wrap:anywhere}
+.idea p{margin:5px 0}.idea small{color:#475569}#save-status{display:block;color:#475569;min-height:26px}
+.evidence-list{font-size:13px;overflow-wrap:anywhere}.detail-toggle{margin:25px 0}.detail-toggle>summary{padding:16px;background:#e8efff;border-radius:10px;margin-bottom:20px}
+.history-record{padding:10px 14px;margin:12px 0;border-left:3px solid #64748b;background:#f8fafc;overflow-wrap:anywhere}
+.history-record h4{margin:0 0 8px;font-size:15px}.history-record p{margin:6px 0}.history-record .stop{color:#991b1b}.history-record .source{font-size:12px;color:#64748b}
+.history-brief{padding:12px;background:#eef2ff;border-radius:9px}.history-nav{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.tree{padding-left:12px;margin-left:0}.tree details{padding:10px}.tree .twig{margin-left:0}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>雷达 → 实时跌倒识别：走到哪，卡在哪
+    <small>完整路线树 + 实验失败分支 + 可保存的临时点子；原始 ROS→跟踪细节保留</small>
+  </h1>
+  <div class="route">
+    <b>ROS 点云</b><i>→</i><b>解码</b><i>→</i><b>时间基</b><i>→</i><b>前置六级门</b><i>→</i>
+    <b>聚类</b><i>→</i><b>候选</b><i>→</i><b>snapshot</b><i>→</i><b>获取器</b><i>→</i><b>跟踪开始</b>
+  </div>
+</header>
+
+
+<section class="overview" aria-label="完整路线树">
+<div class="summary"><strong>最后卡在哪里？事件输入与评测口径先卡住，可靠识别仍未完成。</strong>
+<p>ROS → 点云 → 候选 → 跟踪 → 离线模型候选的接线已实现；但输入是否包含可观测跌倒过程、人体成员是否可靠以及人员泛化均未解决。最终 IFW192S 真实效果、物理标定和板端整链实时性能均为 UNKNOWN，尚未部署候选模型，confirmed 关闭。</p>
+<p>最新输入审计：30条 Falling 中26条无直立帧，仅4条含完整直立→卧倒。此前8/14只表示标签片段触发，不能叫跌倒事件检出率。当前先卡在有效事件数据与评测口径，其次是人体成员/泛化；目标域验证与板端ML实时性还未完成。</p></div>
+<h2>完整路线与研究分支 <span class="status">更新于 2026-10-23 · 离线开发状态</span></h2>
+<div class="history-brief"><strong>已从实际开发记录补入 44 条历史分支（10-10 至 10-22）。</strong><p>每个节点下展开“历史上在这里试过什么”，看尝试 → 结果 → 最后卡点 → 来源。旧侧链、当前实现、失败实验与仅设计路线分开；旧工单与审批用语只当历史，不作为现行流程。这份树是有来源的开发路线整理，不宣称穷尽仓库全部实验。</p><nav class="history-nav"><a href="#input">输入</a><a href="#target">获取/跟踪</a><a href="#geometry">几何/姿态</a><a href="#action">动作模型</a><a href="#fall">跌倒模型</a><a href="#runtime">板端性能</a></nav></div><p>绿＝软件路径已实现；红＝观察到失败或缺口；黄＝待验证想法。已实现不代表人体有效。分支编号用于挂接点子，不是 Git 分支。</p>
+<div class="tree">
+<details open id="input"><summary>01 输入：雷达 → ROS → 解码 → 时间与质量门 <span class="status">软件已有</span></summary>
+<p>保留源行号、源时间、epoch 和标定身份；过期/非法帧不当新观测。原图 01–08 的详细处理保留在下方。</p>
+<div class="twig">想法入口：输入稀疏时先核对扫描包与完整扫描的定义，再谈改模型。</div>
+<div class="twig bad">已发生：Livox 单包连续有效帧最多 2 帧，首次训练停止。三包因果聚合已修；跨传感器对齐与 IFW192S 迁移仍未证明。</div><details class="history-group"><summary>历史上在这里试过什么 · 3条分支</summary><article class="history-record"><h4>10-22 · 用户点子：先查输入损失，别急着换模型</h4><span class="tag">最新关键归因 / 需要改评测协议</span><p class="attempt"><b>当时的想法 / 做法：</b>重读2341段逐帧person包账本，对照Standing/Lying并审计Falling的时间过程。</p><p class="result"><b>实际结果：</b>Velodyne 30条Falling中26条无直立帧，仅4条含完整直立→卧倒；测试14条仅1条有直立帧。</p><p class="stop"><b>最后卡点 / 限定：</b>8/14是标签片段触发，不是跌倒事件召回；仅4条完整下降不足以支持可靠事件泛化结论，需独立事件数据。</p><p class="source">来源：ML/docs/fall_observation_20261022.md · 由此重读 8/14</p></article><article class="history-record"><h4>10-22 · 两条无窗口，是门挡掉还是根本没有过程？</h4><span class="tag">逐帧区分 / 未改阈值</span><p class="attempt"><b>当时的想法 / 做法：</b>拆开S06A09T03与S09A09T01，不再把所有无窗口归为同一原因。</p><p class="result"><b>实际结果：</b>前者8帧含下降后半段却被10帧下限挡住；后者第一帧已卧倒、后面大量零帧。</p><p class="stop"><b>最后卡点 / 限定：</b>降低窗口门只可能找回前者证据；零帧来自person包，原始全场景扫描不在本地，雷达当时是否看到人UNKNOWN。</p><p class="source">来源：ML/docs/fall_observation_20261022.md · 两条「没有有效窗口」</p></article><article class="history-record"><h4>10-22 · 把输入审计落实成数据准入闸门</h4><span class="tag">软件已实现 / 真实事件资格仍需核实</span><p class="attempt"><b>当时的想法 / 做法：</b>fall_dataset_gate检验直立、低位、被采样的下降过程与连续性，不跨断档拼事件。</p><p class="result"><b>实际结果：</b>LaserAct 30条Falling复核为NEVER_UPRIGHT 26 / OK 4；与前轮几何审计一致。</p><p class="stop"><b>最后卡点 / 限定：</b>OK只是这套几何准入定义下通过，不自动成为真实跌倒GT，也不证明主动躺下已被区分。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-22 跌倒数据与开发总计划</p></article></details></details>
+
+<details open id="target"><summary>02 目标：过滤 → 聚类 → 候选历史 → 获取 → 跟踪 <span class="status">几何链已实现 / 人体语义缺口</span></summary>
+<p>只把当前 locked、非预测的实测目标行交给下游；换身份、代际、标定或时间断档清历史。几何框与持续运动都不能直接证明是人。</p>
+<div class="twig ok">显式空场背景：已有会话能跟踪几何目标，作为开发对照。</div>
+<div class="twig bad">固定背景：人在学习阶段会被吸收；不能承担人体识别。无背景候选也可能是家具，静止开机目标仍是必须覆盖的反例。</div>
+<div class="twig">变化获取 + 历史保持：已有实验，默认关闭；退出后误锁改善，但移动家具同样可触发，不能升格为人体判别器。</div>
+<div class="twig">新点子可挂这里：雷达人体语义、静止目标识别、成员归属。需要真实人/家具及开机静止反例来检验。</div><details class="history-group"><summary>历史上在这里试过什么 · 23条分支</summary><article class="history-record"><h4>10-10 · 先用 RF 区别人和家具，再融合跟踪</h4><span class="tag">离线研究 / 未晋级</span><p class="attempt"><b>当时的想法 / 做法：</b>比较既有弱标签上的 RF 与融合候选，保留旧模型对照。</p><p class="result"><b>实际结果：</b>软件检查通过；融合候选仍有运动 track 召回回退和性能失败。</p><p class="stop"><b>最后卡点 / 限定：</b>弱标签不能证明新人、新家具泛化，旧 GT 绑定和独立场景资格不足。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-10 RF 离线优化当前授权</p></article><article class="history-record"><h4>10-13—14 · 用 S1 空场与中央 ROI 提取人体点集</h4><span class="tag">历史离线分支</span><p class="attempt"><b>当时的想法 / 做法：</b>从固定空场/空间域提取中央候选，八段动作统一回放。</p><p class="result"><b>实际结果：</b>旧研究 1934 动作帧均有候选、32 空场留帧无目标；这是候选存在统计。</p><p class="stop"><b>最后卡点 / 限定：</b>固定中央域与参考空场是先验，人体完整率、家具污染及真实身份 UNKNOWN。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-14 HFUS-POINTSET-ACTIONS-01 八段中央人体与控制台</p></article><article class="history-record"><h4>10-14 · 静态锚点补抖动 + 双姿态冻结背景解释</h4><span class="tag">历史对照 / 不晋级</span><p class="attempt"><b>当时的想法 / 做法：</b>在同页加入 scene_change 与 scene_static，输出全视野新增簇而非强套人体节点。</p><p class="result"><b>实际结果：</b>scene_change 前景点减少约 3.116%；旧动作候选仍可见。</p><p class="stop"><b>最后卡点 / 限定：</b>点数减少不是家具污染率下降；部分后续复跑缺原始录制，只能明确使用代理账本。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-14 HFUS-SCENE-CHANGE-01</p></article><article class="history-record"><h4>10-14 · 追查上游删点，并尝试有证据的点保留</h4><span class="tag">旧实验未晋级</span><p class="attempt"><b>当时的想法 / 做法：</b>HF-MAINLINE-POINTS 在原页面做多方案全帧源行与因果前缀对照。</p><p class="result"><b>实际结果：</b>护栏最大中心偏移约 0.094 m；粗槽跳变仍退化，点次仍 UNKNOWN。</p><p class="stop"><b>最后卡点 / 限定：</b>未得到可信完整人体或纯度收益；最终原始源缺失使再次原始回放受阻。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-14 HF-MAINLINE-POINTS-01 实施交付</p></article><article class="history-record"><h4>10-15 · 多种背景模型 + 条件图，寻找几何赢家</h4><span class="tag">NO_GEOMETRIC_WINNER</span><p class="attempt"><b>当时的想法 / 做法：</b>对比 A/B/B_tau/C/D 与时序单因素，原默认与失败版本保留。</p><p class="result"><b>实际结果：</b>新空场残余下降 89.83%，但动作前景增加 69.27%；三种条件图未获几何胜出。</p><p class="stop"><b>最后卡点 / 限定：</b>背景减得干净与保住人体不能同时由点数推断；语义、关节与反射证据仍缺。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-15 HFUS-NEXT-DEV-01</p></article><article class="history-record"><h4>10-16 · 传统 XY / 3D 聚类 → 人体准入 → 低姿续接</h4><span class="tag">旧 PC 回放候选链</span><p class="attempt"><b>当时的想法 / 做法：</b>同页人物高亮，比较 XY、3D 和参考空场；保留身份互斥与姿态候选。</p><p class="result"><b>实际结果：</b>旧主会话 291/295 帧认领、140 帧低姿续接；3D 未胜过 XY，错参考空场仍退化。</p><p class="stop"><b>最后卡点 / 限定：</b>这些是认领/显示统计，语义与真实跌倒并未证实；低姿起始仍有漏段。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-16 REPLAY-FRESH-NEXT-01 传统人体</p></article><article class="history-record"><h4>10-16 · 结构 provisional → 转正；再离线回填漏段</h4><span class="tag">在线与回填分别保留</span><p class="attempt"><b>当时的想法 / 做法：</b>dev_r2 新增结构旁路、confirmed-only 在线认领和独立离线回填。</p><p class="result"><b>实际结果：</b>两窗口在线仅 2/13、2/5，回填可达 13/13、5/5；回填依赖后续证据。</p><p class="stop"><b>最后卡点 / 限定：</b>回填不能当在线实时成绩；目标级完整语义评价仍不足，窄凳降门反例保留。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-16 REPLAY-FRESH-NEXT-01 dev_r2（</p></article><article class="history-record"><h4>10-18 · 框太大：全部前景 → RAW 三维连通目标</h4><span class="tag">已实现 / 单会话几何修复</span><p class="attempt"><b>当时的想法 / 做法：</b>把显示、跟踪、区域和跌倒输入绑定到同一实际目标来源行，不只缩显示框。</p><p class="result"><b>实际结果：</b>水平聚类误并修正后 f341 框宽 2.195→0.954 m；共享 5cm/26邻域组件。</p><p class="stop"><b>最后卡点 / 限定：</b>旧 0.91m 来自另一 ROI/背景，不是 GT；框变小也不能证明人体完整或纯净。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-18 自动单目标实现与框过大修正</p></article><article class="history-record"><h4>10-18 · 自动选人：唯一性 + 持久窗口 + 自动重获</h4><span class="tag">自动几何获取已实现</span><p class="attempt"><b>当时的想法 / 做法：</b>不再固定 t0001；唯一候选持续至少 .6s/5帧，歧义等待，换绑定清基线。</p><p class="result"><b>实际结果：</b>显式前50帧空场时首次 f107 锁定；无背景同会话 386/386 ambiguous。</p><p class="stop"><b>最后卡点 / 限定：</b>没有空场先验时的候选竞争未解决；几何自动获取不等于自动人体语义。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-18 自动单目标实现与框过大修正</p></article><article class="history-record"><h4>10-19 · 相机 YOLO / NPU 给雷达提供人体提示？</h4><span class="tag">做过探针 / 退出产品关键路径</span><p class="attempt"><b>当时的想法 / 做法：</b>RK3588 既有 RGB 与 YOLOv8n RKNN 可用性探针，并记录保守身体核心弱标签。</p><p class="result"><b>实际结果：</b>16 个历史 JPEG 中 12 个有 person 输出，单次约 62.6–108.2ms；不是识别准确率。</p><p class="stop"><b>最后卡点 / 限定：</b>相机内参与雷达外参、时钟未核实；随后明确最终硬件仅单雷达+板卡，RGB 只留离线辅助。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-19 人体范围 AI 判读与 RK3588/RGB</p></article><article class="history-record"><h4>10-19 · 以角格可见性变化找到新进入的物体</h4><span class="tag">探针 / 未接生产获取</span><p class="attempt"><b>当时的想法 / 做法：</b>只用过去点云的变化 cue，不在线吸收静止目标作背景。</p><p class="result"><b>实际结果：</b>在既有多个会话运行，能记录表面可见性变化。</p><p class="stop"><b>最后卡点 / 限定：</b>量化抖动、雷达自身运动未完全排除；静止目标不持续产生变化，变化不等于人体。</p><p class="source">来源：docs/HUMAN_POINTSET_METHOD.md · 无显式空场时的候选竞争</p></article><article class="history-record"><h4>10-19 · CandidateHistory：严格拒绝合并/分裂谱系？</h4><span class="tag">失败实验 / 未默认采用</span><p class="attempt"><b>当时的想法 / 做法：</b>support_history_guard 用历史支撑冲突直接拒绝获取与保持。</p><p class="result"><b>实际结果：</b>完整显式背景回放实测帧从 267 退化为 0；人体小片重连也会形成多前驱。</p><p class="stop"><b>最后卡点 / 限定：</b>严格谱系门误伤真实身体碎片；默认退回 evidence_only，不能靠更严拒绝宣称正确。</p><p class="source">来源：docs/HUMAN_POINTSET_METHOD.md · 首个候选历史增量与规则失效边界</p></article><article class="history-record"><h4>10-19 · 形状 / PCA / 高度层 / 点数能否筛掉家具？</h4><span class="tag">规则未采用</span><p class="attempt"><b>当时的想法 / 做法：</b>用显式背景目标作开发参考，统计无背景竞争候选可分性。</p><p class="result"><b>实际结果：</b>窄规则命中 256 个目标帧，仍有 6 个非目标命中，并漏 11 个入退场帧。</p><p class="stop"><b>最后卡点 / 限定：</b>单会话形状阈值有反例，绝对点数门还会排除远处/小人体；该参考不是人体 GT。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-19 候选历史、成员账本与无背景可分性</p></article><article class="history-record"><h4>10-19 · 固定背景：空场学背景就能隔离人？</h4><span class="tag">有用但受假设限制</span><p class="attempt"><b>当时的想法 / 做法：</b>比较前50帧声明空场与人在场时学习的背景。</p><p class="result"><b>实际结果：</b>空场背景保留参考目标；人在场背景使参考目标平均仅剩 3.66%。</p><p class="stop"><b>最后卡点 / 限定：</b>背景会吸收静止的人；残留小碎片即使全部来自目标，也不是完整人体。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-19 固定背景能力边界</p></article><article class="history-record"><h4>10-19 · 无背景变化获取 + 同 history 保持</h4><span class="tag">实验默认关闭</span><p class="attempt"><b>当时的想法 / 做法：</b>用唯一持续运动历史获取，再只接受同一历史的当前观测。</p><p class="result"><b>实际结果：</b>仅变化门退出后误锁家具12帧；加保持门消除该12帧，但240实测/24遮挡。</p><p class="stop"><b>最后卡点 / 限定：</b>合并/分裂时保持门牺牲可见帧；移动家具也会通过运动获取，仍非人体分类。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-19 无背景变化获取实验</p></article><article class="history-record"><h4>10-20 · 用户点子：高度范围 + 确定在动再锁定</h4><span class="tag">共享入口已实现</span><p class="attempt"><b>当时的想法 / 做法：</b>首次获取增加地面相对P90 .8–2.2m、近期实测净位移；保持不要求继续运动。</p><p class="result"><b>实际结果：</b>旧低候选反事实由333锁定帧变为0；开发会话首次锁定延后，已有站稳/低姿保持。</p><p class="stop"><b>最后卡点 / 限定：</b>门只处理首次/重获取；开机静止人体和移动家具仍不能由此可靠判别。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-20 初始高度与近期运动获取门</p></article><article class="history-record"><h4>10-20 · 人走了却接上低物体：非目标历史隔离</h4><span class="tag">已修复已知反例</span><p class="attempt"><b>当时的想法 / 做法：</b>成功实测时记录远离的独立非目标历史，阻止遮挡后扩张预测门接管。</p><p class="result"><b>实际结果：</b>固定533帧元数据重放保留263原实测，拒绝208错误续接；原错误曾产生193 suspected。</p><p class="stop"><b>最后卡点 / 限定：</b>反例无原始XYZ，仅元数据重放；近身物、无前驱新历史与物理身份正确率仍UNKNOWN。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-20 真人离场后的独立低物体错误续接</p></article><article class="history-record"><h4>10-20 · 遮挡后先验证新身份，不继承旧基线</h4><span class="tag">恢复/连续性软件修复</span><p class="attempt"><b>当时的想法 / 做法：</b>短缺口与验证恢复分开，恢复后新binding；基线和下降计时不跨非法/过长缺口。</p><p class="result"><b>实际结果：</b>31点单帧错误续接被拒；缺口不再凭过去低位时长直接凑suspected。</p><p class="stop"><b>最后卡点 / 限定：</b>超门/超时的静止或低姿目标可能长期无法重获；拒绝正确不等于人体恢复召回已知。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-20 并发清理、异常关闭、基线连续性与恢复诊断修复</p></article><article class="history-record"><h4>10-21 · 固定物体可见成员变化被当成移动：支撑反证</h4><span class="tag">入口假运动已修</span><p class="attempt"><b>当时的想法 / 做法：</b>比较当前实测支撑的静止/平移残差，不用框中心漂移证明运动。</p><p class="result"><b>实际结果：</b>固定XYZ仅变可见成员的反例旧f16获取，新全程拒绝；真人业务输出保持。</p><p class="stop"><b>最后卡点 / 限定：</b>真实身体碎裂后仍可能掉锁，单前驱和互斥行不足以证明应该归并。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-21 人体框定修复开发首轮</p></article><article class="history-record"><h4>10-21 · 支撑碎片组合：有锚点才归并</h4><span class="tag">已实现 / 后续修正边界</span><p class="attempt"><b>当时的想法 / 做法：</b>前驱支撑、并集覆盖、新增上限、刚体残差、包络、间隙和竞争共同判定。</p><p class="result"><b>实际结果：</b>420/482双碎片掉锁反例修复，独立59点簇未混入；仅合并实际接受源行。</p><p class="stop"><b>最后卡点 / 限定：</b>不能通用吞回所有近身点；随后发现排序/方向/早退/间隙采样缺陷，均保留失败版并另修。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-21 支撑碎片组合修复（阶段一）</p></article><article class="history-record"><h4>10-21 · 身体少点：逐行找去向，全点复核采样间隙</h4><span class="tag">成员核查及软件修复</span><p class="attempt"><b>当时的想法 / 做法：</b>不放宽门；采样声称断开时再查全部实际点，并分解高度/背景/连通造成的损失。</p><p class="result"><b>实际结果：</b>部分帧恢复真实碎片；走动段仍182点，参考1267行中881被高度门排除。</p><p class="stop"><b>最后卡点 / 限定：</b>有些间隙是真实过滤后断开；新增成员还会改变主轴并导致区域拒绝，不能隐藏该代价。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-21 成员完整性定位与采样间隙修复</p></article><article class="history-record"><h4>10-21 · 低位点和背景占同一格：能否吞回？</h4><span class="tag">核查后未放宽背景</span><p class="attempt"><b>当时的想法 / 做法：</b>对背景排除109行逐体素核查，使用独立前缀作参考而不替换原背景。</p><p class="result"><b>实际结果：</b>不少被排除行所在体素在参考中反复观测；原背景只存cell，精确原点距离缺失。</p><p class="stop"><b>最后卡点 / 限定：</b>无法仅凭旧身体支撑证明当前点属人；原背景精确距离UNKNOWN，不能安全吞回。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-21 持续上线目标：背景碰撞核查与包内回放</p></article><article class="history-record"><h4>10-19设计 / 仍待验证 · 雷达专用逐点语义：PointNet风格 / 距离图 / 局部网络</h4><span class="tag">设计分支 / 尚未验证</span><p class="attempt"><b>当时的想法 / 做法：</b>提出逐点human/other/unknown、保留source_row；比较PointNet风格、SalsaNext距离图与PointNet++/LiDARCap借鉴。</p><p class="result"><b>实际结果：</b>已有可测接口与转换/延迟检查思路，没有实际逐点分割精度或RKNN成功结果。</p><p class="stop"><b>最后卡点 / 限定：</b>完整人体点级GT、接触/静止/低姿态覆盖不足；算子支持不能替代实际转换与板端执行验证。</p><p class="source">来源：docs/HUMAN_POINTSET_METHOD.md · 雷达专用语义分割的具体可行性</p></article></details></details>
+
+<details open id="geometry"><summary>03A 几何路线：基线 → 特征 / 区域 / 姿态 → 跌倒状态机 <span class="status">软件已有 / confirmed 关闭</span></summary>
+<p>这是既有几何路线，与 ML 候选旁路分开。区域有支撑不等于关节真值，低姿态也可能是蹲下、主动躺下或离场局部可见。</p>
+<div class="twig bad">停止位置：物理标定与人体效果未证实。FallStateMachine 默认 mode_verified=false、allow_confirmed=false；打开开关不能补齐证据。</div><details class="history-group"><summary>历史上在这里试过什么 · 3条分支</summary><article class="history-record"><h4>10-14 · 局部恢复点集 + 因果体轴，补粗骨架缺测</h4><span class="tag">实验未晋级</span><p class="attempt"><b>当时的想法 / 做法：</b>R2 对比五种实验方案，局部恢复与体轴诊断分别检查。</p><p class="result"><b>实际结果：</b>旧研究体轴缺测 79→38 帧，但局部恢复引入新的困难帧。</p><p class="stop"><b>最后卡点 / 限定：</b>人体完整率和解剖精度 UNKNOWN；恢复更多点不等于恢复正确身体成员。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-14 HFUS-POINTSET-ACTIONS-01 R2 点集诊断</p></article><article class="history-record"><h4>10-14 · 邻接图 / 背景风险排除 / 过去帧一致性组合</h4><span class="tag">实验未晋级</span><p class="attempt"><b>当时的想法 / 做法：</b>R3 做 A/B/C 与 ABC 消融，13 槽只用当前实测点支撑。</p><p class="result"><b>实际结果：</b>符号返工后翻转 9→4 次，但保留新困难帧 f124。</p><p class="stop"><b>最后卡点 / 限定：</b>身份和解剖正确性无真值；减少翻转不足以证明骨架有效。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-14 HFUS-POINTSET-ACTIONS-02 R3</p></article><article class="history-record"><h4>10-20 · 配平显示绑定 + 躺姿证据门</h4><span class="tag">软件闭环 / 物理资格未过</span><p class="attempt"><b>当时的想法 / 做法：</b>修复RAW/ground显示绑定，几何跌倒必须有基线、下降、低位及躺姿支撑。</p><p class="result"><b>实际结果：</b>真实页面与数据链可对账；confirmed仍关闭，不把近地或低框直接称跌倒。</p><p class="stop"><b>最后卡点 / 限定：</b>physical_verified/runtime_eligible仍false，真实跌倒与物理标定未验证。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-20 跌倒识别闭环验收与躺姿证据门</p></article></details></details>
+
+<details open id="action"><summary>03B 动作分类：整场景 XYZ → RF / 深度模型 <span class="status">离线实验 / 跨环境退化</span></summary>
+<p>MM-Fi 27 类动作不含 fall，动作分类成绩不能当跌倒召回。</p>
+<div class="twig bad">整场景深度 v2：同环境序列聚合 95.56%，E04 跨环境 4.07%；多环境训练后 E04 3.70%。环境与人员同时变化，环境几何依赖是待检验解释，不能定为唯一原因。</div>
+<div class="twig">分支：改用人体点集、尺度/位置归一化、背景对照。预期减少环境依赖，目前尚无成功证据。</div>
+<div class="twig bad">人体 GT 裁剪分支卡在坐标：12 序列 / 3,564 帧，恒等变换裁剪全部 0 点。关节→LiDAR 外参/单位/帧绑定未核实，真实裁剪训练缓存未发布。</div><details class="history-group"><summary>历史上在这里试过什么 · 6条分支</summary><article class="history-record"><h4>10-16 · 公开点集 + AI 框标签训练 RF / PointNet</h4><span class="tag">旧侧链结果有后续纠正</span><p class="attempt"><b>当时的想法 / 做法：</b>用 AI 标签域做组折 RF 与 PointNet 对照，并核查标签 yaw 与独立组。</p><p class="result"><b>实际结果：</b>RF P=.955/R=.724 仅属 P/N 候选子集；旧 PointNet 全正倾向伴随协议错误。</p><p class="stop"><b>最后卡点 / 限定：</b>不能把该 RF 数字当完整目标检出；PointNet 折间模型/Adam复用与权重分布错误使旧路线失败结论不成立。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-16 HFUS-RF-EVAL-01</p></article><article class="history-record"><h4>10-16 · PointNet 每折重建模型 / 优化器，公平重评</h4><span class="tag">协议已修 / 旧侧链封存</span><p class="attempt"><b>当时的想法 / 做法：</b>dl_fix01 独立实现每折全新模型、训练折实际采样权重和零见验证成员检查。</p><p class="result"><b>实际结果：</b>合成可分集与随机标签对照验证了协议修复；真实输入缺件，真实重训未运行。</p><p class="stop"><b>最后卡点 / 限定：</b>三份原始 ZIP 等输入缺失；之后用户暂停该旧侧链。10-22 新公开数据实验不是恢复或证明这套旧模型。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-16 HFUS-DL-OPT-01 PointNet 训练协议</p></article><article class="history-record"><h4>10-20 · 现成 DGCNN-GRU / PointNet / RKNN 能否直接上？</h4><span class="tag">资产盘点 / 未调用雷达跌倒NPU</span><p class="attempt"><b>当时的想法 / 做法：</b>核对本地雷达倒地源码、person/furniture PointNet shadow、RF/XGB与图像YOLO。</p><p class="result"><b>实际结果：</b>PointNet 是人体/家具分类 shadow；DGCNN-GRU 有参考源码但无可用倒地权重/scaler/RKNN。</p><p class="stop"><b>最后卡点 / 限定：</b>图像YOLO不是雷达倒地模型；表格RF也不能直接当NPU图，缺完整可执行资产与目标域验证。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-20 身份可靠性轮次</p></article><article class="history-record"><h4>10-22 · 完整序列RF → 短前缀 → 专门因果窗口RF</h4><span class="tag">本地候选 / 跨环境退化</span><p class="attempt"><b>当时的想法 / 做法：</b>固定人员分折，比较10/20/30/60帧训练；模型冻结后测E02，再导出纯NumPy。</p><p class="result"><b>实际结果：</b>主要30帧E01窗口约63.28%，E02约35.78%；229个真实回放窗口证明接口一致。</p><p class="stop"><b>最后卡点 / 限定：</b>MM-Fi不含fall；序列标签不是逐帧动作GT，动作泛化与跨传感器对齐不足。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-22 因果短窗口、E02独立验证与NumPy本地候选</p></article><article class="history-record"><h4>10-22 · 深度模型扩大点数/轮数，再加环境</h4><span class="tag">同环境提升 / 跨环境失败</span><p class="attempt"><b>当时的想法 / 做法：</b>每帧64→256点、10→40轮；再用E01+E02+E03训练。</p><p class="result"><b>实际结果：</b>同环境序列95.56%；E04冻结4.07%，多环境训练后3.70%。</p><p class="stop"><b>最后卡点 / 限定：</b>模型未获得可用跨环境能力；环境/人员一起变，不能单凭失败确定唯一原因。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-22 深度 v2：同环境提升</p></article><article class="history-record"><h4>10-22 · 只喂人体点，不喂整场景背景</h4><span class="tag">接口已做 / 真裁剪训练未开始</span><p class="attempt"><b>当时的想法 / 做法：</b>显式关节→LiDAR刚体变换、源行裁剪账本、固定点采样与当前目标因果缓存。</p><p class="result"><b>实际结果：</b>12序列3564帧恒等坐标裁剪全0；真实386帧旁路不改变几何输出。</p><p class="stop"><b>最后卡点 / 限定：</b>外参/单位/帧绑定未核实；不能猜轴后训练，也不能把整场景权重在目标点上的输出当有效动作。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-22 人体点集裁剪审计</p></article></details></details>
+
+<details open id="fall"><summary>03C 跌倒候选：实测目标点 → 10–30 帧 → 二分类 → 事件 <span class="status">接线可跑 / 可靠性未过</span></summary>
+<p>FallCandidateRuntime：默认高阈值 0.8 连续 3 个窗口触发；低阈值 0.2 连续 5 窗释放。重叠窗口票数不是物理持续时间。事件为 ml_fall_candidate，始终不写回正式 confirmed。</p>
+<div class="twig bad">合成集：短窗 RF 检出 437/451、非跌倒触发 112/449；MIL 为 450/451、12/449。动画目录隔离不等于真人人员隔离，不能凭此宣称完成。</div>
+<div class="twig bad"><strong>真人公开数据主卡点：</strong>LaserAct Velodyne MIL 官方人员留出在 Falling 标签片段上触发 8/14（不是跌倒事件检出率）；非跌倒触发 1/889 个可观测片段。6条标签片段未触发：2条无有效连续窗口，4条有窗口却未触发；假阳性为主动躺下 Lying。</div>
+<div class="twig bad">训练人员内部 LOPO：原 bag-max 在 Falling 标签片段上触发3/16（亦非事件召回）、负片段触发 4/1403。21 组规则无支持发布的校准规则；这是研究预算下的结果，不是现场安全标准。</div>
+<div class="twig bad">已尝试的三个分支：连续三窗监督 3/16 + 4/1403；仅动态特征 0/16 + 3/1403；六段有序汇总 3/16 + 4/1403。均未改善、未采用。以上是开发侧消融，不能与官方测试集的 8/14 混成一组结果。</div>
+<div class="twig ok">最新解释修正：上述片段分数不能证明识别了下降事件。新增几何准入闸门复核30条为26条NEVER_UPRIGHT、4条OK；这是开发集的观测筛选，不是独立真实跌倒GT。数据总计划与事件标注接口已落地，新的几何时序链和独立事件验证仍待做。</div><div class="twig ok">软件缺陷已修：导出校验按 manifest 的 feature_schema 分派，20 份权重完成重校验；修复未改变上述泛化失败结论。</div>
+<div class="twig">下一步想法：更充分的时间表示、独立人员的跌倒/主动躺下/低姿态困难负例、有效观测审计。状态均为待实验，当前失败不能证明其中某个想法一定有效。</div><details class="history-group"><summary>历史上在这里试过什么 · 6条分支</summary><article class="history-record"><h4>10-15 · 把时序平滑做全：EMA / 投票 / HMM / HSMM</h4><span class="tag">实际离线实验 / 无语义增益证明</span><p class="attempt"><b>当时的想法 / 做法：</b>固定候选和原 RF，比较滞回、保持、MC、HMM、Forward/Viterbi 与显式秒持续 HSMM。</p><p class="result"><b>实际结果：</b>真实 RF 二值本来就 0 次切换；姿态切换 53→26/30 只是输出描述，真实候选为 0。</p><p class="stop"><b>最后卡点 / 限定：</b>没有证据证明人体稳定性增益；真实事件与语义 GT 不足，平滑不能凭空产生正确观测。</p><p class="source">来源：docs/human_capture/README_HISTORY.md · 2026-10-15 HFUS-MARKOV-EXPERIMENT-01</p></article><article class="history-record"><h4>10-22 · 序列RF滑窗失败 → 短窗RF → 弱监督MIL</h4><span class="tag">候选接口已实现 / 非事件效果证明</span><p class="attempt"><b>当时的想法 / 做法：</b>比较旧序列RF、累积上下文、短窗RF及bag-max；不把正序列每一窗都标成跌倒。</p><p class="result"><b>实际结果：</b>合成MIL触发450/451、负片段12/449；LaserAct Falling标签片段触发8/14。</p><p class="stop"><b>最后卡点 / 限定：</b>合成动画隔离不等于真人隔离；最新输入审计进一步表明8/14不能解释成跌倒过程召回。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-22 跌倒候选链、弱监督与真实人员隔离</p></article><article class="history-record"><h4>10-22 · 换传感器视图 + Livox三包因果聚合</h4><span class="tag">输入修复 / 同事件探索</span><p class="attempt"><b>当时的想法 / 做法：</b>先保留单包无正例窗口的失败，再按已消费三包合成完整扫描模式。</p><p class="result"><b>实际结果：</b>Cepton触发6/14、Livox聚合7/14；属于同一批人员/事件的视图。</p><p class="stop"><b>最后卡点 / 限定：</b>不能算新增独立事件验证，不能由此推出IFW192S迁移；片段标签与事件过程仍不等价。</p><p class="source">来源：ML/docs/fall_recognition_20261022.md · 真实 LiDAR 实验协议</p></article><article class="history-record"><h4>10-22 · 训练目标改为连续三窗 / 仅动态 / 六段时序</h4><span class="tag">三项无收益 / 未采用</span><p class="attempt"><b>当时的想法 / 做法：</b>固定训练人员LOPO、优化器、轮数与事件规则，只改变监督或时间表示。</p><p class="result"><b>实际结果：</b>对照3/16+4/1403；三窗3/16+4/1403，动态0/16+3/1403，有序3/16+4/1403。</p><p class="stop"><b>最后卡点 / 限定：</b>本轮未改善开发侧片段触发；不能由此否定所有时序网络或断言唯一问题是样本量。</p><p class="source">来源：ML/docs/fall_training_ablation_20261022.md · 跌倒候选：训练人员内部三项消融</p></article><article class="history-record"><h4>10-22 · 有序schema导出校验假通过 → 修分派</h4><span class="tag">软件缺陷已修</span><p class="attempt"><b>当时的想法 / 做法：</b>校验器读取模型manifest并按feature_schema构窗，校验SHA和支持上下文。</p><p class="result"><b>实际结果：</b>20份权重重校验，阈值判断一致；原权重和训练成绩未改变。</p><p class="stop"><b>最后卡点 / 限定：</b>校验可靠性恢复不等于泛化改善，也不补足真实事件输入。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-22 修复MIL导出校验schema分派</p></article><article class="history-record"><h4>10-22 · 事件标注schema + 数据/开发总计划</h4><span class="tag">计划与接口已做 / 尚未采集验证</span><p class="attempt"><b>当时的想法 / 做法：</b>新增fall_events_v1起止/落地点/类型/可观测/时钟偏移校验，配套M0–M6与采集协议。</p><p class="result"><b>实际结果：</b>计划以目标域独立事件和人员隔离评价为终点；公开集开发、合成预训练，误报按小时。</p><p class="stop"><b>最后卡点 / 限定：</b>计划中的人数/事件/小时是采集目标而非已有成果；本轮没有采集，M2几何时序链与独立事件方法验证仍待执行。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-22 跌倒数据与开发总计划</p></article></details></details>
+
+<details open id="runtime"><summary>04 最终目标：IFW192S 现场实时跌倒报警 <span class="status">尚未到达</span></summary>
+<p>离线原始 386 帧整链对照已能接入候选；249 个就绪窗口、原几何输出 SHA 保持。这证明接口行为，不证明现场识别效果。</p>
+<div class="twig bad">效果缺口：现有目标域动作/跌倒 GT 不足，召回、每小时误报、起点延迟均 UNKNOWN。</div>
+<div class="twig bad">实时历史：10-19有人约4.03Hz后已做CPU优化；10-22旧几何软件发布有原生板端整段验证，固定输入step P95由30.920增至55.413ms，约6.78小时累计丢43帧。不能把早期4Hz当最新版本结果；该发布不含ML候选，新候选板端整链性能仍UNKNOWN。</div>
+<div class="twig bad">版本边界：既有几何软件已在历史授权中发布；本次未操作设备，新的ML候选模型未部署，confirmed=false；不部署、不采集。先解决可观测性与泛化，再做目标域效果与原生板端性能验证。</div><details class="history-group"><summary>历史上在这里试过什么 · 3条分支</summary><article class="history-record"><h4>10-19—20 · 有人只有约4Hz：先找CPU热点再考虑NPU</h4><span class="tag">等价优化已做 / 整链仍有边界</span><p class="attempt"><b>当时的想法 / 做法：</b>复用区域 ndarray，去重复tolist/array，优化显示抽样、精确体素块与背景查询。</p><p class="result"><b>实际结果：</b>板端7400点区域微基准95.77→28.76ms；后续有人现场曾约9.41Hz、仍有7丢帧。</p><p class="stop"><b>最后卡点 / 限定：</b>微基准不是完整实时链；场景不同不能归因全部提升，后续发布仍有尾部退化。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-19—20 CPU 链路持续优化</p></article><article class="history-record"><h4>10-21 · 用户点子：跟着目标收缩动态 ROI 来提速</h4><span class="tag">消融后不采用 / 默认关闭</span><p class="attempt"><b>当时的想法 / 做法：</b>在稳定碎片基线上比较SEARCH/LOCKED/LOST/RECOVER动态ROI与无ROI。</p><p class="result"><b>实际结果：</b>留出P95约改善18%，开发反而变慢；保住点集但未达本次预设收益目标。</p><p class="stop"><b>最后卡点 / 限定：</b>近距离ROI仅裁约6.6%输入，控制器/掩码开销约1.4ms抵消收益；未进发布包。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-21 支撑碎片组合修复（阶段一）</p></article><article class="history-record"><h4>10-21—22 · 全点间隙加速 → 包内回放 → 现场软件发布</h4><span class="tag">旧几何软件已发布 / 性能退化保留</span><p class="attempt"><b>当时的想法 / 做法：</b>最长轴全点分块+AABB剪枝，随后包内、原生板端与现场窗口核验。</p><p class="result"><b>实际结果：</b>PC压力显著变快，但板端固定输入step P95 30.920→55.413ms；约6.78小时累计丢43帧。</p><p class="stop"><b>最后卡点 / 限定：</b>PC局部加速不能推出板端整链加速；现场两个窗口P95超100ms，缺同窗profile，原因UNKNOWN。ML候选未随这次旧几何发布上线。</p><p class="source">来源：docs/PROGRESS.md · 2026-10-22 现场软件上线与整段核验</p></article></details></details>
+</div>
+
+<div class="panel" id="ideas"><h2>临时想到的点子 → 挂到对应分支</h2>
+<p>点子独立保存，默认“待验证”，不会改写上面的事实结论。保存在当前浏览器；换浏览器、清理缓存或搬文件前请导出 JSON。可导入继续整理。</p>
+<form id="idea-form"><div class="grid"><div><label for="idea-parent">挂在哪一步</label><select id="idea-parent"><option value="input">01 输入</option><option value="target">02 人体 / 跟踪</option><option value="geometry">03A 几何状态机</option><option value="action">03B 动作 / 人体点集</option><option value="fall" selected>03C 跌倒模型</option><option value="runtime">04 现场实时验证</option></select></div>
+<div><label for="idea-state">点子状态（个人记录，不代表验证结论）</label><select id="idea-state"><option>待验证</option><option>实验中</option><option>有收益待复现</option><option>失败保留</option><option>暂缓</option></select></div></div>
+<label for="idea-title">点子</label><input id="idea-title" required maxlength="180" placeholder="例如：只比较同一目标跌倒前后的高度变化？">
+<label for="idea-note">怎么检验 / 结果 / 最后卡在哪</label><textarea id="idea-note" maxlength="4000" placeholder="记录需要什么输入、对照是什么、什么结果支持或否定它。"></textarea>
+<button type="submit">添加分支点子</button><button type="button" id="export-ideas">导出点子 JSON</button>
+<label for="import-ideas">导入点子 JSON（合并，不覆盖现有记录）</label><input type="file" id="import-ideas" accept="application/json,.json"></form>
+<output id="save-status" aria-live="polite"></output><div id="idea-list"></div></div>
+
+<details class="panel evidence-list"><summary>结论来源与证据边界</summary>
+<p>截至 2026-10-22 的仓库记录与源码；不是新做的现场实验。原图的细节与历史行号保留作导航，配置以实际运行清单为准。</p>
+<ul><li>docs/PROJECT_STATE.md · docs/PROGRESS.md</li><li>ML/docs/fall_recognition_20261022.md · fall_training_ablation_20261022.md · human_pointset_20261022.md · deep_lidar_v2_20261022.md</li>
+<li>docs/evidence/2026-10-22_fall_candidate/LASERACT_PRIMARY_FAILURES.json</li><li>docs/evidence/2026-10-22_fall_sustained/COMPARISON.json</li><li>docs/evidence/2026-10-22_fall_schema_fix/FINAL.json</li>
+<li>ML/src/fall_candidate_runtime.py · src/human_fall_detection/core/fall_state.py</li></ul>
+<p>没有点级/动作真值时效果写 UNKNOWN。公开数据跨人员、合成数据、IFW192S 目标域及 PC / 板端性能分别解释。</p></details>
+</section>
+
+<details class="detail-toggle"><summary>展开原始 ROS → 跟踪开始的 17 步细节（历史参数与行号）</summary>
+<div class="legend">
+  <span><i class="swatch" style="background:#2563eb"></i>数据入口 / 输出</span>
+  <span><i class="swatch" style="background:#b45309"></i>门禁 / 可能丢弃</span>
+  <span><i class="swatch" style="background:#b91c1c"></i>故障 / 拒绝</span>
+  <span><i class="swatch" style="background:#6d28d9"></i>数据结构</span>
+  <span><i class="swatch" style="background:#047857"></i>跟踪开始</span>
+</div>
+
+<div class="flow">
+
+  <!-- 01 -->
+  <div class="stage">
+    <div class="num">01</div>
+    <div class="card io">
+      <h2>ROS 点云输出 <span class="tag">入口</span>
+        <span class="ref">publish_manager.cpp:102, 270</span></h2>
+      <ul>
+        <li><code>/innolidar_points</code> → <code>sensor_msgs/PointCloud2</code>，<code>height=1, width=N</code>，<code>is_dense</code> 透传。</li>
+        <li>字段编译期固定（<code>POINT_TYPE XYZI_TIME</code>）：<code>x,y,z</code> FLOAT32、<code>intensity</code> FLOAT32、<code>ring</code> UINT16、<code>timestamp</code> FLOAT64。</li>
+        <li><code>header.stamp</code> 来自设备时间（按秒消费、非法归零、纳秒进位）；<code>header.seq</code> 抄设备 seq；<code>frame_id=innolidar</code>。</li>
+        <li>同一次发布还发 <code>/device_status</code>；IMU 走独立线程与队列发 <code>/inno_imu</code>。</li>
+      </ul>
+      <div class="shape">形状：N × point_step 字节</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 02 -->
+  <div class="stage">
+    <div class="num">02</div>
+    <div class="card io">
+      <h2>订阅与入队 <span class="tag">回调零计算</span>
+        <span class="ref">human_fall_node.py:430, 550</span></h2>
+      <ul>
+        <li><code>queue_size=1</code>（ROS 层只留最新一帧），<code>buff_size=2^24</code>（16 MiB）。</li>
+        <li>回调里只做 <code>queue.put((monotonic, msg, perf))</code>：不解码、不算几何、不发布。</li>
+        <li>旁路 <code>on_imu</code> / <code>on_device</code> 只做时间基与质量记账，不参与几何门禁。</li>
+      </ul>
+      <div class="shape">形状：消息引用 + 接收时刻</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 03 -->
+  <div class="stage">
+    <div class="num">03</div>
+    <div class="card gate">
+      <h2>最新帧队列 <span class="tag gate">丢旧不排队</span>
+        <span class="ref">node_runtime.py:230-281</span></h2>
+      <ul>
+        <li><code>deque(maxlen=1)</code>：计算慢时旧帧被覆盖，<code>dropped += 1</code>。</li>
+        <li>被覆盖帧的 <code>seq / stamp / frame_id / receive_s</code> 记入 <code>overwritten</code>（≤128 条，溢出单独计数）。</li>
+        <li><code>take()</code> 从右端取，<b>永远是最新帧</b>；队列长度不会增长。</li>
+      </ul>
+      <div class="shape">形状：(receive_s, PointCloud2) × 1</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 04 -->
+  <div class="stage">
+    <div class="num">04</div>
+    <div class="card gate">
+      <h2>陈旧门 <span class="tag gate">0.6 s</span>
+        <span class="ref">human_fall_node.py:578-585, 622-650</span></h2>
+      <ul>
+        <li><code>now − receive_s &gt; cloud_stale_s (0.6 s)</code> → 丢弃，只发状态，不产生候选/事件。</li>
+        <li>计算结束后再查一次：慢计算不能把旧帧当新结果；此时候选、事件、位置全部抑制。</li>
+        <li>原则：宁可丢帧，也不让延迟沿链路累积。</li>
+      </ul>
+      <div class="shape gray">形状：丢弃 / 继续</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 05 -->
+  <div class="stage">
+    <div class="num">05</div>
+    <div class="card">
+      <h2>解码为 (N,3) <span class="tag data">行号保留</span>
+        <span class="ref">calibrate_human_follow.py:26 · human_fall_node.py:588</span></h2>
+      <ul>
+        <li>零拷贝 <code>np.dtype</code> 视图 + <code>strides=(row_step, point_step)</code>，支持 organized 布局与行填充。</li>
+        <li><code>preserve_rows=True</code>：非有限点置 <code>NaN</code> 但保留行，返回 <code>(height·width, 3)</code>。</li>
+        <li>校验维度、步长、字段类型、offset 越界；失败 → <code>points=None</code>，核心仍产出无效帧诊断。</li>
+        <li>这里传 <code>min_range_m=0</code>：距离门（0.8 m）在 snapshot 里统一做。</li>
+      </ul>
+      <div class="shape">形状：(H·W, 3) float64，含 NaN 洞</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 06 -->
+  <div class="stage">
+    <div class="num">06</div>
+    <div class="card gate">
+      <h2>时间基 <span class="tag gate">epoch / freshness</span>
+        <span class="ref">timebase.py:160-196, 230-246, 294-320</span></h2>
+      <ul>
+        <li>每帧时间戳分类：<code>first / ok / repeated / regressed / forward_jump / invalid</code>。</li>
+        <li><code>repeated / regressed / forward_jump(&gt;30 s)</code> → <code>time_epoch += 1</code>，清空其它流时间历史。</li>
+        <li><code>invalid</code> <b>不</b>重建 epoch，保留上一个合法比较基线；<code>source_stamp_s = None</code>。</li>
+        <li><code>freshness</code> 只看当前帧接收时间：本帧 receive 非法就是 stale，不借上一帧装新鲜。</li>
+        <li>后续所有历史都绑定 <code>(session, epoch, calibration, frame, ground_sha)</code>。</li>
+      </ul>
+      <div class="shape gray">形状：stamp_status + time_epoch + source_stamp_s</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 07 -->
+  <div class="stage">
+    <div class="num">07</div>
+    <div class="card gate">
+      <h2>有效帧判定 <span class="tag gate">frame_valid</span>
+        <span class="ref">node_runtime.py:755-780</span></h2>
+      <ul>
+        <li><code>frame_valid = points is not None and stamp_status != "invalid"</code>。</li>
+        <li>有解码结果但时间戳非法：<b>仍</b>调用 <code>build_snapshot</code>（诊断/页面可见），但不登记快照、候选不进跟踪历史。</li>
+        <li>解码失败（<code>points=None</code>）：没有 snapshot，只累加 <code>invalid_frames</code>。</li>
+        <li>有效帧 → <code>selection.register_snapshot(snapshot, receive)</code>，供人工选择绑定 <code>snapshot_id + epoch + calibration</code>。</li>
+      </ul>
+      <div class="shape">形状：snapshot 或 None</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 08 -->
+  <div class="stage">
+    <div class="num">08</div>
+    <div class="card">
+      <h2>前置过滤：六级门 <span class="tag">build_snapshot</span>
+        <span class="ref">lidar_candidates.py:834-900</span></h2>
+      <ol>
+        <li><b>有限性</b>：<code>isfinite</code>，同时记录 <code>original_indices</code>。</li>
+        <li><b>上限抽样</b>：<code>max_points=60000</code>，等步长 stride，行号一起抽。</li>
+        <li><b>距离门</b>：传感器原点欧氏距离 <code>[0.8, 8.0] m</code>。</li>
+        <li><b>去噪</b>：<code>0.1 m / 2</code>（自身 + 26 邻域计数），刻意放在地面门之前。</li>
+        <li><b>地面源帧校验 + 高度门</b>：<code>[−0.3, 2.5] m</code>（默认）/ <code>[0.08, 2.5] m</code>（现场）；源帧不匹配则不借用地平面。</li>
+        <li><b>冻结背景减除</b>：<code>0.1 m</code> 体素占据表，只读，<b>不在线学习</b>。</li>
+      </ol>
+      <div class="note warn"><b>无有效地面时</b>：跳过高度门，坐标标记 <code>raw_xy_uncalibrated</code>，高度字段全部 <code>null</code>——绝不假设 z=0 是地面。</div>
+      <div class="shape">形状：(M, 3) + original_indices (M,)</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 09 -->
+  <div class="stage">
+    <div class="num">09</div>
+    <div class="card data">
+      <h2>★ 聚类入口 <span class="tag data">栅格连通</span>
+        <span class="ref">lidar_candidates.py:897-900</span></h2>
+      <div class="split">
+        <div class="branch">
+          <h3>horizontal <span class="tag">默认 0.25 m</span></h3>
+          <ul>
+            <li>投到地面切平面 <code>(u,v)</code>，无地面用原始 XY。</li>
+            <li><code>floor(/0.25)</code> 落格，8 邻域 DFS。</li>
+            <li>竖直叠着的头/肩/腿自然合成一簇。</li>
+          </ul>
+        </div>
+        <div class="branch">
+          <h3>spatial_3d <span class="tag">现场 0.05 m</span></h3>
+          <ul>
+            <li><code>floor(/0.05)</code> 三维落格，26 邻域连通。</li>
+            <li>≥1024 点走 2×2×2 块 + 8 位掩码优化，结果与逐格等价。</li>
+            <li>可分离未连通的三维表面；相接的人/家具仍可能误并，不保证语义分离。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note"><b>是“格元连通”，不是“距离球”</b>：实际可连通距离取决于落格相位（水平最坏约 0.7 m，3D 最坏约 0.17 m）。参数含义是格子边长，不是聚类半径。</div>
+      <div class="shape">形状：list[ndarray[int64]]（过滤后数组下标）</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 10 -->
+  <div class="stage">
+    <div class="num">10</div>
+    <div class="card data">
+      <h2>单簇 → 候选 <span class="tag data">semantic = unknown</span>
+        <span class="ref">lidar_candidates.py:918-935</span></h2>
+      <ul>
+        <li><code>&lt; min_cluster_points (25 / 现场 30)</code> → <code>rejected_clusters</code>，保留 <code>evidence_indices</code>，不算特征。</li>
+        <li>特征：中位中心、AABB、距离、高度分位、水平稳健跨度、PCA 轴（含退化标记）。</li>
+        <li>排序后编号 <code>c0000...</code>：<b>本帧局部</b>，跨帧同名不代表同一目标。</li>
+        <li>中心用中位数（抗离群），不用均值。</li>
+      </ul>
+      <div class="shape">形状：candidates[] + rejected_clusters[]</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 11 -->
+  <div class="stage">
+    <div class="num">11</div>
+    <div class="card data">
+      <h2>一帧 → 自描述 snapshot <span class="tag data">可对账</span>
+        <span class="ref">lidar_candidates.py:916-1002</span></h2>
+      <ul>
+        <li>顶层：<code>session / time_epoch / snapshot_id / source / coordinate / calibration / ground / settings / quality</code>。</li>
+        <li><code>snapshot_id = seq:&lt;n&gt;</code> 或 <code>recv:&lt;t&gt;</code>；<code>source</code> 保留 seq、秒、纳秒、<code>source_stamp_s</code>、frame。</li>
+        <li><code>foreground_indices</code> 与每个候选的 <code>evidence_indices</code> 都是源行号，但<b>数组域不同</b>。</li>
+        <li>发布前 <code>project_snapshot_for_ros</code> 剥掉这三个大数组，算法缓存不被修改（node_runtime.py:138）。</li>
+      </ul>
+      <div class="shape">形状：dict（含候选 + 行号账本 + 坐标/标定身份）</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 12 -->
+  <div class="stage">
+    <div class="num">12</div>
+    <div class="card gate">
+      <h2>节点门禁 <span class="tag gate">地面上下文 + 新鲜度</span>
+        <span class="ref">node_runtime.py:782-821, 939-963</span></h2>
+      <ul>
+        <li>地面监控：<code>degraded / recalibration_required / unknown</code>，或源帧与地平面不匹配 → <code>candidates = []</code>。</li>
+        <li><code>valid = frame_valid and not ground_context_unavailable and freshness(now)=="fresh"</code>。</li>
+        <li>自动模式 <code>valid=False</code> → 获取器按 <code>input_unavailable</code> 重置并释放目标。</li>
+      </ul>
+      <div class="note"><b>manual 分支</b>：跳过 13–16，空候选直接喂 <code>tracker.update</code>，目标自然老化到 <code>occluded</code>。本图主线是自动模式。</div>
+      <div class="shape">形状：candidates[]（可能被清空）+ valid: bool</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 13 -->
+  <div class="stage">
+    <div class="num">13</div>
+    <div class="card reject">
+      <h2>获取器：绑定与故障门 <span class="tag reject">reset</span>
+        <span class="ref">target_acquisition.py:192-215</span></h2>
+      <ul>
+        <li><code>binding = (session, epoch, calibration_id, frame_id, ground_sha256)</code>。</li>
+        <li>故障：<code>input_unavailable / invalid_time / binding_changed / nonincreasing_time</code>。</li>
+        <li>任一故障 → <code>reset()</code>：清 pending、入口窗口、非目标记忆、恢复状态，并 <code>tracker.release()</code>。</li>
+        <li><code>gap = stamp − last_time</code>，供后续持久性窗口判断连续性。</li>
+      </ul>
+      <div class="shape gray">形状：fault → 提前返回；否则继续</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 14 -->
+  <div class="stage">
+    <div class="num">14</div>
+    <div class="card data">
+      <h2>因果历史 CandidateHistory <span class="tag data">只留上一帧</span>
+        <span class="ref">candidate_history.py:82-109, 111-159, 161-254</span></h2>
+      <ul>
+        <li>用真实点重算中心（<code>median</code>），支撑体素 <code>0.1 m</code>；元数据自己漂不能伪造运动。</li>
+        <li>关联：支撑重叠 ≥10%；重叠不足且中心距 ≤0.1 m 时允许邻格容差；无支撑退回 0.5 m 中心门。</li>
+        <li>唯一继承：<b>1 前驱 + 1 后继 + 中心位移 ≤0.5 m</b> → 沿用 <code>history_id</code>；否则新建 <code>h...</code>。</li>
+        <li>多前驱/多后继 → <code>support_conflict</code>，不猜；谱系 ≤64，超出只标 <code>lineage_truncated</code>。</li>
+        <li>断流 &gt; <code>max_gap_s (0.3)</code> → 重置；成员增删对<b>所有前驱并集</b>比较。</li>
+      </ul>
+      <div class="shape">形状：history ledger（history_id / source_rows / 支撑体素 / 谱系）</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 15 -->
+  <div class="stage">
+    <div class="num">15</div>
+    <div class="card reject">
+      <h2>质量门 <span class="tag reject">原因码</span>
+        <span class="ref">target_acquisition.py:94-117, 230-235</span></h2>
+      <ul>
+        <li><code>invalid_position</code> / <code>ground_unavailable</code> / <code>invalid_geometry</code></li>
+        <li><code>insufficient_support</code>（&lt;30 点）</li>
+        <li><code>extent_out_of_range</code>（水平跨度不在 [0.1, 2.5] m）</li>
+        <li><code>height_out_of_range</code>（顶部 &gt;2.7 或底部 &lt;−0.3 m）</li>
+        <li><code>insufficient_height_span</code>（p90 − p10 &lt; 0.15 m）</li>
+        <li>历史测量失败 → <code>invalid_source_support</code></li>
+      </ul>
+      <div class="note bad">每个候选都会得到 <code>rejected[candidate_id] = reason</code>；后续状态里能逐帧回答“为什么没选它”。</div>
+      <div class="shape gray">形状：rejected 映射</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 16 -->
+  <div class="stage">
+    <div class="num">16</div>
+    <div class="card gate">
+      <h2>两条分支：持有 vs 获取 <span class="tag gate">不猜</span>
+        <span class="ref">target_acquisition.py:238-347 / 119-190, 348-423</span></h2>
+      <div class="split">
+        <div class="branch">
+          <h3>已经在跟 <span class="tag">locked / occluded</span></h3>
+          <ul>
+            <li>跳过入口身高/运动门，用关联保持。</li>
+            <li>拒绝：已知非目标历史、0.5 m / 3 s 空间记忆、点数 &gt;3× 且跨度 &gt;2× 的合并。</li>
+            <li>恢复：0.5–3.0 s 缺口、残差 ≤gate、连续 3 帧/0.2 s → <b>新身份 select</b>。</li>
+            <li>否则 <code>tracker.update</code> ★</li>
+          </ul>
+        </div>
+        <div class="branch">
+          <h3>还没锁 <span class="tag">searching / acquiring</span></h3>
+          <ul>
+            <li>高度 p90 ∈ [0.8, 2.2] m；必须有历史且谱系未截断。</li>
+            <li>运动窗 1.2 s / ≥5 帧；端点中位位移 ≥0.3 m。</li>
+            <li>可见性反证：原样残差 ≤0.1 m 或平移后不改善 → 拒。</li>
+            <li>唯一候选；多个 → <code>ambiguous</code>，不按距离挑。</li>
+            <li>持久 0.6 s / 5 帧 → <code>tracker.select</code> ★</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note"><b>可见性反证</b>专门对付“固定物体只改可见成员”：中位中心动了，不等于物体真的动了。</div>
+      <div class="shape">形状：state = {status, reason, rejected, entry_gate, candidate_history}</div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- 17 -->
+  <div class="stage">
+    <div class="num">17</div>
+    <div class="card start">
+      <h2>★ 跟踪开始 <span class="tag ok">TargetTracker</span>
+        <span class="ref">tracking.py:162, 236-288</span></h2>
+      <ul>
+        <li>首次：<code>select('t0001', selection_source='automatic_acquisition')</code>。</li>
+        <li>恢复：<code>select(..., 'verified_geometry_new_identity')</code>，旧基线不继承。</li>
+        <li>之后每帧：<code>update(candidates, ...)</code>。</li>
+        <li>关联门 <code>0.8 + 2.5·dt</code>；近等距 &lt;0.2 m → <code>ambiguous</code>；&gt;3.0 s → <code>lost</code>；时钟回退 → <code>lost</code>。</li>
+        <li><code>dt</code> 来自锁定那一刻固定的时钟域，中途不切换。</li>
+      </ul>
+      <div class="note"><b>从这里往下</b>：基线采集 → 特征 → 几何跌倒状态机；ML 候选走独立旁路，详见上方完整路线树。只有 <code>locked &amp;&amp; !position_predicted</code> 的候选才算“实测”。</div>
+      <div class="shape green">形状：track_state = {track_id, track_status, position_m, position_predicted, ...}</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="ladder">
+  <b>PointCloud2 字节</b><i>→</i>
+  <b>(H·W,3) 含 NaN</b><i>→</i>
+  <b>(M,3) + 行号</b><i>→</i>
+  <b>clusters</b><i>→</i>
+  <b>candidates</b><i>→</i>
+  <b>snapshot</b><i>→</i>
+  <b>history + quality</b><i>→</i>
+  <b>track_state</b>
+</div>
+
+<footer>
+  <b>读数口径：</b>本图是自动模式（<code>target_mode=automatic</code>）主线；manual 模式在 12 之后直接进 <code>tracker.update</code>。
+  参数来自 <code>perception.yaml</code> 的 <code>candidates / acquisition / tracking</code> 段，现场变体为 <code>perception_single_target_v1/v2.yaml</code>。
+  所有 <code>candidate_id / history_id / track_id</code> 都带 <code>semantic=unknown</code>：几何连续不等于人体身份。
+</footer>
+</details>
+
+</div>
+<script>
+(() => {
+  'use strict';
+  const key = 'ldiar.radar.flow.ideas.v1';
+  const $ = id => document.getElementById(id);
+  const parents = Object.fromEntries([...$('idea-parent').options].map(o => [o.value, o.text]));
+  const states = [...$('idea-state').options].map(o => o.value);
+  let ideas = [], storageOK = true;
+  const valid = x => x && typeof x.id === 'string' && x.id.length <= 120 &&
+    Object.hasOwn(parents, x.parent) && states.includes(x.state) &&
+    typeof x.title === 'string' && x.title.trim().length > 0 && x.title.length <= 180 &&
+    typeof x.note === 'string' && x.note.length <= 4000;
+  function message(t) { $('save-status').textContent = t; }
+  try {
+    const saved = JSON.parse(localStorage.getItem(key) || '[]');
+    if (!Array.isArray(saved) || saved.length > 500 || !saved.every(valid)) throw Error('invalid');
+    ideas = saved;
+  } catch (_) { storageOK = false; message('本地记录不可用或格式损坏；请使用导出保存本次点子。'); }
+  function render() {
+    $('idea-list').replaceChildren();
+    for (const x of ideas) {
+      const article = document.createElement('article'); article.className = 'idea';
+      const a = document.createElement('a'); a.href = '#' + x.parent; a.textContent = parents[x.parent];
+      const title = document.createElement('h3'); title.textContent = x.title;
+      const state = document.createElement('small'); state.textContent = x.state + ' · 个人点子记录';
+      const note = document.createElement('p'); note.textContent = x.note;
+      const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '删除此点子';
+      remove.onclick = () => { ideas = ideas.filter(v => v.id !== x.id); save(); };
+      article.append(a, title, state, note, remove); $('idea-list').append(article);
+    }
+  }
+  function save() {
+    if (storageOK) {
+      try { localStorage.setItem(key, JSON.stringify(ideas)); message('已保存 ' + ideas.length + ' 个点子到当前浏览器。'); }
+      catch (_) { storageOK = false; }
+    }
+    if (!storageOK) message('点子仅保留在当前页面内存，请立即导出 JSON 保存。');
+    render();
+  }
+  $('idea-form').onsubmit = e => {
+    e.preventDefault();
+    if (ideas.length >= 500) { message('最多保存 500 个点子，请先导出整理。'); return; }
+    const title = $('idea-title').value.trim(); if (!title) return;
+    ideas.push({id: crypto.randomUUID(), parent: $('idea-parent').value, state: $('idea-state').value,
+      title, note: $('idea-note').value});
+    $('idea-title').value = ''; $('idea-note').value = ''; save();
+  };
+  $('export-ideas').onclick = () => {
+    const blob = new Blob([JSON.stringify({version:1, ideas}, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = '雷达路线点子.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    message('已请求下载点子 JSON，请保留下载文件。');
+  };
+  $('import-ideas').onchange = async e => {
+    try {
+      const file = e.target.files[0]; if (!file) return;
+      if (file.size > 4000000) throw Error('文件过大');
+      const doc = JSON.parse(await file.text());
+      if (doc.version !== 1 || !Array.isArray(doc.ideas) || !doc.ideas.every(valid)) throw Error('格式或字段不合法');
+      const merged = new Map(ideas.map(x => [x.id, x]));
+      for (const x of doc.ideas) if (!merged.has(x.id)) merged.set(x.id, x);
+      if (merged.size > 500) throw Error('超过 500 个点子');
+      ideas = [...merged.values()]; save();
+    } catch (err) { message('导入失败，已有点子保持：' + err.message); }
+    e.target.value = '';
+  };
+  render();
+})();
+</script>
+</body>
+</html>

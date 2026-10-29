@@ -280,7 +280,7 @@ class RecoverTest(unittest.TestCase):
             self.assertTrue(recoverable)
             self.assertIn("退回重试", note)
         with patch.object(H, "_board_get", return_value={
-                "state": "ready", "extra": {"error": "hr01: 下载 points.bin 失败"}}):
+                "state": "failed", "error": "hr01: 下载 points.bin 失败"}):
             note, recoverable = H._sync_failure_note("cap_x")
             self.assertFalse(recoverable)
             self.assertIn("hr01", note)

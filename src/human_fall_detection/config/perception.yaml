@@ -64,6 +64,14 @@ fall:
   confirmed_min_low_duration_s: 3.0
   recovery_fraction: 0.6
   recovery_min_duration_s: 1.0
+  # Sustained low posture is only called suspected when the measured geometry
+  # supports a lying body: horizontal extent >= lying_min_extent_m or measured
+  # top <= lying_max_top_m. A descent into a crouch/kneel stays
+  # low_posture_unclassified. Heuristic from injected rigid-body trajectories,
+  # not human-labelled falls: a fall ending kneeling/against furniture, or in a
+  # strongly partial view, may stay low_posture_unclassified.
+  lying_min_extent_m: 0.6
+  lying_max_top_m: 0.7
   # Default OFF: the real geometric mode is not human-labelled/accepted, so
   # online confirmed is disabled. Synthetic fixtures may enable both explicitly.
   mode_verified: false

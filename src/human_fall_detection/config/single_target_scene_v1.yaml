@@ -1,0 +1,36 @@
+session_id: null
+topics:
+  cloud: /innolidar_points
+  imu: /inno_imu
+  device_status: /device_status
+  candidates: /single_target_live/candidates
+  state: /single_target_live/state
+  event: /single_target_live/event
+  selection_request: /single_target_live/selection_request
+  selection_ack: /single_target_live/selection_ack
+  display_points: /single_target_live/display_points
+visualization:
+  enabled: true
+  stride: 4
+  max_points: 12000
+timeouts_s:
+  cloud_stale: 0.6
+  imu_stale: 0.3
+  device_stale: 0.6
+stamps:
+  max_forward_jump_s: 30.0
+checks:
+  expected_cloud_frame: innolidar
+publish_period_s: 0.5
+geometry:
+  calibration_path: null
+  ground_path: single_target_scene_20261019/ground_candidate.json
+  background_path: single_target_scene_20261019/declared_empty_background.json
+mode:
+  require_ground: false
+output:
+  session_dir: single_target_events
+  event_file: events.jsonl
+  recent_events: 64
+  performance: true
+target_mode: automatic

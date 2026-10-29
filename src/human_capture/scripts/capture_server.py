@@ -12,6 +12,7 @@ import argparse
 import json
 import os
 import shutil
+import signal
 import sys
 import threading
 import time
@@ -26,7 +27,7 @@ if _PKG not in sys.path:
 from core.session_store import (SERVICE_VERSION, SessionStore, StoreError,
                                 validate_session_id)
 from core.recorder import Recorder, RecordError
-from core.fifo import FifoCleaner
+from core.fifo import FifoCleaner, remove_session_artifacts
 from core.bag2session import extract, ExtractError
 
 DEFAULT_CONFIG = {
@@ -68,6 +69,12 @@ def _load_config(path):
             key, val = line.split(":", 1)
             key, val = key.strip(), val.strip()
             if not val:
+                continue
+            # YAML null must stay None. Treating "null"/"~" as a string made
+            # record_config truthy and appended a literal `--config null`, which
+            # made every recording fail at spawn.
+            if val.lower() in ("null", "~", "none"):
+                cfg[key] = None
                 continue
             if val.startswith("["):
                 try:
@@ -123,6 +130,23 @@ class _Handler(BaseHTTPRequestHandler):
     # ---------- 会话文件直下 ----------
 
     def _serve_session_file(self, sid, name):
+        if not validate_session_id(sid):
+            self._send_error_json(404 if sid in ('.', '..') else 400, 'bad_id', 'session_id 非法')
+            return
+        session = self.server.store.get(sid)
+        if session is not None and (session.get('cleanup_pending') or session['state']
+                                   not in ('ready', 'transferred', 'transferring')):
+            self._send_error_json(409, 'busy', '会话不可下载')
+            return
+        with self.server.store.session_guard(sid):
+            session = self.server.store.get(sid)
+            if session is not None and (session.get('cleanup_pending') or session['state']
+                                       not in ('ready', 'transferred', 'transferring')):
+                self._send_error_json(409, 'busy', '会话不可下载')
+                return
+            self._serve_session_file_locked(sid, name)
+
+    def _serve_session_file_locked(self, sid, name):
         """GET/HEAD /api/v1/sessions/<sid>/files/<name>：meta.json / points.bin 本体。
 
         给没配 SSH key 的普通 PC 一条免配置回传路（浏览器直接另存，再放进
@@ -179,19 +203,55 @@ class _Handler(BaseHTTPRequestHandler):
         store = self.server.store
 
         if self.command == "GET" and parts == ["healthz"]:
-            self._send_json(200, {"ok": True, "service": "human_capture",
-                                  "version": SERVICE_VERSION})
+            # Health must mean something: the old static body reported ok even
+            # with a dead extractor or a recorder that never started.
+            threads = {name: bool(thread and thread.is_alive())
+                       for name, thread in (
+                           ("extractor", self.server._extract_thread),
+                           ("fifo", getattr(self.server.fifo, "_thread", None)),
+                           ("recorder_watcher", getattr(self.server.recorder, "_watcher", None)))}
+            live_session = self.server.recorder.current_session_id()
+            self._send_json(200, {
+                "ok": True,
+                "service": "human_capture",
+                "version": SERVICE_VERSION,
+                "pid": os.getpid(),
+                "release_id": self.server.release_id,
+                "started_wall": self.server.started_wall,
+                "uptime_sec": round(time.monotonic() - self.server.t0, 3),
+                "recording": live_session is not None,
+                "recording_session": live_session,
+                "threads": threads,
+                "record_script": self.server.cfg.get("record_script"),
+                "record_script_present": self.server.record_script_present,
+                "sessions_db": self.server.cfg.get("sessions_db"),
+            })
             return
 
         if self.command == "GET" and parts == ["api", "v1", "status"]:
             usage = shutil.disk_usage(self.server.cfg["staging_parent"])
             counts = store.summary_counts()
+            rows = store.list_sessions()
+            states = {}
+            for row in rows:
+                states[row["state"]] = states.get(row["state"], 0) + 1
+            live_session = self.server.recorder.current_session_id()
             self._send_json(200, {
                 "ros": self.server.ros_probe(),  # HC-02 接真实探测；先恒 "unknown"
                 "disk_free_mb": usage.free // (1024 * 1024),
                 "sessions_total": counts["sessions_total"],
                 "recording": counts["recording"],
                 "uptime_sec": round(time.monotonic() - self.server.t0, 3),
+                "version": SERVICE_VERSION,
+                "pid": os.getpid(),
+                "release_id": self.server.release_id,
+                "recording_session": live_session,
+                # DB says recording but no live recorder owns it: a crash or an
+                # abrupt kill left the registry behind. Surface it, never hide it.
+                "inconsistent_recording": bool(counts["recording"] and live_session is None),
+                "states": states,
+                "record_script": self.server.cfg.get("record_script"),
+                "record_script_present": self.server.record_script_present,
             })
             return
 
@@ -245,10 +305,15 @@ class _Handler(BaseHTTPRequestHandler):
                     if err:
                         self._send_error_json(400, "bad_body", err)
                         return
+                    if isinstance(body, dict) and (body.get('state') == 'purged' or
+                            any(k in body for k in ('cleanup_pending', 'cleanup_error', 'purged_reason'))):
+                        self._send_error_json(409, 'cleanup_required', '清理状态及字段只能由安全清理路径登记')
+                        return
                     try:
-                        store.upsert(body)
+                        store.upsert(body, create_only=True)
                     except ValueError as exc:
-                        self._send_error_json(400, "bad_meta", str(exc))
+                        self._send_error_json(409 if str(exc) == 'session_already_exists' else 400,
+                                              'bad_meta', str(exc))
                         return
                     self._send_json(201, {"session_id": body["session_id"]})
                     return
@@ -269,6 +334,9 @@ class _Handler(BaseHTTPRequestHandler):
                         self._send_error_json(400, "bad_body", err)
                         return
                     new_state = body.get("state")
+                    if new_state == 'purged':
+                        self._send_error_json(409, 'cleanup_required', 'purged 只能由安全清理路径登记')
+                        return
                     extra = {k: v for k, v in (body.get("extra") or {}).items()
                              if k in PATCHABLE_EXTRA}
                     if not new_state and not extra:
@@ -282,64 +350,32 @@ class _Handler(BaseHTTPRequestHandler):
                             return
                     else:
                         # 仅更新 extra 字段，不动状态机
-                        s = store.get(sid)
-                        if s is None:
-                            self._send_error_json(404, "not_found", "会话不存在")
-                            return
-                        s.update(extra)
-                        store.upsert(s)
+                        with store.session_guard(sid):
+                            s = store.get(sid)
+                            if s is None:
+                                self._send_error_json(404, 'not_found', '会话不存在')
+                                return
+                            s.update(extra)
+                            try:
+                                store.upsert(s)
+                            except ValueError as exc:
+                                self._send_error_json(409, 'busy', str(exc))
+                                return
                     self._send_json(200, {"session_id": sid,
                                           "state": new_state or store.get(sid)["state"]})
                     return
                 if self.command == "DELETE":
-                    s = store.get(sid)
-                    if s is None:
-                        self._send_error_json(404, "not_found", "会话不存在")
+                    try:
+                        ok, reason, removed = store.cleanup(sid,
+                            lambda: remove_session_artifacts(self.server.cfg['staging_dir'], sid),
+                            'delete', delete_record=True)
+                    except (OSError, ValueError) as exc:
+                        self._send_error_json(500, 'cleanup_failed', str(exc))
                         return
-                    if s["state"] in ("recording", "transferring"):
-                        self._send_error_json(409, "busy",
-                                              "录制/传输中，不可删（%s）" % s["state"])
+                    if not ok:
+                        self._send_error_json(404 if reason == '会话不存在' else 409,
+                                              'not_found' if reason == '会话不存在' else 'busy', reason)
                         return
-                    # 连文件一起删（限 staging_dir 内），仅剩登记会让文件成孤儿
-                    staging = os.path.realpath(self.server.cfg["staging_dir"])
-                    removed = []
-                    for key in ("bag_path", "manifest_path",
-                                "meta_json_path", "points_bin_path"):
-                        p = s.get(key)
-                        if not p:
-                            continue
-                        rp = os.path.realpath(p)
-                        if not (rp == staging or rp.startswith(staging + os.sep)):
-                            continue  # 路径在 staging 外，不动
-                        try:
-                            if os.path.isdir(rp):
-                                os.rmdir(rp)  # 只对空目录兜底，正常走下方显式删
-                            else:
-                                os.remove(rp)
-                            removed.append(os.path.basename(rp))
-                        except FileNotFoundError:
-                            pass
-                        except OSError:
-                            pass
-                    # 会话产物目录（含 meta+bin 的 <sid>/）：
-                    sdir = os.path.join(staging, sid)
-                    if os.path.isdir(os.path.realpath(sdir)):
-                        try:
-                            for f in os.listdir(sdir):
-                                os.remove(os.path.join(sdir, f))
-                            os.rmdir(sdir)
-                            removed.append(sid + "/")
-                        except OSError:
-                            pass
-                    # recorder 的容量预留占位（命名为 <sid>.reserve，注册表里无字段）
-                    rp = os.path.join(staging, sid + ".reserve")
-                    if os.path.isfile(os.path.realpath(rp)):
-                        try:
-                            os.remove(rp)
-                            removed.append(sid + ".reserve")
-                        except OSError:
-                            pass
-                    store.delete(sid)
                     self._send_json(200, {"deleted": sid, "removed": removed})
                     return
 
@@ -374,6 +410,8 @@ class _Server(ThreadingHTTPServer):
     def __init__(self, addr, handler, cfg):
         self.cfg = cfg
         self.t0 = time.monotonic()
+        self.started_wall = time.time()
+        self.release_id = os.environ.get("HF_RELEASE_ID") or None
         os.makedirs(cfg["staging_dir"], exist_ok=True)
         self.store = SessionStore(cfg["sessions_db"])
 
@@ -381,6 +419,12 @@ class _Server(ThreadingHTTPServer):
             sys.stderr.write("[capture_server] %s\n" % msg)
 
         self.recorder = Recorder(self.store, cfg, logger=_log)
+        record_script = cfg.get("record_script")
+        self.record_script_present = bool(record_script and os.path.isfile(record_script))
+        if not self.record_script_present:
+            # Do not hide it: recording will fail at spawn time and the operator
+            # needs to see which path was expected.
+            _log("WARNING: record_script missing: %r" % record_script)
         self.fifo = FifoCleaner(self.store, cfg, logger=_log)
         self.fifo.start()
         # HC-03 抽取守护：扫 extracting 状态，跑 bag→meta+bin，置 ready/failed
@@ -397,45 +441,77 @@ class _Server(ThreadingHTTPServer):
                 sessions = [s for s in self.store.list_sessions()
                             if s["state"] == "extracting"]
                 for s in sessions:
-                    sid = s["session_id"]
-                    bag_path = s.get("bag_path")
-                    if not bag_path or not os.path.exists(bag_path):
-                        self.store.transition(sid, "failed", {"error": "bag_missing"})
-                        continue
-                    # 守护线程是单线程执行者，无抢占；extracting 状态保留到最后
-                    # 一次性迁移到 ready 或 failed。
-                    session_dir = os.path.join(self.cfg["staging_dir"], sid)
-                    try:
-                        meta = extract(bag_path, session_dir, sid)
-                    except ExtractError as exc:
-                        self.store.transition(sid, "failed",
-                                              {"error": "extract: %s" % exc})
-                        log("抽取失败 %s: %s" % (sid, exc))
-                        continue
-                    except Exception as exc:  # noqa: BLE001
-                        self.store.transition(sid, "failed",
-                                              {"error": "extract_crash: %r" % exc})
-                        log("抽取崩溃 %s: %r" % (sid, exc))
-                        continue
-                    info = meta.get("_computed") or {}
-                    self.store.transition(
-                        sid, "ready",
-                        {"meta_json_path": os.path.join(session_dir, "meta.json"),
-                         "points_bin_path": os.path.join(session_dir, "points.bin"),
-                         "frame_count": len(meta.get("frames", [])),
-                         "duration_sec": meta.get("duration_sec"),
-                         "size_bytes": info.get("points_bin_size_bytes")})
-                    log("抽取完成 %s: %d 帧, %d 点"
-                        % (sid, len(meta.get("frames", [])), meta.get("total_points", 0)))
+                    if self._stop_extract.is_set():
+                        break
+                    with self.store.session_guard(s['session_id']):
+                        # The scan is advisory; recheck after acquiring execution.
+                        current = self.store.get(s['session_id'])
+                        if current is not None and current['state'] == 'extracting' and not current.get('cleanup_pending'):
+                            self._extract_one(current, log)
             except Exception as exc:  # noqa: BLE001
-                log("抽取循环异常: %r" % exc)
+                log('抽取循环异常: %r' % exc)
+
+    def _extract_one(self, s, log):
+        sid = s['session_id']
+        bag_path = s.get("bag_path")
+        if not bag_path or not os.path.exists(bag_path):
+            self.store.transition(sid, "failed", {"error": "bag_missing"})
+            return
+        # 守护线程是单线程执行者，无抢占；extracting 状态保留到最后
+        # 一次性迁移到 ready 或 failed。
+        session_dir = os.path.join(self.cfg["staging_dir"], sid)
+        try:
+            meta = extract(bag_path, session_dir, sid)
+        except ExtractError as exc:
+            self.store.transition(sid, "failed",
+                                  {"error": "extract: %s" % exc})
+            log("抽取失败 %s: %s" % (sid, exc))
+            return
+        except Exception as exc:  # noqa: BLE001
+            self.store.transition(sid, "failed",
+                                  {"error": "extract_crash: %r" % exc})
+            log("抽取崩溃 %s: %r" % (sid, exc))
+            return
+        info = meta.get("_computed") or {}
+        self.store.transition(
+            sid, "ready",
+            {"meta_json_path": os.path.join(session_dir, "meta.json"),
+             "points_bin_path": os.path.join(session_dir, "points.bin"),
+             "frame_count": len(meta.get("frames", [])),
+             "duration_sec": meta.get("duration_sec"),
+             "size_bytes": info.get("points_bin_size_bytes")})
+        log("抽取完成 %s: %d 帧, %d 点"
+            % (sid, len(meta.get("frames", [])), meta.get("total_points", 0)))
 
     def server_close(self):
+        # Signal first; every cleanup runs even if a previous one failed.
         self._stop_extract.set()
-        if self._extract_thread:
+        self.fifo._stop_event.set()
+        errors = []
+        def stop_extract():
             self._extract_thread.join(timeout=3)
-        self.fifo.stop()
-        super().server_close()
+            if self._extract_thread.is_alive():
+                raise RuntimeError('extractor_shutdown_timeout')
+        for name, cleanup in (('recorder', self.recorder.close), ('extractor', stop_extract),
+                              ('fifo', self.fifo.stop), ('http', super().server_close)):
+            try:
+                cleanup()
+            except Exception as exc:
+                errors.append((name, exc))
+        self.close_errors = [(name, repr(exc)) for name, exc in errors]
+        self.shutdown_state = dict(
+            recorder_watcher_alive=bool(self.recorder._watcher and self.recorder._watcher.is_alive()),
+            recording_session_id=self.recorder.current_session_id(),
+            extractor_alive=self._extract_thread.is_alive(),
+            fifo_alive=self.fifo._thread.is_alive(), socket_closed=self.socket.fileno() == -1)
+        # Persist the honest stop result: a caller (deploy script, operator) must
+        # be able to see that a thread survived instead of assuming a clean exit.
+        sys.stderr.write("[capture_server] shutdown_state %s\n"
+                         % json.dumps(dict(self.shutdown_state, close_errors=self.close_errors),
+                                      sort_keys=True))
+        sys.stderr.flush()
+        if errors:
+            raise errors[0][1]
 
     def ros_probe(self):
         # HC-02 真实探测：调用 `rosnode list`（CLI 一定存在，python rosgraph 可能没有）。
@@ -468,15 +544,41 @@ def main(argv=None):
         sys.stderr.write("启动失败: %s\n" % exc)
         return 2
 
-    print("[capture_server] listening on %s:%d, db=%s"
-          % (cfg["bind"], cfg["port"], cfg["sessions_db"]))
+    # SIGTERM/SIGHUP must take the same path as Ctrl-C. The default disposition
+    # killed the process before server_close(), leaving a rosbag child (started
+    # with start_new_session) and a registry row stuck in `recording`. Raising
+    # here unwinds serve_forever into the existing `finally: server_close()`;
+    # calling shutdown() from the handler would deadlock (it waits for the very
+    # loop that is running in this thread).
+    class _ShutdownRequested(Exception):
+        pass
+
+    def _request_shutdown(signum, _frame):
+        raise _ShutdownRequested(signum)
+
+    for _sig in (signal.SIGTERM, signal.SIGHUP, signal.SIGQUIT):
+        try:
+            signal.signal(_sig, _request_shutdown)
+        except (ValueError, OSError):  # pragma: no cover - non-main thread
+            pass
+
+    print("[capture_server] listening on %s:%d, db=%s, release=%s, record_script=%s"
+          % (cfg["bind"], cfg["port"], cfg["sessions_db"], server.release_id,
+             server.record_script_present), flush=True)
+    exit_code = 0
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         pass
+    except _ShutdownRequested as exc:
+        sys.stderr.write("[capture_server] shutdown requested by signal %s\n" % exc.args)
     finally:
-        server.server_close()
-    return 0
+        try:
+            server.server_close()
+        except Exception as exc:  # noqa: BLE001 - report, do not mask
+            sys.stderr.write("[capture_server] server_close failed: %r\n" % exc)
+            exit_code = 1
+    return exit_code
 
 
 if __name__ == "__main__":

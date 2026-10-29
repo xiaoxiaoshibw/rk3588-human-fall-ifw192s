@@ -41,6 +41,10 @@ class CalibrationTest(unittest.TestCase):
         points = xyz_from_cloud(msg, 0.3)
         self.assertEqual(points.shape, (3, 3))
         np.testing.assert_allclose(points[:, 0], [2, 3, 4])
+        indexed = xyz_from_cloud(msg, 0.3, preserve_rows=True)
+        self.assertEqual(indexed.shape, (6, 3))
+        np.testing.assert_allclose(indexed[[1, 3, 5]], points)
+        self.assertTrue(np.isnan(indexed[[0, 2, 4]]).all())
         msg.fields = fields[:-1]
         with self.assertRaises(CalibrationError):
             xyz_from_cloud(msg, 0.3)

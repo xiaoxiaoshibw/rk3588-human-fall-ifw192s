@@ -158,6 +158,18 @@ class PerformanceBlockTest(unittest.TestCase):
 
 
 class DisplaySamplingTest(unittest.TestCase):
+    def test_contiguous_organized_rows_tail_and_cap_preserve_exact_bytes(self):
+        for step, height, width, stride, cap in ((26, 2, 17, 4, 5),
+                                                (28, 3, 7, 5, 100),
+                                                (16, 1, 10, 1, 3)):
+            data = bytes(i % 251 for i in range(step * height * width + 9))
+            before = bytearray(data)
+            selected = list(range(0, height * width, stride))[:cap]
+            expected = b''.join(data[i * step:(i + 1) * step] for i in selected)
+            actual = sample_point_data(before, step, step * width, height, width, stride, cap)
+            self.assertEqual(actual, (expected, len(selected), height * width))
+            self.assertEqual(bytes(before), data)
+
     def test_flat_stride_copies_whole_points_without_mutating_source(self):
         data = bytes(i % 256 for i in range(16 * 10))
         out, count, total = sample_point_data(data, 16, 160, 1, 10,

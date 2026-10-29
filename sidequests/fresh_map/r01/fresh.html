@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>FRESH-MAP r01 · 新鲜度渐黑目视（sidequest，非生产页）</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../../pc_apps/human_replay/ui.css">
+<style>
+  /* 结构复刻 pc_apps/human_replay/index.html；脚本换成 fresh 叠加层。 */
+  body { background: var(--bg-inset); }
+  #view { position: absolute; inset: 0; }
+  #hud { position: absolute; top: 10px; left: 10px; padding: 5px 9px;
+         background: rgba(26,27,31,.88); border: 1px solid var(--border-subtle); border-radius: var(--r-ctl);
+         color: var(--text-secondary); font: 11.5px var(--font-mono); pointer-events: none; white-space: pre; z-index: 5; }
+  #frameInfo { position: absolute; top: 40px; left: 10px; padding: 3px 9px;
+         background: rgba(26,27,31,.88); border: 1px solid var(--border-subtle); border-radius: var(--r-ctl);
+         color: var(--text-muted); font: 11.5px var(--font-mono); pointer-events: none; z-index: 5; }
+  #flyHud { position: absolute; top: 72px; left: 10px; display: none; padding: 4px 9px;
+         background: rgba(26,27,31,.88); border: 1px solid var(--border-subtle); border-radius: var(--r-ctl);
+         color: var(--text-secondary); font-size: 11px; pointer-events: none; z-index: 5; }
+  #coordHud { position: absolute; bottom: 40px; left: 10px; padding: 3px 9px;
+         background: rgba(26,27,31,.88); border: 1px solid var(--border-subtle); border-radius: var(--r-ctl);
+         color: var(--text-muted); font: 11.5px var(--font-mono); pointer-events: none; min-width: 200px; z-index: 5; }
+  #status { position: absolute; bottom: 40px; left: 230px; padding: 3px 9px;
+         background: rgba(26,27,31,.88); border: 1px solid var(--border-subtle); border-radius: var(--r-ctl);
+         color: var(--text-secondary); font-size: 11.5px; pointer-events: none; z-index: 5; }
+  #freshHud { position: absolute; bottom: 70px; left: 10px; padding: 4px 9px;
+         background: rgba(20,20,40,.9); border: 1px solid #3a3f7a; border-radius: var(--r-ctl);
+         color: #cdd6ff; font: 11.5px var(--font-mono); pointer-events: none; z-index: 7; }
+  #toolbar { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; align-items: center;
+             background: rgba(26,27,31,.92); border: 1px solid var(--border-subtle); padding: 5px 7px;
+             border-radius: var(--r-ctl); z-index: 6; flex-wrap: wrap; max-width: 70vw; justify-content: flex-end; }
+  #toolbar button, #toolbar select { height: 24px; padding: 0 8px; font-size: 11.5px;
+             background: transparent; border-color: transparent; color: var(--text-secondary); }
+  #toolbar button:hover { background: var(--bg-elevated); color: var(--text-primary); }
+  #toolbar select { border-color: var(--border-strong); background: var(--bg-inset); }
+  #toolbar label { display: flex; gap: 4px; align-items: center; color: var(--text-muted); font-size: 11px; }
+  #toolbar .sep { width: 1px; height: 16px; background: var(--border-strong); margin: 0 2px; }
+  #bottom { position: absolute; left: 0; right: 0; bottom: 0; height: 30px; padding: 0 12px;
+            background: rgba(26,27,31,.92); border-top: 1px solid var(--border-subtle);
+            display: flex; gap: 12px; align-items: center; z-index: 6; }
+  #bottom > span { color: var(--text-muted); font-size: 11px; white-space: nowrap; }
+  #slider { flex: 1; }
+  #bottom kbd { font-size: 10px; padding: 1px 4px; }
+  #metaToggle, #trimToggle { position: absolute; bottom: 40px; padding: 3px 9px;
+             background: rgba(26,27,31,.88); border: 1px solid var(--border-subtle); color: var(--text-muted);
+             border-radius: var(--r-ctl); font-size: 11px; cursor: pointer; z-index: 5; }
+  #metaToggle { left: 10px; }
+  #trimToggle { left: 78px; }
+  #metaBox { position: absolute; right: 10px; top: 52px; max-width: 340px; max-height: 60vh; overflow: auto;
+             background: rgba(26,27,31,.96); border: 1px solid var(--border-strong); padding: 10px;
+             border-radius: var(--r-ctl); font: 11px/1.6 var(--font-mono); white-space: pre;
+             color: var(--text-secondary); display: none; z-index: 10; }
+  #metaBox.open { display: block; }
+  #trimBox { position: absolute; right: 10px; top: 84px; max-width: 340px;
+             background: rgba(26,27,31,.96); border: 1px solid var(--border-strong); padding: 10px;
+             border-radius: var(--r-ctl); font-size: 12px; display: none; z-index: 10; }
+  #trimBox.open { display: block; }
+  #trimInfo { color: var(--text-muted); font-size: 11px; }
+  #trimCmd { width: 100%; height: 54px; margin-top: 6px; background: var(--bg-inset); color: var(--text-secondary);
+             border: 1px solid var(--border-strong); border-radius: var(--r-ctl);
+             font: 11px/1.4 var(--font-mono); resize: none; padding: 5px; }
+  #trimBox .row button { height: 24px; padding: 0 8px; font-size: 11.5px; }
+  #auxMenu, #refMenu { position: absolute; top: 52px; right: 10px; min-width: 190px;
+             background: rgba(26,27,31,.96); border: 1px solid var(--border-strong); padding: 10px 12px;
+             border-radius: var(--r-ctl); display: none; z-index: 11; font-size: 12px; }
+  #auxMenu.open, #refMenu.open { display: block; }
+  #auxMenu label, #refMenu label { display: flex; gap: 6px; padding: 3px 0; cursor: pointer; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+<div id="view"></div>
+
+<div id="hud">未载入</div>
+<div id="flyHud">飞行模式 — WASD 移动 · 空格/Shift 升降 · 滚轮调速 · 鼠标视角 · R=复位 T=正视 · F/ESC 退出</div>
+<div id="frameInfo"></div>
+<div id="status">先点「空场参考」选一段空场会话（如 cap_20261014_221808），再「手动选目录」载入目标会话（如 cap_20261013_082623）</div>
+<div id="freshHud">FRESH 待载入（亮白/蓝=已认领目标 · 暗青=运动证据 · 近黑=背景）</div>
+
+<div id="trimBox">
+  <b>剪辑 (HR-03)</b>
+  <span id="trimInfo">未选区间</span>
+  <div class="row" style="gap:6px;margin-top:6px">
+    <button id="trimStartBtn">标起点</button>
+    <button id="trimEndBtn">标终点</button>
+    <button id="trimClearBtn">清区间</button>
+    <button id="trimCopyBtn" title="复制剪辑命令到剪贴板">复制 trim 命令</button>
+  </div>
+  <textarea id="trimCmd" readonly placeholder="选区间后点「复制 trim 命令」"></textarea>
+</div>
+
+<div id="toolbar">
+  <button id="refPickBtn" title="选一段空场会话作不可变参考图（推荐先选）">空场参考</button>
+  <input id="refDirInput" type="file" webkitdirectory style="display:none">
+  <span class="sep"></span>
+  <button id="pickBtn">手动选目录</button>
+  <input id="dirInput" type="file" webkitdirectory style="display:none">
+  <span class="sep"></span>
+  <label>会话 <select id="freshSessSel" title="切会话自动重载"></select></label>
+  <span class="sep"></span>
+  <button id="playBtn" title="空格">▶</button>
+  <select id="speedSel"></select>
+  <label><input id="loopChk" type="checkbox" checked>循环</label>
+  <span class="sep"></span>
+  <button id="resetBtn" title="R 键：复位">复位</button>
+  <button id="frontBtn" title="T 键：雷达正视图">正视</button>
+  <button id="topBtn" title="7 键：顶视正交">顶视</button>
+  <button id="sideBtn" title="3 键：侧视正交">侧视</button>
+  <button id="perspBtn" title="0 键：复位透视">透视</button>
+  <button id="measureBtn" title="测点距离：点两个点显示 3D 距离（M 键同，再点关闭）">测距:关</button>
+  <span class="sep"></span>
+  <label>底着色 <select id="lutSel">
+    <option value="lut">亮→白</option>
+    <option value="lut2">亮→黄</option>
+    <option value="gray">灰度</option>
+  </select></label>
+  <button id="auxBtn" title="辅助显示开关">显示</button>
+  <button id="refBtn" title="参照物">参照</button>
+</div>
+
+<div id="auxMenu">
+  <div><b>辅助显示</b></div>
+  <label><input id="auxGrid" type="checkbox" checked> 地面网格 1m</label>
+  <label><input id="auxGridFine" type="checkbox"> 细格 0.1m</label>
+  <label><input id="auxAxes" type="checkbox" checked> XYZ 三轴</label>
+  <label><input id="auxOrigin" type="checkbox" checked> 雷达原点</label>
+</div>
+<div id="refMenu">
+  <div><b>参照物</b></div>
+  <label><input id="refPersonStand" type="checkbox"> 1.8m 站立人形（可拖）</label>
+  <label><input id="refPersonLying" type="checkbox"> 1.8m 横放人形</label>
+  <label><input id="refDoor21" type="checkbox"> 2.1m 门框</label>
+  <label><input id="refDoor17" type="checkbox"> 1.7m 门框</label>
+</div>
+<div id="coordHud">(x,y): —</div>
+
+<div id="metaBox"></div>
+<button id="metaToggle" title="会话 meta">ⓘ meta</button>
+<button id="trimToggle" title="剪辑 (HR-03)">✂ trim</button>
+
+<div id="bottom">
+  <span>时间轴</span>
+  <input id="slider" type="range" min="0" max="0" value="0">
+  <span><kbd>空格</kbd> 播/停 · <kbd>←</kbd><kbd>→</kbd> 帧 · <kbd>Shift</kbd> ×10 · <kbd>F</kbd> 飞行 · <kbd>R</kbd> 复位 · <kbd>T</kbd> 正视 · <kbd>M</kbd> 测距</span>
+</div>
+
+<script src="../../../pc_apps/human_replay/vendor/three.min.js"></script>
+<script src="../../../pc_apps/human_replay/vendor/TrackballControls.js"></script>
+<script src="../../../pc_apps/human_replay/vendor/OrbitControls.js"></script>
+<script src="../../../pc_apps/human_replay/vendor/TransformControls.js"></script>
+<script src="../../../pc_apps/human_replay/human_replay_lib.js"></script>
+<script src="../../../pc_apps/human_replay/human_pipe_lib.js"></script>
+<script src="fresh_lib.js"></script>
+<script src="fresh_overlay.js"></script>
+<script src="../../../pc_apps/human_replay/replay.js"></script>
+<script>
+// 空场参考目录（file:// 手动兜底）→ fresh_overlay 不可变参考图。
+document.getElementById("refPickBtn").addEventListener("click", function () {
+  document.getElementById("refDirInput").click();
+});
+document.getElementById("refDirInput").addEventListener("change", function (ev) {
+  var files = Array.from(ev.target.files || []);
+  var st = document.getElementById("status");
+  st.textContent = "空场参考解析中…";
+  window.FRESH_SET_REF(files).then(function (n) {
+    st.textContent = "空场参考就绪（" + n + " 帧）；现在「手动选目录」载入目标会话";
+  }).catch(function (e) { st.textContent = "空场参考失败: " + e.message; });
+});
+
+// http 服务（serve_fresh.py）下：自动载 空场参考 + 主会话，即开即播；?sid/?ref 可换。
+// file:// 下无 /api → 跳过自动，走上面两个手动按钮。
+(function () {
+  if (location.protocol === "file:" || !window.__load_session_sid || !window.FRESH_SET_REF) return;
+  var q = new URLSearchParams(location.search);
+  var MAIN = ["cap_20261013_082623", "cap_20261013_082717", "cap_20261013_083044", "cap_20261013_083120",
+              "cap_20261013_083218", "cap_20261013_083254", "cap_20261015_142416",
+              "cap_20261015_111738", "cap_20261014_221808"];
+  var mainSid = q.get("sid") || "cap_20261013_082623";
+  var refSid = q.get("ref") || "cap_20261014_221808";
+  var st = document.getElementById("status");
+  function filesFor(sid) {
+    return [
+      { name: "meta.json", text: function () {
+          return fetch("/api/file?sid=" + sid + "&name=meta.json").then(function (r) {
+            if (!r.ok) throw new Error("meta HTTP " + r.status); return r.text(); }); } },
+      { name: "points.bin", arrayBuffer: function () {
+          return fetch("/api/file?sid=" + sid + "&name=points.bin").then(function (r) {
+            if (!r.ok) throw new Error("bin HTTP " + r.status); return r.arrayBuffer(); }); } },
+    ];
+  }
+  // 会话切换下拉（切会话=整页重载，参考图重取，干净状态）
+  var sel = document.getElementById("freshSessSel");
+  MAIN.forEach(function (s) { var op = document.createElement("option"); op.value = s; op.textContent = s.replace("cap_", ""); sel.appendChild(op); });
+  sel.value = mainSid;
+  sel.addEventListener("change", function () {
+    var u = new URL(location); u.searchParams.set("sid", sel.value); location = u.toString();
+  });
+  st.textContent = "空场参考 " + refSid + " 载入中…";
+  window.FRESH_SET_REF(filesFor(refSid)).then(function (n) {
+    st.textContent = "参考就绪(" + n + "帧)，载入 " + mainSid + "…";
+    return window.__load_session_sid(mainSid);
+  }).then(function () {
+    st.textContent = "播放中：亮白/蓝=站姿认领或低姿续接 · 暗青=运动证据 · 近黑=背景";
+  }).catch(function (e) { st.textContent = "自动载入失败: " + e.message + "（可手动选目录）"; });
+
+  /* 调试面：?freeze=N → 轮询等几何就绪后暂停并按序步进（promise 时序不可靠，r5 截图实证） */
+  var fz = q.get("freeze");
+  if (fz !== null) {
+    var iv = setInterval(function () {
+      var ri = window.replay_internal;
+      if (!ri || !ri.S || !ri.S.frames || !ri.S.frames.length || !ri.S.geo) return;
+      clearInterval(iv);
+      document.getElementById("playBtn").click();
+      var to = Math.min(+fz, ri.S.frames.length - 1);
+      for (var i = 0; i <= to; i++) ri.set_idx(i);
+      st.textContent = "已冻结 f" + to + "（步进 " + (to + 1) + " 帧）";
+    }, 100);
+  }
+})();
+</script>
+</body>
+</html>

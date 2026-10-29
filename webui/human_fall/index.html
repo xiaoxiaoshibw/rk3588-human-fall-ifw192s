@@ -2,6 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
+<meta name="hf-page-version" content="dev">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IFW192S 雷达实时可视化 · 人体跌倒检测</title>
 <link rel="stylesheet" href="../ui.css">
@@ -72,7 +73,7 @@
     <span>丢帧 <b id="pcDrop">0</b></span>
     <span>呈现 <b id="pcPresHz">--</b> Hz</span>
     <span>未呈现 <b id="pcSkip">0</b></span>
-    <span>抽样 <b id="pcSample">--</b></span>
+    <span><span id="pcSampleLabel">抽样</span> <b id="pcSample">--</b></span>
     <span>帧龄(接收后) <b id="pcAge">--</b> s</span>
     <span>吞吐 <b id="pcBW">--</b> MB/s</span>
     <span>IMU <b id="imuHz">--</b> Hz</span>
@@ -92,7 +93,9 @@
       <label title="右键拖动平移的速度">平移 <input type="range" id="camPan" min="0.5" max="3" step="0.1" style="vertical-align:middle;width:70px"></label>
       <label title="内部渲染分辨率比例，窗口大/高分屏卡顿时调低">分辨率 <input type="range" id="renderScale" min="0.4" max="1" step="0.05" value="1" style="vertical-align:middle;width:70px"></label>
       <button id="btnFit">复位视角</button>
-      <button id="btnFront" title="雷达正视图（俯视 +X）">正视图</button>
+      <button id="btnFront" title="当前显示坐标正视图（沿 +X）">正视图</button>
+      <button id="btnPointStream" hidden>点云 抽样</button>
+      <button id="btnGround" hidden>配平：待绑定</button>
     </div>
   </div>
   <aside>
@@ -107,34 +110,49 @@
     </table></section>
     <section><h3>人体跌倒 (HF-11，算法在 RK3588)</h3>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+        <button id="hfCandidateLayer">几何候选诊断：关</button>
         <button id="hfSelectMode">选人模式：关</button>
         <button id="hfCapture">采集站姿基线</button>
         <button id="hfRelease">解除目标</button>
       </div>
       <table class="kv">
+        <tr><td>运行版本</td><td id="hfVer">--</td></tr>
+        <tr><td>输入来源</td><td id="hfInput">--</td></tr>
+        <tr><td>运行记录</td><td id="hfRunRec">--</td></tr>
         <tr><td>请求通道</td><td id="hfCap">--</td></tr>
         <tr><td>目标 / 状态</td><td id="hfTrack">--</td></tr>
         <tr><td>跌倒状态</td><td id="hfFall">--</td></tr>
+        <tr><td>秒制几何影子</td><td id="hfGeometryShadow">未启用</td></tr>
         <tr><td>可观测性</td><td id="hfObs">--</td></tr>
         <tr><td>位置 source (m)</td><td id="hfPos">--</td></tr>
         <tr><td>距离 source (m)</td><td id="hfRange">--</td></tr>
         <tr><td>坐标 / 标定</td><td id="hfCoord">--</td></tr>
         <tr><td>目标基线</td><td id="hfBaseline">--</td></tr>
+        <tr><td>区域 / 已标定连接</td><td id="hfRegions">--</td></tr>
         <tr><td>预测</td><td id="hfPred">--</td></tr>
         <tr><td>事件保存</td><td id="hfPersist">--</td></tr>
       </table>
       <div style="color:var(--dim);font-size:11px;margin-top:4px;">
-        拖框选择（选人模式下拖出矩形）或点下方候选；坐标均为雷达 source 系（innolidar），未标定为世界坐标。
+        拖框选择（选人模式下拖出矩形）或点下方候选；数值与目标框均来自 source 系。配平仅变换显示，不证明人体身份或物理标定。
       </div>
+      <div style="color:var(--dim);font-size:11px;">几何候选与拒绝原因（不是已锁定目标）</div>
       <div id="hfCands"></div>
     </section>
     <section><h3>跌倒事件历史</h3><div id="hfEvents"></div></section>
+    <section><h3>疑似提示（运行记录，非 confirmed 事件）</h3>
+      <div style="color:var(--dim);font-size:11px;">来自运行记录 suspected_notification；不改变算法判定，重连不重复告警。</div>
+      <div id="hfHints"></div>
+    </section>
     <section><h3>事件 / bridge 状态消息</h3><div id="log"></div></section>
   </aside>
 </main>
 
 <script src="../three.min.js"></script>
 <script src="../OrbitControls.js"></script>
+<!-- Written by the release controller at start time (same effective config as the
+     node). A plain static/dev server may 404 it; the page then falls back to the
+     URL parameters and shows "未加载 runtime.js（无发布绑定）". -->
+<script src="runtime.js"></script>
 <script>
 "use strict";
 /* ============================================================
@@ -150,10 +168,22 @@
  * ============================================================ */
 
 const HF_QUERY = new URLSearchParams(location.search);
+// runtime.js (generated per start) binds the page to the same effective config as
+// the node and profiler, so the operator does not have to type prefix/points.
+// Explicit URL parameters still win, for debugging and for the legacy page.
+const HF_RUNTIME = (window.__HF_RUNTIME__ && typeof window.__HF_RUNTIME__ === "object")
+  ? window.__HF_RUNTIME__ : {};
 // Default to the node's read-only sampled display stream; ?points=/innolidar_points
-// keeps the full source cloud available for diagnostics.
-const HF_DISPLAY_TOPIC = HF_QUERY.get("display") || "/human_fall/display_points";
-const HF_POINTS_TOPIC = HF_QUERY.get("points") || HF_DISPLAY_TOPIC;
+// keeps the full source cloud available for diagnostics. The toolbar button
+// switches the subscribed cloud at runtime between the two streams; ?raw=
+// overrides the full-cloud topic when the driver publishes under another name.
+const HF_DISPLAY_TOPIC = HF_QUERY.get("display") || HF_RUNTIME.display_points ||
+  "/human_fall/display_points";
+const HF_SAMPLED_TOPIC = HF_QUERY.get("points") || HF_RUNTIME.points || HF_DISPLAY_TOPIC;
+const HF_FULL_TOPIC = HF_QUERY.get("raw") || HF_RUNTIME.raw || "/innolidar_points";
+// 点云模式记忆：确认过“全量”就保持（新浏览器默认抽样）。storeGet 是函数声明，此处可用。
+let HF_POINTS_TOPIC = (storeGet("hf_point_stream") === "full" &&
+                       HF_FULL_TOPIC !== HF_SAMPLED_TOPIC) ? HF_FULL_TOPIC : HF_SAMPLED_TOPIC;
 const TOPICS = [HF_POINTS_TOPIC, "/inno_imu", "/device_status"];
 const $ = id => document.getElementById(id);
 
@@ -338,7 +368,7 @@ class FoxgloveClient {
 
 /* ---------- three.js 场景（WebGL 不可用时降级为纯遥测模式） ---------- */
 let renderer = null, scene = null, camera = null, controls = null, material = null;
-let geo = null, pointsObj = null, dirty3d = false, no3d = false, fitDone = false;
+let geo = null, pointsObj = null, sourceGroup = null, dirty3d = false, no3d = false, fitDone = false;
 let MAX_POINTS = 120000;                       // 预分配 2 倍余量（实测 49126 点/帧）
 let positions = new Float32Array(MAX_POINTS * 3);
 let colors = new Float32Array(MAX_POINTS * 3);
@@ -369,7 +399,10 @@ try {
   material = new THREE.PointsMaterial({ size: 1.8, vertexColors: true, sizeAttenuation: false });
   pointsObj = new THREE.Points(geo, material);
   pointsObj.frustumCulled = false;             // 每帧整体重写，包围球不更新，绝不能被剔除
-  scene.add(pointsObj);
+  sourceGroup = new THREE.Group();
+  sourceGroup.matrixAutoUpdate = false;
+  scene.add(sourceGroup);
+  sourceGroup.add(pointsObj);
 } catch (e) {
   no3d = true;
   log("WebGL 初始化失败，3D 视图禁用（遥测仍可用）: " + e.message, 2);
@@ -419,6 +452,7 @@ function onPointCloud(logTimeNs, payload) {
   let m, dv, gx, gy, gz, gi, base0, n = 0;
   try {
     m = parsePC2(payload);
+    if (typeof window.hfDisplayCloudFrame === "function") window.hfDisplayCloudFrame(m.header.frameId);
     if (m.pointStep <= 0 || m.width === 0) return;
     if (m.dataOff + m.dataLen > payload.byteOffset + payload.byteLength) {
       log("点云数据长度异常，丢弃该帧", 1); return;
@@ -470,7 +504,9 @@ function fitView() {
   if (!n) return;
   let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9,z0=1e9,z1=-1e9;
   for (let i = 0; i < n; i++) {
-    const x = positions[i*3], y = positions[i*3+1], z = positions[i*3+2];
+    const e = sourceGroup.matrix.elements, a = positions[i*3], b = positions[i*3+1], c = positions[i*3+2];
+    const x = e[0]*a+e[4]*b+e[8]*c+e[12], y = e[1]*a+e[5]*b+e[9]*c+e[13],
+          z = e[2]*a+e[6]*b+e[10]*c+e[14];
     if (x<x0)x0=x; if (x>x1)x1=x; if (y<y0)y0=y; if (y>y1)y1=y; if (z<z0)z0=z; if (z>z1)z1=z;
   }
   const cx=(x0+x1)/2, cy=(y0+y1)/2, cz=(z0+z1)/2;
@@ -491,6 +527,38 @@ $("btnFront").onclick = () => {
   controls.update();
   dirty3d = true;
 };
+/* 点云模式：抽样显示流（默认，节点 stride 采样）↔ 全量原始点云（未抽样）。
+ * 两者都是只读显示流，切换只换订阅话题并重连 bridge；算法输入与节点输出不受影响。
+ * 全量流点数约 49k（约 13 MB/s），带宽/渲染明显更重，页面卡顿时切回抽样。 */
+const btnPointStream = $("btnPointStream");
+function pointStreamLabel(topic) {
+  const full = topic === HF_FULL_TOPIC;
+  btnPointStream.textContent = full ? "点云 全量" : "点云 抽样";
+  btnPointStream.title = full
+    ? "当前为全量原始点云（未抽样）。点击切回抽样显示流。"
+    : "当前为抽样显示流（采样比见状态栏“抽样”）。点击切换为全量原始点云。";
+}
+function setPointTopic(topic) {
+  if (topic === HF_POINTS_TOPIC) return;
+  const i = TOPICS.indexOf(HF_POINTS_TOPIC);
+  if (i >= 0) TOPICS[i] = topic; else TOPICS.push(topic);
+  HF_POINTS_TOPIC = topic;
+  storeSet("hf_point_stream", topic === HF_FULL_TOPIC ? "full" : "sampled");
+  if (typeof window.hfPointMode === "function") window.hfPointMode(topic);
+  pcPrevSeq = null; pcDrops = 0;           // 换流后 seq 基线重置，避免误计丢帧
+  $("pcDrop").textContent = "0";
+  pointStreamLabel(topic);
+  log("点云模式切换：" + topic + (client && client.live ? "（重新订阅）" : ""));
+  if (client) connect();                    // connect() 先断开旧连接再按新话题订阅
+}
+if (HF_FULL_TOPIC !== HF_SAMPLED_TOPIC) {
+  btnPointStream.hidden = false;
+  pointStreamLabel(HF_POINTS_TOPIC);
+  btnPointStream.onclick = () => setPointTopic(
+    HF_POINTS_TOPIC === HF_FULL_TOPIC ? HF_SAMPLED_TOPIC : HF_FULL_TOPIC);
+} else {
+  btnPointStream.hidden = true;             // 单一话题链接（如 ?points=/innolidar_points）无可切换项
+}
 $("ptSize").oninput = e => { if (material) { material.size = parseFloat(e.target.value); dirty3d = true; } };
 /* 相机速度：可自调并持久化（缩放/旋转影响的是手感，不参与任何回传）。 */
 function applyCamSpeed() {
@@ -787,7 +855,8 @@ function recStart() {
   rec = new McapRecorder(); rec.start(); rec.tStart = Date.now();
   $("btnRec").textContent = "■ 停止"; $("btnRec").classList.add("recording");
   recTimer = setInterval(recTick, 500);
-  log("开始录制（内存模式，建议单次 ≤2 分钟）。注意：当前订阅的是抽样显示流，录到的是显示用抽样点云，不是原始全量 bag");
+  log("开始录制（内存模式，建议单次 ≤2 分钟）。录制话题：" + HF_POINTS_TOPIC +
+      (HF_POINTS_TOPIC === HF_FULL_TOPIC ? "（全量原始点云，体积明显更大）" : "（抽样显示流）"));
 }
 function recStop(auto) {
   if (!rec) return;
@@ -856,7 +925,11 @@ function connect() {
   storeSet("lidar_ws_url", url);
   if (client) client.disconnect();
   client = new FoxgloveClient(url, {
-    message: handleMessage,
+    // Late-bound dispatch: human_fall.js replaces the global handleMessage to add
+    // the HF topics. Passing the function object at construction would capture the
+    // inline-only version when auto-connect runs before that script loads, which
+    // silently disabled every HF panel.
+    message: (topic, logTimeNs, payload) => handleMessage(topic, logTimeNs, payload),
     state: open => { $("btnConnect").textContent = open ? "断开" : "连接";
       if (window.hfConnectionState) window.hfConnectionState(open);
       if (!open) ["pcHz", "pcBW", "pcPresHz", "pcSample", "pcAge", "imuHz", "lastT"].forEach(id => { $(id).textContent = "--"; });
@@ -884,11 +957,15 @@ function loop() {
   }
 }
 resize3d(); fitCanvases();
-if (location.protocol === "file:") log("提示：本地文件方式打开，直接点连接即可");
-else log("页面就绪，点击连接（默认地址已按页面域名填好）");
+// Fixed field entry: open the page and it connects. The operator should not
+// have to hunt for the 连接 button after every refresh; a manual 断开 still
+// stops reconnecting (wantReconnect=false) until the page is reloaded.
+if (location.protocol === "file:") log("提示：本地文件方式打开，仍会自动尝试连接");
+else log("页面就绪，正在按页面域名连接 bridge…");
+connect();
 loop();
 </script>
-<script src="human_fall_lib.js"></script>
-<script src="human_fall.js"></script>
+<script src="human_fall_lib.js?v=f34e0c9370bd"></script>
+<script src="human_fall.js?v=99b7c8e6734c"></script>
 </body>
 </html>

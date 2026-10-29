@@ -161,7 +161,7 @@ class TargetTracker:
 
     def select(self, track_id, time_epoch, candidate=None, position_m=None,
                calibration_version=None, selection_version=None,
-               source_stamp_s=None, receive_s=None):
+               source_stamp_s=None, receive_s=None, selection_source="operator_select"):
         """Lock one operator-chosen candidate (or explicit position) in the session."""
         if track_id is None:
             raise ValueError("track_id is required to lock a target")
@@ -199,7 +199,7 @@ class TargetTracker:
         self.clock_reason = None
         self._occluded_since = None
         self._prediction_age_s = None
-        self._reset_history("operator_select")
+        self._reset_history(selection_source)
         self.action_history.append({"type": "observed", "source_stamp_s": self._measured_source_s})
         return self.snapshot()
 

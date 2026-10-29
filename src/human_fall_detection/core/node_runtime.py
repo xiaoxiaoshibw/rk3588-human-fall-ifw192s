@@ -38,6 +38,7 @@ import json
 import math
 import os
 import threading
+import time
 from collections import deque
 
 import numpy as np
@@ -57,10 +58,12 @@ try:  # pragma: no cover - import shim exercised through the package/tests
     from core.fall_state import FallStateMachine
     from core.features import FeatureExtractor
     from core.ground import GroundMonitor, validate_ground_plane
-    from core.lidar_candidates import build_snapshot, ground_frame_eligible
+    from core.lidar_candidates import (build_snapshot, ground_frame_eligible,
+                                       prepare_background, rebuild_candidate)
     from core.selection import SelectionBackend
     from core.timebase import TimebaseSession
     from core.tracking import TargetTracker
+    from core.target_acquisition import TargetAcquisition
 except ImportError:  # pragma: no cover
     from baseline import StanceBaselineCollector
     from calibration import (build_geometry_calibration,
@@ -76,10 +79,12 @@ except ImportError:  # pragma: no cover
     from fall_state import FallStateMachine
     from features import FeatureExtractor
     from ground import GroundMonitor, validate_ground_plane
-    from lidar_candidates import build_snapshot, ground_frame_eligible
+    from lidar_candidates import (build_snapshot, ground_frame_eligible,
+                                  prepare_background, rebuild_candidate)
     from selection import SelectionBackend
     from timebase import TimebaseSession
     from tracking import TargetTracker
+    from core.target_acquisition import TargetAcquisition
 
 STATE_KIND = "target_state"
 SCHEMA_VERSION = 1
@@ -146,6 +151,8 @@ def project_snapshot_for_ros(snapshot):
     if not isinstance(snapshot, dict):
         return snapshot
     projected = dict(snapshot)
+    projected.pop('foreground_indices', None)
+    projected.pop('rejected_clusters', None)
     candidates = []
     for candidate in snapshot.get("candidates", []):
         if isinstance(candidate, dict):
@@ -190,6 +197,11 @@ def sample_point_data(data, point_step, row_step, height, width,
         return None, 0, 0
     if len(buffer) < needed:
         return None, 0, 0
+    if row_step == width * point_step:
+        # 连续布局按整点字节抽样，保留全部字段及原始字节。
+        selected = np.frombuffer(buffer, dtype=np.dtype((np.void, point_step)),
+                                 count=total)[::stride][:max_points]
+        return selected.tobytes(), len(selected), total
     out = bytearray()
     count = 0
     for index in range(0, total, stride):
@@ -225,13 +237,36 @@ class LatestFrameQueue:
         self._items = deque(maxlen=max(1, int(maxlen)))
         self._event = threading.Event()
         self.dropped = 0
+        self.overwritten = deque(maxlen=128)
+        self.overwritten_overflow = 0
 
     def put(self, item):
         with self._lock:
-            if self._items:
+            if len(self._items) == self._items.maxlen:
                 self.dropped += 1
+                old = self._items[0]
+                if isinstance(old, tuple) and len(old) >= 2 and hasattr(old[1], 'header'):
+                    h = old[1].header
+                    if len(self.overwritten) == self.overwritten.maxlen:
+                        self.overwritten_overflow += 1
+                    self.overwritten.append(dict(seq=getattr(h, 'seq', None),
+                        stamp_secs=getattr(h.stamp, 'secs', None),
+                        stamp_nsecs=getattr(h.stamp, 'nsecs', None),
+                        frame_id=getattr(h, 'frame_id', None), receive_s=old[0]))
             self._items.append(item)
+            if isinstance(item, tuple) and len(item) == 3 and isinstance(item[2], dict):
+                end = time.perf_counter()
+                item[2]['callback_s'] = end-item[2].get('callback_perf_start_s', end)
+                item[2]['enqueue_perf_s'] = end
             self._event.set()
+
+    def drain_overwritten(self):
+        with self._lock:
+            rows = list(self.overwritten)
+            self.overwritten.clear()
+            overflow = self.overwritten_overflow
+            self.overwritten_overflow = 0
+            return dict(headers=rows, overflow=overflow)
 
     def take(self):
         with self._lock:
@@ -335,7 +370,7 @@ class FallNodeCore:
                  transform=None, background=None, event_path=None,
                  recent_events=64, expected_frame="innolidar",
                  cloud_timeout_s=0.6, imu_timeout_s=0.3, device_timeout_s=0.6,
-                 max_forward_jump_s=30.0, clock_domain="monotonic"):
+                 max_forward_jump_s=30.0, clock_domain="monotonic", target_mode="manual"):
         sections = settings or {}
         self.session_id = session_id
         self.settings = sections
@@ -396,7 +431,7 @@ class FallNodeCore:
         # one the fixed standalone copy keeps the legacy support.
         self._reference_transform, self._reference_reason = \
             self._resolve_reference_binding()
-        self.background = background
+        self.background = prepare_background(background)
         # Candidate local ground frame (GL-02). Purely additive: it never sets a
         # physical/extrinsic flag. The id is the switch key for lifecycle
         # invalidation; the monitor is only meaningful with a frozen transform.
@@ -407,6 +442,10 @@ class FallNodeCore:
         self.clock_domain = clock_domain if clock_domain in CLOCK_DOMAINS else "monotonic"
         self._lock = threading.RLock()
         self.tracker = TargetTracker(session_id, sections.get("tracking"))
+        if target_mode not in ("manual", "automatic"):
+            raise ValueError("target_mode must be manual or automatic")
+        self.target_mode = target_mode
+        self.acquisition = TargetAcquisition(self.tracker, sections.get("acquisition"))
         self.features = FeatureExtractor(session_id, sections.get("features"))
         self.fall = FallStateMachine(session_id, sections.get("fall"))
         self.baseline = StanceBaselineCollector(session_id, sections.get("baseline"))
@@ -642,7 +681,9 @@ class FallNodeCore:
                 self.selection._snapshot_order.clear()
                 self.selection._requests.clear()
                 self.selection._request_order.clear()
-                if self.tracker.track_id is not None:
+                if self.target_mode == 'automatic':
+                    self.acquisition.reset('ground_derived_changed')
+                elif self.tracker.track_id is not None:
                     self.tracker.release("ground_derived_changed")
                 self._latest_valid_snapshot = None
                 self._last_snapshot_id = None
@@ -678,32 +719,44 @@ class FallNodeCore:
     # -- per-frame processing -------------------------------------------------
 
     def process(self, points, receive_s, *, seq=None, stamp_secs=None,
-                stamp_nsecs=None, frame_id=None, now=None):
+                stamp_nsecs=None, frame_id=None, now=None, now_fn=None):
         """Process one decoded cloud frame; returns snapshot/state/event payloads.
 
         ``points`` is an ``(N,3)`` array or ``None`` for a frame that could not be
         decoded. ``now`` is the caller's current clock value; it drives freshness
-        and the published ``time_received_s``. An invalid stamp or undecodable
+        and the published ``time_received_s``. Live callers pass ``now_fn`` to
+        sample that clock after taking the lock, alongside auxiliary updates.
+        An invalid stamp or undecodable
         frame yields a diagnostic snapshot but is never registered as a valid,
         selectable snapshot, and its candidates never reach the tracker/fall
         history (the target is reported unobservable/unknown instead).
         """
+        entered = time.perf_counter()
         now = finite_or_none(now)
         if now is None:
             now = finite_or_none(receive_s) or 0.0
         receive = finite_or_none(receive_s)
         frame = frame_id or self.expected_frame
         with self._lock:
+            acquired = time.perf_counter()
+            if now_fn is not None:
+                sampled_now = finite_or_none(now_fn())
+                if sampled_now is not None:
+                    now = sampled_now
             self._current_frame = frame
             note = self.cloud_timebase.note("cloud", seq, (stamp_secs, stamp_nsecs),
                                             receive_s, frame)
             if note["epoch_reset"]:
                 self.selection.set_epoch(self.cloud_timebase.time_epoch)
-            return self._process_locked(points, receive, now, seq, stamp_secs,
-                                        stamp_nsecs, frame)
+            result = self._process_locked(points, receive, now, seq, stamp_secs,
+                                          stamp_nsecs, frame)
+            result['timings_s']['core_lock_wait_s'] = acquired-entered
+            result['timings_s']['core_total_s'] = time.perf_counter()-entered
+            return result
 
     def _process_locked(self, points, receive, now, seq, stamp_secs, stamp_nsecs,
                         frame):
+        started = time.perf_counter()
         stream = self.cloud_timebase.streams["cloud"]
         epoch = self.cloud_timebase.time_epoch
         self.frame_count += 1
@@ -728,6 +781,7 @@ class FallNodeCore:
         else:
             self.invalid_frames += 1
 
+        candidate_done = time.perf_counter()
         if self.ground_monitor is not None:
             if frame_valid and points is not None:
                 try:
@@ -756,20 +810,44 @@ class FallNodeCore:
             # intact. Source frames, the tracker identity and old events are
             # kept; the ordinary IMU degraded check elsewhere is untouched.
             candidates = []
-        track_state = self.tracker.update(candidates, epoch,
-                                          source_stamp_s=source_stamp_s,
-                                          receive_s=receive)
+        guard_done = time.perf_counter()
         observed = None
+        if self.target_mode == "automatic":
+            generation = self.tracker.action_generation
+
+            def rebuild_target(local_rows):
+                """Rebuild every geometry field from the accepted measured rows."""
+                return rebuild_candidate(points, np.asarray(local_rows, dtype=np.int64),
+                                         self.candidate_settings, ground=self.ground,
+                                         calibration=self.calibration,
+                                         transform=self._reference_transform,
+                                         frame_id=frame)
+
+            track_state, _acquisition, observed = self.acquisition.step(
+                candidates, epoch, source_stamp_s, receive_s=receive,
+                calibration_version=(self.calibration or {}).get("calibration_id"),
+                coordinate_version=frame,
+                points=points, frame_seq=seq, ground=self.ground,
+                rebuild=rebuild_target,
+                valid=(frame_valid and not ground_context_unavailable
+                       and stream.freshness(now)[0] == "fresh"))
+            if generation != track_state["action_generation"]:
+                self.baseline.invalidate("automatic_target_binding_changed")
+        else:
+            track_state = self.tracker.update(candidates, epoch,
+                                              source_stamp_s=source_stamp_s,
+                                              receive_s=receive)
         # Candidate ids are local to each frame. Only a successful association
         # can turn a same-named current candidate into this track's measurement.
         if (frame_valid and not ground_context_unavailable
                 and track_state["track_status"] == "locked"
                 and not track_state["position_predicted"]
                 and track_state["candidate_id"] is not None):
-            for candidate in candidates:
-                if candidate["candidate_id"] == track_state["candidate_id"]:
-                    observed = candidate
-                    break
+            if self.target_mode == 'manual':
+                observed = next((candidate for candidate in candidates
+                    if candidate['candidate_id'] == track_state['candidate_id']), None)
+        else:
+            observed = None
         if ground_context_unavailable:
             # The previous frame's cached candidate must never keep publishing
             # position/geometry while the ground context is degraded/unknown.
@@ -782,6 +860,7 @@ class FallNodeCore:
             # cannot keep publishing the previous target's position.
             self._last_candidate = None
 
+        history_done = time.perf_counter()
         baseline_ack = None
         if ground_context_unavailable:
             # Settle the baseline *before* the feature/fall consumers read it, so
@@ -789,6 +868,8 @@ class FallNodeCore:
             # eligibility retires on the very frame the ground context is lost,
             # never after this frame's consumers already saw it.
             baseline_ack = self._cancel_baseline_on_ground_loss()
+        if not ground_context_unavailable and self.target_mode == 'automatic':
+            baseline_ack = self._feed_baseline(observed, track_state, source_stamp_s, receive, epoch)
         feature_block = self.features.update({
             "candidate": observed,
             "track_id": track_state["track_id"],
@@ -802,7 +883,7 @@ class FallNodeCore:
             "source_stamp_s": source_stamp_s,
         }, None if ground_context_unavailable else self.baseline.baseline)
 
-        if not ground_context_unavailable:
+        if not ground_context_unavailable and self.target_mode != 'automatic':
             baseline_ack = self._feed_baseline(observed, track_state,
                                                source_stamp_s, receive, epoch)
 
@@ -815,6 +896,8 @@ class FallNodeCore:
             "calibration_version": track_state["calibration_version"],
             "track_id": track_state["track_id"],
             "track_status": track_state["track_status"],
+            "candidate": observed,
+            "ground_relative_available": False if frame_valid and not self._ground_valid() else None,
         }, None if ground_context_unavailable else self.baseline.baseline)
 
         new_event = fall_block.get("new_event")
@@ -823,11 +906,17 @@ class FallNodeCore:
             if reason == "duplicate":
                 new_event = None
 
+        fall_done = time.perf_counter()
         state = self._state_payload(now, snapshot, frame_valid, track_state,
                                     feature_block, fall_block, observed)
         self._last_state = state
         return {"snapshot": snapshot, "state": state, "event": new_event,
-                "baseline_ack": baseline_ack}
+                "baseline_ack": baseline_ack,
+                "timings_s": dict(candidate_background_s=candidate_done-started,
+                    input_guard_ground_monitor_s=guard_done-candidate_done,
+                    history_association_s=history_done-guard_done,
+                    baseline_fall_s=fall_done-history_done,
+                    state_payload_s=time.perf_counter()-fall_done)}
 
     def _snapshot_id(self, seq, receive):
         if seq is not None:
@@ -888,6 +977,10 @@ class FallNodeCore:
                                         "unknown")
 
     def _feed_baseline(self, observed, track_state, source_stamp_s, receive, epoch):
+        if self.target_mode == 'automatic':
+            self.baseline.feed_automatic(observed, track_state, source_stamp_s)
+            self._baseline_status = self.baseline.status
+            return None
         if self.baseline.status != "pending":
             return None
         observation = {
@@ -905,7 +998,7 @@ class FallNodeCore:
             previous = self._baseline_status
             self._baseline_status = self.baseline.status
             if previous == "pending" and self.baseline.status in ("ready", "failed"):
-                return self._baseline_completion_ack()
+                return self._baseline_completion_ack() if self._baseline_request_id is not None else None
         return None
 
     def _cancel_baseline_on_ground_loss(self):
@@ -1034,6 +1127,8 @@ class FallNodeCore:
             if cached is not None:
                 return cached
             action = request.get("action")
+            if self.target_mode == "automatic" and action == "select":
+                return self._reject(request, "automatic_mode_use_manual_mode_for_selection")
             if action in GATED_ACTIONS:
                 reason = self._required_input_reason(receive_s)
                 if reason is not None:
@@ -1261,7 +1356,8 @@ class FallNodeCore:
             "kind": STATE_KIND,
             "schema_version": SCHEMA_VERSION,
             "session_id": self.session_id,
-            "time_epoch": track_state.get("time_epoch"),
+            # Source epoch exists before a target is acquired.
+            "time_epoch": self.cloud_timebase.time_epoch,
             "frame_id": None if source is None else source.get("frame_id"),
             "source_time_domain": SOURCE_TIME_DOMAIN,
             "clock_domain": self.clock_domain,
@@ -1271,8 +1367,12 @@ class FallNodeCore:
             "source": source,
             "method": METHOD,
             "input_profile": INPUT_PROFILE,
-            "target_kind": "human_like" if track_state.get("track_id") else None,
-            "selection_source": "operator" if track_state.get("track_id") else None,
+            "target_kind": ("geometry_unknown" if self.target_mode == "automatic" else "human_like") if track_state.get("track_id") else None,
+            "selection_source": ("automatic_acquisition" if self.target_mode == "automatic" else "operator") if track_state.get("track_id") else None,
+            "acquisition": dict(self.acquisition.state) if self.target_mode == "automatic" else None,
+            "target_mode": self.target_mode,
+            "semantic": "unknown",
+            "target_source_rows": list(observed.get("evidence_indices", [])) if observed else [],
             "observability": observability,
             "reason_codes": reasons,
             "track_id": track_state.get("track_id"),
@@ -1385,7 +1485,7 @@ class FallNodeCore:
             quality["ground_monitor"] = self.ground_monitor_report
         return quality
 
-    def status_state(self, now):
+    def status_state(self, now, now_fn=None):
         """A state payload when no new cloud arrived (freshness refresh only).
 
         The measurement contents are those of the last processed frame; only the
@@ -1398,11 +1498,20 @@ class FallNodeCore:
         """
         now = finite_or_none(now) or 0.0
         with self._lock:
+            if now_fn is not None:
+                sampled_now = finite_or_none(now_fn())
+                if sampled_now is not None:
+                    now = sampled_now
             # Watchdog side of the monitor: a stale/no-new-frame stream also
             # invalidates the current ground-observation window, so the same
             # recalibration latch rules apply as when the frame is absent.
             stream = self.cloud_timebase.streams["cloud"]
             status, _age = stream.freshness(now)
+            if self.target_mode == "automatic" and status != "fresh":
+                self.acquisition.reset('required_cloud_stale')
+                self.baseline.invalidate('required_cloud_stale')
+                self._last_candidate = None
+                self._last_state = None
             baseline_ack = None
             if self.ground_monitor is not None and status != "fresh":
                 self.ground_monitor.note_invalid()
@@ -1428,9 +1537,13 @@ class FallNodeCore:
                     self.cloud_timebase.streams["cloud"],
                     self._latest_valid_snapshot is not None, now)
                 reasons = []
+                freshness_codes = {label + suffix
+                    for label in set(self.cloud_timebase.streams) | set(self.aux_timebase.streams)
+                    for suffix in ("_no_data", "_stale")}
                 for code in (self.cloud_timebase.reason_codes(now)
                              + self.aux_timebase.reason_codes(now)
-                             + list(state.get("reason_codes") or [])):
+                             + [code for code in state.get("reason_codes") or []
+                                if code not in freshness_codes]):
                     if code and code not in reasons:
                         reasons.append(code)
                 if self._ground_context_unavailable() \

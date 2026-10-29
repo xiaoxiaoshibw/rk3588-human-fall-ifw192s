@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<style>
+  :root{
+    --bg:#070b10; --panel:#0c1219; --panel2:#0f1620; --line:#1e2b38;
+    --fg:#e6eef6; --dim:#8ba1b7; --green:#22ff88; --amber:#f2c14e;
+    --mono:"JetBrains Mono","Cascadia Mono",Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:radial-gradient(1200px 700px at 30% -10%,#122032 0%,#070b10 55%,#05080c 100%);
+       color:var(--fg);font-family:var(--mono);font-size:13px;overflow:hidden}
+  #app{height:100%;display:flex;flex-direction:column;gap:7px;padding:9px 11px 7px}
+  header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;flex:0 0 auto}
+  .brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;letter-spacing:.3px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);
+       animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+  .meta{color:var(--dim);font-size:11.6px;line-height:1.5}
+  .meta b{color:#cfe0ef;font-weight:500}
+  .spacer{flex:1 1 auto}
+  .ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  button{background:#12202c;color:var(--fg);border:1px solid var(--line);border-radius:6px;
+         padding:6px 11px;font-family:var(--mono);font-size:12.5px;cursor:pointer;transition:.15s}
+  button:hover{background:#1a2c3c;border-color:#2f4a60}
+  button.primary{background:#0e3a26;border-color:#1c6a44;color:#b8ffd9}
+  button.primary:hover{background:#125233}
+  label{color:var(--dim);font-size:12px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none}
+  select{background:#12202c;color:var(--fg);border:1px solid var(--line);border-radius:6px;
+         padding:5px 6px;font-family:var(--mono);font-size:12px}
+  input[type=checkbox]{accent-color:#22ff88}
+  main{flex:1 1 auto;display:grid;grid-template-columns:1.02fr 1fr;gap:10px;min-height:0}
+  .pane{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);
+        border-radius:10px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+  .ptitle{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:6px 11px;border-bottom:1px solid var(--line);
+          font-size:12px;color:#b9cbdc;letter-spacing:.4px}
+  .ptitle .tag{margin-left:auto;font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:999px;
+               padding:2px 9px;background:#0a1219;white-space:nowrap}
+  .ptitle .tag.on{color:#9dffc9;border-color:#1c6a44;background:#0b2118}
+  .ptitle .tag.warn{color:#ffd98a;border-color:#6b5320;background:#20190b}
+  .stage{position:relative;flex:1 1 auto;min-height:0;background:#05080c;overflow:hidden}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+  .stage video{position:absolute;background:#05080c}
+  .hud{position:absolute;top:7px;left:8px;padding:6px 9px;border-radius:7px;background:#05080ccc;
+       border:1px solid #16222e;font-size:11.5px;line-height:1.6;color:#cfe0ef;pointer-events:none;
+       white-space:pre;text-shadow:0 1px 2px #000}
+  .hud .k{color:#7f97ad}
+  .hud .v{color:#eaf4ff}
+  .hud .g{color:var(--green)}
+  .hud .a{color:var(--amber)}
+  .hud .m{color:#6f869b}
+  .legend{position:absolute;bottom:6px;left:8px;right:8px;display:flex;gap:13px;flex-wrap:wrap;
+          font-size:10.6px;color:#8299ad;background:#05080cc0;border:1px solid #131f2a;border-radius:6px;
+          padding:4px 8px;pointer-events:none}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle}
+  .legend .l3d{margin-left:auto;color:#5d7183}
+  footer{flex:0 0 auto;display:flex;flex-direction:column;gap:5px}
+  .tl{position:relative;height:22px;border:1px solid var(--line);border-radius:6px;background:#0a1119;
+      overflow:hidden;cursor:pointer}
+  .tl canvas{position:absolute;inset:0;width:100%;height:100%}
+  .tlrow{display:flex;align-items:center;gap:9px;font-size:11.4px;color:var(--dim);flex-wrap:wrap}
+  .tlrow .clock{color:#eaf4ff;font-variant-numeric:tabular-nums;min-width:74px}
+  .tlrow .pill{border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:#9fb4c8;background:#0b141d}
+  .tlrow .pill.g{color:#9dffc9;border-color:#1c6a44;background:#0b2118}
+  .tlrow .pill.a{color:#ffd98a;border-color:#6b5320;background:#20190b}
+  .hint{color:#5d7183;font-size:10.8px}
+  .kbd{border:1px solid #24323f;border-bottom-width:2px;border-radius:4px;padding:0 4px;color:#8ba1b7;font-size:10.2px}
+  .honest{font-size:10.8px;color:#6b8199;border-top:1px solid #14202b;padding-top:4px}
+  .honest b{color:#9fb4c8;font-weight:500}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand"><span class="dot"></span>PLANE-01 · 实时纸飞机绿框</div>
+    <div class="meta" id="meta"></div>
+    <div class="spacer"></div>
+    <div class="ctrl">
+      <button id="btnPlay" class="primary">▶ 播放</button>
+      <button id="btnReset">⟲ 重播</button>
+      <label><input type="checkbox" id="chkLoop" checked>循环</label>
+      <label>倍速
+        <select id="selSpeed">
+          <option value="0.25">0.25×</option>
+          <option value="0.5">0.5×</option>
+          <option value="1" selected>1× 实时</option>
+          <option value="2">2×</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="chkFollow" checked>跟随</label>
+    </div>
+  </header>
+
+  <main>
+    <section class="pane">
+      <div class="ptitle">雷达点云 · 绿色 3D 有向包围盒（OBB）
+        <span class="tag" id="tag3d">等待</span></div>
+      <div class="stage" id="stage3d">
+        <canvas id="cv3d"></canvas>
+        <div class="hud" id="hud3d"></div>
+        <div class="legend">
+          <span><i style="background:#3d7f96"></i>背景点云（会话静态）</span>
+          <span><i style="background:#22ff88"></i>目标点 / 包围盒</span>
+          <span><i style="background:#f2c14e"></i>候选（未确认）</span>
+          <span class="l3d">网格 = z=0 参考面（非地面标定） · 拖拽旋转 · 滚轮缩放 · 双击复位</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="pane">
+      <div class="ptitle">USB 相机视频 · 绿色 2D 检测框
+        <span class="tag" id="tagcam">等待</span></div>
+      <div class="stage" id="stagecam">
+        <video id="vid" muted playsinline preload="auto"></video>
+        <canvas id="cv2d"></canvas>
+        <div class="hud" id="hudcam"></div>
+        <div class="legend">
+          <span><i style="background:#22ff88"></i>2D 检测框（时域中值背景 + 帧差 + 轨迹）</span>
+          <span class="l3d" id="clockcam"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="tl" id="tl"><canvas id="tlCanvas"></canvas></div>
+    <div class="tlrow">
+      <span class="clock" id="clock">0.000 s</span>
+      <span class="pill" id="phase">—</span>
+      <span class="pill" id="pillRadar">雷达 —</span>
+      <span class="pill" id="pillCam">相机 —</span>
+      <span class="spacer"></span>
+      <span class="hint"><span class="kbd">空格</span> 播放/暂停 · <span class="kbd">←</span><span class="kbd">→</span> 单帧 · <span class="kbd">Home</span> 开头</span>
+    </div>
+    <div class="honest" id="honest"></div>
+  </footer>
+</div>
+<script>
+"use strict";
+const DATA = __DATA_JSON__;
+</script>
+<script>
+"use strict";
+/* ============================ 常量 / 状态 ============================ */
+const RADAR = DATA.radar;
+const CAM = DATA.cam;
+const T_END = DATA.session.duration;
+const FPS = CAM.fps;
+const CVW = 960, CVH = 540;
+
+const cv3 = document.getElementById("cv3d");
+const ctx3 = cv3.getContext("2d", { alpha: false });
+const cv2 = document.getElementById("cv2d");
+const ctx2 = cv2.getContext("2d");
+const vid = document.getElementById("vid");
+const stage3 = document.getElementById("stage3d");
+const stageC = document.getElementById("stagecam");
+const tl = document.getElementById("tl");
+const tlCanvas = document.getElementById("tlCanvas");
+
+let DPR = 1;
+let W3 = 0, H3 = 0, W2 = 0, H2 = 0;
+let VBOX = { x: 0, y: 0, w: 960, h: 540 };
+let zbuf = null, imgData = null, px32 = null, off = null, offCtx = null;
+
+const view = { yaw: DATA.view.yaw, pitch: DATA.view.pitch, dist: DATA.view.dist,
+               focus: DATA.view.focus.slice(), focusTarget: DATA.view.focus.slice() };
+const viewHome = { yaw: view.yaw, pitch: view.pitch, dist: view.dist, focus: view.focus.slice() };
+
+/* 背景点云（int16 毫米，分量交错） */
+const BG = (() => {
+  const raw = atob(DATA.bg.xyz_b64);
+  const n = DATA.bg.count;
+  const out = new Float32Array(n * 3);
+  for (let i = 0; i < n * 3; i++) {
+    const a = raw.charCodeAt(i * 2), b = raw.charCodeAt(i * 2 + 1);
+    let v = a | (b << 8);
+    if (v & 0x8000) v -= 0x10000;
+    out[i] = v / 1000;
+  }
+  return out;
+})();
+const BGN = BG.length / 3;
+const BGCOL = new Uint32Array(BGN);
+for (let i = 0; i < BGN; i++) {
+  const r = Math.hypot(BG[i * 3], BG[i * 3 + 1], BG[i * 3 + 2]);
+  const u = Math.min(1, Math.max(0, (r - 1.0) / 13));
+  const cr = Math.round(54 - 22 * u);
+  const cg = Math.round(132 - 34 * u);
+  const cb = Math.round(166 - 30 * u);
+  BGCOL[i] = (255 << 24) | (cb << 16) | (cg << 8) | cr;
+}
+
+/* ============================ 尺寸 ============================ */
+function resizeAll() {
+  DPR = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+  const r3 = stage3.getBoundingClientRect();
+  W3 = Math.max(80, Math.round(r3.width * DPR));
+  H3 = Math.max(80, Math.round(r3.height * DPR));
+  cv3.width = W3; cv3.height = H3;
+  zbuf = new Float32Array(W3 * H3);
+  imgData = ctx3.createImageData(W3, H3);
+  px32 = new Uint32Array(imgData.data.buffer);
+  if (!off) { off = document.createElement("canvas"); }
+  off.width = W3; off.height = H3;
+  offCtx = off.getContext("2d");
+
+  /* 视频按 16:9 等比放进舞台；覆盖层 canvas 与视频同框，坐标严格对应 960x540 */
+  const rc = stageC.getBoundingClientRect();
+  const cssW = Math.max(80, rc.width), cssH = Math.max(80, rc.height);
+  const scale = Math.min(cssW / CVW, cssH / CVH);
+  VBOX = { x: (cssW - CVW * scale) / 2, y: (cssH - CVH * scale) / 2,
+           w: CVW * scale, h: CVH * scale };
+  vid.style.left = VBOX.x + "px";
+  vid.style.top = VBOX.y + "px";
+  vid.style.width = VBOX.w + "px";
+  vid.style.height = VBOX.h + "px";
+  cv2.style.left = VBOX.x + "px";
+  cv2.style.top = VBOX.y + "px";
+  cv2.style.width = VBOX.w + "px";
+  cv2.style.height = VBOX.h + "px";
+  W2 = Math.max(80, Math.round(VBOX.w * DPR));
+  H2 = Math.max(80, Math.round(VBOX.h * DPR));
+  cv2.width = W2; cv2.height = H2;
+
+  const rt = tl.getBoundingClientRect();
+  tlCanvas.width = Math.max(64, Math.round(rt.width * DPR));
+  tlCanvas.height = Math.max(16, Math.round(rt.height * DPR));
+  drawTimeline();
+}
+
+/* ============================ 索引查找 ============================ */
+function camIndexAt(t) {
+  let lo = 0, hi = CAM.frames.length - 1, ans = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (CAM.frames[mid].t <= t + 1e-9) { ans = mid; lo = mid + 1; } else { hi = mid - 1; }
+  }
+  return ans;
+}
+function radarIndexAt(t) {
+  let lo = 0, hi = RADAR.length - 1, ans = 0;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (RADAR[mid].t <= t + 1e-9) { ans = mid; lo = mid + 1; } else { hi = mid - 1; }
+  }
+  return ans;
+}
+
+/* ============================ 3D 渲染 ============================ */
+let camBasis = null;
+function computeBasis() {
+  const tgt = view.focus;
+  const cp = Math.cos(view.pitch), sp = Math.sin(view.pitch);
+  const cy = Math.cos(view.yaw), sy = Math.sin(view.yaw);
+  const eye = [tgt[0] + view.dist * cp * cy, tgt[1] + view.dist * cp * sy, tgt[2] + view.dist * sp];
+  let f = [tgt[0] - eye[0], tgt[1] - eye[1], tgt[2] - eye[2]];
+  const fl = Math.hypot(f[0], f[1], f[2]) || 1;
+  f = [f[0] / fl, f[1] / fl, f[2] / fl];
+  let r = [f[1], -f[0], 0];
+  const rl = Math.hypot(r[0], r[1]) || 1;
+  r = [r[0] / rl, r[1] / rl, 0];
+  const u = [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]];
+  const focal = (H3 / 2) / Math.tan(0.46);
+  camBasis = { eye, f, r, u, focal, cx: W3 / 2, cyy: H3 / 2 };
+}
+function projP(p) {
+  const b = camBasis;
+  const dx = p[0] - b.eye[0], dy = p[1] - b.eye[1], dz = p[2] - b.eye[2];
+  const vz = dx * b.f[0] + dy * b.f[1] + dz * b.f[2];
+  if (vz < 0.10) return null;
+  const s = b.focal / vz;
+  return [b.cx + (dx * b.r[0] + dy * b.r[1] + dz * b.r[2]) * s,
+          b.cyy - (dx * b.u[0] + dy * b.u[1] + dz * b.u[2]) * s, vz];
+}
+
+function render3d() {
+  for (let k = 0; k < 3; k++) {
+    view.focus[k] += (view.focusTarget[k] - view.focus[k]) * 0.16;
+  }
+  computeBasis();
+  const b = camBasis;
+
+  zbuf.fill(Infinity);
+  px32.fill(0);
+
+  for (let i = 0; i < BGN; i++) {
+    const dx = BG[i * 3] - b.eye[0], dy = BG[i * 3 + 1] - b.eye[1], dz = BG[i * 3 + 2] - b.eye[2];
+    const vz = dx * b.f[0] + dy * b.f[1] + dz * b.f[2];
+    if (vz < 0.12) continue;
+    const s = b.focal / vz;
+    const sx = b.cx + (dx * b.r[0] + dy * b.r[1] + dz * b.r[2]) * s;
+    const sy = b.cyy - (dx * b.u[0] + dy * b.u[1] + dz * b.u[2]) * s;
+    if (sx < 0 || sy < 0 || sx >= W3 - 2 || sy >= H3 - 2) continue;
+    const p = (sy | 0) * W3 + (sx | 0);
+    if (vz < zbuf[p]) {
+      zbuf[p] = vz; zbuf[p + 1] = vz; zbuf[p + W3] = vz; zbuf[p + W3 + 1] = vz;
+      const c = BGCOL[i];
+      px32[p] = c; px32[p + 1] = c; px32[p + W3] = c; px32[p + W3 + 1] = c;
+    }
+  }
+
+  const fr = RADAR[curFrame];
+  const GTX = (255 << 24) | (0x88 << 16) | (0xff << 8) | 0x22;
+  if (fr && fr.box) {
+    const gp = fr.p3;
+    for (let i = 0; i < gp.length; i++) {
+      const q = projP(gp[i]);
+      if (!q) continue;
+      const x0 = Math.round(q[0]), y0 = Math.round(q[1]);
+      for (let oy = -1; oy <= 1; oy++) {
+        for (let ox = -1; ox <= 1; ox++) {
+          const xx = x0 + ox, yy = y0 + oy;
+          if (xx < 0 || yy < 0 || xx >= W3 || yy >= H3) continue;
+          const p = yy * W3 + xx;
+          if (q[2] <= zbuf[p] + 0.03) { zbuf[p] = q[2]; px32[p] = GTX; }
+        }
+      }
+    }
+  }
+  offCtx.putImageData(imgData, 0, 0);
+
+  const grad = ctx3.createLinearGradient(0, 0, 0, H3);
+  grad.addColorStop(0, "#0a141f");
+  grad.addColorStop(1, "#03060a");
+  ctx3.fillStyle = grad;
+  ctx3.fillRect(0, 0, W3, H3);
+
+  ctx3.strokeStyle = "rgba(56,92,118,0.34)";
+  ctx3.lineWidth = Math.max(1, DPR * 0.8);
+  for (let gx = 0; gx <= 8; gx++) {
+    const a = projP([gx, -1, 0]), c = projP([gx, 6, 0]);
+    if (a && c) { ctx3.beginPath(); ctx3.moveTo(a[0], a[1]); ctx3.lineTo(c[0], c[1]); ctx3.stroke(); }
+  }
+  for (let gy = -1; gy <= 6; gy++) {
+    const a = projP([0, gy, 0]), c = projP([8, gy, 0]);
+    if (a && c) { ctx3.beginPath(); ctx3.moveTo(a[0], a[1]); ctx3.lineTo(c[0], c[1]); ctx3.stroke(); }
+  }
+
+  ctx3.drawImage(off, 0, 0);
+
+  if (fr && fr.box) {
+    let started = false;
+    ctx3.strokeStyle = "rgba(34,255,136,0.40)";
+    ctx3.lineWidth = Math.max(1.2, DPR * 1.2);
+    ctx3.beginPath();
+    for (let i = 0; i <= curFrame; i++) {
+      const r2 = RADAR[i];
+      if (!r2.box || r2.track !== fr.track) continue;
+      const q = projP(r2.box.c);
+      if (!q) { started = false; continue; }
+      if (!started) { ctx3.moveTo(q[0], q[1]); started = true; } else { ctx3.lineTo(q[0], q[1]); }
+    }
+    ctx3.stroke();
+
+    const C = fr.box.c, A = fr.box.a, h = fr.box.h;
+    const corners = [];
+    for (let i = 0; i < 8; i++) {
+      const sx = (i & 1) ? 1 : -1, sy2 = (i & 2) ? 1 : -1, sz = (i & 4) ? 1 : -1;
+      corners.push([
+        C[0] + A[0][0] * h[0] * sx + A[1][0] * h[1] * sy2 + A[2][0] * h[2] * sz,
+        C[1] + A[0][1] * h[0] * sx + A[1][1] * h[1] * sy2 + A[2][1] * h[2] * sz,
+        C[2] + A[0][2] * h[0] * sx + A[1][2] * h[1] * sy2 + A[2][2] * h[2] * sz
+      ]);
+    }
+    const edges = [[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]];
+    const solid = fr.st === "confirmed";
+    ctx3.lineWidth = Math.max(1.6, DPR * (solid ? 2.1 : 1.5));
+    ctx3.strokeStyle = solid ? "rgba(34,255,136,0.98)" : "rgba(242,193,78,0.96)";
+    ctx3.setLineDash(solid ? [] : [5 * DPR, 4 * DPR]);
+    ctx3.beginPath();
+    for (let e = 0; e < edges.length; e++) {
+      const pa = projP(corners[edges[e][0]]), pb = projP(corners[edges[e][1]]);
+      if (pa && pb) { ctx3.moveTo(pa[0], pa[1]); ctx3.lineTo(pb[0], pb[1]); }
+    }
+    ctx3.stroke();
+    ctx3.setLineDash([]);
+    const pc = projP(C);
+    if (pc) {
+      ctx3.fillStyle = "rgba(34,255,136,0.95)";
+      const s = 2.6 * DPR;
+      ctx3.fillRect(pc[0] - s, pc[1] - s, 2 * s, 2 * s);
+    }
+  }
+
+  drawAxes();
+
+  let html;
+  if (!fr || !fr.box) {
+    html = "帧 <span class='v'>" + (curFrame + 1) + " / " + RADAR.length + "</span>" +
+           "   t = <span class='v'>" + fr.t.toFixed(2) + " s</span>\n" +
+           "<span class='k'>状态</span> " + (fr.st === "boot"
+             ? "<span class='m'>背景建立中（本帧不检测）</span>"
+             : "<span class='m'>无目标</span>") + "\n" +
+           "<span class='k'>前景点</span> <span class='v'>" + fr.fg + "</span>" +
+           "   <span class='k'>候选簇</span> <span class='v'>" + fr.nc + "</span>";
+  } else {
+    const bx = fr.box;
+    html = "帧 <span class='v'>" + (curFrame + 1) + " / " + RADAR.length + "</span>" +
+           "   t = <span class='v'>" + fr.t.toFixed(2) + " s</span>\n" +
+           "<span class='k'>状态</span> " + (fr.st === "confirmed"
+             ? "<span class='g'>目标确认 T" + fr.track + "（命中 " + fr.hits + "）</span>"
+             : "<span class='a'>候选 T" + fr.track + "（未确认）</span>") + "\n" +
+           "<span class='k'>距离</span> <span class='v'>" + fr.range.toFixed(2) + " m</span>" +
+           "   <span class='k'>速度</span> <span class='v'>" + fr.speed.toFixed(2) + " m/s</span>\n" +
+           "<span class='k'>框尺寸</span> <span class='v'>" + (bx.h[0] * 2).toFixed(2) + " × " +
+           (bx.h[1] * 2).toFixed(2) + " × " + (bx.h[2] * 2).toFixed(2) + " m</span>\n" +
+           "<span class='k'>目标点</span> <span class='g'>" + bx.n + "</span>" +
+           "   <span class='k'>前景点</span> <span class='v'>" + fr.fg + "</span>";
+  }
+  document.getElementById("hud3d").innerHTML = html;
+}
+
+function drawAxes() {
+  const ox = W3 - 46 * DPR, oy = 34 * DPR, len = 15 * DPR;
+  const o = projP(view.focus);
+  if (!o) return;
+  ctx3.save();
+  ctx3.font = Math.round(10 * DPR) + "px monospace";
+  const tri = [[1, 0, 0, "#ff6b6b", "x"], [0, 1, 0, "#7ee787", "y"], [0, 0, 1, "#6ea8fe", "z"]];
+  for (const t of tri) {
+    const q = projP([view.focus[0] + t[0] * 0.4, view.focus[1] + t[1] * 0.4, view.focus[2] + t[2] * 0.4]);
+    if (!q) continue;
+    const dx = q[0] - o[0], dy = q[1] - o[1];
+    const l = Math.hypot(dx, dy) || 1;
+    ctx3.strokeStyle = t[3]; ctx3.fillStyle = t[3];
+    ctx3.lineWidth = Math.max(1, DPR);
+    ctx3.beginPath();
+    ctx3.moveTo(ox, oy); ctx3.lineTo(ox + dx / l * len, oy + dy / l * len); ctx3.stroke();
+    ctx3.fillText(t[4], ox + dx / l * (len + 6 * DPR) - 3 * DPR, oy + dy / l * (len + 6 * DPR) + 3 * DPR);
+  }
+  ctx3.restore();
+}
+
+/* ============================ 相机 2D 覆盖层 ============================ */
+function draw2d() {
+  ctx2.clearRect(0, 0, W2, H2);
+  const scale = W2 / CVW;
+  const ox = 0, oy = 0;
+  let idx = Math.floor(vid.currentTime * FPS + 0.02);
+  idx = Math.min(CAM.frames.length - 1, Math.max(0, idx));
+  const cf = CAM.frames[idx];
+  let hud;
+  if (cf && cf.box) {
+    const bx = cf.box;
+    const x = ox + bx[0] * scale, y = oy + bx[1] * scale;
+    const ww = (bx[2] - bx[0]) * scale, hh = (bx[3] - bx[1]) * scale;
+    ctx2.lineWidth = Math.max(2, DPR * 2.2);
+    ctx2.strokeStyle = "rgba(34,255,136,0.98)";
+    ctx2.shadowColor = "rgba(34,255,136,0.6)";
+    ctx2.shadowBlur = 10 * DPR;
+    ctx2.strokeRect(x, y, ww, hh);
+    ctx2.shadowBlur = 0;
+    const k = Math.min(15 * DPR, ww * 0.35, hh * 0.35);
+    ctx2.lineWidth = Math.max(2.4, DPR * 3);
+    ctx2.beginPath();
+    ctx2.moveTo(x, y + k); ctx2.lineTo(x, y); ctx2.lineTo(x + k, y);
+    ctx2.moveTo(x + ww - k, y); ctx2.lineTo(x + ww, y); ctx2.lineTo(x + ww, y + k);
+    ctx2.moveTo(x + ww, y + hh - k); ctx2.lineTo(x + ww, y + hh); ctx2.lineTo(x + ww - k, y + hh);
+    ctx2.moveTo(x + k, y + hh); ctx2.lineTo(x, y + hh); ctx2.lineTo(x, y + hh - k);
+    ctx2.stroke();
+    ctx2.font = Math.round(11.5 * DPR) + "px monospace";
+    const label = "纸飞机 2D 框";
+    const tw = ctx2.measureText(label).width + 10 * DPR;
+    const ly = Math.max(oy + 14 * DPR, y - 8 * DPR);
+    ctx2.fillStyle = "rgba(5,20,12,0.86)";
+    ctx2.fillRect(x, ly - 12 * DPR, tw, 15 * DPR);
+    ctx2.fillStyle = "#8dffc2";
+    ctx2.fillText(label, x + 5 * DPR, ly);
+    hud = "相机帧 <span class='v'>" + (idx + 1) + " / " + CAM.frames.length + "</span>" +
+          "   t = <span class='v'>" + cf.t.toFixed(2) + " s</span>\n" +
+          "<span class='k'>2D 框</span> <span class='g'>(" + bx[0] + "," + bx[1] + ") – (" + bx[2] + "," + bx[3] + ")</span>\n" +
+          "<span class='k'>面积</span> <span class='v'>" + (cf.area || 0) + " px</span>" +
+          "   <span class='k'>峰值</span> <span class='v'>" + Math.round(cf.peak || 0) + "</span>";
+  } else {
+    hud = "相机帧 <span class='v'>" + (idx + 1) + " / " + CAM.frames.length + "</span>" +
+          "   t = <span class='v'>" + (cf ? cf.t.toFixed(2) : "-") + " s</span>\n" +
+          "<span class='k'>状态</span> <span class='m'>无目标</span>";
+  }
+  document.getElementById("hudcam").innerHTML = hud;
+}
+
+/* ============================ 时间轴 ============================ */
+function drawTimeline() {
+  const w = tlCanvas.width, h = tlCanvas.height;
+  if (!w || !h) return;
+  const c = tlCanvas.getContext("2d");
+  c.clearRect(0, 0, w, h);
+  const n = RADAR.length;
+  const bw = w / n;
+  for (let i = 0; i < n; i++) {
+    const st = RADAR[i].st;
+    c.fillStyle = st === "confirmed" ? "#1f7d4d"
+      : (st === "tentative" ? "#6b5320" : (st === "boot" ? "#2b4a63" : "#16232f"));
+    c.fillRect(i * bw + 0.5, 3 * DPR, Math.max(1, bw - 1), 8 * DPR);
+  }
+  for (let i = 0; i < CAM.frames.length; i++) {
+    const f = CAM.frames[i];
+    if (!f.box) continue;
+    const x = (f.t / T_END) * w;
+    c.fillStyle = "#22ff88";
+    c.globalAlpha = 0.85;
+    c.fillRect(x, 14 * DPR, Math.max(1.4, w / CAM.frames.length - 1.4), 4.5 * DPR);
+    c.globalAlpha = 1;
+  }
+  const x = Math.min(w - 2, Math.max(0, (t / T_END) * w));
+  c.fillStyle = "#eaf4ff";
+  c.fillRect(x - 1 * DPR, 0, 2 * DPR, h);
+  c.font = Math.round(9.5 * DPR) + "px monospace";
+  c.fillStyle = "#6f869b";
+  c.fillText("雷达 51 帧（上） · 相机 69 帧检测（下）", 6 * DPR, h - 2 * DPR);
+}
+
+/* ============================ 播放 ============================ */
+let t = 0, curFrame = 0, playing = false, speed = 1, loop = true, follow = true;
+let last = 0, lastRender = 0;
+
+function setPlaying(p) {
+  playing = p;
+  document.getElementById("btnPlay").textContent = p ? "❚❚ 暂停" : "▶ 播放";
+  if (p) {
+    if (t >= T_END - 1e-3) { t = 0; seekVideo(true); }
+    vid.play().catch(function () {});
+    last = performance.now();
+  } else {
+    vid.pause();
+  }
+}
+function seekVideo(force) {
+  const i = camIndexAt(t);
+  if (i < 0) return;
+  const want = i / FPS;
+  const dur = isFinite(vid.duration) ? vid.duration : 1e9;
+  if (force || Math.abs(vid.currentTime - want) > 0.18) {
+    try { vid.currentTime = Math.max(0, Math.min(want, dur - 0.04)); } catch (e) {}
+  }
+}
+
+function snapFocus() {
+  if (follow) view.focus = view.focusTarget.slice();
+}
+
+function updateFrame() {
+  curFrame = radarIndexAt(t);
+  const f = RADAR[curFrame];
+  const tag = document.getElementById("tag3d");
+  if (f.st === "confirmed") { tag.textContent = "目标确认 T" + f.track; tag.className = "tag on"; }
+  else if (f.st === "tentative") { tag.textContent = "候选 T" + f.track; tag.className = "tag warn"; }
+  else if (f.st === "boot") { tag.textContent = "建立背景"; tag.className = "tag"; }
+  else { tag.textContent = "无目标"; tag.className = "tag"; }
+
+  const ci = camIndexAt(t);
+  const cf = ci >= 0 ? CAM.frames[ci] : null;
+  const tagc = document.getElementById("tagcam");
+  if (cf && cf.box) { tagc.textContent = "2D 框"; tagc.className = "tag on"; }
+  else { tagc.textContent = "无目标"; tagc.className = "tag"; }
+
+  const ph = document.getElementById("phase");
+  if (f.st === "boot") { ph.textContent = "建背景"; ph.className = "pill"; }
+  else if (f.st === "none") { ph.textContent = "无目标"; ph.className = "pill"; }
+  else if (f.st === "tentative") { ph.textContent = "候选"; ph.className = "pill a"; }
+  else { ph.textContent = f.speed > 0.5 ? "飞行 / 运动" : "静止"; ph.className = "pill g"; }
+
+  document.getElementById("clock").textContent = t.toFixed(3) + " s";
+  document.getElementById("pillRadar").textContent =
+      "雷达帧 " + (curFrame + 1) + "/" + RADAR.length + " · 前景 " + f.fg + " 点";
+  document.getElementById("pillCam").textContent = "相机 " + (ci >= 0 ? (ci + 1) : 0) + "/" + CAM.frames.length;
+
+  if (follow) {
+    view.focusTarget = f.box ? f.box.c.slice() : viewHome.focus.slice();
+  }
+}
+
+function tick(now) {
+  const dt = Math.min(0.25, Math.max(0, (now - last) / 1000));
+  last = now;
+  if (playing) {
+    t += dt * speed;
+    if (t >= T_END) {
+      if (loop) { t = 0; seekVideo(true); } else { t = T_END; setPlaying(false); }
+    }
+    seekVideo(false);
+  }
+  if (now - lastRender >= 32) {
+    lastRender = now;
+    updateFrame();
+    render3d();
+    draw2d();
+    drawTimeline();
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ============================ 交互 ============================ */
+document.getElementById("btnPlay").addEventListener("click", function () { setPlaying(!playing); });
+document.getElementById("btnReset").addEventListener("click", function () {
+  t = 0; seekVideo(true); setPlaying(true);
+});
+document.getElementById("chkLoop").addEventListener("change", function (e) { loop = e.target.checked; });
+document.getElementById("chkFollow").addEventListener("change", function (e) { follow = e.target.checked; });
+document.getElementById("selSpeed").addEventListener("change", function (e) {
+  speed = parseFloat(e.target.value);
+  vid.playbackRate = Math.min(4, speed);
+});
+
+let dragging = false, draggingTl = false, lx = 0, ly = 0;
+cv3.addEventListener("pointerdown", function (e) {
+  dragging = true; lx = e.clientX; ly = e.clientY;
+  try { cv3.setPointerCapture(e.pointerId); } catch (err) {}
+});
+cv3.addEventListener("pointermove", function (e) {
+  if (!dragging) return;
+  view.yaw -= (e.clientX - lx) * 0.006;
+  view.pitch = Math.max(-0.15, Math.min(1.30, view.pitch + (e.clientY - ly) * 0.005));
+  lx = e.clientX; ly = e.clientY;
+});
+cv3.addEventListener("pointerup", function () { dragging = false; });
+cv3.addEventListener("pointercancel", function () { dragging = false; });
+cv3.addEventListener("wheel", function (e) {
+  e.preventDefault();
+  view.dist = Math.max(0.7, Math.min(18, view.dist * (1 + Math.sign(e.deltaY) * 0.09)));
+}, { passive: false });
+cv3.addEventListener("dblclick", function () {
+  view.yaw = viewHome.yaw; view.pitch = viewHome.pitch; view.dist = viewHome.dist;
+  view.focusTarget = viewHome.focus.slice();
+});
+
+function seekFromEvent(e) {
+  const r = tl.getBoundingClientRect();
+  const u = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+  t = u * T_END;
+  seekVideo(true);
+  updateFrame(); snapFocus(); render3d(); draw2d(); drawTimeline();
+}
+tl.addEventListener("pointerdown", function (e) {
+  draggingTl = true;
+  try { tl.setPointerCapture(e.pointerId); } catch (err) {}
+  seekFromEvent(e);
+});
+tl.addEventListener("pointermove", function (e) { if (draggingTl) seekFromEvent(e); });
+tl.addEventListener("pointerup", function () { draggingTl = false; });
+tl.addEventListener("pointercancel", function () { draggingTl = false; });
+
+window.addEventListener("keydown", function (e) {
+  if (e.code === "Space") { e.preventDefault(); setPlaying(!playing); }
+  else if (e.code === "ArrowRight") {
+    const i = Math.min(RADAR.length - 1, curFrame + 1);
+    t = RADAR[i].t; seekVideo(true);
+  } else if (e.code === "ArrowLeft") {
+    const i = Math.max(0, curFrame - 1);
+    t = RADAR[i].t; seekVideo(true);
+  } else if (e.code === "Home") { t = 0; seekVideo(true); }
+});
+
+/* ============================ 启动 ============================ */
+(function boot() {
+  const s = DATA.session, st = DATA.stats;
+  document.getElementById("meta").innerHTML =
+    "<b>" + s.id + "</b> · 雷达 " + s.frames + " 帧 / " +
+    (s.total_points / 1e4).toFixed(1) + " 万点 / " + s.duration.toFixed(2) + " s · 相机 " +
+    s.camera_frames + " 帧 · 单帧检测中位 " + st.detect_ms_median.toFixed(1) +
+    " ms（P95 " + st.detect_ms_p95.toFixed(1) + " ms）";
+  document.getElementById("clockcam").textContent =
+    "相机时钟偏移 " + (s.offset_s >= 0 ? "+" : "") + s.offset_s.toFixed(2) + " s（落地时刻锚定）";
+  document.getElementById("honest").innerHTML =
+    "<b>口径</b>：绿框 = 几何包围盒，不是“已识别为纸飞机”；目标语义来自用户口头标注（无分类器 / 无 GT）。" +
+    " 背景 = 前 " + st.boot_frames + " 帧逐射线中位数，之后冻结；前景 = 距离判据 ∪ 3D 新点（" +
+    st.novelty_index + "）；聚类 ≥" + DATA.params.min_points + " 点且跨度 ≤" + DATA.params.max_extent_m +
+    " m。检出 " + st.target_frames + " 帧（运动 " + st.flight_frames + " 帧，其余静止），建背景 " +
+    st.boot_frames + " 帧，无目标 " + st.none_frames + " 帧。";
+  vid.src = DATA.video_uri;
+  resizeAll();
+  window.addEventListener("resize", resizeAll);
+  vid.addEventListener("loadeddata", function () { seekVideo(true); });
+  /* 深链：?t=2.5 直接定位到该会话时刻；?yaw=&pitch=&dist= 可换视角（截图/复核用） */
+  const m = /[?&]t=([0-9.]+)/.exec(location.search);
+  const q = (k) => { const r = new RegExp("[?&]" + k + "=(-?[0-9.]+)").exec(location.search); return r ? parseFloat(r[1]) : null; };
+  const qy = q("yaw"), qp = q("pitch"), qd = q("dist");
+  if (qy !== null) { view.yaw = qy; viewHome.yaw = qy; }
+  if (qp !== null) { view.pitch = qp; viewHome.pitch = qp; }
+  if (qd !== null) { view.dist = qd; viewHome.dist = qd; }
+  if (m) {
+    t = Math.max(0, Math.min(T_END, parseFloat(m[1])));
+    seekVideo(true);
+  }
+  updateFrame(); snapFocus(); render3d(); draw2d(); drawTimeline();
+  last = performance.now();
+  requestAnimationFrame(tick);
+  if (!m) setTimeout(function () { if (!playing) setPlaying(true); }, 600);
+})();
+</script>
+</body>
+</html>

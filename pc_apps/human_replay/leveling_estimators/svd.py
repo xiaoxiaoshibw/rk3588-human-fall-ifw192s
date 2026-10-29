@@ -1,9 +1,6 @@
-"""P02 plane_from_svd: centered thin SVD, full shared domain."""
-import numpy as np
-
-
-def estimate(points):
-    center = points.mean(axis=0)
-    _, _, vectors = np.linalg.svd(points - center, full_matrices=False)
-    normal = vectors[-1]
-    return normal, -float(normal @ center)
+"""Compatibility import; canonical implementation is shared with ROS."""
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[3]/"src/human_fall_detection"))
+import core.ground_fit.leveling_estimators.svd as _shared
+globals().update({k:v for k,v in vars(_shared).items() if not k.startswith("__")})

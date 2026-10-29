@@ -22,8 +22,7 @@ __pycache__/
 /ML/models/
 
 # 发布/打包产物（exe 与 zip 由 build 流水线重建，不入库；源码与 spec 入库）
-/pc_apps/console/dist/
-/pc_apps/console/build/
+# 2026-10-25：旧网页版总控制台已删，pc_apps/console 仅剩 joint_capture 后端，无打包产物
 
 # 用户人工收集的原始配置与草稿，已移到本地不入库
 /mirasim.txt
@@ -73,12 +72,10 @@ docs/human_capture/evidence/**/*.npz
 /pc_apps/human_replay/gt_store/
 
 # 杂项/解包残留（2026-10-13 盘点发现）
-/pc_apps/console/O console_extracted
 /pelican_bike.html
 /ml_step1/
 
 # HC-JOINT 本机联合录制产物（exe/zip 由 make_leveling_release.py 重建，不入库）
-/pc_apps/console/dist_leveling/
 
 # 2026-10-14 主线对齐：证据/快照/评审类[可从 captures、leveled、评审会话再生成]派生物不入库
 # （保留者可由源数据+generate 脚本再生；其存在性与 SHA 应登在 returns/审计README）
@@ -93,7 +90,6 @@ sidequests/**/results/**/cap_*.jsonl
 sidequests/**/results/**/cap_*.json
 sidequests/**/results/AUDIT.json
 # O 前缀临时导出产物
-"O console_extracted"
 
 # 2026-10-15 清理：证据目录通用重扩展（点云/打包/截图/回放派生物，可由 session SHA 复核再生）
 docs/**/evidence/**/*.npz
@@ -129,8 +125,33 @@ docs/human_capture/evidence/2026-10-15_hfus_deep_routes_r1/
 /sidequests/human_fusion_lab_next/pointset/r01/server.pid
 
 # 2026-10-15 清理：打包产物
-/pc_apps/console/build.zip
 /sidequests/human_fusion_lab/results/dataset_dual.zip
 
 # 2026-10-15 清理：根目录 Bird识别/ 是 sidequests/plane_track/ 的旧副本，保留在磁盘但不入库
 /Bird识别/
+
+# annotator_v2 构建产物与依赖（源码入库，派生物不入库）
+/pc_apps/annotator_v2/node_modules/
+/pc_apps/annotator_v2/dist/
+/pc_apps/annotator_v2/gt_store_v2/
+# Local display names; source session directories remain untouched.
+console_v2/user_data/
+
+# 2026-10-29 仓库同步：运行日志 / 临时目录 / 依赖与构建产物（此前全部未跟踪，会把推送撑到 GB 级）
+*.log
+/.dsh_tmp/
+/node_modules/
+/dist/
+# console_v2 自带 .gitignore（.tools/ bin/ obj/ spike 构建产物），此处只兜底 Qt 本地缓存
+console_v2/.qtc_clangd/
+
+# 2026-10-29 仓库同步：demo_viewer 演示视频（单集体积 20–31MB，共 318MB，可由会话重渲）
+/pc_apps/demo_viewer/*.mp4
+
+# 2026-10-29 仓库同步：新增证据批量产物不入库（已有跟踪账本仍由 git add -u 维护；
+# 新证据放 docs/evidence/ 时只登记 PROGRESS/摘要与 SHA，机器产物留在本地）
+/docs/evidence/
+/docs/human_fall/evidence/
+/docs/human_capture/evidence/
+/docs/sidequests/evidence/
+/damage.txt

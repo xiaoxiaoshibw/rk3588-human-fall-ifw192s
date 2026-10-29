@@ -1,0 +1,87 @@
+candidates:
+  range_min_m: 0.8
+  range_max_m: 8.0
+  height_min_m: 0.08
+  height_max_m: 2.5
+  denoise_enabled: true
+  denoise_radius_m: 0.1
+  denoise_min_neighbors: 2
+  voxel_size_m: 0.08
+  cluster_cell_m: 0.05
+  max_points: 60000
+  min_cluster_points: 30
+  preferred_cluster_points: 80
+  pca_min_points: 12
+  pca_axis_ratio: 2.5
+  background_cell_m: 0.1
+  background_z_cell_m: 0.1
+  cluster_mode: spatial_3d
+association:
+  gate_m: 0.8
+  ambiguity_margin_m: 0.2
+  max_speed_m_s: 2.5
+  max_size_ratio: 3.0
+tracking:
+  gate_m: 0.8
+  ambiguity_margin_m: 0.2
+  max_speed_m_s: 2.5
+  occlusion_timeout_s: 1.5
+  lost_timeout_s: 3.0
+  velocity_smoothing: 0.5
+  max_size_ratio: 3.0
+  history_size: 64
+selection:
+  snapshot_ttl_s: 2.0
+  request_cache_size: 64
+  snapshot_cache_size: 16
+baseline:
+  require_seconds: 3.0
+  max_duration_s: 10.0
+  min_samples: 15
+  min_point_count: 60
+  max_position_spread_m: 0.25
+  height_min_m: 0.8
+  height_max_m: 2.2
+  max_height_std_m: 0.12
+features:
+  window_s: 1.2
+  max_history: 64
+  low_height_m: 0.7
+  near_ground_tolerance_m: 0.05
+fall:
+  descending_min_drop_m: 0.35
+  descending_min_rate_m_s: 0.35
+  low_height_m: 0.7
+  low_min_duration_s: 1.5
+  confirmed_min_low_duration_s: 3.0
+  recovery_fraction: 0.6
+  recovery_min_duration_s: 1.0
+  lying_min_extent_m: 0.6
+  lying_max_top_m: 0.7
+  mode_verified: false
+  allow_confirmed: false
+acquisition:
+  change_gate: false
+  history_hold_gate: false
+  human_entry_gate: true
+  entry_height_min_m: 0.8
+  entry_height_max_m: 2.2
+  entry_motion_window_s: 1.2
+  entry_motion_min_frames: 5
+  entry_motion_min_displacement_m: 0.3
+  entry_support_static_tolerance_m: 0.1
+  composition:
+    enabled: true
+    cell_m: 0.1
+    min_fragment_support: 0.05
+    min_target_coverage: 0.2
+    max_new_fraction: 0.8
+    max_rigid_rms_m: 0.16
+    max_fragment_gap_m: 0.25
+    max_union_extent_m: 2.5
+    max_union_height_m: 2.7
+    min_points: 30
+    icp_samples: 192
+    icp_iterations: 12
+    max_fragments: 6
+    max_cells: 4096
