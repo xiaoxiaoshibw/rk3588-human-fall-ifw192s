@@ -1,5 +1,11 @@
 # 项目当前状态
 
+## 2026-10-29 分支：3D 点云链 / 2D 距离图→3D 链
+
+- 仓库两条算法线拆成两个长期分支（详见根目录 [BRANCHES.md](../BRANCHES.md)）：`algo-3d` 只保留 3D 点云算法链（`core/` 3D 模块 + `human_fall_node`/`single_target_node`），`algo-2d3d` 保留 2D 径向距离图→同源 3D 全链（`range_*`、`RangeEngine`/`RangeRuntime`、`range_service_node`、`pc_apps/range_fall`、Qt 控制台）；`master` 保留全部，两个分支从同一提交拉出，互不 merge。
+- 依赖实况：`range_runtime` 依赖 `baseline/features/fall_state/lidar_candidates/human_prior/support_composition/candidate_history`，`human_prior` 又依赖 `range_features.bound_ground`，所以 `algo-2d3d` 是 `algo-3d` 的超集；`range_features`/`range_contract` 作为共享原语留在 `algo-3d`。
+- 验证：`algo-3d` 上 Python 套件 733 tests OK（43.7 s）；分支拆分未改算法、阈值、配置或数据，`data/`、junction、驱动/网络未动。人体/跌倒语义仍 UNKNOWN，`confirmed` 关闭。
+
 ## 2026-10-29 板端演示规则启用与现场初始化
 
 - 用户确认视野清空并授权建立背景及地面。停止已核验的旧识别进程（PID 64149，release 7530fd08），保留旧版本和共享 current；新识别服务 PID 65456，release 2c19d73989dfc4e2b5afa0e082da5bc71eac95b57697ee3218a1356991636bb4，独立运行目录 `runs/range_2c19d739_20261029/`。初次切换检测将旧僵尸 PID 当活进程，后续启动脚本 CRLF 导致重定向失败，均已定位修正，失败日志/脚本保留。
