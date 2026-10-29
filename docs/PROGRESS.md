@@ -1417,3 +1417,11 @@
 - 历史重写：用 Python 走 plumbing（`cat-file commit` → 过滤 `ls-tree -r` → `update-index --index-info` → `write-tree` → `hash-object -w -t commit`）重放 `origin/master..master` 共 31 个提交，剔除 1908 个路径：全部 `*.log`、evidence 下 >256 KB、`sidequests/**/results|work/`、任意 >5 MB 文件；作者/提交者/时间/消息原样保留，工作树不动。备份分支 `backup/pre-sync-20261029` 保留原 31 个提交（`c9c4ee4` 链），旧 `master` 可用它恢复。
 - 推送：新链 tip `a60c62c`，远端 `master` `d8efaba..a60c62c` fast-forward；传输 6324 个对象、压缩后约 31.8 MiB（本地估算未压缩新增 blob 109 MB，最大单文件 2.4 MB）。本地 `master` 用 `git reset --mixed` 对齐新链，磁盘文件（含全部 evidence、`data/`、junction）一个未删。
 - 校验：`git diff master-backup sync/20261029` 只有删除、无新增或内容修改；重写后 `git status` 仅剩并发改动与被剔除的 sidequests 输出，随后补 `.gitignore` 收口。未改 `data/`、junction、驱动/网络，未部署/采集/训练。语义边界：GitHub 上现在没有 2026-10-10 至 10-15 的 evidence 大件与 runner 日志，它们仍在本机；需要时按会话 SHA 重跑再生。
+
+## 2026-10-29 两条算法线拆分支（algo-3d / algo-2d3d）
+
+- 用户要求算法全部入库，并把「3D」与「2D 距离→3D」拆成两个分支。新增 `BRANCHES.md`：`master` 保留全部；`algo-3d` 只保留 3D 点云算法链；`algo-2d3d` 保留 2D 径向距离图→同源 3D 全链。
+- 依赖实况决定了两条线不是对称的：`core/range_runtime.py` 直接 import `baseline/features/fall_state/lidar_candidates/human_prior/support_composition/candidate_history`，`core/human_prior.py` 又 import `range_features.bound_ground`；因此 `algo-2d3d` 必然是 `algo-3d` 的超集，`range_features`/`range_contract` 作为共享原语留在 `algo-3d`，两分支的差集就是 2D 距离图这条线新增的文件。
+- `algo-3d` 移除 231 个路径和 18 个测试文件：`core/range_*` 19 个（保留 `range_features`/`range_contract`）、range 入口与配置 7 个、`tests/test_range_*.py` 与 `test_episode_continuity`/`test_online_continuity`，以及依赖该链的 `pc_apps/range_fall`、`pc_apps/annotator_v2`、`pc_apps/bathroom_demo`、`console_v2`、`tools/range_*`、`tools/human_2d3d_package`、`pc_apps/demo_viewer/pseudo_live.*`、`demo_alert.py`。
+- 验证：`algo-3d` 上 `python -B -W error -m unittest discover -s src/human_fall_detection/tests` = **733 tests OK（43.7 s）**；剩余 1568 个 Python 文件 `py_compile` 3 个失败均为改动前既有（`pc_apps/human_ml/train_person_rf_v3.py` 第 178 行 JSON 注释、两份 `docs/human_capture/evidence` 探针脚本），与本次拆分无关。`algo-2d3d` 内容与 `master` 相同，未改代码。
+- 推送：`algo-3d` `f652a06`、`algo-2d3d` `0ecfb81` 已建立远端分支；`master` 内容不变并保留全部。拆分只动文件归属，未改算法、阈值、配置或数据；`data/`、junction、驱动/网络未动，未部署/采集/训练。文档仍保留两条线的历史记录，`algo-3d` 上部分 doc 链接指向已移除文件，属已知边界。人体/跌倒语义仍 UNKNOWN，`confirmed` 关闭。
