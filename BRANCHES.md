@@ -1,16 +1,16 @@
-# 分支说明：3D 点云链 / 2D 距离图→3D 链
+# 主线与算法历史
 
-2026-10-29。仓库里的两条算法线拆在两个长期分支上，`master` 保留全部内容；两个分支都从 `master` 的同一个提交拉出。
+自 2026-11-22 起，GitHub 使用 `master` 作为唯一维护分支。主线包含 3D 点云链、2D 距离图→3D 链及 ESP32-S3 人体跟踪 v3。两条算法线在 2026-10-29 从同一个提交分出，归档标签保留各分支的完整历史。
 
-| 分支 | 承载 | 入口 |
+| 引用 | 内容 | 入口 |
 |---|---|---|
-| `master` | 全部：3D 点云链 + 2D 距离图→3D 链 + 全部应用与控制台 | 见 [docs/PROJECT_STATE.md](docs/PROJECT_STATE.md) |
-| `algo-3d` | 纯 3D 点云算法链（`core/` 的 3D 模块 + `scripts/human_fall_node.py` / `scripts/single_target_node.py`），不含 2D 径向距离图链及其消费者 | `roslaunch human_fall_detection human_fall.launch` |
-| `algo-2d3d` | 2D 径向距离图 → 同源 3D（`core/range_*.py`、`RangeEngine`/`RangeRuntime`、`range_service_node`、`pc_apps/range_fall`、Qt 控制台等），3D 几何核心作为依赖一并保留 | `roslaunch human_fall_detection range_service.launch` |
+| `master` | 两条算法链、桌面应用、控制台和 ESP32-S3 v3 | [项目状态](docs/PROJECT_STATE.md)、[ESP32-S3 v3](firmware/esp32s3_human/README.md) |
+| `archive/algo-3d-20261122` (`39f0424`) | 原 `algo-3d` 的独立 3D 点云算法链，包括 `human_fall_node.py` 和 `single_target_node.py` | `roslaunch human_fall_detection human_fall.launch` |
+| `archive/algo-2d3d-20261122` (`f79d861`) | 原 `algo-2d3d` 的 2D 距离图→3D 全链，含 `RangeEngine`、`RangeRuntime`、`range_service_node` 和 Qt 控制台 | `roslaunch human_fall_detection range_service.launch` |
 
 ## 两条线的关系
 
-- 2D→3D 链建立在 3D 几何核心之上：`core/range_runtime.py` 直接依赖 `baseline`、`features`、`fall_state`、`lidar_candidates`、`human_prior`、`support_composition`、`candidate_history`。因此 `algo-2d3d` 是 `algo-3d` 的超集，两个分支的差集就是 2D 距离图这条线新增的源码与入口。
+- 2D→3D 链建立在 3D 几何核心之上。`core/range_runtime.py` 直接依赖 `baseline`、`features`、`fall_state`、`lidar_candidates`、`human_prior`、`support_composition` 和 `candidate_history`。两个归档版本之间的源码差异主要来自 2D 距离图链及其入口。
 - 两个小模块 `core/range_features.py`、`core/range_contract.py` 被 3D 的 `core/human_prior.py` 直接引用，作为几何/字段绑定原语保留在 `algo-3d` 上，不随 2D 链一起移除。
 - 冻结配置（`default.yaml`、`geometry.yaml`、`geometry_constrained*.yaml`）两个分支一致，不因分支不同而改阈值。
 
@@ -24,6 +24,5 @@
 
 ## 维护约定
 
-- 两条线各自提交，不互相 merge；需要合并时先回到 `master`。
-- 分支上的算法改动同样适用仓库红线：不部署、不采集、不训练、不改驱动/网络、不动 `data/` 与 `captures/` 三个 junction。
-- 语义诚实不变：没有人体/跌倒真值时准确率、召回率写 UNKNOWN；`confirmed` 保持关闭。
+- 后续开发使用 `master`。归档标签用于定位历史版本。
+- 项目操作和验证遵循[项目工作流](docs/PROJECT_WORKFLOW.md)。
