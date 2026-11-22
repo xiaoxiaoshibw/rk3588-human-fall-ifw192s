@@ -1,0 +1,14 @@
+[Unit]
+Description=IFW192S ESP32-S3 Human Kinematics & Fall Detection Web Viewer
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/.local/opt/esp32s3-human-web
+EnvironmentFile=%h/.config/esp32s3-human-web.env
+ExecStart=/usr/bin/python3 -B -u %h/.local/opt/esp32s3-human-web/human_s3_web.py --port ${HUMAN_S3_PORT} --calibration ${HUMAN_S3_CALIBRATION} --http-port 8896
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target
