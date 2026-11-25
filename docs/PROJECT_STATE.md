@@ -1,5 +1,97 @@
 # 项目当前状态
 
+## 2026-11-25 RK3588 “开机直接算 + 后台无感精修”重构（`--instant-start`，本地闭环完成未部署板端）
+
+- 为 RK3588 识别服务新增免空场、免阻塞地面拟合的可选运行模式（默认不改既有 `--declare-empty-prefix` / 离线回放零差异契约；全链路 Python 3.8.10 + stdlib + NumPy 1.17.4 兼容）：
+  1. [silent_ground_refiner.py](../src/human_fall_detection/core/silent_ground_refiner.py)：
+     - `GravityUpEstimator`：第 0 帧即由标称安装角（默认 `pitch=26°, roll=0°`）给出 `gravity_up` 与水平配平 `displayPlane`；收到静止 `/inno_imu`（`|a|∈[8.5,11.0]`、`|ω|≤0.15 rad/s`、连续 ≥10 样本）后离散提交，小抖动不触发下游重置（显式标明 `imuExtrinsicsVerified=False`）。
+     - `SilentGroundRefiner`：后台周期（收敛期每 5 帧、稳态每 25 帧）仅取静态非前景点云沿 `gravity_up` 找最低显著水平峰，执行确定性 RANSAC + TLS 精修 + 倾斜一致门 + 水平跨度门 + “平面下方静态点 < 3%”防桌面/床面劫持门；3 次一致后原子提交 `refined_plane`，收敛后遇遮挡冻结保持、不掉回未配平；另提供直立人脚底 `h_p02` 兜底（`foot_anchored`）与交叉校验（`footConsistent`）。
+  2. [instant_tracker.py](../src/human_fall_detection/core/instant_tracker.py)：
+     - 完整移植并 NumPy 向量化 ESP32-S3 v3 + 2026-11-22 悬挂鸟粘连修复核心：第 0 帧自举最远背景包络（免 50 帧空场）、两阶段 2D 距离图深度连通保留精确 `source_rows`、垂向连续性/IQR/三段占比门、水平 `(u, v)` 位移窗口与上下半区协同运动门、$\alpha$-$\beta$-$\gamma$ 头顶垂向运动学与体态坍塌三联状态机（`upright / descending / suspected`，`confirmed_enabled=False`）。
+     - 后台精修切换 `gravity_up` 时，按各活跃轨迹当前 3D 中心平移重投影基线与滤波状态，**零 ID 切换、零速度尖峰、零清空跌倒史**；精修获得 `offset_m` 后自动启用额外物理悬空门（`bottom_above_ground > 0.95 m`）并暴露 `InstantBackgroundAdapter` 供 `human_physical_v1` 局部回收使用。
+  3. 服务与工作台贯通：[range_engine.py](../src/human_fall_detection/core/range_engine.py)、[range_service.py](../src/human_fall_detection/core/range_service.py)、[range_service_node.py](../src/human_fall_detection/scripts/range_service_node.py) 新增 `--instant-start`、`--mount-pitch-deg`、`--mount-roll-deg`、`--imu-topic`、`--disable-imu`，通告 `instant_start` / `silent_ground_refinement` 能力并支持 `submit_imu`；[pc_apps/lidar_studio/](../pc_apps/lidar_studio/) 透传 `local_range.kinematics` 并在健康条/原因码展示 `免空场自适应`、`重力配平(精修中…)`、`后台精修(非真值)` 与运动学原因码。
+- **验证**：
+  - 全仓五套 `-B -W error` + Node 全过：`human_fall_detection` **959 OK**（skip 1，含新增 [test_instant_start.py](../src/human_fall_detection/tests/test_instant_start.py) 11 项 + Python 3.8 AST 检查）、`human_capture` **69 OK**、`human_follow_calibration` **2 OK**、`pc_apps/range_fall` **84 OK**、`pc_apps/lidar_studio` **17 OK**（含 `houdao` r2 130/130 帧 0 差异与 `instant_start` 纯 JSON 透传测试）+ `studio_lib.test.js` 全过。
+  - **15 段真实 IFW192S 录制零空场零预拟合因果回放**（7 段主力 2,197 帧 + 8pack 8 段 1,934 帧 = 4,131 帧，仅给标称 26°、不喂离线背景/地面）：
+    - **15/15** 在第 0 帧即输出配平 `displayPlane`；**15/15** 在第 **9–19 帧（~0.9–1.9 s）**后台静默收敛至 `refined_plane`（含旧阻塞拟合失败的 `082829`/`082906`/`083218`）；相对全段非因果离线参考平面，法向差 **0.26°–0.87°**、地面偏移差 **0–16 mm**；精修切换造成 ID 跳变 **0 次**。
+    - 7 段主力回放：后倒 `f73→恢复 f136`、前倒 `f155→恢复 f209`、慢倒 `f109→恢复 f197` 全程单一 ID `g0_t0001` 且同 ID 直立恢复；系鞋带弯腰、386 帧、126 帧、780 帧对照均 **0 误触发 `suspected`**，全程单 ID；PC 单帧耗时（`instant_only`）P50 **9.3–15.8 ms** / P95 **18.5–32.1 ms**（含 `ScanGrid.decode`），叠开 `human_physical_v1` 时 P50 **40.1–56.0 ms** / P95 **71.6–120.8 ms**（780 帧 P50 10.9 ms）。
+- **已知边界**：8pack 中 4 段（`083044/083120/083218/083254`）`locked=0`（其中 `083254` 有 175 帧暂态直立轨未跨过 `0.11 m` 动态位移初锁门），体现免空场动态初锁“拒静态杂物但对原地极慢/不动人员不初锁”的固有权衡；前景 14 cm 贴地截断使直立脚底 `h_p02` 稳定高于精修地板约 `0.14–0.22 m`；**本轮未部署至 RK3588 板端**，板端实机耗时、现场 `/inno_imu` 轴向复核、真实人体/跌倒准确率与误报率仍为 **UNKNOWN**，`confirmed` 关闭。证据见 [docs/evidence/2026-11-25_rk3588_instant_start_refinement/](evidence/2026-11-25_rk3588_instant_start_refinement/)。
+
+## 2026-11-24 RK3588 板端常驻识别服务上线（v2：`human_physical_v1` + `--single-person-lock` + 地面配平）与 `LiDAR Studio` 板端纯 JSON 实时联调
+
+- 按用户指令停止板端 `imu-web` 容器（`Exited (0)`，保留未删），不碰驱动（`inno_lidar_node`）、网络、采集（`:8766`）与共享 `current` 软链：
+  - **板端服务扩展与 v2 优化**（Python 3.8.10 / NumPy 1.17.4）：[range_engine.py](../src/human_fall_detection/core/range_engine.py)、[range_service.py](../src/human_fall_detection/core/range_service.py)、[range_service_node.py](../src/human_fall_detection/scripts/range_service_node.py) 新增可选 `--human-physical-v1`、实例级 `--single-person-lock`（碎片预筛 + 地面可用时初锁要求人体几何相容，不改全局 `SETTINGS`）、紧凑 `local_range.bbox` 与 `point_count`；[range_features.py](../src/human_fall_detection/core/range_features.py)/[human_prior.py](../src/human_fall_detection/core/human_prior.py) 用单帧 O(1) `valid_source_row_mask` 替代 `np.isin` 并修正 `choose_single` 同级竞争；[range_normals.py](../src/human_fall_detection/core/range_normals.py)/[human_belief.py](../src/human_fall_detection/core/human_belief.py) 改为分轨紧凑多 ROI 法向（与全图逐位等价）。打包不可变包 `range_service_phys_v1_v2.tar`（`release_id=22f23d303590c6a6311a56c4b921e69d7285906cececce174959b1717af799c6`，SHA256 `be1450058fd605cf1a68ed8144910b8dbaa53ab5567627cb881a235b20c66cb2`，84 文件核验通过），部署在 `slam-localization` 独立目录，以 `taskset -c 4-7` 大核运行（PID `127841`，run `range_20261124T0557Z_phys_v1_lock`，`--declare-empty-prefix --fit-ground-out .../site_ground --human-physical-v1 --single-person-lock`）。
+  - **板端初始化与 RK3588 实测**：
+    - 现场空场 15.02 s / 146 唯一源帧（`BOARD_LIVE_BENCHMARK_v2.json`）：50 帧背景 `ready`、25+3 帧现场地面 `bound`（`current_patch_support` 四区全 PASS）；**9.72 Hz / 0.0% 丢帧**，`service_compute_ms` P50 **50.24 ms** / P95 **59.65 ms** / max **66.60 ms**，`locked_frames=0`（消除 v1 7 条 18–52 点碎片误锁与 41% 丢帧/TTL 频繁清史），纯 JSON（含 192×256 PNG 预览）带宽 **11.12 Mbps**。
+    - RK3588 同机内存合成 A/B（1 大簇 + 5 处散落杂物，`BOARD_AB_SYNTH_BENCH.txt`）：v1 无锁 P50 **216.7 ms**（法向 51.4 ms）→ v2 无锁 **163.0 ms**（法向 20.0 ms）→ v2 + `--single-person-lock` **60.5 ms** / P95 **79.1 ms**（5 杂物全滤除，提速 3.6×）。
+  - **PC 端 `LiDAR Studio` 升级**：[live_source.py](../pc_apps/lidar_studio/live_source.py) / [server.py](../pc_apps/lidar_studio/server.py) / [web/](../pc_apps/lidar_studio/web/) 新增 **`板端纯 JSON（低带宽）`**（默认，只订阅 `/single_target_live/state`）与 **`板端 JSON + 3D 点云`** 一键切换，完整透传背景/地面 `displayPlane`/回收点/`human_physical_v1`，探测超时放宽至 `2.5 s + 1 次重试`；本地服务运行于 `http://127.0.0.1:8960/`。
+  - **验证与边界**：`-B -W error` 全过（`human_fall_detection` 948 OK / skip 1、`pc_apps/range_fall` 84 OK、`pc_apps/lidar_studio` 16 OK 含 `houdao` r2 130/130 帧 0 差异 + `studio_lib.test.js` 全过）；WS 端到端与 `1920×1080` 浏览器双模式实页核验 0 报错。**边界**：真人走入触发完整肢体回收后的 RK3588 耗时、真人锁定与跌倒准确率/召回率/误报率及物理地面真值仍为 **UNKNOWN**，`confirmed` 关闭。证据见 [docs/evidence/2026-11-24_board_range_service_deploy/](evidence/2026-11-24_board_range_service_deploy/)。
+
+## 2026-11-24 雷达体态工作台（`pc_apps/lidar_studio/`，P0–P5 回放与 P4 真机只读实流全验证）
+
+- PC 端独立无构建 Web 控制中心，Windows 一键启动入口 [start_studio.cmd](../pc_apps/lidar_studio/start_studio.cmd) 或 `python -B pc_apps/lidar_studio/server.py --host 127.0.0.1 --port 8960`（协议见 [CONTRACT.md](../pc_apps/lidar_studio/CONTRACT.md)，使用说明见 [README.md](../pc_apps/lidar_studio/README.md)）：
+  - **三屏同屏 & 多视角**：主视图 3D 点云（[view3d.js](../pc_apps/lidar_studio/web/view3d.js)，基于本地副本 Three.js r128 与自定义点精灵 Shader，支持 5 种着色与正面/侧面/俯视/传感器/立体 5 视角平滑补间、跟随目标、配平显示切换、包围盒、几何骨架及轨迹尾迹）；192×256 原生 `rotate180` 2D 距离图（[view2d.js](../pc_apps/lidar_studio/web/view2d.js)，与 `core/range_live.py::preview_rgb` 同色标 0.1–8.0 m，叠加目标/回收掩码、骨架 `imageXY` 投影与鼠标悬停读数）；USB 摄像头对照画面（[camera_hub.py](../pc_apps/lidar_studio/camera_hub.py)，回放按 `bag_time_sec` vs `recv_unix_ns` `±250 ms` 对齐、实时对板端 `:8081/stream` 单连接扇出，绝不进入算法链）。
+  - **算法与状态对齐**：[replay_source.py](../pc_apps/lidar_studio/replay_source.py) 复用 `RangeRuntime(..., human_physical_v1=True)` 输出与 `range_engine.py` 对齐的状态字段，`CONFIRMED_HUMAN` 显示为“多证据物理一致（非真值）”，`confirmed` 关闭；缓存写 `pc_apps/lidar_studio/.cache/`（`.gitignore` 忽略），不写 `data/` 或 `captures/`。
+  - **验证**：`node pc_apps/lidar_studio/web/studio_lib.test.js` 全过；本模块 `python -B -W error` 15 项全过（含 `cap_20261028_houdao` 130/130 实测帧与 r2 账本 0 差异、mock Foxglove 实时闭环与离线探测）；四套全仓 `-B -W error` 全过（945 skip 1 / 69 / 2 / 15）；**RK3588 真机只读实流验证通过**：Foxglove `/innolidar_points` 实测 **8.62 Hz / 0 丢帧**（处理 `9.97–21.75 ms`、本地帧龄 `15–31 ms`、降采样 1/2 约 20,833 点），相机 `:8081/stream` 单连接扇出 **10.29 Hz**（均值 88.7 KB/帧）；1920×1080 浏览器 6 场景截图（含真机三屏实时流 [06_live_board_streaming.png](evidence/2026-11-24_lidar_studio/screenshots/06_live_board_streaming.png)）核对 0 报错。
+  - **边界**：实测时板端 `/single_target_live/state` 未发布消息（2.5 s 为 0 条），实时只读模式不擅自声明空场前缀，故背景/地面如实显示“未声明”，仅展示实时 3D/2D/相机流；人体/跌倒真值效果仍为 **UNKNOWN**。证据见 [docs/evidence/2026-11-24_lidar_studio/](evidence/2026-11-24_lidar_studio/)。
+
+## 2026-11-24 RK3588 纯雷达阶段 1 物理人体识别增强（`human_physical_v1` r2，离线闭环未部署板端）
+
+- 100% 纯雷达（零相机依赖）、Python 3.8.10 + stdlib + NumPy 1.17.4 兼容；默认关闭，`RangeRuntime(..., human_physical_v1=True)` 显式开启（配置记 `revision=physical_v1_r2`）。只追加 `human_physical_v1` 遥测字段，不回写原跟踪 / 跌倒链，**目前不影响产品行为**：
+  1. [range_normals.py](../src/human_fall_detection/core/range_normals.py)：有序网格 `roi_bbox` 局部法向、法向熵、单/双平面内点占比、近地法向对齐。
+  2. [human_prior.py](../src/human_fall_detection/core/human_prior.py)：原 `describe()` 不变；`describe_physical_v1` 做 10 层剖面 + 平面 / 双面盒体 / 悬挂粘连拒识。r2：断层 / 低填充判据要求底部离地（p02 ≥0.20 m），桌面遮挡中段的站立人不再被拒。
+  3. [human_kinematics_filter.py](../src/human_fall_detection/core/human_kinematics_filter.py)：r2 用“非目标且 prior 不兼容”的静止杂物轨迹在线标定残差速度噪声底（可选调参集离线回退 0.1313 / 0.1019 m/s）；刚体 ≤0.8×、非刚体 ≥2.5×；未标定时两者都不产生。振荡只作软证据，“悬空振荡”要求整窗最低点 >0.30 m。
+  4. [full_body_recovery.py](../src/human_fall_detection/core/full_body_recovery.py)：核心→肢体局部回收 + 贴地法向剥离 + 平面截断 + 竞争 / 膨胀 / 平面泄漏护栏（本轮未改）。
+  5. [human_belief.py](../src/human_fall_detection/core/human_belief.py)：Log-Odds 三态（上限 5）；硬否决只来自平面 / 悬挂 / 碎片 / 法向平面，否决帧封顶 1.0 并把 `CONFIRMED` 降为 `CANDIDATE`；振荡、悬空振荡、刚体平移都是软惩罚。各阶段异常隔离并输出原因码，`RangeRuntime` 外层再兜底。
+- **验证**：四套 `-B -W error` 全过（`human_fall_detection` 945 OK / skip 1，含 26 项物理变体测试；`human_capture` 69；`human_follow_calibration` 2；`esp32s3_human` 15）。调参集 7 段（2,197 帧）只用于推导噪声底 / 门限；验证集 9 段（1,982 帧，2026-10-13 8pack + `224823`）只跑不调。两集原链 `parity_diff=0`，评估器全 `ok`；目标 `CONFIRMED` 占比调参集 0.819、验证集 0.932（无真值，只是状态分布）；验证集在线噪声底 0.117–0.200 m/s；回收在跌倒 / 低姿帧拒绝率明显高于直立帧（调参集 suspected 37/76 vs upright 13/867）。
+- **已知限制**：人形弯曲刚体在带真实噪声时运动学上与人无法区分（只能不加分）；`no_ground_contact` 依赖地面拟合精度（8pack 段大量触发）；刚体通道在验证集上不是严格盲测；回收新增点的人体归属无真值。
+- **边界**：原始鸟归档本地缺失；离线回放用整段非因果背景与离线拟合地面；准确率 / 召回率 / 误报率 / 完整性与 RK3588 板端耗时为 **UNKNOWN**，`confirmed` 跌倒告警关闭；真实负例采集与板端测时需用户授权。证据见 [r2](evidence/2026-11-24_rk3588_human_phys_v1_r2/) 与 [r1](evidence/2026-11-24_rk3588_human_phys_v1/)。
+
+## 2026-11-22 ESP32-S3 悬挂鸟粘连误锁与误触发 FALLING 本地修复（未部署板端）
+
+- 针对现场视频 `0:15–0:16` 悬挂鸟模型 `#7`（`2.39 m, X=1.82/Y=1.14/Z=0.91 m, H=1.58 m, W=0.51 m, 220 pts` 粘连支架/桌面后断开突降至 `H=0.25 m / 180 pts` 误触发 `FALLING`），在本地 [human_tracker.hpp](../firmware/esp32s3_human/human_tracker.hpp) / [human_tracker.cpp](../firmware/esp32s3_human/human_tracker.cpp) 加强直立人体准入与初锁运动门（不增 `Workspace` 静态内存，保持 1,032,192 B）：
+  1. `grow_cluster` 复用 2 cm 垂向直方图计算四分位高差 `iqr_height_m`、4 cm 垂向填充率 `vertical_fill`、最大垂向空洞 `max_vertical_gap_m`、上中下三段最小点数占比 `min_third_ratio`，以及上下半区运动点数 `motion_lower / motion_upper`。
+  2. `upright_geometry` 增加悬空底行拦截（`r0 <= 98`）、宽簇最小点数（`W >= 0.25 m` 时 `>= 260` 点）及垂向连续/核心分布门（`vertical_fill >= 0.72`、`max_vertical_gap_m <= 0.14 m`、`iqr_height_m >= 0.28 * H`、`min_third_ratio >= 0.10`）。
+  3. 初锁运动窗口 `MotionWindow` 改用水平 `(u, v)` 位移（避免垂向粘连比例变化漂移 `ch` 伪造行走位移），初锁要求 `>= 260` 点且上下半区均有运动（或头底均稳定的连贯径向移动）。
+- 验证：`g++ -O3 -std=c++17 -Wall -Wextra -Werror` 0 警告编译；`-B -W error` 核心 15 项（含新增 3 项悬挂鸟粘连断开、仅上半区运动粘连静态底座、中高行悬空物体回归，三项在旧 `human_host_v3.exe` 上分别误锁 24/7/9 帧，在新版均 0 帧）与 Web 3 项全过。6 段 1,417 帧开发回放与 v3 逐帧对照：实测锁定帧数（147/142/200/224/263/102）、跌倒疑似首帧（f73/f156/f110）、同 ID 直立恢复（f136/f209/f197）均 0 回退，且 `qiandao` f74 的 183 点碎片暂态轨被消除（IDs `[2] -> [1]`）。
+- **边界**：仅完成本地代码修改、主机编译与离线回放/单测，**未重新编 ESP-IDF 镜像或烧录至板端**（板端当前仍运行 v3）；现场悬挂鸟实流改善与真人准确率/召回率/误报率仍为 **UNKNOWN**，`confirmed` 关闭。证据见 [docs/evidence/2026-11-22_esp32s3_bird_adhesion_fix/](evidence/2026-11-22_esp32s3_bird_adhesion_fix/)。
+
+## 2026-11-22 ESP32-S3 人体 v3 同轨恢复与实流
+
+- v3 源码、构建配置、测试和看板已发布到 [GitHub 的 `codex/esp32s3-human-v3` 分支](https://github.com/xiaoxiaoshibw/rk3588-human-fall-ifw192s/tree/codex/esp32s3-human-v3/firmware/esp32s3_human)，提交 `ec2899f`。发布版实时看板通过 `--port` 与 `--calibration` 接收现场设备参数，systemd 配置方式见该分支 README。
+- RK3588 [实时人体看板](http://192.168.31.58:8896/) 运行 `human_kinematic_v3`，页面已打开并显示 `LIVE · ACTIVE`。Protocol 2 目标表显示距上次续期的秒数。应用区与 Web 旧版备份位于板端 `~/.local/opt/esp32s3-human-web/releases/20261122-v3/previous/`，同一 release 存有 v2 镜像。首轮上线检查超时后验证已回滚，延长检查窗口后重新烧录并验证同一 v3 镜像，服务在约 17 秒完成启动。
+- v3 保留原有人体准入门槛，已锁轨迹可由微动或实测头顶位移续期，静止释放期 25 秒。倒地与起身使用有水平和深度约束的关联，1–2 帧短缺测不推测目标或累计低位证据。三段指定跌倒的疑似首帧为 f73、f156、f110，同 ID 实测直立恢复为 f136、f209、f197。五段原先换 ID 的录制在固定区间均消除切换，第六段仍单轨。慢倒缺测 1 帧，系鞋带片段共缺测 6 帧且每次最多 1 帧。六段开发回放和 780 帧双鸟对照见 [逐帧对照](evidence/2026-11-22_esp32s3_human_v3/final/SUMMARY.json)。
+- 现场 SSE 约 15 秒、146 个连续 active 帧，9.65 Hz，0 锁定、0 疑似。解算 P95 52.87 ms、跟踪 P95 31.33 ms、尾包到结果 P95 84.14 ms，空闲 SRAM 172,987 B、PSRAM 5,911,052 B。真人走动、真实跌倒和长时间运行的准确率及误报率仍为 **UNKNOWN**。实流与固件证据见 [v3 实流](evidence/2026-11-22_esp32s3_human_v3/live_v3.json) 和 [v3 镜像](evidence/2026-11-22_esp32s3_human_v3/esp32s3_human_fall_v3.bin)。
+
+## 2026-11-22 ESP32-S3 动态人体锁定与轨迹时效
+
+- 本地固件 `human_kinematic_v2` 在 [ESP32-S3 人体核心](../firmware/esp32s3_human/README.md) 接入人体尺寸、1.3 秒同轨运动窗口、5 秒锁定续期、12 秒疑似低位保持和缺测断链。覆盖归属于有实测关联的轨迹，过期回波可重新融入背景。Protocol 2 协议保留，串口只发当前帧实测锁定。RK3588 Web 本地版本在目标最后出现 20 秒后清理轨迹及波形，事件日志独立保留。
+- C++ 和 Web 单测共 15 项通过。6 段 1,417 帧开发录制中，首次实测锁定高度低于 0.90 m 的轨迹从 6 条降至 0 条。后倒、前倒主轨、慢倒的新版本疑似首帧为 73、156、110。前倒旧版第 121 帧的疑似来自次要轨迹，旧版主轨首帧为 156。系鞋带与其余两段无疑似。另用 780 帧双悬挂鸟模型录制做新旧对照，两版均为 0 锁定、0 疑似。证据见 [逐轨对照](evidence/2026-11-22_esp32s3_dynamic_human/replay_comparison.json) 和 [本地 Web SSE 回放](evidence/2026-11-22_esp32s3_dynamic_human/web_replay.json)。
+- 新 [ESP32-S3 固件镜像](evidence/2026-11-22_esp32s3_dynamic_human/esp32s3_human_fall_v2.bin) 已由 ESP-IDF 5.5.3 构建，252,768 B。现场网页只读快照仍报告 `human_kinematic_v1`。新版本的现场识别准确率、漏检率、隔夜误锁表现和板端耗时为 **UNKNOWN**，跌倒输出上限为 `FALL_SUSPECTED`。持续静止的人会按锁定时效释放，重新运动后需要重新满足人体准入。
+
+## 2026-11-21 ESP32-S3 人体运动学与跌倒固件真机烧录与实流验证
+- 新增独立 ESP-IDF 固件工程 `firmware/esp32s3_human/esp_idf/`（`CMakeLists.txt`、`sdkconfig.defaults`、`main/main.cpp`、`main/w5500.hpp`、`main/wire.hpp`、`main/geometry.hpp`、`test_live_s3.py`），在 `HumanTracker` 补齐 `set_cell_range_mm` 快路径避免 49,152 次/帧 `sqrtf`；本机 ESP-IDF v5.5.3（240 MHz、`-O3`/PERF、16 MB Flash、Octal PSRAM 80 MHz）一次编过，生成 `esp32s3_human_fall.bin`（251,280 B，SHA256 `de991953849aa9a3c384232eb92b0e652e953f7382ae8a725a1ff5ad462c5457`）。
+- 用户授权 SSH 3588（`192.168.31.58`）烧录实测：临时停止 `lidar-bird-s3.service` 释放 `/dev/ttyACM4`（`usb-1a86_USB_Single_Serial_54E2025778-if00`），通过纯 Python `esptool v4.12.dev1` 写入应用分区 `0x10000` 并校验通过（芯片 ESP32-S3 rev v0.1、8 MB PSRAM、MAC `34:85:18:ac:f9:04`；保留原 bootloader/分区表及 `/home/wel/.local/opt/lidar-bird-s3/` 回滚镜像）。
+- **20 s 真机实流实测（W5500 80 MHz SPI 直连 IFW192S、0 帧空场、标称 pitch=26°）**：
+  - 内存余量：`internal_free = 173,499 B`（~169 KB SRAM 空闲）、`psram_free = 5,911,052 B`（5.64 MB PSRAM 空闲）；`workspace_bytes = 1,032,192 B`、`tracker_bytes = 4,752 B`。
+  - 吞吐与稳定性：169/169 完整 active 帧，0 unknown 帧、0 序列号跳洞、0 错误、实测 **9.64 fps**（满雷达帧率）。
+  - **ESP32-S3 单核实测耗时**：`materialize_ms` P50 **52.62 ms** / P95 **52.73 ms** / max 52.77 ms；`tracker_step_ms` P50 **21.22 ms** / P95 **21.38 ms** / max 21.45 ms；端到端 `tail_to_result_ms` P50 **73.80 ms** / P95 **74.03 ms** / max **74.12 ms**（`>100 ms` 0 帧，距 104 ms 帧周期留有 ~30 ms 余量）。
+  - 现场静态/无人空场景：`valid_cells_mean = 46,954`、`fg_seeds_mean = 273.3`、`locked_frames = 0`、`fall_suspected_frames = 0`。
+- 协议完全兼容 Protocol 2：已新增专用人体运动学与跌倒 Web 看板 `firmware/esp32s3_human/web/`（`human_s3_web.py`、`human_s3_live.html`、`esp32s3-human-web.service`、`test_human_s3_web.py`），部署至 3588 `~/.local/opt/esp32s3-human-web/` 并以 `esp32s3-human-web.service` 监听 **`http://192.168.31.58:8896/`**（已停止 `lidar-bird-s3.service` 释放串口，保留 `/home/wel/.local/opt/lidar-bird-s3/` 不动）。实时 SSE 与 `/api/snapshot` 验证通过（`input_status: streaming`，`9.65 fps`，`74.1–74.3 ms`，展示俯视图、2D 扫描框、头顶高度/落差/速度/加速度曲线、跌倒告警条与目标表）；`-B -W error` 2 项 Web 单测全过。证据 `docs/evidence/2026-11-21_esp32s3_human_web/`。
+- **边界**：本轮 20 s 实测为现场静止场景，尚未有真人走入或真机现场跌倒测试，真机人体锁定/跌倒准确率与误报率仍 **UNKNOWN**，`confirmed` 关闭。PC 6 项单测（`-B -W error`）复跑全过。证据 `docs/evidence/2026-11-21_esp32s3_human_live_flash/`。
+
+## 2026-11-21 ESP32-S3 无空场人体运动学与跌倒核心（C++17 原型）
+- 新增独立纯 C++17 核心 `firmware/esp32s3_human/`（`human_tracker.hpp/.cpp`、`host_replay.cpp`、`run_sessions.py`、`test_human_tracker.py`），全 `float32`、零堆分配、零外部依赖，静态工作区仅 **1,032,192 B（1.01 MB）** + 对象 **4,776 B**，可直接迁入 ESP32-S3（8 MB PSRAM + 512 KB SRAM）。
+- **去空场与免地面拟合**：第 0 帧直接初始化最远背景包络与帧间距离图（`uint16_t` 毫米级），由帧间突近 + 2D 距离图 BFS 区域生长与锁定保持拉出人体；仅需重力方向 `gravity_up`（来自 IMU 或标称安装 pitch/roll），无需 25+3 帧地面拟合或地面 offset；用 $\alpha$-$\beta$-$\gamma$ 滤波平滑 10 Hz 头顶垂向速度/加速度，结合体态坍塌（$H \le 0.55\text{ m}$ 且 $H/W \le 0.55$）与持续低位（$\ge 1.2\text{ s}$）输出 `FALL_SUSPECTED`（`confirmed` 关闭）。
+- **离线验证**（仅标称 pitch=26°、0 帧空场、无地面拟合）：`g++ -O3 -std=c++17 -Wall -Wextra -Werror` 0 警告编译；`-B -W error` 6 项单测全过；6 段真实会话（1,417 帧）回放：后倒 65 帧（首帧 f73）、前倒 65 帧（f121）、慢倒 88 帧（f109）均由 `FAST_KINEMATIC` 检出；系鞋带弯腰/蹲 0 帧、386 帧标准场景 0 帧（单 ID）、126 帧标准场景 0 帧（单 ID）；PC 单帧 C++ P95 耗时 **0.27–0.41 ms**。
+- **边界**：6 段为开发对照集、无逐帧人体/跌倒 GT，真实准确率/召回率/误报率与 ESP32-S3 真机实测耗时均 **UNKNOWN**；上电即静止不动的人在移动前不会触发运动种子；未改既有 `src/`、`data/`、junction 或板端。证据 `docs/evidence/2026-11-21_esp32s3_human_kinematic/`。
+
+## 2026-11-16 QT 实时页“断断续续”归因与板端现状
+- 板端识别服务于 14:33 由现场重启（release `1be292b6`，run `range_restart_20261116T0600Z`，唯一发布者）；背景 ready，地面 `not_loaded`（`existing_quality_rejected`：RANSAC 通过、TLS/SVD 留出帧 27 分区 1 超门）→ 高度/低位/倒地提示 unavailable，confirmed 关闭。
+- 显示侧主因：PC 经 USB 百兆网卡（100 Mbps）连板，原始点云 1.28 MB/帧 × 9.6 Hz ≈ 99 Mbps；Qt 接收 8.2 fps、跳号累积，500 ms TTL 匹配失败出现“无结果/识别输入失效”。板端主链均值 96 ms/帧（45 s 丢 7%）、结果源年龄中位 186 ms/max 370 ms，余量不足；板端 `rows==0` 仅 0.6%。
+- 目标身份仍不稳定：45 s 内 3 个选中 ID；录屏 12 s 内 t0580→t0627。人体/跌倒语义 UNKNOWN。
+- 待办：千兆链路或点云降频/仅订阅算法结果；主链耗时优化；空场重拟合地面；清理僵尸 ws 客户端。证据 `docs/evidence/2026-11-16_board_live_check/`。
+
 ## 2026-10-29 分支：3D 点云链 / 2D 距离图→3D 链
 
 - 仓库两条算法线拆成两个长期分支（详见根目录 [BRANCHES.md](../BRANCHES.md)）：`algo-3d` 只保留 3D 点云算法链（`core/` 3D 模块 + `human_fall_node`/`single_target_node`），`algo-2d3d` 保留 2D 径向距离图→同源 3D 全链（`range_*`、`RangeEngine`/`RangeRuntime`、`range_service_node`、`pc_apps/range_fall`、Qt 控制台）；`master` 保留全部，两个分支从同一提交拉出，互不 merge。
@@ -1092,3 +1184,105 @@ Qt 开发启动入口 `console_v2/start_latest.cmd` / `start_integrated_preview.
 
 - `python -B pc_apps/demo_viewer/pseudo_live.py --port 8899` 启动本机回放，再打开 `http://127.0.0.1:8899/`，选四会话并点击开始；支持暂停/重播、3D 旋转与缩放。该程序在本地预计算整段背景/地面，随后按源时间近似节拍逐帧调用共享 `RangeRuntime`、组合姿态与低位提示并生成同帧 2D 距离图和 3D 点云。
 - 三个倒地演示首个持续低位提示为 83/159/120 帧，弯腰段无；四段与旧逐帧目标 ID、原状态及低位等级一致。后倒 169 帧包括可视化生成的 PC 无节拍 P95 87 ms（不含浏览器）。没有动作或人体 GT；整段背景非因果、拟合地面未经物理验证、误选仍在，不可推断真实在线或跌倒效果。数据、对照、测试及截图见 `docs/evidence/2026-10-29_pseudolive_actions/`。
+
+## 2026-10-29 伪实时坐标、判定依据及补充候选
+
+- 本机 `python -B pc_apps/demo_viewer/pseudo_live.py --port 8899`：页面显示同帧目标框、配平坐标、数据流与实际状态机依据；疑似时默认暂停。原目标白/绿色，较宽松前景且与原目标连通的独立补充候选为橙色，竞争轨迹或尺寸异常时不补充。补充不进入原动作判定或坐标；可能包含环境，完整性仍 UNKNOWN。
+- 后倒 f83 原403点、橙色补充335点；四段 905 帧原目标/状态/几何均与补充前一致。没有逐帧人体 GT，不能将增加点数当准确率提高或证明人体选全；整段背景非因果、地面未物理验证。逐帧、测试、耗时及截图见 `docs/evidence/2026-10-29_pseudolive_coordinates/`。
+
+## 2026-10-29 小腿和脚的宽松探索层
+
+- 本机伪实时页面新增蓝色宽松候选层（原目标种子、0.15m背景差分、排除新增近地<0.10m点），与白/绿原目标和橙色0.20m补充分开显示；竞争轨迹冲突或过大即拒绝，均不改动作判定/坐标。后倒f83原403点、橙色335点、蓝色再增293点，显示范围向外扩展。贴地脚可能被高度门排除，候选可能包含场景，人体完整性未知。
+- 四段905帧原目标、坐标、状态与橙色层逐帧不变；后倒 suspected 33帧，前倒/慢倒为低位提示而非 suspected，弯腰段无低位提示。无点级或动作真值，不能报告准确率/召回；离线非因果背景、未物理验证地面和误选限制不变。证据 `docs/evidence/2026-10-29_lower_leg_probe/`。
+
+
+## 2026-10-29 逐阶段诊断入口
+
+- 本机执行 `python -B -W error pc_apps/demo_viewer/pseudo_live.py --batch <新目录> --trace` 可生成四会话逐帧阶段来源账本；现有交互入口仍为 `python -B pc_apps/demo_viewer/pseudo_live.py --port 8899`。账本和对照见 `docs/evidence/2026-10-29_stage_trace/`。
+- 当前尚不能可靠合并橙/蓝探索候选至坐标或事件链；前倒姿态跨度收缩与慢倒 f104 碎片切轨仍需解决，人体身份、点集完整性、真实跌倒、物理地面及在线性能均 UNKNOWN。服务包只作本地候选，不能把离线背景和拟合地面用于在线部署。
+
+
+## 2026-10-29 识别发布与 Qt 伪实时现状
+
+- 板端 192.168.31.58 当前观测到 recognition release `7b3e379c0235d10d74da5d2505e75b2d7b1ca7e8424b4386717059c8ccd1df09`、PID 65803，独立run `range_7b3e379c_20261029_5c1198bb`；背景ready但地面拟合质量拒绝，地面/高度/低位候选不可用。状态是该次检查快照，不能假设之后不变。地面失败详情、候选包和只切识别进程的回滚步骤见 `docs/evidence/2026-10-29_tracking_release/`。旧服务版本保留但其RAM背景不能跨进程恢复；回滚或重新拟合需要核验当前现场和空场。
+- 当前源码增加短歧义下碎片切换保护；慢倒与负例逐帧变化和限制见 PROGRESS。前倒碎片组合竞争尚未解决。`console_v2/start_latest.cmd` 的「伪实时演示（独立 Qt 窗口）」打开现有四会话演示；也可运行 `python -B pc_apps/demo_viewer/qt_pseudo_live.py`。此Qt窗口依赖本机PySide6 WebEngine，显示使用非因果整段背景和未物理验证地面，不能等同板端在线链。
+
+
+## 2026-10-29 地面质量重试
+
+- 经再次空场授权，同版本识别重启为 PID 66132，run `range_7b3e379c_retry_20261029_0f837fcb`；背景 ready 但25+3地面拟合再次因RANSAC区域4及留出 RMS 超限被拒绝。此为当时状态快照；有效地面、高度和低位提示仍不可用。未放宽质量门或混用旧会话地面。
+- `pc_apps/range_fall/ground_refinement_probe.py` 仅作离线影子实验；证据 `docs/evidence/2026-10-29_ground_quality/` 显示内点TLS精修可掩盖原始RANSAC与TLS的分歧，不能用于当前板端。现场拟合未保存原始点，无法对失败输入精确复跑。
+
+
+## 2026-10-29 现场地面失败已取得可复现原始输入
+
+- 诊断证据 `docs/evidence/2026-10-29_ground_scene_diagnosis/`：3组×28连续帧完整wire/解码行+24张USB图，`SCENE_AND_DEPTH.png`与逐源行选区图；PC入口 `pc_apps/range_fall/ground_scene_probe.py` / `ground_scene_analysis.py`。84帧字节解码一致；未发现字段/非法ring/角表映射异常，零回波保留缺测。相机外参/硬件同步UNKNOWN，不能以RGB给点云赋人体真值。
+- 第2组复现原RANSAC第4区及三留出RMS超3cm，而TLS/SVD通过；原861三点候选中排名第3仅少8支持点（16335 vs16343），第4区RMS3.083→1.949cm，未精修/放宽阈值，拟合帧选候选后独立留出与完整28帧质量/稳定性通过。定位为全域支持数评分与分区RMS门的目标不一致；候选方案只作离线影子验证，详 `analysis_02_final/full_shadow_site.json`。三组新点用冻结旧RANSAC在旧第4区仍约3.50–3.53cm、旧TLS约2.02–2.05cm，支持稳定估计偏差；旧失败原始28帧仍无法追溯。
+- 第3组同时抓到人员近场使旧第3区域出现非地面前景（旧TLS残差约45.5cm），这是场景遮挡/选区适用性问题；新自动选区通过。不能归因地面坏了或雷达移动。核心913(skip1)、range_fall83、同源84帧E2E及完整影子通过；ROS订阅退出ignored ResourceWarning有日志。板端仍原PID66132/release7b3e379c、背景保持、confirmed关闭，线上地面仍不可用，本轮未部署或安装影子地面。
+
+
+## 2026-10-29 地面拟合修复已在板端运行
+
+- 当前识别服务：release `7a60c64d02a040fff64df6c6c0ef869159bd27deeb3bffaf962535d156763d67`、PID66684、run `range_groundfix_20261029_2f82e4e0`（本轮观测快照）。按用户空场声明重新建立50帧背景；现场地面bound/current_patch_support，输入receiving，confirmed关闭。仅切识别进程，旧7b3e379c版本/运行目录和失败候选包保留，current/驱动/capture/Foxglove/网络不变；重启自启动未验证。
+- site使用 `raw_fit_frame_regions_no_refinement_v1`：在原861个三点假设中检查25拟合帧的100个帧×分区组及原聚合区质量，再按原支持率/median挑选；不TLS精修、不用3留出选候选、不放宽门限。只检查聚合区和minimax平均区的两个失败影子版本均未上线。最终9组前后无通过→拒绝，保存的现场失败输入由拒绝变通过，其余结论保持；四会话905帧非计时输出与旧版一致。
+- 现场选区点整体RMS2.034cm/P953.788cm/支持率99.37%；RANSAC第4区1.706cm、三个独立留出1.747/1.665/1.551cm；法向[-0.4641303384,-0.0301047945,0.8852551781]、offset1.3579520169m。28条原始ROS消息SHA匹配并重放同平面，独立100/100点云帧（含拟合后44帧）及后续8秒78/78状态地面可用。现场当前28帧旧算法也能过，修复效果应引用固定失败输入成对对照，不能归因于跨次现场采样变化。
+- 入口与证据 `docs/evidence/2026-10-29_ground_region_fix/`：`LIVE_LEVELING_RESULT.json`、`FINAL_HEALTH.json`、`PAIRED_COMPARISON.json`、`LEVELING_BEFORE_AFTER.png`、exact_fit_input及immutable包；最终核心919(skip1)/range_fall84通过。一次性ROS探针退出ResourceWarning已留日志；物理姿态/高度真值、人体与跌倒效果UNKNOWN，几何通过不等于物理/人体准确率。
+
+
+## 2026-10-30 上线准备：共享服务回放收口（进行中）
+
+- 承接“解释项目中的 RANSAC 残差”中断开发；改前 master/HEAD 与2003个跟踪及非忽略未跟踪文件SHA已保存（非原子，排除受保护数据及历史证据）。共享初始化已接入ROS/PC；修复PC另生成距离图绕过发布预览状态，改为消费服务原始PNG、缺失留空；批处理在建目录前拒绝data/captures，并拒绝覆盖既有输出。
+- 核心改前919项OK(skip1)，演示改后24项OK，Qt独立构建通过；历史四段905帧基线及共享服务977帧回放完成，现场72帧背景/地面可初始化，四动作无空场声明保持UNKNOWN。服务回放为请求驱动，不能当板端拥塞/时延验证。
+- 只读板端10秒观察236条状态/87个不同源帧，仍为7a60c64d/PID66684，唯一发布者、背景ready、末帧地面current_patch_support、confirmed关闭。未部署/重启/采集原始数据。前倒组件归属根因已定位，但候选修复尚未完成对照，未修改跟踪策略；最终部署、恢复策略与真实Qt整链验证仍待完成。证据docs/evidence/2026-10-30_release_readiness/。
+
+
+## 2026-10-30 共享初始化版本板端部署与Qt真机检查
+
+- 用户当前确认空场后，仅切换识别PID66684→66952，release 1be292b6d7d01ba241b3fb3e71a23e8f4fb9e974d4f187d155deedc8d3b02863，独立run range_shared_20261030_a4c7cdb7。80源文件目标环境哈希/导入通过，旧版本保留，驱动/capture/Foxglove/共享current及网络未改。50帧背景ready、25+3拟合成功并bound，confirmed=false。
+- 初始化观察97个不同源帧含预热及拟合阶段，45帧地面可用；随后稳态观察96个不同源帧中96帧地面可用。现场平面normal [-0.4626004754,-0.0317954710,0.8859965283]、offset1.3557325232m；物理真值UNKNOWN。
+- Qt先重新构建并完成全帧解码/原生窗口检查，再以真实Foxglove连接45秒，进程正常退出、run.status=PASS，末期流统计424帧、约9.65Hz、源跳号0；保存2D/3D/配平截图及完整run。ACK不是GPU性能证明，当前空场不证明人体/跌倒效果。
+- 部署的是共享初始化和现有已测算法；前倒组件归属候选尚未采用，设备重启自启动/RAM背景恢复尚未实现，不能称无人值守最终完成。证据docs/evidence/2026-10-30_release_readiness/FINAL_DEPLOYMENT.json、activation_binding、board_fit、qt_live。
+
+
+## 2026-10-30 Qt事件接口第一步
+
+- 查阅Qt6.5属性变化信号/性能文档与QGroundControl Fact.cc的变化才通知策略；将页面切换从150ms轮询改为QML→Viewer.activateSection→sectionActivated事件，进入标注页立即同步当前帧。取消常驻页面轮询，已有逐帧/隐藏页点云规则不变；尚未测GPU帧率改善，不宣称整体流畅度已优化完成。
+- 独立Qt构建通过，真实原生test_ui_tour（完整回放/切页/快捷键/标注惰性拷贝）及test_workspace各1项通过。首次信号放错类导致构建失败、一次编码读取失败、普通runtime文件占用及旧runtime巡检失败均保留；最终使用明确新构建路径运行。
+- 基线含跟踪及非忽略未跟踪文件SHA；证据docs/evidence/2026-10-30_qt_interaction/。未改板端或数据。后续仍需测量GUI逐帧耗时、收敛拖动seek请求并检查C#任务调度，当前仅完成事件接口这一项。
+
+
+## 2026-10-30 Qt拖动合并与会话通知分离
+
+- 进度条保留最新位置、50ms定时预览、松手立即提交；按住时隔离旧回包对滑块值的覆盖；显式命令取消未发送预览，切会话/模式清空。真实测试发现generation随每次seek更新，不能用于取消同会话的新拖动；已修复并保留改前失败。ACK/保存/录制等命令不合并，C#有界队列/同帧校验保持。
+- Viewer.sessions改用独立sessionsChanged及setSessions内容比较，逐帧snapshot不再通知整个会话列表。原生自检100次帧通知产生0次列表通知，两次内容更改准确通知2次。QML节点/调用边界写入console_v2/app/README.md。
+- JS实际QML函数6类契约通过（500更新→1请求）；PySide Qt6.11真实滑块2项通过（120快速鼠标移动→1最终请求，含旧generation回包、模式切换）；生产Qt6.5独立构建、真实完整回放/切页tour与workspace各1项通过。没有配对GPU基准；既有实连422个ACK的GUI处理P50/P95/max=7.708/9.539/11.894ms仅作历史定位。
+- 失败日志保留：一次重叠构建造成临时对象归档错误，串行重建恢复；初版通知测试直接扰动真实窗口造成两项自检失败，改用独立Viewer测通知后真实窗口全通过。证据docs/evidence/2026-10-30_qt_seek/含基线SHA、失败及最终日志、真实窗口报告/截图。未修改板端、算法或原始数据。
+
+## 2026-11-03 控制台板端地址
+
+- Qt 控制台三个默认板端服务共用 `welcomtech.local`，当前名称解析与端口连通通过；更换网络后的 mDNS 可用性未验证，详见 `docs/PROGRESS.md`。
+
+## 2026-11-03 实时连接重试
+
+- 控制台连接按钮重新创建实时连接，修复失败后无法重试；需重启控制台加载新服务。重复点击和板端数据流尚未实测。
+
+## 2026-11-03 Qt 观测模式
+
+- 实时页默认仅订阅原始点云，板端算法结果可选；构建通过，原始订阅及板端实流仍待验证，界面 tour 报告缺失详见 PROGRESS。
+
+## 2026-11-05 人体识别已暂停
+
+- 用户授权后停止slam-localization中人体range_service_node（PID66952），保留容器/雷达驱动/Foxglove；实际ROS订阅收到49126点。当前可继续订阅/innolidar_points用于鸟类识别开发。恢复需重新初始化背景和地面，未修改启动配置，重启行为未验证；详见PROGRESS及docs/evidence/2026-11-05_pause_recognition/。
+
+## 2026-11-16 当前实连与地面状态快照
+
+Qt实时页恢复默认订阅板端算法，新窗口实际显示目标框及几何骨架候选。板端现有PID125268/release 1be292b6/run range_restart_20261116T0600Z持续发布，但本次地面拟合existing_quality_rejected（TLS/SVD独立留出区域P95=5.02853cm>5cm），当前高度/姿态/跌倒不可用；此前成功不代表新进程已绑定。配平恢复尚未完成，未操作板端服务或声明空场。离线UI+实时流3项OK；证据docs/evidence/2026-11-16_live_restore/。
+
+
+## 2026-11-16 实时链路低带宽补丁与实际阻塞
+
+Qt新增默认低带宽模式：完整源帧收到后取消点云订阅，250 ms后恢复；算法状态持续订阅，同帧source-row/SHA与500 ms TTL不放宽。命令行普通实连同样默认启用；全速模式保留，采样跨帧不再标成接收丢帧。已构建，专项模拟桥接测试通过。实际实连未恢复：独立Python WebSocket首帧7.11 s、次帧15.516 s（各约1.28 MB）；SSH读1 MiB耗时8.25 s。说明严重大包吞吐问题跨越Qt/Foxglove，具体网卡/USB/线缆/网络根因UNKNOWN，不能仅凭百兆协商判定。地面仍未加载。未改网络/驱动、未启停或部署板端。证据 docs/evidence/2026-11-16_live_bandwidth/；完整回归结果见PROGRESS。
+
+RSC临时关闭实测1 MiB 4.03秒；原配置已恢复（IPv4/IPv6 enabled，operational false）。实测不足以解释或解决链路慢，建议更换千兆网卡/线缆并重新实测。
+
+2026-11-16：按用户要求板端range_service_node已停止，驱动与Foxglove仍运行；本机桥接启动因自动审批被拒绝，用户已声明空场但尚未建立背景，实时识别未运行。详见PROGRESS。

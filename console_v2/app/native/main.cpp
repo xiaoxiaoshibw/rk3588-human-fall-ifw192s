@@ -258,7 +258,7 @@ int main(int argc,char **argv) {
             const QByteArray bytes=QJsonDocument(message).toJson(QJsonDocument::Compact)+'\n';
             if(socket.write(bytes)!=bytes.size())app.exit(2);
         };
-        ui.sessionData=hello["sessions"].toArray().toVariantList();
+        ui.setSessions(hello["sessions"].toArray().toVariantList());
         // 绑定的地面文件（只读）：只用于“配平视图”的显示旋转，不改点云、不改判定。
         {
             const QString groundPath=option("--ground");
@@ -352,20 +352,14 @@ int main(int argc,char **argv) {
             }
             if(args.contains("--smoke-depth"))engine->rootObjects().first()->setProperty("showDepth",true);
         };
-        loadQml();
-        // 标注画布只在标注页可见时同步点云：section 变化后补一次当前帧（150ms 足够，不逐帧轮询）。
-        int watchedSection=-1;
-        QTimer sectionWatch;sectionWatch.setInterval(150);
-        QObject::connect(&sectionWatch,&QTimer::timeout,&ui,[&] {
-            if(!window)return;
-            const int section=window->property("section").toInt();
-            if(section==watchedSection)return;
-            watchedSection=section;
+        // 页面切换是UI事件；进入标注页立即同步，不再常驻轮询。
+        QObject::connect(&ui,&Viewer::sectionActivated,&ui,[&](int section) {
+            if(!window || window->property("section").toInt()!=section)return;
             if(section==3 && annotationView) {
                 annotationView->setFrame(currentScene,ui.data.value("frameIndex").toInt());annotationCopies++;
             }
         });
-        sectionWatch.start();
+        loadQml();
         QFileSystemWatcher watcher;QTimer debounce;debounce.setSingleShot(true);QString watchDir;
         if(!qmlFile.isEmpty()) {
             watchDir=QFileInfo(qmlFile).absolutePath();
@@ -535,7 +529,7 @@ int main(int argc,char **argv) {
                         // 标注文档只走本地标注 store；QML 据此刷新行内标注台，不自动打开浏览器。
                         ui.gtData=message.toVariantMap();emit ui.gtChanged();continue;
                     } else if(type=="sessions") {
-                        ui.sessionData=message["sessions"].toArray().toVariantList();
+                        ui.setSessions(message["sessions"].toArray().toVariantList());
                     } else if(type=="localTask") {
                         ui.localTaskData=message.toVariantMap();
                     } else if(type=="ground") {
@@ -623,7 +617,7 @@ int main(int argc,char **argv) {
             });timer->start();
         }
         if(!option("--live-url").isEmpty() && !args.contains("--smoke"))
-            QTimer::singleShot(250,&ui,[&]{if(window)window->setProperty("section",1);ui.command({{"op","liveConnect"},{"url",option("--live-url")},{"prefix","/single_target_live/"},{"points","/innolidar_points"}});});
+            QTimer::singleShot(250,&ui,[&]{if(window)window->setProperty("section",1);ui.command({{"op","liveConnect"},{"url",option("--live-url")},{"prefix","/single_target_live/"},{"points","/innolidar_points"},{"pointIntervalMs",250}});});
         if(!option("--workspace-report").isEmpty()) {
             const auto checks=std::make_shared<QJsonArray>();
             const auto width=std::make_shared<double>(0);
@@ -871,6 +865,7 @@ int main(int argc,char **argv) {
             // 不打开额外窗口、不写任何数据。stderr 里出现 QML/Qt 告警由 Python 用例判失败。
             const auto checks=std::make_shared<QJsonArray>();
             const auto frameBefore=std::make_shared<int>(-1);
+            const auto sessionCountBefore=std::make_shared<int>(-1);
             const auto hiddenCopies=std::make_shared<qint64>(-1);
             const auto commandsBefore=std::make_shared<qint64>(-1);
             // before/after 对照用：截图时的会话与帧号单独留档。
@@ -883,7 +878,7 @@ int main(int argc,char **argv) {
             const auto safe=[checks](auto action) {
                 try{action();}catch(const std::exception &error){checks->append(QJsonObject{{"case",error.what()},{"passed",false}});}
             };
-            QTimer::singleShot(900,&ui,[&,require,checks] {
+            QTimer::singleShot(900,&ui,[&,require,checks,sessionCountBefore] {
                 try {
                     const QVariantMap snap=window->property("snap").toMap();
                     QQuickItem *cloud=window->findChild<QQuickItem*>("cloudViewport");
@@ -899,6 +894,7 @@ int main(int argc,char **argv) {
                     require("default_session_loaded",!snap.value("sessionId").toString().isEmpty(),snap.value("sessionId").toString());
                     require("default_paused_at_first_frame",snap.value("frameIndex").toInt()==0 && !ui.playing(),
                         QString("frame %1 / playing %2").arg(snap.value("frameIndex").toInt()).arg(ui.playing()?1:0));
+                    *sessionCountBefore=ui.sessionData.size();
                     require("default_session_list_populated",ui.sessionData.size()>0,QString::number(ui.sessionData.size()));
                     require("default_annotation_page_hidden",!annotation || !annotation->isVisible());
                     require("default_cloud_viewport_visible",cloud && cloud->width()>400,cloud?QString::number(cloud->width()):QString("missing"));
@@ -934,6 +930,21 @@ int main(int argc,char **argv) {
                         shortcutSequence(window,"shortcutPlay")+"/"+shortcutSequence(window,"shortcutPrev")+"/"+shortcutSequence(window,"shortcutNext")
                         +"/"+shortcutSequence(window,"shortcutFirst")+"/"+shortcutSequence(window,"shortcutLast")+"/"+shortcutSequence(window,"shortcutCancel"));
                     // ---- P1-1：会话列表单行 + 名称/编号/分析状态 + 正文 ≥12px ----
+                    int sessionSignals=0;
+                    Viewer sessionProbe;
+                    const auto savedSessions=ui.sessionData;
+                    sessionProbe.setSessions(savedSessions);
+                    const auto connection=QObject::connect(&sessionProbe,&Viewer::sessionsChanged,&sessionProbe,[&sessionSignals] {sessionSignals++;});
+                    for(int i=0;i<100;i++)sessionProbe.notify();
+                    sessionProbe.setSessions(savedSessions);
+                    require("frame_notifications_do_not_rebuild_sessions",sessionSignals==0,QString::number(sessionSignals));
+                    if(!savedSessions.isEmpty()) {
+                        auto renamed=savedSessions;
+                        auto first=renamed[0].toMap();first["name"]="notification-test";renamed[0]=first;
+                        sessionProbe.setSessions(renamed);sessionProbe.setSessions(savedSessions);
+                        require("session_content_changes_notify",sessionSignals==2,QString::number(sessionSignals));
+                    }
+                    QObject::disconnect(connection);
                     require("session_list_model_count",sessionCount(window)==ui.sessionData.size(),
                         QString("%1/%2").arg(sessionCount(window)).arg(ui.sessionData.size()));
                     require("session_filter_count_total",
@@ -1267,7 +1278,7 @@ int main(int argc,char **argv) {
                         field->property("text").toString());
                 });
             });
-            QTimer::singleShot(6500,&ui,[&,require,safe,frameBefore] {
+            QTimer::singleShot(6500,&ui,[&,require,safe,frameBefore,sessionCountBefore] {
                 safe([&] {
                     const QVariantList ids=filteredSessionIds(ui.sessionData,namedText(window,"sessionFilter"));
                     const int expected=ids.size();
@@ -1322,7 +1333,7 @@ int main(int argc,char **argv) {
                     require("filter_does_not_change_loaded_session",
                         ui.data.value("sessionId").toString()==QStringLiteral("cap_20261018_110029")
                         && ui.data.value("frameIndex").toInt()==3 && !ui.playing()
-                        && ui.sessionData.size()==12 && ui.data.value("frameCount").toInt()>0,
+                        && ui.sessionData.size()==*sessionCountBefore && ui.data.value("frameCount").toInt()>0,
                         ui.data.value("sessionId").toString()+QString("/%1").arg(ui.data.value("frameIndex").toInt()));
                 });
             });
@@ -1757,7 +1768,8 @@ int main(int argc,char **argv) {
                     auto *field=window?window->findChild<QObject*>("liveUrl"):nullptr;
                     if(!field || field->property("text").toString()!=url) {qCritical("smoke live URL field mismatch");closing=true;app.exit(2);return;}
                     window->setProperty("section",1);
-                    ui.command({{"op","liveConnect"},{"url",url},{"prefix","/single_target_live/"},{"points","/innolidar_points"}});
+                    ui.command({{"op","liveConnect"},{"url",url},{"prefix","/single_target_live/"},{"points","/innolidar_points"},
+                        {"pointIntervalMs",option("--smoke-point-interval-ms").toInt()}});
                 });
             } else {
                 const int smokeFrame=option("--smoke-frame").isEmpty()?105:option("--smoke-frame").toInt();

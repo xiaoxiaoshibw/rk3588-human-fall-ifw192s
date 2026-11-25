@@ -1,0 +1,15 @@
+{
+  "_说明": "ConsoleV2 源码构建版配置。修改后重新双击 编译并启动.cmd 或 启动控制台.cmd 生效。路径可用环境变量，相对路径相对源码根目录。",
+  "dataRoot": "console_v2/user_data/sessions",
+  "_dataRoot": "会话库目录。默认放在源码树内（已被 gitignore）；局域网共享可填 \\\\主机\\共享\\sessions，只读即可浏览，删除/改名/保存标注需要写权限。留空=默认值。",
+  "boardUrl": "ws://192.168.31.58:8765",
+  "_boardUrl": "板端 Foxglove 只读地址；留空则启动后手动在界面里连接。",
+  "autoConnectLive": true,
+  "_autoConnectLive": "true=启动即进入实时锁定并连接 boardUrl；false=只打开离线会话，用户自己点连接。",
+  "python": "",
+  "_python": "可选：视频同步、网页标注台、离线分析需要 Python 3 + numpy（视频还要 av/Pillow）。留空自动查找 PATH 和 <源码根>/python/python.exe。",
+  "state": "console_v2/user_data/state",
+  "_state": "会话显示名与原生标注草稿的写入目录；可写本地目录。",
+  "logs": "console_v2/user_data/logs",
+  "_logs": "每次启动的日志/报告目录；不可写时自动退到 %LOCALAPPDATA%\\ConsoleV2\\logs。"
+}

@@ -279,7 +279,7 @@ class Viewer final : public QObject {
     Q_PROPERTY(QVariantMap joint READ joint NOTIFY changed)
     Q_PROPERTY(QVariantMap gt READ gt NOTIFY gtChanged)
     Q_PROPERTY(QVariantMap video READ video NOTIFY videoChanged)
-    Q_PROPERTY(QVariantList sessions READ sessions NOTIFY changed)
+    Q_PROPERTY(QVariantList sessions READ sessions NOTIFY sessionsChanged)
     Q_PROPERTY(QString status READ status NOTIFY changed)
     Q_PROPERTY(bool playing READ playing NOTIFY changed)
     Q_PROPERTY(int colorMode READ colorMode WRITE setColorMode NOTIFY colorModeChanged)
@@ -338,6 +338,11 @@ public:
     QVariantMap localTask() const { return localTaskData; }
     QVariantMap video() const { return videoData; }
     QVariantList sessions() const { return sessionData; }
+    void setSessions(const QVariantList &value) {
+        if(sessionData==value)return;
+        sessionData=value;
+        emit sessionsChanged();
+    }
     QString status() const { return message; }
     bool playing() const { return isPlaying; }
     int colorMode() const { return mode; }
@@ -345,6 +350,7 @@ public:
     QVariantMap deleteManifest() const { return manifest; }
     void setDeleteManifest(const QVariantMap &value) { manifest=value; }
     Q_INVOKABLE void command(const QVariantMap &value) { if(send) send(QJsonObject::fromVariantMap(value)); }
+    Q_INVOKABLE void activateSection(int section) { emit sectionActivated(section); }
     void notify() { emit changed(); }
 
     // ---- 错误归因：命令带通道与“期待回包”计数，回包只按终止消息结算 ----
@@ -352,7 +358,7 @@ public:
         static const QHash<QString,QString> table{
             {"open","session"},{"rename","session"},{"deleteProbe","session"},{"deleteConfirm","session"},
             {"liveConnect","live"},{"liveDisconnect","live"},
-            {"localAnalysisToggle","replay"},{"localAnalysisRun","replay"},{"localGroundFit","replay"},{"localOfflinePreview","replay"},
+            {"localAnalysisToggle","replay"},{"localAnalysisRun","replay"},{"localGroundFit","replay"},{"localOfflinePreview","replay"},{"openPseudoLiveQt","replay"},
             {"jointStart","joint"},{"jointStop","joint"},{"jointStatus","joint"},{"jointPreview","joint"},
             {"annotate","annotation"},{"gtLoad","annotation"},{"gtSave","annotation"},
             {"play","replay"},{"pause","replay"},{"step","replay"},{"seek","replay"},{"speed","replay"}};
@@ -460,4 +466,6 @@ signals:
     void gtChanged();
     void alertChanged();
     void groundChanged();
+    void sessionsChanged();
+    void sectionActivated(int section);
 };

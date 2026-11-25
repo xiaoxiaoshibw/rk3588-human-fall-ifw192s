@@ -45,19 +45,50 @@ internal sealed class LiveSource : IDisposable
     private string status = "connecting";
     private object? algorithmInput;
     private readonly Task task;
-    internal LiveSource(string url, string prefix, string topic)
+    private readonly int pointIntervalMs;
+    private readonly SemaphoreSlim sendGate = new(1,1);
+    private Task pointResume = Task.CompletedTask;
+    private volatile bool pointsPaused;
+    private int pointChannel;
+    internal LiveSource(string url, string prefix, string topic, int pointIntervalMs=0)
     {
         Uri uri = new(url);
         if (uri.Scheme is not ("ws" or "wss") || !string.IsNullOrEmpty(uri.UserInfo))
             throw new ArgumentException("Expected a Foxglove WebSocket URL without credentials");
-        if (!prefix.StartsWith('/') || !prefix.EndsWith('/') || !topic.StartsWith('/'))
+        if ((prefix.Length > 0 && (!prefix.StartsWith('/') || !prefix.EndsWith('/'))) || !topic.StartsWith('/'))
             throw new ArgumentException("Absolute ROS prefix/topic required");
         if(topic!="/innolidar_points") throw new ArgumentException("First native live adapter accepts the full /innolidar_points stream only");
-        pointsTopic=topic; stateTopic=prefix+"state";
+        if(pointIntervalMs is <0 or >1000) throw new ArgumentException("Invalid point subscription interval");
+        this.pointIntervalMs=pointIntervalMs;
+        pointsTopic=topic; stateTopic=prefix.Length == 0 ? "" : prefix+"state";
         socket.Options.AddSubProtocol("foxglove.websocket.v1");
         // Only public sensor data travels here; negotiate existing bridge compression.
         socket.Options.DangerousDeflateOptions = new WebSocketDeflateOptions();
         task = Task.Run(() => Receive(uri));
+    }
+    private async Task SendSubscription(object message)
+    {
+        await sendGate.WaitAsync(cancel.Token);
+        try
+        {
+            byte[] bytes=JsonSerializer.SerializeToUtf8Bytes(message);
+            await socket.SendAsync(new ArraySegment<byte>(bytes),WebSocketMessageType.Text,true,cancel.Token);
+        }
+        finally {sendGate.Release();}
+    }
+    private async Task ResumePoints()
+    {
+        try
+        {
+            await Task.Delay(pointIntervalMs,cancel.Token);
+            await SendSubscription(new{op="subscribe",subscriptions=new[]{new{id=1,channelId=pointChannel}}});
+            pointsPaused=false;
+        }
+        catch(Exception error) when(error is not OutOfMemoryException)
+        {
+            if(!cancel.IsCancellationRequested)
+            {lock(gate) status="Point subscription failed: "+error.Message;socket.Abort();}
+        }
     }
     internal (LivePacket? Packet, string Status, JsonElement? Ground) Take(bool consume=true)
     {
@@ -130,12 +161,11 @@ internal sealed class LiveSource : IDisposable
                             if(subscribed.TryGetValue(id,out int previous))
                             {
                                 if(previous==channelId)continue;
-                                byte[] unsubscribe=JsonSerializer.SerializeToUtf8Bytes(new{op="unsubscribe",subscriptionIds=new[]{id}});
-                                await socket.SendAsync(new ArraySegment<byte>(unsubscribe),WebSocketMessageType.Text,true,cancel.Token);
+                                await SendSubscription(new{op="unsubscribe",subscriptionIds=new[]{id}});
                             }
                             subscribed[id]=channelId;
-                            byte[] subscribe=JsonSerializer.SerializeToUtf8Bytes(new{op="subscribe",subscriptions=new[]{new{id,channelId=ch.GetProperty("id").GetInt32()}}});
-                            await socket.SendAsync(new ArraySegment<byte>(subscribe),WebSocketMessageType.Text,true,cancel.Token);
+                            if(id==1) pointChannel=channelId;
+                            await SendSubscription(new{op="subscribe",subscriptions=new[]{new{id,channelId}}});
                         }
                     }
                     if(op=="unadvertise" && msg.GetProperty("channelIds").EnumerateArray().Any(v=>subscribed.Values.Contains(v.GetInt32())))
@@ -145,6 +175,14 @@ internal sealed class LiveSource : IDisposable
                 {
                     int id=BinaryPrimitives.ReadInt32LittleEndian(bytes.AsSpan(1,4));
                     byte[] payload=bytes[13..];
+                    // Sample complete source frames at the bridge, before they fill a slow link.
+                    // Algorithm state remains subscribed continuously; source-row matching is unchanged.
+                    if(id==1 && pointIntervalMs>0 && !pointsPaused)
+                    {
+                        pointsPaused=true;
+                        await SendSubscription(new{op="unsubscribe",subscriptionIds=new[]{1}});
+                        pointResume=ResumePoints();
+                    }
                     lock(gate)
                     {
                         if(id==1)
@@ -293,7 +331,7 @@ internal sealed class LiveSource : IDisposable
         _=gs.GetProperty("available").GetBoolean();
     }
     private static string Key(uint seq,uint secs,uint nsecs,string frame) => $"{seq}/{secs}/{nsecs}/{frame}";
-    private object Metrics() => new{received=cloudCount,receiveHz,sourceHz,sequenceGaps,superseded,previewDelayMs=PreviewDelayS*1000,
+    private object Metrics() => new{received=cloudCount,receiveHz,sourceHz,sequenceGaps,superseded,pointIntervalMs,previewDelayMs=PreviewDelayS*1000,
         stateStreamAgeMs=stateAt==0?(double?)null:Stopwatch.GetElapsedTime(stateAt).TotalMilliseconds};
     private LivePacket Unmatched(CloudFrame c) => new(c.Scene,[],c.Intensity,new{mode="live",sessionId=session??"UNKNOWN",
         frameIndex=c.Seq,frameCount=0,stampSec=c.Stamp,playing=false,speed=1,sceneCount=c.Scene.Length/12,
@@ -532,6 +570,7 @@ internal sealed class LiveSource : IDisposable
     {
         cancel.Cancel(); socket.Abort();
         try { task.GetAwaiter().GetResult(); } catch(OperationCanceledException) { }
+        pointResume.GetAwaiter().GetResult();
         socket.Dispose(); cancel.Dispose();
     }
 }

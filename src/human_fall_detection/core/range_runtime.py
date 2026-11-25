@@ -25,6 +25,7 @@ from .human_prior import DEFAULT_SETTINGS as HUMAN_PRIOR_SETTINGS
 from .candidate_history import ground_version
 from .range_ground_alert import SETTINGS as ALERT_SETTINGS
 from .range_demo_alert import SETTINGS as DEMO_ALERT_SETTINGS
+from .human_belief import HumanPhysicalEvaluator, REVISION as HUMAN_PHYSICAL_REVISION, evaluator_failure_output
 
 
 class SettingsDriftError(ValueError):
@@ -37,7 +38,8 @@ def serial(value):
 
 class RangeRuntime:
     def __init__(self, grid, identity, *, empty_prefix_frames, ground=None, ground_sha=None,
-                 detailed=True, background=None):
+                 detailed=True, background=None, human_physical_v1=False,
+                 human_physical_settings=None, tracker_settings=None):
         self.grid, self.identity = grid, dict(identity)
         self.binding = binding_tuple(identity)
         self.background_non_causal = background is not None
@@ -59,19 +61,27 @@ class RangeRuntime:
         self.background_disabled = False
         self.last_time = None
         self.last_frame_index = None
-        self.tracker = RangeTracker()
+        self._tracker_overrides = dict(tracker_settings or {})
+        self.tracker = RangeTracker(settings=self._tracker_overrides)
         self.features = FeatureExtractor(identity['session'])
         self.state = FallStateMachine(identity['session'], dict(mode_verified=False, allow_confirmed=False))
         self.posture = PostureObserver()
         self.baseline_collector = StanceBaselineCollector(identity['session'])
+        self.human_physical = (
+            HumanPhysicalEvaluator(**(human_physical_settings or {}))
+            if human_physical_v1 else None
+        )
         self.config = dict(frontend='range_v1', empty_prefix_frames=empty_prefix_frames,
-            tracker=dict(SETTINGS), ground_sha256=ground_sha, background_update=False,
+            tracker=dict(SETTINGS, **self._tracker_overrides), ground_sha256=ground_sha, background_update=False,
             min_neighbours=2, min_component_points=15, merge=False,
             fall=dict(self.state.settings), posture=dict(POSTURE_SETTINGS),
             human_prior=dict(HUMAN_PRIOR_SETTINGS),
             baseline=dict(mode='automatic_stance', settings=resolve_baseline_settings(None)),
             feature_defaults=dict(FEATURE_SETTINGS), fall_defaults=dict(FALL_SETTINGS),
             ground_alert=dict(ALERT_SETTINGS), demo_alert=dict(DEMO_ALERT_SETTINGS))
+        if self.human_physical is not None:
+            self.config['human_physical_v1'] = dict(enabled=True, revision=HUMAN_PHYSICAL_REVISION,
+                settings=dict(human_physical_settings or {}))
         if background is not None:
             self.config.update(background_source=background.declaration, background_non_causal=True)
         self.config_sha = hashlib.sha256(serial(self.config).encode()).hexdigest()
@@ -135,7 +145,7 @@ class RangeRuntime:
     def update(self, packed, stamp_s, frame_index, *, identity=None, grid=None, ground_validator=None):
         """只消费当前packed；背景只能由连续、显式声明的起始前缀建立。"""
         for name, current, saved in (
-                ('tracker', SETTINGS, self.config['tracker']),
+                ('tracker', dict(SETTINGS, **self._tracker_overrides), self.config['tracker']),
                 ('human prior', HUMAN_PRIOR_SETTINGS, self.config['human_prior']),
                 ('posture', POSTURE_SETTINGS, self.config['posture']),
                 ('baseline', BASELINE_SETTINGS, self.config['baseline']['settings']),
@@ -152,6 +162,8 @@ class RangeRuntime:
             self.features = FeatureExtractor(self.identity['session'])
             self.state = FallStateMachine(self.identity['session'], dict(mode_verified=False,allow_confirmed=False))
             self.posture = PostureObserver()
+            if self.human_physical is not None:
+                self.human_physical.reset()
             self.tracker.update(None, None, None, stamp_s, frame_index)
         costs = {}
         skipped = max(0,frame_index-self.last_frame_index-1) if self.last_frame_index is not None else 0
@@ -209,6 +221,17 @@ class RangeRuntime:
         costs['inference_binding_json_ms'] = (time.perf_counter()-tracked)*1000
         rule = self.rules(frame, record, costs, ground=effective_ground)
         ruled = time.perf_counter()
+        human_physical_out = None
+        if self.human_physical is not None:
+            physical_start = time.perf_counter()
+            try:
+                human_physical_out = self.human_physical.evaluate(
+                    frame, record, background=self.background, ground=effective_ground)
+            except Exception as exc:  # noqa: BLE001 - 可选命名变体绝不能中断原跟踪/跌倒链
+                self.human_physical.reset()
+                human_physical_out = evaluator_failure_output(
+                    record, exc, (time.perf_counter()-physical_start)*1000)
+            costs.update(human_physical_out['timings'])
         init_start = time.perf_counter()
         if not self.background_disabled and self.prefix_size and len(self.prefix) == self.prefix_size:
             self.background = RayBackground(self.prefix, empty_prefix_declared=True,
@@ -219,5 +242,8 @@ class RangeRuntime:
             frontend_ms=(front_done-started)*1000, tracking_ms=(tracked-front_done)*1000,
             features_ms=detail['features_ms'], algorithm_ms=(tracked-started)*1000,
             event_chain_ms=(ruled-started)*1000, background_init_ms=(time.perf_counter()-init_start)*1000)
-        return dict(tracking=record, rule=rule, status=status, source_binding=identity,
-            config_sha256=self.config_sha, skipped_input_frames=skipped, timings=costs), frame, components
+        payload = dict(tracking=record, rule=rule, status=status, source_binding=identity,
+            config_sha256=self.config_sha, skipped_input_frames=skipped, timings=costs)
+        if human_physical_out is not None:
+            payload['human_physical_v1'] = human_physical_out
+        return payload, frame, components

@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>雷达体态工作台 · LiDAR Studio</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+  <div class="studio-shell">
+    <!-- 顶部控制与健康条 -->
+    <header class="topbar glass">
+      <div class="tb-brand">
+        <span class="brand-dot"></span>
+        <div>
+          <div class="brand-title">雷达体态工作台</div>
+          <div class="brand-sub">纯雷达几何体态 · 物理一致分析</div>
+        </div>
+      </div>
+
+      <div class="tb-controls">
+        <div class="seg-group" id="modeGroup" role="group" aria-label="数据源模式">
+          <button class="seg-btn active" data-mode="replay">回放模式</button>
+          <button class="seg-btn" data-mode="live">实时只读</button>
+        </div>
+
+        <select id="sessionSelect" class="session-select" aria-label="选择回放会话">
+          <option value="">正在读取会话列表…</option>
+        </select>
+
+        <select id="liveStreamSelect" class="session-select hidden" aria-label="实时订阅模式" title="选择板端纯 JSON（低带宽）或附加原始 3D 点云">
+          <option value="json_only" selected>板端纯 JSON（低带宽）</option>
+          <option value="cloud_and_json">板端 JSON + 3D 点云</option>
+        </select>
+
+        <button id="reloadBtn" class="btn-icon" title="刷新会话 / 重探板端">↻</button>
+      </div>
+
+      <!-- 健康条 -->
+      <div class="health-strip" id="healthStrip">
+        <div class="hc-pill" title="渲染帧率">
+          <span class="hc-k">FPS</span>
+          <span class="hc-v mono" id="hFps">—</span>
+        </div>
+        <div class="hc-pill" title="本帧处理耗时 (decode/bg/track/phys)">
+          <span class="hc-k">耗时</span>
+          <span class="hc-v mono" id="hTiming">—</span>
+        </div>
+        <div class="hc-pill">
+          <span class="hc-k">背景</span>
+          <span class="hc-v" id="hBg">—</span>
+        </div>
+        <div class="hc-pill">
+          <span class="hc-k">地面</span>
+          <span class="hc-v" id="hGround">—</span>
+        </div>
+        <div class="hc-pill">
+          <span class="hc-k">物理评估</span>
+          <span class="hc-v" id="hEval">—</span>
+        </div>
+        <div class="hc-pill semantic-badge" title="所有识别均无真值，confirmed 已关闭">
+          <span id="hSource">回放</span> · 无真值(UNKNOWN)
+        </div>
+      </div>
+
+      <button id="toggleInspectorBtn" class="btn-compact inspector-toggle" title="折叠/展开分析栏">分析栏</button>
+    </header>
+
+    <!-- 主三栏工作区 -->
+    <main class="workspace">
+      <!-- 1. 主视图：3D 点云 -->
+      <section class="panel view3d-panel glass">
+        <div id="view3dMount" class="view3d-canvas-wrap"></div>
+
+        <!-- 3D 顶部浮动控制条 -->
+        <div class="hud-top">
+          <div class="hud-group" id="presetGroup" title="快捷键 1–5 切换视角">
+            <button class="hud-btn" data-preset="front"><kbd>1</kbd> 正面</button>
+            <button class="hud-btn" data-preset="side"><kbd>2</kbd> 侧面</button>
+            <button class="hud-btn" data-preset="top"><kbd>3</kbd> 俯视</button>
+            <button class="hud-btn" data-preset="sensor"><kbd>4</kbd> 传感器</button>
+            <button class="hud-btn active" data-preset="free"><kbd>5</kbd> 立体</button>
+          </div>
+
+          <div class="hud-group" id="colorGroup" title="点云着色模式">
+            <button class="hud-btn active" data-color="height">高度</button>
+            <button class="hud-btn" data-color="range">距离</button>
+            <button class="hud-btn" data-color="intensity">反射</button>
+            <button class="hud-btn" data-color="target">目标高亮</button>
+            <button class="hud-btn" data-color="recovery">回收新增</button>
+          </div>
+
+          <div class="hud-group">
+            <button class="hud-btn toggle active" id="btnFollow" title="相机中心平滑跟随目标">跟随目标</button>
+            <button class="hud-btn toggle active" id="btnLevel" title="将显示旋转至拟合地面水平（不改变判定）">配平视图</button>
+            <button class="hud-btn toggle active" id="btnSkeleton" title="几何区域骨架（非人体关节）">骨架</button>
+            <button class="hud-btn toggle active" id="btnBbox">包围盒</button>
+            <button class="hud-btn toggle active" id="btnTrail">尾迹</button>
+          </div>
+        </div>
+
+        <!-- 3D 左下角图例与语义角标 -->
+        <div class="hud-bottom-left glass-sub">
+          <div class="legend-row">
+            <span id="colorLegendTitle">高度着色</span>
+            <div class="legend-bar" id="colorLegendBar"></div>
+            <span class="mono" id="colorLegendRange">0.0 – 2.2 m</span>
+          </div>
+          <div class="hud-meta-row">
+            <span id="coordNote">配平视图（几何拟合 · 非真值）</span>
+            <span class="sep">·</span>
+            <span>骨架：几何区域，非人体关节</span>
+            <span class="sep">·</span>
+            <span class="mono" id="pointStats">0 点</span>
+          </div>
+        </div>
+
+        <!-- 3D 右下角坐标轴指示器 -->
+        <canvas id="axisHud" class="axis-hud" width="112" height="112" title="X 前向 · Y 左向 · Z 向上 (m)"></canvas>
+
+        <!-- 加载进度 / 离线不可达 遮罩 -->
+        <div id="stageOverlay" class="stage-overlay hidden">
+          <div class="overlay-card glass">
+            <div class="spinner-ring" id="overlaySpinner"></div>
+            <h3 id="overlayTitle">正在准备回放会话…</h3>
+            <p id="overlayDesc">首次打开需运行整段背景与物理人体推理，完成后自动写入本地缓存。</p>
+            <div class="progress-track" id="overlayProgressWrap">
+              <div class="progress-fill" id="overlayProgressFill"></div>
+            </div>
+            <div class="mono overlay-meta" id="overlayMeta">0 / 0</div>
+            <button id="overlayRetryBtn" class="btn-primary hidden">重新探测板端</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 中栏：2D 距离图 + USB 摄像头 -->
+      <div class="mid-column">
+        <!-- 2D 距离图卡片 -->
+        <section class="panel card2d glass">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span>2D 径向距离图</span>
+              <span class="tag mono">192×256 · rotate180</span>
+            </div>
+            <div class="mini-toggles">
+              <button class="mini-btn active" id="btnMaskTarget">目标掩码</button>
+              <button class="mini-btn active" id="btnMaskRec">回收</button>
+              <button class="mini-btn active" id="btnMaskSkel">骨架投影</button>
+            </div>
+          </div>
+          <div class="canvas2d-wrap">
+            <canvas id="rangeCanvas" width="256" height="192"></canvas>
+            <canvas id="rangeOverlay" width="512" height="384"></canvas>
+          </div>
+          <div class="panel-foot mono" id="hoverReadout">
+            <span>悬停距离图查看坐标与距离 (0.1–8.0 m)</span>
+            <span class="color-scale-mini"><i style="background:#ff3b30"></i>0.1m → <i style="background:#4ade80"></i>4m → <i style="background:#3b82f6"></i>8m</span>
+          </div>
+        </section>
+
+        <!-- USB 摄像头卡片 -->
+        <section class="panel cardcam glass">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span>USB 摄像头对照</span>
+              <span class="tag warn-tag">仅展示 · 不进入算法链</span>
+            </div>
+            <span class="mono cam-delta" id="camDeltaBadge">—</span>
+          </div>
+          <div class="cam-stage">
+            <img id="camImg" alt="USB 摄像头对照画面" class="hidden">
+            <div id="camEmpty" class="cam-empty">
+              <div class="cam-empty-icon">📷</div>
+              <div class="cam-empty-title" id="camEmptyTitle">等待摄像头画面</div>
+              <div class="cam-empty-sub" id="camEmptySub">回放按接收时间 ±250 ms 对齐</div>
+            </div>
+          </div>
+          <div class="panel-foot">
+            <span id="camSyncNote">接收时间对齐 ±250 ms，非硬件同步</span>
+            <span class="mono" id="camFrameTag">—</span>
+          </div>
+        </section>
+      </div>
+
+      <!-- 3. 右栏：体态与分析状态 -->
+      <aside class="inspector-column" id="inspectorCol">
+        <!-- 跌倒状态机 -->
+        <section class="panel card-block glass">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span>跌倒状态机</span>
+              <span class="tag">几何证据</span>
+            </div>
+            <span class="state-pill muted" id="fallStateBadge">状态未知</span>
+          </div>
+          <div class="card-body">
+            <div class="sub-banner" id="fallSubNote">
+              confirmed 已禁用 · 低位/疑似均为几何证据，非人体跌倒真值
+            </div>
+            <div class="kv-row">
+              <span>低姿提示 (v1)</span>
+              <span class="mono" id="demoAlertText">未匹配</span>
+            </div>
+            <div class="chip-wrap" id="fallReasonChips"></div>
+          </div>
+        </section>
+
+        <!-- 体态卡 -->
+        <section class="panel card-block glass">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span>几何体态</span>
+              <span class="tag">非人体真值</span>
+            </div>
+            <span class="state-pill muted" id="postureBadge">未知</span>
+          </div>
+          <div class="card-body">
+            <div class="gauge-grid">
+              <div class="gauge-item">
+                <div class="g-top"><span>身高中位</span><strong class="mono" id="mHeightMed">—</strong></div>
+                <div class="g-bar"><div class="g-fill cyan" id="gHeightMed"></div></div>
+              </div>
+              <div class="gauge-item">
+                <div class="g-top"><span>顶高</span><strong class="mono" id="mTopHeight">—</strong></div>
+                <div class="g-bar"><div class="g-fill cyan" id="gTopHeight"></div></div>
+              </div>
+              <div class="gauge-item">
+                <div class="g-top"><span>水平展开</span><strong class="mono" id="mHorizExtent">—</strong></div>
+                <div class="g-bar"><div class="g-fill amber" id="gHorizExtent"></div></div>
+              </div>
+              <div class="gauge-item">
+                <div class="g-top"><span>轴向垂直度</span><strong class="mono" id="mVerticality">—</strong></div>
+                <div class="g-bar"><div class="g-fill emerald" id="gVerticality"></div></div>
+              </div>
+              <div class="gauge-item span-2">
+                <div class="g-top"><span>下降速度（负值向下）</span><strong class="mono" id="mDescentRate">—</strong></div>
+                <div class="g-bar bipolar">
+                  <div class="g-center-tick"></div>
+                  <div class="g-bipolar-fill" id="gDescentRate"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- human_physical_v1 置信度卡 -->
+        <section class="panel card-block glass">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span>物理人体一致性</span>
+              <span class="tag mono">human_physical_v1</span>
+            </div>
+            <span class="state-pill muted" id="beliefBadge">未知</span>
+          </div>
+          <div class="card-body">
+            <!-- Log-Odds 仪表 -->
+            <div class="lo-meter-wrap">
+              <div class="lo-header">
+                <span>Log-Odds 证据累积</span>
+                <span class="mono" id="loValueText">0.00 (p=0.50)</span>
+              </div>
+              <div class="lo-track">
+                <div class="lo-tick" style="left:50%" title="candidate 退出 (-0.5)"></div>
+                <div class="lo-tick" style="left:65.45%" title="CANDIDATE 进入 (+1.2)"></div>
+                <div class="lo-tick confirm" style="left:83.64%" title="物理一致进入 (+3.2)"></div>
+                <div class="lo-fill" id="loFill"></div>
+                <div class="lo-pointer" id="loPointer"></div>
+              </div>
+              <div class="lo-scale mono">
+                <span>-6</span><span>-0.5</span><span>+1.2</span><span>+3.2</span><span>+5</span>
+              </div>
+              <div class="lo-deltas mono" id="loDeltas">
+                Δ几何 — · Δ法向 — · Δ运动 —
+              </div>
+            </div>
+
+            <div class="kv-row">
+              <span>运动学噪声底</span>
+              <span class="mono" id="kinFloorText">未标定（通道关闭）</span>
+            </div>
+            <div class="kv-row">
+              <span>局部回收 (完整性未知)</span>
+              <span class="mono" id="recoveryText">—</span>
+            </div>
+
+            <div class="chip-section">
+              <div class="chip-label">支持证据</div>
+              <div class="chip-wrap" id="physEvidenceChips"></div>
+            </div>
+            <div class="chip-section">
+              <div class="chip-label">拒绝 / 软惩罚 / 否决</div>
+              <div class="chip-wrap" id="physRejectChips"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 多轨迹列表 -->
+        <section class="panel card-block glass tracks-card">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span>活跃轨迹列表</span>
+              <span class="mono tag" id="trackCountTag">0 条</span>
+            </div>
+          </div>
+          <div class="track-table-wrap">
+            <table class="track-table">
+              <thead>
+                <tr>
+                  <th>轨迹</th>
+                  <th>状态</th>
+                  <th>点数</th>
+                  <th>评分</th>
+                  <th>物理置信</th>
+                </tr>
+              </thead>
+              <tbody id="trackTableBody">
+                <tr><td colspan="5" class="muted-cell">暂无轨迹数据</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <!-- 底部回放时间轴 -->
+    <footer class="timeline-dock glass" id="timelineDock">
+      <div class="tl-controls">
+        <button class="tl-btn primary" id="btnPlay" title="播放 / 暂停 (空格)"><span id="playIcon">▶</span> 播放</button>
+        <button class="tl-btn" id="btnPrev" title="上一帧 (←)">◀</button>
+        <button class="tl-btn" id="btnNext" title="下一帧 (→)">▶</button>
+
+        <select id="rateSelect" class="tl-select" title="播放倍速">
+          <option value="0.25">0.25×</option>
+          <option value="0.5">0.5×</option>
+          <option value="1" selected>1.0×</option>
+          <option value="2">2.0×</option>
+          <option value="4">4.0×</option>
+        </select>
+
+        <select id="decimSelect" class="tl-select" title="背景点降采样（目标点永不降采样）">
+          <option value="1">点云 1×</option>
+          <option value="2" selected>点云 1/2</option>
+          <option value="4">点云 1/4</option>
+        </select>
+
+        <div class="tl-frame-readout mono" id="frameReadout">0 / 0 · 0.00 s</div>
+
+        <div class="tl-spacer"></div>
+
+        <div class="tl-band-legend">
+          <span>状态带:</span>
+          <i class="dot" style="background:#45d09e"></i>直立
+          <i class="dot" style="background:#ffb84d"></i>下降/低姿
+          <i class="dot" style="background:#ff5c6c"></i>疑似跌倒
+          <span class="sep">|</span>
+          <span>置信带:</span>
+          <i class="dot" style="background:#38d9a9"></i>物理一致(非真值)
+          <i class="dot" style="background:#f5b942"></i>候选
+        </div>
+      </div>
+
+      <div class="tl-scrubber-wrap">
+        <input type="range" id="timelineSlider" min="0" max="0" value="0" aria-label="帧进度条">
+        <canvas id="timelineBands" class="tl-bands" width="1200" height="18" title="点击或拖动可跳转到对应帧"></canvas>
+        <div id="tlHoverTip" class="tl-hover-tip hidden mono"></div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 非构建原生 Three.js r128 与控制器 -->
+  <script src="vendor/three.min.js"></script>
+  <script src="vendor/OrbitControls.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

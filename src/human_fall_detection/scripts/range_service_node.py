@@ -8,14 +8,14 @@ from pathlib import Path
 import sys
 import threading
 import time
-import queue
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from core.range_engine import RangeEngine
 from core.range_image import ScanGrid
 from core.range_service import RangeService, assert_single_publisher, acquire_service_lock
 from core.range_fit_job import GroundFitJob
-from core.range_site_ground import FIT_FRAMES, HELD_FRAMES, fit_site, save_fit
+from core.range_site_ground import save_fit
+from core.range_initialization import SiteInitialization
 from core.subscription_health import SubscriptionGuard
 
 
@@ -31,12 +31,30 @@ def main(argv=None):
     parser.add_argument('--site-id')
     parser.add_argument('--ground-fit-timeout-s', type=float, default=60.)
     parser.add_argument('--diagnostics', action='store_true', help='bounded derived candidate/history summaries; no raw clouds')
+    parser.add_argument('--human-physical-v1', action='store_true',
+                        help='enable pure-LiDAR human_physical_v1 telemetry (read-only sidecar, no writeback)')
+    parser.add_argument('--single-person-lock', action='store_true',
+                        help='enable fragment pre-filter and human-compatible single-target lock')
+    parser.add_argument('--instant-start', action='store_true',
+                        help='zero-init adaptive background + gravity leveling + silent background ground refinement')
+    parser.add_argument('--mount-pitch-deg', type=float, default=26.0,
+                        help='nominal sensor pitch downward in degrees for --instant-start (used before IMU/refinement)')
+    parser.add_argument('--mount-roll-deg', type=float, default=0.0,
+                        help='nominal sensor roll in degrees for --instant-start (used before IMU/refinement)')
+    parser.add_argument('--imu-topic', default='/inno_imu',
+                        help='optional ROS1 sensor_msgs/Imu topic for static gravity alignment in --instant-start')
+    parser.add_argument('--disable-imu', action='store_true',
+                        help='do not subscribe to --imu-topic even in --instant-start mode')
     if argv is None and '--help' not in sys.argv and '-h' not in sys.argv:
         import rospy
         argv = rospy.myargv()[1:]
     args = parser.parse_args(argv)
     if not math.isfinite(args.ground_fit_timeout_s) or args.ground_fit_timeout_s <= 0:
         parser.error('ground fit timeout must be positive and finite')
+    if not (-85.0 <= args.mount_pitch_deg <= 85.0 and -85.0 <= args.mount_roll_deg <= 85.0):
+        parser.error('mount pitch/roll must be finite within [-85, 85] degrees')
+    if args.instant_start and (args.declare_empty_prefix or args.fit_ground_out):
+        parser.error('--instant-start cannot be combined with --declare-empty-prefix or --fit-ground-out')
     config_bytes = args.config.read_bytes()
     config = json.loads(config_bytes)
     if config.get('protocol') != 'range_recognition/1':
@@ -51,8 +69,21 @@ def main(argv=None):
         fit_ground_out=str(args.fit_ground_out) if args.fit_ground_out else None,
         ground_fit_timeout_s=args.ground_fit_timeout_s)
     effective['diagnostics'] = args.diagnostics
+    effective['human_physical_v1'] = args.human_physical_v1
+    effective['single_person_lock'] = args.single_person_lock
+    effective['instant_start'] = args.instant_start
+    if args.instant_start:
+        effective['mount_pitch_deg'] = args.mount_pitch_deg
+        effective['mount_roll_deg'] = args.mount_roll_deg
+        effective['imu_topic'] = None if args.disable_imu else args.imu_topic
     grid = ScanGrid.from_csv(az, el)
-    engine = RangeEngine(grid, config['frame_id'], empty_prefix_frames=50 if args.declare_empty_prefix else None)
+    engine = RangeEngine(grid, config['frame_id'],
+        empty_prefix_frames=50 if args.declare_empty_prefix else None,
+        human_physical_v1=args.human_physical_v1,
+        single_person_lock=args.single_person_lock,
+        instant_start=args.instant_start,
+        mount_pitch_deg=args.mount_pitch_deg,
+        mount_roll_deg=args.mount_roll_deg)
     engine.diagnostics = args.diagnostics
     service = RangeService(engine, args.release_id, preview=config.get('preview', True))
     with acquire_service_lock(config['state_topic']):
@@ -83,102 +114,38 @@ def serve(args, config, effective, config_bytes, grid, engine, service):
 
     guard = SubscriptionGuard(lambda: rospy.Subscriber(topic, PointCloud2, callback,
         queue_size=1, buff_size=2**24), time.monotonic(), watch_messages=True)
-    failure = []
-    initialization = dict(background='explicit_empty_prefix_50' if args.declare_empty_prefix else 'not_declared',
-        ground='pending_single_fit' if args.fit_ground_out else 'not_loaded')
-
-    fit_job = [None]
-    fit_lock = threading.Lock()
-    fit_results = queue.Queue(maxsize=1)
-    fit_thread = [None]
-
-    def current_fit(detach=False):
-        with fit_lock:
-            job = fit_job[0]
-            if detach:fit_job[0] = None
-            return job
-
-    def fit_failed(reason):
-        initialization['ground'] = 'fit_failed: '+str(reason)
-        if engine.runtime:
-            engine.runtime.ground = None
-            engine.runtime.ground_sha = None
-            engine.runtime.config['ground_sha256'] = None
-            engine.runtime.config_sha = hashlib.sha256(json.dumps(engine.runtime.config,sort_keys=True).encode()).hexdigest()
-        engine.ground_status = dict(available=False, reason=initialization['ground'])
-        engine.clear_history()
-
-    def finish_fit(samples, headers, unavailable=None):
-        """Spawn, reap, save and validate files away from recognition/heartbeat."""
-        job = None
+    imu_sub = None
+    if args.instant_start and not args.disable_imu and args.imu_topic:
         try:
-            report = unavailable
-            if report is None:
-                job = GroundFitJob((samples, headers,
-                    dict(siteId=args.site_id, frameId=engine.frame_id, gridSha256=grid.sha256),
-                    dict(upstream='ros:'+topic, identity=dict(engine.identity))),
-                    timeout_s=args.ground_fit_timeout_s)
-                with fit_lock:
-                    if not stop.is_set():fit_job[0] = job
-                if stop.is_set():return
-                while not stop.is_set():
-                    report = job.poll()
-                    if report is not None:break
-                    stop.wait(.02)
-            if stop.is_set():return
-            path = save_fit(report, args.fit_ground_out)
-            if not path:
-                outcome = (None, None, report.get('reason', 'fit_unavailable'))
-            else:
-                ground, sha = engine.prepare_ground(path, args.site_id)
-                outcome = (ground, sha, None)
-            if not stop.is_set():fit_results.put_nowait(outcome)
-        except Exception as exc:
-            if not stop.is_set():fit_results.put_nowait((None, None, repr(exc)))
-        finally:
-            if job is not None:job.close()
-            with fit_lock:
-                if fit_job[0] is job:fit_job[0] = None
-
-    def start_fit(samples, headers, unavailable=None):
-        initialization['ground'] = 'fitting' if unavailable is None else unavailable['reason']
-        fit_thread[0] = threading.Thread(target=finish_fit, args=(samples,headers,unavailable),
-            name='ground-fit-completion', daemon=True)
-        fit_thread[0].start()
+            from sensor_msgs.msg import Imu as _ImuMsg
+            imu_sub = rospy.Subscriber(args.imu_topic, _ImuMsg, service.submit_imu, queue_size=50)
+        except Exception:
+            imu_sub = None
+    failure = []
+    if args.instant_start:
+        initializer = None
+        initialization = dict(
+            background='instant_adaptive_far_bg',
+            ground='gravity_only_with_silent_refinement',
+            imu_topic=None if (args.disable_imu or imu_sub is None) else args.imu_topic,
+            mount_pitch_deg=args.mount_pitch_deg,
+            mount_roll_deg=args.mount_roll_deg,
+        )
+    else:
+        initializer = SiteInitialization(service, declared_empty=args.declare_empty_prefix,
+            output=args.fit_ground_out, site_id=args.site_id, upstream='ros:'+topic,
+            timeout_s=args.ground_fit_timeout_s, stop=stop, job_factory=GroundFitJob, save=save_fit)
+        initialization = initializer.status
 
     def recognition():
-        samples, headers = [], []
         try:
             while not stop.is_set():
                 service.queue.wait(.05)
                 result = service.process_latest()
-                try:outcome = fit_results.get_nowait()
-                except queue.Empty:outcome = None
-                if outcome is not None:
-                    service.clear_ground_binding()
-                    try:
-                        ground, sha, reason = outcome
-                        if reason:fit_failed(reason)
-                        elif not stop.is_set():
-                            engine.install_prepared_ground(ground,sha,'ros:'+topic)
-                            initialization['ground'] = 'bound'
-                    except Exception as exc:
-                        fit_failed(repr(exc))
-                if (not stop.is_set() and args.fit_ground_out and initialization['ground'] == 'pending_single_fit'
-                        and current_fit() is None and result and result.get('source')):
-                    h = result['source']
-                    header = dict(seq=h['seq'], sec=h['stamp_secs'], nsec=h['stamp_nsecs'],
-                                  frame_id=h['frame_id'], wire_sha256=result['local_range']['wireSha256'])
-                    if headers and header['seq'] != headers[-1]['seq']+1:
-                        start_fit([], [], dict(status='unavailable', reason='fit_source_discontinuous', headers=headers))
-                        samples, headers = [], []
-                        continue
-                    frame = engine.ground_frame
-                    samples.append(frame.xyz[frame.source_rows[frame.valid]].copy())
-                    headers.append(header)
-                    if len(samples) == FIT_FRAMES+HELD_FRAMES:
-                        start_fit(samples,headers)
-                        samples, headers = [], []
+                if initializer is not None:
+                    initializer.observe(result)
+                elif getattr(service.engine, 'ground_refiner', None) is not None:
+                    initialization['ground'] = service.engine.ground_refiner.stage
         except Exception as exc:
             failure.append('recognition_worker_failed: '+repr(exc))
             stop.set()
@@ -222,12 +189,16 @@ def serve(args, config, effective, config_bytes, grid, engine, service):
             else: stop.wait(.05)
     finally:
         stop.set()
-        job = current_fit(detach=True)
-        if job is not None:job.close()
+        if initializer is not None:
+            initializer.close()
+        if imu_sub is not None:
+            try:
+                imu_sub.unregister()
+            except Exception:
+                pass
         guard.subscriber.unregister() if guard.subscriber else None
         for worker in workers:
             worker.join(2.)
-        if fit_thread[0] is not None:fit_thread[0].join(2.)
         final = service.snapshot(guard.report())
         final.update(source=None, local_range=None, groundBinding=None, target_source_rows=[], track_id=None,
                      bbox_observed=False, fall_status='unknown', observability='invalid',

@@ -195,6 +195,7 @@ class TestChooseSingle(unittest.TestCase):
         out = choose_single([entry('t1', False, CLASS_UNKNOWN, 9.0),
                              entry('t2', True, CLASS_STANDING, 1.0)])
         self.assertEqual(out['chosen_track_id'], 't2')
+        self.assertFalse(out['ambiguous'])
         self.assertEqual(out['reason'], 'best_compatible_target')
         self.assertEqual(out['eligible_count'], 2)
         self.assertEqual(out['compatible_count'], 1)

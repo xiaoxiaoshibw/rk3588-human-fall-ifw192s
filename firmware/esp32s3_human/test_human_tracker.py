@@ -358,6 +358,97 @@ class TestEsp32S3HumanTracker(unittest.TestCase):
         self.assertTrue(_measured_locks(out[:17]))
         self.assertEqual(len(_measured_locks(out[17:])), 0)
 
+    def test_suspended_bird_adhered_to_stand_stays_unlocked_and_never_falls(self):
+        p = math.radians(26.0)
+        cp, sp = math.cos(p), math.sin(p)
+
+        def w2s(wx: float, wy: float, wz: float) -> tuple[float, float, float]:
+            return (cp * wx - sp * wz, wy, sp * wx + cp * wz)
+
+        base_wall = _make_scene_frame(wall_dist_m=5.0)
+        frames = [(0.1, base_wall)] * 3
+        for i in range(8):
+            recs = list(base_wall)
+            c0 = 112 + min(i, 4)
+            swing_y = 0.045 * min(i, 4)
+            bird_x = 2.25 - 0.03 * min(i, 4)
+            # 180-pt swinging bird at top (H=0.25m, W=0.51m)
+            for r in range(80, 92):
+                wz = 0.65 + ((91 - r) / 11.0) * 0.25
+                for c in range(c0, c0 + 15):
+                    wy = swing_y + (((c - c0) / 14.0) * 2.0 - 1.0) * 0.255
+                    recs.append(((r << 8) | c, *w2s(bird_x, wy, wz)))
+            # Thin 1-col vertical bridge + 16-pt stand edge at bottom (40 pts -> 220 pts total, H~1.52m)
+            c_mid = c0 + 7
+            for r in range(92, 116):
+                wz = -0.55 + ((115 - r) / 23.0) * 1.20
+                recs.append(((r << 8) | c_mid, *w2s(bird_x, swing_y, wz)))
+            for r in range(116, 120):
+                wz = -0.73 + ((119 - r) / 3.0) * 0.15
+                for c in range(c_mid - 1, c_mid + 3):
+                    recs.append(((r << 8) | c, *w2s(bird_x, swing_y + (c - c_mid) * 0.04, wz)))
+            frames.append((0.1, recs))
+        # Adhesion disconnects: only 180-pt bird remains (H=0.25m)
+        for _ in range(20):
+            recs = list(base_wall)
+            for r in range(112, 124):
+                wz = -0.41 + ((123 - r) / 11.0) * 0.25
+                for c in range(116, 131):
+                    wy = 0.18 + (((c - 116) / 14.0) * 2.0 - 1.0) * 0.255
+                    recs.append(((r << 8) | c, *w2s(2.13, wy, wz)))
+            frames.append((0.1, recs))
+
+        _, out = _run_host(frames, pitch_deg=26.0)
+        self.assertGreater(max(frame["candidates"] for frame in out), 0)
+        self.assertEqual(len(_measured_locks(out)), 0)
+
+    def test_top_only_motion_adhered_to_static_lower_stand_stays_unlocked(self):
+        p = math.radians(26.0)
+        cp, sp = math.cos(p), math.sin(p)
+
+        def w2s(wx: float, wy: float, wz: float) -> tuple[float, float, float]:
+            return (cp * wx - sp * wz, wy, sp * wx + cp * wz)
+
+        base_wall = _make_scene_frame(wall_dist_m=5.0)
+        frames = [(0.1, base_wall)] * 3
+        for i in range(12):
+            recs = list(base_wall)
+            # Static lower half (r=98..122, 25 rows x 10 cols = 250 pts, completely fixed)
+            for r in range(98, 123):
+                wz = -0.60 + ((122 - r) / 24.0) * 0.80
+                for c in range(116, 126):
+                    wy = ((c - 116) / 9.0 * 2.0 - 1.0) * 0.20
+                    recs.append(((r << 8) | c, *w2s(2.30, wy, wz)))
+            # Moving upper half (r=72..97, 26 rows x 10 cols = 260 pts) shifting horizontally/in-depth
+            shift_c = min(i, 6)
+            for r in range(72, 98):
+                wz = 0.22 + ((97 - r) / 25.0) * 0.80
+                for c in range(116 + shift_c, 126 + shift_c):
+                    wy = 0.04 * shift_c + ((c - (116 + shift_c)) / 9.0 * 2.0 - 1.0) * 0.20
+                    recs.append(((r << 8) | c, *w2s(2.30 - 0.03 * shift_c, wy, wz)))
+            frames.append((0.1, recs))
+
+        _, out = _run_host(frames, pitch_deg=26.0)
+        self.assertGreater(max(frame["candidates"] for frame in out), 0)
+        self.assertEqual(len(_measured_locks(out)), 0)
+
+    def test_elevated_mid_upper_row_object_stays_unlocked(self):
+        backdrop = _make_scene_frame(person={
+            "x": 5.0, "y": 0.0, "z_bottom": 0.2, "z_top": 2.2, "half_w": 1.2,
+            "r0": 100, "r1": 165, "c0": 95, "c1": 165,
+        })
+        frames = [(0.1, backdrop)] * 3
+        for i in range(12):
+            obj = _make_scene_frame(person={
+                "x": 2.4, "y": -0.25 + 0.05 * i, "z_bottom": 0.3, "z_top": 1.8, "half_w": 0.24,
+                "r0": 105, "r1": 155, "c0": 112 + i, "c1": 128 + i,
+            })
+            frames.append((0.1, backdrop + obj))
+
+        _, out = _run_host(frames, pitch_deg=26.0)
+        self.assertGreater(max(frame["candidates"] for frame in out), 0)
+        self.assertEqual(len(_measured_locks(out)), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

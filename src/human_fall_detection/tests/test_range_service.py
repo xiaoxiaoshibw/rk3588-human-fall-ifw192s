@@ -461,6 +461,69 @@ class RangeServiceTests(unittest.TestCase):
         self.assertEqual(hint['startFrame'], alert['startFrame'])
         self.assertEqual(hint['triggerFrame'], alert['triggerFrame'])
 
+    def test_human_physical_v1_opt_in_telemetry_bbox_and_stale_clear(self):
+        import json
+        # Default engine keeps human_physical_v1 absent.
+        default_state = self.send(0, False)
+        self.assertNotIn('human_physical_v1', default_state)
+        self.assertNotIn('human_physical_v1', self.service.snapshot()['service']['capabilities'])
+
+        phys_engine = RangeEngine(
+            self.grid, 'lidar', dict(self.engine.identity), empty_prefix_frames=2,
+            ground=copy.deepcopy(self.engine.runtime.ground), human_physical_v1=True)
+        phys_service = RangeService(phys_engine, 'phys-release', preview=False)
+        for i in range(6):
+            raw = self.fixture.raw(i, i >= 2)
+            phys_service.submit(ros_standin(raw))
+            state = phys_service.process_latest()
+        snap = phys_service.snapshot()
+        self.assertIn('human_physical_v1', snap['service']['capabilities'])
+        self.assertIsNotNone(snap.get('human_physical_v1'))
+        self.assertEqual(snap['human_physical_v1']['status'], 'ok')
+        self.assertEqual(snap['human_physical_v1']['semantic_truth'], 'UNKNOWN')
+        self.assertIsNotNone(snap['local_range']['bbox'])
+        self.assertIn('raw', snap['local_range']['bbox'])
+        self.assertIn('leveled', snap['local_range']['bbox'])
+        # Strict JSON serialization without NaN/Inf.
+        serialized = json.dumps(snap, allow_nan=False)
+        self.assertLess(len(serialized), 200000)
+        # Stale snapshot must clear human_physical_v1.
+        phys_service.last_received = time.monotonic() - 1.0
+        stale = phys_service.snapshot()
+        self.assertIsNone(stale['source'])
+        self.assertIsNone(stale.get('human_physical_v1'))
+
+    def test_single_person_lock_instance_flag_and_multi_roi_normals_parity(self):
+        from core.range_tracker import SETTINGS as TRACKER_SETTINGS
+        from core.range_normals import estimate_grid_normals
+        before_lock = TRACKER_SETTINGS['single_person_lock']
+        before_drop = TRACKER_SETTINGS['drop_fragment_candidates']
+        lock_engine = RangeEngine(
+            self.grid, 'lidar', dict(self.engine.identity), empty_prefix_frames=2,
+            ground=copy.deepcopy(self.engine.runtime.ground),
+            human_physical_v1=True, single_person_lock=True)
+        self.assertEqual(TRACKER_SETTINGS['single_person_lock'], before_lock)
+        self.assertEqual(TRACKER_SETTINGS['drop_fragment_candidates'], before_drop)
+        self.assertTrue(lock_engine.runtime.config['tracker']['single_person_lock'])
+        self.assertTrue(lock_engine.runtime.config['tracker']['drop_fragment_candidates'])
+        lock_service = RangeService(lock_engine, 'lock-release', preview=False)
+        for i in range(5):
+            raw = self.fixture.raw(i, i >= 2)
+            lock_service.submit(ros_standin(raw))
+            lock_service.process_latest()
+        snap = lock_service.snapshot()
+        self.assertIn('single_person_lock', snap['service']['capabilities'])
+        # Multi-ROI normals must match full-frame normals bit-for-bit on every ROI pixel.
+        frame = lock_engine.ground_frame
+        h, w = frame.grid.shape
+        boxes = [(0, min(h, 20), 0, min(w, 20)), (max(0, h - 20), h, max(0, w - 20), w)]
+        full = estimate_grid_normals(frame)
+        multi = estimate_grid_normals(frame, roi_bboxes=boxes)
+        for y0, y1, x0, x1 in boxes:
+            np.testing.assert_array_equal(multi.valid[y0:y1, x0:x1], full.valid[y0:y1, x0:x1])
+            m = full.valid[y0:y1, x0:x1]
+            np.testing.assert_allclose(multi.normals[y0:y1, x0:x1][m], full.normals[y0:y1, x0:x1][m], atol=1e-12)
+
 
 if __name__ == '__main__':
     unittest.main()

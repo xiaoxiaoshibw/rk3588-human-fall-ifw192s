@@ -11,15 +11,42 @@ internal static class Program
     internal static async Task<int> Main(string[] args)
     {
         string Option(string key,string fallback="") { int i=Array.IndexOf(args,key); return i>=0 && i+1<args.Length?args[i+1]:fallback; }
-        string sessionPath=Path.GetFullPath(Option("--session"));
-        string dataRoot=Path.GetDirectoryName(sessionPath)!;
-        string reportPath=Path.GetFullPath(Option("--report"));
-        DirectoryInfo? root=new(AppContext.BaseDirectory);
-        while(root is not null && !File.Exists(Path.Combine(root.FullName,"AGENTS.md")))root=root.Parent;
-        if(root is null)throw new ArgumentException("Workspace root is unavailable");
-        string allowed=Path.Combine(root.FullName,"console_v2",".tools","app-evidence")+Path.DirectorySeparatorChar;
+        // 发布包用 --root 显式指定资源根（不改仓库布局）；开发时仍从 bin 目录向上找 AGENTS.md。
+        string rootOption=Option("--root");
+        DirectoryInfo? root=rootOption==""?null:new DirectoryInfo(Path.GetFullPath(rootOption));
+        if(root is null || !root.Exists)
+        {
+            root=new(AppContext.BaseDirectory);
+            while(root is not null && !File.Exists(Path.Combine(root.FullName,"AGENTS.md")))root=root.Parent;
+        }
+        if(root is null || !root.Exists)throw new ArgumentException("Workspace root is unavailable; pass --root <app root>");
+        // 会话库可独立于安装目录：--data-root 支持 UNC 共享路径；只有 --session 时沿用其父目录。
+        string dataRootOption=Option("--data-root");
+        string sessionOption=Option("--session");
+        string dataRoot=dataRootOption!=""
+            ?Path.GetFullPath(dataRootOption)
+            :sessionOption!=""?Path.GetDirectoryName(Path.GetFullPath(sessionOption))!:"";
+        if(dataRoot=="")throw new ArgumentException("Either --data-root or --session is required");
+        if(!Directory.Exists(dataRoot))throw new ArgumentException("Data root does not exist: "+dataRoot);
+        string sessionPath=sessionOption!=""
+            ?Path.GetFullPath(sessionOption)
+            :Directory.EnumerateDirectories(dataRoot)
+                .Where(p=>File.Exists(Path.Combine(p,"meta.json")))
+                .OrderByDescending(p=>File.GetLastWriteTimeUtc(Path.Combine(p,"meta.json")))
+                .FirstOrDefault()??throw new ArgumentException("No session with meta.json under data root: "+dataRoot);
+        // 报告与本地任务输出目录：开发默认在 console_v2/.tools；发布包用 --logs 指向可写目录。
+        string evidenceRoot=Option("--logs")!=""?Path.GetFullPath(Option("--logs"))
+            :Path.Combine(root.FullName,"console_v2",".tools","app-evidence");
+        string localAnalysisRoot=Option("--local-analysis")!=""?Path.GetFullPath(Option("--local-analysis"))
+            :Path.Combine(root.FullName,"console_v2",".tools","local-analysis");
+        string reportOption=Option("--report");
+        string reportPath=reportOption!=""
+            ?Path.GetFullPath(reportOption)
+            :Path.Combine(evidenceRoot,"run_"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfff")+"Z.json");
+        Directory.CreateDirectory(evidenceRoot);
+        string allowed=evidenceRoot.TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar;
         if(!reportPath.StartsWith(allowed,StringComparison.OrdinalIgnoreCase))
-            throw new ArgumentException("Reports must be in the private console_v2/.tools/app-evidence directory");
+            throw new ArgumentException("Reports must be in the private evidence directory ("+evidenceRoot+")");
         for(DirectoryInfo? parent=new(Path.GetDirectoryName(reportPath)!);parent is not null;parent=parent.Parent)
             if(parent.Exists && parent.Attributes.HasFlag(FileAttributes.ReparsePoint))throw new ArgumentException("Report directory links are rejected");
         if(Option("--screenshot")!="" && Path.GetFullPath(Option("--screenshot"))!=Path.Combine(Path.GetDirectoryName(reportPath)!,"window.png"))
@@ -44,7 +71,7 @@ internal static class Program
         {
             string sid=Path.GetFileName(Path.TrimEndingDirectorySeparator(path));
             if(analysisPaths.TryGetValue(sid,out string? existing))return new(path,existing);
-            string saved=Path.Combine(root.FullName,"console_v2",".tools","local-analysis",sid);
+            string saved=Path.Combine(localAnalysisRoot,sid);
             if(!args.Contains("--no-restore-local") && Directory.Exists(saved) && !File.GetAttributes(saved).HasFlag(FileAttributes.ReparsePoint))
             {
                 foreach(string job in Directory.EnumerateDirectories(saved).OrderByDescending(Directory.GetLastWriteTimeUtc))
@@ -115,6 +142,7 @@ internal static class Program
             if(Option("--live-url")!=""){start.ArgumentList.Add("--live-url");start.ArgumentList.Add(Option("--live-url"));}
             if(Option("--workspace-report")!=""){start.ArgumentList.Add("--workspace-report");start.ArgumentList.Add(Option("--workspace-report"));}
             if(Option("--live-duration-ms")!=""){start.ArgumentList.Add("--live-duration-ms");start.ArgumentList.Add(Option("--live-duration-ms"));}
+            if(Option("--smoke-point-interval-ms")!=""){start.ArgumentList.Add("--smoke-point-interval-ms");start.ArgumentList.Add(Option("--smoke-point-interval-ms"));}
             foreach(string key in new[]{"--video-report","--preview-report","--annotation-report","--tour-report","--alert-report","--local-report","--offline-preview-report"})
                 if(Option(key)!=""){start.ArgumentList.Add(key);start.ArgumentList.Add(Option(key));}
             if(args.Contains("--preview-stale"))start.ArgumentList.Add("--preview-stale");
@@ -200,7 +228,7 @@ internal static class Program
                 if(kind=="ground" && session.Frames.Length<4)throw new InvalidOperationException("自动配平需要至少4帧（1帧拟合+3帧独立留出）");
                 if(kind=="analysis" && session.Frames.Length<=50)throw new InvalidOperationException("本地算法需要空场前缀后仍有可处理帧");
                 localJobKind=kind;localJobSession=session.Id;localJobId=Guid.NewGuid().ToString("N");
-                localJobOut=Path.Combine(root.FullName,"console_v2",".tools","local-analysis",localJobSession,localJobId);
+                localJobOut=Path.Combine(localAnalysisRoot,localJobSession,localJobId);
                 ProcessStartInfo task=new(Option("--python","python")){UseShellExecute=false,CreateNoWindow=true,RedirectStandardError=true,WorkingDirectory=root.FullName};
                 foreach(string arg in new[]{"-B","-W","error",Path.Combine(root.FullName,"console_v2","app","local_replay_worker.py"),"--session",session.DirectoryPath,"--out",localJobOut,"--kind",localJobKind})task.ArgumentList.Add(arg);
                 if(kind=="analysis")
@@ -374,6 +402,14 @@ internal static class Program
                                         throw new ArgumentException("请先确认该会话前50帧确实为空场");
                                     StartLocalJob(op=="localGroundFit"?"ground":op=="localOfflinePreview"?"offline-preview":"analysis");break;
                                 }
+                                case "openPseudoLiveQt":
+                                {
+                                    ProcessStartInfo viewer=new(Option("--python","python")){UseShellExecute=false,CreateNoWindow=true,WorkingDirectory=root.FullName};
+                                    foreach(string arg in new[]{"-B","-W","error",Path.Combine(root.FullName,"pc_apps","demo_viewer","qt_pseudo_live.py")})viewer.ArgumentList.Add(arg);
+                                    using Process started=Process.Start(viewer)??throw new InvalidOperationException("无法启动伪实时 Qt 窗口");
+                                    Send(new{type="notice",message="已请求启动独立 Qt 伪实时窗口；背景使用整段离线数据",seq});
+                                    break;
+                                }
                                 case "rename":
                                 {
                                     string renameSid=command.GetProperty("sessionId").GetString()??"";
@@ -429,8 +465,9 @@ internal static class Program
                                 case "videoOffset":
                                     video!.SetOffset(command.GetProperty("offsetMs").GetDouble()/1000);SendVideoInfo();break;
                                 case "liveConnect":
-                                    if(live is not null)throw new InvalidOperationException("Already connected");
-                                    live=new(command.GetProperty("url").GetString()!,command.GetProperty("prefix").GetString()!,command.GetProperty("points").GetString()!);
+                                    LiveSource replacementLive=new(command.GetProperty("url").GetString()!,command.GetProperty("prefix").GetString()!,command.GetProperty("points").GetString()!,
+                                        command.TryGetProperty("pointIntervalMs",out JsonElement interval)?interval.GetInt32():0);
+                                    live?.Dispose();live=replacementLive;
                                     previousLiveStatus="";previousLiveGround="";videoEnabled=false;video!.Stop();SendVideoInfo(false);
                                     Send(new{type="status",message="连接实时源，等待同帧点云",clearTarget=true,groundBinding=(object?)null});
                                     log.Add(new{eventType="modeCleared",reason="liveConnect",clearTarget=true});

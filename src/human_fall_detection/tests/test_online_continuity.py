@@ -1,5 +1,6 @@
 """Online lifecycle regressions; synthetic measurements are not human GT."""
 import unittest
+from unittest.mock import patch
 import numpy as np
 
 from test_episode_continuity import feature, observation, STANDING, SITTING, LYING
@@ -142,6 +143,46 @@ class OnlineContinuityTests(unittest.TestCase):
         result = step(tracker, [(1.4, -.3, .5), (1.4, .3, .5), b], .4, 4)
         self.assertEqual(result['target_track_id'], 'g0_t0002')
         self.assertIsNone(result['continuity_track_id'])
+
+    def test_ambiguous_track_does_not_switch_to_known_fragment(self):
+        def prior(frame, rows, ground):
+            fragment = float(np.median(frame.xyz[rows, 0])) > 2.5
+            return dict(available=True, **{'class': 'fragment' if fragment else 'standing'},
+                        compatible=not fragment, posture='unknown', reason='synthetic')
+        with patch('core.range_tracker.describe', side_effect=prior):
+            tracker = RangeTracker()
+            a, b = (1.4, 0, .5), (3, 1, .5)
+            for i in range(4):
+                old = step(tracker, [a, b], i * .1, i)['target_track_id']
+            gap = step(tracker, [(1.4, -.3, .5), (1.4, .3, .5), b], .4, 4)
+            self.assertEqual(gap['target_reason'], 'selected_target_ambiguous')
+            self.assertIsNone(gap['target_track_id'])
+            self.assertEqual(gap['target_source_rows'], [])
+            self.assertIsNone(gap['continuity_track_id'])
+            self.assertEqual(tracker.selected, old)
+            resumed = step(tracker, [a, b], .5, 5)
+            self.assertEqual(resumed['target_track_id'], old)
+
+    def test_fragment_hold_is_bounded_and_prior_must_be_available(self):
+        def prior(frame, rows, ground):
+            return dict(available=True, **{'class': 'fragment'}, compatible=False,
+                        posture='unknown', reason='synthetic')
+        with patch('core.range_tracker.describe', side_effect=prior):
+            tracker = RangeTracker()
+            a, b = (1.4, 0, .5), (3, 1, .5)
+            for i in range(4): step(tracker, [a, b], i * .1, i)
+            gap = step(tracker, [(1.4, -.3, .5), (1.4, .3, .5), b], .4, 4)
+            self.assertIsNone(gap['target_track_id'])
+            released = step(tracker, [(1.4, -.3, .5), (1.4, .3, .5), b], .7, 7)
+            self.assertEqual(released['target_track_id'], 'g0_t0002')
+        def unavailable(frame, rows, ground):
+            return dict(available=False, **{'class': 'fragment'}, compatible=False,
+                        posture='unknown', reason='synthetic_unavailable')
+        with patch('core.range_tracker.describe', side_effect=unavailable):
+            tracker = RangeTracker()
+            for i in range(4): step(tracker, [a, b], i * .1, i)
+            result = step(tracker, [(1.4, -.3, .5), (1.4, .3, .5), b], .4, 4)
+            self.assertEqual(result['target_track_id'], 'g0_t0002')
 
     def test_nonambiguous_old_track_releases_after_short_hold(self):
         tracker = RangeTracker()

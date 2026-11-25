@@ -34,7 +34,12 @@ SETTINGS = dict(birth_observations=3, miss_timeout_s=1.5, reset_gap_s=2.0,
 
 
 class RangeTracker:
-    def __init__(self):
+    def __init__(self, settings=None):
+        self._overrides = {}
+        for key, value in (settings or {}).items():
+            if key not in SETTINGS:
+                raise ValueError('unknown tracker setting: ' + str(key))
+            self._overrides[key] = value
         self.tracks = {}
         self.generation = 0
         self.next_id = 1
@@ -47,9 +52,13 @@ class RangeTracker:
         self.pending = None
         self.released = None
 
+    def _cfg(self, key):
+        return self._overrides[key] if key in self._overrides else SETTINGS[key]
+
     def _candidates(self, frame, labels, components, ground=None):
         result = {}
         dropped = []
+        drop_frag = self._cfg('drop_fragment_candidates')
         for component in components:
             if not component['retained']:
                 continue
@@ -59,7 +68,7 @@ class RangeTracker:
             if not np.array_equal(np.sort(frame.source_rows.ravel()[cells]), rows):
                 raise ValueError('component labels/source measurement mismatch')
             xyz = frame.xyz[rows].astype(float)
-            if SETTINGS['drop_fragment_candidates'] and ground is not None:
+            if drop_frag and ground is not None:
                 quick = quick_screen(xyz, ground)
                 if quick['class'] == CLASS_FRAGMENT:
                     dropped.append(dict(component_id=cid, points=len(rows),
@@ -70,7 +79,7 @@ class RangeTracker:
         self.dropped_fragments = dropped
         return result
 
-    def _locked_choice(self, available, policy, stamp_s):
+    def _locked_choice(self, available, policy, stamp_s, ground_available=False):
         """单人锁定选择 + 释放/切换去抖；返回 (chosen, reason)。
 
         ``release_hold_s``：当前目标被策略拒绝时先保留（仍实测），超过去抖
@@ -85,6 +94,10 @@ class RangeTracker:
         if previous is not None:
             held = next((r for r in available if r['track_id'] == previous), None)
         picked = next((r for r in available if r['track_id'] == policy['chosen_track_id']), None)
+        if picked is not None and previous is None and ground_available:
+            prior = picked.get('human_prior') or {}
+            if not prior.get('compatible') and prior.get('reason') == 'insufficient_points':
+                picked = None
         if picked is not None:
             self.reject_since = None
             if picked['track_id'] == self.released:
@@ -92,7 +105,7 @@ class RangeTracker:
             if previous is not None and picked['track_id'] != previous and held is not None:
                 if self.pending is None or self.pending[0] != picked['track_id']:
                     self.pending = (picked['track_id'], stamp_s)
-                if stamp_s - self.pending[1] < SETTINGS['switch_hold_s']:
+                if stamp_s - self.pending[1] < self._cfg('switch_hold_s'):
                     return held, 'previous_target_retained_pending_switch'
             self.pending = None
             return picked, None
@@ -100,7 +113,7 @@ class RangeTracker:
         if previous is not None and held is not None:
             if self.reject_since is None:
                 self.reject_since = stamp_s
-            if stamp_s - self.reject_since <= SETTINGS['release_hold_s']:
+            if stamp_s - self.reject_since <= self._cfg('release_hold_s'):
                 return held, 'target_held_unverified'
             self.released = previous
             return None, 'target_released_unverified'
@@ -293,7 +306,7 @@ class RangeTracker:
         available = [r for r in output if r['status']=='tracked' and r['observed']]
         available.sort(key=lambda r:(-r['selection_score'],r['track_id']))
         prior_entries = []
-        if SETTINGS['human_prior_enabled']:
+        if self._cfg('human_prior_enabled'):
             # 影子：给每条实测轨迹附几何相容性；只有显式开启才用它改变选择。
             for entry in output:
                 if not entry['observed'] or not entry['source_rows']:
@@ -311,7 +324,7 @@ class RangeTracker:
                         compatible=prior['compatible'], score=entry['selection_score'],
                         point_count=len(entry['source_rows']), **{'class': prior['class']}))
         policy = choose_single(prior_entries, previous_track_id=self.selected) \
-            if SETTINGS['human_prior_enabled'] else None
+            if self._cfg('human_prior_enabled') else None
         chosen = next((r for r in available if r['track_id']==self.selected),None)
         reason = 'no_stable_current_measurement'
         previous = self.selected
@@ -321,10 +334,10 @@ class RangeTracker:
         if previous in blocked_tracks and not available:
             chosen, reason = None, 'selected_target_ambiguous'
             may_resume = False
-        elif SETTINGS['single_person_lock'] and policy is not None:
+        elif self._cfg('single_person_lock') and policy is not None:
             # 单人策略 + 释放/切换去抖：单帧不相容不等于释放，新目标要连续
             # 成为最优才能替换仍在实测的旧目标，否则一次分类抖动就会清空跌倒证据。
-            chosen, reason = self._locked_choice(available, policy, stamp_s)
+            chosen, reason = self._locked_choice(available, policy, stamp_s, ground_available=plane is not None)
             if policy['ambiguous']:
                 may_resume = False
         elif chosen is None and may_resume and available:
@@ -334,8 +347,16 @@ class RangeTracker:
                 reason='competing_target_scores'
             else:
                 chosen=available[0]
+        # 短暂歧义时不把明确的碎片候选当作替代目标；只保留内部选择偏好，
+        # 不发布历史观测。超时后或先验不可用时仍沿用原选择策略。
+        fragment_hold = bool(previous in blocked_tracks and previous in self.tracks
+            and stamp_s-self.tracks[previous]['last_observed'] <= .3+1e-9
+            and chosen is not None and (chosen.get('human_prior') or {}).get('available')
+            and (chosen.get('human_prior') or {}).get('class') == CLASS_FRAGMENT)
+        if fragment_hold:
+            chosen, reason, may_resume = None, 'selected_target_ambiguous', False
         # 短缺测只保留唯一同轨的选择偏好，不发布旧框/旧点或给缺测累计证据。
-        self.selected = chosen['track_id'] if chosen else previous if may_resume else None
+        self.selected = chosen['track_id'] if chosen else previous if may_resume or fragment_hold else None
         continuity = self.selected if chosen is None and may_resume else None
         if timings is not None:
             timings['features_ms'] = feature_ms

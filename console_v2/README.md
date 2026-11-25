@@ -1,5 +1,20 @@
 # ConsoleV2（Qt 应用开发版与 R2 技术验证）
 
+## 源码分发给局域网同事（2026-10-30）
+
+`release/` 是给“自己编译”的同事用的套件：`编译并启动.cmd` 自动发现 .NET 8 SDK / Qt 6.5 MinGW / CMake / MinGW，
+构建 C# 服务与 Qt 程序，`windeployqt` 部署到 `console_v2/app/runtime`，再按 `config/console.json`
+（板端地址、数据目录、可选 Python）启动。没有会话时自动创建 `placeholder_live_only` 占位会话（0 点云，仅实时）。
+说明见 [release/README_编译与运行.md](release/README_编译与运行.md)。
+
+打包源码包（不含 data/evidence/工具链/构建产物）：
+
+```powershell
+python -B -W error console_v2/tools/make_source_bundle.py --out dist/console_v2_source_<日期> --zip
+```
+
+开发仍用下面的 `dev.py` / `app_dev.py` 入口；它们优先使用 `.tools/`，不影响上面的发布入口。
+
 2026-10-25：按用户要求三线并行推进，新增独立 `app/`：真实会话回放、同帧距离图结果、Foxglove实时目标订阅、USB联合录制客户端。入口 `python -B -W error console_v2/app_dev.py run --analysis <analysis.json>`；完整运行方式与边界见 [app/README.md](app/README.md)。应用未替代旧控制台，R2历史spike/单文件包保持，干净系统/真正冷机等缺口仍未收口。
 
 以下为保留的 R2 技术验证入口，不与新应用能力混算。

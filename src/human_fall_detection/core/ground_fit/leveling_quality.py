@@ -2,6 +2,9 @@
 import math
 import numpy as np
 from .leveling_estimators import ESTIMATORS
+from .leveling_estimators.ransac import estimate as raw_ransac
+
+FIT_REGION_RANSAC_VARIANT = 'raw_fit_frame_regions_no_refinement_v1'
 
 PROFILE = {
     "profile_id": "offline_p02_workbench_v1", "schema": 1,
@@ -37,7 +40,7 @@ def statistics(points, normal, offset):
             "median_signed_m": float(np.median(residual)), "status": "PASS" if ok else "FAIL"}
 
 
-def compare(points, regions, holdouts, anchor):
+def compare(points, regions, holdouts, anchor, fit_region_ransac=False, fit_frame_ids=None):
     """Owned frozen float64 fit points; holdouts never passed to an estimator."""
     covariance = np.cov((points - points.mean(axis=0)).T)
     values, vectors = np.linalg.eigh(covariance)
@@ -51,7 +54,41 @@ def compare(points, regions, holdouts, anchor):
                   "valid": False, "reject_reasons": [], "normal_source": None,
                   "offset_source_m": None, "pitch_deg": None, "roll_deg": None, "R": None, "t": None}
         try:
-            normal, offset = estimate(points)
+            selection = {}
+            if name == 'ransac' and fit_region_ransac:
+                fit_groups = [points] + [points[regions == i] for i in range(1, 5)]
+                frame_keys, frame_counts = None, None
+                if fit_frame_ids is not None:
+                    frame_ids = np.asarray(fit_frame_ids)
+                    if frame_ids.shape != (len(points),) or frame_ids.dtype.kind not in 'iu':
+                        raise ValueError('fit frame ids must match the fit points')
+                    unique, indices = np.unique(frame_ids, return_inverse=True)
+                    frame_keys = indices*4 + regions-1
+                    frame_counts = np.bincount(frame_keys, minlength=len(unique)*4)
+                def frame_rms(normal, offset):
+                    if frame_keys is None:
+                        return None
+                    if (frame_counts == 0).any():
+                        return float('inf')
+                    residual = np.einsum('ij,j->i', points, normal) + offset
+                    return float(np.sqrt(np.max(np.bincount(frame_keys,
+                        weights=residual**2, minlength=len(frame_counts))/frame_counts)))
+                def candidate_valid(normal, offset):
+                    for group in fit_groups:
+                        stats = statistics(group, normal, offset)
+                        if stats['status'] != 'PASS':
+                            return False
+                    worst = frame_rms(normal, offset)
+                    return worst is None or worst <= PROFILE['rms_max_m']
+                normal, offset = raw_ransac(points, candidate_valid, selection)
+                worst = frame_rms(normal, offset)
+                selection.update(policy='fit_region_support_then_median',
+                    fit_frame_region_groups=0 if frame_counts is None else len(frame_counts),
+                    worst_fit_frame_region_rms_m=worst if worst is not None and math.isfinite(worst) else None)
+                result['fit_selection'] = selection
+                result['estimator_variant'] = FIT_REGION_RANSAC_VARIANT
+            else:
+                normal, offset = estimate(points)
             norm = float(np.linalg.norm(normal))
             if not np.isfinite(normal).all() or not math.isfinite(offset) or norm < 1e-9:
                 raise ValueError("非法平面")

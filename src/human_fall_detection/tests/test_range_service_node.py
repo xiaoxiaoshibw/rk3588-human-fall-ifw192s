@@ -65,7 +65,7 @@ class NodeTests(unittest.TestCase):
         for stage in ('poll', 'save', 'install', 'slow_save', 'slow_reap', 'shutdown_during_spawn'):
             with self.subTest(stage=stage), tempfile.TemporaryDirectory() as directory:
                 modules = self.modules()
-                engine = NS(disabled=None, frame_id='innolidar', identity={},
+                engine = NS(disabled=None, frame_id='innolidar', identity={}, grid=NS(sha256='synthetic'),
                     runtime=NS(ground=None, ground_sha=None, config={}, config_sha=None),
                     ground_frame=NS(xyz=np.zeros((1,3)), source_rows=np.array([[0]]), valid=np.array([[True]])),
                     clear_history=Mock(), prepare_ground=Mock(return_value=({},'0'*64)),
@@ -73,7 +73,7 @@ class NodeTests(unittest.TestCase):
                 if stage == 'install':engine.install_prepared_ground.side_effect = ValueError('synthetic install rejected')
                 class Service:
                     def __init__(self):
-                        self.count=0;self.preview=False;self.ground_clears=0
+                        self.count=0;self.preview=False;self.ground_clears=0;self.engine=engine
                         self.queue=NS(wait=lambda seconds:time.sleep(.001))
                     def submit(self,msg):pass
                     def clear_ground_binding(self):self.ground_clears+=1
@@ -118,6 +118,17 @@ class NodeTests(unittest.TestCase):
                 self.assertGreater(service.count, 35, 'fit failure must leave main recognition alive')
                 self.assertIsNone(engine.runtime.ground)
                 self.assertTrue(any('fit_failed' in s['service'].get('initialization',{}).get('ground','') for s in self.states))
+
+    def test_real_entry_human_physical_v1_flag_propagates(self):
+        modules = self.modules()
+        with patch.dict(sys.modules, modules):
+            self.assertEqual(node.main(['--config', str(ROOT/'src/human_fall_detection/config/range_service_v1.json'),
+                '--release-id', 'node-phys', '--human-physical-v1', '--single-person-lock']), 0)
+        self.assertGreater(len(self.states), 1)
+        self.assertTrue(all(s['service']['effectiveConfig']['human_physical_v1'] is True for s in self.states[:-1]))
+        self.assertTrue(all(s['service']['effectiveConfig']['single_person_lock'] is True for s in self.states[:-1]))
+        self.assertTrue(all('human_physical_v1' in s['service'].get('capabilities', []) for s in self.states))
+        self.assertTrue(all('single_person_lock' in s['service'].get('capabilities', []) for s in self.states))
 
 
 if __name__=='__main__':

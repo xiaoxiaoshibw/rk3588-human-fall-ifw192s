@@ -438,7 +438,7 @@ extern "C" void app_main() {
         std::puts("{\"type\":\"error\",\"message\":\"Cannot allocate calibration rays\"}");
         return;
     }
-    std::puts("\n{\"type\":\"ready\",\"protocol\":2,\"profile\":\"human_kinematic_v3\"}");
+    std::puts("\n{\"type\":\"ready\",\"protocol\":2,\"profile\":\"human_kinematic_v4\"}");
     if (!wait_for_calibration() || !init_storage()) {
         std::puts("{\"type\":\"error\",\"message\":\"Calibration or frame storage failed\"}");
         return;

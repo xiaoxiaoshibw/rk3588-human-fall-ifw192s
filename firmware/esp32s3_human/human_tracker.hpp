@@ -58,10 +58,16 @@ struct Config {
 
     // Human lock thresholds (geometry + motion, no empty-room assumption)
     int lock_min_frames = 3;
+    int human_min_lock_points = 260;
+    int human_max_bottom_row = 98;
     float human_min_upright_h_m = 0.90f;
     float human_max_upright_h_m = 2.15f;
     float human_min_horiz_m = 0.15f;
     float human_max_horiz_m = 1.15f;
+    float human_min_vertical_fill = 0.72f;
+    float human_max_vertical_gap_m = 0.14f;
+    float human_min_iqr_ratio = 0.28f;
+    float human_min_third_ratio = 0.10f;
     uint16_t motion_depth_mm = 120;
     float motion_window_sec = 1.30f;
     float motion_lock_disp_m = 0.11f;
@@ -186,6 +192,8 @@ private:
     struct Candidate {
         int point_count = 0;
         int motion_points = 0;
+        int motion_lower = 0;
+        int motion_upper = 0;
         int owned_points = 0;
         int r0 = 0, c0 = 0, r1 = 0, c1 = 0;
         Vec3f center = {};
@@ -193,6 +201,10 @@ private:
         float range_m = 0.0f;
         float h_p05 = 0.0f, h_p50 = 0.0f, h_p95 = 0.0f;
         float height_m = 0.0f;
+        float iqr_height_m = 0.0f;
+        float vertical_fill = 0.0f;
+        float max_vertical_gap_m = 0.0f;
+        float min_third_ratio = 0.0f;
         float horiz_span_m = 0.0f;
         float aspect = 0.0f;
         bool from_retain = false;

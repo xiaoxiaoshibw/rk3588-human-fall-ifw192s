@@ -263,15 +263,22 @@ bool HumanTracker::grow_cluster(uint16_t seed_cell, int retain_slot,
         return false;
     }
 
-    // O(N) fixed-bin histogram for robust P05 / P50 / P95 height along gravity_up
+    // O(N) fixed-bin histogram for robust P05 / P25 / P50 / P75 / P95 height along gravity_up
     uint16_t hist[kHistBins];
     std::memset(hist, 0, sizeof(hist));
     constexpr float kBinSize = 0.02f;  // 2 cm
     constexpr float kInvBin = 1.0f / kBinSize;
+    const float h_mid = 0.5f * (h_min + h_max);
+    int motion_lower = 0;
+    int motion_upper = 0;
 
     for (int i = 0; i < tail; ++i) {
         const uint16_t cell = ws_.bfs_queue[i];
         const float ph = dot3_pt(ws_.points[cell], g_up_);
+        if (ws_.cell_flags[cell] & kFlagMotion) {
+            if (ph < h_mid) ++motion_lower;
+            else ++motion_upper;
+        }
         int b = static_cast<int>((ph - h_min) * kInvBin);
         if (b < 0) b = 0;
         if (b >= kHistBins) b = kHistBins - 1;
@@ -279,22 +286,58 @@ bool HumanTracker::grow_cluster(uint16_t seed_cell, int retain_slot,
     }
 
     const int target_05 = std::max(1, (tail * 5) / 100);
+    const int target_25 = std::max(1, (tail * 25) / 100);
     const int target_50 = std::max(1, tail / 2);
+    const int target_75 = std::max(1, (tail * 75) / 100);
     const int target_95 = std::max(1, (tail * 95) / 100);
     int acc = 0;
-    float hp05 = h_min, hp50 = h_min, hp95 = h_max;
-    bool got05 = false, got50 = false, got95 = false;
+    float hp05 = h_min, hp25 = h_min, hp50 = h_min, hp75 = h_max, hp95 = h_max;
+    int b05 = 0, b95 = 0;
+    bool got05 = false, got25 = false, got50 = false, got75 = false, got95 = false;
     for (int b = 0; b < kHistBins; ++b) {
         acc += hist[b];
         const float h_val = h_min + (static_cast<float>(b) + 0.5f) * kBinSize;
-        if (!got05 && acc >= target_05) { hp05 = h_val; got05 = true; }
+        if (!got05 && acc >= target_05) { hp05 = h_val; b05 = b; got05 = true; }
+        if (!got25 && acc >= target_25) { hp25 = h_val; got25 = true; }
         if (!got50 && acc >= target_50) { hp50 = h_val; got50 = true; }
-        if (!got95 && acc >= target_95) { hp95 = h_val; got95 = true; break; }
+        if (!got75 && acc >= target_75) { hp75 = h_val; got75 = true; }
+        if (!got95 && acc >= target_95) { hp95 = h_val; b95 = b; got95 = true; break; }
     }
+
+    const int span_bins = std::max(1, b95 - b05 + 1);
+    int filled_bins = 0;
+    int cur_empty = 0;
+    int max_empty = 0;
+    int third_counts[3] = {0, 0, 0};
+    int inner_points = 0;
+    for (int b = b05; b <= b95; ++b) {
+        const uint16_t cnt = hist[b];
+        inner_points += cnt;
+        int t_idx = ((b - b05) * 3) / span_bins;
+        if (t_idx < 0) t_idx = 0;
+        if (t_idx > 2) t_idx = 2;
+        third_counts[t_idx] += cnt;
+
+        const bool covered = (cnt > 0) ||
+                             (b > b05 && hist[b - 1] > 0) ||
+                             (b < b95 && hist[b + 1] > 0);
+        if (covered) {
+            ++filled_bins;
+        }
+        if (cnt == 0) {
+            ++cur_empty;
+            if (cur_empty > max_empty) max_empty = cur_empty;
+        } else {
+            cur_empty = 0;
+        }
+    }
+    const int min_third = std::min(third_counts[0], std::min(third_counts[1], third_counts[2]));
 
     const float inv_n = 1.0f / static_cast<float>(tail);
     cand.point_count = tail;
     cand.motion_points = motion_points;
+    cand.motion_lower = motion_lower;
+    cand.motion_upper = motion_upper;
     cand.owned_points = owned_points;
     cand.r0 = r0;
     cand.c0 = c0;
@@ -309,6 +352,11 @@ bool HumanTracker::grow_cluster(uint16_t seed_cell, int retain_slot,
     cand.h_p50 = hp50;
     cand.h_p95 = hp95;
     cand.height_m = std::max(0.0f, hp95 - hp05);
+    cand.iqr_height_m = std::max(0.0f, hp75 - hp25);
+    cand.vertical_fill = static_cast<float>(filled_bins) / static_cast<float>(span_bins);
+    cand.max_vertical_gap_m = static_cast<float>(max_empty) * kBinSize;
+    cand.min_third_ratio =
+        static_cast<float>(min_third) / static_cast<float>(std::max(1, inner_points));
     cand.horiz_span_m = std::max(u_span, v_span);
     cand.aspect = cand.height_m / std::max(cand.horiz_span_m, 0.15f);
     cand.from_retain = retain_mode;
@@ -323,9 +371,22 @@ bool HumanTracker::grow_cluster(uint16_t seed_cell, int retain_slot,
 
 bool HumanTracker::upright_geometry(const Candidate& cand) const {
     const bool high_edge = (cand.r0 <= 1 || cand.r1 >= kHeight - 2) && cand.h_p05 > 0.0f;
-    return !high_edge && cand.height_m >= cfg_.human_min_upright_h_m &&
-           cand.height_m <= cfg_.human_max_upright_h_m &&
-           cand.horiz_span_m <= cfg_.human_max_horiz_m && cand.aspect >= 1.05f;
+    if (high_edge || cand.r0 > cfg_.human_max_bottom_row) return false;
+    if (cand.height_m < cfg_.human_min_upright_h_m ||
+        cand.height_m > cfg_.human_max_upright_h_m ||
+        cand.horiz_span_m > cfg_.human_max_horiz_m || cand.aspect < 1.05f) {
+        return false;
+    }
+    if (cand.horiz_span_m >= 0.25f && cand.point_count < cfg_.human_min_lock_points) {
+        return false;
+    }
+    if (cand.vertical_fill < cfg_.human_min_vertical_fill ||
+        cand.max_vertical_gap_m > cfg_.human_max_vertical_gap_m ||
+        cand.iqr_height_m < cfg_.human_min_iqr_ratio * cand.height_m ||
+        cand.min_third_ratio < cfg_.human_min_third_ratio) {
+        return false;
+    }
+    return true;
 }
 
 float HumanTracker::association_distance_squared(const Track& tr, const Candidate& cand,
@@ -371,9 +432,10 @@ void HumanTracker::update_track_from_candidate(Track& tr, const Candidate& cand,
     const bool continuous = tr.age_frames > 0 && tr.miss_frames == 0;
     const float elapsed = dt + tr.missed_sec;
     const bool upright = upright_geometry(cand);
-    const Vec3f delta = {cand.cu - tr.cu, cand.cv - tr.cv, cand.ch - tr.ch};
-    const float step_m = continuous ? std::sqrt(dot3(delta, delta)) : 0.0f;
-    const Vec3f position = {cand.cu, cand.cv, cand.ch};
+    const float du_step = cand.cu - tr.cu;
+    const float dv_step = cand.cv - tr.cv;
+    const float step_m = continuous ? std::sqrt(du_step * du_step + dv_step * dv_step) : 0.0f;
+    const Vec3f position = {cand.cu, cand.cv, 0.0f};
     MotionWindow& motion = tr.motion;
     bool moving = false;
     if (!upright || !continuous || motion.seconds + dt > cfg_.motion_window_sec ||
@@ -387,12 +449,16 @@ void HumanTracker::update_track_from_candidate(Track& tr, const Candidate& cand,
         const float range_step = std::fabs(cand.range_m - tr.range_m);
         const bool radial_motion = range_step >= std::max(0.025f, 0.70f * step_m) &&
                                    std::fabs(cand.height_m - tr.height_m) <= 0.10f &&
+                                   std::fabs(cand.h_p05 - tr.h_p05) <= 0.12f &&
+                                   std::fabs(cand.h_p95 - tr.h_p95) <= 0.12f &&
                                    std::abs(cand.point_count - tr.point_count) <= tr.point_count / 6;
-        if (radial_motion || cand.motion_points >= std::max(4, cand.point_count / 100)) {
+        const bool dual_half_motion = tr.locked_human ||
+                                      (cand.motion_lower >= 2 && cand.motion_upper >= 2);
+        if (radial_motion ||
+            (dual_half_motion && cand.motion_points >= std::max(4, cand.point_count / 100))) {
             ++motion.depth_frames;
         }
-        const Vec3f net = {position.x - motion.origin.x, position.y - motion.origin.y,
-                           position.z - motion.origin.z};
+        const Vec3f net = {position.x - motion.origin.x, position.y - motion.origin.y, 0.0f};
         const float displacement = std::sqrt(dot3(net, net));
         const float min_displacement = tr.locked_human ? 0.075f : cfg_.motion_lock_disp_m;
         moving = motion.moving_steps >= 2 && motion.depth_frames >= 2 &&
@@ -401,7 +467,8 @@ void HumanTracker::update_track_from_candidate(Track& tr, const Candidate& cand,
     if (upright) {
         if (tr.upright_frames < cfg_.lock_min_frames) ++tr.upright_frames;
         if (moving && tr.upright_frames >= cfg_.lock_min_frames &&
-            cand.horiz_span_m >= cfg_.human_min_horiz_m) {
+            cand.horiz_span_m >= cfg_.human_min_horiz_m &&
+            (tr.locked_human || cand.point_count >= cfg_.human_min_lock_points)) {
             motion = MotionWindow{position};
             if (!tr.locked_human) {
                 tr.locked_human = true;

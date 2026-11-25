@@ -27,10 +27,12 @@ import numpy as np
 
 try:  # pragma: no cover - import shim
     from .lidar_candidates import ground_plane_basis, rebuild_candidate
-    from .range_features import bound_ground
+    from .range_features import bound_ground, valid_source_row_mask
+    from .range_normals import cluster_normal_features
 except ImportError:  # pragma: no cover
     from lidar_candidates import ground_plane_basis, rebuild_candidate
-    from range_features import bound_ground
+    from range_features import bound_ground, valid_source_row_mask
+    from range_normals import cluster_normal_features
 
 KIND = "human_prior"
 SCHEMA_VERSION = 1
@@ -40,10 +42,12 @@ CLASS_SITTING = "sitting_geometry"
 CLASS_LYING = "lying_geometry"
 CLASS_FRAGMENT = "fragment"
 CLASS_PLANAR = "planar_structure"
+CLASS_HANGING_ADHESION = "hanging_or_adhesion"
 CLASS_OTHER = "not_compatible"
 CLASS_UNKNOWN = "unknown"
 CLASSES = (CLASS_STANDING, CLASS_SITTING, CLASS_LYING, CLASS_FRAGMENT,
            CLASS_PLANAR, CLASS_OTHER, CLASS_UNKNOWN)
+PHYSICAL_V1_CLASSES = CLASSES + (CLASS_HANGING_ADHESION,)
 COMPATIBLE_CLASSES = (CLASS_STANDING, CLASS_SITTING, CLASS_LYING)
 
 POSTURE = {
@@ -52,6 +56,7 @@ POSTURE = {
     CLASS_LYING: "lying_horizontal",
     CLASS_FRAGMENT: "not_evaluable_fragment",
     CLASS_PLANAR: "not_evaluable_planar",
+    CLASS_HANGING_ADHESION: "not_evaluable_hanging_adhesion",
     CLASS_OTHER: "not_evaluable_shape",
     CLASS_UNKNOWN: "not_evaluable",
 }
@@ -112,7 +117,7 @@ def _require_rows(frame, rows):
     if (rows.ndim != 1 or not rows.size or rows.dtype.kind not in "iu"
             or len(np.unique(rows)) != len(rows) or rows.min() < 0
             or rows.max() >= len(frame.xyz)
-            or not np.isin(rows, frame.source_rows[frame.valid]).all()):
+            or not valid_source_row_mask(frame)[rows].all()):
         raise ValueError("human prior requires unique current decoded measurement rows")
     return rows
 
@@ -370,10 +375,287 @@ def choose_single(entries, previous_track_id=None, settings=None):
         if previous_score >= resolved["keep_previous_score_ratio"] * best_score \
                 and previous.get("compatible"):
             chosen, reason = previous, "previous_target_retained"
-    ranked = [entry for entry in ordered if entry is not chosen]
+    chosen_compat = bool(chosen.get("compatible"))
+    ranked = [entry for entry in ordered
+              if entry is not chosen and bool(entry.get("compatible")) == chosen_compat]
     if ranked and float(ranked[0].get("score") or 0.0) \
             >= resolved["competing_score_ratio"] * float(chosen.get("score") or 0.0):
         result["ambiguous"] = True
     result["chosen_track_id"] = chosen.get("track_id")
     result["reason"] = reason
     return result
+
+
+PHYSICAL_V1_SETTINGS = {
+    "num_tiers": 10,
+    "tier_min_point_ratio": 0.01,
+    "adhesion_check_min_span_m": 0.70,
+    "min_normalized_vertical_fill": 0.60,
+    "max_empty_tier_run": 2,
+    "detached_bottom_min_m": 0.20,
+    "max_top_third_ratio": 0.72,
+    "min_third_ratio": 0.08,
+    "thin_bridge_width_m": 0.08,
+    "thin_bridge_point_ratio": 0.025,
+    "max_thin_bridge_tiers": 3,
+    "max_top_to_mid_width_ratio": 3.5,
+    "single_plane_reject_ratio": 0.80,
+    "planar_max_azimuth_entropy": 0.36,
+    "planar_non_horiz_floor": 0.20,
+    "dual_plane_reject_ratio": 0.90,
+    "dual_plane_max_azimuth_entropy": 0.42,
+    "dual_plane_max_roughness": 0.015,
+    "lying_plane_reject_ratio": 0.88,
+    "lying_max_sphere_entropy": 0.28,
+}
+
+
+def resolve_physical_v1_settings(settings=None):
+    resolved = dict(PHYSICAL_V1_SETTINGS)
+    for key, value in (settings or {}).items():
+        if key not in resolved:
+            raise ValueError("unknown human prior physical_v1 setting: " + str(key))
+        resolved[key] = value
+    for key in ("num_tiers", "max_empty_tier_run", "max_thin_bridge_tiers"):
+        if isinstance(resolved[key], bool) or int(resolved[key]) != resolved[key] or int(resolved[key]) < 1:
+            raise ValueError(key + " must be a positive integer")
+        resolved[key] = int(resolved[key])
+    if resolved["num_tiers"] < 3:
+        raise ValueError("num_tiers must be at least 3")
+    for key in resolved:
+        if key in ("num_tiers", "max_empty_tier_run", "max_thin_bridge_tiers"):
+            continue
+        val = float(resolved[key])
+        if not np.isfinite(val) or val < 0.0:
+            raise ValueError(key + " must be a finite non-negative number")
+        resolved[key] = val
+    return resolved
+
+
+def _tier_horizontal_spans(u_tier, v_tier):
+    """旋转不变的局部水平宽度与厚度（大/小主轴方向跨度）。"""
+    count = len(u_tier)
+    if count <= 1:
+        return 0.0, 0.0
+    uv = np.column_stack((u_tier, v_tier))
+    centered = uv - np.mean(uv, axis=0)
+    if count >= 4:
+        cov = (centered.T @ centered) / float(count)
+        if np.isfinite(cov).all():
+            _, vecs = np.linalg.eigh(cov)
+            proj_major = centered @ vecs[:, 1]
+            proj_minor = centered @ vecs[:, 0]
+            if count >= 10:
+                w_maj = float(np.percentile(proj_major, 95.0) - np.percentile(proj_major, 5.0))
+                w_min = float(np.percentile(proj_minor, 95.0) - np.percentile(proj_minor, 5.0))
+            else:
+                w_maj = float(proj_major.max() - proj_major.min())
+                w_min = float(proj_minor.max() - proj_minor.min())
+            return max(w_maj, w_min), min(w_maj, w_min)
+    su = float(u_tier.max() - u_tier.min())
+    sv = float(v_tier.max() - v_tier.min())
+    return max(su, sv), min(su, sv)
+
+
+def _normalized_tier_profile(u, v, heights, num_tiers, min_tier_ratio,
+                             thin_width_m, thin_ratio, tier_normals=None,
+                             tier_normal_valid=None):
+    """10 层归一化高度剖面（0%..100% 高度的宽/厚/点数占比/法向离散度）。"""
+    total = len(heights)
+    h_lo, h_hi = np.percentile(heights, [2.0, 98.0])
+    h_span = max(float(h_hi - h_lo), 1e-3)
+    norm_h = np.clip((heights - float(h_lo)) / h_span, 0.0, 0.999999)
+    tier_idx = np.floor(norm_h * num_tiers).astype(np.int64)
+
+    tiers = []
+    occupied_tiers = 0
+    cur_empty = 0
+    max_empty = 0
+    thin_bridge_tiers = 0
+    min_pts_occ = max(1, int(np.ceil(total * min_tier_ratio)))
+
+    for k in range(num_tiers):
+        mask = tier_idx == k
+        cnt = int(mask.sum())
+        ratio = cnt / float(max(1, total))
+        if cnt > 0:
+            width_m, thickness_m = _tier_horizontal_spans(u[mask], v[mask])
+        else:
+            width_m, thickness_m = 0.0, 0.0
+
+        disp = None
+        if tier_normals is not None and tier_normal_valid is not None:
+            nm = mask & tier_normal_valid
+            if int(nm.sum()) >= 3:
+                mean_n = np.mean(tier_normals[nm], axis=0)
+                disp = round(float(max(0.0, 1.0 - float(np.linalg.norm(mean_n)))), 4)
+
+        is_occ = cnt >= min_pts_occ
+        if is_occ:
+            occupied_tiers += 1
+            cur_empty = 0
+        else:
+            cur_empty += 1
+            if cur_empty > max_empty:
+                max_empty = cur_empty
+
+        if 1 <= k <= num_tiers - 2:
+            if width_m < thin_width_m or ratio < thin_ratio:
+                thin_bridge_tiers += 1
+
+        tiers.append({
+            "tier": k,
+            "point_count": cnt,
+            "point_ratio": round(ratio, 4),
+            "width_m": round(width_m, 4),
+            "thickness_m": round(thickness_m, 4),
+            "normal_dispersion": disp,
+        })
+
+    # 上/中/下三段点数占比（按归一化高度三等分）
+    third_idx = np.clip(np.floor(norm_h * 3.0).astype(np.int64), 0, 2)
+    third_counts = np.bincount(third_idx, minlength=3).astype(np.float64)
+    third_ratios = third_counts / max(1.0, float(third_counts.sum()))
+
+    top_widths = [t["width_m"] for t in tiers[-2:] if t["point_count"] > 0]
+    mid_widths = [t["width_m"] for t in tiers[2:-2]]
+    top_w = max(top_widths) if top_widths else 0.0
+    mid_min_w = min(mid_widths) if mid_widths else 0.0
+    top_to_mid_ratio = top_w / max(mid_min_w, 0.02) if top_w > 0.0 else 0.0
+
+    return {
+        "num_tiers": num_tiers,
+        "height_p02_m": round(float(h_lo), 4),
+        "height_p98_m": round(float(h_hi), 4),
+        "vertical_fill": round(occupied_tiers / float(num_tiers), 4),
+        "max_empty_tier_run": int(max_empty),
+        "third_ratios": [round(float(r), 4) for r in third_ratios],
+        "bottom_third_ratio": round(float(third_ratios[0]), 4),
+        "middle_third_ratio": round(float(third_ratios[1]), 4),
+        "top_third_ratio": round(float(third_ratios[2]), 4),
+        "min_third_ratio": round(float(third_ratios.min()), 4),
+        "thin_bridge_tier_count": int(thin_bridge_tiers),
+        "top_to_mid_width_ratio": round(float(top_to_mid_ratio), 3),
+        "tiers": tiers,
+    }
+
+
+def describe_physical_v1(frame, rows, ground, normals=None, settings=None,
+                         base_settings=None, normal_settings=None):
+    """命名变体 physical_v1：10 层归一化剖面 + 表面法向平面度 + 悬空粘连拒识。
+
+    不改动原 describe() 契约；保持 standing/sitting/lying 三姿态物理兼容边界，
+    绝不以直立身高作为唯一入口，也不声称人体真值身份（semantic 恒为 UNKNOWN）。
+    """
+    pcfg = resolve_physical_v1_settings(settings)
+    base = describe(frame, rows, ground, settings=base_settings)
+    out = dict(base)
+    out["variant"] = "physical_v1"
+    out["physical_thresholds"] = dict(pcfg)
+    out["normalized_profile"] = None
+    out["normal_features"] = None
+    out["rejection_reasons"] = []
+    out["physical_notes"] = []
+
+    if not out["available"]:
+        if out["reason"]:
+            out["rejection_reasons"] = [out["reason"]]
+        return out
+
+    rows_arr = np.asarray(rows, dtype=np.int64)
+    plane = bound_ground(frame, ground)
+    normal_vec, axis_u, axis_v = ground_plane_basis(plane)
+    xyz = frame.xyz[rows_arr].astype(np.float64)
+    heights = xyz @ normal_vec + float(plane["offset_m"])
+    u = xyz @ axis_u
+    v = xyz @ axis_v
+
+    tier_normals = None
+    tier_normal_valid = None
+    norm_feat = None
+    if normals is not None:
+        norm_feat = cluster_normal_features(
+            frame, rows_arr, grid_normals=normals, ground=plane,
+            settings=normal_settings,
+        )
+        cells = normals.row_to_cell[rows_arr]
+        tier_normal_valid = normals.valid.ravel()[cells]
+        tier_normals = normals.normals.reshape(-1, 3)[cells]
+    else:
+        norm_feat = cluster_normal_features(
+            frame, rows_arr, grid_normals=None, ground=plane,
+            settings=normal_settings,
+        )
+
+    profile = _normalized_tier_profile(
+        u, v, heights,
+        num_tiers=pcfg["num_tiers"],
+        min_tier_ratio=pcfg["tier_min_point_ratio"],
+        thin_width_m=pcfg["thin_bridge_width_m"],
+        thin_ratio=pcfg["thin_bridge_point_ratio"],
+        tier_normals=tier_normals,
+        tier_normal_valid=tier_normal_valid,
+    )
+    out["normalized_profile"] = profile
+    out["normal_features"] = norm_feat
+
+    if out["class"] in (CLASS_FRAGMENT, CLASS_PLANAR, CLASS_OTHER):
+        out["rejection_reasons"] = [out["reason"] or out["class"]]
+        return out
+
+    reasons = []
+    # 1. 表面法向平面度与盒体拒识（拦截较窄门板、柜面、双面直角箱体）
+    if norm_feat is not None and norm_feat.get("available"):
+        sp = norm_feat["single_plane_inlier_ratio"]
+        dp = norm_feat["dual_plane_inlier_ratio"]
+        ent = norm_feat["normal_azimuth_entropy"]
+        s_ent = norm_feat["normal_sphere_entropy"]
+        non_h = norm_feat["non_horizontal_fraction"]
+        med_r = norm_feat["median_local_roughness"]
+
+        if out["class"] == CLASS_LYING:
+            if sp >= pcfg["lying_plane_reject_ratio"] and s_ent <= pcfg["lying_max_sphere_entropy"]:
+                reasons.append("surface_normal_flat_horizontal_plane")
+        else:
+            if (sp >= pcfg["single_plane_reject_ratio"]
+                    and (ent <= pcfg["planar_max_azimuth_entropy"]
+                         or non_h < pcfg["planar_non_horiz_floor"])):
+                reasons.append("surface_normal_single_plane")
+            elif (dp >= pcfg["dual_plane_reject_ratio"]
+                  and ent <= pcfg["dual_plane_max_azimuth_entropy"]
+                  and med_r is not None and med_r <= pcfg["dual_plane_max_roughness"]):
+                reasons.append("surface_normal_dual_plane_box")
+
+    if reasons:
+        rejected = _classify(out, CLASS_PLANAR, reasons[0])
+        rejected["rejection_reasons"] = reasons
+        return rejected
+
+    # 2. 悬空/细杆粘连/顶重脚轻结构拒识（覆盖悬挂鸟粘连支架、衣帽架、落地灯）
+    height_span_m = out["features"]["height_span_m"]
+    if height_span_m >= pcfg["adhesion_check_min_span_m"] and out["class"] != CLASS_LYING:
+        hang_reasons = []
+        # r2：断层/低填充类判据必须同时满足“底部离地”（p02 高度 >= detached_bottom_min_m）。
+        # 底部贴地的簇出现中段断层，更常见的是桌面/椅背遮挡人体中段，不能单凭断层判悬空粘连。
+        bottom_detached = profile["height_p02_m"] >= pcfg["detached_bottom_min_m"]
+        profile["bottom_detached"] = bool(bottom_detached)
+        gap_hit = profile["max_empty_tier_run"] >= pcfg["max_empty_tier_run"]
+        fill_hit = profile["vertical_fill"] < pcfg["min_normalized_vertical_fill"]
+        if gap_hit and bottom_detached:
+            hang_reasons.append("vertical_profile_gap_discontinuity")
+        if fill_hit and bottom_detached:
+            hang_reasons.append("low_normalized_vertical_fill")
+        if (gap_hit or fill_hit) and not bottom_detached:
+            out["physical_notes"] = ["gap_ignored_bottom_ground_supported"]
+        if (profile["top_third_ratio"] >= pcfg["max_top_third_ratio"]
+                and profile["min_third_ratio"] < pcfg["min_third_ratio"]):
+            hang_reasons.append("top_heavy_hanging_mass_concentration")
+        if (profile["thin_bridge_tier_count"] >= pcfg["max_thin_bridge_tiers"]
+                and profile["top_to_mid_width_ratio"] >= pcfg["max_top_to_mid_width_ratio"]):
+            hang_reasons.append("thin_bridge_lollipop_adhesion")
+        if hang_reasons:
+            rejected = _classify(out, CLASS_HANGING_ADHESION, hang_reasons[0])
+            rejected["rejection_reasons"] = hang_reasons
+            return rejected
+
+    return out

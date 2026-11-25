@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[3]
 from .ground_fit.floor_roi import detect_floor_regions_v3
 from .ground_fit.floor_sheet import _discover_planes
 from .ground_fit.leveling_estimators import ESTIMATORS
-from .ground_fit.leveling_quality import PROFILE, compare, rotation, statistics
+from .ground_fit.leveling_quality import PROFILE, FIT_REGION_RANSAC_VARIANT, compare, rotation, statistics
 
 FIT_FRAMES = 25  # existing prepare_leveling / ablate fit count
 HELD_FRAMES = PROFILE['holdout_frames']
@@ -43,7 +43,7 @@ def fit_site(samples, headers, binding, source):
     report = dict(format='live_ground_fit/1', status='unavailable', binding=binding, source=source,
         headers=headers, units='m', coordinate='RAW/' + binding['frameId'],
         formula='height_m = dot(raw_xyz_m, normal) + offset_m',
-        physicalGroundTruth='UNKNOWN', settings=dict(PROFILE), rawCloudsRecorded=False,
+        physicalGroundTruth='UNKNOWN', settings=dict(PROFILE, estimator_variant=FIT_REGION_RANSAC_VARIANT), rawCloudsRecorded=False,
         fitFrames=list(range(FIT_FRAMES)), heldFrames=list(range(FIT_FRAMES, FIT_FRAMES + HELD_FRAMES)))
     try:
         if len(samples) != FIT_FRAMES + HELD_FRAMES or len(headers) != len(samples):
@@ -79,7 +79,8 @@ def fit_site(samples, headers, binding, source):
         for i in range(FIT_FRAMES, len(clean)):
             hc = region_codes(clean[i], initial, domain['regions'])
             held.append(dict(ordinal=i, points=clean[i][hc > 0], regions=hc[hc > 0]))
-        quality = compare(selected, codes[codes > 0], held, initial[2])
+        quality = compare(selected, codes[codes > 0], held, initial[2],
+                          fit_region_ransac=True, fit_frame_ids=ids[codes > 0])
         report['quality'] = quality
         if quality['consensus'] != 'GOOD': raise ValueError('existing_quality_rejected')
         fitted = quality['estimators'][quality['recommended']]

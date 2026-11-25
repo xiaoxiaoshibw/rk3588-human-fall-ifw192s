@@ -61,6 +61,25 @@ class RangeService:
             self.queue.put((start, msg))
             self.callback_ms = (self.clock()-start)*1000
 
+    def submit_imu(self, msg):
+        """轻量接收 ROS sensor_msgs/Imu，零锁竞争喂入引擎重力估计器。"""
+        feed = getattr(self.engine, 'feed_imu', None)
+        if feed is None:
+            return False
+        try:
+            acc = msg.linear_acceleration
+            gyr = msg.angular_velocity
+            hdr = getattr(msg, 'header', None)
+            stamp_s = None
+            if hdr is not None and getattr(hdr, 'stamp', None) is not None:
+                st = hdr.stamp
+                secs = getattr(st, 'secs', getattr(st, 'sec', 0))
+                nsecs = getattr(st, 'nsecs', getattr(st, 'nanosec', 0))
+                stamp_s = float(secs) + float(nsecs) / 1e9
+            return bool(feed(acc.x, acc.y, acc.z, gyr.x, gyr.y, gyr.z, stamp_s=stamp_s))
+        except (AttributeError, TypeError, ValueError):
+            return False
+
     def process_latest(self):
         item = self.queue.take()
         if item is None:
@@ -105,7 +124,13 @@ class RangeService:
         # the committed copy, including when recognition evidence is discarded.
         ground = copy.deepcopy(getattr(self.engine, 'ground_status', None))
         runtime = getattr(self.engine, 'runtime', None)
-        if (getattr(self.engine, 'disabled', None) or not runtime
+        if getattr(self.engine, 'instant_start', False):
+            refiner = getattr(self.engine, 'ground_refiner', None)
+            if (getattr(self.engine, 'disabled', None) or refiner is None
+                    or not ground or ground.get('sha256') != refiner.sha256
+                    or not ground.get('displayPlane')):
+                ground = None
+        elif (getattr(self.engine, 'disabled', None) or not runtime
                 or not runtime.ground or not runtime.ground_sha
                 or not ground or ground.get('sha256') != runtime.ground_sha
                 or not ground.get('displayPlane')):
@@ -189,6 +214,8 @@ class RangeService:
                 state = dict(state, source=None, track_id=None, track_status='unselected',
                     observability='invalid', bbox_observed=False, target_source_rows=[],
                     fall_status='unknown', acquisition=dict(reason=reason), local_range=None)
+                if 'human_physical_v1' in state:
+                    state['human_physical_v1'] = None
                 self.state = state
             result = copy.copy(state)
             result['groundBinding'] = copy.deepcopy(self.ground_binding)
@@ -201,7 +228,10 @@ class RangeService:
                 capabilities=['source_wire_sha256', 'source_rows', 'range_runtime', 'ground_monitor',
                               'height', 'dynamic_evidence', 'ground_alert_v1', 'horizontal_low_posture_v1', 'heartbeat',
                               'independent_ground_binding']
-                             + (['async_preview'] if self.preview else []),
+                             + (['async_preview'] if self.preview else [])
+                             + (['human_physical_v1'] if getattr(self.engine, 'human_physical_v1', False) else [])
+                             + (['single_person_lock'] if getattr(self.engine, 'single_person_lock', False) else [])
+                             + (['instant_start', 'silent_ground_refinement'] if getattr(self.engine, 'instant_start', False) else []),
                 ttlMs=500, confirmedEnabled=False, body='unavailable')
             result['health'] = dict(received=self.received, processed=self.processed,
                 published=self.published, overwritten=self.queue.dropped, sourceGaps=self.source_gaps,

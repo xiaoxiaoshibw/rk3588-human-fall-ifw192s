@@ -11,12 +11,14 @@ ApplicationWindow {
     width: 1360; height: 880; minimumWidth: 1120; minimumHeight: 740
     visible: true; color: "#0c1423"; title: "LiDAR Console · 目标跟踪与跌倒识别"
     property int section: 0
+    onSectionChanged: viewer.activateSection(section)
     property bool sidebarOpen: true
     property bool detailsOpen: true
     // 自检/报告模式：主窗口由 C++ 设成不抢焦点，子窗口跟着走。
     // 用可 NOTIFY 的布尔值而不是直接读 root.flags（flags 没有 NOTIFY，绑定会告警）。
     property bool headlessChecks: false
-    property string liveEndpoint: "ws://192.168.31.58:8765"
+    property string boardHost: "welcomtech.local"
+    property string liveEndpoint: "ws://" + boardHost + ":8765"
     property bool cameraPreviewRequested: false
     property string appliedOfflineGround: ""
     property string appliedLiveGround: ""
@@ -397,9 +399,35 @@ ApplicationWindow {
     readonly property string alertState: root.alert && root.alert.state ? root.alert.state : "none"
     function stateLabel(state) { return ({unknown:"动作未判定",upright:"直立",descending:"下降",low_posture_unclassified:"低姿态 / 未分类",suspected:"疑似跌倒",recovering:"恢复中"})[state] || "动作未判定" }
     function send(op) {
+        cancelSeekPreview()
         if(root.snap.mode==="live" && ["play","pause","step","seek"].indexOf(op.op)>=0) return
         viewer.command(op)
     }
+    property int pendingSeekIndex: -1
+    property string pendingSeekContext: ""
+    // generation advances for each accepted seek; its reply must not cancel a
+    // newer drag position in the same session. Explicit commands cancel above.
+    readonly property string seekContext: JSON.stringify([root.snap.mode, root.snap.sessionId])
+    onSeekContextChanged: cancelSeekPreview()
+    function cancelSeekPreview() {
+        seekPreviewTimer.stop()
+        pendingSeekIndex = -1
+        pendingSeekContext = ""
+    }
+    function queueSeekPreview(index) {
+        if(root.snap.mode === "live") return
+        pendingSeekIndex = Math.round(index)
+        pendingSeekContext = seekContext
+        if(!seekPreviewTimer.running) seekPreviewTimer.start()
+    }
+    function flushSeekPreview() {
+        const index = pendingSeekIndex
+        const context = pendingSeekContext
+        cancelSeekPreview()
+        if(index >= 0 && context === seekContext && root.snap.mode !== "live")
+            viewer.command({op:"seek", index:index})
+    }
+    Timer { id: seekPreviewTimer; interval: 50; onTriggered: root.flushSeekPreview() }
     function urlToPath(u) { const s = u ? u.toString() : ""; return s.startsWith("file:///") ? decodeURIComponent(s.slice(8)) : s }
     function worldFocus() { return Qt.vector3d(focusPoint.x, focusPoint.z, -focusPoint.y) }
     // 经验标定渲染相机：mapToViewport 是唯一权威，探针反解投影模型，
@@ -762,6 +790,13 @@ ApplicationWindow {
                     onClicked: root.send({op:"localGroundFit"})
                 }
                 Button {
+                    objectName: "pseudoLiveQtButton"; Layout.fillWidth: true; text: "伪实时演示（独立 Qt 窗口）"
+                    enabled: viewer.localTask.state !== "running"
+                    onClicked: root.send({op:"openPseudoLiveQt"})
+                    ToolTip.visible: hovered
+                    ToolTip.text: "使用整段离线背景和拟合地面；四会话在新窗口内选择，结果不是确认跌倒"
+                }
+                Button {
                     objectName: "localOfflinePreviewButton"; Layout.fillWidth: true; text: "打开整段离线对比"
                     enabled: root.snap.mode === "replay" && root.selectedSessionId.length>0 && viewer.localTask.state !== "running"
                     onClicked: root.send({op:"localOfflinePreview"})
@@ -856,20 +891,24 @@ ApplicationWindow {
                 visible: root.section === 1; Layout.fillWidth: true; spacing: 10
                 Label { text: "Foxglove WebSocket" }
                 TextField { id: liveUrl; objectName: "liveUrl"; Layout.fillWidth: true; text: root.liveEndpoint }
-                Label { text: "算法话题前缀" }
-                TextField { id: prefix; Layout.fillWidth: true; text: "/single_target_live/" }
-                Label { text: "点云：/innolidar_points（完整原始流）"; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                Button { text: "连接实时目标"; Layout.fillWidth: true; onClicked: root.send({op:"liveConnect",url:liveUrl.text,prefix:prefix.text,points:"/innolidar_points"}) }
+                CheckBox { id: useAlgorithm; objectName: "useAlgorithm"; text: "订阅板端算法结果"; checked: true }
+                Label { text: "算法话题前缀"; enabled: useAlgorithm.checked }
+                TextField { id: prefix; Layout.fillWidth: true; text: "/single_target_live/"; enabled: useAlgorithm.checked }
+                CheckBox { id: lowBandwidth; objectName: "lowBandwidth"; text: "低带宽连接（百兆网卡推荐）"; checked: true }
+                Label { text: lowBandwidth.checked ? "完整点云约 3 帧/秒；算法结果持续订阅" : "点云：/innolidar_points（完整原始流）"; wrapMode: Text.Wrap; Layout.fillWidth: true }
+                Button { text: "连接实时点云"; Layout.fillWidth: true; onClicked: root.send({op:"liveConnect",url:liveUrl.text,prefix:useAlgorithm.checked ? prefix.text : "",points:"/innolidar_points",pointIntervalMs:lowBandwidth.checked ? 250 : 0}) }
                 Button { text: "断开 / 返回回放"; Layout.fillWidth: true; onClicked: root.send({op:"liveDisconnect"}) }
                 AlertHint { objectName: "liveAlert"; channel: "live" }
-                Label { text: "自动锁定与持续跟踪由板端算法提供。当前模式以收到的状态为准。"; color: "#849eb8"; wrapMode: Text.Wrap; Layout.fillWidth: true }
+                Label { text: useAlgorithm.checked
+                    ? "连接后显示板端目标与配平结果；更改订阅选项后请重新连接。"
+                    : "仅观测原始点云：目标、距离图和板端配平结果未订阅。更改后请重新连接。"; color: "#849eb8"; wrapMode: Text.Wrap; Layout.fillWidth: true }
                 Item { Layout.fillHeight: true }
             }
             ColumnLayout {
                 visible: root.section === 2; Layout.fillWidth: true; spacing: 8
                 Label { text: "USB 相机接在板端，使用 MJPEG 流"; wrapMode: Text.Wrap; Layout.fillWidth: true }
                 Label { text: "相机流地址" }
-                TextField { id: camera; objectName: "cameraUrl"; Layout.fillWidth: true; text: "http://192.168.31.58:8081/stream" }
+                TextField { id: camera; objectName: "cameraUrl"; Layout.fillWidth: true; text: "http://" + root.boardHost + ":8081/stream" }
                 Button {
                     objectName: "cameraPreviewButton"; Layout.fillWidth: true
                     text: root.cameraPreviewRequested ? "关闭相机预览" : "开启相机预览"
@@ -884,7 +923,7 @@ ApplicationWindow {
                 }
                 Label { text: viewer.joint.configured ? (root.cameraPreviewRequested ? cameraPreviewFeed.status : "预览未开启") : "本地预览服务未配置"; color: "#849eb8"; wrapMode: Text.Wrap; Layout.fillWidth: true }
                 Label { text: "LiDAR 采集服务" }
-                TextField { id: board; Layout.fillWidth: true; text: "http://192.168.31.58:8766" }
+                TextField { id: board; Layout.fillWidth: true; text: "http://" + root.boardHost + ":8766" }
                 Label { text: "保存根目录（绝对路径）" }
                 RowLayout {
                     Layout.fillWidth: true; spacing: 6
@@ -1113,7 +1152,7 @@ ApplicationWindow {
                     visible: root.snap.mode==="live" && !!root.snap.stream
                     anchors.left: parent.left; anchors.top: parent.top; anchors.leftMargin: 20; anchors.topMargin: 72
                     color: root.colorInfo
-                    text: root.snap.stream ? "接收 " + root.snap.stream.receiveHz.toFixed(1) + " fps · 源频率约 " + root.snap.stream.sourceHz.toFixed(1) + " Hz · 接收跳号 " + root.snap.stream.sequenceGaps + " 帧" : ""
+                    text: root.snap.stream ? "接收 " + root.snap.stream.receiveHz.toFixed(1) + " fps · 源频率约 " + root.snap.stream.sourceHz.toFixed(1) + " Hz · " + (root.snap.stream.pointIntervalMs > 0 ? "采样跨过 " : "接收跳号 ") + root.snap.stream.sequenceGaps + " 帧" : ""
                 }
                 // 3D 坐标轴指示器：小尺寸落在右下角，不遮挡主要点云；方向来自相机探针实测投影。
                 // 传感器系 (x,y,z) → 世界系 (x,z,-y)（与点云节点的 -90° X 旋转一致）。
@@ -1393,7 +1432,13 @@ ApplicationWindow {
                 Button { text: "◀"; onClicked: root.send({op:"step",delta:-1}) }
                 Button { objectName: "playButton"; text: viewer.playing ? "暂停" : "播放"; onClicked: root.togglePlay() }
                 Button { text: "▶"; onClicked: root.send({op:"step",delta:1}) }
-                Slider { id: seek; Layout.fillWidth: true; from: 0; to: Math.max(0,(root.snap.frameCount || 1)-1); stepSize: 1; value: root.snap.frameIndex || 0; onMoved: root.send({op:"seek",index:Math.round(value)}) }
+                Slider {
+                    id: seek; objectName: "seekSlider"; Layout.fillWidth: true
+                    from: 0; to: Math.max(0,(root.snap.frameCount || 1)-1); stepSize: 1
+                    onMoved: root.queueSeekPreview(value)
+                    onPressedChanged: if(!pressed) root.flushSeekPreview()
+                    Binding { target: seek; property: "value"; value: root.snap.frameIndex || 0; when: !seek.pressed }
+                }
                 Label {
                     objectName: "frameReadoutSlider"; text: (root.snap.frameIndex||0) + " / " + (root.snap.frameCount||1)
                     color: root.colorText; font.pixelSize: root.fontBody
