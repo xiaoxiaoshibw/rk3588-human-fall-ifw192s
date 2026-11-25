@@ -1,28 +1,22 @@
-# 主线与算法历史
+# 分支结构说明
 
-自 2026-11-22 起，GitHub 使用 `master` 作为唯一维护分支。主线包含 3D 点云链、2D 距离图→3D 链及 ESP32-S3 人体跟踪 v3。两条算法线在 2026-10-29 从同一个提交分出，归档标签保留各分支的完整历史。
+本仓库在 GitHub 上维护三个分支与两个历史归档标签，按目标硬件清晰隔离：
 
-| 引用 | 内容 | 入口 |
+| 引用 | 定位与内容 | 入口 |
 |---|---|---|
-| `master` | 两条算法链、桌面应用、控制台和 ESP32-S3 v3 | [项目状态](docs/PROJECT_STATE.md)、[ESP32-S3 v3](firmware/esp32s3_human/README.md) |
-| `archive/algo-3d-20261122` (`39f0424`) | 原 `algo-3d` 的独立 3D 点云算法链，包括 `human_fall_node.py` 和 `single_target_node.py` | `roslaunch human_fall_detection human_fall.launch` |
-| `archive/algo-2d3d-20261122` (`f79d861`) | 原 `algo-2d3d` 的 2D 距离图→3D 全链，含 `RangeEngine`、`RangeRuntime`、`range_service_node` 和 Qt 控制台 | `roslaunch human_fall_detection range_service.launch` |
+| `master` | 完整统一主线（RK3588 识别服务 + 桌面工作台/控制台 + ESP32-S3 固件） | [项目状态](docs/PROJECT_STATE.md)、[LiDAR Studio](pc_apps/lidar_studio/README.md)、[ESP32-S3](firmware/esp32s3_human/README.md) |
+| `rk3588` | **RK3588 专用分支**：ROS1/ROS2 驱动、`human_fall_detection`（含 `--instant-start` 开机直接算与后台无感精修、`human_physical_v1`）、`human_capture`、`human_follow_calibration`、PC 端 `LiDAR Studio` / `console_v2` / `webui`（不含 `firmware/esp32s3_human/`） | [项目状态](docs/PROJECT_STATE.md)、[LiDAR Studio](pc_apps/lidar_studio/README.md) |
+| `esp32s3` | **ESP32-S3 专用分支**：`firmware/esp32s3_human/`（纯 C++17 免空场运动学核心 v4 含防悬挂鸟粘连修复、ESP-IDF W5500 固件、RK3588 侧 `:8896` 轻量看板）及离线回放所需的最小 IFW192S 标定表/解码模块 | [ESP32-S3 README](firmware/esp32s3_human/README.md) |
+| `archive/algo-3d-20261122` (`39f0424`) | 历史归档：独立 3D 点云算法链（`human_fall_node.py` / `single_target_node.py`） | 只读归档标签 |
+| `archive/algo-2d3d-20261122` (`f79d861`) | 历史归档：2D 距离图→3D 全链快照 | 只读归档标签 |
 
-## 两条线的关系
+## 两条硬件线的关系
 
-- 2D→3D 链建立在 3D 几何核心之上。`core/range_runtime.py` 直接依赖 `baseline`、`features`、`fall_state`、`lidar_candidates`、`human_prior`、`support_composition` 和 `candidate_history`。两个归档版本之间的源码差异主要来自 2D 距离图链及其入口。
-- 两个小模块 `core/range_features.py`、`core/range_contract.py` 被 3D 的 `core/human_prior.py` 直接引用，作为几何/字段绑定原语保留在 `algo-3d` 上，不随 2D 链一起移除。
-- 冻结配置（`default.yaml`、`geometry.yaml`、`geometry_constrained*.yaml`）两个分支一致，不因分支不同而改阈值。
+- **`rk3588` 分支**面向带 ROS1/ROS2 驱动的 RK3588 开发板与 PC 可视化工作台，默认支持传统 `--declare-empty-prefix` 与免空场 `--instant-start`（开机直接算 + 后台无感地面精修）两种模式，可选叠加 `human_physical_v1` 物理人体增强与局部肢体回收。
+- **`esp32s3` 分支**面向 ESP32-S3 + W5500 单片机直连 IFW192S，全静态 `float32` 零堆分配（工作区 ~1.01 MB），开机 0 帧免空场、免地面拟合，通过 Protocol 2 串口输出目标与 `FALL_SUSPECTED` 候选。
+- 两条硬件分支均从同一 `master` 基线切分，互不交叉合并；后续如需同步公共改动，以 `master` 为源头分别发布。
 
-## `algo-3d` 上被移除的内容
+## 历史算法线备忘
 
-- `core/range_image|components|denoise|background|tracker|runtime|posture|shape|skeleton|engine|service|live|offline|png|wire|site_ground|fit_job|demo_alert|ground_alert.py`
-- `scripts/range_image_node.py`、`scripts/range_service_node.py`、`scripts/replay_range_frontend.py`、`scripts/replay_range_tracking.py`、`scripts/prepare_range_service_bundle.py`
-- `config/range_service_v1.json`、`launch/range_service.launch`
-- 依赖上面模块的测试与应用：`tests/test_range_*.py`、`tests/test_episode_continuity.py`、`tests/test_online_continuity.py`、`pc_apps/range_fall/`、`pc_apps/annotator_v2/`、`pc_apps/bathroom_demo/`、`console_v2/`、`tools/range_*.py`、`tools/human_2d3d_package/`、`pc_apps/demo_viewer/pseudo_live.*`、`pc_apps/demo_viewer/demo_alert.py`
-- 文档（`docs/RANGE_*.md`、`docs/LOCAL_RANGE_LIVE.md` 等）保留在两个分支上作为历史记录，里面引用的文件在 `algo-3d` 上不存在。
-
-## 维护约定
-
-- 后续开发使用 `master`。归档标签用于定位历史版本。
-- 项目操作和验证遵循[项目工作流](docs/PROJECT_WORKFLOW.md)。
+- `archive/algo-3d-20261122` 与 `archive/algo-2d3d-20261122` 保留了 2026-10-29 拆分时的两条纯软件算法链完整提交历史；其中 `core/range_features.py` 与 `core/range_contract.py` 作为共享几何原语存在于两条线中，冻结配置（`default.yaml`、`geometry.yaml`、`geometry_constrained*.yaml`）保持一致。
+- 项目操作和验证遵循 [项目工作流](docs/PROJECT_WORKFLOW.md)。
