@@ -9,6 +9,7 @@ import {
   clamp,
   translateBeliefState,
   translateFallState,
+  translatePairingStatus,
   translatePosture,
   translateReasonCode,
 } from "./studio_lib.js";
@@ -57,7 +58,8 @@ export function updateHealthBar(decoded, fps) {
   const physMs = rt.physical_total_ms;
   const timingEl = $("hTiming");
   timingEl.textContent = typeof procMs === "number" ? `${procMs.toFixed(1)} ms` : "—";
-  timingEl.title = `decode:${fmtNum(rt.decode_ms, 1)}ms · bg:${fmtNum(rt.background_ms, 1)}ms · track:${fmtNum(rt.tracking_ms, 1)}ms · phys:${fmtNum(physMs, 1)}ms`;
+  const trkMs = rt.instant_tracker_ms ?? rt.tracking_ms;
+  timingEl.title = `decode:${fmtNum(rt.decode_ms, 1)}ms · track:${fmtNum(trkMs, 1)}ms · refine:${fmtNum(rt.silent_refine_ms, 1)}ms · phys:${fmtNum(physMs, 1)}ms`;
 
   const bg = lr.background || {};
   const bgEl = $("hBg");
@@ -71,7 +73,11 @@ export function updateHealthBar(decoded, fps) {
     bgEl.textContent = "空场学习中…";
     bgEl.className = "hc-v warn";
   } else {
-    bgEl.textContent = bg.status === "background_not_declared" ? "未声明(只读)" : (bg.status || "未声明");
+    bgEl.textContent = bg.status === "background_not_declared"
+      ? "未声明(只读)"
+      : bg.status === "awaiting_board_state"
+      ? "等待同帧结果"
+      : (bg.status || "未声明");
     bgEl.className = "hc-v warn";
   }
 
@@ -108,10 +114,18 @@ export function updateHealthBar(decoded, fps) {
     evalEl.className = `hc-v ${phys.status === "ok" ? "ok" : phys.status === "degraded" ? "warn" : "danger"}`;
   }
 
-  $("hSource").textContent =
-    st.mode === "live"
-      ? (st.stream_mode === "json_only" ? "板端纯JSON" : "板端JSON+点云")
-      : "回放";
+  const srcEl = $("hSource");
+  if (st.mode === "live") {
+    const modeTxt = st.stream_mode === "json_only" ? "板端纯JSON" : "板端JSON+点云";
+    const pairInfo = translatePairingStatus(st.pairing);
+    srcEl.textContent = `${modeTxt} · ${pairInfo.label}`;
+  } else if (st.replay_mode === "board_causal") {
+    const rmeta = st.replay_metadata || {};
+    const imuTag = rmeta.imu_available ? "含IMU" : `无IMU·标称${rmeta.mount_pitch_deg ?? 26}°`;
+    srcEl.textContent = `板端因果回放 (${imuTag})`;
+  } else {
+    srcEl.textContent = "离线整段研究回放";
+  }
 }
 
 export function updateFallAndPosturePanels(decoded) {
@@ -122,9 +136,17 @@ export function updateFallAndPosturePanels(decoded) {
   const post = lr.posture || {};
   const meas = lr.measurement || {};
 
-  // 跌倒状态机
+  // 跌倒状态机（显式区分“上次疑似·当前缺测 / 疑似后失联 / 实测直立恢复”）
   const fallInfo = translateFallState(st.fall_status);
-  setPill($("fallStateBadge"), fallInfo.label, fallInfo.tone);
+  const obsStatus = fe.observation_status || lr.kinematics?.observation_status || null;
+  const lastObsFall = fe.last_observed_fall_state || lr.kinematics?.last_observed_fall_state || null;
+  if (st.fall_status === "suspected" && obsStatus === "last_suspected_missing_echo") {
+    setPill($("fallStateBadge"), "上次疑似 · 当前缺测", "warn");
+  } else if (st.fall_status === "unknown" && (obsStatus === "lost_after_suspected" || lastObsFall === "suspected")) {
+    setPill($("fallStateBadge"), "上次疑似 · 当前失联/缺测", "warn");
+  } else {
+    setPill($("fallStateBadge"), fallInfo.label, fallInfo.tone);
+  }
 
   const demoMap = {
     unavailable: "不可用",
@@ -288,7 +310,17 @@ export function updatePhysicalAndTracksPanels(decoded) {
             ? "0"
             : "实测";
         const loTxt = b ? fmtNum(b.log_odds, 2) : "—";
-        const stMap = { tracked: "实测", tentative: "暂态", predicted: "缺测保持" };
+        const stMap = {
+          tracked: "实测",
+          locked: "已锁实测",
+          held: tr.missed_echo_state === "last_suspected_missing_echo"
+            ? "上次疑似·缺测"
+            : tr.missed_echo_state === "lost_after_suspected"
+            ? "疑似后失联"
+            : "缺测保持",
+          tentative: "暂态",
+          predicted: "缺测保持",
+        };
         return `<tr class="${isTgt ? "is-target" : ""}">
           <td class="mono">${isTgt ? "★ " : ""}${tid}</td>
           <td>${stMap[tr.status] || tr.status}</td>

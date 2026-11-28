@@ -168,6 +168,7 @@ class RangeEngine:
                 shape=grid.shape,
                 gravity_up=self.ground_refiner.normal,
                 settings=instant_settings,
+                diagnostics=bool(diagnostics),
             )
             if self.human_physical_v1:
                 self.instant_physical = HumanPhysicalEvaluator()
@@ -305,7 +306,7 @@ class RangeEngine:
                 self.invalidate('calibration_changed_requires_rebind');return self.invalid(self.disabled)
             if started-received>.5:
                 self.clear_history();return self.invalid('local_input_expired')
-            msg=parse_cloud(raw) if isinstance(raw,(bytes,bytearray,memoryview)) else raw
+            msg=parse_cloud(raw, zero_copy=True) if isinstance(raw,(bytes,bytearray,memoryview)) else raw
             wire_sha256=hashlib.sha256(raw).hexdigest() if wire_sha256 is None else wire_sha256
             if len(wire_sha256)!=64:raise ValueError('missing original ROS wire fingerprint')
             h=msg.header;stamp=h.stamp.secs+h.stamp.nsecs/1e9
@@ -433,6 +434,7 @@ class RangeEngine:
         decode_ms = (time.perf_counter() - stage) * 1000.0
         stage = time.perf_counter()
 
+        self.instant_tracker.diagnostics = bool(self.diagnostics)
         cur_up = self.ground_refiner.normal
         cur_offset = self.ground_refiner.offset_m
         instant_out = self.instant_tracker.step(
@@ -562,6 +564,8 @@ class RangeEngine:
                 status='adaptive_ready', declaration='instant_adaptive_far_bg',
                 configSha256=self.instant_config_sha,
                 validCells=instant_out['valid_cells'], fgSeedCells=instant_out['fg_seed_cells'],
+                radialSeedMarginM=round(float(self.instant_tracker.settings['fg_margin_mm']) * 0.001, 4),
+                radialGrowMarginM=round(float(self.instant_tracker.settings['bg_grow_margin_mm']) * 0.001, 4),
             ),
             ground=self.ground_status,
             fallEvidence=instant_out['fall_evidence'],
@@ -620,7 +624,9 @@ class RangeEngine:
                     tracks=[
                         dict(
                             {k: t.get(k) for k in ('track_id', 'status', 'component_ids', 'selection_score',
-                                                   'reason', 'fall_state', 'drop_top_m', 'vel_top_mps', 'still_sec')},
+                                                   'reason', 'fall_state', 'last_observed_fall_state',
+                                                   'missed_echo_state', 'suspected_episode_id',
+                                                   'miss_frames', 'drop_top_m', 'vel_top_mps', 'still_sec')},
                             point_count=int(t.get('point_count') or 0),
                         )
                         for t in record['tracks'][:32]
@@ -629,7 +635,7 @@ class RangeEngine:
                     associationEdges={}, associationEdgeCount=0,
                     compositions=[], ambiguousComponentIds=[], ambiguousComponentCount=0,
                 ),
-                detail=None,
+                detail=instant_out.get('diagnostics_detail') if self.diagnostics else None,
             ),
         )
         if self.human_physical_v1 and phys_out is not None:

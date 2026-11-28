@@ -23,6 +23,7 @@ const VERT_SHADER = `
   attribute float aFlag;
   uniform mat4 uLevelMatrix;
   uniform float uBaseSize;
+  uniform float uPixelRatio;
   uniform int uColorMode;
   varying vec3 vColor;
   varying float vAlpha;
@@ -60,8 +61,9 @@ const VERT_SHADER = `
     bool bFg = mod(floor(f / 8.0), 2.0) >= 0.5;
 
     float depth = max(0.8, -mvPos.z);
-    float boost = (bTarget || bRec) ? 1.42 : (bOther ? 1.18 : 1.0);
-    gl_PointSize = clamp(uBaseSize * boost * (5.2 / depth), 2.0, 18.0);
+    float boost = (bTarget || bRec) ? 1.24 : (bOther ? 1.10 : 1.0);
+    float maxPx = clamp(uBaseSize * 2.4, 3.0, 10.5) * uPixelRatio;
+    gl_PointSize = clamp(uBaseSize * boost * uPixelRatio * (3.6 / depth), 1.2 * uPixelRatio, maxPx);
 
     float distFade = 1.0 - smoothstep(6.5, 13.5, length(position));
     vAlpha = (bTarget || bRec || bOther) ? 0.98 : mix(0.28, 0.78, distFade);
@@ -103,10 +105,9 @@ const FRAG_SHADER = `
     vec2 uv = gl_PointCoord * 2.0 - 1.0;
     float r2 = dot(uv, uv);
     if (r2 > 1.0) discard;
-    float halo = 1.0 - smoothstep(0.25, 1.0, r2);
-    float core = exp(-r2 * 4.2);
-    vec3 col = vColor * (0.72 + 0.55 * core);
-    gl_FragColor = vec4(col, halo * vAlpha);
+    float edge = 1.0 - smoothstep(0.60, 1.0, r2);
+    vec3 col = vColor * (0.90 + 0.18 * (1.0 - r2));
+    gl_FragColor = vec4(col, edge * vAlpha);
   }
 `;
 
@@ -273,6 +274,7 @@ export class View3D {
     this.cloudGeo.setAttribute("aFlag", this.flagAttr);
     this.cloudGeo.setDrawRange(0, 0);
 
+    this.pointSize = 2.4;
     this.levelMat4 = new THREE.Matrix4();
     this.cloudMat = new THREE.ShaderMaterial({
       vertexShader: VERT_SHADER,
@@ -281,7 +283,8 @@ export class View3D {
       depthWrite: true,
       uniforms: {
         uLevelMatrix: { value: this.levelMat4 },
-        uBaseSize: { value: 6.5 },
+        uBaseSize: { value: this.pointSize },
+        uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
         uColorMode: { value: 0 },
       },
     });
@@ -362,6 +365,14 @@ export class View3D {
     return COLOR_LEGEND_META[mode] || COLOR_LEGEND_META.height;
   }
 
+  setPointSize(size) {
+    const clamped = Math.max(1.0, Math.min(6.0, Number(size) || 2.4));
+    this.pointSize = clamped;
+    if (this.supported) {
+      this.cloudMat.uniforms.uBaseSize.value = clamped;
+    }
+  }
+
   setLeveling(enabled) {
     this.useLeveling = Boolean(enabled);
     this._refreshGeometryOverlays();
@@ -416,18 +427,24 @@ export class View3D {
     this.currentFrameIdx = Number(st.frame_index || 0);
 
     if (st.mode === "live") {
-      const key = `${st.session_id || ""}:${st.time_epoch ?? 0}:${st.track_id || ""}`;
-      if (!st.track_id || key !== this.liveTrailKey) {
+      const pStatus = st.pairing?.status || "matched";
+      if (pStatus === "expired" || pStatus === "invalid_source" || pStatus === "unpaired") {
         this.liveTrail = [];
-        this.liveTrailKey = st.track_id ? key : null;
-      }
-      if (st.track_id && lr.bbox) {
-        this.liveTrail.push({
-          center_raw: lr.bbox.raw?.center || null,
-          center_leveled: lr.bbox.leveled?.center || null,
-        });
-        if (this.liveTrail.length > MAX_TRAIL_FRAMES) {
-          this.liveTrail.shift();
+        this.liveTrailKey = null;
+      } else if (pStatus !== "awaiting_state") {
+        const key = `${st.session_id || ""}:${st.time_epoch ?? 0}:${st.track_id || ""}`;
+        if (!st.track_id || key !== this.liveTrailKey) {
+          this.liveTrail = [];
+          this.liveTrailKey = st.track_id ? key : null;
+        }
+        if (st.track_id && lr.bbox) {
+          this.liveTrail.push({
+            center_raw: lr.bbox.raw?.center || null,
+            center_leveled: lr.bbox.leveled?.center || null,
+          });
+          if (this.liveTrail.length > MAX_TRAIL_FRAMES) {
+            this.liveTrail.shift();
+          }
         }
       }
     } else if (this.liveTrail.length) {

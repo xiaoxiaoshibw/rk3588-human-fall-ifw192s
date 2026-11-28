@@ -492,6 +492,20 @@ export const REASON_CODE_MAP = {
   kinematic_descending: "运动学高度下降中",
   kinematic_suspected: "运动学疑似倒地（非真值）",
 
+  // 实时同源配对状态与未配对原因
+  awaiting_board_state: "等待同源板端识别结果",
+  wire_sha256_mismatch: "原始点云 SHA 不一致（拒绝叠加）",
+  missing_wire_sha256: "缺少原始点云 SHA（拒绝叠加）",
+  missing_source_header: "缺少源帧头信息",
+  source_time_rewind: "源序号或时间戳回拨",
+  source_rows_out_of_bounds: "目标源点行号越界",
+  duplicate_source_rows: "目标源点行号重复",
+  recognition_result_expired: "识别结果已超时过期",
+  preview_sha256_mismatch: "预览图 SHA 校验失败",
+  last_suspected_missing_echo: "上次疑似 · 当前缺测",
+  lost_after_suspected: "疑似后失联（缺测）",
+  echo_lost_unknown: "失联 / 当前缺测",
+
   // full_body_recovery 状态与拒绝原因
   recovered_ok: "局部肢体回收成功",
   no_addition: "无新增可连接点",
@@ -519,4 +533,16 @@ export function translatePosture(state) {
 
 export function translateBeliefState(state) {
   return BELIEF_STATE_MAP[state] || BELIEF_STATE_MAP.UNKNOWN;
+}
+
+export function translatePairingStatus(pairing) {
+  if (!pairing || typeof pairing !== "object") {
+    return { label: "同源", tone: "ok" };
+  }
+  const st = pairing.status;
+  if (st === "matched") return { label: "同源匹配", tone: "ok" };
+  if (st === "awaiting_state") return { label: "等待同帧结果", tone: "warn" };
+  if (st === "expired") return { label: "结果已过期", tone: "danger" };
+  if (st === "invalid_source") return { label: "源帧失效", tone: "danger" };
+  return { label: `未配对(${translateReasonCode(pairing.reason || st)})`, tone: "danger" };
 }

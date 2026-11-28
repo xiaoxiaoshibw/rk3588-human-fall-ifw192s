@@ -111,12 +111,14 @@ export class View2D {
         }
         return;
       }
+      this._previewToken += 1;
       this._previewB64 = null;
       this._previewImg = null;
       this.ctxRange.fillStyle = "#05080d";
       this.ctxRange.fillRect(0, 0, this.width, this.height);
       return;
     }
+    this._previewToken += 1;
     this._previewB64 = null;
     this._previewImg = null;
 
@@ -223,8 +225,15 @@ export class View2D {
   _updateReadout() {
     if (!this.lastFrame || !this.lastFrame.rangeMm?.length) {
       if (this.lastFrame?.state?.stream_mode === "json_only") {
+        const hasPrev = Boolean(this.lastFrame?.state?.local_range?.preview);
+        const pairSt = this.lastFrame?.state?.pairing?.status || "matched";
+        const msg = hasPrev
+          ? "板端纯 JSON 预览图 (192×256 PNG · 低带宽)"
+          : pairSt === "invalid_source"
+            ? "当前无有效源帧 · 已清空旧预览"
+            : "等待当前源帧 2D 预览图 · 不复用旧帧";
         this.readoutEl.innerHTML =
-          `<span>板端纯 JSON 预览图 (192×256 PNG · 低带宽)</span>` +
+          `<span>${msg}</span>` +
           `<span class="color-scale-mini"><i style="background:#ff3b30"></i>0.1m → <i style="background:#4ade80"></i>4m → <i style="background:#3b82f6"></i>8m</span>`;
         return;
       }

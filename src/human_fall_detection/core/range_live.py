@@ -9,6 +9,10 @@ from .capture_input import ROW_DTYPE
 from .node_runtime import LatestFrameQueue
 
 
+_FAST_DST_V18 = np.dtype(dict(names=('head18', 'timestamp'), formats=('V18', '<f4'), offsets=(0, 20), itemsize=28))
+_FAST_SRC_CACHE = {}
+
+
 def pointcloud_rows(msg):
     """按消息声明读取，保留所有点及行号；只在边界打包一次为ScanGrid输入。
 
@@ -43,8 +47,28 @@ def pointcloud_rows(msg):
         formats.append(dtype)
         offsets.append(start)
         intervals.append((start, end))
-    packed = np.zeros(width * height, dtype=ROW_DTYPE)
-    if not len(packed):
+    n = width * height
+    packed = np.zeros(n, dtype=ROW_DTYPE)
+    if not n:
+        return packed
+    # 小端连续标准布局快路径：前 18 字节 (x,y,z,intensity,ring) 与 ROW_DTYPE 逐字节一致，
+    # 合并为单次 18 字节块拷贝 + 1 次时间戳转换，避免 5 次跨步字段拷贝。
+    if (not msg.is_bigendian and stride == width * step
+            and offsets[:5] == [0, 4, 8, 12, 16]):
+        ts_off, ts_fmt = offsets[5], formats[5]
+        key = (step, ts_off, ts_fmt.str)
+        src_dt = _FAST_SRC_CACHE.get(key)
+        if src_dt is None:
+            src_dt = np.dtype(dict(names=('head18', 'timestamp'),
+                                   formats=('V18', ts_fmt),
+                                   offsets=(0, ts_off),
+                                   itemsize=step))
+            _FAST_SRC_CACHE[key] = src_dt
+        src = np.ndarray((n,), dtype=src_dt, buffer=data)
+        dst = packed.view(_FAST_DST_V18)
+        dst['head18'] = src['head18']
+        with np.errstate(over='raise', invalid='ignore'):
+            dst['timestamp'] = src['timestamp']
         return packed
     dtype = np.dtype(dict(names=names, formats=formats, offsets=offsets, itemsize=step))
     view = np.ndarray((height, width), dtype=dtype, buffer=data, strides=(stride, step))
@@ -56,9 +80,12 @@ def pointcloud_rows(msg):
 
 
 def preview_rgb(frame):
-    rgb = np.zeros(frame.valid.shape + (3,), dtype=np.uint8)
-    t = np.clip((frame.range_m[frame.valid] - .1) / 7.9, 0, 1)
-    rgb[frame.valid] = np.column_stack((255*(1-t), 255*(1-np.abs(2*t-1)), 255*t)).astype('u1')
+    v = frame.valid
+    rgb = np.zeros(v.shape + (3,), dtype=np.uint8)
+    t = np.clip((frame.range_m[v] - 0.1) * (1.0 / 7.9), 0.0, 1.0)
+    rgb[:, :, 0][v] = (255.0 * (1.0 - t)).astype(np.uint8)
+    rgb[:, :, 1][v] = (255.0 * (1.0 - np.abs(2.0 * t - 1.0))).astype(np.uint8)
+    rgb[:, :, 2][v] = (255.0 * t).astype(np.uint8)
     return rgb[::-1, ::-1]
 
 

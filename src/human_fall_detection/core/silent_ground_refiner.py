@@ -216,22 +216,24 @@ class GravityUpEstimator:
     def feed_imu(self, ax, ay, az, gx=0.0, gy=0.0, gz=0.0, stamp_s=None):
         """喂入单帧三轴加速度/角速度（m/s^2, rad/s）；仅静止样本参与重力方向估计。"""
         cfg = self.settings
-        vals = (ax, ay, az, gx, gy, gz)
         try:
-            fvals = [float(v) for v in vals]
+            fax = float(ax); fay = float(ay); faz = float(az)
+            fgx = float(gx); fgy = float(gy); fgz = float(gz)
         except (TypeError, ValueError):
             with self._lock:
                 self._imu_rejected += 1
             return False
-        if not all(math.isfinite(v) for v in fvals):
+        if not (math.isfinite(fax) and math.isfinite(fay) and math.isfinite(faz)
+                and math.isfinite(fgx) and math.isfinite(fgy) and math.isfinite(fgz)):
             with self._lock:
                 self._imu_rejected += 1
             return False
         sx, sy, sz = cfg["imu_axis_signs"]
-        acc = np.array([fvals[0] * sx, fvals[1] * sy, fvals[2] * sz], dtype=np.float64)
-        gyro = np.array([fvals[3], fvals[4], fvals[5]], dtype=np.float64)
-        acc_norm = float(np.linalg.norm(acc))
-        gyro_norm = float(np.linalg.norm(gyro))
+        ax_s = fax * sx
+        ay_s = fay * sy
+        az_s = faz * sz
+        acc_norm = math.sqrt(ax_s * ax_s + ay_s * ay_s + az_s * az_s)
+        gyro_norm = math.sqrt(fgx * fgx + fgy * fgy + fgz * fgz)
         if not (cfg["imu_norm_min_m_s2"] <= acc_norm <= cfg["imu_norm_max_m_s2"]):
             with self._lock:
                 self._imu_rejected += 1
@@ -240,35 +242,55 @@ class GravityUpEstimator:
             with self._lock:
                 self._imu_rejected += 1
             return False
-        unit_up = acc / acc_norm
-        if float(unit_up[2]) < cfg["imu_min_up_z"]:
+        inv_norm = 1.0 / acc_norm
+        ux = ax_s * inv_norm
+        uy = ay_s * inv_norm
+        uz = az_s * inv_norm
+        if uz < cfg["imu_min_up_z"]:
             with self._lock:
                 self._imu_rejected += 1
             return False
 
         with self._lock:
             self._imu_samples += 1
-            if stamp_s is not None and math.isfinite(float(stamp_s)):
-                self._imu_last_stamp = float(stamp_s)
+            if stamp_s is not None:
+                fs = float(stamp_s)
+                if math.isfinite(fs):
+                    self._imu_last_stamp = fs
             if self._imu_ema is None:
-                self._imu_ema = unit_up.copy()
+                self._imu_ema = np.array([ux, uy, uz], dtype=np.float64)
             else:
                 alpha = (cfg["imu_ema_alpha_init"]
                          if self._imu_samples <= cfg["imu_min_samples"] * 3
                          else cfg["imu_ema_alpha_steady"])
-                blended = (1.0 - alpha) * self._imu_ema + alpha * unit_up
-                bn = float(np.linalg.norm(blended))
+                one_m = 1.0 - alpha
+                ema = self._imu_ema
+                bx = one_m * float(ema[0]) + alpha * ux
+                by = one_m * float(ema[1]) + alpha * uy
+                bz = one_m * float(ema[2]) + alpha * uz
+                bn = math.sqrt(bx * bx + by * by + bz * bz)
                 if bn > 1e-9:
-                    self._imu_ema = blended / bn
+                    inv_bn = 1.0 / bn
+                    ema[0] = bx * inv_bn
+                    ema[1] = by * inv_bn
+                    ema[2] = bz * inv_bn
 
             if self._imu_samples >= cfg["imu_min_samples"]:
                 if self._source != "imu_static_gravity":
                     self._committed_up = self._imu_ema.copy()
                     self._source = "imu_static_gravity"
                     self._revision += 1
-                elif _angle_deg(self._committed_up, self._imu_ema) >= cfg["imu_commit_angle_deg"]:
-                    self._committed_up = self._imu_ema.copy()
-                    self._revision += 1
+                else:
+                    cu = self._committed_up
+                    em = self._imu_ema
+                    dot = float(cu[0]) * float(em[0]) + float(cu[1]) * float(em[1]) + float(cu[2]) * float(em[2])
+                    if dot < -1.0:
+                        dot = -1.0
+                    elif dot > 1.0:
+                        dot = 1.0
+                    if math.degrees(math.acos(dot)) >= cfg["imu_commit_angle_deg"]:
+                        self._committed_up = em.copy()
+                        self._revision += 1
         return True
 
     def snapshot(self):
@@ -542,7 +564,9 @@ class SilentGroundRefiner:
         self._update_foot_consistency()
 
     def _update_foot_consistency(self):
-        if self._offset_m is None or self._foot_offset_m is None:
+        # 仅在取得独立静态地面平面 (STAGE_REFINED_PLANE) 后才计算与足端估计的交叉残差；
+        # 脚底兜底阶段 (STAGE_FOOT_ANCHORED) 下平面零点本身来自足端，严禁自证一致。
+        if self._stage != STAGE_REFINED_PLANE or self._offset_m is None or self._foot_offset_m is None:
             self._foot_consistent = None
             self._foot_residual_m = None
             return
@@ -772,17 +796,29 @@ class SilentGroundRefiner:
             else float(self.settings["nominal_display_offset_m"])
         )
         available = self._offset_m is not None
+        independent_plane = self._stage == STAGE_REFINED_PLANE
         if self._stage == STAGE_REFINED_PLANE:
             reason = "silent_refined_plane"
+            offset_source = "independent_static_plane"
         elif self._stage == STAGE_FOOT_ANCHORED:
             reason = "silent_foot_anchored"
+            offset_source = "upright_foot_anchor_only"
         else:
             reason = "gravity_only_refining"
+            offset_source = "none"
+        if self._foot_offset_m is None:
+            foot_xcheck_status = "no_foot_samples"
+        elif independent_plane:
+            foot_xcheck_status = "compared_to_independent_plane"
+        else:
+            foot_xcheck_status = "awaiting_independent_plane"
         return {
             "available": available,
             "reason": reason,
             "refinementStage": self._stage,
             "refinementSource": self._source,
+            "offsetSource": offset_source,
+            "independentPlaneAvailable": independent_plane,
             "gravitySource": gsnap["source"],
             "imuSamples": gsnap["imu_samples"],
             "imuExtrinsicsVerified": False,
@@ -793,6 +829,8 @@ class SilentGroundRefiner:
             "lastCheckReason": self._last_check_reason,
             "quality": dict(self._quality) if self._quality is not None else None,
             "footSamples": len(self._foot_samples),
+            "footAnchorOffsetM": None if self._foot_offset_m is None else round(self._foot_offset_m, 4),
+            "footCrossCheckStatus": foot_xcheck_status,
             "footConsistent": self._foot_consistent,
             "footResidualM": None if self._foot_residual_m is None else round(self._foot_residual_m, 4),
             "physicalGroundTruth": "UNKNOWN",

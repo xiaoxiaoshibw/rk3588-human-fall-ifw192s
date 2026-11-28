@@ -20,7 +20,14 @@ from aiohttp import WSMsgType, web
 
 from camera_hub import LiveCameraHub
 from live_source import LiveSource, probe_board
-from replay_source import ReplayManager, ReplaySessionData, validate_sid
+from replay_source import (
+    REPLAY_MODE_BOARD_CAUSAL,
+    REPLAY_MODE_OFFLINE_RESEARCH,
+    ReplayManager,
+    ReplaySessionData,
+    VALID_REPLAY_MODES,
+    validate_sid,
+)
 
 WEB_ROOT = Path(__file__).resolve().parent / "web"
 
@@ -36,6 +43,7 @@ class ClientSessionHandler:
         self.ws = ws
         self.ctx = ctx
         self.mode = "replay"  # replay | live
+        self.replay_mode = REPLAY_MODE_OFFLINE_RESEARCH
         self.session: ReplaySessionData | None = None
         self.frame_index = 0
         self.playing = False
@@ -86,6 +94,7 @@ class ClientSessionHandler:
             {
                 "type": "playback_state",
                 "mode": self.mode,
+                "replay_mode": self.replay_mode,
                 "sid": self.session.sid if self.session else None,
                 "playing": self.playing,
                 "rate": self.rate,
@@ -184,6 +193,10 @@ class ClientSessionHandler:
         if action == "open":
             sid = str(cmd.get("sid") or "")
             initial_frame = int(cmd.get("frame") or 0)
+            req_rm = str(cmd.get("replay_mode") or REPLAY_MODE_OFFLINE_RESEARCH)
+            if req_rm not in VALID_REPLAY_MODES:
+                raise ValueError(f"unsupported replay_mode: {req_rm!r}")
+            self.replay_mode = req_rm
             if "decimation" in cmd:
                 self.decimation = max(1, min(16, int(cmd["decimation"])))
             await self._stop_play_task()
@@ -194,7 +207,7 @@ class ClientSessionHandler:
             if self._open_task is not None and not self._open_task.done():
                 self._open_task.cancel()
                 await asyncio.gather(self._open_task, return_exceptions=True)
-            self._open_task = asyncio.create_task(self._open_session_job(sid, initial_frame, gen))
+            self._open_task = asyncio.create_task(self._open_session_job(sid, initial_frame, gen, req_rm))
 
         elif action == "play":
             if self.mode != "replay" or self.session is None:
@@ -275,7 +288,7 @@ class ClientSessionHandler:
         else:
             self.send_text({"type": "error", "code": "unknown_cmd", "message": f"未知命令: {action}"})
 
-    async def _open_session_job(self, sid: str, initial_frame: int, gen: int) -> None:
+    async def _open_session_job(self, sid: str, initial_frame: int, gen: int, replay_mode: str = REPLAY_MODE_OFFLINE_RESEARCH) -> None:
         loop = asyncio.get_running_loop()
 
         def on_progress(stage: str, current: int, total: int, message: str) -> None:
@@ -286,6 +299,7 @@ class ClientSessionHandler:
                 {
                     "type": "loading",
                     "sid": sid,
+                    "replay_mode": replay_mode,
                     "stage": stage,
                     "current": current,
                     "total": total,
@@ -294,7 +308,12 @@ class ClientSessionHandler:
             )
 
         try:
-            session_obj = await asyncio.to_thread(self.ctx.replay_manager.open_session, sid, on_progress)
+            session_obj = await asyncio.to_thread(
+                self.ctx.replay_manager.open_session,
+                sid,
+                on_progress,
+                replay_mode=replay_mode,
+            )
             if self._closed or gen != self._open_gen:
                 return
             self.session = session_obj
@@ -303,6 +322,7 @@ class ClientSessionHandler:
                 {
                     "type": "session_ready",
                     "sid": sid,
+                    "replay_mode": replay_mode,
                     "summary": session_obj.summary,
                 }
             )
@@ -416,14 +436,20 @@ def create_app(
         return web.FileResponse(target)
 
     async def handle_sessions(request: web.Request) -> web.Response:
-        sessions = await asyncio.to_thread(ctx.replay_manager.list_sessions)
-        return web.json_response({"sessions": sessions})
+        rm = request.query.get("replay_mode", REPLAY_MODE_OFFLINE_RESEARCH)
+        if rm not in VALID_REPLAY_MODES:
+            rm = REPLAY_MODE_OFFLINE_RESEARCH
+        sessions = await asyncio.to_thread(ctx.replay_manager.list_sessions, rm)
+        return web.json_response({"sessions": sessions, "replay_mode": rm})
 
     async def handle_session_summary(request: web.Request) -> web.Response:
         sid = request.match_info["sid"]
+        rm = request.query.get("replay_mode", REPLAY_MODE_OFFLINE_RESEARCH)
+        if rm not in VALID_REPLAY_MODES:
+            return web.json_response({"error": f"unsupported replay_mode: {rm}"}, status=400)
         try:
             validate_sid(sid, ctx.replay_manager.sessions_root)
-            s = await asyncio.to_thread(ctx.replay_manager.open_session, sid)
+            s = await asyncio.to_thread(ctx.replay_manager.open_session, sid, replay_mode=rm)
             return web.json_response(s.summary)
         except ValueError as exc:
             return web.json_response({"error": str(exc)}, status=400)

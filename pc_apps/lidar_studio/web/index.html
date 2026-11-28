@@ -28,6 +28,11 @@
           <option value="">正在读取会话列表…</option>
         </select>
 
+        <select id="replayModeSelect" class="session-select" aria-label="选择回放算法模式" title="切换板端因果回放（与 RK3588 同算法，从第0帧起）或离线整段研究模式">
+          <option value="board_causal" selected>板端因果 (instant-start · 0帧起)</option>
+          <option value="offline_research">离线整段研究 (非因果背景)</option>
+        </select>
+
         <select id="liveStreamSelect" class="session-select hidden" aria-label="实时订阅模式" title="选择板端纯 JSON（低带宽）或附加原始 3D 点云">
           <option value="json_only" selected>板端纯 JSON（低带宽）</option>
           <option value="cloud_and_json">板端 JSON + 3D 点云</option>
@@ -96,6 +101,12 @@
             <button class="hud-btn toggle active" id="btnSkeleton" title="几何区域骨架（非人体关节）">骨架</button>
             <button class="hud-btn toggle active" id="btnBbox">包围盒</button>
             <button class="hud-btn toggle active" id="btnTrail">尾迹</button>
+          </div>
+
+          <div class="hud-group hud-slider-group" title="调整 3D 点云显示尺寸">
+            <span class="hud-slider-label">点大小</span>
+            <input id="pointSizeSlider" class="hud-slider" type="range" min="1.0" max="6.0" step="0.2" value="2.4" aria-label="3D 点大小">
+            <span id="pointSizeVal" class="hud-slider-val mono">2.4</span>
           </div>
         </div>
 

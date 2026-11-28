@@ -68,6 +68,14 @@ class LidarStudioApp {
       }
     });
 
+    $("replayModeSelect").addEventListener("change", () => {
+      if (this.mode === "replay" && this.currentSid) {
+        const curFrame = this.lastDecoded?.state?.frame_index ?? 0;
+        this.refreshSessions();
+        this.openSession(this.currentSid, curFrame);
+      }
+    });
+
     $("liveStreamSelect").addEventListener("change", () => {
       if (this.mode === "live") {
         const sm = $("liveStreamSelect").value || "json_only";
@@ -132,6 +140,26 @@ class LidarStudioApp {
     bindToggle("btnSkeleton", (v) => this.view3d.setShowSkeleton(v));
     bindToggle("btnBbox", (v) => this.view3d.setShowBbox(v));
     bindToggle("btnTrail", (v) => this.view3d.setShowTrail(v));
+
+    // 3D 点大小滑块
+    const ptSlider = $("pointSizeSlider");
+    const ptVal = $("pointSizeVal");
+    if (ptSlider) {
+      const saved = Number(window.localStorage?.getItem("lidarStudio.pointSize"));
+      if (Number.isFinite(saved) && saved >= 1.0 && saved <= 6.0) {
+        ptSlider.value = saved.toFixed(1);
+        this.view3d.setPointSize(saved);
+        if (ptVal) ptVal.textContent = saved.toFixed(1);
+      }
+      ptSlider.addEventListener("input", () => {
+        const sz = Number(ptSlider.value);
+        this.view3d.setPointSize(sz);
+        if (ptVal) ptVal.textContent = sz.toFixed(1);
+        try {
+          window.localStorage?.setItem("lidarStudio.pointSize", sz.toFixed(1));
+        } catch (_) {}
+      });
+    }
 
     // 2D 开关
     bindToggle("btnMaskTarget", (v) => this.view2d.setShowTargetMask(v));
@@ -212,7 +240,8 @@ class LidarStudioApp {
 
   async refreshSessions() {
     try {
-      const resp = await fetch("/api/sessions");
+      const rm = $("replayModeSelect")?.value || "board_causal";
+      const resp = await fetch(`/api/sessions?replay_mode=${encodeURIComponent(rm)}`);
       const data = await resp.json();
       this.sessions = data.sessions || [];
       const sel = $("sessionSelect");
@@ -297,6 +326,7 @@ class LidarStudioApp {
     const isLive = targetMode === "live";
     $("timelineDock").classList.toggle("hidden", isLive);
     $("sessionSelect").classList.toggle("hidden", isLive);
+    $("replayModeSelect")?.classList.toggle("hidden", isLive);
     $("liveStreamSelect").classList.toggle("hidden", !isLive);
 
     if (isLive) {
@@ -331,9 +361,13 @@ class LidarStudioApp {
     this.playing = false;
     this._updatePlayBtn();
     this.cameraPanel.clearCache();
+    const replayMode = $("replayModeSelect")?.value || "board_causal";
     this.showOverlay({
       title: `正在准备 ${sid}`,
-      desc: "首次打开将运行整段背景与 human_physical_v1 推理并写入本地缓存…",
+      desc:
+        replayMode === "board_causal"
+          ? "首次打开将按板端 instant-start 因果链从第 0 帧逐帧推算并写入独立缓存…"
+          : "首次打开将运行离线整段背景与 human_physical_v1 推理并写入本地缓存…",
       pct: 5,
       meta: "连接后端…",
     });
@@ -341,6 +375,7 @@ class LidarStudioApp {
       cmd: "open",
       sid,
       frame: initialFrame,
+      replay_mode: replayMode,
       decimation: Number($("decimSelect").value || 2),
     });
   }

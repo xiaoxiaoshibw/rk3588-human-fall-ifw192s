@@ -13,9 +13,12 @@ if str(STUDIO_DIR) not in sys.path:
 
 from protocol import FLAG_TARGET_CORE, unpack_frame  # noqa: E402
 from replay_source import (  # noqa: E402
+    REPLAY_MODE_BOARD_CAUSAL,
+    REPLAY_MODE_OFFLINE_RESEARCH,
     ReplayManager,
     assert_safe_cache_dir,
     get_shared_grid,
+    run_causal_schedule_simulation,
     validate_session_meta,
     validate_sid,
 )
@@ -235,6 +238,96 @@ class TestReplaySource(unittest.TestCase):
             self.assertLessEqual(abs(unpacked["state"]["camera"]["deltaMs"]), 250.0)
         finally:
             mgr.close_all()
+
+    def test_board_causal_prefix_truncation_seek_and_cache_isolation(self):
+        houdao_dir = REPO_ROOT / "data" / "sessions" / "cap_20261028_houdao"
+        if not houdao_dir.is_dir():
+            self.skipTest("houdao session missing")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            s_root = tmp_root / "sessions"
+            c_root = tmp_root / "cache"
+            s_root.mkdir()
+            # Build truncated 90-frame copy of houdao (frames 0..89 only)
+            full_meta = json.loads((houdao_dir / "meta.json").read_bytes().decode("utf-8-sig"))
+            trunc_n = 90
+            trunc_frames = full_meta["frames"][:trunc_n]
+            total_pts = sum(f["count_points"] for f in trunc_frames)
+            trunc_meta = dict(full_meta, frames=trunc_frames, total_points=total_pts)
+            trunc_dir = s_root / "cap_20261028_houdao_trunc90"
+            trunc_dir.mkdir()
+            (trunc_dir / "meta.json").write_text(json.dumps(trunc_meta), encoding="utf-8")
+            with (houdao_dir / "points.bin").open("rb") as src_fp:
+                (trunc_dir / "points.bin").write_bytes(src_fp.read(total_pts * 28))
+
+            mgr_full = ReplayManager(sessions_root=REPO_ROOT / "data" / "sessions", cache_dir=c_root)
+            mgr_trunc = ReplayManager(sessions_root=s_root, cache_dir=c_root)
+            try:
+                # 1. Board causal replay on full houdao
+                s_full = mgr_full.open_session("cap_20261028_houdao", replay_mode=REPLAY_MODE_BOARD_CAUSAL)
+                self.assertEqual(s_full.summary["replay_mode"], REPLAY_MODE_BOARD_CAUSAL)
+                rmeta = s_full.summary["replay_metadata"]
+                self.assertEqual(rmeta["wire_identity"], "reconstructed_from_session_points_bin")
+                self.assertFalse(rmeta["imu_available"])
+                self.assertEqual(rmeta["mount_pitch_deg"], 26.0)
+                self.assertEqual(rmeta["clock_mode"], "deterministic_source_stamp")
+
+                # Verify known houdao causal landmarks: f73 first suspected, f136 recovered upright
+                first_susp = next((i for i, st in enumerate(s_full.states) if st["fall_status"] == "suspected"), None)
+                first_rec = next((i for i, st in enumerate(s_full.states) if first_susp is not None and i > first_susp and st["fall_status"] == "upright"), None)
+                self.assertEqual(first_susp, 73)
+                self.assertEqual(first_rec, 136)
+
+                # 2. Truncated prefix replay MUST match full replay identically on frames 0..89!
+                s_trunc = mgr_trunc.open_session("cap_20261028_houdao_trunc90", replay_mode=REPLAY_MODE_BOARD_CAUSAL)
+                for i in range(trunc_n):
+                    a, b = s_full.states[i], s_trunc.states[i]
+                    self.assertEqual(a["track_id"], b["track_id"], f"track_id diff at f{i}")
+                    self.assertEqual(a["fall_status"], b["fall_status"], f"fall_status diff at f{i}")
+                    self.assertEqual(a["target_source_rows_sha256"], b["target_source_rows_sha256"], f"rows_sha diff at f{i}")
+                    self.assertEqual(
+                        a["local_range"]["ground"]["refinementStage"],
+                        b["local_range"]["ground"]["refinementStage"],
+                        f"ground_stage diff at f{i}",
+                    )
+
+                # 3. Random seek vs sequential playback byte-identical
+                seq_83 = s_full.get_packed_frame(83, decimation=2)
+                _ = s_full.get_packed_frame(10, decimation=2)
+                _ = s_full.get_packed_frame(136, decimation=2)
+                seek_83 = s_full.get_packed_frame(83, decimation=2)
+                self.assertEqual(seq_83, seek_83)
+
+                # 4. Dual-mode cache isolation: opening offline_research in SAME cache_dir must NOT hit causal cache
+                s_off = mgr_full.open_session("cap_20261028_houdao", replay_mode=REPLAY_MODE_OFFLINE_RESEARCH)
+                self.assertEqual(s_off.summary["replay_mode"], REPLAY_MODE_OFFLINE_RESEARCH)
+                self.assertIsNotNone(s_off.states[83]["human_physical_v1"])
+                self.assertIsNone(s_full.states[83]["human_physical_v1"])
+
+                # 5. Re-opening board_causal hits causal cache directly
+                mgr_full.close_all()
+                stages = []
+                s_hit = mgr_full.open_session(
+                    "cap_20261028_houdao",
+                    progress_cb=lambda st, c, t, m: stages.append(st),
+                    replay_mode=REPLAY_MODE_BOARD_CAUSAL,
+                )
+                self.assertEqual(stages, ["cache_hit"])
+                self.assertEqual(s_hit.states[73]["fall_status"], "suspected")
+
+                # 6. Schedule simulation isolates real intervals / dropped frames / >0.5s timeout
+                sim = run_causal_schedule_simulation(
+                    trunc_dir,
+                    drop_indices={40, 41},
+                    extra_delay_by_index={55: 0.65},
+                )
+                self.assertTrue(sim[40]["dropped_by_schedule"])
+                self.assertEqual(sim[55]["observability"], "invalid")
+                self.assertEqual(sim[55]["acquisition_reason"], "local_input_expired")
+            finally:
+                mgr_full.close_all()
+                mgr_trunc.close_all()
 
 
 if __name__ == "__main__":

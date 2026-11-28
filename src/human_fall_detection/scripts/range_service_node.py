@@ -12,7 +12,7 @@ import time
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from core.range_engine import RangeEngine
 from core.range_image import ScanGrid
-from core.range_service import RangeService, assert_single_publisher, acquire_service_lock
+from core.range_service import RangeService, RawCloudWire, assert_single_publisher, acquire_service_lock
 from core.range_fit_job import GroundFitJob
 from core.range_site_ground import save_fit
 from core.range_initialization import SiteInitialization
@@ -85,7 +85,10 @@ def main(argv=None):
         mount_pitch_deg=args.mount_pitch_deg,
         mount_roll_deg=args.mount_roll_deg)
     engine.diagnostics = args.diagnostics
-    service = RangeService(engine, args.release_id, preview=config.get('preview', True))
+    service = RangeService(
+        engine, args.release_id, preview=config.get('preview', True),
+        preview_compress_level=1 if args.instant_start else 6,
+    )
     with acquire_service_lock(config['state_topic']):
         return serve(args, config, effective, config_bytes, grid, engine, service)
 
@@ -106,19 +109,39 @@ def serve(args, config, effective, config_bytes, grid, engine, service):
     stop = threading.Event()
     guard = None
 
+    any_msg_cls = getattr(rospy, 'AnyMsg', None)
+
     def callback(msg):
         now = time.monotonic()
         if guard is not None:
             guard.note_message(now)
-        service.submit(msg)
+        raw_buf = getattr(msg, '_buff', None) if any_msg_cls is not None else None
+        service.submit(RawCloudWire(raw_buf) if raw_buf is not None else msg)
 
-    guard = SubscriptionGuard(lambda: rospy.Subscriber(topic, PointCloud2, callback,
+    cloud_msg_type = any_msg_cls if any_msg_cls is not None else PointCloud2
+    guard = SubscriptionGuard(lambda: rospy.Subscriber(topic, cloud_msg_type, callback,
         queue_size=1, buff_size=2**24), time.monotonic(), watch_messages=True)
     imu_sub = None
     if args.instant_start and not args.disable_imu and args.imu_topic:
         try:
-            from sensor_msgs.msg import Imu as _ImuMsg
-            imu_sub = rospy.Subscriber(args.imu_topic, _ImuMsg, service.submit_imu, queue_size=50)
+            if any_msg_cls is not None:
+                imu_state = [0, 0.0]
+
+                def imu_callback(msg):
+                    # 前 50 个样本全速收敛（约 0.2 s），收敛后按 20 Hz 采样，消除 230 Hz 冗余回调开销
+                    if imu_state[0] >= 50:
+                        now_imu = time.monotonic()
+                        if now_imu - imu_state[1] < 0.05:
+                            return
+                        imu_state[1] = now_imu
+                    if service.submit_imu(msg):
+                        imu_state[0] += 1
+
+                imu_sub = rospy.Subscriber(args.imu_topic, any_msg_cls, imu_callback,
+                                           queue_size=8, buff_size=65536)
+            else:
+                from sensor_msgs.msg import Imu as _ImuMsg
+                imu_sub = rospy.Subscriber(args.imu_topic, _ImuMsg, service.submit_imu, queue_size=50)
         except Exception:
             imu_sub = None
     failure = []
@@ -166,6 +189,8 @@ def serve(args, config, effective, config_bytes, grid, engine, service):
         worker.start()
     next_owner_check = 0.
     updated = getattr(service, 'updated', None)
+    config_sha256 = hashlib.sha256(json.dumps(effective, sort_keys=True).encode()).hexdigest()
+    config_file_sha256 = hashlib.sha256(config_bytes).hexdigest()
     try:
         while not rospy.is_shutdown() and not stop.is_set():
             now = time.monotonic()
@@ -174,18 +199,18 @@ def serve(args, config, effective, config_bytes, grid, engine, service):
                 assert_single_publisher(master.getSystemState()[0], state_topic, rospy.get_name())
                 next_owner_check = now+2.
             # Clear before snapshot: an update landing during publish stays pending
-            # and wakes the next iteration immediately. Test substitutes without the
-            # event keep the fixed 50 ms cadence.
+            # and wakes the next iteration immediately. Heartbeat cap 150 ms (< 500 ms TTL)
+            # avoids duplicate 65 KB PNG re-serialization between 10 Hz frames.
             if updated is not None: updated.clear()
             result = service.snapshot(guard.report())
-            result['service'].update(configSha256=hashlib.sha256(json.dumps(effective,sort_keys=True).encode()).hexdigest(),
-                configFileSha256=hashlib.sha256(config_bytes).hexdigest(),
+            result['service'].update(configSha256=config_sha256,
+                configFileSha256=config_file_sha256,
                 effectiveConfig=effective, initialization=dict(initialization))
             start = time.monotonic()
             service.note_publish_started()
             publisher.publish(String(data=json.dumps(result, allow_nan=False, separators=(',', ':'))))
             service.note_published((time.monotonic()-start)*1000)
-            if updated is not None: updated.wait(.05)
+            if updated is not None: updated.wait(.15)
             else: stop.wait(.05)
     finally:
         stop.set()

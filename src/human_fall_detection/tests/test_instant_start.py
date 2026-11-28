@@ -297,14 +297,37 @@ class SilentGroundRefinerTests(unittest.TestCase):
         est = GravityUpEstimator({"mount_pitch_deg": 26.0, "mount_roll_deg": 0.0})
         refiner = SilentGroundRefiner(est, frame_id="innolidar")
 
-        # No floor plane available; walking upright person feeds foot heights around -1.38 m
+        # Case 1: Only upright foot points (no independent static plane) -> foot_anchored,
+        # source explicitly reported, cross-check residual MUST remain None (no circular self-check!)
         for i in range(12):
             refiner.observe_upright_foot(-1.38 + 0.005 * ((i % 3) - 1), 2.5 + 0.04 * i, 0.1)
         self.assertEqual(refiner.stage, STAGE_FOOT_ANCHORED)
         self.assertAlmostEqual(refiner.offset_m, 1.38, delta=0.02)
-        st = refiner.status_dict("s_foot")
-        self.assertTrue(st["available"])
-        self.assertTrue(st["footConsistent"])
+        st_foot = refiner.status_dict("s_foot")
+        self.assertTrue(st_foot["available"])
+        self.assertEqual(st_foot["offsetSource"], "upright_foot_anchor_only")
+        self.assertFalse(st_foot["independentPlaneAvailable"])
+        self.assertEqual(st_foot["footCrossCheckStatus"], "awaiting_independent_plane")
+        self.assertIsNone(st_foot["footConsistent"])
+        self.assertIsNone(st_foot["footResidualM"])
+        self.assertAlmostEqual(st_foot["footAnchorOffsetM"], 1.38, delta=0.02)
+
+        # Case 2: Independent static floor plane subsequently converges -> cross-check residual computed!
+        for _ in range(15):
+            frame, _ = _render_synthetic_frame(
+                self.grid, self.rays, self.binding,
+                pitch_deg=26.0, roll_deg=0.0, sensor_height_m=1.42, boxes=(),
+            )
+            static_xyz = frame.xyz[frame.source_rows[frame.valid]]
+            refiner.observe_frame(static_xyz)
+        self.assertEqual(refiner.stage, STAGE_REFINED_PLANE)
+        st_ref = refiner.status_dict("s_foot")
+        self.assertEqual(st_ref["offsetSource"], "independent_static_plane")
+        self.assertTrue(st_ref["independentPlaneAvailable"])
+        self.assertEqual(st_ref["footCrossCheckStatus"], "compared_to_independent_plane")
+        self.assertIsNotNone(st_ref["footResidualM"])
+        self.assertAlmostEqual(st_ref["footResidualM"], refiner.offset_m - st_ref["footAnchorOffsetM"], places=3)
+        self.assertTrue(st_ref["footConsistent"])
 
 
 class InstantHumanTrackerTests(unittest.TestCase):
@@ -414,6 +437,198 @@ class InstantHumanTrackerTests(unittest.TestCase):
         self.assertEqual(set(locked_before), set(locked_after), "gravity refinement must not switch track ID")
         for o in outs[20:]:
             self.assertNotIn(o["fall_status"], (FALL_DESCENDING, FALL_SUSPECTED))
+
+    def test_missing_echo_after_suspected_short_long_dedup_and_separate_margins(self):
+        # f0..24 walk -> lock; f25..31 fall; f32..46 stay collapsed (reaches FALL_SUSPECTED);
+        # f47..48: 2-frame short missing echo (person removed from scene);
+        # f49..52: collapsed echoes return (same episode must NOT double count!);
+        # f53..57: 5-frame long missing echo (> short_miss_frames=2, <= max_miss_frames=8):
+        #          top-level AND per-track MUST be FALL_UNKNOWN (NEVER FALL_UPRIGHT!);
+        # f58..63: person stands back up -> measured upright recovery!
+        def boxes(i):
+            if i < 25:
+                y = -0.8 + 0.06 * i
+                return [(2.3, 2.65, y - 0.22, y + 0.22, 0.0, 1.72)]
+            if i < 32:
+                frac = (i - 24) / 7.0
+                top = 1.72 * (1.0 - frac) + 0.34 * frac
+                w_half = 0.22 * (1.0 - frac) + 0.72 * frac
+                return [(2.3, 2.65, 0.64 - w_half, 0.64 + w_half, 0.0, top)]
+            if i < 47:
+                return [(2.3, 2.65, -0.08, 1.36, 0.0, 0.34)]
+            if i in (47, 48):
+                return []  # 2-frame short miss
+            if i < 53:
+                return [(2.3, 2.65, -0.08, 1.36, 0.0, 0.34)]
+            if i < 58:
+                return []  # 5-frame long miss
+            return [(2.3, 2.65, 0.42, 0.86, 0.0, 1.72)]
+
+        outs = self._run_sequence(boxes, 64, ground_offset_fn=lambda _: 1.36)
+        # Confirm suspected achieved before f47
+        self.assertEqual(outs[46]["fall_status"], FALL_SUSPECTED)
+        low_dur_46 = outs[46]["fall_evidence"]["low_duration_s"]
+        self.assertEqual(outs[46]["fall_evidence"]["suspected_episode_count"], 1)
+
+        # Check radial vs physical margins separated in measurement
+        meas_46 = outs[46]["measurement"]
+        self.assertAlmostEqual(meas_46["radialBgSeedMarginM"], 0.22, places=4)
+        self.assertAlmostEqual(meas_46["radialBgGrowMarginM"], 0.14, places=4)
+        self.assertAlmostEqual(meas_46["groundHangingGateM"], 0.95, places=4)
+        self.assertIsNotNone(meas_46["bottomHeightAboveGroundM"])
+        self.assertIsNotNone(meas_46["footP02AboveGroundM"])
+
+        # Short miss (f47, f48): holds "last_suspected_missing_echo", does NOT accumulate low_duration_s
+        for idx in (47, 48):
+            fe = outs[idx]["fall_evidence"]
+            self.assertEqual(outs[idx]["fall_status"], FALL_SUSPECTED)
+            self.assertEqual(fe["observation_status"], "last_suspected_missing_echo")
+            self.assertFalse(fe["measured_this_frame"])
+            self.assertIn("last_suspected_missing_echo", fe["reason_codes"])
+            self.assertEqual(fe["low_duration_s"], low_dur_46, "missing frames must not accumulate low_duration_s")
+            locked_tracks = [t for t in outs[idx]["tracking"]["tracks"] if t["locked_human"]]
+            self.assertEqual(len(locked_tracks), 1)
+            self.assertEqual(locked_tracks[0]["missed_echo_state"], "last_suspected_missing_echo")
+            self.assertFalse(locked_tracks[0]["observed"])
+
+        # Echoes return collapsed (f49..52): SAME episode, counted ONCE (no second new_event!)
+        for idx in range(49, 53):
+            fe = outs[idx]["fall_evidence"]
+            self.assertEqual(outs[idx]["fall_status"], FALL_SUSPECTED)
+            self.assertEqual(fe["suspected_episode_count"], 1)
+            self.assertIsNone(fe["new_event"])
+
+        # Long miss (f55..57, miss_frames = 3..5): top-level AND per-track MUST be FALL_UNKNOWN, NEVER FALL_UPRIGHT!
+        for idx in (55, 56, 57):
+            fe = outs[idx]["fall_evidence"]
+            self.assertEqual(outs[idx]["fall_status"], FALL_UNKNOWN, f"f{idx} top-level must be unknown")
+            self.assertEqual(fe["observation_status"], "lost_after_suspected")
+            self.assertEqual(fe["last_observed_fall_state"], FALL_SUSPECTED)
+            locked_tracks = [t for t in outs[idx]["tracking"]["tracks"] if t["locked_human"]]
+            self.assertEqual(len(locked_tracks), 1)
+            self.assertEqual(locked_tracks[0]["fall_state"], FALL_UNKNOWN, f"f{idx} per-track must NEVER fake FALL_UPRIGHT")
+            self.assertEqual(locked_tracks[0]["missed_echo_state"], "lost_after_suspected")
+            self.assertEqual(locked_tracks[0]["last_observed_fall_state"], FALL_SUSPECTED)
+
+        # Standing back up with new measured observation (f60..63) -> FALL_UPRIGHT!
+        self.assertEqual(outs[-1]["fall_status"], FALL_UPRIGHT)
+        self.assertTrue(outs[-1]["fall_evidence"]["measured_this_frame"])
+
+    def test_diagnostics_opt_in_default_off_and_populates_rejection_reasons(self):
+        g_up = gravity_up_from_pitch_roll(26.0, 0.0)
+        trk_off = InstantHumanTracker(shape=self.grid.shape, gravity_up=g_up, diagnostics=False)
+        trk_on = InstantHumanTracker(shape=self.grid.shape, gravity_up=g_up, diagnostics=True)
+        for i in range(6):
+            # Small elevated hanging object -> rejected by upright geometry
+            y = -0.3 + 0.08 * i
+            boxes = [(2.3, 2.55, y - 0.16, y + 0.16, 1.18, 1.55)]
+            fr, _ = _render_synthetic_frame(self.grid, self.rays, self.binding, pitch_deg=26.0, sensor_height_m=1.36, boxes=boxes)
+            o_off = trk_off.step(fr, 1000.0 + i * 0.104, i, gravity_up=g_up, ground_offset_m=1.36)
+            o_on = trk_on.step(fr, 1000.0 + i * 0.104, i, gravity_up=g_up, ground_offset_m=1.36)
+            self.assertIsNone(o_off["diagnostics_detail"])
+            if i >= 1:
+                self.assertIsNotNone(o_on["diagnostics_detail"])
+                self.assertEqual(o_on["diagnostics_detail"]["version"], 1)
+                if o_on["diagnostics_detail"]["candidates"]:
+                    self.assertIsNotNone(o_on["diagnostics_detail"]["candidates"][0]["upright_reject_reason"])
+
+    def test_step3_vertical_articulation_lock_and_safety_guards(self):
+        g_up = gravity_up_from_pitch_roll(26.0, 0.0)
+
+        # 1. Positive control: person stands up in place with counter-phase upper/lower articulation
+        #    (center horizontal displacement stays < 0.11 m so baseline cannot lock, while Exp B locks!)
+        def inplace_rise(i):
+            if i == 0:
+                return []
+            if i < 5:
+                return [(2.35, 2.70, -0.22, 0.22, 0.0, 0.96)]
+            step = min(14, i - 5)
+            top = 0.96 + step * 0.052
+            shift = 0.075 if (step % 2 == 0) else -0.075
+            return [
+                (2.35 - shift, 2.70 - shift, -0.22, 0.22, 0.0, 0.48),
+                (2.35 + shift, 2.70 + shift, -0.22, 0.22, 0.48, top),
+            ]
+
+        trk_base = InstantHumanTracker(
+            shape=self.grid.shape, gravity_up=g_up,
+            settings={"enable_f0_body_completion": False, "enable_vertical_articulation_lock": False},
+        )
+        trk_vert = InstantHumanTracker(
+            shape=self.grid.shape, gravity_up=g_up,
+            settings={"enable_f0_body_completion": False, "enable_vertical_articulation_lock": True},
+        )
+        base_locked, vert_locked, vert_susp = 0, 0, 0
+        for i in range(28):
+            fr, _ = _render_synthetic_frame(self.grid, self.rays, self.binding, pitch_deg=26.0, sensor_height_m=1.36, boxes=inplace_rise(i))
+            ob = trk_base.step(fr, 1000.0 + i * 0.104, i, gravity_up=g_up, ground_offset_m=1.36)
+            ov = trk_vert.step(fr, 1000.0 + i * 0.104, i, gravity_up=g_up, ground_offset_m=1.36)
+            if ob["tracking"]["target_track_id"]:
+                base_locked += 1
+            if ov["tracking"]["target_track_id"]:
+                vert_locked += 1
+            if ov["fall_status"] == FALL_SUSPECTED:
+                vert_susp += 1
+        self.assertEqual(base_locked, 0, "baseline 0.11m horizontal gate should not lock purely in-place vertical rise")
+        self.assertGreater(vert_locked, 0, "vertical articulation mode must lock in-place rise")
+        self.assertEqual(vert_susp, 0, "standing up must never trigger suspected")
+
+        # 2. Hanging bobbing rigid block (bottom rises/falls with top -> NOT grounded articulation -> 0 lock)
+        def bobbing_block(i):
+            dz = 0.25 * math.sin(i * 0.25)
+            return [(2.3, 2.65, -0.22, 0.22, 0.45 + dz, 1.55 + dz)]
+        outs_bob = self._run_sequence(bobbing_block, 35, ground_offset_fn=lambda _: 1.36)
+        self.assertEqual([o["tracking"]["target_track_id"] for o in outs_bob if o["tracking"]["target_track_id"]], [])
+
+        # 3. Pre-lock rapid squat MUST NOT backfill suspected on vertical admission
+        def rapid_squat(i):
+            if i == 0:
+                return []
+            if i < 6:
+                return [(2.3, 2.65, -0.22, 0.22, 0.0, 1.72)]
+            top = max(0.36, 1.72 - (i - 5) * 0.11)
+            lean = 0.06 * math.sin(i * 0.7)
+            return [(2.3 + lean, 2.65 + lean, -0.22, 0.22, 0.0, top)]
+        outs_sq = self._run_sequence(rapid_squat, 32, ground_offset_fn=lambda _: 1.36)
+        self.assertEqual([i for i, o in enumerate(outs_sq) if o["fall_status"] == FALL_SUSPECTED], [])
+
+        # 4. Gravity basis shift isolates tentative vertical state (static tall object under +4 deg shift -> 0 lock)
+        shifted_g = gravity_up_from_pitch_roll(30.0, 0.0)
+        outs_shift = self._run_sequence(
+            lambda i: [(2.4, 2.75, -0.22, 0.22, 0.0, 1.70)] if i >= 1 else [],
+            22, ground_offset_fn=lambda _: 1.36, gravity_shift_at=(10, shifted_g),
+        )
+        self.assertEqual([o["tracking"]["target_track_id"] for o in outs_shift if o["tracking"]["target_track_id"]], [])
+
+    def test_step3_f0_body_completion_negative_controls_zero_false_lock(self):
+        # Adversarial negative controls under default (Exp A + Exp B enabled) settings:
+        # (a) bird touching thin pole with no gap; (b) bird touching static stand then disconnecting;
+        # (c) planar curtain swaying horizontally in place. All must stay 0 locked, 0 suspected.
+        cases = [
+            ("bird_thin_pole", 35, lambda i: [
+                (2.3, 2.55, -0.18 + 0.06 * math.sin(i * 0.4), 0.18 + 0.06 * math.sin(i * 0.4), 1.14, 1.55),
+                (2.35, 2.43, -0.04, 0.04, 0.0, 1.15),
+            ]),
+            ("bird_stand_disconnect", 40, lambda i: (
+                [(2.3, 2.60, -0.18 + 0.08 * math.sin(i * 0.35), 0.18 + 0.08 * math.sin(i * 0.35), 1.10, 1.52),
+                 (2.3, 2.60, -0.18, 0.18, 0.0, 1.11)] if i < 22 else [(2.3, 2.60, -0.18, 0.18, 0.0, 1.11)]
+            )),
+            ("curtain_sway", 35, lambda i: [
+                (2.5 + 0.04 * math.sin(i * 0.4), 2.54 + 0.04 * math.sin(i * 0.4), -0.35, 0.35, 0.0, 1.75),
+            ]),
+        ]
+        for name, n_frames, fn in cases:
+            outs = self._run_sequence(fn, n_frames, ground_offset_fn=lambda _: 1.36)
+            self.assertEqual(
+                [i for i, o in enumerate(outs) if o["tracking"]["target_track_id"]],
+                [],
+                msg=f"{name} must not false-lock",
+            )
+            self.assertEqual(
+                [i for i, o in enumerate(outs) if o["fall_status"] == FALL_SUSPECTED],
+                [],
+                msg=f"{name} must not false-suspect",
+            )
 
 
 class InstantEngineServiceNodeIntegrationTests(unittest.TestCase):
@@ -548,8 +763,94 @@ class InstantEngineServiceNodeIntegrationTests(unittest.TestCase):
                 "--instant-start", "--declare-empty-prefix",
             ])
 
+    def test_raw_wire_cloud_and_imu_parity_and_vectorized_bfs_oracle(self):
+        from collections import deque
+        from core.instant_tracker import _bfs_single_component_mm
+        from core.range_png import png as encode_png
+        from core.range_service import RawCloudWire
+
+        # 1. Vectorized _bfs_single_component_mm matches independent pixel BFS oracle on random grids
+        rng = np.random.RandomState(20261125)
+        for _ in range(25):
+            grow = rng.rand(18, 22) > 0.35
+            depth = rng.randint(1000, 3000, size=(18, 22), dtype=np.int32)
+            sr, sc = int(rng.randint(0, 18)), int(rng.randint(0, 22))
+            vr, vc = _bfs_single_component_mm(grow, depth, sr, sc, 200)
+            got = sorted(zip(vr.tolist(), vc.tolist()))
+            expected = []
+            if grow[sr, sc]:
+                vis = {(sr, sc)}
+                q = deque([(sr, sc)])
+                while q:
+                    r, c = q.popleft()
+                    expected.append((r, c))
+                    for nr in range(max(0, r - 1), min(18, r + 2)):
+                        for nc in range(max(0, c - 1), min(22, c + 2)):
+                            if (nr, nc) not in vis and grow[nr, nc] and abs(int(depth[nr, nc]) - int(depth[r, c])) <= 200:
+                                vis.add((nr, nc))
+                                q.append((nr, nc))
+                expected.sort()
+            self.assertEqual(got, expected)
+
+        # 2. RawCloudWire + raw ROS1 Imu bytes match typed messages identically
+        now_a, now_b = [1000.0], [1000.0]
+        eng_a = RangeEngine(self.grid, "innolidar", identity=dict(self.identity), clock=lambda: now_a[0], instant_start=True)
+        eng_b = RangeEngine(self.grid, "innolidar", identity=dict(self.identity), clock=lambda: now_b[0], instant_start=True)
+        svc_a = RangeService(eng_a, release_id="raw-test", preview=True, clock=lambda: now_a[0], preview_compress_level=1)
+        svc_b = RangeService(eng_b, release_id="raw-test", preview=True, clock=lambda: now_b[0], preview_compress_level=6)
+
+        frame_id_b = b"innolidar"
+        raw_imu = (
+            struct.pack("<IIII", 1, 1000, 500000000, len(frame_id_b)) + frame_id_b
+            + struct.pack("<4d9d", 0.0, 0.0, 0.0, 0.0, *([0.0] * 9))
+            + struct.pack("<3d9d", 0.002, -0.001, 0.001, *([0.0] * 9))
+            + struct.pack("<3d9d", -4.55, -0.12, 8.68, *([0.0] * 9))
+        )
+        imu_obj = NS(
+            header=NS(stamp=NS(secs=1000, nsecs=500000000)),
+            linear_acceleration=NS(x=-4.55, y=-0.12, z=8.68),
+            angular_velocity=NS(x=0.002, y=-0.001, z=0.001),
+        )
+        for _ in range(12):
+            self.assertTrue(svc_a.submit_imu(NS(_buff=raw_imu)))
+            self.assertTrue(svc_b.submit_imu(imu_obj))
+        self.assertFalse(svc_a.submit_imu(b"too_short"))
+
+        for i in range(6):
+            now_a[0] += 0.104
+            now_b[0] += 0.104
+            _, packed = _render_synthetic_frame(
+                self.grid, self.rays, self.binding,
+                pitch_deg=26.5, roll_deg=-0.5, sensor_height_m=1.38,
+                boxes=[(2.4, 2.75, -0.5 + 0.06 * i, -0.06 + 0.06 * i, 0.0, 1.72)],
+            )
+            raw, msg = _pack_ros_cloud(packed, seq=i + 1, stamp_s=now_a[0])
+            svc_a.submit(RawCloudWire(raw))
+            svc_b.submit(msg)
+            ra = svc_a.process_latest()
+            rb = svc_b.process_latest()
+            self.assertEqual(ra["local_range"]["wireSha256"], rb["local_range"]["wireSha256"])
+            self.assertEqual(ra["target_source_rows"], rb["target_source_rows"])
+            self.assertEqual(ra["fall_status"], rb["fall_status"])
+            self.assertEqual(ra["local_range"]["ground"]["sha256"], rb["local_range"]["ground"]["sha256"])
+        self.assertTrue(svc_a.process_preview())
+        self.assertTrue(svc_b.process_preview())
+        pa = svc_a.snapshot()["local_range"]["preview"]
+        pb = svc_b.snapshot()["local_range"]["preview"]
+        self.assertTrue(pa and pb)
+        # Valid PNG signature for both level 1 and level 6
+        import base64
+        self.assertTrue(base64.b64decode(pa).startswith(b"\x89PNG\r\n\x1a\n"))
+        self.assertTrue(base64.b64decode(pb).startswith(b"\x89PNG\r\n\x1a\n"))
+        arr = np.arange(24, dtype=np.uint8).reshape(2, 4, 3)
+        self.assertTrue(encode_png(arr, compress_level=1).startswith(b"\x89PNG\r\n\x1a\n"))
+
     def test_python38_ast_compatibility(self):
         for rel in (
+            "src/human_fall_detection/core/range_image.py",
+            "src/human_fall_detection/core/range_live.py",
+            "src/human_fall_detection/core/range_png.py",
+            "src/human_fall_detection/core/range_wire.py",
             "src/human_fall_detection/core/silent_ground_refiner.py",
             "src/human_fall_detection/core/instant_tracker.py",
             "src/human_fall_detection/core/range_engine.py",

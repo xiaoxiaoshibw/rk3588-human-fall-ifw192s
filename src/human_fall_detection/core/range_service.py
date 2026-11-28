@@ -18,13 +18,55 @@ from .node_runtime import LatestFrameQueue
 from .range_live import preview_rgb
 from .range_png import png
 from .range_skeleton import estimate, project_regions
+from .range_wire import parse_cloud_header
 
 PROTOCOL = 'range_recognition/1'
 
 
+class _Sha256Writer:
+    """Zero-copy sink for ROS genpy msg.serialize(buff): hashes chunks directly."""
+    __slots__ = ('_hasher',)
+
+    def __init__(self):
+        self._hasher = hashlib.sha256()
+
+    def write(self, chunk):
+        self._hasher.update(chunk)
+        return len(chunk)
+
+    def hexdigest(self):
+        return self._hasher.hexdigest()
+
+
+class RawCloudWire:
+    """Lightweight holder for raw ROS1 PointCloud2 wire bytes (from rospy.AnyMsg).
+
+    Avoids genpy deserialization + re-serialization while exposing a lazy `.header`
+    for LatestFrameQueue overwritten-header bookkeeping.
+    """
+    __slots__ = ('raw_bytes', '_header', '_header_parsed')
+
+    def __init__(self, raw_bytes):
+        self.raw_bytes = raw_bytes
+        self._header = None
+        self._header_parsed = False
+
+    @property
+    def header(self):
+        if not self._header_parsed:
+            self._header_parsed = True
+            try:
+                self._header = parse_cloud_header(self.raw_bytes)
+            except (ValueError, TypeError, struct.error, UnicodeError):
+                self._header = None
+        return self._header
+
+
 class RangeService:
-    def __init__(self, engine, release_id='development', preview=True, clock=time.monotonic):
+    def __init__(self, engine, release_id='development', preview=True, clock=time.monotonic,
+                 preview_compress_level=6):
         self.engine, self.release_id, self.preview, self.clock = engine, release_id, preview, clock
+        self.preview_compress_level = int(preview_compress_level)
         self.queue, self.previews = LatestFrameQueue(1), LatestFrameQueue(1)
         self.lock = threading.Lock()
         self.clear_pending = threading.Event()
@@ -62,10 +104,24 @@ class RangeService:
             self.callback_ms = (self.clock()-start)*1000
 
     def submit_imu(self, msg):
-        """轻量接收 ROS sensor_msgs/Imu，零锁竞争喂入引擎重力估计器。"""
+        """轻量接收 ROS sensor_msgs/Imu（或 AnyMsg 原始字节），零锁竞争喂入引擎重力估计器。"""
         feed = getattr(self.engine, 'feed_imu', None)
         if feed is None:
             return False
+        raw = msg if isinstance(msg, (bytes, bytearray, memoryview)) else getattr(msg, '_buff', None)
+        if raw is not None:
+            try:
+                if len(raw) < 312:
+                    return False
+                _seq, secs, nsecs, flen = struct.unpack_from('<IIII', raw, 0)
+                off = 16 + flen
+                if flen > 4096 or off + 296 != len(raw) or nsecs >= 1000000000:
+                    return False
+                gx, gy, gz = struct.unpack_from('<ddd', raw, off + 104)
+                ax, ay, az = struct.unpack_from('<ddd', raw, off + 200)
+                return bool(feed(ax, ay, az, gx, gy, gz, stamp_s=float(secs) + float(nsecs) * 1e-9))
+            except (TypeError, ValueError, struct.error):
+                return False
         try:
             acc = msg.linear_acceleration
             gyr = msg.angular_velocity
@@ -98,15 +154,23 @@ class RangeService:
             self.engine.clear_history()
         start = self.clock()
         try:
-            # genpy serialization preserves the received header, fields, strides,
-            # padding and data. Never hash packed ROW_DTYPE inference rows.
-            if len(msg.data) > 32*1024*1024 or len(msg.fields) > 128:
-                raise ValueError('oversized ROS cloud')
-            stream = io.BytesIO()
-            msg.serialize(stream)
-            fingerprint = hashlib.sha256(stream.getvalue()).hexdigest()
-            serialized = self.clock()
-            result = self.engine.process(msg, received, wire_sha256=fingerprint, preview=False)
+            raw_wire = getattr(msg, 'raw_bytes', None)
+            if raw_wire is not None:
+                if len(raw_wire) > 32 * 1024 * 1024:
+                    raise ValueError('oversized ROS cloud')
+                fingerprint = hashlib.sha256(raw_wire).hexdigest()
+                serialized = self.clock()
+                result = self.engine.process(raw_wire, received, wire_sha256=fingerprint, preview=False)
+            else:
+                # genpy serialization preserves the received header, fields, strides,
+                # padding and data. Never hash packed ROW_DTYPE inference rows.
+                if len(msg.data) > 32*1024*1024 or len(msg.fields) > 128:
+                    raise ValueError('oversized ROS cloud')
+                writer = _Sha256Writer()
+                msg.serialize(writer)
+                fingerprint = writer.hexdigest()
+                serialized = self.clock()
+                result = self.engine.process(msg, received, wire_sha256=fingerprint, preview=False)
             if result.get('source'):
                 seq = result['source']['seq']
                 if self.previous_seq is not None and seq > self.previous_seq:
@@ -172,7 +236,8 @@ class RangeService:
         result = dict(original)
         bundle = result['local_range'] = dict(original['local_range'])
         rows = result['target_source_rows']
-        encoded = png(preview_rgb(frame))
+        rgb_img = preview_rgb(frame)
+        encoded = png(rgb_img) if self.preview_compress_level == 6 else png(rgb_img, compress_level=self.preview_compress_level)
         bundle['preview'] = base64.b64encode(encoded).decode('ascii')
         bundle['depth'] = dict(bundle['depth'], previewSha256=hashlib.sha256(encoded).hexdigest())
         bundle['skeleton'] = project_regions(estimate(frame.xyz[rows] if rows else [], rows), frame)
@@ -218,7 +283,7 @@ class RangeService:
                     state['human_physical_v1'] = None
                 self.state = state
             result = copy.copy(state)
-            result['groundBinding'] = copy.deepcopy(self.ground_binding)
+            result['groundBinding'] = dict(self.ground_binding) if self.ground_binding is not None else None
             if result['groundBinding'] is not None:
                 # The plane remains bound; the last support check is not a
                 # current observation once recognition loses its source.

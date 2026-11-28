@@ -15,6 +15,7 @@
 """
 
 from collections import deque
+import hashlib
 import math
 import time
 
@@ -91,6 +92,9 @@ DEFAULT_INSTANT_SETTINGS = {
     "max_miss_frames": 8,
     "short_miss_frames": 2,
     "max_gap_sec": 0.35,
+    # 可选有名算法变体（Step 3 实验 A/B：经 16 段实测与 12 项对照验证后默认启用，仍支持显式关闭作基线对照）
+    "enable_f0_body_completion": True,
+    "enable_vertical_articulation_lock": True,
 }
 
 
@@ -100,6 +104,12 @@ def resolve_instant_settings(settings=None):
         if k not in resolved:
             raise ValueError("unknown instant tracker setting: " + str(k))
         resolved[k] = v
+    bool_keys = ("enable_f0_body_completion", "enable_vertical_articulation_lock")
+    for k in bool_keys:
+        val = resolved[k]
+        if not isinstance(val, bool):
+            raise ValueError(k + " must be a boolean")
+        resolved[k] = bool(val)
     int_keys = (
         "min_range_mm", "max_range_mm", "fg_margin_mm", "bg_grow_margin_mm",
         "bfs_step_mm", "retain_margin_mm", "retain_extra_mm", "retain_tight_mm",
@@ -113,7 +123,7 @@ def resolve_instant_settings(settings=None):
             raise ValueError(k + " must be a non-negative integer")
         resolved[k] = int(val)
     for k in resolved:
-        if k in int_keys:
+        if k in int_keys or k in bool_keys:
             continue
         val = float(resolved[k])
         if not math.isfinite(val) or val < 0.0:
@@ -182,54 +192,117 @@ def _connected_components_mm(mask, cur_mm, step_mm):
 
 
 def _bfs_single_component_mm(growable, cur_mm, seed_r, seed_c, step_mm):
-    """在小型 ROI 内从单个种子做精确 8 邻域深度连通（保证只拉出与种子相连的簇）。"""
+    """在小型 ROI 内从单个种子做精确 8 邻域深度连通（向量化水平 run + 并查集，与逐像素 BFS 集合完全等价）。"""
     rh, rw = growable.shape
     if not (0 <= seed_r < rh and 0 <= seed_c < rw) or not growable[seed_r, seed_c]:
         return np.empty(0, dtype=np.int32), np.empty(0, dtype=np.int32)
-    visited = np.zeros((rh, rw), dtype=bool)
-    visited[seed_r, seed_c] = True
-    q = deque([(seed_r, seed_c)])
-    rs = []
-    cs = []
-    while q:
-        r, c = q.popleft()
-        rs.append(r)
-        cs.append(c)
-        c_mm = int(cur_mm[r, c])
-        r_lo = 0 if r == 0 else r - 1
-        r_hi = rh - 1 if r == rh - 1 else r + 1
-        c_lo = 0 if c == 0 else c - 1
-        c_hi = rw - 1 if c == rw - 1 else c + 1
-        for nr in range(r_lo, r_hi + 1):
-            for nc in range(c_lo, c_hi + 1):
-                if visited[nr, nc] or not growable[nr, nc]:
-                    continue
-                if abs(int(cur_mm[nr, nc]) - c_mm) <= step_mm:
-                    visited[nr, nc] = True
-                    q.append((nr, nc))
-    return np.asarray(rs, dtype=np.int32), np.asarray(cs, dtype=np.int32)
+    cells = np.flatnonzero(growable.ravel())
+    if not len(cells):
+        return np.empty(0, dtype=np.int32), np.empty(0, dtype=np.int32)
+    depth = np.ascontiguousarray(cur_mm).ravel()
+    starts = np.ones(len(cells), dtype=bool)
+    if len(cells) > 1:
+        same_row_adj = (cells[1:] == cells[:-1] + 1) & ((cells[1:] % rw) != 0)
+        depth_ok = np.abs(depth[cells[1:]] - depth[cells[:-1]]) <= step_mm
+        starts[1:] = ~(same_row_adj & depth_ok)
+    runs = np.cumsum(starts, dtype=np.int32) - 1
+    n_runs = int(runs[-1]) + 1
+
+    labels_flat = np.full(rh * rw, -1, dtype=np.int32)
+    labels_flat[cells] = runs
+    seed_run = int(labels_flat[seed_r * rw + seed_c])
+    if seed_run < 0:
+        return np.empty(0, dtype=np.int32), np.empty(0, dtype=np.int32)
+
+    pairs_list = []
+    rows = cells // rw
+    cols = cells % rw
+    not_last = rows < (rh - 1)
+    for dc in (-1, 0, 1):
+        sel = not_last & ((cols + dc) >= 0) & ((cols + dc) < rw)
+        if not np.any(sel):
+            continue
+        a = cells[sel]
+        b = a + rw + dc
+        other = labels_flat[b]
+        ok = (other >= 0) & (np.abs(depth[a] - depth[b]) <= step_mm)
+        if np.any(ok):
+            pairs_list.append(runs[sel][ok].astype(np.int64) * n_runs + other[ok])
+
+    parent = list(range(n_runs))
+
+    def find_root(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    if pairs_list:
+        for pair in np.unique(np.concatenate(pairs_list)).tolist():
+            ra = find_root(pair // n_runs)
+            rb = find_root(pair % n_runs)
+            if ra != rb:
+                if ra < rb:
+                    parent[rb] = ra
+                else:
+                    parent[ra] = rb
+
+    target_root = find_root(seed_run)
+    keep_runs = np.fromiter((find_root(i) == target_root for i in range(n_runs)), dtype=bool, count=n_runs)
+    sel_cells = cells[keep_runs[runs]]
+    return (sel_cells // rw).astype(np.int32), (sel_cells % rw).astype(np.int32)
 
 
 class InstantBackgroundAdapter:
-    """为 `full_body_recovery` 提供与 `RayBackground` 兼容的只读视图（known / mean_m / sigma_m）。"""
+    """为 `full_body_recovery` 提供与 `RayBackground` 兼容的按需只读视图（known / mean_m / sigma_m）。"""
 
     def __init__(self, shape, binding):
         self.shape = tuple(shape)
         self.binding = binding
-        self.known = np.zeros(self.shape, dtype=bool)
-        self.mean_m = np.full(self.shape, np.nan, dtype=np.float64)
+        self._bg_far_mm = None
+        self._version = 0
+        self._cached_known_ver = -1
+        self._cached_mean_ver = -1
+        self._known_cache = np.zeros(self.shape, dtype=bool)
+        self._mean_cache = np.full(self.shape, np.nan, dtype=np.float64)
         self.sigma_m = None
         self.non_causal = False
         self.declaration = "instant_adaptive_far_bg"
 
     def sync(self, bg_far_mm, binding):
         self.binding = binding
-        self.known = bg_far_mm > 0
-        self.mean_m = np.where(self.known, bg_far_mm.astype(np.float64) * 0.001, np.nan)
+        self._bg_far_mm = bg_far_mm
+        self._version += 1
+
+    @property
+    def known(self):
+        if self._cached_known_ver != self._version:
+            if self._bg_far_mm is None:
+                self._known_cache = np.zeros(self.shape, dtype=bool)
+            else:
+                self._known_cache = self._bg_far_mm > 0
+            self._cached_known_ver = self._version
+        return self._known_cache
+
+    @property
+    def mean_m(self):
+        if self._cached_mean_ver != self._version:
+            if self._bg_far_mm is None:
+                self._mean_cache = np.full(self.shape, np.nan, dtype=np.float64)
+            else:
+                k = self.known
+                self._mean_cache = np.where(k, self._bg_far_mm.astype(np.float64) * 0.001, np.nan)
+            self._cached_mean_ver = self._version
+        return self._mean_cache
 
 
 class _MotionWindow:
-    __slots__ = ("origin_u", "origin_v", "seconds", "path_m", "moving_steps", "depth_frames")
+    __slots__ = (
+        "origin_u", "origin_v", "seconds", "path_m", "moving_steps", "depth_frames",
+        "vert_active", "vert_sec", "vert_frames", "vert_origin_u", "vert_origin_v",
+        "vert_min_h95", "vert_max_h95", "vert_min_h", "vert_max_h",
+        "vert_min_h05", "vert_max_h05", "vert_dual_depth",
+    )
 
     def __init__(self, u=0.0, v=0.0):
         self.origin_u = float(u)
@@ -238,6 +311,21 @@ class _MotionWindow:
         self.path_m = 0.0
         self.moving_steps = 0
         self.depth_frames = 0
+        self.reset_vertical()
+
+    def reset_vertical(self):
+        self.vert_active = False
+        self.vert_sec = 0.0
+        self.vert_frames = 0
+        self.vert_origin_u = 0.0
+        self.vert_origin_v = 0.0
+        self.vert_min_h95 = 0.0
+        self.vert_max_h95 = 0.0
+        self.vert_min_h = 0.0
+        self.vert_max_h = 0.0
+        self.vert_min_h05 = 0.0
+        self.vert_max_h05 = 0.0
+        self.vert_dual_depth = 0
 
 
 class _Track:
@@ -252,6 +340,9 @@ class _Track:
         "history", "peak_down_vel", "peak_down_acc", "peak_brake_acc",
         "low_posture_sec", "still_sec", "suspected_sec", "renewal_top_h",
         "motion", "fall_state", "fall_reason",
+        "last_observed_fall_state", "missed_echo_state",
+        "suspected_episode_id", "new_episode_this_frame",
+        "last_motion_reset_reason",
         "source_rows", "cells",
     )
 
@@ -292,6 +383,11 @@ class _Track:
         self.motion = _MotionWindow()
         self.fall_state = FALL_UNKNOWN
         self.fall_reason = REASON_NONE
+        self.last_observed_fall_state = FALL_UNKNOWN
+        self.missed_echo_state = None
+        self.suspected_episode_id = 0
+        self.new_episode_this_frame = False
+        self.last_motion_reset_reason = None
         self.source_rows = []
         self.cells = np.empty(0, dtype=np.int32)
 
@@ -299,9 +395,10 @@ class _Track:
 class InstantHumanTracker:
     """免空场自适应背景 + 运动学跌倒候选跟踪器（支持重力向量无感更新与地面零点增强）。"""
 
-    def __init__(self, shape=(192, 256), gravity_up=(0.0, 0.0, 1.0), settings=None):
+    def __init__(self, shape=(192, 256), gravity_up=(0.0, 0.0, 1.0), settings=None, diagnostics=False):
         self.shape = (int(shape[0]), int(shape[1]))
         self.settings = resolve_instant_settings(settings)
+        self.diagnostics = bool(diagnostics)
         self.u_axis, self.v_axis, self.g_up = horizontal_basis(gravity_up)
 
         self.bg_far_mm = np.zeros(self.shape, dtype=np.int32)
@@ -313,6 +410,8 @@ class InstantHumanTracker:
         self.tracks = [_Track(i) for i in range(self.settings["max_tracks"])]
         self.generation = 0
         self.next_track_id = 1
+        self.next_episode_id = 1
+        self.suspected_episodes = deque(maxlen=32)
         self.frame_count = 0
         self.last_stamp_s = None
         self.last_frame_index = None
@@ -356,6 +455,9 @@ class InstantHumanTracker:
             tr.start_cv += dv
             tr.motion.origin_u += du
             tr.motion.origin_v += dv
+            # 坐标基准变化时隔离暂态轨历史垂向证据，避免精修切换伪造高度变化
+            if not tr.locked_human:
+                tr.motion.reset_vertical()
             tr.h_p02 += dh
             tr.h_p05 += dh
             tr.h_p50 += dh
@@ -502,29 +604,40 @@ class InstantHumanTracker:
             "source_rows": src_rows.tolist(),
         }
 
-    def _upright_geometry(self, cand, ground_offset_m=None):
+    def _upright_geometry_reason(self, cand, ground_offset_m=None):
         cfg = self.settings
         h_rows = self.shape[0]
         high_edge = (cand["r0"] <= 1 or cand["r1"] >= h_rows - 2) and cand["h_p05"] > 0.0
-        if high_edge or cand["r0"] > cfg["human_max_bottom_row"]:
-            return False
-        if (cand["height_m"] < cfg["human_min_upright_h_m"]
-                or cand["height_m"] > cfg["human_max_upright_h_m"]
-                or cand["horiz_span_m"] > cfg["human_max_horiz_m"]
-                or cand["aspect"] < cfg["human_min_aspect"]):
-            return False
+        if high_edge:
+            return "high_edge"
+        if cand["r0"] > cfg["human_max_bottom_row"]:
+            return "bottom_row_gt_max"
+        if cand["height_m"] < cfg["human_min_upright_h_m"]:
+            return "height_below_min"
+        if cand["height_m"] > cfg["human_max_upright_h_m"]:
+            return "height_above_max"
+        if cand["horiz_span_m"] > cfg["human_max_horiz_m"]:
+            return "horiz_above_max"
+        if cand["aspect"] < cfg["human_min_aspect"]:
+            return "aspect_below_min"
         if cand["horiz_span_m"] >= 0.25 and cand["point_count"] < cfg["human_min_lock_points"]:
-            return False
-        if (cand["vertical_fill"] < cfg["human_min_vertical_fill"]
-                or cand["max_vertical_gap_m"] > cfg["human_max_vertical_gap_m"]
-                or cand["iqr_height_m"] < cfg["human_min_iqr_ratio"] * cand["height_m"]
-                or cand["min_third_ratio"] < cfg["human_min_third_ratio"]):
-            return False
+            return "wide_points_below_min"
+        if cand["vertical_fill"] < cfg["human_min_vertical_fill"]:
+            return "vertical_fill_below_min"
+        if cand["max_vertical_gap_m"] > cfg["human_max_vertical_gap_m"]:
+            return "vertical_gap_above_max"
+        if cand["iqr_height_m"] < cfg["human_min_iqr_ratio"] * cand["height_m"]:
+            return "iqr_ratio_below_min"
+        if cand["min_third_ratio"] < cfg["human_min_third_ratio"]:
+            return "min_third_below_min"
         if ground_offset_m is not None:
             bottom_above = cand["h_p05"] + float(ground_offset_m)
             if bottom_above > cfg["ground_hanging_bottom_max_m"]:
-                return False
-        return True
+                return "bottom_above_ground_hanging"
+        return None
+
+    def _upright_geometry(self, cand, ground_offset_m=None):
+        return self._upright_geometry_reason(cand, ground_offset_m) is None
 
     def _association_distance_sq(self, tr, cand, dt, ground_offset_m=None):
         cfg = self.settings
@@ -618,16 +731,19 @@ class InstantHumanTracker:
             and tr.drop_top_m >= cfg["slow_drop_m"]
         )
 
-        # 直立恢复清除跌倒状态（过滤弯腰/捡东西）
+        # 直立恢复清除跌倒状态（过滤弯腰/捡东西；仅在有实测新观测支持时发生）
         if tr.height_m >= cfg["recover_height_m"] and tr.drop_top_m <= cfg["recover_drop_m"]:
             tr.fall_state = FALL_UPRIGHT
             tr.fall_reason = REASON_NONE
             tr.low_posture_sec = 0.0
+            tr.suspected_episode_id = 0
+            tr.last_observed_fall_state = FALL_UPRIGHT
             return
 
         if tr.fall_state == FALL_SUSPECTED:
             if is_collapsed:
                 tr.low_posture_sec += observed_dt
+            tr.last_observed_fall_state = FALL_SUSPECTED
             return
 
         if is_collapsed and (fast_kin or slow_kin or tr.low_posture_sec > 0.0):
@@ -636,6 +752,10 @@ class InstantHumanTracker:
                 tr.fall_reason = REASON_FAST_KINEMATIC if fast_kin else REASON_SLOW_DESCENT
             if tr.low_posture_sec >= cfg["fall_hold_sec"]:
                 tr.fall_state = FALL_SUSPECTED
+                if tr.suspected_episode_id == 0:
+                    tr.suspected_episode_id = self.next_episode_id
+                    self.next_episode_id += 1
+                    tr.new_episode_this_frame = True
             else:
                 tr.fall_state = FALL_DESCENDING
         else:
@@ -645,6 +765,7 @@ class InstantHumanTracker:
                 tr.fall_state = FALL_DESCENDING
             else:
                 tr.fall_state = FALL_UPRIGHT
+        tr.last_observed_fall_state = tr.fall_state
 
     def _update_track(self, tr, cand, dt, ground_offset_m=None):
         cfg = self.settings
@@ -657,12 +778,42 @@ class InstantHumanTracker:
 
         motion = tr.motion
         moving = False
-        if (not upright or not continuous
-                or (motion.seconds + dt) > cfg["motion_window_sec"]
-                or step_m > cfg["human_max_speed_mps"] * dt
-                or abs(cand["height_m"] - tr.height_m) > 0.26):
+        reset_motion_reason = None
+        if not upright:
+            reset_motion_reason = "not_upright"
+        elif not continuous:
+            reset_motion_reason = "not_continuous"
+        elif (motion.seconds + dt) > cfg["motion_window_sec"]:
+            reset_motion_reason = "motion_window_timeout"
+        elif step_m > cfg["human_max_speed_mps"] * dt:
+            reset_motion_reason = "exceeded_max_speed"
+        elif abs(cand["height_m"] - tr.height_m) > 0.26:
+            reset_motion_reason = "height_jump_gt_0.26m"
+        tr.last_motion_reset_reason = reset_motion_reason
+        saved_vert = None
+        if cfg["enable_vertical_articulation_lock"] and (not tr.locked_human) and motion.vert_active:
+            saved_vert = (
+                motion.vert_sec, motion.vert_frames,
+                motion.vert_origin_u, motion.vert_origin_v,
+                motion.vert_min_h95, motion.vert_max_h95,
+                motion.vert_min_h, motion.vert_max_h,
+                motion.vert_min_h05, motion.vert_max_h05,
+                motion.vert_dual_depth,
+            )
+        if reset_motion_reason is not None:
             tr.motion = _MotionWindow(cand["cu"], cand["cv"])
             tr.upright_frames = 0
+            if saved_vert is not None and upright and continuous and (saved_vert[0] + dt <= 2.2):
+                m_new = tr.motion
+                m_new.vert_active = True
+                (
+                    m_new.vert_sec, m_new.vert_frames,
+                    m_new.vert_origin_u, m_new.vert_origin_v,
+                    m_new.vert_min_h95, m_new.vert_max_h95,
+                    m_new.vert_min_h, m_new.vert_max_h,
+                    m_new.vert_min_h05, m_new.vert_max_h05,
+                    m_new.vert_dual_depth,
+                ) = saved_vert
         elif tr.upright_frames > 0:
             motion.seconds += dt
             motion.path_m += step_m
@@ -684,16 +835,84 @@ class InstantHumanTracker:
             moving = (motion.moving_steps >= 2 and motion.depth_frames >= 2
                       and disp >= min_disp and disp >= 0.60 * motion.path_m)
 
+        vert_locked_now = False
+        if cfg["enable_vertical_articulation_lock"] and not tr.locked_human:
+            m = tr.motion
+            dual_now = (
+                cand["motion_lower"] >= 2
+                and cand["motion_upper"] >= 2
+                and cand["motion_points"] >= max(4, cand["point_count"] // 100)
+            )
+            if (not upright) or (not continuous) or (not m.vert_active) or (m.vert_sec + dt > 2.2):
+                if upright:
+                    m.vert_active = True
+                    m.vert_sec = 0.0
+                    m.vert_frames = 1
+                    m.vert_origin_u = cand["cu"]
+                    m.vert_origin_v = cand["cv"]
+                    m.vert_min_h95 = m.vert_max_h95 = cand["h_p95"]
+                    m.vert_min_h = m.vert_max_h = cand["height_m"]
+                    m.vert_min_h05 = m.vert_max_h05 = cand["h_p05"]
+                    m.vert_dual_depth = 1 if dual_now else 0
+                else:
+                    m.reset_vertical()
+            else:
+                m.vert_sec += dt
+                m.vert_frames += 1
+                if cand["h_p95"] < m.vert_min_h95:
+                    m.vert_min_h95 = cand["h_p95"]
+                if cand["h_p95"] > m.vert_max_h95:
+                    m.vert_max_h95 = cand["h_p95"]
+                if cand["height_m"] < m.vert_min_h:
+                    m.vert_min_h = cand["height_m"]
+                if cand["height_m"] > m.vert_max_h:
+                    m.vert_max_h = cand["height_m"]
+                if cand["h_p05"] < m.vert_min_h05:
+                    m.vert_min_h05 = cand["h_p05"]
+                if cand["h_p05"] > m.vert_max_h05:
+                    m.vert_max_h05 = cand["h_p05"]
+                if dual_now:
+                    m.vert_dual_depth += 1
+
+                h95_exc = m.vert_max_h95 - m.vert_min_h95
+                h_exc = m.vert_max_h - m.vert_min_h
+                bot_drift = m.vert_max_h05 - m.vert_min_h05
+                v_hdisp = math.hypot(cand["cu"] - m.vert_origin_u, cand["cv"] - m.vert_origin_v)
+
+                if m.vert_dual_depth >= 2 and m.vert_sec <= 2.2 and h95_exc >= 0.08:
+                    tr.still_sec = min(tr.still_sec, cfg["motion_window_sec"] * 0.5)
+
+                if (
+                    m.vert_frames >= cfg["lock_min_frames"]
+                    and cand["point_count"] >= cfg["human_min_lock_points"]
+                    and cand["horiz_span_m"] >= cfg["human_min_horiz_m"]
+                    and m.vert_dual_depth >= 4
+                    and h95_exc >= 0.18
+                    and h_exc >= 0.14
+                    and bot_drift <= 0.18
+                    and v_hdisp <= 0.35
+                ):
+                    tr.motion = _MotionWindow(cand["cu"], cand["cv"])
+                    tr.locked_human = True
+                    tr.still_sec = 0.0
+                    tr.renewal_top_h = cand["h_p95"]
+                    tr.fall_state = FALL_UPRIGHT
+                    tr.last_observed_fall_state = FALL_UPRIGHT
+                    tr.fall_reason = REASON_NONE
+                    tr.low_posture_sec = 0.0
+                    vert_locked_now = True
+
         if upright:
             if tr.upright_frames < cfg["lock_min_frames"]:
                 tr.upright_frames += 1
-            if (moving and tr.upright_frames >= cfg["lock_min_frames"]
+            if (not vert_locked_now and moving and tr.upright_frames >= cfg["lock_min_frames"]
                     and cand["horiz_span_m"] >= cfg["human_min_horiz_m"]
                     and (tr.locked_human or cand["point_count"] >= cfg["human_min_lock_points"])):
                 tr.motion = _MotionWindow(cand["cu"], cand["cv"])
                 if not tr.locked_human:
                     tr.locked_human = True
                     tr.fall_state = FALL_UPRIGHT
+                    tr.last_observed_fall_state = FALL_UPRIGHT
                 tr.still_sec = 0.0
                 tr.renewal_top_h = cand["h_p95"]
 
@@ -707,6 +926,8 @@ class InstantHumanTracker:
             tr.vel_v = 0.65 * tr.vel_v + 0.35 * (dv_step / dt)
 
         tr.measured_this_frame = True
+        tr.missed_echo_state = None
+        tr.new_episode_this_frame = False
         tr.miss_frames = 0
         tr.missed_sec = 0.0
         tr.age_frames += 1
@@ -735,7 +956,19 @@ class InstantHumanTracker:
                 tr.baseline_top_h = (1.0 - alpha) * tr.baseline_top_h + alpha * cand["h_p95"]
                 tr.baseline_height = (1.0 - alpha) * tr.baseline_height + alpha * cand["height_m"]
 
-        self._update_kinematics_and_fall(tr, elapsed, dt if continuous else 0.0)
+        if vert_locked_now:
+            # 准入帧之前的垂向下降史绝不回填为跌倒证据
+            tr.history.clear()
+            tr.peak_down_vel = tr.peak_down_acc = tr.peak_brake_acc = 0.0
+            tr.low_posture_sec = 0.0
+            tr.fall_reason = REASON_NONE
+            tr.fall_state = FALL_UPRIGHT
+            tr.last_observed_fall_state = FALL_UPRIGHT
+            tr.baseline_top_h = max(tr.baseline_top_h, cand["h_p95"]) if tr.baseline_ready else cand["h_p95"]
+            tr.baseline_height = max(tr.baseline_height, cand["height_m"]) if tr.baseline_ready else cand["height_m"]
+            tr.baseline_ready = True
+        else:
+            self._update_kinematics_and_fall(tr, elapsed, dt if continuous else 0.0)
         if (tr.locked_human and continuous
                 and abs(tr.f_top_h - tr.renewal_top_h) >= 0.20
                 and abs(tr.h_p95 - tr.f_top_h) <= 0.10
@@ -743,7 +976,77 @@ class InstantHumanTracker:
             tr.still_sec = 0.0
             tr.renewal_top_h = tr.f_top_h
 
-    def _update_background(self, cur_mm, new_owner_grid):
+    def _try_f0_body_completion(self, frame, cand, cur_mm, motion_mask, visited, ground_offset_m):
+        """实验 A（有名变体）：第 0 帧有人导致下肢被 bg_far_mm 自吸收时，在真实未访问且无归属像素上做紧圆柱向下连通补全。"""
+        cfg = self.settings
+        if not cfg["enable_f0_body_completion"] or ground_offset_m is None:
+            return cand
+        if cand["from_retain"] or cand["point_count"] < 150 or cand["motion_points"] < 4:
+            return cand
+        if cand["height_m"] >= cfg["human_min_upright_h_m"] and cand["r0"] <= cfg["human_max_bottom_row"]:
+            return cand
+        bottom_above = cand["h_p05"] + float(ground_offset_m)
+        if bottom_above < 0.38 or bottom_above > 1.35:
+            return cand
+
+        h_rows, w_cols = self.shape
+        gr0 = max(0, cand["r0"] - 72)
+        gr1 = min(h_rows - 1, cand["r1"] + 6)
+        gc0 = max(0, cand["c0"] - 14)
+        gc1 = min(w_cols - 1, cand["c1"] + 14)
+
+        sub_cur = cur_mm[gr0:gr1 + 1, gc0:gc1 + 1]
+        sub_vis = visited[gr0:gr1 + 1, gc0:gc1 + 1]
+        sub_own = self.owner_grid[gr0:gr1 + 1, gc0:gc1 + 1]
+        # 严格禁止侵占已访问像素或任何已归属轨迹的像素
+        sub_valid = (sub_cur > 0) & (~sub_vis) & (sub_own == 0)
+        c_rs = cand["cells"] // w_cols
+        c_cs = cand["cells"] % w_cols
+        sub_valid[c_rs - gr0, c_cs - gc0] = True
+
+        rs_v, cs_v = np.nonzero(sub_valid)
+        if len(rs_v) <= cand["point_count"] + 20:
+            return cand
+        src_v = frame.source_rows[gr0 + rs_v, gc0 + cs_v].astype(np.int64)
+        xyz_v = frame.xyz[src_v].astype(np.float64)
+        du = (xyz_v @ self.u_axis) - cand["cu"]
+        dv = (xyz_v @ self.v_axis) - cand["cv"]
+        ph_v = xyz_v @ self.g_up
+        h_above_g = ph_v + float(ground_offset_m)
+
+        cand_r_mm = int(round(cand["range_m"] * 1000.0))
+        dmm_v = np.abs(sub_cur[rs_v, cs_v] - cand_r_mm)
+        keep = (
+            ((du * du + dv * dv) <= (0.48 * 0.48))
+            & (h_above_g >= 0.14)
+            & (ph_v <= cand["h_p95"] + 0.12)
+            & (dmm_v <= 550)
+        )
+        grow = np.zeros_like(sub_valid)
+        grow[rs_v[keep], cs_v[keep]] = True
+        grow[c_rs - gr0, c_cs - gc0] = True
+
+        seed_idx = int(np.argmin(c_rs))
+        sr = int(c_rs[seed_idx] - gr0)
+        sc = int(c_cs[seed_idx] - gc0)
+        cr, cc = _bfs_single_component_mm(grow, sub_cur, sr, sc, cfg["bfs_step_mm"])
+        if len(cr) <= cand["point_count"] + 15:
+            return cand
+
+        new_cells = ((gr0 + cr) * w_cols + (gc0 + cc)).astype(np.int32)
+        new_cand = self._build_candidate(frame, new_cells, cur_mm, motion_mask, -1)
+        if new_cand is None:
+            return cand
+        if new_cand["height_m"] < cand["height_m"] + 0.15:
+            return cand
+        if (new_cand["horiz_span_m"] > max(cand["horiz_span_m"] + 0.28, 0.90)
+                or new_cand["horiz_span_m"] > cfg["human_max_horiz_m"]):
+            return cand
+        if not self._upright_geometry(new_cand, ground_offset_m):
+            return cand
+        return new_cand
+
+    def _update_background(self, cur_mm, new_owner_grid, has_owner=False):
         cfg = self.settings
         h, w = self.shape
         prev = self.prev_range_mm
@@ -759,13 +1062,16 @@ class InstantHumanTracker:
                 if np.any(old_mask):
                     near = (cur_mm == 0) | (np.abs(cur_mm - int(round(tr.range_m * 1000.0))) <= 300)
                     owner[old_mask & near] = tr.slot + 1
+                    has_owner = True
 
-        # 保护已锁轨迹 1 像素边框免被背景吞噬
-        protect = np.zeros(self.shape, dtype=bool)
+        # 保护已锁轨迹 1 像素边框免被背景吞噬（无已锁轨时跳过全图分配）
+        protect = None
         for tr in self.tracks:
             if (tr.active and tr.locked_human
                     and tr.miss_frames <= cfg["short_miss_frames"]
                     and tr.missed_sec <= cfg["max_gap_sec"]):
+                if protect is None:
+                    protect = np.zeros(self.shape, dtype=bool)
                 r0 = max(0, tr.box_r0 - 1)
                 r1 = min(h, tr.box_r1 + 2)
                 c0 = max(0, tr.box_c0 - 1)
@@ -783,25 +1089,35 @@ class InstantHumanTracker:
                 )
                 protect[r0:r1, c0:c1] |= p_sub
 
-        upd = (cur_mm > 0) & (owner == 0) & (~protect)
+        upd = cur_mm > 0
+        if has_owner:
+            upd &= (owner == 0)
+        if protect is not None:
+            upd &= (~protect)
         if np.any(upd):
-            m_init = upd & (bg == 0) & (prev > 0) & (np.abs(cur_mm - prev) <= 100)
-            bg[m_init] = cur_mm[m_init]
+            bg_pos = bg > 0
+            m_init = upd & (~bg_pos) & (prev > 0) & (np.abs(cur_mm - prev) <= 100)
+            if np.any(m_init):
+                bg[m_init] = cur_mm[m_init]
 
-            has_bg = upd & (bg > 0)
-            m_far = has_bg & (cur_mm > bg + 150)
-            bg[m_far] = cur_mm[m_far]
+            has_bg = upd & bg_pos
+            if np.any(has_bg):
+                diff = cur_mm - bg
+                m_far = has_bg & (diff > 150)
+                if np.any(m_far):
+                    bg[m_far] = cur_mm[m_far]
 
-            m_near_bg = has_bg & (~m_far) & (np.abs(cur_mm - bg) <= 150)
-            bg[m_near_bg] = ((bg[m_near_bg] * 15 + cur_mm[m_near_bg]) >> 4)
+                m_near_bg = has_bg & (diff <= 150) & (diff >= -150)
+                if np.any(m_near_bg):
+                    bg[m_near_bg] = ((bg[m_near_bg] * 15 + cur_mm[m_near_bg]) >> 4)
 
-            m_closer = has_bg & (~m_far) & (~m_near_bg) & (prev > 0) & (np.abs(cur_mm - prev) <= 35) & (cur_mm < bg)
-            if np.any(m_closer):
-                step = np.maximum(1, (bg[m_closer] - cur_mm[m_closer]) >> 5)
-                bg[m_closer] = bg[m_closer] - step
+                m_closer = has_bg & (diff < -150) & (prev > 0) & (np.abs(cur_mm - prev) <= 35)
+                if np.any(m_closer):
+                    step = np.maximum(1, (-diff[m_closer]) >> 5)
+                    bg[m_closer] = bg[m_closer] - step
 
         self.owner_grid = owner
-        self.prev_range_mm = cur_mm.copy()
+        self.prev_range_mm = cur_mm
 
     def _select_primary_track(self):
         """单人优先选择：优先已锁定且实测的轨迹（含疑似跌倒优先），保留当前选中防抖。"""
@@ -862,19 +1178,21 @@ class InstantHumanTracker:
         self.last_stamp_s = stamp_s
         self.last_frame_index = frame_index
 
-        # 构造当前帧毫米距离图
-        with np.errstate(invalid="ignore"):
-            rm_mm = np.where(frame.valid & np.isfinite(frame.range_m), np.rint(frame.range_m * 1000.0), 0.0)
-        cur_mm = np.where(
-            (rm_mm >= cfg["min_range_mm"]) & (rm_mm <= cfg["max_range_mm"]),
-            rm_mm.astype(np.int32),
-            0,
-        )
+        # 构造当前帧毫米距离图（仅对有效点做 rint/int32 转换，保持精确舍入边界）
+        cur_mm = np.zeros(self.shape, dtype=np.int32)
+        valid_f = frame.valid & np.isfinite(frame.range_m)
+        if np.any(valid_f):
+            rm_mm = np.rint(frame.range_m[valid_f] * 1000.0)
+            in_rng = (rm_mm >= cfg["min_range_mm"]) & (rm_mm <= cfg["max_range_mm"])
+            cur_vals = np.zeros(len(rm_mm), dtype=np.int32)
+            cur_vals[in_rng] = rm_mm[in_rng].astype(np.int32)
+            cur_mm[valid_f] = cur_vals
         valid_cur = cur_mm > 0
 
         # 轨迹过期与断流清理
         retain_owner = np.zeros(cfg["max_tracks"] + 1, dtype=bool)
         expired_ids = []
+        any_retained = False
         for tr in self.tracks:
             if not tr.active:
                 continue
@@ -893,13 +1211,16 @@ class InstantHumanTracker:
                 tr.reset()
             else:
                 retain_owner[tr.slot + 1] = True
+                any_retained = True
         if gap:
             reset_reason = reset_reason or "stream_gap"
             self.prev_range_mm.fill(0)
             self.owner_grid.fill(0)
-        else:
+        elif any_retained:
             keep_own = retain_owner[self.owner_grid]
             self.owner_grid = np.where(keep_own, self.owner_grid, np.uint8(0))
+        elif np.any(self.owner_grid):
+            self.owner_grid.fill(0)
 
         # 第 0 帧：直接用首帧初始化最远背景，免空场等待
         if self.frame_count == 0:
@@ -1009,17 +1330,20 @@ class InstantHumanTracker:
                         if cand is not None:
                             candidates.append(cand)
 
-        # 阶段 2：全图向量化发现新前景候选
-        growable_disc = (
-            valid_cur & (~visited)
-            & (fg_seed | (self.bg_far_mm == 0) | (cur_mm + cfg["bg_grow_margin_mm"] < self.bg_far_mm))
-        )
+        # 阶段 2：全图向量化发现新前景候选（无未访问前景种子时跳过全图掩码）
         if np.any(fg_seed & (~visited)):
+            growable_disc = (
+                valid_cur & (~visited)
+                & (fg_seed | (self.bg_far_mm == 0) | (cur_mm + cfg["bg_grow_margin_mm"] < self.bg_far_mm))
+            )
             comps = _connected_components_mm(growable_disc, cur_mm, cfg["bfs_step_mm"])
             fg_flat = fg_seed.ravel()
+            vis_flat = visited.ravel()
             for comp_cells in comps:
                 if len(candidates) >= cfg["max_candidates"]:
                     break
+                if cfg["enable_f0_body_completion"]:
+                    comp_cells = comp_cells[~vis_flat[comp_cells]]
                 if len(comp_cells) < cfg["min_cluster_points"]:
                     continue
                 seed_in_comp = comp_cells[fg_flat[comp_cells]]
@@ -1027,7 +1351,9 @@ class InstantHumanTracker:
                     continue
                 cand = self._build_candidate(frame, comp_cells, cur_mm, motion_mask, -1)
                 if cand is not None:
-                    visited.ravel()[comp_cells] = True
+                    if cfg["enable_f0_body_completion"]:
+                        cand = self._try_f0_body_completion(frame, cand, cur_mm, motion_mask, visited, ground_offset_m)
+                    visited.ravel()[cand["cells"]] = True
                     candidates.append(cand)
                 else:
                     # 若大连通片跨度超 2.35 m（如与墙面轻微粘连），从最密前景种子按 1.15 m 半径裁切提取
@@ -1088,15 +1414,23 @@ class InstantHumanTracker:
                     self._update_track(tr, candidates[best_i], dt, ground_offset_m)
                     cand_slots[best_i] = tr.slot + 1
 
-        # 3c. 未实测轨迹老化（不编造测量点）
+        # 3c. 未实测轨迹老化（不编造测量点；严禁在缺测时把疑似改写成直立）
         for tr in self.tracks:
-            if not tr.active or tr.measured_this_frame:
+            if not tr.active:
                 continue
+            if tr.measured_this_frame:
+                continue
+            tr.new_episode_this_frame = False
             tr.source_rows = []
             tr.cells = np.empty(0, dtype=np.int32)
             tr.miss_frames += 1
             tr.missed_sec += dt
             if tr.locked_human and tr.miss_frames <= cfg["short_miss_frames"] and tr.missed_sec <= cfg["max_gap_sec"]:
+                tr.missed_echo_state = (
+                    "last_suspected_missing_echo"
+                    if tr.last_observed_fall_state == FALL_SUSPECTED
+                    else "short_missing_echo"
+                )
                 continue
             tr.vel_u = 0.0
             tr.vel_v = 0.0
@@ -1105,7 +1439,13 @@ class InstantHumanTracker:
             tr.peak_down_vel = tr.peak_down_acc = tr.peak_brake_acc = 0.0
             tr.low_posture_sec = 0.0
             tr.fall_reason = REASON_NONE
-            tr.fall_state = FALL_UPRIGHT if tr.locked_human else FALL_UNKNOWN
+            # 持续缺测必须给出未知/失联，绝不能在没有新直立观测时伪称 FALL_UPRIGHT
+            tr.fall_state = FALL_UNKNOWN
+            tr.missed_echo_state = (
+                "lost_after_suspected"
+                if tr.last_observed_fall_state == FALL_SUSPECTED
+                else "echo_lost_unknown"
+            )
             if tr.miss_frames > cfg["max_miss_frames"]:
                 expired_ids.append("g%d_t%04d" % (self.generation, tr.id))
                 if tr.id == self.selected_track_id:
@@ -1130,6 +1470,7 @@ class InstantHumanTracker:
 
         # 阶段 4：构造覆盖归属掩码并更新自适应远景背景
         new_owner = np.zeros(self.shape, dtype=np.uint8)
+        has_owner = False
         for i, cand in enumerate(candidates):
             slot = cand_slots[i] - 1
             if slot < 0:
@@ -1139,9 +1480,21 @@ class InstantHumanTracker:
                 if cand["motion_points"] < 4 and (cand["retain_track_slot"] != slot or cand["owned_points"] < 4):
                     continue
             new_owner.ravel()[cand["cells"]] = slot + 1
-        self._update_background(cur_mm, new_owner)
+            has_owner = True
+        self._update_background(cur_mm, new_owner, has_owner=has_owner)
         self.background_adapter.sync(self.bg_far_mm, binding)
         self.frame_count += 1
+
+        # 记录本帧新触发的去重疑似事件（跨短缺测同一事件只计一次）
+        for tr in self.tracks:
+            if tr.active and tr.new_episode_this_frame and tr.suspected_episode_id > 0:
+                self.suspected_episodes.append({
+                    "episode_id": int(tr.suspected_episode_id),
+                    "track_id": "g%d_t%04d" % (self.generation, tr.id),
+                    "frame": int(frame_index),
+                    "time_s": float(stamp_s),
+                    "reason": tr.fall_reason,
+                })
 
         # 收集直立已锁目标的脚底观测供后台精修交叉校验 / 兜底
         foot_observations = []
@@ -1152,6 +1505,73 @@ class InstantHumanTracker:
                     and 1.10 <= tr.height_m <= 2.05):
                 foot_observations.append((tr.h_p02, tr.cu, tr.cv))
 
+        diag_detail = None
+        if self.diagnostics:
+            cand_diags = []
+            for i, cand in enumerate(candidates[:16]):
+                slot = cand_slots[i] - 1
+                assigned_tid = (
+                    ("g%d_t%04d" % (self.generation, self.tracks[slot].id))
+                    if (slot >= 0 and self.tracks[slot].active)
+                    else None
+                )
+                rows_arr = np.asarray(cand["source_rows"], dtype="<i8")
+                cand_diags.append({
+                    "index": i,
+                    "point_count": int(cand["point_count"]),
+                    "rows_sha256": hashlib.sha256(rows_arr.tobytes()).hexdigest() if len(rows_arr) else hashlib.sha256(b"").hexdigest(),
+                    "from_retain": bool(cand["from_retain"]),
+                    "retain_track_slot": int(cand["retain_track_slot"]),
+                    "assigned_track_id": assigned_tid,
+                    "r0": int(cand["r0"]),
+                    "r1": int(cand["r1"]),
+                    "c0": int(cand["c0"]),
+                    "c1": int(cand["c1"]),
+                    "range_m": round(float(cand["range_m"]), 4),
+                    "height_m": round(float(cand["height_m"]), 4),
+                    "horiz_span_m": round(float(cand["horiz_span_m"]), 4),
+                    "aspect": round(float(cand["aspect"]), 3),
+                    "h_p05": round(float(cand["h_p05"]), 4),
+                    "h_p95": round(float(cand["h_p95"]), 4),
+                    "vertical_fill": round(float(cand["vertical_fill"]), 3),
+                    "max_vertical_gap_m": round(float(cand["max_vertical_gap_m"]), 4),
+                    "iqr_ratio": round(float(cand["iqr_height_m"]) / max(1e-6, float(cand["height_m"])), 3),
+                    "min_third_ratio": round(float(cand["min_third_ratio"]), 3),
+                    "motion_points": int(cand["motion_points"]),
+                    "motion_lower": int(cand["motion_lower"]),
+                    "motion_upper": int(cand["motion_upper"]),
+                    "upright_reject_reason": self._upright_geometry_reason(cand, ground_offset_m),
+                })
+            track_diags = []
+            for tr in self.tracks:
+                if not tr.active:
+                    continue
+                disp = math.hypot(tr.cu - tr.motion.origin_u, tr.cv - tr.motion.origin_v)
+                track_diags.append({
+                    "track_id": "g%d_t%04d" % (self.generation, tr.id),
+                    "locked_human": bool(tr.locked_human),
+                    "measured_this_frame": bool(tr.measured_this_frame),
+                    "upright_frames": int(tr.upright_frames),
+                    "point_count": int(tr.point_count),
+                    "height_m": round(float(tr.height_m), 4),
+                    "h_p95": round(float(tr.h_p95), 4),
+                    "motion_reset_reason": tr.last_motion_reset_reason,
+                    "motion_seconds": round(float(tr.motion.seconds), 3),
+                    "motion_moving_steps": int(tr.motion.moving_steps),
+                    "motion_depth_frames": int(tr.motion.depth_frames),
+                    "motion_disp_m": round(float(disp), 4),
+                    "motion_path_m": round(float(tr.motion.path_m), 4),
+                })
+            diag_detail = {
+                "version": 1,
+                "raw_valid_cells": int(valid_cur.sum()),
+                "fg_seed_cells": int(fg_seed.sum()),
+                "owner_cells": int((self.owner_grid > 0).sum()),
+                "candidate_count": len(candidates),
+                "candidates": cand_diags,
+                "tracks": track_diags,
+            }
+
         static_mask = valid_cur & (~fg_seed) & (self.owner_grid == 0)
         t_end = time.perf_counter()
         return self._pack_output(
@@ -1161,11 +1581,13 @@ class InstantHumanTracker:
             candidate_count=len(candidates), ground_offset_m=ground_offset_m,
             timings={"instant_tracker_ms": (t_end - t0) * 1000.0},
             bootstrap_frame=False,
+            diagnostics_detail=diag_detail,
         )
 
     def _pack_output(self, frame, stamp_s, frame_index, reset_reason, expired_ids, *,
                      static_mask, foot_observations, valid_cells, fg_seed_cells,
-                     candidate_count, ground_offset_m, timings, bootstrap_frame):
+                     candidate_count, ground_offset_m, timings, bootstrap_frame,
+                     diagnostics_detail=None):
         primary, continuity_tr, target_reason = self._select_primary_track()
         tracks_out = []
         for tr in self.tracks:
@@ -1203,9 +1625,16 @@ class InstantHumanTracker:
                 "still_sec": round(float(tr.still_sec), 3),
                 "fall_state": tr.fall_state,
                 "fall_reason": tr.fall_reason,
+                "last_observed_fall_state": tr.last_observed_fall_state,
+                "missed_echo_state": tr.missed_echo_state,
+                "suspected_episode_id": int(tr.suspected_episode_id),
                 "selection_score": float(tr.point_count) if tr.locked_human else 0.0,
                 "component_ids": [],
-                "reason": "locked_human" if tr.locked_human else "tentative_motion_check",
+                "reason": (
+                    tr.missed_echo_state
+                    if (tr.locked_human and not tr.measured_this_frame and tr.missed_echo_state)
+                    else ("locked_human" if tr.locked_human else "tentative_motion_check")
+                ),
             })
 
         target_tid = ("g%d_t%04d" % (self.generation, primary.id)) if primary is not None else None
@@ -1213,16 +1642,48 @@ class InstantHumanTracker:
         target_rows = list(primary.source_rows) if primary is not None else []
         state_tr = primary if primary is not None else continuity_tr
 
+        lost_suspected_tr = None
+        if state_tr is None:
+            for tr in self.tracks:
+                if tr.active and tr.locked_human and tr.missed_echo_state == "lost_after_suspected":
+                    lost_suspected_tr = tr
+                    break
+
+        new_event = None
+        if state_tr is not None and state_tr.new_episode_this_frame and state_tr.suspected_episode_id > 0:
+            new_event = {
+                "episode_id": int(state_tr.suspected_episode_id),
+                "track_id": cont_tid,
+                "frame": int(frame_index),
+                "time_s": float(stamp_s),
+                "reason": state_tr.fall_reason,
+            }
+
         if bootstrap_frame:
             fall_status = FALL_UNKNOWN
             reason_codes = ["instant_frame0_bootstrap"]
             kinematics = None
+            obs_status = "bootstrap"
+            last_obs_fall = FALL_UNKNOWN
+            ep_id = 0
         elif state_tr is None:
             fall_status = FALL_UNKNOWN
-            reason_codes = [target_reason or "no_locked_human_target"]
+            if lost_suspected_tr is not None:
+                reason_codes = ["lost_after_suspected", "echo_lost_unknown"]
+                obs_status = "lost_after_suspected"
+                last_obs_fall = FALL_SUSPECTED
+                ep_id = int(lost_suspected_tr.suspected_episode_id)
+                target_reason = "lost_after_suspected"
+            else:
+                reason_codes = [target_reason or "no_locked_human_target"]
+                obs_status = "no_target"
+                last_obs_fall = FALL_UNKNOWN
+                ep_id = 0
             kinematics = None
         else:
             fall_status = state_tr.fall_state
+            last_obs_fall = state_tr.last_observed_fall_state
+            ep_id = int(state_tr.suspected_episode_id)
             reason_codes = []
             if state_tr.fall_reason != REASON_NONE:
                 reason_codes.append(state_tr.fall_reason)
@@ -1231,13 +1692,21 @@ class InstantHumanTracker:
             if state_tr.low_posture_sec > 0.0:
                 reason_codes.append("collapsed_low_posture_sustained")
             if not state_tr.measured_this_frame:
+                obs_status = state_tr.missed_echo_state or "short_missing_echo"
+                if obs_status == "last_suspected_missing_echo":
+                    reason_codes.append("last_suspected_missing_echo")
                 reason_codes.append("short_measurement_gap_held")
+            else:
+                obs_status = "measured"
             if not reason_codes:
                 reason_codes.append("kinematic_" + fall_status)
             kinematics = {
                 "method": "instant_gravity_kinematics_v1",
                 "track_id": cont_tid,
                 "measured_this_frame": state_tr.measured_this_frame,
+                "observation_status": obs_status,
+                "last_observed_fall_state": last_obs_fall,
+                "suspected_episode_id": ep_id,
                 "baseline_ready": state_tr.baseline_ready,
                 "height_span_m": round(float(state_tr.height_m), 4),
                 "horiz_span_m": round(float(state_tr.horiz_span_m), 4),
@@ -1313,9 +1782,15 @@ class InstantHumanTracker:
 
         fall_evidence = {
             "state": fall_status,
+            "observation_status": obs_status,
+            "measured_this_frame": bool(primary is not None),
+            "last_observed_fall_state": last_obs_fall,
+            "suspected_episode_id": ep_id,
+            "suspected_episode_count": len(self.suspected_episodes),
+            "episode_history": list(self.suspected_episodes),
             "reason_codes": reason_codes,
             "confirmed_enabled": False,
-            "new_event": None,
+            "new_event": new_event,
             "method": "instant_gravity_kinematics_v1",
             "low_duration_s": round(float(state_tr.low_posture_sec), 3) if state_tr is not None else 0.0,
             "drop_top_m": round(float(state_tr.drop_top_m), 4) if state_tr is not None else None,
@@ -1326,12 +1801,19 @@ class InstantHumanTracker:
         measurement = {
             "topHeightM": top_height_m,
             "bottomHeightM": bottom_height_m,
+            "bottomHeightAboveGroundM": bottom_height_m,
+            "footP02AboveGroundM": (
+                None if (h_off is None or primary is None) else round(float(primary.h_p02 + h_off), 4)
+            ),
             "heightSpanM": round(float(primary.height_m), 4) if primary is not None else None,
             "horizontalExtentM": horiz_extent_m,
             "descentRateMps": descent_rate_mps,
             "axisVerticality": axis_vert,
             "dropTopM": round(float(primary.drop_top_m), 4) if primary is not None else None,
             "groundRelativeAvailable": h_off is not None,
+            "radialBgSeedMarginM": round(float(self.settings["fg_margin_mm"]) * 0.001, 4),
+            "radialBgGrowMarginM": round(float(self.settings["bg_grow_margin_mm"]) * 0.001, 4),
+            "groundHangingGateM": round(float(self.settings["ground_hanging_bottom_max_m"]), 4),
         }
 
         return {
@@ -1349,4 +1831,5 @@ class InstantHumanTracker:
             "candidate_count": candidate_count,
             "timings": timings,
             "bootstrap_frame": bootstrap_frame,
+            "diagnostics_detail": diagnostics_detail,
         }

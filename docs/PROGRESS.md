@@ -1748,3 +1748,45 @@
   - 地面后台无感精修：**15/15** 第 0 帧输出配平 `displayPlane`，**15/15** 在 f9–f19（~0.9–1.9 s）收敛至 `refined_plane`（含旧拟合失败的 `082829/082906/083218`），与离线全段参考平面法向差 **0.26°–0.87°**、偏移差 **0–16 mm**，切换引起 ID 跳变 **0 次**。
   - 7 段主力回放：后倒 `f73→f136`、前倒 `f155→f209`、慢倒 `f109→f197` 全检出且同 ID `g0_t0001` 直立恢复；系鞋带弯腰、386 帧、126 帧、780 帧对照均 0 误触发、单 ID；PC 单帧耗时 `instant_only` P50 **9.3–15.8 ms** / P95 **18.5–32.1 ms**，加开 `human_physical_v1` P50 **40.1–56.0 ms**（780 帧 10.9 ms）。
 - 边界与下一步：8pack 中 4 段（`083044/083120/083218/083254`）0 锁定（`083254` 含 175 帧暂态直立轨未跨过 `0.11 m` 动态位移门），属免空场动态初锁固有边界；前景 14 cm 贴地裁剪使直立脚底 `h_p02` 高于精修地面约 `0.14–0.22 m`；未动 `data/`/junction/git/驱动/板端服务，RK3588 实机耗时、`/inno_imu` 现场实流轴向与真实人体/跌倒效果指标仍 **UNKNOWN**，`confirmed` 关闭。证据见 `docs/evidence/2026-11-25_rk3588_instant_start_refinement/`（`SUMMARY.json`、`EIGHTPACK_GENERALIZATION.json`、`FILES_SHA256.json`、15 份逐帧账本）。下一步经用户授权后可打包部署至 RK3588 并用 `--instant-start` 做实机现场与 `/inno_imu` 联调。
+
+## 2026-11-25 RK3588 人体/倒地识别部署包构建与隔离验证（板端当前网络不可达，待连网推送）
+
+- 按用户明确指令部署 RK3588 人体/倒地识别（最新 `--instant-start` 免空场自适应背景 + 后台无感精修地面 + 运动学跌倒候选链），但当前主机连接 `SZUT` Wi-Fi（`10.12.150.7/21`，无 `192.168.31.x` 路由/有线网卡），经只读连通核查 `ping 192.168.31.58` 超时、`welcomtech.local` 解析失败、`ssh wel@192.168.31.58:22` 超时（`BOARD_DEPLOY_ATTEMPT.log`），无法推送或启停板端服务。
+- 已完成不依赖板端连通的全部发布准备与隔离验证（未改生产源码、未动 `data/`/junction/git/板端）：
+  - 打包不可变识别包 `range_service_instant_v1.tar`（`release_id=46a530d156854aff8ab6f3d513092278330bd2fc9aba18610c811b764bf25e33`，tar SHA256 `9f9ce67065a9765a7be6543d94f07a0d50c5cd71f9b821684fca5294dae6c34d`，共 88 文件含 86 载荷，含 `core/silent_ground_refiner.py` 与 `core/instant_tracker.py`）。
+  - `-B -W error` 单元测试：`src/human_fall_detection/tests` **959 OK**（skip 1，85.47 s，`core_tests.log`）。
+  - 独立解包隔离验证（`verify_bundle_offline.py` → `BUNDLE_ISOLATED_VERIFY.json`，`-B -W error`）：86/86 载荷 SHA256 核验通过、80/80 `.py` Python 3.8 AST 检查通过、隔离导入与 `range_service_node.py` 入口加载通过；从解包目录直接跑 `RangeService + RangeEngine(instant_start=True)` 零空场零预拟合回放：`cap_20261028_houdao`（169 帧，f0 出 `displayPlane`、f19 精修收敛、单一 ID `g0_t0001` 0 切换、f73 疑似/f136 直立恢复、4/4 异步预览 OK、PC P50 18.59 ms / P95 36.68 ms）与 `cap_20261028_jixiedaiwanyao`（265 帧，f19 收敛、单一 ID、0 疑似误报、4/4 预览 OK、PC P50 19.11 ms / P95 35.17 ms），`confirmed_enabled=false`。
+  - 备好一键部署与 15 s 实流基准脚本 `deploy_instant_to_3588.py`（核验 tar 与 86 文件 SHA + 板端 Python 3.8.10 / NumPy 1.17.4 隔离导入后仅替换 `range_service_node.py`，不碰驱动/网络/采集/`current`，默认先 `--disable-imu` 待现场复核 `/inno_imu` 轴向后再决定是否启用）。
+- 边界与下一步：板端未变更（当前运行态与板端实测耗时/真实人体及跌倒效果仍为 **UNKNOWN**）；待主机接入 RK3588 所在网络（如 `192.168.31.x` 或用户指定板端 IP）后直接执行 `deploy_instant_to_3588.py` 完成上线、`/inno_imu` 轴向核查与实流基准。证据见 `docs/evidence/2026-11-25_board_instant_deploy/`。
+
+## 2026-11-25 RK3588 人体/倒地识别（`--instant-start`）实机上线、`/inno_imu` 核查与 15 s 实流验证
+
+- 连通后先只读核查 RK3588（`192.168.31.58`，`BOARD_PRECHECK.txt`）：`/inno_imu` 实流约 200 Hz，`linear_acceleration ≈ [-4.13, +0.01, +9.08] m/s²`（`|a|=9.97 m/s²`，`|ω|=0.041 rad/s`），单位重力向量 `[-0.414, +0.001, +0.910]` 与前日地面法向同轴同号（夹角 ~4.0°，仍诚实标记 `imuExtrinsicsVerified=false`），确认可启用 `/inno_imu`。
+- 板端上线（`deploy_instant_to_3588.py`，初版遇 `ROS_DISTRO` `set -u` 与 `pgrep -f` 误匹配子 shell，均已修正并留存日志）：上传 `range_service_instant_v1.tar`（SHA256 `9f9ce67065a9765a7be6543d94f07a0d50c5cd71f9b821684fca5294dae6c34d`）至 `slam-localization` 独立目录 `recognition_releases/46a530d1.../bundle`，板端 Python 3.8.10 / NumPy 1.17.4 核验 86/86 文件 SHA256 与隔离导入通过；仅停止旧 `range_service_node.py` PID `127841`（保留旧 release `22f23d30...` 可回滚），以 `taskset -c 4-7` 启动新 PID **`128168`**（run `range_20261125T0401Z_instant`，`--instant-start --mount-pitch-deg 26.0 --mount-roll-deg 0.0`），`/single_target_live/state` 唯一发布者，`node.log` 0 字节 0 报错；驱动 `126812`、Foxglove `105`、采集 `57942`、页面 `57954`/`174`、网络、`data/` 与 `current` 均未触碰。
+- RK3588 15.0 s 实流基准（`BOARD_LIVE_BENCHMARK.json` / `BOARD_CPU_STATUS.txt`，145 唯一源帧）：启动 2 s 内即静默收敛 `refined_plane`（`normal=[-0.4430, -0.0178, 0.8964]`、`offsetM=1.3288 m`、`inliers=456`、`rms=16.8 mm`、`p95=31.6 mm`、`span=2.21×1.94 m`、`below_fraction=0.3%`、`tilt_diff_deg=1.92°`、`imuSamples=3749`）；实测 **9.67 Hz / 0.0% 丢帧**、`service_compute_ms` P50 **40.44 ms** / P95 **59.51 ms** / max **77.84 ms**（`decode` P50 20.46 ms、`instant_tracker` P50 8.61 ms、`silent_refine` P50 0.20 ms、异步 `preview` P50 16.07 ms、`result_source_age_ms` P50 59.74 ms / max 98.12 ms）、带宽 **10.56 Mbps**、CPU **74.8%** 单核（旧 v2 为 109%）、RSS **82.6 MB**（旧 v2 为 223.9 MB）；空场 `locked_frames=0`，`confirmed_enabled=false`。
+- 联调与回归：`pc_apps/lidar_studio/tests` `-B -W error` **17 OK** + `studio_lib.test.js` 全过；`verify_studio_live.py` → `STUDIO_LIVE_E2E.json` 实测 `LiDAR Studio` 以 `json_only`（53.3 KB/帧）与 `cloud_and_json`（20,242 点）实时消费板端新流全通。边界：真人走入后的板端耗时、真实人体/跌倒准确率/召回率/误报率与物理地面真值仍 **UNKNOWN**，`confirmed` 关闭。证据见 `docs/evidence/2026-11-25_board_instant_deploy/`（`FILES_SHA256.json` 14 项）。
+
+## 2026-11-27 优化方向评估与工作区/发布包对照
+
+- PC 因果回放 11 月 25 日 RK3588 发布包和当前工作区，校验 15 段原始录制 meta/points SHA，按相同标称 26°、无 IMU/物理增强/预览逐帧处理。4,131 帧的目标 ID、目标源行数与有序行 SHA、跌倒状态、地面阶段、重建的 ROS wire SHA 均一致。后倒/前倒/慢倒的疑似→直立恢复为 f73→136、f155→209、f109→197；弯腰系鞋带 0 疑似。当前工作区 instant-start 专项 12 项、Studio 17 项均以 -B -W error 通过。
+- Studio 内存重放复现两个跨帧问题：seq10 的目标与 suspected 被叠到 wire SHA 不同的 seq11 点云；seq11 纯 JSON 无预览时仍打包 seq10 PNG。建议优先实施同源配对及乱序测试，再让 Studio 能选择板端因果算法回放。现场出现频率未知。
+- 四段坐/蹲起身对照（954 帧）：默认 11 cm 与仅将位移门改成 0 的两次运行均 0 锁定。前三段实测直立候选轨分别只有 2/14/7 帧；侧面蹲起有 174 帧，159 帧能累计运动证据，仅 10 帧满足两步运动要求。优先定位候选高度覆盖与同轨运动证据。板端性能宜在有目标负载下对照测量；未改生产代码、未操作设备，无逐帧真值，现场效果 UNKNOWN。
+- [本轮机器证据](evidence/2026-11-27_optimization_review/)含原始逐帧账本、配对输出、门限对照、SHA 和测试日志。
+
+## 2026-11-27 RK3588 人体识别实施计划与方法核查
+
+- 多轮对照 ROS1 精确时间配对、距离图几何分割、弱观测关联、跟踪与跌倒事件评价的原始资料，实施计划写入 DEVELOPMENT_DEBUGGING.md 第 10 节。顺序为同源显示、板端因果回放、候选高度与垂向运动两组实验、缺测及地面状态、有载板测。每项写明对照、输出和停止条件。
+- 本轮复跑 Studio 封包/解包的两帧反例，两种串帧均复现；instant-start 12 项、Studio 17 项（均 -B -W error）及 Studio JS 通过。15 段回放和门限消融引用本日已落盘证据。本轮交付计划，现场性能与长期人体效果仍 UNKNOWN。机器证据见 docs/evidence/2026-11-27_optimization_plan/。
+
+## 2026-11-27 实施计划第 1–4 步开发闭环与 PC 侧 16 段评估（未部署板端）
+
+- 按 `DEVELOPMENT_DEBUGGING.md` §10 连续完成第 1–4 步代码实现、对照实验、真实浏览器核验与第 5 步 PC 侧评估（未动板端/驱动/网络/`data/`/junction，未 commit/push/reset/checkout/clean，`confirmed_enabled=false`）：
+  1. **Step 1（Studio 实时同源配对）**：先将两帧 100 ms / 3 m 错配反例与正确配对正例写入 `test_server_and_live.py` 留存修前失败日志（`PRE_FIX_PAIRING_TEST.log`），再重构 `pc_apps/lidar_studio/live_source.py` 为双侧有界缓存按 `(conn_gen, seq, stamp_secs, stamp_nsecs, frame_id)` + 64 位原始 `wireSha256` 精确配对，覆盖先状态/先点云/晚到同帧预览/同 seq 异 SHA/重复或无效心跳/重连序号复用/TTL 过期 7 类时序与故障，统计驱逐/取代丢失的有效结果与等待耗时 P50/P95/max；前端 `view2d.js` 加 `_previewToken` 防慢解码回写已清画布、`view3d.js` 过期清尾迹、`panels.js`/`studio_lib.js` 补齐配对与缺测译文。
+  2. **Step 2（Studio 板端因果回放）**：`replay_source.py`/`server.py`/`web/{index.html,app.js,panels.js}` 新增默认 `board_causal` 模式，直接复用共享 `RangeService + RangeEngine(instant_start=True)` 从第 0 帧起算，保留 `offline_research` 对照；缓存键按模式/配置/标定/代码 SHA 隔离并兼容旧缓存，显式标注重建 wire 身份与无 IMU（标称 26°），补充 `run_causal_schedule_simulation` 覆盖真间隔、丢帧（f35/36）与 >0.5 s TTL 超时（f90 `local_input_expired`）。
+  3. **Step 4（缺测/起身恢复/脚底地面/边距口径）**：`instant_tracker.py` 区分疑似后短缺测（≤2 帧维持 `last_suspected_missing_echo`“上次疑似 · 当前缺测”、不累计 `low_posture_sec`、回波恢复同次 episode 不重复计数）与长缺测（>2 帧顶层与逐轨同设 `FALL_UNKNOWN` + `lost_after_suspected`，杜绝无观测伪造 `FALL_UPRIGHT`），并分离径向背景边距（`0.22/0.14 m`）与物理离地高度；`silent_ground_refiner.py` 停止 `foot_anchored` 自检循环（独立静态平面收敛前 `footConsistent=None`、`footResidualM=None`，显式标明 `offsetSource="upright_foot_anchor_only"`）。
+  4. **Step 3（坐蹲两类初锁失败诊断与隔离修复）**：新增默认关闭 `diagnostics=False` 诊断通道（`SIT_SQUAT_DIAGNOSTIC.json` 证明 `083044/083120/083218` 根因为第 0 帧人在场导致 `bg_far_mm` 下肢自吸收而非 BFS 断簇；`083254` 10/10 两步帧全死于直线度门且 1.3 s 超时）；在 `instant_tracker.py` 集成并经 16 段实测 + 12 项合成对照（8 项负例全 0 误锁/0 疑似）隔离验证后默认启用 `enable_f0_body_completion=True`（真实未访问/无归属像素紧圆柱向下补全 + 宽度膨胀与全套直立门）与 `enable_vertical_articulation_lock=True`（同连续暂态轨双半区垂向伸展初锁 + 锁前下降史清零 + 重力切换隔离）：6 段主力与 `224823` 空场与基线 **0 帧差异**（`houdao` f73→136、`qiandao` f155→209、`huanmandiedao` f109→197、`jixiedaiwanyao` 0 疑似），四段原 0 锁坐蹲全部解锁且单 ID 0 误报（`083044` 84f/f166、`083120` 166f/f80、`083218` 71f/f160、`083254` 170f/f54），`082717` 提前至 f34 锁定（292f，含疑似与 f277 同 ID 恢复）。
+- **验证**：
+  - 全仓四套 `-B -W error` + JS：`human_fall_detection` **964 OK**（skipped=1，含 `test_instant_start.py` 16 项与 Python 3.8 AST 检查）、`human_capture` **69 OK**、`human_follow_calibration` **2 OK**、`pc_apps/lidar_studio` **24 OK** + `studio_lib.test.js` 与 5 份 JS 语法检查通过；
+  - 16 段 **4,179 帧** Studio `board_causal` 与直跑 `RangeService + RangeEngine(instant_start=True)` 逐帧 **0 差异**（`FINAL_16_SESSION_STUDIO_PARITY_AND_EVAL.json`，PC 服务侧 `diagnostics=False` P50 `8.10–14.61 ms` / P95 `12.74–23.88 ms`）；
+  - 1920×1080 真实浏览器核验 4 场景（`board_causal` f73 疑似、`offline_research` 切换、纯 JSON “有图→待图”真清屏与“上次疑似 · 当前缺测”、点云+JSON 错帧拒叠），0 控制台/页面错误（截图 `screenshots/browser_live_mismatched_cleared.png`）。
+- **边界与遗留**：无逐帧 GT，准确率/召回率/每有效小时误报率及 **RK3588 有目标实机延迟（第 5 步板测）均 UNKNOWN**；工作区既有 11-25 性能优化未提交改动已记录在 `FILES_SHA256.json`；待用户授权后再打包并于 RK3588 交替有载重放对比。机器证据：`docs/evidence/2026-11-27_studio_causal_and_tracker_dev/`。

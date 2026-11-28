@@ -13,6 +13,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import struct
 import sys
 import tempfile
 import threading
@@ -31,11 +32,13 @@ for _p in (str(HF_DIR), str(HF_SCRIPTS)):
 from core.capture_input import ROW_DTYPE, read_source_meta, sha256_file  # noqa: E402
 from core.range_contract import binding_tuple, source_binding  # noqa: E402
 from core.range_demo_alert import DemoAlert  # noqa: E402
+from core.range_engine import RangeEngine  # noqa: E402
 from core.range_features import bound_ground  # noqa: E402
 from core.range_ground_alert import GroundAlertObserver  # noqa: E402
 from core.range_image import ScanGrid  # noqa: E402
 from core.range_offline import QuantileBackground, SEED as OFFLINE_SEED, fit_declared_plane  # noqa: E402
 from core.range_runtime import RangeRuntime  # noqa: E402
+from core.range_service import RangeService, RawCloudWire  # noqa: E402
 from core.range_skeleton import estimate as estimate_skeleton, project_regions  # noqa: E402
 
 from camera_hub import ReplayCameraIndex
@@ -53,7 +56,145 @@ AZIMUTH_CSV = CALIBRATION_DIR / "ifw192s_azimuth_192x256.csv"
 ELEVATION_CSV = CALIBRATION_DIR / "ifw192s_elevation_192x256.csv"
 
 CACHE_FORMAT_VERSION = "lidar_studio_cache_v2"
+CACHE_FORMAT_BOARD_CAUSAL = "lidar_studio_board_causal_v1"
+REPLAY_MODE_OFFLINE_RESEARCH = "offline_research"
+REPLAY_MODE_BOARD_CAUSAL = "board_causal"
+VALID_REPLAY_MODES = (REPLAY_MODE_OFFLINE_RESEARCH, REPLAY_MODE_BOARD_CAUSAL)
 SID_PATTERN = re.compile(r"^[A-Za-z0-9._-]+$")
+
+_BOARD_CAUSAL_CODE_FILES = (
+    HF_DIR / "core" / "instant_tracker.py",
+    HF_DIR / "core" / "silent_ground_refiner.py",
+    HF_DIR / "core" / "range_engine.py",
+    HF_DIR / "core" / "range_service.py",
+    HF_DIR / "core" / "range_image.py",
+    HF_DIR / "core" / "range_live.py",
+    HF_DIR / "core" / "range_wire.py",
+)
+
+
+def board_causal_code_sha256() -> str:
+    """计算板端因果链路核心源码联合摘要，算法改动后自动隔离旧缓存。"""
+    h = hashlib.sha256()
+    for p in _BOARD_CAUSAL_CODE_FILES:
+        h.update(p.name.encode("utf-8"))
+        h.update(b":")
+        h.update(p.read_bytes())
+        h.update(b"\n")
+    return h.hexdigest()
+
+
+def pack_rows_to_ros_wire(
+    packed: np.ndarray,
+    *,
+    seq: int,
+    stamp_sec: int,
+    stamp_nanosec: int,
+    frame_id: str,
+) -> bytes:
+    """将录制会话的 ROW_DTYPE 点云重建为标准 ROS1 PointCloud2 线格式（仅作离线重建输入，非当年实流原字节）。"""
+    fid = frame_id.encode("utf-8")
+    n = int(len(packed))
+    point_step = int(ROW_DTYPE.itemsize)  # 28 bytes: x(0), y(4), z(8), intensity(12), ring(16), timestamp(20)
+    data = np.ascontiguousarray(packed, dtype=ROW_DTYPE).tobytes()
+    fields = (
+        (b"x", 0, 7, 1),
+        (b"y", 4, 7, 1),
+        (b"z", 8, 7, 1),
+        (b"intensity", 12, 7, 1),
+        (b"ring", 16, 4, 1),
+        (b"timestamp", 20, 7, 1),
+    )
+    parts = [
+        struct.pack("<IIII", int(seq), int(stamp_sec), int(stamp_nanosec), len(fid)),
+        fid,
+        struct.pack("<III", 1, n, len(fields)),
+    ]
+    for name, off, dtype_code, count in fields:
+        parts.append(struct.pack("<I", len(name)) + name + struct.pack("<IBI", off, dtype_code, count))
+    parts.append(struct.pack("<?III", False, point_step, point_step * n, len(data)))
+    parts.append(data)
+    parts.append(struct.pack("<?", True))
+    return b"".join(parts)
+
+
+def run_causal_schedule_simulation(
+    session_dir: Path,
+    *,
+    mount_pitch_deg: float = 26.0,
+    mount_roll_deg: float = 0.0,
+    drop_indices: set[int] | None = None,
+    extra_delay_by_index: dict[int, float] | None = None,
+    use_real_source_intervals: bool = True,
+) -> list[dict[str, Any]]:
+    """独立调度仿真：用真实源时间间隔、缺帧与处理超期（>0.5s TTL）运行 RangeService+RangeEngine，单列调度差异。"""
+    meta, meta_sha = validate_session_meta(session_dir)
+    points_sha = sha256_file(session_dir / "points.bin")
+    grid, az_sha, el_sha = get_shared_grid()
+    identity = source_binding(session_dir, meta, meta_sha, points_sha, grid)
+    identity["azimuth_sha256"] = az_sha
+    identity["elevation_sha256"] = el_sha
+    frame_id = identity["coordinate"][4:]
+
+    sim_clock = [0.0]
+    engine = RangeEngine(
+        grid,
+        frame_id,
+        identity=dict(identity),
+        clock=lambda: sim_clock[0],
+        instant_start=True,
+        mount_pitch_deg=mount_pitch_deg,
+        mount_roll_deg=mount_roll_deg,
+        human_physical_v1=False,
+    )
+    service = RangeService(engine, release_id="studio_schedule_sim", preview=False, clock=lambda: sim_clock[0])
+
+    drops = drop_indices or set()
+    delays = extra_delay_by_index or {}
+    out: list[dict[str, Any]] = []
+    frames_meta = meta["frames"]
+    t0_stamp = frames_meta[0]["stamp_sec"] + frames_meta[0]["stamp_nanosec"] / 1e9
+
+    with (session_dir / "points.bin").open("rb") as stream:
+        for idx, info in enumerate(frames_meta):
+            size = info["count_points"] * ROW_DTYPE.itemsize
+            raw = stream.read(size)
+            if len(raw) != size:
+                raise ValueError(f"points.bin truncated at frame {idx}")
+            if idx in drops:
+                out.append({"frame": idx, "dropped_by_schedule": True, "observability": "dropped", "track_id": None, "fall_status": "unknown"})
+                continue
+            packed = np.frombuffer(raw, dtype=ROW_DTYPE)
+            stamp = info["stamp_sec"] + info["stamp_nanosec"] / 1e9
+            recv_t = (stamp - t0_stamp) if use_real_source_intervals else (idx * 0.104)
+            sim_clock[0] = recv_t
+            repacked = pack_rows_to_ros_wire(
+                packed,
+                seq=info.get("seq", idx + 1),
+                stamp_sec=info["stamp_sec"],
+                stamp_nanosec=info["stamp_nanosec"],
+                frame_id=frame_id,
+            )
+            service.submit(RawCloudWire(repacked))
+            extra_delay = float(delays.get(idx, 0.0))
+            if extra_delay > 0.0:
+                sim_clock[0] = recv_t + extra_delay
+            res = service.process_latest()
+            out.append(
+                {
+                    "frame": idx,
+                    "dropped_by_schedule": False,
+                    "extra_delay_s": extra_delay,
+                    "observability": res.get("observability"),
+                    "acquisition_reason": (res.get("acquisition") or {}).get("reason"),
+                    "track_id": res.get("track_id"),
+                    "fall_status": res.get("fall_status"),
+                    "target_rows": len(res.get("target_source_rows") or []),
+                    "ground_stage": ((res.get("local_range") or {}).get("ground") or {}).get("refinementStage"),
+                    "wire_identity": "reconstructed_from_session_points_bin",
+                }
+            )
+    return out
 
 KNOWN_TITLES = {
     "cap_20261028_houdao": "向后倒地（带相机）",
@@ -424,7 +565,7 @@ class ReplaySessionData:
 
 
 class ReplayManager:
-    """管理全部回放会话列表、离线算法推理与安全磁盘缓存。"""
+    """管理全部回放会话列表、离线研究/板端因果双模式推理与安全磁盘缓存。"""
 
     def __init__(
         self,
@@ -435,8 +576,8 @@ class ReplayManager:
         raw_cache = cache_dir or (Path(__file__).resolve().parent / ".cache")
         self.cache_dir = assert_safe_cache_dir(raw_cache)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
-        self._open_sessions: dict[str, ReplaySessionData] = {}
-        self._compute_locks: dict[str, threading.Lock] = {}
+        self._open_sessions: dict[tuple[str, str], ReplaySessionData] = {}
+        self._compute_locks: dict[tuple[str, str], threading.Lock] = {}
         self._mgr_lock = threading.Lock()
 
     def close_all(self) -> None:
@@ -449,10 +590,58 @@ class ReplayManager:
         raw = f"{CACHE_FORMAT_VERSION}:{meta_sha}:{points_sha}:{runtime_config_sha}".encode("utf-8")
         return hashlib.sha256(raw).hexdigest()[:16]
 
-    def _find_cached_dir(self, sid: str, meta_sha: str, points_sha: str) -> Path | None:
-        prefix = f"{sid}_"
+    def _compute_board_causal_cache_key(
+        self,
+        meta_sha: str,
+        points_sha: str,
+        az_sha: str,
+        el_sha: str,
+        instant_config_sha: str,
+        code_sha: str,
+        *,
+        mount_pitch_deg: float,
+        mount_roll_deg: float,
+        human_physical_v1: bool,
+    ) -> str:
+        payload = json.dumps(
+            {
+                "format": CACHE_FORMAT_BOARD_CAUSAL,
+                "mode": REPLAY_MODE_BOARD_CAUSAL,
+                "meta_sha": meta_sha,
+                "points_sha": points_sha,
+                "az_sha": az_sha,
+                "el_sha": el_sha,
+                "instant_config_sha": instant_config_sha,
+                "code_sha": code_sha,
+                "mount_pitch_deg": round(float(mount_pitch_deg), 4),
+                "mount_roll_deg": round(float(mount_roll_deg), 4),
+                "human_physical_v1": bool(human_physical_v1),
+                "imu_available": False,
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        return hashlib.sha256(payload).hexdigest()[:16]
+
+    def _find_cached_dir(
+        self,
+        sid: str,
+        meta_sha: str,
+        points_sha: str,
+        *,
+        replay_mode: str = REPLAY_MODE_OFFLINE_RESEARCH,
+        expected_cache_key: str | None = None,
+    ) -> Path | None:
+        prefix = f"{sid}_" if replay_mode == REPLAY_MODE_OFFLINE_RESEARCH else f"{sid}_causal_"
+        expected_fmt = (
+            CACHE_FORMAT_VERSION
+            if replay_mode == REPLAY_MODE_OFFLINE_RESEARCH
+            else CACHE_FORMAT_BOARD_CAUSAL
+        )
         for candidate in self.cache_dir.iterdir():
             if not candidate.is_dir() or not candidate.name.startswith(prefix):
+                continue
+            if replay_mode == REPLAY_MODE_OFFLINE_RESEARCH and candidate.name.startswith(f"{sid}_causal_"):
                 continue
             summary_p = candidate / "summary.json"
             states_p = candidate / "states.jsonl"
@@ -461,17 +650,23 @@ class ReplayManager:
                 continue
             try:
                 summary = json.loads(summary_p.read_text(encoding="utf-8"))
+                s_mode = summary.get("replay_mode", REPLAY_MODE_OFFLINE_RESEARCH)
                 if (
-                    summary.get("cache_format") == CACHE_FORMAT_VERSION
+                    summary.get("cache_format") == expected_fmt
+                    and s_mode == replay_mode
                     and summary.get("meta_sha256") == meta_sha
                     and summary.get("points_sha256") == points_sha
                 ):
+                    if expected_cache_key is not None and summary.get("cache_key") != expected_cache_key:
+                        continue
                     return candidate
             except Exception:
                 continue
         return None
 
-    def list_sessions(self) -> list[dict[str, Any]]:
+    def list_sessions(self, replay_mode: str = REPLAY_MODE_OFFLINE_RESEARCH) -> list[dict[str, Any]]:
+        if replay_mode not in VALID_REPLAY_MODES:
+            replay_mode = REPLAY_MODE_OFFLINE_RESEARCH
         if not self.sessions_root.is_dir():
             return []
         entries: list[dict[str, Any]] = []
@@ -497,20 +692,23 @@ class ReplayManager:
                 if has_cam:
                     cam_frames = sum(1 for ln in cam_idx_p.read_text(encoding="utf-8").splitlines() if ln.strip())
                 meta_sha = hashlib.sha256(meta_p.read_bytes()).hexdigest()
-                cached = False
+                cached_research = False
+                cached_causal = False
                 for c in self.cache_dir.iterdir():
                     if not (c.is_dir() and c.name.startswith(f"{d.name}_") and (c / "summary.json").is_file()):
                         continue
                     try:
                         csum = json.loads((c / "summary.json").read_text(encoding="utf-8"))
-                        if (
-                            csum.get("cache_format") == CACHE_FORMAT_VERSION
-                            and csum.get("meta_sha256") == meta_sha
-                        ):
-                            cached = True
-                            break
+                        if csum.get("meta_sha256") != meta_sha:
+                            continue
+                        cmode = csum.get("replay_mode", REPLAY_MODE_OFFLINE_RESEARCH)
+                        if csum.get("cache_format") == CACHE_FORMAT_VERSION and cmode == REPLAY_MODE_OFFLINE_RESEARCH:
+                            cached_research = True
+                        elif csum.get("cache_format") == CACHE_FORMAT_BOARD_CAUSAL and cmode == REPLAY_MODE_BOARD_CAUSAL:
+                            cached_causal = True
                     except Exception:
                         continue
+                cached = cached_causal if replay_mode == REPLAY_MODE_BOARD_CAUSAL else cached_research
                 entries.append(
                     {
                         "sid": d.name,
@@ -520,34 +718,48 @@ class ReplayManager:
                         "has_camera": has_cam,
                         "camera_frames": cam_frames,
                         "cached": cached,
-                        "in_memory": d.name in self._open_sessions,
+                        "cached_offline_research": cached_research,
+                        "cached_board_causal": cached_causal,
+                        "in_memory": (d.name, replay_mode) in self._open_sessions,
                     }
                 )
             except Exception:
                 continue
         return entries
 
-    def _get_session_lock(self, sid: str) -> threading.Lock:
+    def _get_session_lock(self, sid: str, replay_mode: str) -> threading.Lock:
+        key = (sid, replay_mode)
         with self._mgr_lock:
-            if sid not in self._compute_locks:
-                self._compute_locks[sid] = threading.Lock()
-            return self._compute_locks[sid]
+            if key not in self._compute_locks:
+                self._compute_locks[key] = threading.Lock()
+            return self._compute_locks[key]
 
     def open_session(
         self,
         sid: str,
         progress_cb: Callable[[str, int, int, str], None] | None = None,
+        *,
+        replay_mode: str = REPLAY_MODE_OFFLINE_RESEARCH,
+        mount_pitch_deg: float = 26.0,
+        mount_roll_deg: float = 0.0,
+        human_physical_v1: bool = False,
     ) -> ReplaySessionData:
+        if replay_mode not in VALID_REPLAY_MODES:
+            raise ValueError(f"unsupported replay_mode: {replay_mode!r}")
         session_dir = validate_sid(sid, self.sessions_root)
+        mem_key = (sid, replay_mode) if replay_mode == REPLAY_MODE_OFFLINE_RESEARCH else (
+            sid,
+            f"{replay_mode}:{round(float(mount_pitch_deg), 4)}:{round(float(mount_roll_deg), 4)}:{int(bool(human_physical_v1))}",
+        )
         with self._mgr_lock:
-            existing = self._open_sessions.get(sid)
+            existing = self._open_sessions.get(mem_key)
             if existing is not None:
                 return existing
 
-        lock = self._get_session_lock(sid)
+        lock = self._get_session_lock(sid, mem_key[1])
         with lock:
             with self._mgr_lock:
-                existing = self._open_sessions.get(sid)
+                existing = self._open_sessions.get(mem_key)
                 if existing is not None:
                     return existing
 
@@ -558,7 +770,39 @@ class ReplayManager:
             identity["azimuth_sha256"] = az_sha
             identity["elevation_sha256"] = el_sha
 
-            cached_dir = self._find_cached_dir(sid, meta_sha, points_sha)
+            if replay_mode == REPLAY_MODE_BOARD_CAUSAL:
+                frame_id = identity["coordinate"][4:]
+                probe_engine = RangeEngine(
+                    grid,
+                    frame_id,
+                    identity=dict(identity),
+                    instant_start=True,
+                    mount_pitch_deg=mount_pitch_deg,
+                    mount_roll_deg=mount_roll_deg,
+                    human_physical_v1=human_physical_v1,
+                )
+                code_sha = board_causal_code_sha256()
+                expected_key = self._compute_board_causal_cache_key(
+                    meta_sha,
+                    points_sha,
+                    az_sha,
+                    el_sha,
+                    str(probe_engine.instant_config_sha),
+                    code_sha,
+                    mount_pitch_deg=mount_pitch_deg,
+                    mount_roll_deg=mount_roll_deg,
+                    human_physical_v1=human_physical_v1,
+                )
+                cached_dir = self._find_cached_dir(
+                    sid, meta_sha, points_sha, replay_mode=REPLAY_MODE_BOARD_CAUSAL, expected_cache_key=expected_key
+                )
+            else:
+                expected_key = None
+                code_sha = ""
+                cached_dir = self._find_cached_dir(
+                    sid, meta_sha, points_sha, replay_mode=REPLAY_MODE_OFFLINE_RESEARCH
+                )
+
             if cached_dir is not None:
                 if progress_cb:
                     progress_cb("cache_hit", 1, 1, "命中本地推理缓存，正在载入...")
@@ -580,13 +824,30 @@ class ReplayManager:
                     grid,
                     identity,
                 )
+            elif replay_mode == REPLAY_MODE_BOARD_CAUSAL:
+                session_obj = self._build_and_cache_board_causal(
+                    sid,
+                    session_dir,
+                    meta,
+                    meta_sha,
+                    points_sha,
+                    grid,
+                    az_sha,
+                    el_sha,
+                    identity,
+                    code_sha,
+                    progress_cb,
+                    mount_pitch_deg=mount_pitch_deg,
+                    mount_roll_deg=mount_roll_deg,
+                    human_physical_v1=human_physical_v1,
+                )
             else:
                 session_obj = self._build_and_cache(
                     sid, session_dir, meta, meta_sha, points_sha, grid, identity, progress_cb
                 )
 
             with self._mgr_lock:
-                self._open_sessions[sid] = session_obj
+                self._open_sessions[mem_key] = session_obj
             return session_obj
 
     def _build_and_cache(
@@ -831,6 +1092,7 @@ class ReplayManager:
                         "schema_version": 1,
                         "kind": "target_state",
                         "mode": "replay",
+                        "replay_mode": REPLAY_MODE_OFFLINE_RESEARCH,
                         "session_id": sid,
                         "frame_index": idx,
                         "frame_count": count,
@@ -954,6 +1216,7 @@ class ReplayManager:
         summary = sanitize_json(
             {
                 "cache_format": CACHE_FORMAT_VERSION,
+                "replay_mode": REPLAY_MODE_OFFLINE_RESEARCH,
                 "cache_key": cache_key,
                 "sid": sid,
                 "title": KNOWN_TITLES.get(sid, sid),
@@ -975,6 +1238,357 @@ class ReplayManager:
 
         # 原子写入临时目录后再重命名
         tmp_dir = Path(tempfile.mkdtemp(prefix=f".tmp_{sid}_", dir=str(self.cache_dir)))
+        try:
+            (tmp_dir / "summary.json").write_text(
+                json.dumps(summary, ensure_ascii=False, allow_nan=False), encoding="utf-8"
+            )
+            with (tmp_dir / "states.jsonl").open("w", encoding="utf-8") as sf:
+                for st in states:
+                    sf.write(json.dumps(st, ensure_ascii=False, allow_nan=False) + "\n")
+
+            def _pack_csr(lst: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
+                offs = np.zeros(len(lst) + 1, dtype=np.int32)
+                for i, a in enumerate(lst):
+                    offs[i + 1] = offs[i] + len(a)
+                flat = np.concatenate(lst) if offs[-1] > 0 else np.empty(0, dtype=np.int32)
+                return offs, flat
+
+            t_offs, t_flat = _pack_csr(target_list)
+            r_offs, r_flat = _pack_csr(recovery_list)
+            o_offs, o_flat = _pack_csr(other_list)
+            f_offs, f_flat = _pack_csr(fg_list)
+            np.savez_compressed(
+                tmp_dir / "rows.npz",
+                target_offsets=t_offs,
+                target_flat=t_flat,
+                recovery_offsets=r_offs,
+                recovery_flat=r_flat,
+                other_offsets=o_offs,
+                other_flat=o_flat,
+                fg_offsets=f_offs,
+                fg_flat=f_flat,
+            )
+
+            if target_cache_dir.exists():
+                import shutil
+                shutil.rmtree(target_cache_dir, ignore_errors=True)
+            tmp_dir.rename(target_cache_dir)
+        except BaseException:
+            import shutil
+            shutil.rmtree(tmp_dir, ignore_errors=True)
+            raise
+
+        return ReplaySessionData(
+            sid,
+            session_dir,
+            meta,
+            meta_sha,
+            points_sha,
+            summary,
+            states,
+            target_cache_dir / "rows.npz",
+            grid,
+            identity,
+        )
+
+    def _build_and_cache_board_causal(
+        self,
+        sid: str,
+        session_dir: Path,
+        meta: dict[str, Any],
+        meta_sha: str,
+        points_sha: str,
+        grid: ScanGrid,
+        az_sha: str,
+        el_sha: str,
+        identity: dict[str, Any],
+        code_sha: str,
+        progress_cb: Callable[[str, int, int, str], None] | None,
+        *,
+        mount_pitch_deg: float = 26.0,
+        mount_roll_deg: float = 0.0,
+        human_physical_v1: bool = False,
+    ) -> ReplaySessionData:
+        """与 RK3588 一致的单遍因果回放：调用共享 RangeService + RangeEngine(instant_start=True)，从第 0 帧起算。"""
+        t_start = time.perf_counter()
+        frames_meta = meta["frames"]
+        count = len(frames_meta)
+        frame_id = identity["coordinate"][4:]
+
+        sim_clock = [0.0]
+        engine = RangeEngine(
+            grid,
+            frame_id,
+            identity=dict(identity),
+            clock=lambda: sim_clock[0],
+            instant_start=True,
+            mount_pitch_deg=mount_pitch_deg,
+            mount_roll_deg=mount_roll_deg,
+            human_physical_v1=human_physical_v1,
+        )
+        service = RangeService(
+            engine,
+            release_id="studio_board_causal",
+            preview=False,
+            clock=lambda: sim_clock[0],
+        )
+
+        base_stamp = frames_meta[0]["stamp_sec"] + frames_meta[0]["stamp_nanosec"] / 1e9
+        states: list[dict[str, Any]] = []
+        timeline: list[dict[str, Any]] = []
+        stamp_secs: list[float] = []
+        rel_times: list[float] = []
+        target_list: list[np.ndarray] = []
+        recovery_list: list[np.ndarray] = []
+        other_list: list[np.ndarray] = []
+        fg_list: list[np.ndarray] = []
+        last_display_plane: dict[str, Any] | None = None
+        last_ground_reason = "gravity_only_refining"
+
+        replay_meta = {
+            "replay_mode": REPLAY_MODE_BOARD_CAUSAL,
+            "algorithm_entry": "RangeService+RangeEngine(instant_start=True)",
+            "wire_identity": "reconstructed_from_session_points_bin",
+            "original_live_wire_verified": False,
+            "mount_pitch_deg": float(mount_pitch_deg),
+            "mount_roll_deg": float(mount_roll_deg),
+            "imu_available": False,
+            "imu_source": "missing_in_session_recording",
+            "clock_mode": "deterministic_source_stamp",
+            "human_physical_v1": bool(human_physical_v1),
+            "instant_config_sha256": engine.instant_config_sha,
+            "code_sha256": code_sha,
+            "grid_sha256": grid.sha256,
+            "azimuth_sha256": az_sha,
+            "elevation_sha256": el_sha,
+            "meta_sha256": meta_sha,
+            "points_sha256": points_sha,
+        }
+
+        cam_index = ReplayCameraIndex(session_dir)
+        try:
+            with (session_dir / "points.bin").open("rb") as stream:
+                for idx, info in enumerate(frames_meta):
+                    size = info["count_points"] * ROW_DTYPE.itemsize
+                    raw = stream.read(size)
+                    if len(raw) != size:
+                        raise ValueError(f"points.bin truncated at frame {idx}")
+                    packed = np.frombuffer(raw, dtype=ROW_DTYPE)
+                    stamp = info["stamp_sec"] + info["stamp_nanosec"] / 1e9
+                    rel_t = round(stamp - base_stamp, 4)
+                    stamp_secs.append(stamp)
+                    rel_times.append(rel_t)
+
+                    sim_clock[0] = stamp
+                    seq_val = int(info.get("seq", idx + 1))
+                    repacked_wire = pack_rows_to_ros_wire(
+                        packed,
+                        seq=seq_val,
+                        stamp_sec=info["stamp_sec"],
+                        stamp_nanosec=info["stamp_nanosec"],
+                        frame_id=frame_id,
+                    )
+                    service.submit(RawCloudWire(repacked_wire))
+                    res = service.process_latest()
+                    if res is None:
+                        raise RuntimeError(f"RangeService returned None at frame {idx}")
+
+                    frame = engine.ground_frame
+                    lr = res.get("local_range") or {}
+                    rows = list(res.get("target_source_rows") or [])
+                    phys = res.get("human_physical_v1")
+                    bbox = lr.get("bbox")
+                    ground_block = dict(lr.get("ground") or {})
+                    if ground_block.get("displayPlane"):
+                        last_display_plane = dict(ground_block["displayPlane"])
+                    last_ground_reason = str(ground_block.get("reason") or last_ground_reason)
+
+                    try:
+                        pose = (
+                            project_regions(estimate_skeleton(frame.xyz[rows] if rows else [], rows if rows else []), frame)
+                            if frame is not None
+                            else {"nodes": {}, "edges": []}
+                        )
+                    except (ValueError, TypeError, FloatingPointError):
+                        pose = project_regions(estimate_skeleton([], []), frame) if frame is not None else {"nodes": {}, "edges": []}
+
+                    t_arr = _rows_array(rows)
+                    rec_added = ((phys or {}).get("recovery") or {}).get("added_rows") or []
+                    r_arr = _rows_array(rec_added)
+                    other_raw: list[int] = []
+                    if engine.instant_tracker is not None:
+                        tgt_tid = res.get("track_id")
+                        gen = engine.instant_tracker.generation
+                        for tr in engine.instant_tracker.tracks:
+                            if tr.active and tr.measured_this_frame and tr.source_rows:
+                                tr_tid = f"g{gen}_t{tr.id:04d}"
+                                if tr_tid != tgt_tid:
+                                    other_raw.extend(tr.source_rows)
+                    o_arr = _rows_array(other_raw)
+
+                    if frame is not None and engine.instant_tracker is not None:
+                        fg_rows_raw = frame.source_rows[engine.instant_tracker.last_fg_mask & frame.valid]
+                        fg_arr = _rows_array(fg_rows_raw[fg_rows_raw >= 0])
+                    else:
+                        fg_arr = np.empty(0, dtype=np.int32)
+
+                    target_list.append(t_arr)
+                    recovery_list.append(r_arr)
+                    other_list.append(o_arr)
+                    fg_list.append(fg_arr)
+
+                    cam_meta = cam_index.match_meta(info.get("bag_time_sec"))
+                    tb = (phys or {}).get("target_belief") if isinstance(phys, dict) else None
+                    belief_state_val = tb["belief_state"] if isinstance(tb, dict) else "NONE"
+                    fall_state_val = str(res.get("fall_status") or "unknown")
+                    rows_sha = hashlib.sha256(np.asarray(rows, dtype="<i8").tobytes()).hexdigest() if rows else hashlib.sha256(b"").hexdigest()
+
+                    state_obj = {
+                        "schema_version": 1,
+                        "kind": "target_state",
+                        "mode": "replay",
+                        "replay_mode": REPLAY_MODE_BOARD_CAUSAL,
+                        "replay_metadata": {
+                            "mode": REPLAY_MODE_BOARD_CAUSAL,
+                            "wire_identity": "reconstructed_from_session_points_bin",
+                            "reconstructed_wire_sha256": lr.get("wireSha256"),
+                            "mount_pitch_deg": float(mount_pitch_deg),
+                            "mount_roll_deg": float(mount_roll_deg),
+                            "imu_available": False,
+                            "imu_source": "missing_in_session_recording",
+                            "clock_mode": "deterministic_source_stamp",
+                            "target_rows_sha256": rows_sha,
+                        },
+                        "session_id": sid,
+                        "frame_index": idx,
+                        "frame_count": count,
+                        "stamp_sec": stamp,
+                        "relative_time_sec": rel_t,
+                        "time_epoch": res.get("time_epoch", 0),
+                        "selection_version": 0,
+                        "source": {
+                            "seq": seq_val,
+                            "stamp_secs": info["stamp_sec"],
+                            "stamp_nsecs": info["stamp_nanosec"],
+                            "frame_id": frame_id,
+                        },
+                        "target_mode": res.get("target_mode", "instant_kinematic_automatic"),
+                        "track_id": res.get("track_id"),
+                        "track_status": res.get("track_status", "unselected"),
+                        "observability": res.get("observability", "valid"),
+                        "bbox_observed": bool(res.get("bbox_observed")),
+                        "position_predicted": bool(res.get("position_predicted", False)),
+                        "target_source_rows_sha256": rows_sha,
+                        "fall_status": fall_state_val,
+                        "acquisition": res.get("acquisition") or {"reason": "board_causal"},
+                        "semantic": "unknown",
+                        "confirmed_enabled": False,
+                        "local_range": {
+                            "version": 1,
+                            "wireSha256": lr.get("wireSha256"),
+                            "wireIdentity": "reconstructed_from_session_points_bin",
+                            "heightMedianM": lr.get("heightMedianM"),
+                            "groundAlert": lr.get("groundAlert"),
+                            "measurement": lr.get("measurement"),
+                            "sourceBinding": dict(identity),
+                            "background": lr.get("background"),
+                            "ground": ground_block,
+                            "fallEvidence": lr.get("fallEvidence"),
+                            "kinematics": lr.get("kinematics"),
+                            "demoFallCandidate": lr.get("demoFallCandidate"),
+                            "posture": lr.get("posture"),
+                            "skeleton": compact_skeleton(pose),
+                            "bbox": bbox,
+                            "depth": lr.get("depth")
+                            or {
+                                "metadata": {
+                                    "format": "lidar_range_image",
+                                    "version": 2,
+                                    "width": grid.shape[1],
+                                    "height": grid.shape[0],
+                                    "nativeTransform": "rotate180",
+                                    "validPixels": int(frame.valid.sum()) if frame is not None else 0,
+                                    "targetPixels": len(rows),
+                                }
+                            },
+                        },
+                        "performance": {
+                            "process_ms": (res.get("performance") or {}).get("service_compute_ms", 0.0),
+                            "runtime": (res.get("performance") or {}).get("runtime") or {},
+                            "stages": (res.get("performance") or {}).get("stages") or {},
+                        },
+                        "diagnostics": res.get("diagnostics") or {"tracking": None},
+                        "human_physical_v1": phys,
+                        "camera": cam_meta,
+                    }
+                    states.append(sanitize_json(state_obj))
+
+                    center_raw = bbox["raw"]["center"] if bbox else None
+                    center_lev = bbox["leveled"]["center"] if (bbox and bbox.get("leveled")) else None
+                    timeline.append(
+                        {
+                            "i": idx,
+                            "t": rel_t,
+                            "fall_state": fall_state_val,
+                            "belief_state": belief_state_val,
+                            "tid": res.get("track_id"),
+                            "ground_stage": ground_block.get("refinementStage"),
+                            "center_raw": center_raw,
+                            "center_leveled": center_lev,
+                        }
+                    )
+                    if progress_cb and (idx % 10 == 0 or idx == count - 1):
+                        progress_cb(
+                            "board_causal_infer",
+                            idx + 1,
+                            count,
+                            f"板端因果回放 instant-start ({idx + 1}/{count})",
+                        )
+        finally:
+            cam_index.close()
+
+        cache_key = self._compute_board_causal_cache_key(
+            meta_sha,
+            points_sha,
+            az_sha,
+            el_sha,
+            str(engine.instant_config_sha),
+            code_sha,
+            mount_pitch_deg=mount_pitch_deg,
+            mount_roll_deg=mount_roll_deg,
+            human_physical_v1=human_physical_v1,
+        )
+        target_cache_dir = self.cache_dir / f"{sid}_causal_{cache_key}"
+        assert_safe_cache_dir(target_cache_dir)
+
+        if progress_cb:
+            progress_cb("cache_write", 0, 1, "正在写入板端因果回放缓存...")
+
+        summary = sanitize_json(
+            {
+                "cache_format": CACHE_FORMAT_BOARD_CAUSAL,
+                "replay_mode": REPLAY_MODE_BOARD_CAUSAL,
+                "replay_metadata": replay_meta,
+                "cache_key": cache_key,
+                "sid": sid,
+                "title": KNOWN_TITLES.get(sid, sid),
+                "meta_sha256": meta_sha,
+                "points_sha256": points_sha,
+                "runtime_config_sha256": engine.instant_config_sha,
+                "frame_count": count,
+                "duration_sec": round(rel_times[-1], 3) if rel_times else 0.0,
+                "has_camera": cam_index.available,
+                "camera_frames": len(cam_index.rows) if cam_index.available else 0,
+                "compute_s": round(time.perf_counter() - t_start, 3),
+                "stamp_secs": stamp_secs,
+                "relative_times": rel_times,
+                "display_plane": last_display_plane,
+                "ground_reason": last_ground_reason,
+                "timeline": timeline,
+            }
+        )
+
+        tmp_dir = Path(tempfile.mkdtemp(prefix=f".tmp_{sid}_causal_", dir=str(self.cache_dir)))
         try:
             (tmp_dir / "summary.json").write_text(
                 json.dumps(summary, ensure_ascii=False, allow_nan=False), encoding="utf-8"

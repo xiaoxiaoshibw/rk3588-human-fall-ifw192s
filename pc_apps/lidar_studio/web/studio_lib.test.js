@@ -20,6 +20,7 @@ import {
   rawPointToWorld,
   translateBeliefState,
   translateFallState,
+  translatePairingStatus,
   translatePosture,
   translateReasonCode,
 } from "./studio_lib.js";
@@ -184,6 +185,11 @@ function makePacket({
   assert.equal(translateReasonCode("SLOW_DESCENT"), "缓慢下坠+持续低位坍塌");
   assert.ok(Object.keys(FALL_STATE_MAP).length >= 7);
   assert.ok(Object.keys(BELIEF_STATE_MAP).length >= 3);
+  assert.equal(translatePairingStatus({ status: "matched" }).label, "同源匹配");
+  assert.equal(translatePairingStatus({ status: "awaiting_state" }).tone, "warn");
+  assert.equal(translatePairingStatus({ status: "expired" }).tone, "danger");
+  assert.ok(translatePairingStatus({ status: "unpaired", reason: "wire_sha256_mismatch" }).label.includes("SHA"));
+  assert.equal(translateReasonCode("last_suspected_missing_echo"), "上次疑似 · 当前缺测");
 }
 
 console.log("studio_lib.test.js: all assertions passed");
